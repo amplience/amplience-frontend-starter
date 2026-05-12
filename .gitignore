@@ -1,0 +1,8 @@
+# env files
+.env
+
+# IDE settings
+.vscode
+
+# misc
+.DS_Store
