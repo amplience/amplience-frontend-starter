@@ -1,0 +1,7 @@
+{
+  "name": "@amplience/quadratic-extension",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Quadratic Helper — Manifest v3 browser extension.",
+  "type": "module"
+}

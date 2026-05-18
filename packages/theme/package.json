@@ -1,0 +1,7 @@
+{
+  "name": "@amplience/quadratic-theme",
+  "version": "0.0.0",
+  "private": true,
+  "description": "CSS variable contract and design tokens.",
+  "type": "module"
+}

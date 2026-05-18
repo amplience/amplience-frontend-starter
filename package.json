@@ -1,0 +1,22 @@
+{
+  "name": "quadratic-lite",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Open-source accelerator for the Amplience Quadratic demo platform.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amplience/quadratic-lite.git"
+  },
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=20.11.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}

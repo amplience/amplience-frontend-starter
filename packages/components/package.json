@@ -1,0 +1,7 @@
+{
+  "name": "@amplience/quadratic-components",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Atomic-design component library.",
+  "type": "module"
+}

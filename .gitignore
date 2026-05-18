@@ -1,8 +1,30 @@
 # env files
 .env
+.env.*
+!.env.example
 
 # IDE settings
 .vscode
+.idea
+
+# Dependencies
+node_modules
+
+# Build output
+dist
+build
+.next
+out
+
+# Cache
+.turbo
+.cache
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
 
 # misc
 .DS_Store

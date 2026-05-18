@@ -1,0 +1,7 @@
+{
+  "name": "@amplience/quadratic-web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Next.js accelerator application.",
+  "type": "module"
+}
