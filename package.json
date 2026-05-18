@@ -2,6 +2,7 @@
   "name": "quadratic-lite",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "description": "Open-source accelerator for the Amplience Quadratic demo platform.",
   "license": "Apache-2.0",
   "repository": {
@@ -10,13 +11,37 @@
   },
   "packageManager": "pnpm@9.15.4",
   "engines": {
-    "node": ">=20.11.0",
+    "node": ">=20.17.0",
     "pnpm": ">=9.0.0"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "prepare": "husky",
+    "typecheck": "tsc --noEmit && pnpm -r typecheck",
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix --max-warnings=0",
+    "lint:cleanup": "ESLINT_DISABLE_NO_AUTOFIX_WRAPPER=1 eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run"
   },
   "devDependencies": {
-    "typescript": "^5.6.3"
+    "@amplience/quadratic-config": "workspace:*",
+    "@eslint/js": "^9.39.4",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "@next/eslint-plugin-next": "^16.2.6",
+    "@types/node": "^22.19.19",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-no-autofix": "^2.1.0",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.3",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.3",
+    "vitest": "^4.1.6"
   }
 }
