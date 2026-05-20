@@ -1,0 +1,39 @@
+# Gitleaks config for Quadratic Lite.
+#
+# We extend the upstream default ruleset (which covers AWS / GCP / Stripe / Slack / GitHub /
+# generic high-entropy patterns, etc.) and add a small allowlist for legitimate non-secret
+# matches that would otherwise fire false positives.
+#
+# Tuning rules of thumb:
+#   - Prefer narrowing the allowlist to a specific path + regex over disabling a rule globally.
+#   - If a real Amplience-specific token format gets coined later, add a new [[rules]] block
+#     here rather than relying on the generic entropy catch-all.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Quadratic Lite allowlist — non-secret matches we accept."
+
+paths = [
+  # Example env file — committed deliberately as documentation of required vars.
+  '''(^|/)\.env\.example$''',
+
+  # pnpm lockfile contains content-addressable hashes that look like high-entropy secrets
+  # to generic detectors but are deterministic and public.
+  '''(^|/)pnpm-lock\.yaml$''',
+
+  # Vendor directories — we never ship these, but contributors may have them locally.
+  '''(^|/)node_modules/''',
+  '''(^|/)\.pnpm-store/''',
+  '''(^|/)dist/''',
+  '''(^|/)build/''',
+  '''(^|/)\.next/''',
+]
+
+# Allow obviously-fake placeholders in docs and examples. Keep these tight — a real key that
+# happens to contain "EXAMPLE" should still trip the scanner.
+regexes = [
+  '''AKIAIOSFODNN7EXAMPLE''',                 # AWS docs canonical example access key
+  '''wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY''', # AWS docs canonical example secret key
+]
