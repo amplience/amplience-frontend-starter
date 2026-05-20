@@ -7,13 +7,13 @@
   "exports": {
     "./eslint": "./eslint.config.js",
     "./prettier": "./prettier.config.js",
-    "./vitest": "./vitest.config.ts",
+    "./vitest": "./vitest.config.js",
     "./lint-staged": "./lint-staged.config.js"
   },
   "files": [
     "eslint.config.js",
     "prettier.config.js",
-    "vitest.config.ts",
+    "vitest.config.js",
     "lint-staged.config.js"
   ],
   "peerDependencies": {
@@ -28,10 +28,10 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-unused-imports": "^4.4.1",
     "prettier": "^3.8.3",
-    "typescript-eslint": "^8.59.3",
-    "vitest": "^4.1.6"
+    "typescript-eslint": "^8.59.4",
+    "vitest": "^4.1.7"
   },
   "engines": {
-    "node": ">=20.17.0"
+    "node": ">=22.22.1"
   }
 }
