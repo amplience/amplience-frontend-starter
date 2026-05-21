@@ -118,6 +118,10 @@ export default tseslint.config(
     rules: {
       ...nextPlugin.configs.recommended.rules,
       ...nextPlugin.configs['core-web-vitals'].rules,
+      // App Router only — no pages/ directory exists. This rule is a
+      // Pages-Router check that scans for `pages/` at the project root
+      // and warns when it can't find one; it has no meaning here.
+      '@next/next/no-html-link-for-pages': 'off',
     },
   },
 

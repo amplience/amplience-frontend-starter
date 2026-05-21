@@ -16,6 +16,11 @@ build
 .next
 out
 
+# Next.js auto-generates next-env.d.ts on every dev/build/typegen and the
+# contents differ between modes (see vercel/next.js#85738 + #86001). Per
+# Vercel's official recommendation, keep it out of version control.
+next-env.d.ts
+
 # Cache
 .turbo
 .cache

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    /* Next.js needs the browser libs in addition to the ES2022 baseline. */
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+
+    /* Next.js compiles JSX itself — leave it in source. */
+    "jsx": "preserve",
+
+    /* Incremental rebuilds + Next.js TS plugin. */
+    "incremental": true,
+    "noEmit": true,
+    "plugins": [{ "name": "next" }],
+
+    /* Allow Next.js's generated .js shims to be picked up by tsc. */
+    "allowJs": true,
+
+    /* Next 16's generated next-env.d.ts side-effect-imports
+     * `./.next/dev/types/routes.d.ts` with an explicit .d.ts extension.
+     * Safe under noEmit: true. */
+    "allowImportingTsExtensions": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "next.config.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
+}
