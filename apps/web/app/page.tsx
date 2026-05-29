@@ -10,6 +10,7 @@
  * line — the port surface stays identical.
  */
 
+import { Link } from '@amplience/quadratic-components/link'
 import { Typography } from '@amplience/quadratic-components/typography'
 import { makeMockContentClient } from '@amplience/quadratic-content/mock'
 
@@ -47,7 +48,11 @@ export default async function HomePage() {
         <Typography as="h6" variant="h6">
           Heading 6
         </Typography>
-        <Typography variant="body">Body — the quick brown fox jumps over the lazy dog.</Typography>
+        <Typography variant="body">
+          Body — the quick brown fox jumps over the lazy dog, with an{' '}
+          <Link href="/docs">internal link</Link> and an{' '}
+          <Link href="https://example.com">external link</Link>.
+        </Typography>
         <Typography variant="caption">Caption — supplementary text at small size.</Typography>
         <Typography as="p" variant="h2">
           Variant/element decoupled: h2 style on a &lt;p&gt;

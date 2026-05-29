@@ -3,7 +3,10 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "lib": ["ES2022", "DOM"]
+    "lib": ["ES2022", "DOM"],
+    // CSS module objects have known keys — bracket notation adds noise without
+    // safety. Overrides the workspace baseline (tsconfig.base.json).
+    "noPropertyAccessFromIndexSignature": false
   },
   "include": ["src"]
 }

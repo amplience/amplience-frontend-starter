@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react'
 
 import styles from './Typography.module.css'
@@ -43,7 +44,7 @@ export function Typography<E extends ElementType = 'p'>({
   const El = as ?? 'p'
 
   const variantClass = styles[variant] ?? ''
-  const classes = [styles['root'], variantClass, className].filter(Boolean).join(' ')
+  const classes = clsx(styles.root, variantClass, className)
 
   return (
     <El className={classes} {...rest}>

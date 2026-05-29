@@ -1,0 +1,15 @@
+/*
+ * Link atom — base styles.
+ *
+ * Kept intentionally minimal: themes add visual treatment (colour, underline
+ * style, hover state) on top rather than having to revert defaults set here.
+ *
+ * Brand layers can override via [data-brand] selectors, e.g.
+ *   [data-brand="acme"] .root { color: var(--color-link); }
+ */
+
+.root {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: initial;
+}
