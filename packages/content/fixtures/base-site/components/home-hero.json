@@ -1,0 +1,19 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000003",
+  "label": "Home — hero",
+  "body": {
+    "_meta": {
+      "name": "Home — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/banner",
+      "deliveryKeys": {
+        "values": [{ "value": "home/hero" }]
+      }
+    },
+    "headline": "Build composable sites without the boilerplate.",
+    "subheadline": "Quadratic Lite is the open-source accelerator for Amplience-backed projects.",
+    "cta": {
+      "label": "Get started",
+      "href": "/docs/getting-started"
+    }
+  }
+}

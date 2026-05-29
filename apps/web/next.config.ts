@@ -1,7 +1,10 @@
 import type { NextConfig } from 'next'
 
-// Skeleton config — defaults are sufficient for the App Router hello-world.
-// Future work (image domains, env, redirects, etc.) lands here.
-const nextConfig: NextConfig = {}
+const nextConfig: NextConfig = {
+  // Workspace packages ship TypeScript source (no build step) — Next.js
+  // needs the explicit nod to compile them in the same pass as apps/web.
+  // Add new workspace packages here as they're consumed.
+  transpilePackages: ['@amplience/quadratic-content'],
+}
 
 export default nextConfig
