@@ -12,7 +12,7 @@
 
 import type { ContentItem, ContentRequestOptions } from './types'
 
-export interface ContentClient {
+export type ContentClient = {
   /**
    * Fetch a content item by its delivery key (e.g. `"home"`,
    * `"blog/welcome"`). Returns the delivery shape — body with `_meta`,

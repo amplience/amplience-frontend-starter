@@ -21,7 +21,7 @@ export const CONTENT_LINK_SCHEMA =
   'http://bigcontent.io/cms/schema/v1/core#/definitions/content-link'
 
 /** The Amplience content envelope `_meta`. Schema URI is the dispatch key. */
-export interface ContentMeta {
+export type ContentMeta = {
   readonly schema: string
   readonly name?: string
   readonly deliveryId?: string
@@ -36,7 +36,7 @@ export interface ContentMeta {
  * `_meta.schema` value and resolves them via the loader's id map when
  * `depth: 'all'` is requested.
  */
-export interface ContentLink {
+export type ContentLink = {
   readonly id: string
   readonly contentType: string
   readonly _meta: { readonly schema: typeof CONTENT_LINK_SCHEMA }
@@ -47,7 +47,7 @@ export interface ContentLink {
  * conforms to. The `body` is the delivery shape; the envelope is purely
  * management-side metadata that round-trips with dc-cli imports.
  */
-export interface EnrichedContentItem<TBody = unknown> {
+export type EnrichedContentItem<TBody = unknown> = {
   readonly id: string
   readonly label?: string
   readonly body: ContentBody<TBody>
@@ -70,7 +70,7 @@ export type ContentBody<TExtra = unknown> = TExtra & {
 export type ContentItem<TBody = unknown> = ContentBody<TBody>
 
 /** Options that apply to any read. Mirrors the surface in ADR-0008. */
-export interface ContentRequestOptions {
+export type ContentRequestOptions = {
   /**
    * Resolve nested content-link references inline (`'all'`) or leave them as
    * reference stubs (`'root'`). Defaults to `'root'` to match the Amplience

@@ -10,9 +10,10 @@
  * line — the port surface stays identical.
  */
 
+import { Typography } from '@amplience/quadratic-components/typography'
 import { makeMockContentClient } from '@amplience/quadratic-content/mock'
 
-interface HomeBody {
+type HomeBody = {
   title: string
   description: string
 }
@@ -24,8 +25,35 @@ export default async function HomePage() {
 
   return (
     <main>
-      <h1>{home.title}</h1>
-      <p>{home.description}</p>
+      <Typography as="h1" variant="h1">
+        {home.title}
+      </Typography>
+      <Typography variant="body">{home.description}</Typography>
+
+      {/* Typography atom smoke — QL-24. Remove once Storybook lands. */}
+      <section aria-label="Typography scale (QL-24)">
+        <Typography as="h2" variant="h2">
+          Heading 2
+        </Typography>
+        <Typography as="h3" variant="h3">
+          Heading 3
+        </Typography>
+        <Typography as="h4" variant="h4">
+          Heading 4
+        </Typography>
+        <Typography as="h5" variant="h5">
+          Heading 5
+        </Typography>
+        <Typography as="h6" variant="h6">
+          Heading 6
+        </Typography>
+        <Typography variant="body">Body — the quick brown fox jumps over the lazy dog.</Typography>
+        <Typography variant="caption">Caption — supplementary text at small size.</Typography>
+        <Typography as="p" variant="h2">
+          Variant/element decoupled: h2 style on a &lt;p&gt;
+        </Typography>
+      </section>
+
       <details>
         <summary>Resolved content tree (debug)</summary>
         <pre>{JSON.stringify(home, null, 2)}</pre>

@@ -1,0 +1,68 @@
+/*
+ * Typography atom — base styles.
+ *
+ * Values are design-system placeholders: the real scale will come from
+ * the theme package (QL-theme). Brand layers override these rules by
+ * wrapping content in a [data-brand] selector with higher specificity,
+ * e.g. [data-brand="acme"] .h1 { font-size: 3rem }.
+ *
+ * rem has been used here so values scale with the user's browser
+ * font-size preference — important for low-vision accessibility.
+ *
+ * No CSS variables are used here yet: the plain cascade gives us the same
+ * override mechanism with less indirection (per QL-24 design decision).
+ */
+
+/* Reset browser-default margins so the atom is layout-neutral.
+   Spacing around a Typography instance is the parent's responsibility. */
+.root {
+  margin: 0;
+}
+
+.h1 {
+  font-size: 3.875rem; /* 62px @ 16px root */
+  font-weight: 400;
+  line-height: 1;
+}
+
+.h2 {
+  font-size: 3rem; /* 48px */
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.h3 {
+  font-size: 2.375rem; /* 38px */
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.h4 {
+  font-size: 1.75rem; /* 28px */
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.h5 {
+  font-size: 1.375rem; /* 22px */
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.h6 {
+  font-size: 1.125rem; /* 18px */
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.body {
+  font-size: 1rem; /* 16px */
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.caption {
+  font-size: 0.75rem; /* 12px */
+  font-weight: 400;
+  line-height: 1.3;
+}
