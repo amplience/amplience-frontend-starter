@@ -204,6 +204,15 @@ export default tseslint.config(
     ...tseslint.configs.disableTypeChecked,
   },
 
+  // Project-wide overrides to stylisticTypeChecked defaults.
+  {
+    rules: {
+      // Prefer `type` over `interface` throughout the project — consistent
+      // with the codebase convention and avoids declaration-merging surprises.
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+    },
+  },
+
   // MUST be last: turn off stylistic rules that would fight Prettier.
   prettierConfig,
 )

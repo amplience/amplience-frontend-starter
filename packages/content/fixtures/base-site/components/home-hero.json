@@ -9,8 +9,8 @@
         "values": [{ "value": "home/hero" }]
       }
     },
-    "headline": "Build composable sites without the boilerplate.",
-    "subheadline": "Quadratic Lite is the open-source accelerator for Amplience-backed projects.",
+    "title": "Build composable sites without the boilerplate.",
+    "subtitle": "Quadratic Lite is the open-source accelerator for Amplience-backed projects.",
     "cta": {
       "label": "Get started",
       "href": "/docs/getting-started"
