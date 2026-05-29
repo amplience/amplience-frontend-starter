@@ -23,12 +23,7 @@ import type { EnrichedContentItem } from '../types'
  * generate fixtures or accept user-provided ones, this is the boundary to add
  * runtime validation at.
  */
-const fixtures: readonly EnrichedContentItem[] = [
-  homePage,
-  homeMainSlot,
-  homeHero,
-  homeText,
-]
+const fixtures: readonly EnrichedContentItem[] = [homePage, homeMainSlot, homeHero, homeText]
 
 /** Build `id → item` and `deliveryKey → item` maps from the fixture set. */
 const buildMaps = (
