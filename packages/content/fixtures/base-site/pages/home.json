@@ -1,0 +1,24 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000001",
+  "label": "Home page",
+  "body": {
+    "_meta": {
+      "name": "Home page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [{ "value": "home" }]
+      }
+    },
+    "title": "Welcome to Quadratic Lite",
+    "description": "A clean starting point for an Amplience-backed site.",
+    "slots": [
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000002",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

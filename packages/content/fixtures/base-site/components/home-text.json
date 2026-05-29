@@ -1,0 +1,15 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000004",
+  "label": "Home — intro text",
+  "body": {
+    "_meta": {
+      "name": "Home — intro text",
+      "schema": "https://quadratic.amplience.com/v2/content/text-block",
+      "deliveryKeys": {
+        "values": [{ "value": "home/intro" }]
+      }
+    },
+    "heading": "What's in the box",
+    "body": "A recursive renderer, a content-client abstraction with mock and SDK adapters, an atomic-design component library, and an automation CLI for hub provisioning. Clone, point at an Amplience hub, ship."
+  }
+}

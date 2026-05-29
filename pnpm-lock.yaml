@@ -67,6 +67,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@amplience/quadratic-content':
+        specifier: workspace:*
+        version: link:../../packages/content
       next:
         specifier: ^16.2.6
         version: 16.2.6(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -138,6 +141,12 @@ importers:
       vitest:
         specifier: ^4.1.7
         version: 4.1.7(@types/node@22.19.19)(vite@8.0.13(@types/node@22.19.19)(yaml@2.9.0))
+
+  packages/content:
+    devDependencies:
+      '@amplience/quadratic-config':
+        specifier: workspace:*
+        version: link:../config
 
   packages/theme: {}
 
