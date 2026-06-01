@@ -3,13 +3,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "react-jsx",
-    "lib": ["ES2022", "DOM"],
-    // Required for project references — lets consuming projects treat this
-    // package as a separate compilation unit with its own compiler options.
-    "composite": true,
-    // CSS module objects have known keys — bracket notation adds noise without
-    // safety. Overrides the workspace baseline (tsconfig.base.json).
-    "noPropertyAccessFromIndexSignature": false
+    "lib": ["ES2022", "DOM"]
   },
   "include": ["src"]
 }
