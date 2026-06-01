@@ -58,6 +58,12 @@ describe('Link', () => {
     expect(el.target).toBe('_blank')
   })
 
+  it('tel: links are treated as external', () => {
+    render(<Link href="tel:+441234567890">Call</Link>)
+    const el = screen.getByRole('link', { name: 'Call' })
+    expect(el.target).toBe('_blank')
+  })
+
   it('forwards title attribute', () => {
     render(
       <Link href="/foo" title="The Foo Page">

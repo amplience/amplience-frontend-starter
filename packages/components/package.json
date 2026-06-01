@@ -7,7 +7,8 @@
   "sideEffects": false,
   "exports": {
     "./typography": "./src/atoms/Typography/Typography.tsx",
-    "./link": "./src/atoms/Link/Link.tsx"
+    "./link": "./src/atoms/Link/Link.tsx",
+    "./button": "./src/atoms/Button/Button.tsx"
   },
   "peerDependencies": {
     "next": "^16.0.0",

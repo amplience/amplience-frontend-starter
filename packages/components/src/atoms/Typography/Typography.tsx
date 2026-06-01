@@ -7,11 +7,19 @@ import styles from './Typography.module.css'
 // Types
 // ---------------------------------------------------------------------------
 
-export type TypographyVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body' | 'caption'
+export type TypographyVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'caption'
+export type TypographyAlign = 'left' | 'center' | 'right'
 
 type OwnProps = {
   /** Visual style to apply, independent of the rendered HTML element. */
   variant?: TypographyVariant
+  /**
+   * Text alignment. Omit to inherit alignment from the parent container,
+   * which is the right default for most layout contexts. Supply explicitly
+   * when a single piece of text needs to break from its surroundings, or
+   * when the value comes from a CMS-authored field.
+   */
+  align?: TypographyAlign
   children: ReactNode
   className?: string
 }
@@ -36,18 +44,21 @@ export type TypographyProps<E extends ElementType = 'p'> = OwnProps & {
 
 export function Typography<E extends ElementType = 'p'>({
   as,
-  variant = 'body',
+  variant = 'p',
+  align,
   className,
   children,
   ...rest
 }: TypographyProps<E>) {
-  const El = as ?? 'p'
+  const resolvedVariant = variant
+  const defaultElement = resolvedVariant
+  const El = as ?? defaultElement
 
-  const variantClass = styles[variant] ?? ''
+  const variantClass = styles[resolvedVariant] ?? ''
   const classes = clsx(styles.root, variantClass, className)
 
   return (
-    <El className={classes} {...rest}>
+    <El className={classes} data-align={align} {...rest}>
       {children}
     </El>
   )
