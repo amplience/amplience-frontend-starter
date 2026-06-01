@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" data-brand={process.env['NEXT_PUBLIC_BRAND'] ?? 'default'}>
+    <html lang="en" data-brand={process.env.NEXT_PUBLIC_BRAND ?? 'default'}>
       <body>{children}</body>
     </html>
   )
