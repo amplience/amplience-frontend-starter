@@ -1,0 +1,40 @@
+/*
+ * Divider atom styles.
+ *
+ * Resets browser-default <hr> appearance, then applies orientation-specific
+ * layout via [data-orientation]. Brand layers can restyle via --divider-*
+ * under a [data-brand] selector without touching this file.
+ */
+
+/* ---------------------------------------------------------------------------
+   Base — resets UA stylesheet
+   --------------------------------------------------------------------------- */
+
+.root {
+  border: none;
+  background-color: var(--divider-color, var(--color-gray-300));
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Horizontal (default) — a full-width block-level rule
+   --------------------------------------------------------------------------- */
+
+.root[data-orientation='horizontal'] {
+  display: block;
+  width: 100%;
+  height: var(--divider-thickness, 1px);
+}
+
+/* ---------------------------------------------------------------------------
+   Vertical — a 1px-wide inline rule for use inside flex/grid rows.
+   The parent must supply a height (or use align-items: stretch).
+   --------------------------------------------------------------------------- */
+
+.root[data-orientation='vertical'] {
+  display: inline-block;
+  width: var(--divider-thickness, 1px);
+  height: 100%;
+  align-self: stretch;
+}

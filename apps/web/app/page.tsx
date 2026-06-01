@@ -10,8 +10,14 @@
  * line — the port surface stays identical.
  */
 
+import { Fragment } from 'react'
+
 import { Button } from '@amplience/quadratic-components/button'
+import { Container } from '@amplience/quadratic-components/container'
+import { Divider } from '@amplience/quadratic-components/divider'
 import { Link } from '@amplience/quadratic-components/link'
+import { Placeholder } from '@amplience/quadratic-components/placeholder'
+import { Stack } from '@amplience/quadratic-components/stack'
 import { Typography } from '@amplience/quadratic-components/typography'
 import { makeMockContentClient } from '@amplience/quadratic-content/mock'
 
@@ -32,118 +38,168 @@ export default async function HomePage() {
 
   return (
     <main>
-      <Header title={home.title}>
-        <Typography>{home.description}</Typography>
-      </Header>
+      {/* Page header */}
+      <header style={{ background: 'var(--color-gray-200)', padding: 'var(--site-gutter) 0' }}>
+        <Container gutter>
+          <Stack>
+            <Typography variant="h1">{home.title}</Typography>
+            <Typography>{home.description}</Typography>
+          </Stack>
+        </Container>
+      </header>
 
       {/* Typography atom smoke — QL-24. Remove once Storybook lands. */}
-      <Section title="Typography" aria-label="Typography scale (QL-24)">
-        <Typography variant="h1">Heading 1</Typography>
-        <Typography variant="h2">Heading 2</Typography>
-        <Typography variant="h3">Heading 3</Typography>
-        <Typography variant="h4">Heading 4</Typography>
-        <Typography variant="h5">Heading 5</Typography>
-        <Typography variant="h6">Heading 6</Typography>
-        <Typography variant="p">
-          Body — the quick brown fox <em>jumps</em> over the <strong>lazy</strong> dog, with an{' '}
-          <Link href="/docs">internal link</Link> and an{' '}
-          <Link href="https://example.com">external link</Link>.
-        </Typography>
-        <Typography variant="caption" as="p">
-          Caption — supplementary text at small size.
-        </Typography>
-
-        <hr />
-
-        <Typography as="p" variant="h2">
-          Variant/element decoupled: h2 style on a &lt;p&gt;
-        </Typography>
-      </Section>
+      <section aria-label="Typography scale (QL-24)" style={{ padding: 'var(--site-gutter) 0' }}>
+        <Container gutter>
+          <Stack>
+            <Typography variant="h2">Typography</Typography>
+            <Divider />
+            <Typography variant="h1">Heading 1</Typography>
+            <Typography variant="h2">Heading 2</Typography>
+            <Typography variant="h3">Heading 3</Typography>
+            <Typography variant="h4">Heading 4</Typography>
+            <Typography variant="h5">Heading 5</Typography>
+            <Typography variant="h6">Heading 6</Typography>
+            <Typography variant="p">
+              Body — the quick brown fox <em>jumps</em> over the <strong>lazy</strong> dog, with an{' '}
+              <Link href="/docs">internal link</Link> and an{' '}
+              <Link href="https://example.com">external link</Link>.
+            </Typography>
+            <Typography variant="caption" as="p">
+              Caption — supplementary text at small size.
+            </Typography>
+            <Divider />
+            <Typography as="p" variant="h2">
+              Variant/element decoupled: h2 style on a &lt;p&gt;
+            </Typography>
+          </Stack>
+        </Container>
+      </section>
 
       {/* Button atom smoke — QL-25. Remove once Storybook lands. */}
-      <Section title="Buttons" background="var(--color-gray-200)">
-        <Typography variant="h3">Buttons as links</Typography>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: `repeat(${BUTTONVARIANTS.length}, auto)`,
-            gap: 'calc(var(--spacing) * 4)',
-          }}
-        >
-          {BUTTONVARIANTS.map((variant) => (
+      <section style={{ background: 'var(--color-gray-200)', padding: 'var(--site-gutter) 0' }}>
+        <Container gutter>
+          <Stack>
+            <Typography variant="h2">Buttons</Typography>
+            <Divider />
+            <Typography variant="h3">Buttons as links</Typography>
             <div
-              key={variant}
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'subgrid',
+                gridTemplateColumns: `repeat(${BUTTONVARIANTS.length}, auto)`,
                 gap: 'calc(var(--spacing) * 4)',
-                marginBottom: '1rem',
               }}
             >
-              {BUTTONCOLORS.map((color) => (
-                <Button key={`${variant}-${color}`} variant={variant} color={color} href="#">
-                  {`${variant} ${color}`}
-                </Button>
+              {BUTTONVARIANTS.map((variant) => (
+                <div
+                  key={variant}
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'subgrid',
+                    gap: 'calc(var(--spacing) * 4)',
+                    marginBottom: '1rem',
+                  }}
+                >
+                  {BUTTONCOLORS.map((color) => (
+                    <Button key={`${variant}-${color}`} variant={variant} color={color} href="#">
+                      {`${variant} ${color}`}
+                    </Button>
+                  ))}
+                </div>
               ))}
             </div>
+            <Divider />
+            <Typography variant="h3">Buttons as buttons</Typography>
+            <Typography>
+              <em>To be added once we have client components in Storybook.</em>
+            </Typography>
+          </Stack>
+        </Container>
+      </section>
+
+      {/* Container variants smoke — QL-27. Remove once Storybook lands. */}
+      <section style={{ padding: 'var(--site-gutter) 0' }}>
+        <Container gutter>
+          <Stack>
+            <Typography variant="h2">Containers</Typography>
+            <Divider />
+          </Stack>
+        </Container>
+        <Stack style={{ marginTop: 'var(--gap)' }}>
+          {(['narrow', 'default', 'wide', 'full'] as const).map((maxWidth) => (
+            <Fragment key={maxWidth}>
+              <Container maxWidth={maxWidth} gutter>
+                <Placeholder text={`maxWidth="${maxWidth}" with gutter`} />
+              </Container>
+              <Container maxWidth={maxWidth}>
+                <Placeholder text={`maxWidth="${maxWidth}" with no gutter`} />
+              </Container>
+            </Fragment>
           ))}
-        </div>
+        </Stack>
+      </section>
 
-        <hr />
+      {/* Divider variants smoke — QL-27. Remove once Storybook lands. */}
+      <section style={{ background: 'var(--color-gray-200)', padding: 'var(--site-gutter) 0' }}>
+        <Container gutter>
+          <Stack>
+            <Typography variant="h2">Dividers</Typography>
+            <Divider />
+            <Typography variant="h3">Horizontal (default)</Typography>
+            <Divider />
+            <Typography variant="h3">Vertical (inside a row Stack)</Typography>
+            <Stack direction="row" gap="md" style={{ height: 48, alignItems: 'center' }}>
+              <Typography>Left</Typography>
+              <Divider orientation="vertical" />
+              <Typography>Right</Typography>
+            </Stack>
+          </Stack>
+        </Container>
+      </section>
 
-        <Typography variant="h3">Buttons as buttons</Typography>
-        <Typography>
-          <em>To be added once we have client components in storybook.</em>
-        </Typography>
-      </Section>
+      {/* Stack variants smoke — QL-27. Remove once Storybook lands. */}
+      <section style={{ padding: 'var(--site-gutter) 0' }}>
+        <Container gutter>
+          <Stack>
+            <Typography variant="h2">Stacks</Typography>
+            <Divider />
+            <Typography variant="h3">Column (default) — gap scale</Typography>
+            {(['none', 'xs', 'sm', 'md', 'lg', 'xl'] as const).map((gap) => (
+              <div key={gap}>
+                <Typography variant="caption" as="p">
+                  <code>gap=&quot;{gap}&quot;</code>
+                </Typography>
+                <Stack gap={gap}>
+                  <Placeholder />
+                  <Placeholder />
+                  <Placeholder />
+                </Stack>
+              </div>
+            ))}
+            <Divider />
+            <Typography variant="h3">Row — gap md</Typography>
+            <Stack direction="row" gap="md">
+              <Placeholder />
+              <Placeholder />
+              <Placeholder />
+            </Stack>
+          </Stack>
+        </Container>
+      </section>
 
-      <Section title="Content tree (debug)">
-        <details>
-          <summary>Resolved content tree (debug)</summary>
-          <pre>{JSON.stringify(home, null, 2)}</pre>
-        </details>
-      </Section>
+      {/* Content tree debug */}
+      <section style={{ background: 'var(--color-gray-200)', padding: 'var(--site-gutter) 0' }}>
+        <Container gutter>
+          <Stack>
+            <Typography variant="h2">Content tree (debug)</Typography>
+            <Divider />
+            <details>
+              <summary>Resolved content tree</summary>
+              <pre>{JSON.stringify(home, null, 2)}</pre>
+            </details>
+          </Stack>
+        </Container>
+      </section>
     </main>
   )
 }
-
-// Temporary layout components to structure the page. These will be replaced by real atoms and molecules as those are built out.
-
-const Section = ({
-  title,
-  background,
-  children,
-}: {
-  title: string
-  background?: string
-  children: React.ReactNode
-}) => (
-  <div
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 'var(--gap)',
-      padding: 'var(--gutter)',
-      background,
-    }}
-  >
-    <Typography variant="h2">{title}</Typography>
-    <hr />
-    {children}
-  </div>
-)
-
-const Header = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <header
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 'var(--gap)',
-      background: 'var(--color-gray-200)',
-      padding: 'var(--gutter)',
-    }}
-  >
-    <Typography variant="h1">{title}</Typography>
-    {children}
-  </header>
-)
