@@ -13,15 +13,26 @@
  * Token families defined here (expand as needed):
  *   --spacing   base unit for the spacing scale
  *   --radius    base unit for the border-radius scale
- *   --container max-width breakpoints and horizontal padding
+ *   --site-*    site layout variables (gutter, max-widths)
+ *   --color-*   colour palette (primary, secondary, neutrals)
+ *   --button-*  button defaults (padding, border-radius, colors)
  */
 
 :root {
   /* Spacing — base unit. Components use calc() multiples of this value.
      e.g. calc(var(--spacing) * 4) = 16px at the default. */
   --spacing: 4px;
-  --gap: calc(var(--spacing) * 4);
-  --site-gutter: calc(var(--spacing) * 10);
+  --spacing-0: 0;
+  --spacing-1: calc(var(--spacing) * 1);
+  --spacing-2: calc(var(--spacing) * 2);
+  --spacing-3: calc(var(--spacing) * 3);
+  --spacing-4: calc(var(--spacing) * 4);
+  --spacing-5: calc(var(--spacing) * 5);
+  --spacing-6: calc(var(--spacing) * 6);
+  --spacing-8: calc(var(--spacing) * 8);
+  --spacing-10: calc(var(--spacing) * 10);
+  --gap: var(--spacing-4);
+  --site-gutter: var(--spacing-10);
   --site-max-width-narrow: 640px;
   --site-max-width: 1200px;
   --site-max-width-wide: 1600px;
@@ -47,6 +58,11 @@
   --color-gray-800: #333333;
   --color-gray-900: #111111;
   --color-black: #000000;
+
+  --color-success: #007a4d;
+  --color-info: #1553b6;
+  --color-warning: #ffbe09;
+  --color-error: #b00020;
 
   --button-padding-y: calc(var(--spacing) * 2);
   --button-padding-x: calc(var(--spacing) * 6);

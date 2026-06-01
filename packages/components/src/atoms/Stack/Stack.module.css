@@ -17,6 +17,7 @@
 .root {
   display: flex;
   flex-direction: var(--stack-direction, column);
+  flex-wrap: var(--stack-wrap, nowrap);
   gap: var(--stack-gap, 0);
 }
 
@@ -30,6 +31,18 @@
 
 .root[data-direction='row'] {
   --stack-direction: row;
+}
+
+/* ---------------------------------------------------------------------------
+   Wrap variants
+   --------------------------------------------------------------------------- */
+
+.root[data-wrap='nowrap'] {
+  --stack-wrap: nowrap;
+}
+
+.root[data-wrap='wrap'] {
+  --stack-wrap: wrap;
 }
 
 /* ---------------------------------------------------------------------------

@@ -15,6 +15,8 @@ import { Fragment } from 'react'
 import { Button } from '@amplience/quadratic-components/button'
 import { Container } from '@amplience/quadratic-components/container'
 import { Divider } from '@amplience/quadratic-components/divider'
+import { Icon, ICON_NAMES } from '@amplience/quadratic-components/icon'
+import { Image } from '@amplience/quadratic-components/image'
 import { Link } from '@amplience/quadratic-components/link'
 import { Placeholder } from '@amplience/quadratic-components/placeholder'
 import { Stack } from '@amplience/quadratic-components/stack'
@@ -32,6 +34,7 @@ const client = makeMockContentClient()
 // At that point, page.tsx will be a simple composer file.
 const BUTTONVARIANTS = ['text', 'solid', 'outlined'] as const
 const BUTTONCOLORS = ['primary', 'secondary', 'black', 'white'] as const
+const ALL_ICON_NAMES = Array.from(ICON_NAMES as ArrayLike<unknown>, (name) => String(name))
 
 export default async function HomePage() {
   const home = await client.getByKey<HomeBody>('home', { depth: 'all' })
@@ -183,6 +186,140 @@ export default async function HomePage() {
               <Placeholder />
               <Placeholder />
             </Stack>
+          </Stack>
+        </Container>
+      </section>
+
+      {/* Image atom smoke — QL-26. Remove once Storybook lands. */}
+      <section style={{ background: 'var(--color-gray-200)', padding: 'var(--site-gutter) 0' }}>
+        <Container gutter>
+          <Stack>
+            <Typography variant="h2">Images</Typography>
+            <Divider />
+
+            <Typography variant="h3">Default (intrinsic ratio)</Typography>
+            <Typography variant="caption" as="p">
+              No <code>aspectRatio</code> prop — height follows the intrinsic dimensions.
+            </Typography>
+            <div style={{ maxWidth: 480 }}>
+              <Image
+                src="https://picsum.photos/seed/ql26a/800/400"
+                alt="A placeholder landscape image"
+                width={800}
+                height={400}
+                unoptimized
+              />
+            </div>
+
+            <Divider />
+            <Typography variant="h3">With aspectRatio override</Typography>
+            <Typography variant="caption" as="p">
+              <code>aspectRatio=&quot;1 / 1&quot;</code> — same image, cropped square via{' '}
+              <code>object-fit: cover</code>. Width is fluid; the CSS variable controls the ratio.
+            </Typography>
+            <div style={{ maxWidth: 320 }}>
+              <Image
+                src="https://picsum.photos/seed/ql26a/800/400"
+                alt="The same image cropped to a square"
+                width={800}
+                height={400}
+                aspectRatio="1 / 1"
+                unoptimized
+              />
+            </div>
+
+            <Divider />
+            <Typography variant="h3">16 / 9 ratio</Typography>
+            <div style={{ maxWidth: 480 }}>
+              <Image
+                src="https://picsum.photos/seed/ql26b/1200/800"
+                alt="A placeholder portrait image cropped to 16:9"
+                width={1200}
+                height={800}
+                aspectRatio="16 / 9"
+                unoptimized
+              />
+            </div>
+          </Stack>
+        </Container>
+      </section>
+
+      {/* Icon atom smoke — QL-26. Remove once Storybook lands. */}
+      <section style={{ padding: 'var(--site-gutter) 0' }}>
+        <Container gutter>
+          <Stack>
+            <Typography variant="h2">Icons</Typography>
+            <Divider />
+
+            <Typography variant="h3">Decorative (no label, inherits colour)</Typography>
+            <Stack direction="row" gap="md" wrap style={{ alignItems: 'center' }}>
+              {ALL_ICON_NAMES.map((name) => (
+                <Icon key={name} name={name as never} />
+              ))}
+            </Stack>
+
+            <Divider />
+            <Typography variant="h3">Named colours</Typography>
+            <Stack direction="row" gap="md" wrap style={{ alignItems: 'center' }}>
+              <Icon name="star" color="primary" label="Primary colour" />
+              <Icon name="star" color="secondary" label="Secondary colour" />
+              <Icon name="star" color="black" label="Black" />
+              <span
+                style={{
+                  background: 'var(--color-black)',
+                  padding: '4px 8px',
+                  display: 'inline-flex',
+                  borderRadius: 4,
+                }}
+              >
+                <Icon name="star" color="white" label="White (on dark background)" />
+              </span>
+            </Stack>
+
+            <Divider />
+            <Typography variant="h3">Size — inherits from surrounding text (default)</Typography>
+            <Typography variant="caption" as="p">
+              No <code>size</code> prop. Icon scales with the font-size of its context.
+            </Typography>
+            <Stack direction="row" gap="md" wrap style={{ alignItems: 'baseline' }}>
+              <Typography variant="h1">
+                <Icon name="star" /> h1
+              </Typography>
+              <Typography variant="h3">
+                <Icon name="star" /> h3
+              </Typography>
+              <Typography variant="p">
+                <Icon name="star" /> body
+              </Typography>
+              <Typography variant="caption" as="p">
+                <Icon name="star" /> caption
+              </Typography>
+            </Stack>
+
+            <Divider />
+            <Typography variant="h3">Size — explicit</Typography>
+            <Stack direction="row" gap="md" wrap style={{ alignItems: 'center' }}>
+              {([12, 16, 20, 24, 32, 48] as const).map((size) => (
+                <div key={size} style={{ textAlign: 'center' }}>
+                  <Icon name="star" size={size} label={`${size}px star`} />
+                  <Typography variant="caption" as="p">
+                    {size}px
+                  </Typography>
+                </div>
+              ))}
+            </Stack>
+
+            <Divider />
+            <Typography variant="h3">Inline with text</Typography>
+            <Typography variant="p">
+              <Icon name="check-circle" color="success" /> Your order has been confirmed
+            </Typography>
+            <Typography variant="p">
+              <Icon name="alert-circle" color="warning" /> Please review before continuing
+            </Typography>
+            <Button href="#">
+              Continue <Icon name="chevron-right" />
+            </Button>
           </Stack>
         </Container>
       </section>

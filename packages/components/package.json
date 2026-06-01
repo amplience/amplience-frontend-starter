@@ -12,7 +12,9 @@
     "./container": "./src/atoms/Container/Container.tsx",
     "./divider": "./src/atoms/Divider/Divider.tsx",
     "./stack": "./src/atoms/Stack/Stack.tsx",
-    "./placeholder": "./src/atoms/Placeholder/Placeholder.tsx"
+    "./placeholder": "./src/atoms/Placeholder/Placeholder.tsx",
+    "./image": "./src/atoms/Image/Image.tsx",
+    "./icon": "./src/atoms/Icon/Icon.tsx"
   },
   "peerDependencies": {
     "next": "^16.0.0",
@@ -29,6 +31,7 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "clsx": "^2.1.1"
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.525.0"
   }
 }

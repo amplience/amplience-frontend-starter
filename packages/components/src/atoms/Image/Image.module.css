@@ -1,0 +1,27 @@
+/*
+ * Image atom styles.
+ *
+ * The base .root rule sets display and max-width so the image is
+ * layout-neutral by default (no implicit inline spacing from img elements).
+ *
+ * When aspectRatio is supplied, --image-aspect-ratio is set as an inline
+ * style (runtime CMS value — ADR-0002 §9) and the [data-has-ratio] selector
+ * applies object-fit: cover so the image fills the ratio without distorting.
+ *
+ * Brand layers can override sizing behaviour by targeting .root under their
+ * [data-brand] selector — no component CSS changes required.
+ */
+
+.root {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* When an aspect ratio is provided, enforce it and cover-crop the image. */
+.root[data-has-ratio='true'] {
+  aspect-ratio: var(--image-aspect-ratio);
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
