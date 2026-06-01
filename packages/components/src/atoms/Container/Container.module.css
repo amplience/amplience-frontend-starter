@@ -1,0 +1,42 @@
+/*
+ * Container atom styles.
+ *
+ * The .root rule reads from --site-* tokens. Width caps are set by
+ * [data-max-width] selectors that locally rebind --site-max-width,
+ * keeping the base rule clean (per ADR-0002 §conventions 7).
+ */
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+
+.root {
+  width: 100%;
+  max-width: var(--site-max-width);
+  margin-inline: auto;
+}
+
+/* ---------------------------------------------------------------------------
+   Max-width variants
+   --------------------------------------------------------------------------- */
+
+.root[data-max-width='narrow'] {
+  --site-max-width: var(--site-max-width-narrow);
+}
+
+.root[data-max-width='wide'] {
+  --site-max-width: var(--site-max-width-wide);
+}
+
+.root[data-max-width='full'] {
+  --site-max-width: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Gutter — adds horizontal padding so content doesn't touch the container edge.
+   The max-width cap is unaffected; gutter only adds padding, not width.
+   --------------------------------------------------------------------------- */
+
+.root[data-gutter] {
+  padding-inline: var(--site-gutter);
+}

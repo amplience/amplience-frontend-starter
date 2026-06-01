@@ -8,7 +8,11 @@
   "exports": {
     "./typography": "./src/atoms/Typography/Typography.tsx",
     "./link": "./src/atoms/Link/Link.tsx",
-    "./button": "./src/atoms/Button/Button.tsx"
+    "./button": "./src/atoms/Button/Button.tsx",
+    "./container": "./src/atoms/Container/Container.tsx",
+    "./divider": "./src/atoms/Divider/Divider.tsx",
+    "./stack": "./src/atoms/Stack/Stack.tsx",
+    "./placeholder": "./src/atoms/Placeholder/Placeholder.tsx"
   },
   "peerDependencies": {
     "next": "^16.0.0",

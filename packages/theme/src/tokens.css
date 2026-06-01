@@ -13,15 +13,18 @@
  * Token families defined here (expand as needed):
  *   --spacing   base unit for the spacing scale
  *   --radius    base unit for the border-radius scale
+ *   --container max-width breakpoints and horizontal padding
  */
 
 :root {
   /* Spacing — base unit. Components use calc() multiples of this value.
      e.g. calc(var(--spacing) * 4) = 16px at the default. */
   --spacing: 4px;
-
   --gap: calc(var(--spacing) * 4);
-  --gutter: calc(var(--spacing) * 10);
+  --site-gutter: calc(var(--spacing) * 10);
+  --site-max-width-narrow: 640px;
+  --site-max-width: 1200px;
+  --site-max-width-wide: 1600px;
 
   /* Radius — base unit for border-radius.
      e.g. var(--radius) = 4px; calc(var(--radius) * 2) = 8px. */

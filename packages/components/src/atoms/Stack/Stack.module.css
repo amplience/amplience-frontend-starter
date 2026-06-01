@@ -1,0 +1,61 @@
+/*
+ * Stack atom styles.
+ *
+ * The base .root sets display:flex. Direction and gap are applied via
+ * [data-direction] and [data-gap] selectors that locally rebind
+ * --stack-direction and --stack-gap (per ADR-0002 §conventions 7).
+ *
+ * Gap values are multiples of --spacing so they stay in sync with the
+ * token scale — brands never need to override these selectors, only the
+ * --spacing root value if they want a different base unit.
+ */
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+
+.root {
+  display: flex;
+  flex-direction: var(--stack-direction, column);
+  gap: var(--stack-gap, 0);
+}
+
+/* ---------------------------------------------------------------------------
+   Direction variants
+   --------------------------------------------------------------------------- */
+
+.root[data-direction='column'] {
+  --stack-direction: column;
+}
+
+.root[data-direction='row'] {
+  --stack-direction: row;
+}
+
+/* ---------------------------------------------------------------------------
+   Gap variants
+   --------------------------------------------------------------------------- */
+
+.root[data-gap='none'] {
+  --stack-gap: 0;
+}
+
+.root[data-gap='xs'] {
+  --stack-gap: calc(var(--spacing) * 1);
+}
+
+.root[data-gap='sm'] {
+  --stack-gap: calc(var(--spacing) * 2);
+}
+
+.root[data-gap='md'] {
+  --stack-gap: calc(var(--spacing) * 4);
+}
+
+.root[data-gap='lg'] {
+  --stack-gap: calc(var(--spacing) * 6);
+}
+
+.root[data-gap='xl'] {
+  --stack-gap: calc(var(--spacing) * 10);
+}
