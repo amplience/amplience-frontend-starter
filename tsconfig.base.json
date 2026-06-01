@@ -15,7 +15,10 @@
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
     "exactOptionalPropertyTypes": true,
-    "noPropertyAccessFromIndexSignature": true,
+    // CSS modules are typed as index signatures by tooling — dot notation is safe
+    // and cleaner. Disabled repo-wide rather than per-package to avoid the
+    // consuming-tsconfig-wins problem with source-first workspace packages.
+    "noPropertyAccessFromIndexSignature": false,
 
     /* Module hygiene */
     "isolatedModules": true,

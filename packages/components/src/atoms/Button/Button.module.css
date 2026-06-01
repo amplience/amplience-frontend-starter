@@ -1,0 +1,185 @@
+/*
+ * Button atom styles.
+ *
+ * The base .root rule reads from --button-* component-scoped variables.
+ * The [data-variant][data-color] selectors locally rebind those variables
+ * for each of the 12 combinations (3 variants × 4 colours), keeping the
+ * base rule clean (per ADR-0002 §conventions 7).
+ *
+ * Brand layers override by redefining --button-* or --color-* variables
+ * under a [data-brand] selector — no component CSS changes required, e.g.:
+ *   [data-brand="acme"] .root[data-variant="solid"][data-color="primary"] {
+ *     --button-background: var(--color-primary);
+ *   }
+ */
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+
+.root {
+  display: inline-block;
+  padding: var(--button-padding-y) var(--button-padding-x);
+  background: var(--button-background);
+  border-radius: var(--button-border-radius);
+  border: solid 1px var(--button-border-color);
+  color: var(--button-color);
+  cursor: pointer;
+  text-align: center;
+
+  /* Inherit font so the button doesn't use the UA default */
+  font: inherit;
+  /* Suppress default <a> underline when rendered as a link */
+  text-decoration: none;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+
+  /* Focus ring — universal across all variants and colours.
+     Uses :focus-visible so mouse clicks don't trigger it.
+     Brands can restyle via --color-primary. */
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  /* Disabled — covers native [disabled] on <button> and aria-disabled on links */
+  &:is([disabled], [aria-disabled='true']) {
+    cursor: not-allowed;
+    background: var(--button-disabled-background);
+    border-color: var(--button-disabled-border-color);
+    color: var(--button-disabled-color);
+    pointer-events: none;
+  }
+
+  /* Hover — only when interactive */
+  &:hover:not([disabled]):not([aria-disabled='true']) {
+    background: var(--button-hover-background);
+    border-color: var(--button-hover-border-color);
+    color: var(--button-hover-color);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Solid variant — filled background
+   --------------------------------------------------------------------------- */
+
+.root[data-variant='solid'][data-color='primary'] {
+  --button-background: var(--color-primary);
+  --button-border-color: var(--color-primary);
+  --button-color: var(--color-primary-contrast);
+  --button-hover-background: color-mix(in srgb, var(--color-primary) 80%, black);
+  --button-hover-border-color: color-mix(in srgb, var(--color-primary) 80%, black);
+  --button-hover-color: var(--color-primary-contrast);
+}
+
+.root[data-variant='solid'][data-color='secondary'] {
+  --button-background: var(--color-secondary);
+  --button-border-color: var(--color-secondary);
+  --button-color: var(--color-secondary-contrast);
+  --button-hover-background: color-mix(in srgb, var(--color-secondary) 80%, black);
+  --button-hover-border-color: color-mix(in srgb, var(--color-secondary) 80%, black);
+  --button-hover-color: var(--color-secondary-contrast);
+}
+
+.root[data-variant='solid'][data-color='black'] {
+  --button-background: var(--color-black);
+  --button-border-color: var(--color-black);
+  --button-color: var(--color-white);
+  --button-hover-background: var(--color-gray-800);
+  --button-hover-border-color: var(--color-gray-800);
+  --button-hover-color: var(--color-white);
+}
+
+.root[data-variant='solid'][data-color='white'] {
+  --button-background: var(--color-white);
+  --button-border-color: var(--color-white);
+  --button-color: var(--color-black);
+  --button-hover-background: var(--color-gray-100);
+  --button-hover-border-color: var(--color-gray-100);
+  --button-hover-color: var(--color-black);
+}
+
+/* ---------------------------------------------------------------------------
+   Outlined variant — transparent background, coloured border and text.
+   Hover fills with the colour.
+   --------------------------------------------------------------------------- */
+
+.root[data-variant='outlined'][data-color='primary'] {
+  --button-background: transparent;
+  --button-border-color: var(--color-primary);
+  --button-color: var(--color-primary);
+  --button-hover-background: var(--color-primary);
+  --button-hover-border-color: var(--color-primary);
+  --button-hover-color: var(--color-primary-contrast);
+}
+
+.root[data-variant='outlined'][data-color='secondary'] {
+  --button-background: transparent;
+  --button-border-color: var(--color-secondary);
+  --button-color: var(--color-secondary);
+  --button-hover-background: var(--color-secondary);
+  --button-hover-border-color: var(--color-secondary);
+  --button-hover-color: var(--color-secondary-contrast);
+}
+
+.root[data-variant='outlined'][data-color='black'] {
+  --button-background: transparent;
+  --button-border-color: var(--color-black);
+  --button-color: var(--color-black);
+  --button-hover-background: var(--color-black);
+  --button-hover-border-color: var(--color-black);
+  --button-hover-color: var(--color-white);
+}
+
+.root[data-variant='outlined'][data-color='white'] {
+  --button-background: transparent;
+  --button-border-color: var(--color-white);
+  --button-color: var(--color-white);
+  --button-hover-background: var(--color-white);
+  --button-hover-border-color: var(--color-white);
+  --button-hover-color: var(--color-black);
+}
+
+/* ---------------------------------------------------------------------------
+   Text variant — no border or background, coloured text only.
+   Hover adds a subtle tinted background.
+   --------------------------------------------------------------------------- */
+
+.root[data-variant='text'][data-color='primary'] {
+  --button-background: transparent;
+  --button-border-color: transparent;
+  --button-color: var(--color-primary);
+  --button-hover-background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  --button-hover-border-color: transparent;
+  --button-hover-color: var(--color-primary);
+}
+
+.root[data-variant='text'][data-color='secondary'] {
+  --button-background: transparent;
+  --button-border-color: transparent;
+  --button-color: var(--color-secondary);
+  --button-hover-background: color-mix(in srgb, var(--color-secondary) 10%, transparent);
+  --button-hover-border-color: transparent;
+  --button-hover-color: var(--color-secondary);
+}
+
+.root[data-variant='text'][data-color='black'] {
+  --button-background: transparent;
+  --button-border-color: transparent;
+  --button-color: var(--color-black);
+  --button-hover-background: color-mix(in srgb, var(--color-white) 15%, transparent);
+  --button-hover-border-color: transparent;
+  --button-hover-color: var(--color-black);
+}
+
+.root[data-variant='text'][data-color='white'] {
+  --button-background: transparent;
+  --button-border-color: transparent;
+  --button-color: var(--color-white);
+  --button-hover-background: color-mix(in srgb, var(--color-white) 15%, transparent);
+  --button-hover-border-color: transparent;
+  --button-hover-color: var(--color-white);
+}

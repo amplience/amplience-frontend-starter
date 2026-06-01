@@ -107,9 +107,9 @@ export class ContentClientError extends Error {
 export const isContentLink = (value: unknown): value is ContentLink => {
   if (typeof value !== 'object' || value === null) return false
   const v = value as Record<string, unknown>
-  if (typeof v['id'] !== 'string') return false
-  if (typeof v['contentType'] !== 'string') return false
-  const meta = v['_meta']
+  if (typeof v.id !== 'string') return false
+  if (typeof v.contentType !== 'string') return false
+  const meta = v._meta
   if (typeof meta !== 'object' || meta === null) return false
-  return (meta as Record<string, unknown>)['schema'] === CONTENT_LINK_SCHEMA
+  return (meta as Record<string, unknown>).schema === CONTENT_LINK_SCHEMA
 }
