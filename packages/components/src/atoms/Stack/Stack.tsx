@@ -33,6 +33,11 @@ export type StackProps = {
    * Defaults to `"md"` (16px at the base spacing unit).
    */
   gap?: StackGap
+  /**
+   * Whether items should wrap onto multiple lines when they overflow.
+   * Defaults to `false` (`nowrap`).
+   */
+  wrap?: boolean
 } & Omit<ComponentPropsWithoutRef<'div'>, 'className' | 'children'>
 
 // ---------------------------------------------------------------------------
@@ -48,12 +53,14 @@ export type StackProps = {
  *   <Stack>…</Stack>                          — column, md gap
  *   <Stack direction="row" gap="sm">…</Stack> — row, 8px gap
  *   <Stack gap="xl">…</Stack>                 — column, gutter-sized gap
+ *   <Stack direction="row" wrap>…</Stack>      — row, wrapping items
  */
 export function Stack({
   children,
   className,
   direction = 'column',
   gap = 'md',
+  wrap = false,
   ...rest
 }: StackProps) {
   return (
@@ -61,6 +68,7 @@ export function Stack({
       className={clsx(styles.root, className)}
       data-direction={direction}
       data-gap={gap}
+      data-wrap={wrap ? 'wrap' : 'nowrap'}
       {...rest}
     >
       {children}

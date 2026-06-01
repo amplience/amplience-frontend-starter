@@ -18,7 +18,10 @@
    --------------------------------------------------------------------------- */
 
 .root {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing);
   padding: var(--button-padding-y) var(--button-padding-x);
   background: var(--button-background);
   border-radius: var(--button-border-radius);

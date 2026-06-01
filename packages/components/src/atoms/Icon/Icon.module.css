@@ -1,0 +1,77 @@
+/*
+ * Icon atom styles.
+ *
+ * .root is a neutral inline-flex wrapper that keeps the SVG vertically
+ * centred with adjacent text and prevents it collapsing the line height.
+ *
+ * Sizing:
+ *   The icon's size prop defaults to "1em", so width/height on the SVG
+ *   resolve to the current font-size. No CSS trickery required — it just
+ *   flows with the text wherever it's placed.
+ *
+ * Colour:
+ *   The base .root sets --icon-color to `inherit`, so the icon picks up
+ *   whatever color the parent element has via currentColor.
+ *
+ *   [data-color] selectors set the color to a brand token for
+ *   each named colour.
+ *
+ *   Brand layers can further override by redefining --icon-color or
+ *   --color-* under a [data-brand] selector — no component CSS changes
+ *   required, e.g.:
+ *     [data-brand="acme"] .root[data-color="primary"] {
+ *       --icon-color: var(--color-primary);
+ *     }
+ */
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+
+.root {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  /* line-height: 0 prevents the inline-flex wrapper from adding extra
+     vertical space beyond the SVG's own dimensions. */
+  line-height: 0;
+  color: inherit;
+  vertical-align: top;
+}
+
+/* -----------------------
+   Named colour overrides
+   ----------------------- */
+
+.root[data-color='primary'] {
+  color: var(--color-primary);
+}
+
+.root[data-color='secondary'] {
+  color: var(--color-secondary);
+}
+
+.root[data-color='black'] {
+  color: var(--color-black);
+}
+
+.root[data-color='white'] {
+  color: var(--color-white);
+}
+
+.root[data-color='success'] {
+  color: var(--color-success);
+}
+
+.root[data-color='info'] {
+  color: var(--color-info);
+}
+
+.root[data-color='warning'] {
+  color: var(--color-warning);
+}
+
+.root[data-color='error'] {
+  color: var(--color-error);
+}

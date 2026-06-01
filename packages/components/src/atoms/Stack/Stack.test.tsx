@@ -48,6 +48,20 @@ describe('Stack', () => {
     expect(screen.getByTestId('s').getAttribute('data-gap')).toBe('xl')
   })
 
+  it('defaults to nowrap', () => {
+    render(<Stack data-testid="s">x</Stack>)
+    expect(screen.getByTestId('s').getAttribute('data-wrap')).toBe('nowrap')
+  })
+
+  it('supports wrapping children', () => {
+    render(
+      <Stack data-testid="s" wrap>
+        x
+      </Stack>,
+    )
+    expect(screen.getByTestId('s').getAttribute('data-wrap')).toBe('wrap')
+  })
+
   it('forwards additional class names', () => {
     render(
       <Stack data-testid="s" className="custom">
