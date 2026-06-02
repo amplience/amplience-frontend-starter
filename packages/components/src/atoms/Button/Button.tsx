@@ -10,7 +10,7 @@ import styles from './Button.module.css'
 // ---------------------------------------------------------------------------
 
 export type ButtonVariant = 'text' | 'solid' | 'outlined'
-export type ButtonColor = 'primary' | 'secondary' | 'black' | 'white'
+export type ButtonColor = 'primary' | 'secondary' | 'tertiary' | 'black' | 'white'
 
 type ButtonAsButton = Omit<ComponentPropsWithoutRef<'button'>, 'children' | 'className'>
 

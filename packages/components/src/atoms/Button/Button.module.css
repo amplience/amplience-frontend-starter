@@ -87,6 +87,15 @@
   --button-hover-color: var(--color-secondary-contrast);
 }
 
+.root[data-variant='solid'][data-color='tertiary'] {
+  --button-background: var(--color-tertiary);
+  --button-border-color: var(--color-tertiary);
+  --button-color: var(--color-tertiary-contrast);
+  --button-hover-background: color-mix(in srgb, var(--color-tertiary) 80%, black);
+  --button-hover-border-color: color-mix(in srgb, var(--color-tertiary) 80%, black);
+  --button-hover-color: var(--color-tertiary-contrast);
+}
+
 .root[data-variant='solid'][data-color='black'] {
   --button-background: var(--color-black);
   --button-border-color: var(--color-black);
@@ -128,6 +137,15 @@
   --button-hover-color: var(--color-secondary-contrast);
 }
 
+.root[data-variant='outlined'][data-color='tertiary'] {
+  --button-background: transparent;
+  --button-border-color: var(--color-tertiary);
+  --button-color: var(--color-tertiary);
+  --button-hover-background: var(--color-tertiary);
+  --button-hover-border-color: var(--color-tertiary);
+  --button-hover-color: var(--color-tertiary-contrast);
+}
+
 .root[data-variant='outlined'][data-color='black'] {
   --button-background: transparent;
   --button-border-color: var(--color-black);
@@ -167,6 +185,15 @@
   --button-hover-background: color-mix(in srgb, var(--color-secondary) 10%, transparent);
   --button-hover-border-color: transparent;
   --button-hover-color: var(--color-secondary);
+}
+
+.root[data-variant='text'][data-color='tertiary'] {
+  --button-background: transparent;
+  --button-border-color: transparent;
+  --button-color: var(--color-tertiary);
+  --button-hover-background: color-mix(in srgb, var(--color-tertiary) 10%, transparent);
+  --button-hover-border-color: transparent;
+  --button-hover-color: var(--color-tertiary);
 }
 
 .root[data-variant='text'][data-color='black'] {

@@ -43,6 +43,7 @@
 
   --color-primary: #1553b6;
   --color-secondary: #ffbe09;
+  --color-tertiary: #4caf50;
 
   --color-primary-contrast: #ffffff;
   --color-secondary-contrast: #000000;
@@ -79,4 +80,41 @@
   --button-hover-background: var(--color-gray-800);
   --button-hover-border-color: var(--color-gray-800);
   --button-hover-color: var(--color-white);
+}
+
+[data-brand='anyafinn'] {
+}
+
+[data-brand='arbor-harvest'] {
+  --color-primary: #1b4332;
+  --color-primary-contrast: #ffffff;
+  --color-secondary: #d4af37;
+  --color-secondary-contrast: #000000;
+  --color-tertiary: #5a302f;
+  --color-tertiary-contrast: #ffffff;
+  --color-white: #f8f9fa;
+  --radius: var(--spacing);
+  --button-border-radius: var(--radius);
+}
+
+[data-brand='azure-harvest'] {
+  --color-primary: #0066ff;
+  --color-primary-contrast: #ffffff;
+  --color-secondary: #5b75ba;
+  --color-secondary-contrast: #ffffff;
+  --color-tertiary: #4caf50;
+  --color-tertiary-contrast: #000000;
+  --color-white: #f8fafc;
+  --radius: var(--spacing);
+  --button-border-radius: var(--radius);
+}
+
+[data-brand='culinary-supply-hub'] {
+  --color-primary: #0b305f;
+  --color-primary-contrast: #ffffff;
+  --color-secondary: #7c9f19;
+  --color-secondary-contrast: #ffffff;
+  --color-tertiary: #333333;
+  --color-tertiary-contrast: #ffffff;
+  --color-white: #f3f3f3;
 }
