@@ -1,0 +1,13 @@
+/*
+ * ListItem atom styles.
+ *
+ * Intentionally minimal — ListItem is a transparent wrapper that lets
+ * parent List control spacing (via row-gap) and marker appearance.
+ * Brand layers or molecule components can apply their own rules on top.
+ */
+
+.root {
+  /* Inherit display from the UA (list-item) so markers render correctly
+     whether the parent is ul or ol and regardless of marker setting. */
+  display: list-item;
+}

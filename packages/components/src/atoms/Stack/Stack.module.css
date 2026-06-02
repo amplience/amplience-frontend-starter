@@ -54,21 +54,21 @@
 }
 
 .root[data-gap='xs'] {
-  --stack-gap: calc(var(--spacing) * 1);
+  --stack-gap: var(--spacing-1);
 }
 
 .root[data-gap='sm'] {
-  --stack-gap: calc(var(--spacing) * 2);
+  --stack-gap: var(--spacing-2);
 }
 
 .root[data-gap='md'] {
-  --stack-gap: calc(var(--spacing) * 4);
+  --stack-gap: var(--spacing-4);
 }
 
 .root[data-gap='lg'] {
-  --stack-gap: calc(var(--spacing) * 6);
+  --stack-gap: var(--spacing-6);
 }
 
 .root[data-gap='xl'] {
-  --stack-gap: calc(var(--spacing) * 10);
+  --stack-gap: var(--spacing-10);
 }

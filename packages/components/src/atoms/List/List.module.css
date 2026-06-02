@@ -1,0 +1,72 @@
+/*
+ * List atom styles.
+ *
+ * The base .root resets UA padding/margin and controls marker display.
+ * Gap between items is implemented via `row-gap` on a flex column, driven
+ * by [data-gap] — same scale as Stack so they compose predictably.
+ *
+ * The [data-marker] selector switches list-style-type:
+ *   auto  — let the browser apply its default (disc / decimal)
+ *   none  — removes markers (for card-grid or unstyled layouts)
+ *
+ * Brand layers need only override --spacing if they want a different
+ * base unit; no List-specific tokens are required.
+ */
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--list-gap, 0);
+  margin: 0;
+  padding: 0;
+}
+
+.ul {
+  list-style: var(--list-marker, disc);
+}
+
+/* ---------------------------------------------------------------------------
+   Marker variants
+   --------------------------------------------------------------------------- */
+
+.root[data-marker='auto'] {
+  --list-marker: revert; /* restore browser default (disc / decimal) */
+  padding-inline-start: 1.5em; /* re-instate indent removed by reset */
+}
+
+.root[data-marker='none'] {
+  --list-marker: none;
+  padding-inline-start: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Gap variants
+   --------------------------------------------------------------------------- */
+
+.root[data-gap='none'] {
+  --list-gap: 0;
+}
+
+.root[data-gap='xs'] {
+  --list-gap: var(--spacing-1);
+}
+
+.root[data-gap='sm'] {
+  --list-gap: var(--spacing-2);
+}
+
+.root[data-gap='md'] {
+  --list-gap: var(--spacing-4);
+}
+
+.root[data-gap='lg'] {
+  --list-gap: var(--spacing-6);
+}
+
+.root[data-gap='xl'] {
+  --list-gap: var(--spacing-10);
+}

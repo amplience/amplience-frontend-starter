@@ -1,0 +1,139 @@
+/*
+ * Card atom styles.
+ *
+ * The base .root sets shared surface properties. Elevation, padding, and
+ * colour variants rebind --card-* component-scoped variables via [data-*]
+ * selectors (per ADR-0002 §conventions 7) — no class combinatorics needed.
+ *
+ * Colour variants set --card-background and --card-color (foreground).
+ * The base rule reads both, so coloured cards automatically get a
+ * contrasting text colour without any extra JSX.
+ *
+ * Interactive hover is fully CSS-variable-driven so brands can apply their
+ * preferred effect without touching component CSS:
+ *   --card-hover-shadow    — box-shadow on hover (default: same as resting)
+ *   --card-hover-transform — transform on hover  (default: none)
+ *   --card-hover-opacity   — opacity on hover    (default: 1)
+ *
+ * Example brand overrides:
+ *   [data-brand="acme"] { --card-border-radius: var(--radius); }
+ *   [data-brand="acme"] { --card-hover-transform: translateY(-2px); }
+ *   [data-brand="acme"] { --card-hover-opacity: 0.9; }
+ */
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+
+.root {
+  background: var(--card-background, var(--color-white));
+  border-radius: var(--card-border-radius, var(--radius));
+  border: solid 1px var(--card-border-color, transparent);
+  box-shadow: var(--card-shadow, none);
+  color: var(--card-color, inherit);
+  overflow: hidden;
+  padding: var(--card-padding, 0);
+}
+
+/* ---------------------------------------------------------------------------
+   Elevation variants
+   --------------------------------------------------------------------------- */
+
+.root[data-elevation='flat'] {
+  --card-border-color: transparent;
+  --card-shadow: none;
+}
+
+.root[data-elevation='raised'] {
+  --card-border-color: transparent;
+  --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.root[data-elevation='bordered'] {
+  --card-border-color: var(--color-gray-200);
+  --card-shadow: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Padding variants
+   --------------------------------------------------------------------------- */
+
+.root[data-padding='none'] {
+  --card-padding: 0;
+}
+
+.root[data-padding='sm'] {
+  --card-padding: var(--spacing-2);
+}
+
+.root[data-padding='md'] {
+  --card-padding: var(--spacing-4);
+}
+
+.root[data-padding='lg'] {
+  --card-padding: var(--spacing-6);
+}
+
+/* ---------------------------------------------------------------------------
+   Colour variants
+   Sets --card-background and --card-color (foreground contrast).
+   --------------------------------------------------------------------------- */
+
+.root[data-color='white'] {
+  --card-background: var(--color-white);
+  --card-color: var(--color-black);
+}
+
+.root[data-color='light'] {
+  --card-background: var(--color-gray-100);
+  --card-color: var(--color-black);
+}
+
+.root[data-color='dark'] {
+  --card-background: var(--color-gray-800);
+  --card-color: var(--color-white);
+}
+
+.root[data-color='black'] {
+  --card-background: var(--color-black);
+  --card-color: var(--color-white);
+}
+
+.root[data-color='primary'] {
+  --card-background: var(--color-primary);
+  --card-color: var(--color-primary-contrast);
+}
+
+.root[data-color='secondary'] {
+  --card-background: var(--color-secondary);
+  --card-color: var(--color-secondary-contrast);
+}
+
+.root[data-color='tertiary'] {
+  --card-background: var(--color-tertiary);
+  --card-color: var(--color-tertiary-contrast);
+}
+
+/* ---------------------------------------------------------------------------
+   Interactive — hover and focus states for clickable cards.
+   Applies only when data-interactive="true" is present.
+   --------------------------------------------------------------------------- */
+
+.root[data-interactive='true'] {
+  cursor: pointer;
+  transition:
+    box-shadow 0.15s ease,
+    transform 0.15s ease,
+    opacity 0.15s ease;
+
+  &:hover {
+    box-shadow: var(--card-hover-shadow, var(--card-shadow, none));
+    transform: var(--card-hover-transform, none);
+    opacity: var(--card-hover-opacity, 1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+}
