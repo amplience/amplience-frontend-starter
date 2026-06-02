@@ -48,15 +48,21 @@ export const AllIcons: Story = {
       style={{
         display: 'flex',
         flexWrap: 'wrap',
-        gap: '1.5rem',
-        padding: '1rem',
+        gap: '1rem',
         alignItems: 'center',
       }}
     >
       {Array.from(ICON_NAMES).map((name) => (
         <div
           key={name}
-          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem' }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '0.5rem',
+            aspectRatio: 1,
+            justifyContent: 'center',
+          }}
         >
           <Icon name={name} size={20} />
           <span
@@ -64,6 +70,8 @@ export const AllIcons: Story = {
               fontSize: '0.625rem',
               fontFamily: 'monospace',
               color: 'var(--color-gray-600)',
+              minWidth: 80,
+              textAlign: 'center',
             }}
           >
             {name}

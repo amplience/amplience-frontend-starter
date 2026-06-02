@@ -18,7 +18,10 @@
     "./stack": "./src/atoms/Stack/Stack.tsx",
     "./placeholder": "./src/atoms/Placeholder/Placeholder.tsx",
     "./image": "./src/atoms/Image/Image.tsx",
-    "./icon": "./src/atoms/Icon/Icon.tsx"
+    "./icon": "./src/atoms/Icon/Icon.tsx",
+    "./list": "./src/atoms/List/List.tsx",
+    "./list-item": "./src/atoms/ListItem/ListItem.tsx",
+    "./card": "./src/atoms/Card/Card.tsx"
   },
   "peerDependencies": {
     "next": "^16.0.0",

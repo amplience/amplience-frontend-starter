@@ -29,7 +29,9 @@
   --spacing-4: calc(var(--spacing) * 4);
   --spacing-5: calc(var(--spacing) * 5);
   --spacing-6: calc(var(--spacing) * 6);
+  --spacing-7: calc(var(--spacing) * 7);
   --spacing-8: calc(var(--spacing) * 8);
+  --spacing-9: calc(var(--spacing) * 9);
   --spacing-10: calc(var(--spacing) * 10);
   --gap: var(--spacing-4);
   --site-gutter: var(--spacing-10);
@@ -65,8 +67,8 @@
   --color-warning: #ffbe09;
   --color-error: #b00020;
 
-  --button-padding-y: calc(var(--spacing) * 2);
-  --button-padding-x: calc(var(--spacing) * 6);
+  --button-padding-y: var(--spacing-2);
+  --button-padding-x: var(--spacing-6);
   --button-border-radius: var(--radius);
 
   --button-background: var(--color-black);
@@ -83,6 +85,15 @@
 }
 
 [data-brand='anyafinn'] {
+  --color-primary: #ffa900;
+  --color-primary-contrast: #000000;
+  --color-secondary: #886443;
+  --color-secondary-contrast: #ffffff;
+  --color-tertiary: #00e4b3;
+  --color-tertiary-contrast: #000000;
+  /* Soft fade — elegant, minimal. No movement, just a gentle opacity dip.
+     Suits a fashion/lifestyle brand where motion feels heavy-handed. */
+  --card-hover-opacity: 0.8;
 }
 
 [data-brand='arbor-harvest'] {
@@ -95,6 +106,10 @@
   --color-white: #f8f9fa;
   --radius: var(--spacing);
   --button-border-radius: var(--radius);
+  /* Lift — classic e-commerce card raise. Shadow deepens and card floats up
+     slightly. Familiar pattern that signals "this is clickable". */
+  --card-hover-shadow: 0 8px 24px 0 rgb(0 0 0 / 0.14), 0 4px 8px -2px rgb(0 0 0 / 0.1);
+  --card-hover-transform: translateY(-2px);
 }
 
 [data-brand='azure-harvest'] {
@@ -107,6 +122,9 @@
   --color-white: #f8fafc;
   --radius: var(--spacing);
   --button-border-radius: var(--radius);
+  /* Scale — tech/SaaS feel. Card grows very slightly in place; no shadow
+     change keeps it flat and modern. */
+  --card-hover-transform: scale(1.02);
 }
 
 [data-brand='culinary-supply-hub'] {
@@ -117,4 +135,7 @@
   --color-tertiary: #333333;
   --color-tertiary-contrast: #ffffff;
   --color-white: #f3f3f3;
+  /* Shadow only — utilitarian B2B feel. No transform, just a deeper shadow
+     that signals depth without any animation distraction. */
+  --card-hover-shadow: 0 4px 16px 0 rgb(0 0 0 / 0.18), 0 2px 6px -1px rgb(0 0 0 / 0.12);
 }
