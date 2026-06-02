@@ -68,7 +68,7 @@ export function Stack({
       className={clsx(styles.root, className)}
       data-direction={direction}
       data-gap={gap}
-      data-wrap={wrap ? 'wrap' : 'nowrap'}
+      data-wrap={wrap ? 'true' : undefined}
       {...rest}
     >
       {children}

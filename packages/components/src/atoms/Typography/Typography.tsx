@@ -39,6 +39,26 @@ export type TypographyProps<E extends ElementType = 'p'> = OwnProps & {
 } & Omit<ComponentPropsWithoutRef<E>, keyof OwnProps | 'as'>
 
 // ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Maps each visual variant to the HTML element it should render as by default.
+ * `caption` is a visual style, not the `<caption>` table element — it falls
+ * back to `<p>`. All other variants match their HTML counterpart.
+ */
+const VARIANT_ELEMENT: Record<TypographyVariant, ElementType> = {
+  h1: 'h1',
+  h2: 'h2',
+  h3: 'h3',
+  h4: 'h4',
+  h5: 'h5',
+  h6: 'h6',
+  p: 'p',
+  caption: 'p',
+}
+
+// ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
@@ -50,11 +70,9 @@ export function Typography<E extends ElementType = 'p'>({
   children,
   ...rest
 }: TypographyProps<E>) {
-  const resolvedVariant = variant
-  const defaultElement = resolvedVariant
-  const El = as ?? defaultElement
+  const El = as ?? VARIANT_ELEMENT[variant]
 
-  const variantClass = styles[resolvedVariant] ?? ''
+  const variantClass = styles[variant] ?? ''
   const classes = clsx(styles.root, variantClass, className)
 
   return (
