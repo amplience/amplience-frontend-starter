@@ -18,6 +18,7 @@ const meta: Meta<typeof Icon> = {
         undefined,
         'primary',
         'secondary',
+        'tertiary',
         'black',
         'white',
         'success',
@@ -75,7 +76,16 @@ export const AllIcons: Story = {
 
 export const Colors: Story = {
   render: () => {
-    const colors = ['primary', 'secondary', 'black', 'success', 'info', 'warning', 'error'] as const
+    const colors = [
+      'primary',
+      'secondary',
+      'tertiary',
+      'black',
+      'success',
+      'info',
+      'warning',
+      'error',
+    ] as const
     return (
       <div
         style={{

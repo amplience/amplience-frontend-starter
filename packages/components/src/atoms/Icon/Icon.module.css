@@ -52,6 +52,10 @@
   color: var(--color-secondary);
 }
 
+.root[data-color='tertiary'] {
+  color: var(--color-tertiary);
+}
+
 .root[data-color='black'] {
   color: var(--color-black);
 }

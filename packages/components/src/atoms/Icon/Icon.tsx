@@ -106,6 +106,7 @@ export type IconSize = number | string
 export type IconColor =
   | 'primary'
   | 'secondary'
+  | 'tertiary'
   | 'black'
   | 'white'
   | 'success'
@@ -138,6 +139,7 @@ export type IconProps = {
    * When set, locally rebinds --icon-color to the corresponding brand token:
    *   "primary"   → var(--color-primary)
    *   "secondary" → var(--color-secondary)
+   *   "tertiary"  → var(--color-tertiary)
    *   "black"     → var(--color-black)
    *   "white"     → var(--color-white)
    */
