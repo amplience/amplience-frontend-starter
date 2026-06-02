@@ -21,12 +21,16 @@ const meta = {
       options: ['auto', 'none'],
     },
   },
+  parameters: {
+    controls: { disable: true },
+  },
 } satisfies Meta<typeof List>
 
 export default meta
 type Story = StoryObj<typeof List>
 
 export const Playground: Story = {
+  parameters: { controls: { disable: false } },
   args: {
     as: 'ul',
     gap: 'sm',

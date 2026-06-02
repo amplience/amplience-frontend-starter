@@ -18,12 +18,17 @@ const meta = {
     },
     wrap: { control: 'boolean' },
   },
+  parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
+  },
 } satisfies Meta<typeof Stack>
 
 export default meta
 type Story = StoryObj<typeof Stack>
 
 export const Playground: Story = {
+  parameters: { controls: { disable: false } },
   args: {
     direction: 'column',
     gap: 'md',

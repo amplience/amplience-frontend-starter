@@ -6,7 +6,7 @@ const meta = {
   title: 'Atoms/Icon',
   component: Icon,
   tags: ['autodocs'],
-  parameters: { layout: 'padded' },
+  parameters: { controls: { disable: true }, layout: 'padded' },
   argTypes: {
     name: {
       control: 'select',
@@ -35,6 +35,7 @@ export default meta
 type Story = StoryObj<typeof Icon>
 
 export const Playground: Story = {
+  parameters: { controls: { disable: false } },
   args: {
     name: 'star',
     size: 24,
@@ -99,7 +100,6 @@ export const Colors: Story = {
         style={{
           display: 'flex',
           gap: '1.5rem',
-          padding: '1rem',
           alignItems: 'center',
           flexWrap: 'wrap',
         }}
@@ -154,7 +154,7 @@ export const SizeScale: Story = {
   render: () => {
     const sizes = [12, 16, 20, 24, 32, 48] as const
     return (
-      <div style={{ display: 'flex', gap: '1.5rem', padding: '1rem', alignItems: 'flex-end' }}>
+      <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-end' }}>
         {sizes.map((size) => (
           <div
             key={size}
@@ -185,7 +185,7 @@ export const SizeScale: Story = {
 export const InheritsTextSize: Story = {
   name: 'Inherits text size (1em default)',
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', padding: '1rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
       {(['h1', 'h3', 'p'] as const).map((tag) => {
         const El = tag
         return (

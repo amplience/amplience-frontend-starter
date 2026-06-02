@@ -6,7 +6,7 @@ const meta = {
   title: 'Atoms/Link',
   component: Link,
   tags: ['autodocs'],
-  parameters: { layout: 'padded' },
+  parameters: { controls: { disable: true }, layout: 'padded' },
 } satisfies Meta<typeof Link>
 
 export default meta

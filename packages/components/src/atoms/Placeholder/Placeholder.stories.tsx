@@ -6,7 +6,7 @@ const meta: Meta<typeof Placeholder> = {
   title: 'Atoms/Placeholder',
   component: Placeholder,
   tags: ['autodocs'],
-  parameters: { layout: 'padded' },
+  parameters: { controls: { disable: true }, layout: 'padded' },
   argTypes: {
     height: { control: 'text' },
   },

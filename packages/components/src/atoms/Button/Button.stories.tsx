@@ -18,12 +18,16 @@ const meta = {
       options: ['black', 'white', 'primary', 'secondary'],
     },
   },
+  parameters: {
+    controls: { disable: true },
+  },
 } satisfies Meta<typeof Button>
 
 export default meta
 type Story = StoryObj<typeof Button>
 
 export const Playground: Story = {
+  parameters: { controls: { disable: false } },
   args: {
     children: 'Button label',
     variant: 'solid',
@@ -40,10 +44,10 @@ export const AsButton: Story = {
     return (
       <div
         style={{
-          padding: '2rem',
           display: 'grid',
           gridTemplateColumns: 'repeat(6, 1fr)',
           gap: '2rem',
+          padding: '2rem',
           background: 'linear-gradient(90deg, transparent 82%, var(--color-gray-900) 82%)',
           textAlign: 'center',
         }}
@@ -51,8 +55,8 @@ export const AsButton: Story = {
         <div
           style={{
             display: 'grid',
-            gap: '1rem',
             gridTemplateColumns: 'subgrid',
+            gap: '1rem',
             alignItems: 'center',
           }}
         >
@@ -68,8 +72,8 @@ export const AsButton: Story = {
             key={color}
             style={{
               display: 'grid',
-              gap: '1rem',
               gridTemplateColumns: 'subgrid',
+              gap: '1rem',
               alignItems: 'center',
             }}
           >
@@ -89,12 +93,15 @@ export const AsButton: Story = {
       </div>
     )
   },
+  parameters: {
+    layout: 'fullscreen',
+  },
 }
 
 export const AsLink: Story = {
   name: 'As <a> (href supplied)',
   render: () => (
-    <div style={{ padding: '2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
       <Button href="/internal" variant="solid" color="primary">
         Internal link
       </Button>
@@ -110,7 +117,7 @@ export const AsLink: Story = {
 
 export const Disabled: Story = {
   render: () => (
-    <div style={{ padding: '2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
       <Button variant="solid" color="primary" disabled>
         Solid disabled
       </Button>
@@ -140,4 +147,5 @@ export const CssCheck: Story = {
     const button = canvas.getByRole('button', { name: 'CSS check' })
     await expect(getComputedStyle(button).backgroundColor).toBe('rgb(21, 83, 182)')
   },
+  tags: ['!autodocs'],
 }

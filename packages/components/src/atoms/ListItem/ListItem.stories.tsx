@@ -14,12 +14,16 @@ const meta = {
       </List>
     ),
   ],
+  parameters: {
+    controls: { disable: true },
+  },
 } satisfies Meta<typeof ListItem>
 
 export default meta
 type Story = StoryObj<typeof ListItem>
 
 export const Playground: Story = {
+  parameters: { controls: { disable: false } },
   args: {
     children: 'A single list item',
   },

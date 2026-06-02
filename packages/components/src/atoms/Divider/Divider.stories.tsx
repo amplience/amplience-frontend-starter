@@ -6,7 +6,7 @@ const meta = {
   title: 'Atoms/Divider',
   component: Divider,
   tags: ['autodocs'],
-  parameters: { layout: 'padded' },
+  parameters: { controls: { disable: true }, layout: 'padded' },
   argTypes: {
     orientation: {
       control: 'radio',
