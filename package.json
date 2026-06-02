@@ -24,7 +24,9 @@
     "lint:cleanup": "ESLINT_DISABLE_NO_AUTOFIX_WRAPPER=1 eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "storybook": "pnpm --filter @amplience/quadratic-components storybook",
+    "sb": "pnpm storybook"
   },
   "devDependencies": {
     "@amplience/quadratic-config": "workspace:*",
