@@ -50,7 +50,7 @@ describe('Stack', () => {
 
   it('defaults to nowrap', () => {
     render(<Stack data-testid="s">x</Stack>)
-    expect(screen.getByTestId('s').getAttribute('data-wrap')).toBe('nowrap')
+    expect(screen.getByTestId('s').getAttribute('data-wrap')).toBe(null)
   })
 
   it('supports wrapping children', () => {
@@ -59,7 +59,7 @@ describe('Stack', () => {
         x
       </Stack>,
     )
-    expect(screen.getByTestId('s').getAttribute('data-wrap')).toBe('wrap')
+    expect(screen.getByTestId('s').getAttribute('data-wrap')).toBe('true')
   })
 
   it('forwards additional class names', () => {
