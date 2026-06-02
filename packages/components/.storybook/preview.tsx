@@ -66,7 +66,10 @@ const preview: Preview = {
       // overrides from the brand stylesheet take effect (ADR-0002 §5).
       const brand = context.globals.brand as string
       return (
-        <div data-brand={brand} style={{ minHeight: '100vh' }}>
+        <div
+          data-brand={brand}
+          style={{ minHeight: context.viewMode === 'docs' ? undefined : '100vh' }}
+        >
           <Story />
         </div>
       )
