@@ -63,7 +63,7 @@ export function Container({
     <div
       className={clsx(styles.root, className)}
       data-max-width={maxWidth}
-      data-gutter={gutter || undefined}
+      data-gutter={gutter ? 'true' : undefined}
       {...rest}
     >
       {children}

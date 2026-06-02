@@ -40,3 +40,12 @@ select {
 hr {
   margin: 0;
 }
+
+/*
+ * Give story canvases in Docs a little breathing room so shadows, focus rings,
+ * and other overflow effects aren't clipped at the component boundary.
+ */
+.sb-story {
+  margin: -1rem;
+  padding: 1rem;
+}

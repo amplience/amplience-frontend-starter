@@ -1,9 +1,33 @@
+import {
+  Controls,
+  Description,
+  Primary,
+  Stories,
+  Subtitle,
+  Title,
+} from '@storybook/addon-docs/blocks'
 import type { Preview } from '@storybook/nextjs-vite'
 
 // Design tokens — the CSS variable contract per ADR-0002
 import '@amplience/quadratic-theme/tokens.css'
 // Global reset — mirrors apps/web/app/globals.css
 import './preview-globals.css'
+
+/**
+ * Custom docs page: renders the primary (Playground) story once as an
+ * interactive preview, then the controls table, then all remaining stories —
+ * without duplicating the primary story in the Stories block.
+ */
+const DocsPage = () => (
+  <>
+    <Title />
+    <Subtitle />
+    <Description />
+    <Primary />
+    <Controls />
+    <Stories includePrimary={false} />
+  </>
+)
 
 const preview: Preview = {
   parameters: {
@@ -16,14 +40,16 @@ const preview: Preview = {
       exclude: ['className', 'style'],
     },
     docs: {
+      page: DocsPage,
       story: {
         height: 'auto', // Overrides min-height to allow automatic resizing
         inline: true, // Renders the story in-place
       },
     },
-    // Disable the default padding Storybook adds around stories — components
-    // that control their own spacing (Container, Stack) need a clean canvas.
-    layout: 'fullscreen',
+    // Center atoms in the canvas by default. Components that need edge-to-edge
+    // layout (Container, Stack, and future molecules/organisms) override with
+    // layout: 'fullscreen' in their own meta.
+    layout: 'centered',
     backgrounds: {
       default: 'white',
       values: [
@@ -66,7 +92,10 @@ const preview: Preview = {
       // overrides from the brand stylesheet take effect (ADR-0002 §5).
       const brand = context.globals.brand as string
       return (
-        <div data-brand={brand} style={{ minHeight: '100vh' }}>
+        <div
+          data-brand={brand}
+          // style={{ minHeight: context.viewMode === 'docs' ? undefined : '100vh' }}
+        >
           <Story />
         </div>
       )

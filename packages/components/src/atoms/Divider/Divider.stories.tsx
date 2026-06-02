@@ -2,18 +2,18 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { Divider } from './Divider'
 
-const meta: Meta<typeof Divider> = {
+const meta = {
   title: 'Atoms/Divider',
   component: Divider,
   tags: ['autodocs'],
-  parameters: { layout: 'padded' },
+  parameters: { controls: { disable: true }, layout: 'padded' },
   argTypes: {
     orientation: {
       control: 'radio',
       options: ['horizontal', 'vertical'],
     },
   },
-}
+} satisfies Meta<typeof Divider>
 
 export default meta
 type Story = StoryObj<typeof Divider>

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { List } from '../List/List'
 import { ListItem } from './ListItem'
 
-const meta: Meta<typeof ListItem> = {
+const meta = {
   title: 'Atoms/ListItem',
   component: ListItem,
   tags: ['autodocs'],
@@ -14,12 +14,16 @@ const meta: Meta<typeof ListItem> = {
       </List>
     ),
   ],
-}
+  parameters: {
+    controls: { disable: true },
+  },
+} satisfies Meta<typeof ListItem>
 
 export default meta
 type Story = StoryObj<typeof ListItem>
 
 export const Playground: Story = {
+  parameters: { controls: { disable: false } },
   args: {
     children: 'A single list item',
   },

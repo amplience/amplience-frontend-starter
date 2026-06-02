@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { Container } from './Container'
 
-const meta: Meta<typeof Container> = {
+const meta = {
   title: 'Atoms/Container',
   component: Container,
   tags: ['autodocs'],
@@ -13,10 +13,23 @@ const meta: Meta<typeof Container> = {
     },
     gutter: { control: 'boolean' },
   },
-}
+  parameters: {
+    controls: { disable: true },
+    layout: 'fullscreen',
+  },
+} satisfies Meta<typeof Container>
 
 export default meta
 type Story = StoryObj<typeof Container>
+
+export const Playground: Story = {
+  parameters: { controls: { disable: false } },
+  args: {
+    maxWidth: 'default',
+    gutter: true,
+    children: <Box label='maxWidth="default" gutter' />,
+  },
+}
 
 // Helper that makes the container bounds visible
 function Box({ label }: { label: string }) {
@@ -35,14 +48,6 @@ function Box({ label }: { label: string }) {
       {label}
     </div>
   )
-}
-
-export const Playground: Story = {
-  args: {
-    maxWidth: 'default',
-    gutter: true,
-    children: <Box label='maxWidth="default" gutter' />,
-  },
 }
 
 export const MaxWidthScale: Story = {

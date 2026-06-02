@@ -37,11 +37,7 @@
    Wrap variants
    --------------------------------------------------------------------------- */
 
-.root[data-wrap='nowrap'] {
-  --stack-wrap: nowrap;
-}
-
-.root[data-wrap='wrap'] {
+.root[data-wrap='true'] {
   --stack-wrap: wrap;
 }
 

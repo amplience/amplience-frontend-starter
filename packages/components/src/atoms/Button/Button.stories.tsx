@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect } from 'storybook/test'
 
 import { Typography } from '../Typography/Typography'
 import { Button } from './Button'
 
-const meta: Meta<typeof Button> = {
+const meta = {
   title: 'Atoms/Button',
   component: Button,
   tags: ['autodocs'],
@@ -17,12 +18,16 @@ const meta: Meta<typeof Button> = {
       options: ['black', 'white', 'primary', 'secondary'],
     },
   },
-}
+  parameters: {
+    controls: { disable: true },
+  },
+} satisfies Meta<typeof Button>
 
 export default meta
 type Story = StoryObj<typeof Button>
 
 export const Playground: Story = {
+  parameters: { controls: { disable: false } },
   args: {
     children: 'Button label',
     variant: 'solid',
@@ -39,10 +44,10 @@ export const AsButton: Story = {
     return (
       <div
         style={{
-          padding: '2rem',
           display: 'grid',
           gridTemplateColumns: 'repeat(6, 1fr)',
           gap: '2rem',
+          padding: '2rem',
           background: 'linear-gradient(90deg, transparent 82%, var(--color-gray-900) 82%)',
           textAlign: 'center',
         }}
@@ -50,8 +55,8 @@ export const AsButton: Story = {
         <div
           style={{
             display: 'grid',
-            gap: '1rem',
             gridTemplateColumns: 'subgrid',
+            gap: '1rem',
             alignItems: 'center',
           }}
         >
@@ -67,8 +72,8 @@ export const AsButton: Story = {
             key={color}
             style={{
               display: 'grid',
-              gap: '1rem',
               gridTemplateColumns: 'subgrid',
+              gap: '1rem',
               alignItems: 'center',
             }}
           >
@@ -88,12 +93,15 @@ export const AsButton: Story = {
       </div>
     )
   },
+  parameters: {
+    layout: 'fullscreen',
+  },
 }
 
 export const AsLink: Story = {
   name: 'As <a> (href supplied)',
   render: () => (
-    <div style={{ padding: '2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
       <Button href="/internal" variant="solid" color="primary">
         Internal link
       </Button>
@@ -109,7 +117,7 @@ export const AsLink: Story = {
 
 export const Disabled: Story = {
   render: () => (
-    <div style={{ padding: '2rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
       <Button variant="solid" color="primary" disabled>
         Solid disabled
       </Button>
@@ -121,4 +129,23 @@ export const Disabled: Story = {
       </Button>
     </div>
   ),
+}
+
+/**
+ * CSS token smoke check — the only story in the package that asserts a
+ * computed style value. Proves that the design token CSS loaded correctly in
+ * Storybook; `toBeVisible()` alone would pass on an unstyled component.
+ *
+ * `--color-primary: #1553b6` resolves to `rgb(21, 83, 182)`. If the token
+ * stylesheet is missing, the background will be empty or transparent and this
+ * assertion will fail.
+ */
+export const CssCheck: Story = {
+  name: 'CSS token check (automated)',
+  args: { variant: 'solid', color: 'primary', children: 'CSS check' },
+  play: async ({ canvas }) => {
+    const button = canvas.getByRole('button', { name: 'CSS check' })
+    await expect(getComputedStyle(button).backgroundColor).toBe('rgb(21, 83, 182)')
+  },
+  tags: ['!autodocs'],
 }

@@ -2,20 +2,21 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { Image } from './Image'
 
-const meta: Meta<typeof Image> = {
+const meta = {
   title: 'Atoms/Image',
   component: Image,
   tags: ['autodocs'],
-  parameters: { layout: 'padded' },
+  parameters: { controls: { disable: true }, layout: 'padded' },
   argTypes: {
     aspectRatio: { control: 'text' },
   },
-}
+} satisfies Meta<typeof Image>
 
 export default meta
 type Story = StoryObj<typeof Image>
 
 export const Playground: Story = {
+  parameters: { controls: { disable: false } },
   args: {
     src: 'https://picsum.photos/seed/ql-story/800/400',
     alt: 'A placeholder landscape image',

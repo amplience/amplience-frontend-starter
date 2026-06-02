@@ -25,6 +25,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
     "storybook": "pnpm --filter @amplience/quadratic-components storybook",
     "sb": "pnpm storybook"
   },
@@ -32,8 +34,9 @@
     "@amplience/quadratic-config": "workspace:*",
     "@eslint/js": "^9.39.4",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
-    "@next/eslint-plugin-next": "^16.2.6",
-    "@types/node": "^22.19.19",
+    "@next/eslint-plugin-next": "^16.2.7",
+    "@types/node": "^25.9.1",
+    "@vitest/coverage-v8": "4.1.8",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -42,10 +45,10 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-unused-imports": "^4.4.1",
     "husky": "^9.1.7",
-    "lint-staged": "^17.0.5",
+    "lint-staged": "^17.0.7",
     "prettier": "^3.8.3",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.59.4",
-    "vitest": "^4.1.7"
+    "typescript-eslint": "^8.60.1",
+    "vitest": "^4.1.8"
   }
 }

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { Typography } from './Typography'
 
-const meta: Meta<typeof Typography> = {
+const meta = {
   title: 'Atoms/Typography',
   component: Typography,
   tags: ['autodocs'],
@@ -16,12 +16,17 @@ const meta: Meta<typeof Typography> = {
       options: [undefined, 'left', 'center', 'right'],
     },
   },
-}
+  parameters: {
+    controls: { disable: true },
+    layout: 'padded',
+  },
+} satisfies Meta<typeof Typography>
 
 export default meta
 type Story = StoryObj<typeof Typography>
 
 export const Playground: Story = {
+  parameters: { controls: { disable: false } },
   args: {
     variant: 'p',
     children: 'The quick brown fox jumps over the lazy dog.',
@@ -30,7 +35,7 @@ export const Playground: Story = {
 
 export const TypeScale: Story = {
   render: () => (
-    <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <Typography variant="h1">Heading 1</Typography>
       <Typography variant="h2">Heading 2</Typography>
       <Typography variant="h3">Heading 3</Typography>
@@ -49,7 +54,7 @@ export const TypeScale: Story = {
 
 export const Alignment: Story = {
   render: () => (
-    <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <Typography variant="p" align="left">
         Left-aligned (default)
       </Typography>
@@ -66,7 +71,7 @@ export const Alignment: Story = {
 export const PolymorphicAs: Story = {
   name: 'Polymorphic (as)',
   render: () => (
-    <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <Typography as="p" variant="h2">
         h2 visual style on a &lt;p&gt; element
       </Typography>
