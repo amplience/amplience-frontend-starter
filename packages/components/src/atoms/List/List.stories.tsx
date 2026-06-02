@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { ListItem } from '../ListItem/ListItem'
 import { List } from './List'
 
-const meta: Meta<typeof List> = {
+const meta = {
   title: 'Atoms/List',
   component: List,
   tags: ['autodocs'],
@@ -21,7 +21,7 @@ const meta: Meta<typeof List> = {
       options: ['auto', 'none'],
     },
   },
-}
+} satisfies Meta<typeof List>
 
 export default meta
 type Story = StoryObj<typeof List>

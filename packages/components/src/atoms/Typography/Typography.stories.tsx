@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { Typography } from './Typography'
 
-const meta: Meta<typeof Typography> = {
+const meta = {
   title: 'Atoms/Typography',
   component: Typography,
   tags: ['autodocs'],
@@ -16,7 +16,7 @@ const meta: Meta<typeof Typography> = {
       options: [undefined, 'left', 'center', 'right'],
     },
   },
-}
+} satisfies Meta<typeof Typography>
 
 export default meta
 type Story = StoryObj<typeof Typography>

@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { expect } from 'storybook/test'
 
 import { Typography } from '../Typography/Typography'
 import { Button } from './Button'
 
-const meta: Meta<typeof Button> = {
+const meta = {
   title: 'Atoms/Button',
   component: Button,
   tags: ['autodocs'],
@@ -17,7 +18,7 @@ const meta: Meta<typeof Button> = {
       options: ['black', 'white', 'primary', 'secondary'],
     },
   },
-}
+} satisfies Meta<typeof Button>
 
 export default meta
 type Story = StoryObj<typeof Button>
@@ -121,4 +122,22 @@ export const Disabled: Story = {
       </Button>
     </div>
   ),
+}
+
+/**
+ * CSS token smoke check — the only story in the package that asserts a
+ * computed style value. Proves that the design token CSS loaded correctly in
+ * Storybook; `toBeVisible()` alone would pass on an unstyled component.
+ *
+ * `--color-primary: #1553b6` resolves to `rgb(21, 83, 182)`. If the token
+ * stylesheet is missing, the background will be empty or transparent and this
+ * assertion will fail.
+ */
+export const CssCheck: Story = {
+  name: 'CSS token check (automated)',
+  args: { variant: 'solid', color: 'primary', children: 'CSS check' },
+  play: async ({ canvas }) => {
+    const button = canvas.getByRole('button', { name: 'CSS check' })
+    await expect(getComputedStyle(button).backgroundColor).toBe('rgb(21, 83, 182)')
+  },
 }

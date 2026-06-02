@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { Card } from './Card'
 
-const meta: Meta<typeof Card> = {
+const meta = {
   title: 'Atoms/Card',
   component: Card,
   tags: ['autodocs'],
@@ -21,7 +21,7 @@ const meta: Meta<typeof Card> = {
     },
     interactive: { control: 'boolean' },
   },
-}
+} satisfies Meta<typeof Card>
 
 export default meta
 type Story = StoryObj<typeof Card>

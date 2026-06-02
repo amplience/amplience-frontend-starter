@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { Placeholder } from '../Placeholder/Placeholder'
 import { Stack } from './Stack'
 
-const meta: Meta<typeof Stack> = {
+const meta = {
   title: 'Atoms/Stack',
   component: Stack,
   tags: ['autodocs'],
@@ -18,7 +18,7 @@ const meta: Meta<typeof Stack> = {
     },
     wrap: { control: 'boolean' },
   },
-}
+} satisfies Meta<typeof Stack>
 
 export default meta
 type Story = StoryObj<typeof Stack>

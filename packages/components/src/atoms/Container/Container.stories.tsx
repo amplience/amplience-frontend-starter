@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import { Container } from './Container'
 
-const meta: Meta<typeof Container> = {
+const meta = {
   title: 'Atoms/Container',
   component: Container,
   tags: ['autodocs'],
@@ -13,7 +13,7 @@ const meta: Meta<typeof Container> = {
     },
     gutter: { control: 'boolean' },
   },
-}
+} satisfies Meta<typeof Container>
 
 export default meta
 type Story = StoryObj<typeof Container>
