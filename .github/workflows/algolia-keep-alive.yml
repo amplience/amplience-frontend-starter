@@ -1,0 +1,50 @@
+# Fires a POST to each webhook URL in the KEEPALIVE_WEBHOOK_URLS secret once a
+# month. This triggers a blog-post publish on each linked demo site, preventing
+# the associated Algolia demo accounts from being suspended due to inactivity.
+#
+# Add or remove demo accounts by updating the secret value — no code changes
+# needed. KEEPALIVE_WEBHOOK_URLS is a comma-separated list of webhook URLs
+# (Settings → Secrets and variables → Actions).
+#
+# workflow_dispatch lets you trigger a run manually from the Actions tab, which
+# is useful both for initial testing and for rescuing a suspended account
+# mid-month without waiting for the schedule.
+name: Algolia demo keep-alive
+
+on:
+  schedule:
+    - cron: '0 9 1 * *' # 09:00 UTC on the 1st of each month
+  workflow_dispatch: # manual trigger
+
+concurrency:
+  group: algolia-keep-alive
+  cancel-in-progress: false # never cancel a run mid-webhook-fire
+
+jobs:
+  fire-webhooks:
+    name: Fire keep-alive webhooks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Fire keep-alive webhooks
+        run: pnpm --filter @amplience/quadratic-automation keep-alive
+        env:
+          KEEPALIVE_WEBHOOK_URLS: ${{ secrets.KEEPALIVE_WEBHOOK_URLS }}
