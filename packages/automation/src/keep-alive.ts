@@ -31,7 +31,11 @@ console.log(`Firing ${urls.length} keep-alive webhook(s)…\n`)
 
 const results = await Promise.allSettled(
   urls.map(async (url) => {
-    const res = await fetch(url, { method: 'POST' })
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    })
     if (!res.ok) throw new Error(`${url} → HTTP ${res.status}`)
     return url
   }),
