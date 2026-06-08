@@ -2,6 +2,10 @@
   "name": "@amplience/quadratic-automation",
   "version": "0.0.0",
   "private": true,
-  "description": "Automation CLI using dc-management-sdk-js.",
-  "type": "module"
+  "description": "Automation scripts for Quadratic Lite demo infrastructure.",
+  "type": "module",
+  "scripts": {
+    "keep-alive": "node --experimental-strip-types src/keep-alive.ts",
+    "typecheck": "tsc --noEmit"
+  }
 }
