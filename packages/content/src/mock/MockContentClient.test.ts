@@ -37,7 +37,7 @@ describe('MockContentClient', () => {
     // Components inside the slot are also inlined.
     expect(slot?.components).toHaveLength(2)
     expect(slot?.components[0]?._meta.schema).toBe(
-      'https://quadratic.amplience.com/v2/content/banner',
+      'https://quadratic.amplience.com/v2/content/hero',
     )
     expect(slot?.components[1]?._meta.schema).toBe(
       'https://quadratic.amplience.com/v2/content/text-block',
