@@ -21,7 +21,8 @@
     "./icon": "./src/atoms/Icon/Icon.tsx",
     "./list": "./src/atoms/List/List.tsx",
     "./list-item": "./src/atoms/ListItem/ListItem.tsx",
-    "./card": "./src/atoms/Card/Card.tsx"
+    "./card": "./src/atoms/Card/Card.tsx",
+    "./hero": "./src/molecules/Hero/Hero.tsx"
   },
   "peerDependencies": {
     "next": "^16.0.0",

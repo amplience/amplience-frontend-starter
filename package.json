@@ -18,6 +18,7 @@
     "prepare": "husky",
     "dev": "pnpm --filter @amplience/quadratic-web dev",
     "build": "pnpm --filter @amplience/quadratic-web build",
+    "start": "pnpm --filter @amplience/quadratic-web start",
     "typecheck": "tsc --noEmit && pnpm -r typecheck",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix --max-warnings=0",
