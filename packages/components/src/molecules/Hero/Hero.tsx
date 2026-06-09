@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import type { CSSProperties } from 'react'
+import { useId, type CSSProperties } from 'react'
 
 import { Button, type ButtonProps } from '../../atoms/Button/Button'
 import { Container } from '../../atoms/Container/Container'
@@ -214,6 +214,7 @@ export function Hero({
   // ratio as a CSS custom property. Only set when at least one breakpoint
   // uses overlay + flexible.
   const hasImage = image != null
+  const titleId = useId()
   const needsAspectRatio =
     hasImage &&
     heightBehaviour === 'flexible' &&
@@ -221,6 +222,7 @@ export function Hero({
 
   return (
     <section
+      aria-labelledby={titleId}
       className={clsx(styles.root, className)}
       data-content-position-mobile={hasImage ? contentPositionMobile : undefined}
       data-content-position-desktop={hasImage ? contentPositionDesktop : undefined}
@@ -255,7 +257,7 @@ export function Hero({
             } as CSSProperties
           }
         >
-          <Typography variant="h1" className={styles.title ?? ''}>
+          <Typography id={titleId} variant="h1" className={styles.title ?? ''}>
             {title}
           </Typography>
 

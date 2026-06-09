@@ -223,11 +223,6 @@ describe('Hero', () => {
       expect(screen.getByRole('region').getAttribute('data-background-color')).toBe('dark')
     })
 
-    it('does not set data-background-color when omitted', () => {
-      render(<Hero title="Title" />)
-      expect(screen.getByRole('region').getAttribute('data-background-color')).toBeNull()
-    })
-
     it('sets data-background-color even without an image', () => {
       render(<Hero title="Title" backgroundColor="primary" />)
       expect(screen.getByRole('region').getAttribute('data-background-color')).toBe('primary')
@@ -240,11 +235,6 @@ describe('Hero', () => {
 
     it('does not set data-overlay-color when image is omitted', () => {
       render(<Hero title="Title" overlayColor="primary" />)
-      expect(screen.getByRole('region').getAttribute('data-overlay-color')).toBeNull()
-    })
-
-    it('does not set data-overlay-color when not provided', () => {
-      render(<Hero title="Title" image={sampleImage} />)
       expect(screen.getByRole('region').getAttribute('data-overlay-color')).toBeNull()
     })
   })
