@@ -1,0 +1,169 @@
+import clsx from 'clsx'
+
+import { Button } from '../../atoms/Button/Button'
+import type { ButtonColor, ButtonVariant } from '../../atoms/Button/Button'
+import { Card } from '../../atoms/Card/Card'
+import type { CardColor, CardElevation } from '../../atoms/Card/Card'
+import { Image } from '../../atoms/Image/Image'
+import type { ImageProps } from '../../atoms/Image/Image'
+import { Link } from '../../atoms/Link/Link'
+import { Typography } from '../../atoms/Typography/Typography'
+import styles from './MediaCard.module.css'
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
+/**
+ * Controls how the image and body are arranged inside the card.
+ *
+ *   above   — image stacked above the text body (default)
+ *   beside  — image left, body right in a fixed split
+ *   dynamic — above when the card is narrow, beside when wide.
+ *             Uses a container query so the switch is driven by the
+ *             card's own rendered width, not the viewport.
+ *   overlay — image fills the card; body is layered on top with a
+ *             gradient scrim. Uses CSS grid named areas so both slots
+ *             occupy the same cell without absolute positioning.
+ */
+export type MediaCardLayout = 'above' | 'beside' | 'dynamic' | 'overlay'
+
+export type MediaCardCtaProps = {
+  label: string
+  href: string
+  variant?: ButtonVariant
+  color?: ButtonColor
+}
+
+export type MediaCardProps = {
+  /** Card heading. Rendered as an h3 by default; override via headingVariant. */
+  title: string
+  /** Optional body copy below the title. */
+  description?: string
+  /**
+   * Cover image. Renders flush with the card edge (no Card padding).
+   * All Image atom props are accepted (src, alt, width, height, aspectRatio …).
+   */
+  image?: ImageProps
+  /**
+   * Makes the entire card a single link. When set, `cta` is ignored —
+   * avoid nesting interactive elements inside an already-interactive card.
+   * External URLs open in a new tab; internal paths use Next.js routing.
+   */
+  href?: string
+  /**
+   * Explicit call-to-action rendered inside the body. Only used when `href`
+   * is not set. Use `href` when you want the whole card to be clickable.
+   */
+  cta?: MediaCardCtaProps
+  /**
+   * Image/body arrangement — see MediaCardLayout.
+   * Defaults to 'above'.
+   */
+  layout?: MediaCardLayout
+  /**
+   * Heading element rendered for the card title.
+   * Defaults to 'h3' — adjust to fit the surrounding document outline.
+   */
+  headingVariant?: 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+  /** Card surface elevation. Passed through to the Card atom. Defaults to 'raised'. */
+  elevation?: CardElevation
+  /** Card surface colour. Passed through to the Card atom. Defaults to 'white'. */
+  color?: CardColor
+  className?: string
+}
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
+
+/**
+ * MediaCard molecule — a card with an optional cover image, title, body
+ * copy, and a CTA.
+ *
+ * Composes the Card atom with `padding="none"` so the image bleeds flush
+ * to the card edge; text content is padded in its own body slot.
+ *
+ * Layout variants:
+ *   above   — image above text (default)
+ *   beside  — image left, text right
+ *   dynamic — container-query driven: above when narrow, beside when wide
+ *   overlay — image fills the card, text overlays with a gradient scrim
+ *
+ * Linking:
+ *   href — wraps the whole card in a link (sets Card interactive)
+ *   cta  — explicit action inside the body (only when href is absent)
+ *
+ * Usage:
+ *   <MediaCard title="Spring collection" image={…} href="/products" />
+ *   <MediaCard title="Explore" description="…" layout="beside" cta={{ label: 'Shop now', href: '/shop' }} />
+ *   <MediaCard title="Tile" image={…} layout="overlay" />
+ */
+export function MediaCard({
+  title,
+  description,
+  image,
+  href,
+  cta,
+  layout = 'above',
+  headingVariant = 'h3',
+  elevation = 'raised',
+  color = 'white',
+  className,
+}: MediaCardProps) {
+  const isLinked = href != null
+
+  const mediaEl = image != null && (
+    <div className={styles.media}>
+      <Image {...image} className={clsx(styles.image, image.className)} />
+    </div>
+  )
+
+  const bodyEl = (
+    <div className={styles.body}>
+      <Typography variant={headingVariant} className={clsx(styles.title)}>
+        {title}
+      </Typography>
+
+      {description && (
+        <Typography variant="p" className={clsx(styles.description)}>
+          {description}
+        </Typography>
+      )}
+
+      {/* CTA only renders when the card is not already a full-card link */}
+      {!isLinked && cta && (
+        <div className={styles.cta}>
+          <Button href={cta.href} variant={cta.variant ?? 'solid'} color={cta.color ?? 'primary'}>
+            {cta.label}
+          </Button>
+        </div>
+      )}
+    </div>
+  )
+
+  const inner = (
+    <div className={styles.inner} data-layout={layout}>
+      {mediaEl}
+      {bodyEl}
+    </div>
+  )
+
+  return (
+    <Card
+      className={clsx(styles.root, className)}
+      padding="none"
+      elevation={elevation}
+      color={color}
+      interactive={isLinked}
+    >
+      {isLinked ? (
+        <Link href={href} className={clsx(styles.link)}>
+          {inner}
+        </Link>
+      ) : (
+        inner
+      )}
+    </Card>
+  )
+}

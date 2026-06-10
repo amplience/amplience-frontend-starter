@@ -1,0 +1,91 @@
+/*
+ * ColumnsBlock molecule styles.
+ *
+ * Renders children as equal-width, non-wrapping columns.
+ * Column count is implicit — one per child.
+ *
+ * Uses `grid-auto-flow: column` + `grid-auto-columns: 1fr` so every child
+ * gets equal width automatically, with no wrapping.
+ *
+ * GAP:
+ *   --columns-block-gap — overrides --gap token when set via prop
+ *
+ * BACKGROUND:
+ *   data-background-color — primary / secondary / tertiary / white / light / dark / black
+ *
+ * BRAND OVERRIDES: redefine --columns-block-* variables under [data-brand].
+ */
+
+/* ---------------------------------------------------------------------------
+   Variables + base container
+   --------------------------------------------------------------------------- */
+
+.root {
+  --columns-block-gap: var(--gap);
+  --columns-block-padding-y: calc(var(--spacing) * 10);
+
+  --columns-block-background-color: transparent;
+  --columns-block-text-color: inherit;
+
+  box-sizing: border-box;
+  background-color: var(--columns-block-background-color);
+  color: var(--columns-block-text-color);
+  padding-block: var(--columns-block-padding-y);
+}
+
+/* ---------------------------------------------------------------------------
+   Columns layout
+   Mobile-first: items stack vertically (grid-auto-flow: row, one item per row).
+   Tablet+ (≥ 769px): items sit side-by-side in equal-width columns via
+   grid-auto-flow: column + grid-auto-columns: 1fr.
+   Column count is implicit — one column per child — with no wrapping.
+   --------------------------------------------------------------------------- */
+
+.columns {
+  display: grid;
+  gap: var(--columns-block-gap);
+  align-items: var(--columns-block-align-items, stretch);
+  /* Mobile: stack vertically */
+  grid-auto-flow: row;
+}
+
+@media (min-width: 769px) {
+  .columns {
+    /* Tablet+: side-by-side, equal-width columns */
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Background colour
+   --------------------------------------------------------------------------- */
+
+.root[data-background-color='primary'] {
+  --columns-block-background-color: var(--color-primary);
+  --columns-block-text-color: var(--color-primary-contrast);
+}
+.root[data-background-color='secondary'] {
+  --columns-block-background-color: var(--color-secondary);
+  --columns-block-text-color: var(--color-secondary-contrast);
+}
+.root[data-background-color='tertiary'] {
+  --columns-block-background-color: var(--color-tertiary);
+  --columns-block-text-color: var(--color-tertiary-contrast);
+}
+.root[data-background-color='light'] {
+  --columns-block-background-color: var(--color-gray-100);
+  --columns-block-text-color: var(--color-black);
+}
+.root[data-background-color='dark'] {
+  --columns-block-background-color: var(--color-gray-800);
+  --columns-block-text-color: var(--color-white);
+}
+.root[data-background-color='black'] {
+  --columns-block-background-color: var(--color-black);
+  --columns-block-text-color: var(--color-white);
+}
+.root[data-background-color='white'] {
+  --columns-block-background-color: var(--color-white);
+  --columns-block-text-color: var(--color-black);
+}

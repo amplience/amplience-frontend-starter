@@ -1,0 +1,168 @@
+/*
+ * MediaCard molecule styles.
+ *
+ * LAYOUT VARIANTS (data-layout on .inner):
+ *   above   — image above body (default flex column)
+ *   beside  — image left, body right (flex row)
+ *   dynamic — container-query driven: above → beside at 380px
+ *   overlay — image and body stacked in the same CSS grid cell;
+ *             body sits above image via z-index, gradient scrim below
+ *
+ * The root receives `container-type: inline-size` so the 'dynamic'
+ * variant can query the card's own rendered width, not the viewport.
+ * This means a card in a narrow GridBlock column switches at the right
+ * breakpoint independently of its siblings.
+ *
+ * IMAGE BLEED:
+ *   Card is rendered with padding="none". Only .body adds padding, so
+ *   the image always bleeds flush to the card edge.
+ *
+ * OVERLAY SCRIM:
+ *   Uses CSS grid stacking (grid-area: stack) rather than absolute
+ *   positioning so the image drives the card height naturally.
+ *
+ * BRAND OVERRIDES: redefine --media-card-* variables under [data-brand].
+ */
+
+/* ---------------------------------------------------------------------------
+   Root — container query anchor
+   --------------------------------------------------------------------------- */
+
+.root {
+  --media-card-body-padding: var(--spacing-4);
+  --media-card-beside-image-width: 45%;
+  --media-card-overlay-scrim: linear-gradient(to top, rgb(0 0 0 / 0.75) 0%, transparent 60%);
+  --media-card-overlay-text-color: var(--color-white);
+
+  /* Enables @container queries on .inner so 'dynamic' layout is driven
+     by the card's own width, not the viewport. */
+  container-type: inline-size;
+}
+
+/* ---------------------------------------------------------------------------
+   Link wrapper — full-bleed block link, no visual styling
+   --------------------------------------------------------------------------- */
+
+.link {
+  display: block;
+}
+
+/* ---------------------------------------------------------------------------
+   Inner — layout container
+   --------------------------------------------------------------------------- */
+
+/* above (default): image above, body below */
+.inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* beside: image left, body right */
+.inner[data-layout='beside'] {
+  flex-direction: row;
+
+  > .media {
+    width: var(--media-card-beside-image-width);
+    flex-shrink: 0;
+  }
+
+  > .body {
+    flex: 1;
+    min-width: 0; /* prevent flex child overflow */
+  }
+}
+
+/* dynamic: above by default, beside when card is ≥ 380px wide */
+.inner[data-layout='dynamic'] {
+  flex-direction: column;
+
+  @container (min-width: 380px) {
+    flex-direction: row;
+
+    > .media {
+      width: var(--media-card-beside-image-width);
+      flex-shrink: 0;
+    }
+
+    > .body {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+}
+
+/* overlay: image and body occupy the same grid cell via named areas.
+   Body sits above the image (z-index); gradient scrim provides legibility. */
+.inner[data-layout='overlay'] {
+  display: grid;
+  grid-template-areas: 'stack';
+
+  > .media {
+    grid-area: stack;
+  }
+
+  > .body {
+    grid-area: stack;
+    align-self: end;
+    z-index: 1;
+    background: var(--media-card-overlay-scrim);
+    color: var(--media-card-overlay-text-color);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Media slot — image fills its container
+   --------------------------------------------------------------------------- */
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* beside / dynamic-wide: match body height */
+.inner[data-layout='beside'] > .media,
+.inner[data-layout='dynamic'] > .media {
+  > .image {
+    height: 100%;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Body — padded text content
+   --------------------------------------------------------------------------- */
+
+.body {
+  padding: var(--media-card-body-padding);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 2);
+}
+
+/* In overlay mode, body padding is reduced — gradient does the legibility work */
+.inner[data-layout='overlay'] > .body {
+  padding: calc(var(--media-card-body-padding) * 1.5) var(--media-card-body-padding);
+}
+
+/* ---------------------------------------------------------------------------
+   Typography slots
+   --------------------------------------------------------------------------- */
+
+.title {
+  margin: 0;
+}
+
+.description {
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   CTA slot — pushes to bottom of the body column
+   --------------------------------------------------------------------------- */
+
+.cta {
+  margin-block-start: auto;
+  padding-block-start: calc(var(--spacing) * 2);
+}

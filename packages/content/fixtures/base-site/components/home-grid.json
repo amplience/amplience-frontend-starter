@@ -1,0 +1,55 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000010",
+  "label": "Home — Quadratic attributes grid",
+  "body": {
+    "_meta": {
+      "name": "Home — Quadratic attributes grid",
+      "schema": "https://quadratic.amplience.com/v2/content/grid",
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000010",
+      "deliveryKeys": {
+        "values": [{ "value": "home/grid" }]
+      }
+    },
+    "sizingMode": "auto",
+    "minItemWidth": 280,
+    "backgroundColor": "light",
+    "gutter": true,
+    "items": [
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000011",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000012",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000013",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000018",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000019",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

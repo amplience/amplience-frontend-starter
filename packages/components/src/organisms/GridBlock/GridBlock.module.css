@@ -1,0 +1,104 @@
+/*
+ * GridBlock molecule styles.
+ *
+ * SIZING MODES (data-sizing-mode):
+ *   'fixed' — columns per breakpoint driven by CSS custom properties:
+ *               --grid-block-columns-mobile   (default 1)
+ *               --grid-block-columns-tablet   (default 2)
+ *               --grid-block-columns-desktop  (default 3)
+ *   'auto'  — browser-derived columns via auto-fit + minmax:
+ *               --grid-block-min-item-width   (default 250px)
+ *
+ * GAP:
+ *   --grid-block-gap — overrides --gap token when set via prop
+ *
+ * BACKGROUND:
+ *   data-background-color — primary / secondary / tertiary / white / light / dark / black
+ *
+ * BRAND OVERRIDES: redefine --grid-block-* variables under [data-brand].
+ */
+
+/* ---------------------------------------------------------------------------
+   Variables + base container
+   --------------------------------------------------------------------------- */
+
+.root {
+  --grid-block-columns-mobile: 1;
+  --grid-block-columns-tablet: 2;
+  --grid-block-columns-desktop: 3;
+  --grid-block-min-item-width: 250px;
+  --grid-block-gap: var(--gap);
+  --grid-block-padding-y: calc(var(--spacing) * 10);
+
+  --grid-block-background-color: transparent;
+  --grid-block-text-color: inherit;
+
+  box-sizing: border-box;
+  background-color: var(--grid-block-background-color);
+  color: var(--grid-block-text-color);
+  padding-block: var(--grid-block-padding-y);
+}
+
+/* ---------------------------------------------------------------------------
+   Grid — fixed mode (default)
+   --------------------------------------------------------------------------- */
+
+.grid {
+  display: grid;
+  gap: var(--grid-block-gap);
+  /* Mobile-first: use the mobile column count */
+  grid-template-columns: repeat(var(--grid-block-columns-mobile), 1fr);
+}
+
+@media (min-width: 769px) {
+  .root[data-sizing-mode='fixed'] .grid {
+    grid-template-columns: repeat(var(--grid-block-columns-tablet), 1fr);
+  }
+}
+
+@media (min-width: 1025px) {
+  .root[data-sizing-mode='fixed'] .grid {
+    grid-template-columns: repeat(var(--grid-block-columns-desktop), 1fr);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Grid — auto mode
+   --------------------------------------------------------------------------- */
+
+.root[data-sizing-mode='auto'] .grid {
+  grid-template-columns: repeat(auto-fit, minmax(var(--grid-block-min-item-width), 1fr));
+}
+
+/* ---------------------------------------------------------------------------
+   Background colour
+   --------------------------------------------------------------------------- */
+
+.root[data-background-color='primary'] {
+  --grid-block-background-color: var(--color-primary);
+  --grid-block-text-color: var(--color-primary-contrast);
+}
+.root[data-background-color='secondary'] {
+  --grid-block-background-color: var(--color-secondary);
+  --grid-block-text-color: var(--color-secondary-contrast);
+}
+.root[data-background-color='tertiary'] {
+  --grid-block-background-color: var(--color-tertiary);
+  --grid-block-text-color: var(--color-tertiary-contrast);
+}
+.root[data-background-color='light'] {
+  --grid-block-background-color: var(--color-gray-100);
+  --grid-block-text-color: var(--color-black);
+}
+.root[data-background-color='dark'] {
+  --grid-block-background-color: var(--color-gray-800);
+  --grid-block-text-color: var(--color-white);
+}
+.root[data-background-color='black'] {
+  --grid-block-background-color: var(--color-black);
+  --grid-block-text-color: var(--color-white);
+}
+.root[data-background-color='white'] {
+  --grid-block-background-color: var(--color-white);
+  --grid-block-text-color: var(--color-black);
+}

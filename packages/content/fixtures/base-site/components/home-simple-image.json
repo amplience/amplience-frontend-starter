@@ -1,0 +1,20 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000007",
+  "label": "Home — simple image",
+  "body": {
+    "_meta": {
+      "name": "Home — simple image",
+      "schema": "https://quadratic.amplience.com/v2/content/image",
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000007",
+      "deliveryKeys": {
+        "values": [{ "value": "home/simple-image" }]
+      }
+    },
+    "image": {
+      "src": "https://picsum.photos/seed/ql-feature/600/600",
+      "alt": "Quadratic Lite — open-source accelerator for Amplience-backed projects",
+      "width": 600,
+      "height": 600
+    }
+  }
+}

@@ -1,0 +1,130 @@
+/*
+ * ImageBlock molecule styles.
+ *
+ * LAYOUT:
+ *   Default — image constrained by Container max-width, with section padding.
+ *   Full-bleed (data-full-bleed="true") — image runs edge-to-edge; the
+ *   Container's padding and max-width are removed by the component in JSX.
+ *   Vertical padding is preserved in both modes.
+ *
+ * BACKGROUND:
+ *   data-background-color — primary / secondary / tertiary / white / light / dark / black
+ *
+ * BRAND OVERRIDES: redefine --image-block-* variables under [data-brand].
+ */
+
+/* ---------------------------------------------------------------------------
+   Variables + base container
+   --------------------------------------------------------------------------- */
+
+.root {
+  --image-block-padding-y: calc(var(--spacing) * 10);
+  --image-block-caption-gap: calc(var(--spacing) * 3);
+  --image-block-caption-color: var(--color-gray-600);
+  --image-block-caption-background-color: var(--color-gray-100);
+
+  --image-block-background-color: transparent;
+  --image-block-text-color: inherit;
+
+  box-sizing: border-box;
+  background-color: var(--image-block-background-color);
+  color: var(--image-block-text-color);
+}
+
+.container {
+  padding-block: var(--image-block-padding-y);
+}
+
+/* Full-bleed: remove vertical padding so the image sits flush with adjacent sections */
+.root[data-full-bleed='true'] .container {
+  padding: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Figure — reset browser default margin
+   --------------------------------------------------------------------------- */
+
+.figure {
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Image — fill its container
+   --------------------------------------------------------------------------- */
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------------------------------------------------------------------------
+   Link wrapper — block-level so the image fills the anchor correctly.
+   Hover reads from --interactive-hover-* tokens so the effect is consistent
+   with other interactive surfaces (cards etc.) across all themes.
+   overflow: hidden ensures scale transforms clip to the image boundary
+   rather than bleeding into adjacent layout.
+   --------------------------------------------------------------------------- */
+
+.link {
+  display: block;
+  overflow: hidden;
+  transition:
+    box-shadow 0.15s ease,
+    transform 0.15s ease,
+    opacity 0.15s ease;
+
+  &:hover {
+    box-shadow: var(--interactive-hover-shadow, none);
+    transform: var(--interactive-hover-transform, none);
+    opacity: var(--interactive-hover-opacity, 1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Caption
+   --------------------------------------------------------------------------- */
+
+.caption {
+  padding: var(--image-block-caption-gap);
+  color: var(--image-block-caption-color);
+  background-color: var(--image-block-caption-background-color);
+}
+
+/* ---------------------------------------------------------------------------
+   Background colour
+   --------------------------------------------------------------------------- */
+
+.root[data-background-color='primary'] {
+  --image-block-background-color: var(--color-primary);
+  --image-block-text-color: var(--color-primary-contrast);
+}
+.root[data-background-color='secondary'] {
+  --image-block-background-color: var(--color-secondary);
+  --image-block-text-color: var(--color-secondary-contrast);
+}
+.root[data-background-color='tertiary'] {
+  --image-block-background-color: var(--color-tertiary);
+  --image-block-text-color: var(--color-tertiary-contrast);
+}
+.root[data-background-color='light'] {
+  --image-block-background-color: var(--color-gray-100);
+  --image-block-text-color: var(--color-black);
+}
+.root[data-background-color='dark'] {
+  --image-block-background-color: var(--color-gray-800);
+  --image-block-text-color: var(--color-white);
+}
+.root[data-background-color='black'] {
+  --image-block-background-color: var(--color-black);
+  --image-block-text-color: var(--color-white);
+}
+.root[data-background-color='white'] {
+  --image-block-background-color: var(--color-white);
+  --image-block-text-color: var(--color-black);
+}

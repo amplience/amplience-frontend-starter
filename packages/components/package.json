@@ -22,7 +22,13 @@
     "./list": "./src/atoms/List/List.tsx",
     "./list-item": "./src/atoms/ListItem/ListItem.tsx",
     "./card": "./src/atoms/Card/Card.tsx",
-    "./hero": "./src/molecules/Hero/Hero.tsx"
+    "./media-card": "./src/molecules/MediaCard/MediaCard.tsx",
+    "./markdown": "./src/molecules/Markdown/Markdown.tsx",
+    "./hero-block": "./src/organisms/HeroBlock/HeroBlock.tsx",
+    "./image-block": "./src/organisms/ImageBlock/ImageBlock.tsx",
+    "./grid-block": "./src/organisms/GridBlock/GridBlock.tsx",
+    "./columns-block": "./src/organisms/ColumnsBlock/ColumnsBlock.tsx",
+    "./markdown-block": "./src/organisms/MarkdownBlock/MarkdownBlock.tsx"
   },
   "peerDependencies": {
     "next": "^16.0.0",
@@ -38,7 +44,7 @@
     "@storybook/nextjs-vite": "^10.4.2",
     "@storybook/react": "^10.4.2",
     "@testing-library/react": "^16.3.2",
-    "@types/react": "^19.2.16",
+    "@types/react": "19.2.16",
     "jsdom": "^29.1.1",
     "next": "^16.2.7",
     "react": "^19.2.7",
@@ -48,6 +54,7 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "lucide-react": "^1.17.0"
+    "lucide-react": "^1.17.0",
+    "react-markdown": "^9.1.0"
   }
 }

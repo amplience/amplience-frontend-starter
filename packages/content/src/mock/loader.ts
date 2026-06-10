@@ -9,8 +9,18 @@
  * `../../fixtures/base-site/README.md` for the format and ADR-0008 for why.
  */
 
+import homeColumnsImage from '../../fixtures/base-site/components/home-columns-image.json' with { type: 'json' }
+import homeColumnsMarkdown from '../../fixtures/base-site/components/home-columns-markdown.json' with { type: 'json' }
+import homeColumns from '../../fixtures/base-site/components/home-columns.json' with { type: 'json' }
+import homeGrid from '../../fixtures/base-site/components/home-grid.json' with { type: 'json' }
 import homeHero from '../../fixtures/base-site/components/home-hero.json' with { type: 'json' }
-import homeText from '../../fixtures/base-site/components/home-text.json' with { type: 'json' }
+import homeImage from '../../fixtures/base-site/components/home-image.json' with { type: 'json' }
+import homeMarkdown from '../../fixtures/base-site/components/home-markdown.json' with { type: 'json' }
+import homeMediaCard1 from '../../fixtures/base-site/components/home-media-card-1.json' with { type: 'json' }
+import homeMediaCard2 from '../../fixtures/base-site/components/home-media-card-2.json' with { type: 'json' }
+import homeMediaCard3 from '../../fixtures/base-site/components/home-media-card-3.json' with { type: 'json' }
+import homeMediaCard4 from '../../fixtures/base-site/components/home-media-card-4.json' with { type: 'json' }
+import homeMediaCard5 from '../../fixtures/base-site/components/home-media-card-5.json' with { type: 'json' }
 import homePage from '../../fixtures/base-site/pages/home.json' with { type: 'json' }
 import homeMainSlot from '../../fixtures/base-site/slots/home-main.json' with { type: 'json' }
 import type { EnrichedContentItem } from '../types'
@@ -23,7 +33,22 @@ import type { EnrichedContentItem } from '../types'
  * generate fixtures or accept user-provided ones, this is the boundary to add
  * runtime validation at.
  */
-const fixtures: readonly EnrichedContentItem[] = [homePage, homeMainSlot, homeHero, homeText]
+const fixtures: readonly EnrichedContentItem[] = [
+  homePage,
+  homeMainSlot,
+  homeHero,
+  homeImage,
+  homeGrid,
+  homeColumns,
+  homeColumnsImage,
+  homeColumnsMarkdown,
+  homeMarkdown,
+  homeMediaCard1,
+  homeMediaCard2,
+  homeMediaCard3,
+  homeMediaCard4,
+  homeMediaCard5,
+]
 
 /** Build `id → item` and `deliveryKey → item` maps from the fixture set. */
 const buildMaps = (

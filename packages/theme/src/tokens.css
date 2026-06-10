@@ -11,11 +11,16 @@
  * fight or undo the defaults.
  *
  * Token families defined here (expand as needed):
- *   --spacing   base unit for the spacing scale
- *   --radius    base unit for the border-radius scale
- *   --site-*    site layout variables (gutter, max-widths)
- *   --color-*   colour palette (primary, secondary, neutrals)
- *   --button-*  button defaults (padding, border-radius, colors)
+ *   --spacing            base unit for the spacing scale
+ *   --radius             base unit for the border-radius scale
+ *   --site-*             site layout variables (gutter, max-widths)
+ *   --color-*            colour palette (primary, secondary, neutrals)
+ *   --button-*           button defaults (padding, border-radius, colors)
+ *   --interactive-hover-* shared hover tokens applied to all interactive
+ *                        surfaces (cards, linked images, etc.). Components
+ *                        read from these so a single brand override is
+ *                        enough. Component-scoped tokens (e.g. --card-hover-*)
+ *                        are still available for more targeted overrides.
  */
 
 :root {
@@ -83,6 +88,12 @@
   --button-hover-background: var(--color-gray-800);
   --button-hover-border-color: var(--color-gray-800);
   --button-hover-color: var(--color-white);
+
+  /* Interactive hover — shared across all interactive surfaces.
+     Default values are no-ops; brands override to add motion/depth. */
+  --interactive-hover-shadow: none;
+  --interactive-hover-transform: none;
+  --interactive-hover-opacity: 1;
 }
 
 [data-brand='anyafinn'] {
@@ -94,7 +105,7 @@
   --color-tertiary-contrast: #000000;
   /* Soft fade — elegant, minimal. No movement, just a gentle opacity dip.
      Suits a fashion/lifestyle brand where motion feels heavy-handed. */
-  --card-hover-opacity: 0.8;
+  --interactive-hover-opacity: 0.8;
 }
 
 [data-brand='arbor-harvest'] {
@@ -107,10 +118,10 @@
   --color-white: #f8f9fa;
   --radius: var(--spacing);
   --button-border-radius: var(--radius);
-  /* Lift — classic e-commerce card raise. Shadow deepens and card floats up
+  /* Lift — classic e-commerce raise. Shadow deepens and element floats up
      slightly. Familiar pattern that signals "this is clickable". */
-  --card-hover-shadow: 0 8px 24px 0 rgb(0 0 0 / 0.14), 0 4px 8px -2px rgb(0 0 0 / 0.1);
-  --card-hover-transform: translateY(-2px);
+  --interactive-hover-shadow: 0 8px 24px 0 rgb(0 0 0 / 0.14), 0 4px 8px -2px rgb(0 0 0 / 0.1);
+  --interactive-hover-transform: translateY(-2px);
 }
 
 [data-brand='azure-harvest'] {
@@ -123,9 +134,9 @@
   --color-white: #f8fafc;
   --radius: var(--spacing);
   --button-border-radius: var(--radius);
-  /* Scale — tech/SaaS feel. Card grows very slightly in place; no shadow
+  /* Scale — tech/SaaS feel. Element grows very slightly in place; no shadow
      change keeps it flat and modern. */
-  --card-hover-transform: scale(1.02);
+  --interactive-hover-transform: scale(1.02);
 }
 
 [data-brand='culinary-supply-hub'] {
@@ -138,5 +149,5 @@
   --color-white: #f3f3f3;
   /* Shadow only — utilitarian B2B feel. No transform, just a deeper shadow
      that signals depth without any animation distraction. */
-  --card-hover-shadow: 0 4px 16px 0 rgb(0 0 0 / 0.18), 0 2px 6px -1px rgb(0 0 0 / 0.12);
+  --interactive-hover-shadow: 0 4px 16px 0 rgb(0 0 0 / 0.18), 0 2px 6px -1px rgb(0 0 0 / 0.12);
 }

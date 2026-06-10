@@ -35,3 +35,11 @@ select {
 hr {
   margin: 0;
 }
+
+pre {
+  width: 100%;
+  padding: var(--gap);
+  background: var(--color-gray-100);
+  border-radius: var(--radius);
+  white-space: pre-wrap;
+}

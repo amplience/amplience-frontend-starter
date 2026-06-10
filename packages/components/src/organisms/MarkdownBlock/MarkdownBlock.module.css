@@ -1,0 +1,59 @@
+/*
+ * MarkdownBlock organism styles.
+ *
+ * The section wrapper handles background colour and block-level spacing.
+ * Typography and prose rhythm live in Markdown.module.css.
+ * Brands override via --markdown-block-* tokens under [data-brand].
+ */
+
+.root {
+  padding-block: var(--spacing-10);
+}
+
+/* CTA row — rendered below the markdown content in both bare and wrapped modes */
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+  margin-top: var(--spacing-6);
+}
+
+/* Bare wrapper — minimal block container used when section+Container are stripped */
+.bareWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Background colour variants — mirror the pattern used across other block organisms */
+.root[data-background-color='light'] {
+  background-color: var(--color-gray-100);
+}
+
+.root[data-background-color='dark'] {
+  background-color: var(--color-gray-800);
+  color: var(--color-white);
+}
+
+.root[data-background-color='black'] {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.root[data-background-color='white'] {
+  background-color: var(--color-white);
+}
+
+.root[data-background-color='primary'] {
+  background-color: var(--color-primary);
+  color: var(--color-primary-contrast);
+}
+
+.root[data-background-color='secondary'] {
+  background-color: var(--color-secondary);
+  color: var(--color-secondary-contrast);
+}
+
+.root[data-background-color='tertiary'] {
+  background-color: var(--color-tertiary);
+  color: var(--color-tertiary-contrast);
+}

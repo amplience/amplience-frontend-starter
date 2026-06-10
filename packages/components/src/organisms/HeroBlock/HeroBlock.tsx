@@ -7,21 +7,21 @@ import type { ContainerProps } from '../../atoms/Container/Container'
 import { Image } from '../../atoms/Image/Image'
 import type { ImageProps } from '../../atoms/Image/Image'
 import { Typography } from '../../atoms/Typography/Typography'
-import styles from './Hero.module.css'
+import styles from './HeroBlock.module.css'
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-export type HeroContentPosition = 'overlay' | 'beneath'
-export type HeroHeightBehaviour = 'flexible' | 'fitToContent' | 'fitToImage'
-export type HeroVerticalPosition = 'top' | 'center' | 'bottom'
-export type HeroHorizontalPosition = 'left' | 'center' | 'right'
-export type HeroTextAlign = 'left' | 'center' | 'right'
-export type HeroOverlayStyle = 'gradient' | 'solid' | 'hard'
-export type HeroTextColor = HeroColorToken
+export type HeroBlockContentPosition = 'overlay' | 'beneath'
+export type HeroBlockHeightBehaviour = 'flexible' | 'fitToContent' | 'fitToImage'
+export type HeroBlockVerticalPosition = 'top' | 'center' | 'bottom'
+export type HeroBlockHorizontalPosition = 'left' | 'center' | 'right'
+export type HeroBlockTextAlign = 'left' | 'center' | 'right'
+export type HeroBlockOverlayStyle = 'gradient' | 'solid' | 'hard'
+export type HeroBlockTextColor = HeroBlockColorToken
 /** Shared palette type — used for both backgroundColor and overlayColor. */
-export type HeroColorToken =
+export type HeroBlockColorToken =
   | 'primary'
   | 'secondary'
   | 'tertiary'
@@ -29,17 +29,17 @@ export type HeroColorToken =
   | 'dark'
   | 'black'
   | 'white'
-export type HeroBackgroundColor = HeroColorToken
-export type HeroOverlayColor = HeroColorToken
+export type HeroBlockBackgroundColor = HeroBlockColorToken
+export type HeroBlockOverlayColor = HeroBlockColorToken
 
-export type HeroCtaProps = {
+export type HeroBlockCtaProps = {
   label: string
   href: string
   variant?: ButtonProps['variant']
   color?: ButtonProps['color']
 }
 
-export type HeroProps = {
+export type HeroBlockProps = {
   title: string
   subtitle?: string
   /**
@@ -48,19 +48,19 @@ export type HeroProps = {
    * Omit for a text-only hero.
    */
   image?: ImageProps
-  ctas?: HeroCtaProps[]
+  ctas?: HeroBlockCtaProps[]
   /**
    * Where the content sits relative to the image on mobile (≤ 768px).
    *   'overlay' — content overlays the image with a gradient scrim (default).
    *   'beneath' — content flows below the image.
    * Has no effect when image is omitted.
    */
-  contentPositionMobile?: HeroContentPosition
+  contentPositionMobile?: HeroBlockContentPosition
   /**
    * Where the content sits relative to the image on desktop (> 768px).
    * Defaults to 'overlay'. Has no effect when image is omitted.
    */
-  contentPositionDesktop?: HeroContentPosition
+  contentPositionDesktop?: HeroBlockContentPosition
   /**
    * Determines the hero's height when content overlays the image.
    *   'flexible'     — height = max(image's natural ratio, content). Default.
@@ -71,13 +71,13 @@ export type HeroProps = {
    *                    exceeds the image height.
    * Has no effect when contentPosition is 'beneath' at the active breakpoint.
    */
-  heightBehaviour?: HeroHeightBehaviour
+  heightBehaviour?: HeroBlockHeightBehaviour
   /**
    * Max-width constraint on the content slot. Passed through to the Container
    * atom — useful for limiting line length on text-heavy heroes.
    * Defaults to the Container's 'default' max-width.
    */
-  verticalPosition?: HeroVerticalPosition
+  verticalPosition?: HeroBlockVerticalPosition
   /**
    * Horizontal extent and alignment of the content panel.
    *   'left'      — content is capped at 50% width, aligned to the left edge
@@ -85,13 +85,13 @@ export type HeroProps = {
    *   'right'     — content is capped at 50% width, aligned to the right edge
    * Only applies in overlay layouts.
    */
-  horizontalPosition?: HeroHorizontalPosition
+  horizontalPosition?: HeroBlockHorizontalPosition
   /**
    * Text alignment of heading, subtitle, and CTA group.
    * Also aligns the CTA button group via justify-content.
    * Defaults to 'center'.
    */
-  textAlign?: HeroTextAlign
+  textAlign?: HeroBlockTextAlign
   /**
    * Max-width constraint on the content slot. Passed through to the Container
    * atom — useful for limiting line length on text-heavy heroes.
@@ -110,8 +110,8 @@ export type HeroProps = {
    * navy tint over a lifestyle image).
    * Has no effect when contentPosition is 'beneath' or no image is present.
    */
-  overlayColor?: HeroOverlayColor
-  overlayStyle?: HeroOverlayStyle
+  overlayColor?: HeroBlockOverlayColor
+  overlayStyle?: HeroBlockOverlayStyle
   /**
    * Strength of the overlay scrim.
    *   'none'   — no overlay (0% opacity)
@@ -132,7 +132,7 @@ export type HeroProps = {
    * mode it inherits from the page. Set this to override either.
    * Buttons manage their own colours and are unaffected.
    */
-  textColor?: HeroTextColor | undefined
+  textColor?: HeroBlockTextColor | undefined
   /**
    * Background colour of the hero section, drawn from the design token palette.
    * Applies in all layout modes and serves as:
@@ -142,7 +142,7 @@ export type HeroProps = {
    * When set, a matching foreground colour is applied automatically so text
    * remains readable even without the image.
    */
-  backgroundColor?: HeroBackgroundColor
+  backgroundColor?: HeroBlockBackgroundColor
   contentWidth?: number
   contentPadding?: number | undefined
   maxWidth?: ContainerProps['maxWidth']
@@ -189,7 +189,7 @@ export type HeroProps = {
  *     contentPositionDesktop="overlay"
  *   />
  */
-export function Hero({
+export function HeroBlock({
   title,
   subtitle,
   image,
@@ -209,7 +209,7 @@ export function Hero({
   contentWidth = 50,
   contentPadding,
   className,
-}: HeroProps) {
+}: HeroBlockProps) {
   // The ::before spacer in 'flexible' overlay mode needs the image aspect
   // ratio as a CSS custom property. Only set when at least one breakpoint
   // uses overlay + flexible.
@@ -269,7 +269,7 @@ export function Hero({
 
           {ctas && ctas.length > 0 && (
             <div className={styles.buttonGroup}>
-              {ctas.map(({ href, variant, color, label }) => (
+              {ctas.map(({ href, variant, color, label }: HeroBlockCtaProps) => (
                 <Button
                   key={href}
                   href={href}

@@ -24,6 +24,11 @@ export const CONTENT_LINK_SCHEMA =
 export type ContentMeta = {
   readonly schema: string
   readonly name?: string
+  /**
+   * The delivery UUID of this content item. Present on resolved inline items
+   * (depth='all') and on direct fetches from the real SDK. Used as the React
+   * key in the slot renderer so keys are stable and unique.
+   */
   readonly deliveryId?: string
   readonly deliveryKeys?: {
     readonly values: readonly { readonly value: string }[]

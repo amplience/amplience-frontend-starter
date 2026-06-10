@@ -10,6 +10,11 @@
     "url": "https://github.com/amplience/quadratic-lite.git"
   },
   "packageManager": "pnpm@9.15.4",
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.2.16"
+    }
+  },
   "engines": {
     "node": ">=22.22.1",
     "pnpm": ">=9.0.0"

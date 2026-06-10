@@ -1,0 +1,160 @@
+/*
+ * Markdown molecule — prose rhythm and element styles.
+ *
+ * react-markdown renders standard HTML elements (h1-h6, p, ul, ol, li,
+ * blockquote, code, pre, hr) inside .root. Descendant selectors style them
+ * here; brands can override via --markdown-* tokens under [data-brand].
+ *
+ * The flex-column + gap approach (from the reference implementation) spaces
+ * block-level children uniformly without collapsing margin edge-cases.
+ */
+
+/* ---------------------------------------------------------------------------
+   Root — block-level rhythm
+   --------------------------------------------------------------------------- */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap); /* --gap = --spacing-4 = 16px */
+
+  /* ---------------------------------------------------------------------------
+     Headings — mirror Typography atom scale (Typography.module.css)
+     --------------------------------------------------------------------------- */
+
+  & h1 {
+    font-size: 3.875rem;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  & h2 {
+    font-size: 3rem;
+    font-weight: 400;
+    line-height: 1.1;
+  }
+
+  & h3 {
+    font-size: 2.375rem;
+    font-weight: 400;
+    line-height: 1.15;
+  }
+
+  & h4 {
+    font-size: 1.75rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  & h5 {
+    font-size: 1.375rem;
+    font-weight: 500;
+    line-height: 1.25;
+  }
+
+  & h6 {
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  /* ---------------------------------------------------------------------------
+     Paragraph
+     --------------------------------------------------------------------------- */
+
+  & p {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  /* ---------------------------------------------------------------------------
+     Lists
+     --------------------------------------------------------------------------- */
+
+  & ul,
+  & ol {
+    padding-inline-start: var(--spacing-6);
+  }
+
+  & ul {
+    list-style-type: disc;
+  }
+
+  & ol {
+    list-style-type: decimal;
+  }
+
+  & li + li {
+    margin-block-start: var(--spacing-2);
+  }
+
+  /* Nested lists — tighter gap, no additional indent */
+  & li > ul,
+  & li > ol {
+    margin-block-start: var(--spacing-2);
+  }
+
+  /* ---------------------------------------------------------------------------
+     Blockquote
+     --------------------------------------------------------------------------- */
+
+  & blockquote {
+    border-inline-start: 3px solid var(--color-gray-300);
+    padding-inline-start: var(--spacing-4);
+    opacity: 0.75;
+    font-style: italic;
+  }
+
+  /* ---------------------------------------------------------------------------
+     Inline code
+     --------------------------------------------------------------------------- */
+
+  & :not(pre) > code {
+    font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+    font-size: 0.875em;
+    background-color: var(--color-gray-100);
+    padding: 0.1em 0.375em;
+    border-radius: var(--radius);
+  }
+
+  /* ---------------------------------------------------------------------------
+     Code block
+     --------------------------------------------------------------------------- */
+
+  & pre {
+    background-color: var(--color-gray-900);
+    color: var(--color-gray-100);
+    padding: var(--spacing-4);
+    border-radius: var(--radius);
+    overflow-x: auto;
+
+    & code {
+      font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+      font-size: 0.875rem;
+      background-color: transparent;
+      padding: 0;
+    }
+  }
+
+  /* ---------------------------------------------------------------------------
+     Horizontal rule
+     --------------------------------------------------------------------------- */
+
+  & hr {
+    border: none;
+    border-block-start: 1px solid var(--color-gray-200);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Link — rendered by the Link atom via the components override.
+   --------------------------------------------------------------------------- */
+
+.link {
+  text-decoration: underline;
+
+  &:hover {
+    opacity: var(--interactive-hover-opacity, 0.8);
+  }
+}

@@ -35,12 +35,21 @@ describe('MockContentClient', () => {
     expect(slot?._meta.schema).toBe('https://quadratic.amplience.com/v2/slots/slot')
 
     // Components inside the slot are also inlined.
-    expect(slot?.components).toHaveLength(2)
+    expect(slot?.components).toHaveLength(5)
     expect(slot?.components[0]?._meta.schema).toBe(
       'https://quadratic.amplience.com/v2/content/hero',
     )
     expect(slot?.components[1]?._meta.schema).toBe(
-      'https://quadratic.amplience.com/v2/content/text-block',
+      'https://quadratic.amplience.com/v2/content/image',
+    )
+    expect(slot?.components[2]?._meta.schema).toBe(
+      'https://quadratic.amplience.com/v2/content/markdown-block',
+    )
+    expect(slot?.components[3]?._meta.schema).toBe(
+      'https://quadratic.amplience.com/v2/content/grid',
+    )
+    expect(slot?.components[4]?._meta.schema).toBe(
+      'https://quadratic.amplience.com/v2/content/columns',
     )
   })
 

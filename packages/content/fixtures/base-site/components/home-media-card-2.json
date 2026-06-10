@@ -1,0 +1,28 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000012",
+  "label": "Home — card: zero-config start",
+  "body": {
+    "_meta": {
+      "name": "Home — card: zero-config start",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000012",
+      "deliveryKeys": {
+        "values": [{ "value": "home/card-zero-config" }]
+      }
+    },
+    "title": "Works out of the box",
+    "description": "Clone, connect your Amplience hub, and you have a fully functional frontend in minutes. Minimal configuration, maximum velocity.",
+    "image": {
+      "src": "https://picsum.photos/seed/ql-card-config/800/450",
+      "alt": "Quick setup with minimal configuration",
+      "width": 800,
+      "height": 450
+    },
+    "cta": {
+      "label": "Get started",
+      "href": "/docs/quickstart",
+      "variant": "solid",
+      "color": "primary"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000011",
+  "label": "Home — card: content rendering",
+  "body": {
+    "_meta": {
+      "name": "Home — card: content rendering",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000011",
+      "deliveryKeys": {
+        "values": [{ "value": "home/card-content-rendering" }]
+      }
+    },
+    "title": "Renders any content",
+    "description": "Every schema you define in Amplience Dynamic Content is rendered automatically — from hero banners to rich editorial layouts.",
+    "image": {
+      "src": "https://picsum.photos/seed/ql-card-render/800/450",
+      "alt": "Content rendered from Amplience Dynamic Content",
+      "width": 800,
+      "height": 450
+    },
+    "cta": {
+      "label": "See the components",
+      "href": "/features/content-rendering",
+      "variant": "solid",
+      "color": "primary"
+    }
+  }
+}
