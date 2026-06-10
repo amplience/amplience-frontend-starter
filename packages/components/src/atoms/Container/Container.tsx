@@ -25,11 +25,11 @@ export type ContainerProps = {
    */
   maxWidth?: ContainerMaxWidth
   /**
-   * When true, removes the horizontal gutter so content runs to the edge of
-   * the container. Useful for full-width media (images, video, colour bands)
-   * inside a section that otherwise uses the standard gutter.
+   * When true, adds horizontal padding (`--site-gutter`) so content is inset
+   * from the container edge. Omit or set false for edge-to-edge content such
+   * as full-width media or colour bands.
    *
-   * The max-width cap still applies — `gutter` only removes padding, not width.
+   * The max-width cap still applies — `gutter` only controls padding, not width.
    */
   gutter?: boolean
 } & Omit<ComponentPropsWithoutRef<'div'>, 'className' | 'children'>
@@ -49,8 +49,8 @@ export type ContainerProps = {
  *   <Container maxWidth="wide">…</Container>
  *   <Container maxWidth="narrow">…</Container>
  *   <Container maxWidth="full">…</Container>
- *   <Container gutter>…</Container>          — no horizontal padding
- *   <Container maxWidth="full" gutter>…</Container>  — truly edge-to-edge
+ *   <Container gutter>…</Container>          — adds horizontal padding
+ *   <Container maxWidth="full">…</Container>  — truly edge-to-edge (no gutter, no max-width cap)
  */
 export function Container({
   children,

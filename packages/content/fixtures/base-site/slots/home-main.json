@@ -12,14 +12,35 @@
     "components": [
       {
         "id": "a1b2c3d4-0001-4000-8000-000000000003",
-        "contentType": "https://quadratic.amplience.com/v2/content/banner",
+        "contentType": "https://quadratic.amplience.com/v2/content/hero",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "a1b2c3d4-0001-4000-8000-000000000004",
-        "contentType": "https://quadratic.amplience.com/v2/content/text-block",
+        "id": "a1b2c3d4-0001-4000-8000-000000000005",
+        "contentType": "https://quadratic.amplience.com/v2/content/image",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000016",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000010",
+        "contentType": "https://quadratic.amplience.com/v2/content/grid",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000014",
+        "contentType": "https://quadratic.amplience.com/v2/content/columns",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }

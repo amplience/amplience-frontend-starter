@@ -10,15 +10,19 @@
  * contrasting text colour without any extra JSX.
  *
  * Interactive hover is fully CSS-variable-driven so brands can apply their
- * preferred effect without touching component CSS:
- *   --card-hover-shadow    — box-shadow on hover (default: same as resting)
- *   --card-hover-transform — transform on hover  (default: none)
- *   --card-hover-opacity   — opacity on hover    (default: 1)
+ * preferred effect without touching component CSS.
+ *
+ * Hover token resolution order (most-specific wins):
+ *   --card-hover-*        — card-specific override (set this to diverge from
+ *                           other interactive surfaces)
+ *   --interactive-hover-* — shared token read by all interactive surfaces
+ *                           (cards, linked images, etc.). Define this once
+ *                           per brand for consistent hover behaviour.
+ *   built-in fallback     — no-op (no shadow / no transform / full opacity)
  *
  * Example brand overrides:
- *   [data-brand="acme"] { --card-border-radius: var(--radius); }
- *   [data-brand="acme"] { --card-hover-transform: translateY(-2px); }
- *   [data-brand="acme"] { --card-hover-opacity: 0.9; }
+ *   [data-brand="acme"] { --interactive-hover-transform: translateY(-2px); }
+ *   [data-brand="acme"] { --card-hover-opacity: 0.9; } (cards only)
  */
 
 /* ---------------------------------------------------------------------------
@@ -127,9 +131,9 @@
     opacity 0.15s ease;
 
   &:hover {
-    box-shadow: var(--card-hover-shadow, var(--card-shadow, none));
-    transform: var(--card-hover-transform, none);
-    opacity: var(--card-hover-opacity, 1);
+    box-shadow: var(--card-hover-shadow, var(--interactive-hover-shadow, var(--card-shadow, none)));
+    transform: var(--card-hover-transform, var(--interactive-hover-transform, none));
+    opacity: var(--card-hover-opacity, var(--interactive-hover-opacity, 1));
   }
 
   &:focus-visible {

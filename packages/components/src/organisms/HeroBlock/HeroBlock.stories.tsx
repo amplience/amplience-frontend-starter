@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Hero } from './Hero'
+import { HeroBlock } from './HeroBlock'
 
 const meta = {
-  title: 'Molecules/Hero',
-  component: Hero,
+  title: 'Organisms/HeroBlock',
+  component: HeroBlock,
   tags: ['autodocs'],
   argTypes: {
     contentPositionMobile: {
@@ -86,10 +86,10 @@ const meta = {
     controls: { disable: true },
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof Hero>
+} satisfies Meta<typeof HeroBlock>
 
 export default meta
-type Story = StoryObj<typeof Hero>
+type Story = StoryObj<typeof HeroBlock>
 
 // ---------------------------------------------------------------------------
 // Shared fixtures
@@ -137,7 +137,7 @@ export const Playground: Story = {
     overlayIntensity: 50,
     overlayStyle: 'gradient',
     overlayColor: 'black',
-    backgroundColor: 'light',
+    backgroundColor: 'dark',
   },
 }
 
@@ -158,19 +158,7 @@ export const BackgroundColor: Story = {
   args: {
     ...baseCopy,
     ctas: [...singleCta],
-    backgroundColor: 'dark',
-  },
-}
-
-export const BackgroundColorWithImage: Story = {
-  name: 'Background colour — with image (placeholder during load)',
-  args: {
-    ...baseCopy,
-    ctas: [...multiCta],
-    image: { ...landscapeImage },
-    backgroundColor: 'dark',
-    overlayStyle: 'gradient',
-    overlayIntensity: 50,
+    backgroundColor: 'primary',
   },
 }
 
@@ -186,6 +174,7 @@ export const Beneath: Story = {
     image: { ...landscapeImage },
     contentPositionMobile: 'beneath',
     contentPositionDesktop: 'beneath',
+    textColor: 'dark',
   },
 }
 
@@ -242,6 +231,7 @@ export const BeneathMobileOverlayDesktop: Story = {
     contentPositionMobile: 'beneath',
     contentPositionDesktop: 'overlay',
     heightBehaviour: 'flexible',
+    backgroundColor: 'dark',
   },
 }
 

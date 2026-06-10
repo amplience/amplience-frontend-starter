@@ -1,0 +1,28 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000019",
+  "label": "Home — card: time to value",
+  "body": {
+    "_meta": {
+      "name": "Home — card: time to value",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000019",
+      "deliveryKeys": {
+        "values": [{ "value": "home/card-time-to-value" }]
+      }
+    },
+    "title": "Faster time to value",
+    "description": "Skip the boilerplate. Quadratic Lite gets new Amplience implementations to a working frontend faster, so teams can focus on what matters.",
+    "image": {
+      "src": "https://picsum.photos/seed/ql-card-ttv/800/450",
+      "alt": "Accelerated implementation timeline",
+      "width": 800,
+      "height": 450
+    },
+    "cta": {
+      "label": "Find out more",
+      "href": "/features/accelerator",
+      "variant": "solid",
+      "color": "primary"
+    }
+  }
+}
