@@ -28,7 +28,10 @@
     "./image-block": "./src/organisms/ImageBlock/ImageBlock.tsx",
     "./grid-block": "./src/organisms/GridBlock/GridBlock.tsx",
     "./columns-block": "./src/organisms/ColumnsBlock/ColumnsBlock.tsx",
-    "./markdown-block": "./src/organisms/MarkdownBlock/MarkdownBlock.tsx"
+    "./markdown-block": "./src/organisms/MarkdownBlock/MarkdownBlock.tsx",
+    "./slot": "./src/organisms/Slot/Slot.tsx",
+    "./page": "./src/templates/Page/Page.tsx",
+    "./registry": "./src/registry.ts"
   },
   "peerDependencies": {
     "next": "^16.0.0",
@@ -53,6 +56,8 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
+    "@amplience/quadratic-content": "workspace:*",
+    "@amplience/quadratic-types": "workspace:*",
     "clsx": "^2.1.1",
     "lucide-react": "^1.17.0",
     "react-markdown": "^9.1.0"

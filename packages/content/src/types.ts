@@ -118,3 +118,45 @@ export const isContentLink = (value: unknown): value is ContentLink => {
   if (typeof meta !== 'object' || meta === null) return false
   return (meta as Record<string, unknown>).schema === CONTENT_LINK_SCHEMA
 }
+
+// ---------------------------------------------------------------------------
+// Media links (Amplience Content Hub assets)
+// ---------------------------------------------------------------------------
+
+/** The schema URI Amplience uses to mark an image media-link. */
+export const IMAGE_LINK_SCHEMA = 'http://bigcontent.io/cms/schema/v1/core#/definitions/image-link'
+
+/**
+ * An Amplience image media-link — how an image field arrives in a delivery
+ * body. Unlike a content-link it is not a reference to resolve: the fields
+ * here are everything needed to build the asset's Dynamic Media URL (see
+ * `mediaImageUrl`).
+ */
+export type MediaImageLink = {
+  readonly _meta: { readonly schema: typeof IMAGE_LINK_SCHEMA }
+  readonly id: string
+  readonly name: string
+  readonly endpoint: string
+  readonly defaultHost: string
+}
+
+/** True if `value` is an image media-link. */
+export const isMediaImageLink = (value: unknown): value is MediaImageLink => {
+  if (typeof value !== 'object' || value === null) return false
+  const v = value as Record<string, unknown>
+  if (typeof v.name !== 'string') return false
+  if (typeof v.endpoint !== 'string') return false
+  if (typeof v.defaultHost !== 'string') return false
+  const meta = v._meta
+  if (typeof meta !== 'object' || meta === null) return false
+  return (meta as Record<string, unknown>).schema === IMAGE_LINK_SCHEMA
+}
+
+/**
+ * The Dynamic Media URL for an image media-link:
+ * `https://{defaultHost}/i/{endpoint}/{name}`. Transformation parameters
+ * (width, format, crop …) are the caller's concern — append a query string
+ * where needed.
+ */
+export const mediaImageUrl = (link: MediaImageLink): string =>
+  `https://${link.defaultHost}/i/${link.endpoint}/${encodeURIComponent(link.name)}`

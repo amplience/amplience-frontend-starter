@@ -9,12 +9,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "@amplience/quadratic-components": "workspace:*",
     "@amplience/quadratic-content": "workspace:*",
     "@amplience/quadratic-theme": "workspace:*",
+    "@amplience/quadratic-types": "workspace:*",
     "next": "^16.2.7",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"

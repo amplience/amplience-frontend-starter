@@ -31,6 +31,14 @@ const DocsPage = () => (
 
 const preview: Preview = {
   parameters: {
+    backgrounds: {
+      default: 'white',
+      values: [
+        { name: 'white', value: '#ffffff' },
+        { name: 'gray', value: '#e0e0e0' },
+        { name: 'dark', value: '#111111' },
+      ],
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -50,13 +58,10 @@ const preview: Preview = {
     // layout (Container, Stack, and future molecules/organisms) override with
     // layout: 'fullscreen' in their own meta.
     layout: 'centered',
-    backgrounds: {
-      default: 'white',
-      values: [
-        { name: 'white', value: '#ffffff' },
-        { name: 'gray', value: '#e0e0e0' },
-        { name: 'dark', value: '#111111' },
-      ],
+    options: {
+      storySort: {
+        order: ['Intro', 'Atoms', 'Molecules', 'Organisms', 'Templates', 'Pages'],
+      },
     },
   },
 

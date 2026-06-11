@@ -11,6 +11,17 @@
     },
     "title": "Welcome to Quadratic Lite",
     "description": "A clean starting point for an Amplience-backed site.",
+    "keywords": ["amplience", "accelerator", "next.js", "composable content"],
+    "social": {
+      "title": "Quadratic Lite — composable sites without the boilerplate",
+      "description": "An open-source Amplience accelerator: recursive renderer, atomic component library, automation CLI.",
+      "image": {
+        "src": "https://picsum.photos/seed/ql-hero/1200/600",
+        "alt": "Hero — Quadratic Lite accelerator",
+        "width": 1200,
+        "height": 600
+      }
+    },
     "slots": [
       {
         "id": "a1b2c3d4-0001-4000-8000-000000000002",
