@@ -6,7 +6,14 @@
  */
 
 export type { ContentClient } from './port'
-export { CONTENT_LINK_SCHEMA, ContentClientError, isContentLink } from './types'
+export {
+  CONTENT_LINK_SCHEMA,
+  ContentClientError,
+  IMAGE_LINK_SCHEMA,
+  isContentLink,
+  isMediaImageLink,
+  mediaImageUrl,
+} from './types'
 export type {
   ContentBody,
   ContentClientErrorKind,
@@ -15,4 +22,5 @@ export type {
   ContentMeta,
   ContentRequestOptions,
   EnrichedContentItem,
+  MediaImageLink,
 } from './types'
