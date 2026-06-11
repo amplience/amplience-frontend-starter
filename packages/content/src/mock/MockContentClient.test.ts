@@ -40,7 +40,7 @@ describe('MockContentClient', () => {
       'https://quadratic.amplience.com/v2/content/hero',
     )
     expect(slot?.components[1]?._meta.schema).toBe(
-      'https://quadratic.amplience.com/v2/content/image',
+      'https://quadratic.amplience.com/v2/content/columns',
     )
     expect(slot?.components[2]?._meta.schema).toBe(
       'https://quadratic.amplience.com/v2/content/markdown-block',
