@@ -13,8 +13,8 @@
     "image": {
       "src": "https://picsum.photos/seed/qlcols/800/500",
       "alt": "Quadratic Lite — accelerator for composable Amplience sites",
-      "width": 600,
-      "height": 800
+      "width": 800,
+      "height": 500
     },
     "caption": "Built on Amplience. Shipped with mocks."
   }
