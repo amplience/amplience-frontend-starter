@@ -10,6 +10,7 @@ export {
   CONTENT_LINK_SCHEMA,
   ContentClientError,
   IMAGE_LINK_SCHEMA,
+  isContentClientError,
   isContentLink,
   isMediaImageLink,
   mediaImageUrl,

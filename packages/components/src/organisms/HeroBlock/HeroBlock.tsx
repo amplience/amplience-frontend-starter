@@ -73,9 +73,10 @@ export type HeroBlockProps = {
    */
   heightBehaviour?: HeroBlockHeightBehaviour
   /**
-   * Max-width constraint on the content slot. Passed through to the Container
-   * atom — useful for limiting line length on text-heavy heroes.
-   * Defaults to the Container's 'default' max-width.
+   * Vertical position of the content within the section: top (default),
+   * center, or bottom. Applies whenever the section is taller than its
+   * content — overlay layouts, and any mode given slack by `minHeight`
+   * (including text-only heroes and `fitToContent`).
    */
   verticalPosition?: HeroBlockVerticalPosition
   /**
@@ -146,6 +147,8 @@ export type HeroBlockProps = {
   contentWidth?: number
   contentPadding?: number | undefined
   maxWidth?: ContainerProps['maxWidth']
+  minHeight?: number
+  maxHeight?: number
   className?: string
 }
 
@@ -208,6 +211,8 @@ export function HeroBlock({
   maxWidth = 'default',
   contentWidth = 50,
   contentPadding,
+  minHeight,
+  maxHeight,
   className,
 }: HeroBlockProps) {
   // The ::before spacer in 'flexible' overlay mode needs the image aspect
@@ -234,10 +239,13 @@ export function HeroBlock({
       data-overlay-style={hasImage ? overlayStyle : undefined}
       data-background-color={backgroundColor}
       data-text-color={textColor}
+      data-max-height={maxHeight != null ? true : undefined}
       style={(() => {
         const vars: Record<string, string | number> = {}
         if (needsAspectRatio) vars['--image-aspect-ratio'] = `${image.width} / ${image.height}`
         if (hasImage) vars['--hero-scrim-opacity'] = overlayIntensity / 100
+        if (minHeight != null) vars['--hero-min-height'] = `${minHeight}px`
+        if (maxHeight != null) vars['--hero-max-height'] = `${maxHeight}px`
         return Object.keys(vars).length > 0 ? vars : undefined
       })()}
     >

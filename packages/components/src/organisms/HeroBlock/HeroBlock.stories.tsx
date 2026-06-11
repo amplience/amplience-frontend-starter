@@ -194,6 +194,37 @@ export const OverlayFlexible: Story = {
   },
 }
 
+export const HeightConstraints: Story = {
+  name: 'Height constraints (minHeight / maxHeight)',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <HeroBlock
+        title="minHeight 400 — short content, guaranteed presence"
+        backgroundColor="dark"
+        minHeight={400}
+      />
+      <HeroBlock
+        title="minHeight 400 + verticalPosition center — content centred in the slack"
+        backgroundColor="primary"
+        minHeight={400}
+        verticalPosition="center"
+        horizontalPosition="center"
+        textAlign="center"
+      />
+      <HeroBlock
+        {...baseCopy}
+        title="maxHeight 280 — tall image capped and clipped"
+        image={{ ...landscapeImage }}
+        contentPositionMobile="overlay"
+        contentPositionDesktop="overlay"
+        heightBehaviour="flexible"
+        overlayIntensity={50}
+        maxHeight={280}
+      />
+    </div>
+  ),
+}
+
 export const OverlayFitToContent: Story = {
   name: 'Overlay — fitToContent (image crops)',
   args: {

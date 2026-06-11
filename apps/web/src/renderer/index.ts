@@ -5,7 +5,9 @@
  */
 
 export { renderContent } from './dispatch'
+export { emitContentFailure, emitRendererFailure } from './console'
 export { ComponentUnregisteredCard } from './failure/ComponentUnregisteredCard'
+export { ContentUnavailableCard } from './failure/ContentUnavailableCard'
 export { FailureCard } from './failure/FailureCard'
 export { PropsValidationFailureCard } from './failure/PropsValidationFailureCard'
 export { SchemaUnknownCard } from './failure/SchemaUnknownCard'

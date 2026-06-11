@@ -13,8 +13,11 @@
  *   'fitToImage'   — image drives height; content is positioned absolutely.
  *
  * CONTENT POSITIONING (apply in all modes unless noted):
- *   data-vertical-position   — top / center / bottom (overlay only; maps to
- *                               --hero-v-justify, consumed in @media blocks)
+ *   data-vertical-position   — top / center / bottom. Maps to
+ *                               --hero-v-justify, consumed by the base flex
+ *                               layout (text-only / fitToContent slack from
+ *                               minHeight), the 'flexible' grid align-items,
+ *                               and the 'fitToImage' absolute container.
  *   data-horizontal-position — left / center / right
  *   data-text-align          — left / center / right
  *
@@ -67,6 +70,27 @@
   box-sizing: border-box;
   background-color: var(--hero-background-color);
   color: var(--hero-text-color);
+
+  /* Height constraints — set as inline px vars by the minHeight/maxHeight
+     props; brands can also override under [data-brand]. min-height applies
+     in all layout modes; max-height is gated on its data attribute (below)
+     so the overflow clip only exists when a cap was actually requested. */
+  min-height: var(--hero-min-height, auto);
+
+  /* Vertical position — applies whenever the section is taller than its
+     in-flow children (a minHeight'd text-only hero, or fitToContent with
+     minHeight slack). No effect when height is content-driven (no slack).
+     The 'flexible' overlay mode overrides display to grid below and
+     consumes the same --hero-v-justify via align-items; 'fitToImage'
+     positions its absolute container with it directly. */
+  display: flex;
+  flex-direction: column;
+  justify-content: var(--hero-v-justify);
+}
+
+.root[data-max-height='true'] {
+  max-height: var(--hero-max-height);
+  overflow: hidden;
 }
 
 /* ---------------------------------------------------------------------------
@@ -344,9 +368,6 @@
 
 @media (max-width: 768px) {
   .root:not([data-content-position-mobile='beneath']) {
-    & .content {
-      width: var(--contentWidth);
-    }
     &[data-horizontal-position='left'] .content {
       margin-inline: 0 auto;
     }

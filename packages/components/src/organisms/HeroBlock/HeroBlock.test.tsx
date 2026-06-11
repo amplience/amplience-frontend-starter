@@ -58,6 +58,29 @@ describe('HeroBlock', () => {
     })
   })
 
+  describe('height constraints', () => {
+    it('sets --hero-min-height when minHeight is provided', () => {
+      render(<HeroBlock title="Title" minHeight={320} />)
+      const el = screen.getByRole('region')
+      expect(el.style.getPropertyValue('--hero-min-height')).toBe('320px')
+    })
+
+    it('sets --hero-max-height and the data-max-height gate when maxHeight is provided', () => {
+      render(<HeroBlock title="Title" maxHeight={480} />)
+      const el = screen.getByRole('region')
+      expect(el.style.getPropertyValue('--hero-max-height')).toBe('480px')
+      expect(el.getAttribute('data-max-height')).toBe('true')
+    })
+
+    it('sets neither variable nor gate when the props are omitted', () => {
+      render(<HeroBlock title="Title" />)
+      const el = screen.getByRole('region')
+      expect(el.style.getPropertyValue('--hero-min-height')).toBe('')
+      expect(el.style.getPropertyValue('--hero-max-height')).toBe('')
+      expect(el.getAttribute('data-max-height')).toBeNull()
+    })
+  })
+
   describe('CTAs', () => {
     it('renders a single CTA link', () => {
       render(<HeroBlock title="Title" ctas={[{ label: 'Get started', href: '/docs' }]} />)

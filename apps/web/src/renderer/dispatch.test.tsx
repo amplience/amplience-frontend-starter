@@ -9,6 +9,11 @@ import type { ReactNode } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import {
+  createRegistry,
+  HERO_BLOCK_SCHEMA,
+  heroBlockRegistryEntry,
+} from '@amplience/quadratic-components/registry'
 import { CONTENT_LINK_SCHEMA } from '@amplience/quadratic-content'
 import type {
   AnyComponentRegistryEntry,
@@ -237,6 +242,19 @@ describe('renderContent — loud failure', () => {
     expect(out).toContain('before')
     expect(out).toContain('data-renderer-failure="SchemaUnknown"')
     expect(out).toContain('after')
+  })
+
+  it('rejects mismatched real-world content — hero missing its title (QL-37)', () => {
+    // Through the real hero entry (the same instance defaultRegistry uses),
+    // not a stub: the contract validator rejects content with no title.
+    const registry = createRegistry([[HERO_BLOCK_SCHEMA, heroBlockRegistryEntry]])
+    const badHero = {
+      _meta: { schema: HERO_BLOCK_SCHEMA, deliveryId: 'hero-no-title' },
+      subtitle: 'No title on this hero.',
+    }
+    const out = html(badHero, registry)
+    expect(out).toContain('data-renderer-failure="PropsValidationFailure"')
+    expect(out).toContain(HERO_BLOCK_SCHEMA)
   })
 
   it('localises failure inside a container — the parent still renders', () => {

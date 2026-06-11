@@ -18,8 +18,8 @@
         }
       },
       {
-        "id": "a1b2c3d4-0001-4000-8000-000000000005",
-        "contentType": "https://quadratic.amplience.com/v2/content/image",
+        "id": "a1b2c3d4-0001-4000-8000-000000000014",
+        "contentType": "https://quadratic.amplience.com/v2/content/columns",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
@@ -39,7 +39,7 @@
         }
       },
       {
-        "id": "a1b2c3d4-0001-4000-8000-000000000014",
+        "id": "a1b2c3d4-0001-4000-8000-000000000020",
         "contentType": "https://quadratic.amplience.com/v2/content/columns",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

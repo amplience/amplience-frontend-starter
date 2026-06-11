@@ -108,6 +108,19 @@ export class ContentClientError extends Error {
   }
 }
 
+/**
+ * True if `value` is a ContentClientError. Structural rather than
+ * `instanceof`, so it stays reliable when more than one copy of this module
+ * exists in the process (test doubles re-importing the package, or a
+ * dependency tree that resolves two package instances).
+ */
+export const isContentClientError = (value: unknown): value is ContentClientError => {
+  if (value instanceof ContentClientError) return true
+  if (typeof value !== 'object' || value === null) return false
+  const v = value as Record<string, unknown>
+  return v.name === 'ContentClientError' && typeof v.kind === 'string'
+}
+
 /** True if `value` is a content-link reference stub. */
 export const isContentLink = (value: unknown): value is ContentLink => {
   if (typeof value !== 'object' || value === null) return false
