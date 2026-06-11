@@ -76,6 +76,36 @@ Each failure renders a card _in place_ — the rest of the page renders normally
 
 The card is identical in dev and prod; dev adds an expandable `<details>` diagnostics block. It's a native disclosure element, so the renderer ships no client JavaScript — it runs as a Server Component all the way down (§11).
 
+### Content-fetch failures (page-level)
+
+The three classes above cover "the tree arrived but a node can't render". A fourth surface covers "the tree never arrived" (QL-37): routes catch `ContentClientError` from the content client and act on its `kind` — `not-found` becomes a branded 404 via `notFound()`, every other kind renders `ContentUnavailableCard` in place of the page tree, server-rendered like the dispatch cards, with the same dev-verbose/prod-redacted console emission (`emitContentFailure`). Only genuinely unexpected errors fall through to `app/error.tsx`, the one client-component piece of the failure surface.
+
+Per-route wiring a new page needs: the `generateMetadata` stub, plus the try/catch shown in `app/page.tsx`. Failure kinds are testable without an SDK via `makeFailingContentClient(kind)` from `@amplience/quadratic-content/mock`.
+
+### Smoke-checking
+
+`/debug/failures` renders every failure card through the real dispatcher and the real route path — development only (404s in production).
+
+## Theming
+
+The renderer itself is brand-agnostic — it never reads theme state. Branding happens entirely in CSS: `app/layout.tsx` imports the token contract from [`@amplience/quadratic-theme`](../../../../packages/theme/README.md) and sets the brand attribute on the root element:
+
+```tsx
+<html lang="en" data-brand={process.env.NEXT_PUBLIC_BRAND ?? 'default'}>
+```
+
+Every component the dispatcher renders styles itself through CSS variables, so the `[data-brand]` overlays in [`tokens.css`](../../../../packages/theme/src/tokens.css) cascade to the whole tree from that single attribute (ADR-0002 §5 — see the project architecture docs). One brand per deployment at POC/MVP: `NEXT_PUBLIC_BRAND` is deployment configuration (`.env.example` documents it), and the `'default'` fallback intentionally matches no overlay — out of the box the reference page renders the plain `:root` token values.
+
+### Adding a brand
+
+A new brand never touches this directory; the renderer's dispatch path is identical for every brand. The steps live elsewhere:
+
+1. Define the overlay — a `[data-brand='name']` block of token redefinitions, per [the brand override guide](../../../../packages/theme/README.md#how-a-brand-overrides-tokens) in the theme package.
+2. Make it previewable — add the brand to the Storybook toolbar `items` in `packages/components/.storybook/preview.tsx`.
+3. Deploy it — set `NEXT_PUBLIC_BRAND="name"` for that deployment.
+
+Because activation is one attribute on one element, a future multi-brand-per-deployment model (ADR-0002 §7) would change where the attribute is set, not how components or this renderer work.
+
 ## Graduation
 
 This directory promotes to a `packages/renderer` workspace the first time a second consumer needs it (ADR-0010, "Where the renderer lives"). Until then the package boundary would be ceremony without a consumer.

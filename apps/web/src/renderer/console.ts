@@ -74,3 +74,21 @@ export function emitRendererFailure(failure: RendererFailure, content?: unknown)
     ...(failure.failureClass === 'PropsValidationFailure' && { reason: failure.reason }),
   })
 }
+
+/**
+ * Emit one content-fetch failure to the console — same posture as
+ * `emitRendererFailure`: full error in development; in production only the
+ * error kind and the resource being fetched (no message, no cause, no
+ * stack — adapter messages can echo transport detail we don't want logged).
+ */
+export function emitContentFailure(error: ContentClientErrorLike, resource: string): void {
+  if (isDev) {
+    console.error(`[renderer] ContentUnavailable — "${resource}" (${error.kind})`, { error })
+    return
+  }
+
+  console.error('[renderer]', { failureClass: 'ContentUnavailable', kind: error.kind, resource })
+}
+
+/** Structural view of ContentClientError — avoids a runtime import cycle. */
+type ContentClientErrorLike = { readonly kind: string; readonly message: string }
