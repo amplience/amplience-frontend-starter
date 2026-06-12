@@ -1,0 +1,26 @@
+{
+  "id": "a1b2c3d4-0002-4000-8000-000000000001",
+  "label": "About page",
+  "body": {
+    "_meta": {
+      "name": "About page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [{ "value": "about" }, { "value": "about-us" }]
+      }
+    },
+    "title": "About Quadratic Lite",
+    "description": "Why Quadratic Lite exists: a demo-ready, composable frontend that gives a headless CMS its head.",
+    "keywords": ["amplience", "quadratic", "accelerator", "headless cms"],
+    "canonicalUrl": "/about",
+    "slots": [
+      {
+        "id": "a1b2c3d4-0002-4000-8000-000000000002",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

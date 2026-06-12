@@ -7,14 +7,14 @@ import { makeMockContentClient } from './MockContentClient'
 describe('MockContentClient', () => {
   it('returns the home page body by delivery key', async () => {
     const client = makeMockContentClient()
-    const home = await client.getByKey<{ title: string }>('home')
+    const home = await client.getByKey<{ title: string }>('homepage')
     expect(home._meta.schema).toBe('https://quadratic.amplience.com/v2/content/page')
     expect(home.title).toBe('Welcome to Quadratic Lite')
   })
 
   it('returns content-links unresolved by default (depth: root)', async () => {
     const client = makeMockContentClient()
-    const home = await client.getByKey<{ slots: unknown[] }>('home')
+    const home = await client.getByKey<{ slots: unknown[] }>('homepage')
     expect(home.slots).toHaveLength(1)
     expect(isContentLink(home.slots[0])).toBe(true)
   })
@@ -26,7 +26,7 @@ describe('MockContentClient', () => {
         _meta: { schema: string }
         components: { _meta: { schema: string } }[]
       }[]
-    }>('home', { depth: 'all' })
+    }>('homepage', { depth: 'all' })
 
     // Slot is now inlined, not a link stub.
     const slot = home.slots[0]
@@ -51,6 +51,15 @@ describe('MockContentClient', () => {
     expect(slot?.components[4]?._meta.schema).toBe(
       'https://quadratic.amplience.com/v2/content/columns',
     )
+  })
+
+  it('resolves every delivery key on an item to the same content (QL-76)', async () => {
+    // Amplience supports multiple delivery keys per item; the about fixture
+    // carries 'about' and 'about-us', so both keys return one item.
+    const client = makeMockContentClient()
+    const byPrimary = await client.getByKey<{ title: string }>('about')
+    const byAlias = await client.getByKey<{ title: string }>('about-us')
+    expect(byAlias).toEqual(byPrimary)
   })
 
   it('throws ContentClientError(not-found) for an unknown delivery key', async () => {

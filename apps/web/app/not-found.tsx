@@ -25,7 +25,7 @@ export default function NotFound() {
             label: 'Back to the home page',
           },
         ]}
-        minHeight={400}
+        minHeight={600}
         verticalPosition="center"
       />
     </main>
