@@ -9,6 +9,10 @@
  * `../../fixtures/base-site/README.md` for the format and ADR-0008 for why.
  */
 
+import aboutHero from '../../fixtures/base-site/components/about-hero.json' with { type: 'json' }
+import aboutMarkdown from '../../fixtures/base-site/components/about-markdown.json' with { type: 'json' }
+import docsHero from '../../fixtures/base-site/components/docs-hero.json' with { type: 'json' }
+import docsMarkdown from '../../fixtures/base-site/components/docs-markdown.json' with { type: 'json' }
 import homeColumns2 from '../../fixtures/base-site/components/home-columns-2.json' with { type: 'json' }
 import homeColumnsImage from '../../fixtures/base-site/components/home-columns-image.json' with { type: 'json' }
 import homeColumnsMarkdown from '../../fixtures/base-site/components/home-columns-markdown.json' with { type: 'json' }
@@ -24,7 +28,11 @@ import homeMediaCard2 from '../../fixtures/base-site/components/home-media-card-
 import homeMediaCard3 from '../../fixtures/base-site/components/home-media-card-3.json' with { type: 'json' }
 import homeMediaCard4 from '../../fixtures/base-site/components/home-media-card-4.json' with { type: 'json' }
 import homeMediaCard5 from '../../fixtures/base-site/components/home-media-card-5.json' with { type: 'json' }
+import aboutPage from '../../fixtures/base-site/pages/about.json' with { type: 'json' }
+import docsPage from '../../fixtures/base-site/pages/docs.json' with { type: 'json' }
 import homePage from '../../fixtures/base-site/pages/home.json' with { type: 'json' }
+import aboutMainSlot from '../../fixtures/base-site/slots/about-main.json' with { type: 'json' }
+import docsMainSlot from '../../fixtures/base-site/slots/docs-main.json' with { type: 'json' }
 import homeMainSlot from '../../fixtures/base-site/slots/home-main.json' with { type: 'json' }
 import type { EnrichedContentItem } from '../types'
 
@@ -54,6 +62,14 @@ const fixtures: readonly EnrichedContentItem[] = [
   homeMediaCard3,
   homeMediaCard4,
   homeMediaCard5,
+  aboutPage,
+  aboutMainSlot,
+  aboutHero,
+  aboutMarkdown,
+  docsPage,
+  docsHero,
+  docsMainSlot,
+  docsMarkdown,
 ]
 
 /** Build `id → item` and `deliveryKey → item` maps from the fixture set. */
@@ -78,7 +94,7 @@ const maps = buildMaps(fixtures)
 /** Lookup by delivery ID (UUID). Undefined when no fixture matches. */
 export const findById = (id: string): EnrichedContentItem | undefined => maps.byId.get(id)
 
-/** Lookup by delivery key (e.g. `"home"`). Undefined when no fixture matches. */
+/** Lookup by delivery key (e.g. `"homepage"`). Undefined when no fixture matches. */
 export const findByKey = (key: string): EnrichedContentItem | undefined => maps.byKey.get(key)
 
 /** All loaded fixtures, for tests and introspection. */

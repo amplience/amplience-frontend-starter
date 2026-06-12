@@ -14,7 +14,7 @@
     "ctas": [
       {
         "label": "Read more",
-        "href": "#",
+        "href": "/about",
         "variant": "solid",
         "color": "primary"
       },

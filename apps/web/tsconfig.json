@@ -26,6 +26,9 @@
     "next.config.ts",
     "**/*.ts",
     "**/*.tsx",
+    /* TS globs skip dot-directories, so the DevTools well-known route needs
+     * naming explicitly — otherwise tsc and typed lint silently ignore it. */
+    "app/.well-known/**/*.ts",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],

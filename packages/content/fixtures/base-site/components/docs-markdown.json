@@ -1,0 +1,23 @@
+{
+  "id": "a1b2c3d4-0003-4000-8000-000000000003",
+  "label": "Docs — overview markdown",
+  "body": {
+    "_meta": {
+      "name": "Docs — overview markdown",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "a1b2c3d4-0003-4000-8000-000000000003"
+    },
+    "content": "## What is Quadratic Lite?\n\nQuadratic Lite is a composable, flexible Next.js frontend designed to demonstrate the full power of Amplience Dynamic Content — the \"head\" for your headless CMS. It renders any content you create in Amplience, works out of the box with minimal configuration, and adapts to your brand through design tokens.\n\n## How it works\n\n### The recursive component engine\n\nPages are content. A page item references slots, slots reference components, and components can nest other components. The renderer walks that tree recursively, dispatching each item on its `_meta.schema` to a registered component — so editors compose pages freely and the frontend keeps up, with no route-per-template code.\n\n### Content-driven architecture\n\nEverything the site needs lives in the CMS: page content, metadata, layout composition, and brand styling. URLs map directly to delivery keys (`/about` serves the item keyed `about`), so launching a page is a publish, not a deployment.\n\n## Key benefits\n\n- **Zero-deployment content management** — content, layouts, and styling managed entirely in the CMS\n- **Maximum flexibility** — composable components and per-brand token overrides\n- **Loud failures** — missing or malformed content renders a visible, branded failure card, never a blank page\n- **Accelerator pace** — validate a content strategy in weeks rather than a custom-build quarter\n\n## Getting started\n\nClone the repo, `pnpm install`, `pnpm dev` — the mock content client serves the fixture site offline, no hub required. Detailed guides (hub setup, brand theming, adding components) will land here as the accelerator matures.",
+    "maxWidth": "default",
+    "gutter": true,
+    "ctas": [
+      { "label": "About the project", "href": "/about", "variant": "outlined", "color": "primary" },
+      {
+        "label": "View on GitHub",
+        "href": "https://github.com/mattisherwood/quadratic-lite",
+        "variant": "solid",
+        "color": "primary"
+      }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "a1b2c3d4-0003-4000-8000-000000000002",
+  "label": "Docs — main slot",
+  "body": {
+    "_meta": {
+      "name": "Docs — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot",
+      "deliveryKeys": {
+        "values": [{ "value": "docs/main" }]
+      }
+    },
+    "components": [
+      {
+        "id": "a1b2c3d4-0002-4000-9000-000000000003",
+        "contentType": "https://quadratic.amplience.com/v2/content/hero-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0003-4000-8000-000000000003",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

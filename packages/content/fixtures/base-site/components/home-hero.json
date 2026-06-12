@@ -20,18 +20,19 @@
     },
     "contentPositionMobile": "beneath",
     "contentPositionDesktop": "overlay",
-    "heightBehaviour": "flexible",
+    "heightBehaviour": "fitToContent",
+    "minHeight": 600,
     "overlayIntensity": 50,
     "verticalPosition": "center",
     "backgroundColor": "dark",
     "ctas": [
+      { "label": "Learn more", "href": "/about", "variant": "solid", "color": "primary" },
       {
-        "label": "Get started",
-        "href": "/docs/getting-started",
-        "variant": "solid",
-        "color": "primary"
-      },
-      { "label": "Learn more", "href": "/about", "variant": "outlined", "color": "white" }
+        "label": "Read the docs",
+        "href": "/docs",
+        "variant": "outlined",
+        "color": "white"
+      }
     ]
   }
 }
