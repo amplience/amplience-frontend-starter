@@ -31,9 +31,8 @@ const config: StorybookConfig = {
     name: '@storybook/nextjs-vite',
     options: {},
   },
-  docs: {
-    autodocs: 'tag',
-  },
+  // `docs.autodocs` no longer exists as an option — autodocs-by-tag is the
+  // built-in behaviour now, driven by the `autodocs` tag on stories.
   viteFinal(config) {
     // import.meta.dirname is the ESM equivalent of __dirname (Node 21.2+).
     // Storybook is run from packages/components, so node_modules/react resolves

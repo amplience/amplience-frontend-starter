@@ -35,32 +35,32 @@ describe('Link', () => {
 
   it('external link opens in a new tab with noopener', () => {
     render(<Link href="https://example.com">External</Link>)
-    const el = screen.getByRole('link', { name: 'External' })
+    const el = screen.getByRole<HTMLAnchorElement>('link', { name: 'External' })
     expect(el.target).toBe('_blank')
     expect(el.rel).toBe('noopener noreferrer')
   })
 
   it('internal link does not get target=_blank', () => {
     render(<Link href="/internal">Internal</Link>)
-    const el = screen.getByRole('link', { name: 'Internal' })
+    const el = screen.getByRole<HTMLAnchorElement>('link', { name: 'Internal' })
     expect(el.target).toBe('')
   })
 
   it('protocol-relative URLs are treated as external', () => {
     render(<Link href="//cdn.example.com/img.png">CDN</Link>)
-    const el = screen.getByRole('link', { name: 'CDN' })
+    const el = screen.getByRole<HTMLAnchorElement>('link', { name: 'CDN' })
     expect(el.target).toBe('_blank')
   })
 
   it('mailto: links are treated as external', () => {
     render(<Link href="mailto:hello@example.com">Email</Link>)
-    const el = screen.getByRole('link', { name: 'Email' })
+    const el = screen.getByRole<HTMLAnchorElement>('link', { name: 'Email' })
     expect(el.target).toBe('_blank')
   })
 
   it('tel: links are treated as external', () => {
     render(<Link href="tel:+441234567890">Call</Link>)
-    const el = screen.getByRole('link', { name: 'Call' })
+    const el = screen.getByRole<HTMLAnchorElement>('link', { name: 'Call' })
     expect(el.target).toBe('_blank')
   })
 
@@ -70,7 +70,7 @@ describe('Link', () => {
         Foo
       </Link>,
     )
-    const el = screen.getByRole('link', { name: 'Foo' })
+    const el = screen.getByRole<HTMLAnchorElement>('link', { name: 'Foo' })
     expect(el.title).toBe('The Foo Page')
   })
 
@@ -89,7 +89,7 @@ describe('Link', () => {
         Same tab
       </Link>,
     )
-    const el = screen.getByRole('link', { name: 'Same tab' })
+    const el = screen.getByRole<HTMLAnchorElement>('link', { name: 'Same tab' })
     expect(el.target).toBe('_self')
   })
 })

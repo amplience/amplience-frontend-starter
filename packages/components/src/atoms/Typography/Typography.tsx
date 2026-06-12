@@ -72,8 +72,7 @@ export function Typography<E extends ElementType = 'p'>({
 }: TypographyProps<E>) {
   const El = as ?? VARIANT_ELEMENT[variant]
 
-  const variantClass = styles[variant] ?? ''
-  const classes = clsx(styles.root, variantClass, className)
+  const classes = clsx(styles.root, styles[variant], className)
 
   return (
     <El className={classes} data-align={align} {...rest}>

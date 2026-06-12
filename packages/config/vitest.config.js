@@ -9,7 +9,7 @@
 // config file with esbuild, but a cross-package `.ts` import would force
 // Node 22.6+ on every contributor and CI runner.
 
-import { defineConfig } from 'vitest/config'
+import { coverageConfigDefaults, defineConfig } from 'vitest/config'
 
 /** @type {ReturnType<typeof defineConfig>} */
 export default defineConfig({
@@ -19,5 +19,27 @@ export default defineConfig({
     include: ['**/*.{test,spec}.{ts,tsx}'],
     exclude: ['**/node_modules/**', '**/dist/**', '**/build/**', '**/.next/**'],
     passWithNoTests: true,
+    coverage: {
+      provider: 'v8',
+      // On top of Vitest's defaults (tests, node_modules, config files):
+      // stories and Storybook scaffolding are documentation, and CSS modules
+      // aren't executable surface — none of them are code the suite should
+      // be asked to exercise.
+      exclude: [
+        ...coverageConfigDefaults.exclude,
+        '**/*.stories.{ts,tsx}',
+        '**/.storybook/**',
+        '**/storybook-static/**',
+        '**/*.module.css',
+      ],
+      // QL-40: ≥90% on all four metrics. The floor is a property of CI, not
+      // of reviewer vigilance — a change that drops below it fails the run.
+      thresholds: {
+        statements: 90,
+        branches: 90,
+        functions: 90,
+        lines: 90,
+      },
+    },
   },
 })
