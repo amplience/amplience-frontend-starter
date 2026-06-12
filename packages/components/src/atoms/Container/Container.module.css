@@ -28,7 +28,7 @@
   --site-max-width: var(--site-max-width-wide);
 }
 
-.root[data-max-width='full'] {
+.root[data-max-width='none'] {
   --site-max-width: none;
 }
 

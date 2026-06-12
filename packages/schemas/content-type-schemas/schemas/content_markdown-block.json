@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/markdown-block",
+  "title": "Markdown block",
+  "description": "A markdown content section with optional CTAs.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "📝 Content",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "📝 Content",
+            "pointers": ["/content", "/ctas"]
+          },
+          {
+            "label": "⚙️ Options",
+            "pointers": ["/backgroundColor", "/maxWidth", "/gutter"]
+          }
+        ]
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "content": {
+      "type": "string",
+      "title": "Content",
+      "description": "Markdown source. Standard CommonMark.",
+      "format": "markdown"
+    },
+    "ctas": {
+      "type": "array",
+      "title": "CTAs",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "https://quadratic.amplience.com/v2/partials/cta"
+          }
+        ]
+      }
+    },
+    "backgroundColor": {
+      "type": "string",
+      "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"],
+      "title": "Background colour"
+    },
+    "maxWidth": {
+      "type": "string",
+      "enum": ["narrow", "default", "wide", "none"],
+      "title": "Max width",
+      "default": "default"
+    },
+    "gutter": {
+      "type": "boolean",
+      "title": "Gutter",
+      "description": "Inset content from the viewport edge with horizontal padding."
+    }
+  },
+  "propertyOrder": ["content", "ctas", "backgroundColor", "maxWidth", "gutter"],
+  "required": ["content"]
+}

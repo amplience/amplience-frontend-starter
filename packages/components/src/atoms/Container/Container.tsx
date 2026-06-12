@@ -9,12 +9,12 @@ import styles from './Container.module.css'
 
 /**
  * Max-width breakpoint tokens. Maps to CSS classes that cap the content width
- * at sensible editorial widths; the value `full` removes the cap entirely.
+ * at sensible editorial widths; the value `none` removes the cap entirely.
  *
  * Narrower values suit focused editorial content; `wide` suits dashboards
  * or media-rich layouts.
  */
-export type ContainerMaxWidth = 'narrow' | 'default' | 'wide' | 'full'
+export type ContainerMaxWidth = 'narrow' | 'default' | 'wide' | 'none'
 
 export type ContainerProps = {
   children: ReactNode
@@ -48,9 +48,9 @@ export type ContainerProps = {
  *   <Container>…</Container>
  *   <Container maxWidth="wide">…</Container>
  *   <Container maxWidth="narrow">…</Container>
- *   <Container maxWidth="full">…</Container>
+ *   <Container maxWidth="none">…</Container>
  *   <Container gutter>…</Container>          — adds horizontal padding
- *   <Container maxWidth="full">…</Container>  — truly edge-to-edge (no gutter, no max-width cap)
+ *   <Container maxWidth="none">…</Container>  — truly edge-to-edge (no gutter, no max-width cap)
  */
 export function Container({
   children,

@@ -9,7 +9,7 @@ const meta = {
   argTypes: {
     maxWidth: {
       control: 'select',
-      options: ['narrow', 'default', 'wide', 'full'],
+      options: ['narrow', 'default', 'wide', 'none'],
     },
     gutter: { control: 'boolean' },
   },
@@ -54,7 +54,7 @@ export const MaxWidthScale: Story = {
   name: 'Max-width scale',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', padding: '1rem 0' }}>
-      {(['narrow', 'default', 'wide', 'full'] as const).map((maxWidth) => (
+      {(['narrow', 'default', 'wide', 'none'] as const).map((maxWidth) => (
         <Container key={maxWidth} maxWidth={maxWidth} gutter>
           <Box label={`maxWidth="${maxWidth}" with gutter`} />
         </Container>

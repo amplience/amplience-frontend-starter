@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/slots_slot.json",
+  "schemaId": "https://quadratic.amplience.com/v2/slots/slot",
+  "validationLevel": "SLOT"
+}

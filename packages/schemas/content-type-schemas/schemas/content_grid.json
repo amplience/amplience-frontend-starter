@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/grid",
+  "title": "Grid",
+  "description": "A wrapping grid of content items — fixed columns per breakpoint, or auto-fit by minimum item width.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "📝 Content",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "📝 Content",
+            "pointers": ["/items"]
+          },
+          {
+            "label": "⚙️ Options",
+            "pointers": [
+              "/sizingMode",
+              "/columnsMobile",
+              "/columnsTablet",
+              "/columnsDesktop",
+              "/minItemWidth",
+              "/gap",
+              "/alignItems",
+              "/backgroundColor",
+              "/maxWidth",
+              "/gutter"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "items": {
+      "title": "Items",
+      "description": "Content items laid out in the grid.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+          },
+          {
+            "properties": {
+              "contentType": {
+                "enum": [
+                  "https://quadratic.amplience.com/v2/content/hero",
+                  "https://quadratic.amplience.com/v2/content/markdown-block",
+                  "https://quadratic.amplience.com/v2/content/columns",
+                  "https://quadratic.amplience.com/v2/content/grid",
+                  "https://quadratic.amplience.com/v2/content/media-card",
+                  "https://quadratic.amplience.com/v2/content/image"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sizingMode": {
+      "type": "string",
+      "enum": ["fixed", "auto"],
+      "title": "Sizing mode",
+      "description": "fixed — explicit column counts per breakpoint; auto — fit as many columns as the minimum item width allows.",
+      "default": "fixed"
+    },
+    "gap": {
+      "type": "number",
+      "title": "Gap (px)",
+      "minimum": 0
+    },
+    "backgroundColor": {
+      "type": "string",
+      "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"],
+      "title": "Background colour"
+    },
+    "maxWidth": {
+      "type": "string",
+      "enum": ["narrow", "default", "wide", "none"],
+      "title": "Max width",
+      "default": "default"
+    },
+    "gutter": {
+      "type": "boolean",
+      "title": "Gutter",
+      "description": "Inset grid items from the viewport edge with horizontal padding."
+    }
+  },
+  "if": {
+    "properties": {
+      "sizingMode": {
+        "const": "fixed"
+      }
+    }
+  },
+  "then": {
+    "properties": {
+      "columnsMobile": {
+        "type": "integer",
+        "title": "Columns (mobile)",
+        "description": "Only applies when sizing mode is fixed.",
+        "minimum": 1,
+        "maximum": 6
+      },
+      "columnsTablet": {
+        "type": "integer",
+        "title": "Columns (tablet)",
+        "description": "Only applies when sizing mode is fixed.",
+        "minimum": 1,
+        "maximum": 6
+      },
+      "columnsDesktop": {
+        "type": "integer",
+        "title": "Columns (desktop)",
+        "description": "Only applies when sizing mode is fixed.",
+        "minimum": 1,
+        "maximum": 6
+      }
+    }
+  },
+  "else": {
+    "properties": {
+      "minItemWidth": {
+        "type": "number",
+        "title": "Min item width (px)",
+        "description": "Only applies when sizing mode is auto.",
+        "minimum": 1
+      }
+    }
+  },
+  "propertyOrder": [
+    "items",
+    "sizingMode",
+    "columnsMobile",
+    "columnsTablet",
+    "columnsDesktop",
+    "minItemWidth",
+    "gap",
+    "backgroundColor",
+    "maxWidth",
+    "gutter"
+  ]
+}

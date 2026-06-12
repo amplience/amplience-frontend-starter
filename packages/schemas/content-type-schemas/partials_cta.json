@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/partials_cta.json",
+  "schemaId": "https://quadratic.amplience.com/v2/partials/cta",
+  "validationLevel": "PARTIAL"
+}

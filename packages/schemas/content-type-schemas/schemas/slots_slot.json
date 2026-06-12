@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/slots/slot",
+  "title": "Slot",
+  "description": "An ordered list of component content the renderer recurses into.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "components": {
+      "title": "Components",
+      "description": "Ordered components rendered in this slot.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+          },
+          {
+            "properties": {
+              "contentType": {
+                "enum": [
+                  "https://quadratic.amplience.com/v2/content/hero",
+                  "https://quadratic.amplience.com/v2/content/markdown-block",
+                  "https://quadratic.amplience.com/v2/content/columns",
+                  "https://quadratic.amplience.com/v2/content/grid",
+                  "https://quadratic.amplience.com/v2/content/media-card",
+                  "https://quadratic.amplience.com/v2/content/image"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "propertyOrder": ["components"]
+}

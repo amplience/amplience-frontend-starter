@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/image",
+  "title": "Image block",
+  "description": "A standalone image section with optional caption and link.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "image": {
+      "title": "Image",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/image"
+        }
+      ]
+    },
+    "caption": {
+      "type": "string",
+      "title": "Caption"
+    },
+    "href": {
+      "type": "string",
+      "title": "Link",
+      "description": "Optional URL — wraps the image in a link. External URLs open in a new tab."
+    },
+    "fullBleed": {
+      "type": "boolean",
+      "title": "Full bleed",
+      "description": "Extend the image edge-to-edge, ignoring container padding and max-width."
+    },
+    "backgroundColor": {
+      "type": "string",
+      "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"],
+      "title": "Background colour"
+    },
+    "maxWidth": {
+      "type": "string",
+      "enum": ["narrow", "default", "wide", "none"],
+      "title": "Max width",
+      "description": "Ignored when full bleed is on.",
+      "default": "default"
+    }
+  },
+  "propertyOrder": ["image", "caption", "href", "fullBleed", "backgroundColor", "maxWidth"],
+  "required": ["image"]
+}
