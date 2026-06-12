@@ -44,7 +44,7 @@ describe('Button', () => {
 
     it('forwards disabled', () => {
       render(<Button disabled>Save</Button>)
-      const el = screen.getByRole('button', { name: 'Save' })
+      const el = screen.getByRole<HTMLButtonElement>('button', { name: 'Save' })
       expect(el.disabled).toBe(true)
     })
 
@@ -67,7 +67,7 @@ describe('Button', () => {
 
     it('external href opens in a new tab', () => {
       render(<Button href="https://example.com">Visit</Button>)
-      const el = screen.getByRole('link', { name: 'Visit' })
+      const el = screen.getByRole<HTMLAnchorElement>('link', { name: 'Visit' })
       expect(el.target).toBe('_blank')
     })
 

@@ -22,6 +22,7 @@ import jsxA11y from 'eslint-plugin-jsx-a11y'
 import noAutofix from 'eslint-plugin-no-autofix'
 import reactPlugin from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
+import * as regexpPlugin from 'eslint-plugin-regexp'
 import unusedImports from 'eslint-plugin-unused-imports'
 import tseslint from 'typescript-eslint'
 
@@ -210,6 +211,50 @@ export default tseslint.config(
       // Prefer `type` over `interface` throughout the project — consistent
       // with the codebase convention and avoids declaration-merging surprises.
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+    },
+  },
+
+  // Regex safety (QL-40; Quadratic 1.0 audit finding #18).
+  //
+  // The v1 finding wasn't one bad regex — it was a regex *compiled at
+  // runtime from CMS config* (with unescaped interpolation) and matched
+  // against request URLs in the SSR hot path. Two rules make the safe
+  // posture a property of the toolchain rather than of review discipline:
+  //
+  //  - regexp/no-super-linear-backtracking rejects patterns whose
+  //    worst-case runtime is super-linear (catastrophic backtracking).
+  //    Linear-safe patterns pass untouched — regex stays available.
+  //  - no-restricted-syntax rejects RegExp construction whose pattern is
+  //    anything but a literal: a pattern that doesn't exist until runtime
+  //    can't be statically analysed. A genuinely needed dynamic regex
+  //    carries an explicit eslint-disable with a justification, so review
+  //    happens exactly where the risk is.
+  {
+    files: ['**/*.{js,jsx,ts,tsx,mjs,cjs}'],
+    plugins: {
+      regexp: regexpPlugin,
+    },
+    rules: {
+      'regexp/no-super-linear-backtracking': 'error',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "NewExpression[callee.name='RegExp'][arguments.0.type!='Literal']",
+          message:
+            'Build regexes as literals (/…/). A pattern assembled at runtime cannot be ' +
+            'checked for catastrophic backtracking — the exact shape of the v1 ReDoS ' +
+            'finding (audit #18). If a dynamic pattern is unavoidable, disable this ' +
+            'rule for the line with a justification.',
+        },
+        {
+          selector: "CallExpression[callee.name='RegExp'][arguments.0.type!='Literal']",
+          message:
+            'Build regexes as literals (/…/). A pattern assembled at runtime cannot be ' +
+            'checked for catastrophic backtracking — the exact shape of the v1 ReDoS ' +
+            'finding (audit #18). If a dynamic pattern is unavoidable, disable this ' +
+            'rule for the line with a justification.',
+        },
+      ],
     },
   },
 
