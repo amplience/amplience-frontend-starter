@@ -19,8 +19,15 @@ vi.mock('next/link', () => ({
 }))
 
 vi.mock('next/image', () => ({
-  default: ({ src, alt, ...props }: React.ComponentPropsWithoutRef<'img'>) => (
-    <img src={src} alt={alt} {...props} />
+  // `priority` is a next/image prop, not a DOM attribute — surface it as
+  // data-priority so tests can assert on it.
+  default: ({
+    src,
+    alt,
+    priority,
+    ...props
+  }: React.ComponentPropsWithoutRef<'img'> & { priority?: boolean }) => (
+    <img src={src} alt={alt} data-priority={priority ? 'true' : undefined} {...props} />
   ),
 }))
 
@@ -122,6 +129,23 @@ describe('HeroBlock', () => {
     it('does not render image element when omitted', () => {
       render(<HeroBlock title="Title" />)
       expect(screen.queryByRole('img')).toBeNull()
+    })
+  })
+
+  describe('image loading priority', () => {
+    it('does not prioritise the image by default (next/image lazy-loads)', () => {
+      render(<HeroBlock title="Title" image={sampleImage} />)
+      expect(screen.getByAltText('Hero image').getAttribute('data-priority')).toBeNull()
+    })
+
+    it('prioritises the image at the top of the page', () => {
+      render(<HeroBlock title="Title" image={sampleImage} isTopOfPage />)
+      expect(screen.getByAltText('Hero image').getAttribute('data-priority')).toBe('true')
+    })
+
+    it('lets an authored image.priority override the position default', () => {
+      render(<HeroBlock title="Title" image={{ ...sampleImage, priority: true }} />)
+      expect(screen.getByAltText('Hero image').getAttribute('data-priority')).toBe('true')
     })
   })
 

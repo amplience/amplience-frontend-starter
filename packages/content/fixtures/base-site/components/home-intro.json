@@ -13,7 +13,7 @@
     "content": "## What's in the box\n\nA **recursive renderer**, a content-client abstraction with mock and SDK adapters, an atomic-design component library, and an automation CLI for hub provisioning.\n\nClone, point at an Amplience hub, ship.",
     "ctas": [
       {
-        "label": "Read more",
+        "label": "About",
         "href": "/about",
         "variant": "solid",
         "color": "primary"

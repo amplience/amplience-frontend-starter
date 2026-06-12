@@ -7,20 +7,24 @@ export const IMAGE_BLOCK_SCHEMA = 'https://quadratic.amplience.com/v2/content/im
 
 /**
  * The image delivery body — ImageBlock props plus the content envelope.
- * `bare` is excluded: it's a layout cue supplied by the render context,
- * not an author-editable field.
+ * `bare` and `isTopOfPage` are excluded: they're layout/position cues
+ * supplied by the render context, not author-editable fields.
  */
-export type ImageBlockSchema = Omit<ImageBlockProps, 'bare'> & { readonly _meta: unknown }
+export type ImageBlockSchema = Omit<ImageBlockProps, 'bare' | 'isTopOfPage'> & {
+  readonly _meta: unknown
+}
 
 /**
  * Registry entry for the image schema. The adapter strips the `_meta`
- * envelope and sets `bare` from the render context so an image nested in a
- * layout container drops its own section wrapper.
+ * envelope and sets `bare` and `isTopOfPage` from the render context — an
+ * image nested in a layout container drops its own section wrapper, and one
+ * leading the page loads eagerly.
  */
 export const imageBlockRegistryEntry: ComponentRegistryEntry<ImageBlockSchema, ImageBlockProps> = {
   component: ImageBlock,
   propsFromSchema: ({ _meta: _envelope, ...props }, ctx) => ({
     ...props,
     bare: ctx.bare ?? false,
+    isTopOfPage: ctx.isTopOfPage ?? false,
   }),
 }

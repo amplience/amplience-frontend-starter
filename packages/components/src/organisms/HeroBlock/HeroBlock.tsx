@@ -149,6 +149,15 @@ export type HeroBlockProps = {
   maxWidth?: ContainerProps['maxWidth']
   minHeight?: number
   maxHeight?: number
+  /**
+   * True when this hero is the first block on the page (supplied by the
+   * renderer via RenderContext, not authored). A top-of-page hero image is
+   * the likely LCP element, so it renders with next/image `priority` —
+   * eager load, `fetchpriority="high"`, and a head preload hint. Below the
+   * fold, next/image's default lazy loading applies. An explicit
+   * `image.priority` still wins. Defaults to false.
+   */
+  isTopOfPage?: boolean
   className?: string
 }
 
@@ -213,6 +222,7 @@ export function HeroBlock({
   contentPadding,
   minHeight,
   maxHeight,
+  isTopOfPage = false,
   className,
 }: HeroBlockProps) {
   // The ::before spacer in 'flexible' overlay mode needs the image aspect
@@ -251,7 +261,12 @@ export function HeroBlock({
     >
       {hasImage && (
         <div className={styles.media}>
-          <Image {...image} className={clsx(styles.image, image.className)} />
+          {/* Default before the spread: an authored `priority` overrides. */}
+          <Image
+            priority={isTopOfPage}
+            {...image}
+            className={clsx(styles.image, image.className)}
+          />
         </div>
       )}
 
