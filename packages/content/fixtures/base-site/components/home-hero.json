@@ -26,7 +26,7 @@
     "verticalPosition": "center",
     "backgroundColor": "dark",
     "ctas": [
-      { "label": "Learn more", "href": "/about", "variant": "solid", "color": "primary" },
+      { "label": "About", "href": "/about", "variant": "solid", "color": "primary" },
       {
         "label": "Read the docs",
         "href": "/docs",

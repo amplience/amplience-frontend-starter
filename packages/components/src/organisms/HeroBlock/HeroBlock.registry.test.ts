@@ -3,7 +3,7 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { validateHeroBlockSchema } from './HeroBlock.registry'
+import { heroBlockRegistryEntry, validateHeroBlockSchema } from './HeroBlock.registry'
 
 const validHero = {
   _meta: { schema: 'https://quadratic.amplience.com/v2/content/hero' },
@@ -33,5 +33,22 @@ describe('validateHeroBlockSchema', () => {
   it('rejects non-object input', () => {
     expect(validateHeroBlockSchema(null)).toBe(false)
     expect(validateHeroBlockSchema('hero')).toBe(false)
+  })
+})
+
+describe('heroBlockRegistryEntry.propsFromSchema', () => {
+  const adapt = heroBlockRegistryEntry.propsFromSchema
+
+  it('strips the _meta envelope and passes the remaining fields through', () => {
+    expect(adapt?.(validHero, {})).toMatchObject({
+      title: validHero.title,
+      subtitle: validHero.subtitle,
+    })
+    expect(adapt?.(validHero, {})).not.toHaveProperty('_meta')
+  })
+
+  it('sets isTopOfPage from the render context, defaulting to false', () => {
+    expect(adapt?.(validHero, {})?.isTopOfPage).toBe(false)
+    expect(adapt?.(validHero, { isTopOfPage: true })?.isTopOfPage).toBe(true)
   })
 })

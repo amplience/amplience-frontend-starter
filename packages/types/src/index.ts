@@ -29,9 +29,17 @@ export type SchemaURI = string
  * `bare` — true when the node renders inside a layout container (ColumnsBlock,
  * GridBlock) that already provides section/Container semantics. Adapters for
  * blocks with a `bare` prop read this to avoid double-wrapping.
+ *
+ * `isTopOfPage` — true while rendering the page's leading edge: the root
+ * node and, within each container along that edge, its first child. The
+ * flag therefore reaches exactly the first block on a page (or the first
+ * block in the first slot, when slots are present). Adapters for blocks
+ * that render images read this so above-the-fold imagery loads eagerly
+ * while everything below the fold keeps lazy loading.
  */
 export type RenderContext = {
   readonly bare?: boolean
+  readonly isTopOfPage?: boolean
 }
 
 /**

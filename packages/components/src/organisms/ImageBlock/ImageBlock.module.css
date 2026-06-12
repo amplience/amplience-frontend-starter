@@ -20,7 +20,7 @@
 .root {
   --image-block-padding-y: calc(var(--spacing) * 10);
   --image-block-caption-gap: calc(var(--spacing) * 3);
-  --image-block-caption-color: var(--color-gray-600);
+  --image-block-caption-color: var(--color-gray-800);
   --image-block-caption-background-color: var(--color-gray-100);
 
   --image-block-background-color: transparent;

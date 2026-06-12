@@ -81,11 +81,14 @@ export function renderContent(
 ): ReactNode {
   if (content == null) return null
 
-  // Structural guard — array node: render each element in order.
+  // Structural guard — array node: render each element in order. Only the
+  // first element sits on the page's leading edge, so `isTopOfPage` (when
+  // set) survives into index 0 and falls away for every sibling after it.
   if (Array.isArray(content)) {
-    return content.map((node, i) => (
-      <Fragment key={keyOf(node, i)}>{renderContent(node, registry, ctx)}</Fragment>
-    ))
+    return content.map((node, i) => {
+      const childCtx = i === 0 ? ctx : { ...ctx, isTopOfPage: false }
+      return <Fragment key={keyOf(node, i)}>{renderContent(node, registry, childCtx)}</Fragment>
+    })
   }
 
   // Structural guard — unresolved content-link stub: the tree was fetched
@@ -150,7 +153,14 @@ export function renderContent(
     const props = (adapt === undefined ? content : adapt(content, ctx)) as Record<string, unknown>
     if (getChildren === undefined) return createElement(component, props)
 
-    const children = renderContent(getChildren(content), registry, entry.childContext ?? {})
+    // A container on the page's leading edge passes `isTopOfPage` down into
+    // its children (the array branch above then narrows it to the first);
+    // the entry's own childContext supplies everything else (e.g. `bare`).
+    const childCtx: RenderContext = {
+      ...(entry.childContext ?? {}),
+      ...(ctx.isTopOfPage === true && { isTopOfPage: true }),
+    }
+    const children = renderContent(getChildren(content), registry, childCtx)
     return createElement(component, props, children)
   } catch (error) {
     return fail(

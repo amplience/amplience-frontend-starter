@@ -55,11 +55,30 @@ const boxEntry: ComponentRegistryEntry<BoxSchema, BoxProps> = {
 type IdentityProps = { _meta?: unknown; label?: string }
 const Identity = ({ label }: IdentityProps) => <em>{label}</em>
 
+// A leaf that surfaces both render-context cues, for the isTopOfPage tests.
+const EDGE_SCHEMA = 'https://test.example.com/v1/content/edge'
+type EdgeProps = { label: string; bare?: boolean; isTopOfPage?: boolean }
+const Edge = ({ label, bare, isTopOfPage }: EdgeProps) => (
+  <span data-bare={bare ?? false} data-top={isTopOfPage ?? false}>
+    {label}
+  </span>
+)
+
+const edgeEntry: ComponentRegistryEntry<LeafSchema, EdgeProps> = {
+  component: Edge,
+  propsFromSchema: ({ _meta: _envelope, ...props }, ctx) => ({
+    ...props,
+    bare: ctx.bare ?? false,
+    isTopOfPage: ctx.isTopOfPage ?? false,
+  }),
+}
+
 const makeRegistry = (): Registry =>
   new Map<SchemaURI, AnyComponentRegistryEntry>([
     [LEAF_SCHEMA, leafEntry],
     [BOX_SCHEMA, boxEntry],
     [IDENTITY_SCHEMA, { component: Identity }],
+    [EDGE_SCHEMA, edgeEntry],
   ])
 
 const node = (schema: string, fields: Record<string, unknown> = {}, deliveryId?: string) => ({
@@ -69,6 +88,10 @@ const node = (schema: string, fields: Record<string, unknown> = {}, deliveryId?:
 
 const html = (content: unknown, registry: Registry = makeRegistry()): string =>
   renderToStaticMarkup(<>{renderContent(content, registry)}</>)
+
+/** As `html`, but seeded with a root context — how the route renders pages. */
+const htmlTop = (content: unknown): string =>
+  renderToStaticMarkup(<>{renderContent(content, makeRegistry(), { isTopOfPage: true })}</>)
 
 // The dispatcher emits a structured console signal on every failure exit —
 // silence it (and assert on it) via a spy.
@@ -162,6 +185,50 @@ describe('renderContent — recursion', () => {
 
   it('renders an empty container when getChildren returns no items', () => {
     expect(html(node(BOX_SCHEMA, { name: 'empty' }))).toBe('<div data-box="empty"></div>')
+  })
+})
+
+describe('renderContent — isTopOfPage', () => {
+  const edge = (label: string, id: string) => node(EDGE_SCHEMA, { label }, id)
+
+  it('is false everywhere when no root context is seeded', () => {
+    expect(html(edge('solo', 'id-1'))).toBe('<span data-bare="false" data-top="false">solo</span>')
+  })
+
+  it('reaches the root node when seeded', () => {
+    expect(htmlTop(edge('solo', 'id-1'))).toBe(
+      '<span data-bare="false" data-top="true">solo</span>',
+    )
+  })
+
+  it('survives into the first array element only', () => {
+    expect(htmlTop([edge('first', 'id-1'), edge('second', 'id-2')])).toBe(
+      '<span data-bare="false" data-top="true">first</span>' +
+        '<span data-bare="false" data-top="false">second</span>',
+    )
+  })
+
+  it('flows along the leading edge of nested containers (page → first slot → first block)', () => {
+    const tree = node(BOX_SCHEMA, {
+      name: 'page',
+      items: [
+        node(BOX_SCHEMA, { name: 'slot-1', items: [edge('a', 'id-a'), edge('b', 'id-b')] }, 'id-1'),
+        node(BOX_SCHEMA, { name: 'slot-2', items: [edge('c', 'id-c')] }, 'id-2'),
+      ],
+    })
+    // Only the first block of the first slot is top-of-page; the container's
+    // own childContext (bare) is preserved alongside the inherited flag.
+    expect(htmlTop(tree)).toBe(
+      '<div data-box="page">' +
+        '<div data-box="slot-1">' +
+        '<span data-bare="true" data-top="true">a</span>' +
+        '<span data-bare="true" data-top="false">b</span>' +
+        '</div>' +
+        '<div data-box="slot-2">' +
+        '<span data-bare="true" data-top="false">c</span>' +
+        '</div>' +
+        '</div>',
+    )
   })
 })
 

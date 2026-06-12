@@ -65,6 +65,15 @@ export type ImageBlockProps = {
    * Defaults to false.
    */
   bare?: boolean
+  /**
+   * True when this block is the first block on the page (supplied by the
+   * renderer via RenderContext, not authored). A top-of-page image is the
+   * likely LCP element, so it renders with next/image `priority` — eager
+   * load, `fetchpriority="high"`, and a head preload hint. Below the fold,
+   * next/image's default lazy loading applies. An explicit `image.priority`
+   * still wins. Defaults to false.
+   */
+  isTopOfPage?: boolean
   className?: string
 }
 
@@ -108,9 +117,13 @@ export function ImageBlock({
   backgroundColor,
   maxWidth = 'default',
   bare = false,
+  isTopOfPage = false,
   className,
 }: ImageBlockProps) {
-  const imageEl = <Image {...image} className={clsx(styles.image, image.className)} />
+  // Default before the spread: an authored `priority` overrides.
+  const imageEl = (
+    <Image priority={isTopOfPage} {...image} className={clsx(styles.image, image.className)} />
+  )
 
   const figure = (
     <figure className={clsx(styles.figure, bare && className)}>

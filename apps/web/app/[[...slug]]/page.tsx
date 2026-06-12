@@ -94,5 +94,8 @@ export default async function ContentPage({ params }: RouteProps) {
     emitContentFailure(error, key)
     return <ContentUnavailableCard error={error} resource={key} />
   }
-  return renderContent(page, registry)
+  // The root of the tree is, by definition, the top of the page — the
+  // dispatcher carries the flag along the leading edge from here so the
+  // first block can load its imagery eagerly.
+  return renderContent(page, registry, { isTopOfPage: true })
 }

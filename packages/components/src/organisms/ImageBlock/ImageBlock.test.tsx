@@ -16,8 +16,15 @@ vi.mock('next/link', () => ({
 }))
 
 vi.mock('next/image', () => ({
-  default: ({ src, alt, ...props }: React.ComponentPropsWithoutRef<'img'>) => (
-    <img src={src} alt={alt} {...props} />
+  // `priority` is a next/image prop, not a DOM attribute — surface it as
+  // data-priority so tests can assert on it.
+  default: ({
+    src,
+    alt,
+    priority,
+    ...props
+  }: React.ComponentPropsWithoutRef<'img'> & { priority?: boolean }) => (
+    <img src={src} alt={alt} data-priority={priority ? 'true' : undefined} {...props} />
   ),
 }))
 
@@ -122,6 +129,23 @@ describe('ImageBlock', () => {
       render(<ImageBlock image={{ ...sampleImage, aspectRatio: '16 / 9' }} />)
       const img = screen.getByAltText('A test photo')
       expect(img.getAttribute('style')).toContain('--image-aspect-ratio')
+    })
+  })
+
+  describe('image loading priority', () => {
+    it('does not prioritise the image by default (next/image lazy-loads)', () => {
+      render(<ImageBlock image={sampleImage} />)
+      expect(screen.getByAltText('A test photo').getAttribute('data-priority')).toBeNull()
+    })
+
+    it('prioritises the image at the top of the page', () => {
+      render(<ImageBlock image={sampleImage} isTopOfPage />)
+      expect(screen.getByAltText('A test photo').getAttribute('data-priority')).toBe('true')
+    })
+
+    it('lets an authored image.priority override the position default', () => {
+      render(<ImageBlock image={{ ...sampleImage, priority: true }} />)
+      expect(screen.getByAltText('A test photo').getAttribute('data-priority')).toBe('true')
     })
   })
 })
