@@ -36,6 +36,7 @@ no dotenv dependency):
 
 ```sh
 AMPLIENCE_HUB_NAME="quadraticlite"          # visualization URIs
+AMPLIENCE_APP_URL="https://quadratic-lite-web.vercel.app"  # Production viz origin
 AMPLIENCE_REPO_CONTENT="6a03b80d273dc65652a8dd1a"
 AMPLIENCE_REPO_SLOTS="6a03b813c09912743234ee8a"
 AMPLIENCE_CLIENT_ID="..."                   # ┐ optional — omit all three
@@ -62,11 +63,11 @@ pnpm hub:import
 That executes three steps in order; each is also runnable on its own from
 `packages/schemas/` when iterating:
 
-| Step | Script                    | What happens                                                                                                                     |
-| ---- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| 1    | `pnpm hub:import:schemas` | Registers the JSON Schemas (8 types + 2 partials) from `content-type-schemas/`                                                   |
-| 2    | `pnpm hub:import:types`   | Stages `content-types/` with `${hub}` substituted, imports with `--sync` so visualization changes reach already-registered types |
-| 3    | `pnpm hub:import:content` | Imports fixtures leaf-first — components → slots → pages — each into its repository, with `--publish`                            |
+| Step | Script                    | What happens                                                                                                                                     |
+| ---- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1    | `pnpm hub:import:schemas` | Registers the JSON Schemas (8 types + 2 partials) from `content-type-schemas/`                                                                   |
+| 2    | `pnpm hub:import:types`   | Stages `content-types/` with `${hub}` and `${appUrl}` substituted, imports with `--sync` so visualization changes reach already-registered types |
+| 3    | `pnpm hub:import:content` | Imports fixtures leaf-first — components → slots → pages — each into its repository, with `--publish`                                            |
 
 The leaf-first order exists because dc-cli rewrites cross-item links using
 a mapping file: by the time a slot or page arrives, every item it links to

@@ -1,8 +1,9 @@
 /**
  * resolveContentConfig tests (QL-43) — the env → client-selection seam.
  * The contract under test: no configuration always means the mock (the
- * fresh-clone offline experience), and misconfiguration fails loud at
- * composition time rather than surfacing as a renderer failure card.
+ * fresh-clone offline experience); AMPLIENCE_HUB_NAME present implies sdk;
+ * explicit CONTENT_CLIENT overrides inference; misconfiguration fails loud
+ * at composition time rather than surfacing as a renderer failure card.
  */
 
 import { describe, expect, it } from 'vitest'
@@ -22,7 +23,20 @@ describe('resolveContentConfig', () => {
     expect(resolveContentConfig({ CONTENT_CLIENT: 'mock' })).toEqual({ kind: 'mock' })
   })
 
-  it('selects the sdk with a hub name', () => {
+  it('infers sdk when AMPLIENCE_HUB_NAME is set (no CONTENT_CLIENT needed)', () => {
+    expect(resolveContentConfig({ AMPLIENCE_HUB_NAME: 'quadraticlite' })).toEqual({
+      kind: 'sdk',
+      hubName: 'quadraticlite',
+    })
+  })
+
+  it('explicit CONTENT_CLIENT=mock overrides hub-name inference', () => {
+    expect(
+      resolveContentConfig({ CONTENT_CLIENT: 'mock', AMPLIENCE_HUB_NAME: 'quadraticlite' }),
+    ).toEqual({ kind: 'mock' })
+  })
+
+  it('selects the sdk with an explicit CONTENT_CLIENT=sdk and a hub name', () => {
     expect(
       resolveContentConfig({ CONTENT_CLIENT: 'sdk', AMPLIENCE_HUB_NAME: 'quadraticlite' }),
     ).toEqual({ kind: 'sdk', hubName: 'quadraticlite' })
@@ -31,7 +45,6 @@ describe('resolveContentConfig', () => {
   it('carries staging host and locale only when present', () => {
     expect(
       resolveContentConfig({
-        CONTENT_CLIENT: 'sdk',
         AMPLIENCE_HUB_NAME: 'quadraticlite',
         AMPLIENCE_STAGING_HOST: 'abc.staging.bigcontent.io',
         AMPLIENCE_LOCALE: 'en-GB',
@@ -45,14 +58,13 @@ describe('resolveContentConfig', () => {
 
     expect(
       resolveContentConfig({
-        CONTENT_CLIENT: 'sdk',
         AMPLIENCE_HUB_NAME: 'quadraticlite',
         AMPLIENCE_STAGING_HOST: '',
       }),
     ).toEqual({ kind: 'sdk', hubName: 'quadraticlite' })
   })
 
-  it('throws loudly when sdk is selected without a hub name', () => {
+  it('throws loudly when sdk is forced without a hub name', () => {
     expect(() => resolveContentConfig({ CONTENT_CLIENT: 'sdk' })).toThrow(/AMPLIENCE_HUB_NAME/)
     expect(() => resolveContentConfig({ CONTENT_CLIENT: 'sdk', AMPLIENCE_HUB_NAME: '' })).toThrow(
       /AMPLIENCE_HUB_NAME/,

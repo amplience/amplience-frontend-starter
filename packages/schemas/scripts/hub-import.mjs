@@ -130,13 +130,21 @@ const importSchemas = async () => {
 
 const importTypes = async () => {
   const hubName = require_('AMPLIENCE_HUB_NAME', 'fill the ${hub} token in visualization URIs')
+  let appUrl = require_(
+    'AMPLIENCE_APP_URL',
+    'fill the ${appUrl} token in the Production visualization URI (the deployed frontend origin)',
+  )
+  while (appUrl.endsWith('/')) appUrl = appUrl.slice(0, -1)
   const source = path.join(packageRoot, 'content-types')
   const staged = path.join(stagingDir, 'content-types')
   rmSync(staged, { recursive: true, force: true })
   mkdirSync(staged, { recursive: true })
   for (const file of readdirSync(source)) {
     const body = readFileSync(path.join(source, file), 'utf8')
-    writeFileSync(path.join(staged, file), body.replaceAll('${hub}', hubName))
+    writeFileSync(
+      path.join(staged, file),
+      body.replaceAll('${hub}', hubName).replaceAll('${appUrl}', appUrl),
+    )
   }
   await dcCli('content-type', 'import', staged, '--sync')
 }

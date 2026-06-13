@@ -1,33 +1,9 @@
-import {
-  Controls,
-  Description,
-  Primary,
-  Stories,
-  Subtitle,
-  Title,
-} from '@storybook/addon-docs/blocks'
 import type { Preview } from '@storybook/nextjs-vite'
 
 // Design tokens — the CSS variable contract per ADR-0002
 import '@amplience/quadratic-theme/tokens.css'
 // Global reset — mirrors apps/web/app/globals.css
 import './preview-globals.css'
-
-/**
- * Custom docs page: renders the primary (Playground) story once as an
- * interactive preview, then the controls table, then all remaining stories —
- * without duplicating the primary story in the Stories block.
- */
-const DocsPage = () => (
-  <>
-    <Title />
-    <Subtitle />
-    <Description />
-    <Primary />
-    <Controls />
-    <Stories includePrimary={false} />
-  </>
-)
 
 const preview: Preview = {
   parameters: {
@@ -46,13 +22,6 @@ const preview: Preview = {
       },
       // Suppress noise from low-value HTML passthrough props
       exclude: ['className', 'style'],
-    },
-    docs: {
-      page: DocsPage,
-      story: {
-        height: 'auto', // Overrides min-height to allow automatic resizing
-        inline: true, // Renders the story in-place
-      },
     },
     // Center atoms in the canvas by default. Components that need edge-to-edge
     // layout (Container, Stack, and future molecules/organisms) override with
