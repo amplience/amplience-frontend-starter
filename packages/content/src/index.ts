@@ -2,9 +2,13 @@
  * @amplience/quadratic-content — public surface.
  *
  * The port and shared types live here; concrete implementations live under
- * subpaths (`./mock` today, `./sdk` once QL-43 lands).
+ * subpaths (`./mock` and, since QL-43, `./sdk`). `resolveContentConfig` is
+ * the one place environment becomes client configuration — compositions
+ * pick an implementation from its result.
  */
 
+export { resolveContentConfig } from './config'
+export type { ContentClientSelection } from './config'
 export type { ContentClient } from './port'
 export {
   CONTENT_LINK_SCHEMA,

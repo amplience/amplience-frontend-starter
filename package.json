@@ -33,6 +33,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
+    "hub:import": "pnpm --filter @amplience/quadratic-schemas hub:import",
     "storybook": "pnpm --filter @amplience/quadratic-components storybook",
     "sb": "pnpm storybook"
   },

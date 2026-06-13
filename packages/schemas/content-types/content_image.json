@@ -1,0 +1,20 @@
+{
+  "contentTypeUri": "https://quadratic.amplience.com/v2/content/image",
+  "status": "ACTIVE",
+  "settings": {
+    "label": "Image block",
+    "visualizations": [
+      {
+        "label": "JSON",
+        "templatedUri": "https://delivery-preview.visualizations.content.amplience.net?id={{content.sys.id}}&vse={{vse.domain}}&hub=${hub}&realtime=true",
+        "default": true
+      },
+      {
+        "label": "Localhost (dev)",
+        "templatedUri": "http://localhost:3000/visualization?vse={{vse.domain}}&content={{content.sys.id}}",
+        "default": false
+      }
+    ]
+  },
+  "repositories": ["content"]
+}

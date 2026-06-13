@@ -12,7 +12,7 @@
     "components": [
       {
         "id": "a1b2c3d4-0002-4000-9000-000000000003",
-        "contentType": "https://quadratic.amplience.com/v2/content/hero-block",
+        "contentType": "https://quadratic.amplience.com/v2/content/hero",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }

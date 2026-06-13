@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/partials/cta",
+  "title": "Call to action",
+  "description": "A button-style link — label, destination, and Button atom styling.",
+  "type": "object",
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "📝 Content",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "📝 Content",
+            "pointers": ["/label", "/href"]
+          },
+          {
+            "label": "🎨 Style",
+            "pointers": ["/variant", "/color"]
+          }
+        ]
+      }
+    }
+  },
+  "properties": {
+    "label": {
+      "type": "string",
+      "title": "Label",
+      "minLength": 1
+    },
+    "href": {
+      "type": "string",
+      "title": "URL / path",
+      "pattern": "^(?!https?\\/\\/)(?:(?:https?:\\/\\/)(?:localhost|(?:[A-Za-z0-9-]+\\.)+[A-Za-z]{2,})(?::\\d{2,5})?(?:\\/[^\\s?#]*)?(?:\\?[^\\s#]*)?(?:#[^\\s]*)?|\\/(?:[^\\s?#]+(?:\\/[^\\s?#]*)*)?(?:\\?[^\\s#]*)?(?:#[^\\s]*)?|(?:\\.\\.?\\/)?[^\\s/:?#]+(?:\\/[^\\s?#]*)*(?:\\?[^\\s#]*)?(?:#[^\\s]*)?)$"
+    },
+    "variant": {
+      "type": "string",
+      "enum": ["text", "solid", "outlined"],
+      "title": "Variant",
+      "default": "solid"
+    },
+    "color": {
+      "type": "string",
+      "enum": ["primary", "secondary", "tertiary", "black", "white"],
+      "title": "Colour"
+    }
+  },
+  "propertyOrder": ["label", "href", "variant", "color"],
+  "required": ["label", "href"]
+}

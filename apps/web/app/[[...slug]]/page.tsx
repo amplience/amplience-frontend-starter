@@ -25,8 +25,9 @@
  * place of the tree — server-rendered, like every other failure surface.
  * Only genuinely unexpected errors fall through to app/error.tsx.
  *
- * When the SDK adapter lands (QL-43), the only change here is swapping
- * `makeMockContentClient` → `makeSdkContentClient` on the import line.
+ * Which client serves the content is environment-driven composition
+ * (QL-43): `lib/content-client.ts` resolves mock vs SDK once, and this
+ * route just consumes the port.
  */
 
 import type { Metadata } from 'next'
@@ -35,13 +36,11 @@ import { notFound } from 'next/navigation'
 import { PAGE_SCHEMA, pageMetadataFromSchema } from '@amplience/quadratic-components/registry'
 import type { PageSchema } from '@amplience/quadratic-components/registry'
 import { isContentClientError } from '@amplience/quadratic-content'
-import { makeMockContentClient } from '@amplience/quadratic-content/mock'
 
+import { client } from '../../lib/content-client'
 import { registry } from '../../lib/registry'
 import { deliveryKeyForSlug, pathForDeliveryKey } from '../../lib/routing'
 import { ContentUnavailableCard, emitContentFailure, renderContent } from '../../src/renderer'
-
-const client = makeMockContentClient()
 
 type RouteProps = {
   params: Promise<{ slug?: string[] }>

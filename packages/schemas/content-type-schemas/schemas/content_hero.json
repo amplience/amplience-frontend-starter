@@ -1,0 +1,201 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/hero",
+  "title": "Hero",
+  "description": "A leading banner — title, optional subtitle, image, and CTAs, with overlay and positioning controls.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "📝 Foreground",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "📝 Foreground",
+            "pointers": ["/title", "/subtitle", "/ctas", "/textColor"]
+          },
+          {
+            "label": "🎨 Overlay",
+            "pointers": ["/overlayStyle", "/overlayColor", "/overlayIntensity"]
+          },
+          {
+            "label": "🖼️ Background",
+            "pointers": ["/image", "/backgroundColor"]
+          },
+          {
+            "label": "⚙️ Layout",
+            "pointers": [
+              "/contentPositionMobile",
+              "/contentPositionDesktop",
+              "/heightBehaviour",
+              "/verticalPosition",
+              "/horizontalPosition",
+              "/textAlign",
+              "/contentWidth",
+              "/contentPadding",
+              "/maxWidth",
+              "/minHeight",
+              "/maxHeight"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Title",
+      "description": "Drives the <h1> and the section's accessible name.",
+      "minLength": 1
+    },
+    "subtitle": {
+      "type": "string",
+      "title": "Subtitle",
+      "ui:component": "text-area"
+    },
+    "image": {
+      "title": "Image",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/image"
+        }
+      ]
+    },
+    "ctas": {
+      "type": "array",
+      "title": "CTAs",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "https://quadratic.amplience.com/v2/partials/cta"
+          }
+        ]
+      }
+    },
+    "contentPositionMobile": {
+      "type": "string",
+      "enum": ["overlay", "beneath"],
+      "title": "Content position (mobile)",
+      "description": "Where content sits relative to the image at ≤768px."
+    },
+    "contentPositionDesktop": {
+      "type": "string",
+      "enum": ["overlay", "beneath"],
+      "title": "Content position (desktop)",
+      "description": "Where content sits relative to the image at >768px.",
+      "default": "overlay"
+    },
+    "heightBehaviour": {
+      "type": "string",
+      "enum": ["flexible", "fitToContent", "fitToImage"],
+      "title": "Height behaviour",
+      "description": "How the hero's height is determined when content overlays the image."
+    },
+    "verticalPosition": {
+      "type": "string",
+      "enum": ["top", "center", "bottom"],
+      "title": "Vertical position",
+      "description": "Vertical position of the content within the section.",
+      "default": "top"
+    },
+    "horizontalPosition": {
+      "type": "string",
+      "enum": ["left", "center", "right"],
+      "title": "Horizontal position",
+      "description": "Horizontal extent and alignment of the content panel."
+    },
+    "textAlign": {
+      "type": "string",
+      "enum": ["left", "center", "right"],
+      "title": "Text alignment"
+    },
+    "overlayStyle": {
+      "type": "string",
+      "enum": ["gradient", "solid", "hard"],
+      "title": "Overlay style",
+      "description": "Style of the overlay scrim drawn over the image."
+    },
+    "overlayColor": {
+      "type": "string",
+      "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"],
+      "title": "Overlay colour",
+      "description": "Colour of the overlay scrim, from the design token palette.",
+      "default": "black"
+    },
+    "overlayIntensity": {
+      "type": "number",
+      "title": "Overlay intensity",
+      "description": "Opacity of the overlay scrim as a percentage.",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "textColor": {
+      "type": "string",
+      "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"],
+      "title": "Text colour"
+    },
+    "backgroundColor": {
+      "type": "string",
+      "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"],
+      "title": "Background colour"
+    },
+    "contentWidth": {
+      "type": "number",
+      "title": "Content width (px)",
+      "minimum": 0
+    },
+    "contentPadding": {
+      "type": "number",
+      "title": "Content padding (px)",
+      "minimum": 0
+    },
+    "maxWidth": {
+      "type": "string",
+      "enum": ["narrow", "default", "wide", "none"],
+      "title": "Max width",
+      "description": "Max-width constraint on the content slot.",
+      "default": "default"
+    },
+    "minHeight": {
+      "type": "number",
+      "title": "Min height (px)",
+      "minimum": 0
+    },
+    "maxHeight": {
+      "type": "number",
+      "title": "Max height (px)",
+      "minimum": 0
+    }
+  },
+  "propertyOrder": [
+    "title",
+    "subtitle",
+    "image",
+    "ctas",
+    "contentPositionMobile",
+    "contentPositionDesktop",
+    "heightBehaviour",
+    "verticalPosition",
+    "horizontalPosition",
+    "textAlign",
+    "overlayStyle",
+    "overlayColor",
+    "overlayIntensity",
+    "textColor",
+    "backgroundColor",
+    "contentWidth",
+    "contentPadding",
+    "maxWidth",
+    "minHeight",
+    "maxHeight"
+  ],
+  "required": ["title"]
+}

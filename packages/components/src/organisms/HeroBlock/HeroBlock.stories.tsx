@@ -33,7 +33,7 @@ const meta = {
     },
     maxWidth: {
       control: 'radio',
-      options: ['narrow', 'default', 'wide', 'full'],
+      options: ['narrow', 'default', 'wide', 'none'],
     },
     contentWidth: {
       control: {

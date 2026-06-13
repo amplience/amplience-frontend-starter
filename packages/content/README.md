@@ -6,25 +6,36 @@ between the renderer and the Amplience SDK. Established by
 
 ## What's here today
 
-| Module                                                         | Status              |
-| -------------------------------------------------------------- | ------------------- |
-| `ContentClient` port + shared types                            | POC (QL-15 / QL-23) |
-| `MockContentClient` — fixture-backed adapter                   | POC (QL-23)         |
-| `AmplienceContentClient` — `dc-delivery-sdk-js`-backed adapter | Pending (QL-43)     |
+| Module                                                     | Status              |
+| ---------------------------------------------------------- | ------------------- |
+| `ContentClient` port + shared types                        | POC (QL-15 / QL-23) |
+| `MockContentClient` — fixture-backed adapter               | POC (QL-23)         |
+| `SdkContentClient` — `dc-delivery-sdk-js`-backed adapter   | Done (QL-43)        |
+| `resolveContentConfig` — env → client selection, one place | Done (QL-43)        |
 
-The mock and the SDK adapter satisfy the same port. Anything that consumes
-content — pages, components, the renderer — depends on the port, not on the
-concrete adapter.
+The mock and the SDK adapter satisfy the same port — the SDK test suite
+asserts parity against the mock for every fixture at both depths. Anything
+that consumes content — pages, components, the renderer — depends on the
+port, not on the concrete adapter.
 
 ## Quick start
 
 ```ts
+import { resolveContentConfig } from '@amplience/quadratic-content'
 import { makeMockContentClient } from '@amplience/quadratic-content/mock'
+import { makeSdkContentClient } from '@amplience/quadratic-content/sdk'
 
-const client = makeMockContentClient()
+const config = resolveContentConfig() // env-driven; no config → mock
+const client = config.kind === 'sdk' ? makeSdkContentClient(config) : makeMockContentClient()
+
 const home = await client.getByKey('home', { depth: 'all' })
 //             ↑ ContentItem with all content-links resolved inline
 ```
+
+With `CONTENT_CLIENT=sdk` and `AMPLIENCE_HUB_NAME` set, the same call serves
+the real hub (optionally via `AMPLIENCE_STAGING_HOST` for latest-saved
+content). Unset, it's the offline fixture site — a fresh clone needs no
+configuration at all.
 
 `depth` mirrors the Amplience delivery API:
 

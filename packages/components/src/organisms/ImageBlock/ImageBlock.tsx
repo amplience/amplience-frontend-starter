@@ -41,7 +41,7 @@ export type ImageBlockProps = {
   /**
    * When true, the image extends edge-to-edge — the Container's horizontal
    * padding and max-width cap are both removed. Equivalent to setting
-   * maxWidth="full" with the gutter removed.
+   * maxWidth="none" with the gutter removed.
    *
    * Vertical padding on the section is preserved.
    * Defaults to false.
@@ -162,7 +162,7 @@ export function ImageBlock({
     >
       <Container
         className={styles.container ?? ''}
-        maxWidth={fullBleed ? 'full' : maxWidth}
+        maxWidth={fullBleed ? 'none' : maxWidth}
         gutter={!fullBleed}
       >
         {figure}

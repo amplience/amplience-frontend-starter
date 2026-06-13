@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/content_markdown-block.json",
+  "schemaId": "https://quadratic.amplience.com/v2/content/markdown-block",
+  "validationLevel": "CONTENT_TYPE"
+}

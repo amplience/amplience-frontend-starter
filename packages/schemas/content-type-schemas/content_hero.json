@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/content_hero.json",
+  "schemaId": "https://quadratic.amplience.com/v2/content/hero",
+  "validationLevel": "CONTENT_TYPE"
+}

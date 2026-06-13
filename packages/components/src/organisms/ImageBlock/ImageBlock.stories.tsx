@@ -12,7 +12,7 @@ const meta = {
     fullBleed: { control: 'boolean' },
     maxWidth: {
       control: 'radio',
-      options: ['narrow', 'default', 'wide', 'full'],
+      options: ['narrow', 'default', 'wide', 'none'],
     },
     backgroundColor: {
       control: 'select',
