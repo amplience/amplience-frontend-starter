@@ -1,9 +1,11 @@
 // Route-level tests for the catch-all content route (QL-37, QL-76).
 //
-// The route builds its client via `makeMockContentClient`, so the failure
-// tests swap that factory for `makeFailingContentClient` per error kind and
-// re-import the route module fresh each time (the client is created at
-// module scope). Node environment — the page is a Server Component;
+// The route's client comes from `lib/content-client`, which resolves to
+// `makeMockContentClient` when no CONTENT_CLIENT env is set (always true in
+// tests) — so the failure tests swap that factory for
+// `makeFailingContentClient` per error kind and re-import the route module
+// fresh each time (the client is composed at module scope). Node
+// environment — the page is a Server Component;
 // assertions run against react-dom/server markup, the same SSR path Next
 // exercises.
 

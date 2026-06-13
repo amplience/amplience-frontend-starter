@@ -11,12 +11,17 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "hub:import": "node --env-file-if-exists=.env scripts/hub-import.mjs all",
+    "hub:import:schemas": "node --env-file-if-exists=.env scripts/hub-import.mjs schemas",
+    "hub:import:types": "node --env-file-if-exists=.env scripts/hub-import.mjs types",
+    "hub:import:content": "node --env-file-if-exists=.env scripts/hub-import.mjs content"
   },
   "dependencies": {
     "@amplience/quadratic-content": "workspace:*"
   },
   "devDependencies": {
+    "@amplience/dc-cli": "^0.31.0",
     "@amplience/quadratic-config": "workspace:*",
     "ajv": "^8.17.1"
   }

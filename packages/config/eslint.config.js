@@ -177,14 +177,16 @@ export default tseslint.config(
       },
 
   // Build-config files (eslint.config.js, prettier.config.js, vitest.config.ts,
-  // lint-staged.config.js, etc.) run in Node and aren't part of any tsconfig
-  // project. Disable type-aware rules and declare Node globals.
+  // lint-staged.config.js, etc.) and package scripts/ directories run in Node
+  // and aren't part of any tsconfig project. Disable type-aware rules and
+  // declare Node globals.
   {
     files: [
       '**/*.config.{js,ts,mjs,cjs}',
       '**/eslint.config.{js,mjs,cjs}',
       '**/prettier.config.{js,mjs,cjs}',
       '**/lint-staged.config.{js,mjs,cjs}',
+      '**/scripts/**/*.{js,mjs,cjs}',
     ],
     ...tseslint.configs.disableTypeChecked,
     languageOptions: {
