@@ -3,16 +3,19 @@
  * configuration (QL-43; ADR-0003 note).
  *
  * The contract: no configuration means the mock, so a fresh clone runs the
- * fixture site offline with zero setup; `CONTENT_CLIENT=sdk` plus a hub
- * name points the same app at a real hub. Everything an operator sets is
- * flat env vars today; when ADR-0003 lands its per-owner hub catalogue
+ * fixture site offline with zero setup; setting AMPLIENCE_HUB_NAME points
+ * the same app at a real hub via the SDK. CONTENT_CLIENT can still be set
+ * explicitly to force a specific client (e.g. CONTENT_CLIENT=mock alongside
+ * a hub name to use fixture data for debugging). Everything an operator sets
+ * is flat env vars today; when ADR-0003 lands its per-owner hub catalogue
  * (alias file + one selector variable), the lookup changes inside this
  * function and nowhere else.
  *
  * Variables read:
  *
- *   CONTENT_CLIENT           'mock' (default) | 'sdk'
- *   AMPLIENCE_HUB_NAME       required for 'sdk' — public-endpoint hub name
+ *   AMPLIENCE_HUB_NAME       set → sdk; unset → mock (the zero-config default)
+ *   CONTENT_CLIENT           optional override: 'mock' | 'sdk'; wins over
+ *                            hub-name inference when present
  *   AMPLIENCE_STAGING_HOST   optional VSE host; serves latest saved versions
  *   AMPLIENCE_LOCALE         optional locale passed to the delivery API
  *
@@ -22,7 +25,9 @@
  *
  * Misconfiguration throws a plain Error at composition time: like registry
  * composition (ADR-0010), a config bug should be loud at boot, not a
- * renderer failure card at request time.
+ * renderer failure card at request time. A boot log line names the chosen
+ * client so a silent misconfiguration (typo in a var name) is diagnosable
+ * from server logs.
  */
 
 export type ContentClientSelection =
@@ -44,7 +49,10 @@ const present = (value: string | undefined): value is string => value !== undefi
 const processEnv: EnvSource = (globalThis as { process?: { env?: EnvSource } }).process?.env ?? {}
 
 export const resolveContentConfig = (env: EnvSource = processEnv): ContentClientSelection => {
-  const selected = present(env.CONTENT_CLIENT) ? env.CONTENT_CLIENT : 'mock'
+  // Hub name present → sdk, absent → mock. An explicit CONTENT_CLIENT wins.
+  const hubName = env.AMPLIENCE_HUB_NAME
+  const inferred = present(hubName) ? 'sdk' : 'mock'
+  const selected = present(env.CONTENT_CLIENT) ? env.CONTENT_CLIENT : inferred
 
   if (selected === 'mock') return { kind: 'mock' }
 
@@ -54,7 +62,6 @@ export const resolveContentConfig = (env: EnvSource = processEnv): ContentClient
     )
   }
 
-  const hubName = env.AMPLIENCE_HUB_NAME
   if (!present(hubName)) {
     throw new Error(
       'CONTENT_CLIENT=sdk needs AMPLIENCE_HUB_NAME — the hub name in ' +

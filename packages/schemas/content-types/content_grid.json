@@ -5,13 +5,18 @@
     "label": "Grid",
     "visualizations": [
       {
-        "label": "JSON",
-        "templatedUri": "https://delivery-preview.visualizations.content.amplience.net?id={{content.sys.id}}&vse={{vse.domain}}&hub=${hub}&realtime=true",
+        "label": "Web",
+        "templatedUri": "${appUrl}/visualization?vse={{vse.domain}}&content={{content.sys.id}}",
         "default": true
       },
       {
-        "label": "Localhost (dev)",
+        "label": "Web (localhost)",
         "templatedUri": "http://localhost:3000/visualization?vse={{vse.domain}}&content={{content.sys.id}}",
+        "default": false
+      },
+      {
+        "label": "JSON",
+        "templatedUri": "https://delivery-preview.visualizations.content.amplience.net?id={{content.sys.id}}&vse={{vse.domain}}&hub=${hub}&realtime=true",
         "default": false
       }
     ]

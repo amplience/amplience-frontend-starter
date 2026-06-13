@@ -12,8 +12,23 @@ export const siteTitle = process.env.SITE_TITLE ?? 'Quadratic Lite'
 export const siteDescription =
   process.env.SITE_DESCRIPTION ?? 'An open-source accelerator for Amplience'
 
-/** Public origin — metadataBase for resolving relative canonical/og URLs. */
-export const siteUrl = process.env.SITE_URL ?? 'http://localhost:3000'
+/**
+ * Public origin — metadataBase for resolving relative canonical/og URLs.
+ *
+ * Resolution chain: explicit SITE_URL (the custom-domain override) →
+ * VERCEL_PROJECT_PRODUCTION_URL (a bare hostname Vercel injects into every
+ * deployment, so canonicals are correct by default there) → localhost for
+ * local dev. Without this chain an unset SITE_URL on Vercel would quietly
+ * ship `<link rel="canonical" href="http://localhost:3000/…">` to search
+ * engines — visually fine, semantically wrong.
+ */
+const vercelProductionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+
+export const siteUrl =
+  process.env.SITE_URL ??
+  (vercelProductionUrl !== undefined && vercelProductionUrl !== ''
+    ? `https://${vercelProductionUrl}`
+    : 'http://localhost:3000')
 
 /**
  * Where the favicon set lives. The filenames are fixed convention
