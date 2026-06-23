@@ -5,6 +5,7 @@
   "description": "Quadratic Helper — browser extension for Quadratic demo sites.",
   "type": "module",
   "scripts": {
+    "prepare": "wxt prepare",
     "dev": "wxt",
     "build": "wxt build",
     "zip": "wxt zip",
