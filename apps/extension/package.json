@@ -1,7 +1,20 @@
 {
   "name": "@amplience/quadratic-extension",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
-  "description": "Quadratic Helper — Manifest v3 browser extension.",
-  "type": "module"
+  "description": "Quadratic Helper — browser extension for Quadratic demo sites.",
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@amplience/quadratic-config": "workspace:*",
+    "@types/chrome": "^0.0.325",
+    "typescript": "^6.0.3",
+    "wxt": "^0.20.6"
+  }
 }
