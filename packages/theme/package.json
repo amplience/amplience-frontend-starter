@@ -5,6 +5,10 @@
   "description": "CSS variable contract and design tokens.",
   "type": "module",
   "exports": {
-    "./tokens.css": "./src/tokens.css"
+    "./tokens.css": "./src/tokens.css",
+    "./fonts": "./src/fonts.ts"
+  },
+  "peerDependencies": {
+    "next": ">=14.0.0"
   }
 }

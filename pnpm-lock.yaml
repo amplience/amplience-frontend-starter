@@ -267,7 +267,11 @@ importers:
         specifier: ^8.17.1
         version: 8.20.0
 
-  packages/theme: {}
+  packages/theme:
+    dependencies:
+      next:
+        specifier: '>=14.0.0'
+        version: 16.2.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
 
   packages/types:
     devDependencies:

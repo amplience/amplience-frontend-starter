@@ -24,6 +24,14 @@
  */
 
 :root {
+  /* Typography — font stacks. Body is applied to <body>; heading to h1–h6.
+     Default values are system stacks so the page is readable with no network.
+     Brands override to pull in their own loaded Google Font families. */
+  --font-body:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, Arial,
+    sans-serif;
+  --font-heading: var(--font-body);
+
   /* Spacing — base unit. Components use calc() multiples of this value.
      e.g. calc(var(--spacing) * 4) = 16px at the default. */
   --spacing: 4px;
@@ -97,6 +105,8 @@
 }
 
 [data-brand='anyafinn'] {
+  --font-heading: var(--nf-cormorant-garamond), Georgia, 'Times New Roman', serif;
+  --font-body: var(--nf-jost), 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --color-primary: #ffa900;
   --color-primary-contrast: #000000;
   --color-secondary: #886443;
@@ -109,6 +119,8 @@
 }
 
 [data-brand='arbor-harvest'] {
+  --font-heading: var(--nf-playfair-display), Georgia, 'Times New Roman', serif;
+  --font-body: var(--nf-lato), 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --color-primary: #1b4332;
   --color-primary-contrast: #ffffff;
   --color-secondary: #d4af37;
@@ -125,6 +137,8 @@
 }
 
 [data-brand='azure-harvest'] {
+  --font-heading: var(--nf-inter), 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-body: var(--nf-inter), 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --color-primary: #0066ff;
   --color-primary-contrast: #ffffff;
   --color-secondary: #5b75ba;
@@ -140,6 +154,8 @@
 }
 
 [data-brand='culinary-supply-hub'] {
+  --font-heading: var(--nf-roboto-slab), Georgia, 'Times New Roman', serif;
+  --font-body: var(--nf-roboto), 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --color-primary: #0b305f;
   --color-primary-contrast: #ffffff;
   --color-secondary: #7c9f19;

@@ -1,10 +1,14 @@
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 
+import { brandFonts } from '@amplience/quadratic-theme/fonts'
+
 import './globals.css'
 import '@amplience/quadratic-theme/tokens.css'
 
 import { faviconBase, siteDescription, siteTitle, siteUrl, themeColor } from '../lib/site'
+
+const fontVariables = brandFonts.map((f) => f.variable).join(' ')
 
 export const metadata: Metadata = {
   /**
@@ -41,7 +45,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" data-brand={process.env.NEXT_PUBLIC_BRAND ?? 'default'}>
+    <html
+      lang="en"
+      className={fontVariables}
+      data-brand={process.env.NEXT_PUBLIC_BRAND ?? 'default'}
+    >
       <body>{children}</body>
     </html>
   )
