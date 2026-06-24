@@ -3,7 +3,9 @@ import { useCallback, useEffect, useState } from 'react'
 import { api } from './api.js'
 import { EnvironmentCard } from './components/EnvironmentCard.js'
 import { EnvironmentForm } from './components/EnvironmentForm.js'
+import { FixturesCard } from './components/FixturesCard.js'
 import type { Config, Environment } from './types.js'
+import { FIXTURES_NAME } from './types.js'
 
 type Modal = { mode: 'add' } | { mode: 'edit'; env: Environment } | null
 
@@ -77,17 +79,14 @@ export function App() {
 
         {config === null && !loadError && <p className="loading">Loading…</p>}
 
-        {config !== null && config.environments.length === 0 && (
-          <div className="empty-state">
-            <p>No environments yet.</p>
-            <button className="btn btn--primary" onClick={() => setModal({ mode: 'add' })}>
-              Add your first environment
-            </button>
-          </div>
-        )}
-
-        {config !== null && config.environments.length > 0 && (
+        {config !== null && (
           <div className="env-list">
+            <FixturesCard
+              isActive={config.active === FIXTURES_NAME}
+              onActivate={() => {
+                void handleActivate(FIXTURES_NAME)
+              }}
+            />
             {config.environments.map((env) => (
               <EnvironmentCard
                 key={env.name}

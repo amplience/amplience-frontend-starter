@@ -1,3 +1,6 @@
+/** Sentinel name for the built-in "Local Fixtures" entry — never stored in config.json. */
+export const FIXTURES_NAME = 'fixtures'
+
 export type Environment = {
   name: string
   label: string

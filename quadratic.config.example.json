@@ -1,5 +1,5 @@
 {
-  "active": "my-hub",
+  "active": "fixtures",
   "environments": [
     {
       "name": "my-hub",
