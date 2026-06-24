@@ -5,6 +5,7 @@
 
 # IDE settings
 .vscode/settings.json
+.vscode/css-custom-data.json
 .idea
 
 # Dependencies
