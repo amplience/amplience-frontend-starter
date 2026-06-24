@@ -48,6 +48,7 @@ export default tseslint.config(
       '**/out/**',
       '**/.next/**',
       '**/.wxt/**',
+      '**/.output/**',
       '**/coverage/**',
       '**/*.tsbuildinfo',
     ],

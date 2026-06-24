@@ -1,0 +1,18 @@
+{
+  "active": "my-hub",
+  "environments": [
+    {
+      "name": "my-hub",
+      "label": "My Hub (example)",
+      "hubName": "",
+      "hubId": "",
+      "appUrl": "http://localhost:3000",
+      "repoContent": "",
+      "repoSlots": "",
+      "clientId": "",
+      "clientSecret": "",
+      "stagingHost": "",
+      "republish": false
+    }
+  ]
+}

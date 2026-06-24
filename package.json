@@ -35,7 +35,8 @@
     "test:watch": "vitest",
     "hub:import": "pnpm --filter @amplience/quadratic-schemas hub:import",
     "storybook": "pnpm --filter @amplience/quadratic-components storybook",
-    "sb": "pnpm storybook"
+    "sb": "pnpm storybook",
+    "env-manager": "pnpm --filter @amplience/environment-manager dev"
   },
   "devDependencies": {
     "@amplience/quadratic-config": "workspace:*",
