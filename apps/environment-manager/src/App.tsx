@@ -108,7 +108,7 @@ export function App() {
 
       {modal !== null && (
         <EnvironmentForm
-          initial={modal.mode === 'edit' ? modal.env : undefined}
+          {...(modal.mode === 'edit' ? { initial: modal.env } : {})}
           onSave={handleSave}
           onCancel={() => setModal(null)}
         />
