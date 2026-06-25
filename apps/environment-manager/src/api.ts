@@ -1,4 +1,4 @@
-import type { Config, Environment, EnvironmentStats } from './types.js'
+import type { Config, DiscoverResult, Environment, EnvironmentStats } from './types.js'
 
 const BASE = '/api'
 
@@ -33,4 +33,9 @@ export const api = {
     request<Config>(`/environments/${encodeURIComponent(name)}`, { method: 'DELETE' }),
   stats: (name: string) =>
     request<EnvironmentStats>(`/environments/${encodeURIComponent(name)}/stats`),
+  discover: (clientId: string, clientSecret: string) =>
+    request<DiscoverResult>('/amplience/discover', {
+      method: 'POST',
+      body: JSON.stringify({ clientId, clientSecret }),
+    }),
 }

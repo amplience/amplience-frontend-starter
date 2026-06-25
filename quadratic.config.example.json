@@ -12,6 +12,7 @@
       "clientId": "",
       "clientSecret": "",
       "stagingHost": "",
+      "defaultBrand": "",
       "republish": false
     }
   ]

@@ -12,6 +12,7 @@ export type Environment = {
   clientId: string
   clientSecret: string
   stagingHost: string
+  defaultBrand: string
   republish: boolean
 }
 
@@ -24,6 +25,25 @@ export type EnvironmentStats = {
   schemas: number
   types: number
   items: number
+}
+
+export type DiscoveredRepo = {
+  id: string
+  name: string
+  label: string
+  features: string[]
+}
+
+export type DiscoveredHub = {
+  id: string
+  name: string
+  label: string
+  repos: DiscoveredRepo[]
+  stagingHost?: string
+}
+
+export type DiscoverResult = {
+  hubs: DiscoveredHub[]
 }
 
 export type OpKey =
@@ -49,5 +69,6 @@ export const EMPTY_ENV: Environment = {
   clientId: '',
   clientSecret: '',
   stagingHost: '',
+  defaultBrand: '',
   republish: false,
 }

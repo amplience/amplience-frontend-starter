@@ -47,7 +47,7 @@
     --color-danger: #cc2929;
     --color-danger-hover: #e74040;
     --color-active: #15803d;
-    --color-modal-backdrop: rgba(0, 0, 0, 0.45);
+    --color-modal-backdrop: rgba(0, 0, 0, 0.33);
   }
 }
 
@@ -262,6 +262,18 @@ body {
   background: color-mix(in srgb, var(--color-text-muted) 15%, transparent);
   color: var(--color-text-muted);
   border: 1px solid color-mix(in srgb, var(--color-text-muted) 30%, transparent);
+}
+
+.badge--brand {
+  display: inline-flex;
+  gap: 2px;
+  align-items: center;
+  background: color-mix(in srgb, var(--color-text-muted) 10%, transparent);
+  color: color-mix(in srgb, var(--color-text-muted) 80%, var(--color-text));
+  border: 1px solid color-mix(in srgb, var(--color-text-muted) 20%, transparent);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-transform: none;
 }
 
 .env-card__meta {
@@ -634,6 +646,7 @@ body {
   position: fixed;
   inset: 0;
   background: var(--color-modal-backdrop);
+  backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -759,6 +772,63 @@ body {
   width: 1rem;
   height: 1rem;
   flex-shrink: 0;
+}
+
+/* ── Form sections + discover ──────────────────────────────────────────────── */
+
+.form-section {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0 0.1rem;
+}
+
+.form-section::before,
+.form-section::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.form-section__label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.form-discover {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.25rem 0 0.5rem;
+}
+
+.form-discover__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  white-space: nowrap;
+}
+
+.form-discover__error {
+  font-size: 0.75rem;
+  color: var(--color-danger);
+  margin: 0;
+}
+
+.badge--autofill {
+  font-size: 0.65rem;
+  font-weight: 500;
+  padding: 0.1em 0.45em;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-active) 15%, transparent);
+  color: var(--color-active);
+  margin-left: 0.4em;
+  vertical-align: middle;
 }
 
 .form-error {

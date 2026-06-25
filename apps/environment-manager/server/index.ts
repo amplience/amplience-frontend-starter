@@ -36,6 +36,7 @@ type Environment = {
   clientId: string
   clientSecret: string
   stagingHost: string
+  defaultBrand: string
   republish: boolean
 }
 
@@ -110,6 +111,7 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
   const appUrl = env !== null && env.appUrl !== '' ? env.appUrl : undefined
   const repoContent = env !== null && env.repoContent !== '' ? env.repoContent : undefined
   const repoSlots = env !== null && env.repoSlots !== '' ? env.repoSlots : undefined
+  const defaultBrand = env !== null && env.defaultBrand !== '' ? env.defaultBrand : undefined
 
   // apps/web/.env.local — only the vars the web app needs
   const existingWeb = existsSync(WEB_ENV_LOCAL) ? await readFile(WEB_ENV_LOCAL, 'utf-8') : ''
@@ -118,6 +120,7 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
     updateEnvVars(existingWeb, {
       AMPLIENCE_HUB_NAME: hubName,
       AMPLIENCE_STAGING_HOST: stagingHost,
+      NEXT_PUBLIC_BRAND: defaultBrand,
     }),
     'utf-8',
   )
@@ -129,7 +132,7 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
     updateEnvVars(existingSchemas, {
       AMPLIENCE_HUB_NAME: hubName,
       AMPLIENCE_HUB_ID: hubId,
-      AMPLIENCE_APP_URL: appUrl,
+      LOCALHOST_URL: appUrl,
       AMPLIENCE_REPO_CONTENT: repoContent,
       AMPLIENCE_REPO_SLOTS: repoSlots,
       AMPLIENCE_CLIENT_ID: clientId,
@@ -168,6 +171,88 @@ async function fetchCount(token: string, url: string): Promise<number> {
   if (!res.ok) throw new Error(`Amplience API ${res.status}: ${url}`)
   const data = (await res.json()) as { page: { totalElements: number } }
   return data.page.totalElements
+}
+
+// ── Hub discovery ─────────────────────────────────────────────────────────────
+
+type DiscoveredRepo = { id: string; name: string; label: string; features: string[] }
+type DiscoveredHub = { id: string; name: string; label: string; repos: DiscoveredRepo[] }
+
+/**
+ * Fetch the hubs + content repositories accessible to a given credential pair.
+ * Uses HAL links from the hub resource so the URLs are API-driven rather than
+ * guessed. URI template variables (e.g. {?page,size}) are stripped before use.
+ */
+async function discoverHubs(clientId: string, clientSecret: string): Promise<DiscoveredHub[]> {
+  const token = await getAmplToken(clientId, clientSecret)
+
+  const strip = (href: string) => href.replace(/\{[^}]*\}/g, '')
+
+  // List all hubs visible to these credentials
+  const hubsRes = await fetch(`${AMPL_API}/hubs?size=50`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  if (!hubsRes.ok) throw new Error(`Failed to list hubs: HTTP ${hubsRes.status}`)
+
+  const hubsBody = (await hubsRes.json()) as {
+    _embedded?: {
+      hubs?: {
+        id: string
+        name: string
+        label?: string
+        settings?: {
+          virtualStagingEnvironment?: { hostname?: string }
+          previewVirtualStagingEnvironment?: { hostname?: string }
+        }
+        _links?: Record<string, { href: string; templated?: boolean }>
+      }[]
+    }
+  }
+
+  const rawHubs = hubsBody._embedded?.hubs ?? []
+
+  return Promise.all(
+    rawHubs.map(async (hub): Promise<DiscoveredHub> => {
+      // VSE hostname is embedded in hub settings — prefer preview VSE, fall back to standard VSE
+      const stagingHost =
+        hub.settings?.previewVirtualStagingEnvironment?.hostname ??
+        hub.settings?.virtualStagingEnvironment?.hostname
+
+      const reposHref = hub._links?.['content-repositories']?.href
+      if (!reposHref) {
+        return { id: hub.id, name: hub.name, label: hub.label ?? hub.name, repos: [], stagingHost }
+      }
+
+      const reposRes = await fetch(`${strip(reposHref)}?size=50`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (!reposRes.ok) {
+        return { id: hub.id, name: hub.name, label: hub.label ?? hub.name, repos: [], stagingHost }
+      }
+
+      const reposBody = (await reposRes.json()) as {
+        _embedded?: {
+          'content-repositories'?: {
+            id: string
+            name: string
+            label?: string
+            features?: string[]
+          }[]
+        }
+      }
+
+      const repos = (reposBody._embedded?.['content-repositories'] ?? []).map(
+        (r): DiscoveredRepo => ({
+          id: r.id,
+          name: r.name,
+          label: r.label ?? r.name,
+          features: r.features ?? [],
+        }),
+      )
+
+      return { id: hub.id, name: hub.name, label: hub.label ?? hub.name, repos, stagingHost }
+    }),
+  )
 }
 
 // ── Script runner ─────────────────────────────────────────────────────────────
@@ -390,6 +475,22 @@ app.delete('/api/environments/:name', async (c) => {
 
   await writeConfig(config)
   return c.json(config)
+})
+
+// POST /api/amplience/discover  — resolve hub + repos from a credential pair
+app.post('/api/amplience/discover', async (c) => {
+  const body = await c.req.json<{ clientId?: string; clientSecret?: string }>()
+  const { clientId, clientSecret } = body
+  if (!clientId || !clientSecret) {
+    return c.json({ error: 'clientId and clientSecret are required' }, 400)
+  }
+  try {
+    const hubs = await discoverHubs(clientId, clientSecret)
+    return c.json({ hubs })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return c.json({ error: `Discovery failed: ${message}` }, 500)
+  }
 })
 
 // ── Stats ─────────────────────────────────────────────────────────────────────

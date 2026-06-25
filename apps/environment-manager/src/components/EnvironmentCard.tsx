@@ -126,6 +126,26 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit }: Props) {
       <div className="env-card__header">
         <div>
           <span className="env-card__label">{env.label || env.name}</span>
+          {env.defaultBrand !== '' && (
+            <span className="badge badge--brand">
+              <svg
+                aria-hidden="true"
+                width="8"
+                height="10"
+                viewBox="0 0 8 10"
+                fill="currentColor"
+                style={{
+                  display: 'inline-block',
+                  verticalAlign: 'middle',
+                  marginRight: '0.25em',
+                  marginTop: '-1px',
+                }}
+              >
+                <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
+              </svg>
+              {env.defaultBrand}
+            </span>
+          )}
           {isActive && <span className="badge badge--active">Active</span>}
         </div>
         <div className="env-card__header-actions">
@@ -319,6 +339,14 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit }: Props) {
           </div>
         </div>
       )}
+
+      {/* Sites */}
+      <div className="env-card__sites">
+        {/* Sites will be listed here with simple info on their URL and their brand */
+        /* Every hub will have a localhost at least, listed with its brand */
+        /* But if the hub is deployed, it will have a URL and brand listed here as well */
+        /* In some cases in the future, there may be multiple deployed sites for a single hub, so we will list them all here */}
+      </div>
     </div>
   )
 }

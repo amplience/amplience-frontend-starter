@@ -5,14 +5,9 @@
     "label": "Markdown block",
     "visualizations": [
       {
-        "label": "Web",
-        "templatedUri": "${appUrl}/visualization?vse={{vse.domain}}&content={{content.sys.id}}",
-        "default": true
-      },
-      {
         "label": "Web (localhost)",
-        "templatedUri": "http://localhost:3000/visualization?vse={{vse.domain}}&content={{content.sys.id}}",
-        "default": false
+        "templatedUri": "${localhostUrl}/visualization?vse={{vse.domain}}&content={{content.sys.id}}",
+        "default": true
       },
       {
         "label": "JSON",

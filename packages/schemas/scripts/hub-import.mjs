@@ -35,6 +35,7 @@
  * .env.example), and plain exported variables work the same way:
  *
  *   AMPLIENCE_HUB_NAME       hub name — visualization URIs + map-file name
+ *   LOCALHOST_URL            localhost origin — fills ${localhostUrl} in viz URIs
  *   AMPLIENCE_REPO_CONTENT   repository id for pages + components (content step)
  *   AMPLIENCE_REPO_SLOTS     repository id for slots (content step)
  *   AMPLIENCE_CLIENT_ID      ┐ optional — when all three are set they're
@@ -130,11 +131,11 @@ const importSchemas = async () => {
 
 const importTypes = async () => {
   const hubName = require_('AMPLIENCE_HUB_NAME', 'fill the ${hub} token in visualization URIs')
-  let appUrl = require_(
-    'AMPLIENCE_APP_URL',
-    'fill the ${appUrl} token in the Production visualization URI (the deployed frontend origin)',
+  let localhostUrl = require_(
+    'LOCALHOST_URL',
+    'fill the ${localhostUrl} token in the Web (localhost) visualization URI',
   )
-  while (appUrl.endsWith('/')) appUrl = appUrl.slice(0, -1)
+  while (localhostUrl.endsWith('/')) localhostUrl = localhostUrl.slice(0, -1)
   const source = path.join(packageRoot, 'content-types')
   const staged = path.join(stagingDir, 'content-types')
   rmSync(staged, { recursive: true, force: true })
@@ -143,7 +144,7 @@ const importTypes = async () => {
     const body = readFileSync(path.join(source, file), 'utf8')
     writeFileSync(
       path.join(staged, file),
-      body.replaceAll('${hub}', hubName).replaceAll('${appUrl}', appUrl),
+      body.replaceAll('${hub}', hubName).replaceAll('${localhostUrl}', localhostUrl),
     )
   }
   await dcCli('content-type', 'import', staged, '--sync')

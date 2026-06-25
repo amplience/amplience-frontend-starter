@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
-import type { Environment } from '../types.js'
+import { api } from '../api.js'
+import type { DiscoveredHub, Environment } from '../types.js'
 import { EMPTY_ENV } from '../types.js'
 
 type Props = {
@@ -10,9 +11,16 @@ type Props = {
   onDelete?: () => void
 }
 
-type Field = keyof Environment
+// ── Field groups ──────────────────────────────────────────────────────────────
 
-const TEXT_FIELDS: { key: Field; label: string; required?: boolean; placeholder?: string }[] = [
+type FieldMeta = {
+  key: keyof Environment
+  label: string
+  required?: boolean
+  placeholder?: string
+}
+
+const IDENTITY_FIELDS: FieldMeta[] = [
   { key: 'label', label: 'Label', required: true, placeholder: 'e.g. Client A — Staging' },
   {
     key: 'name',
@@ -20,23 +28,35 @@ const TEXT_FIELDS: { key: Field; label: string; required?: boolean; placeholder?
     required: true,
     placeholder: 'e.g. client-a-staging (no spaces)',
   },
+]
+
+const CREDENTIAL_FIELDS: FieldMeta[] = [
+  { key: 'clientId', label: 'Client ID', placeholder: 'Amplience OAuth client ID' },
+  { key: 'clientSecret', label: 'Client secret', placeholder: 'Amplience OAuth client secret' },
+]
+
+const HUB_FIELDS: FieldMeta[] = [
   { key: 'hubName', label: 'Hub name', required: true, placeholder: 'e.g. quadraticlite' },
-  { key: 'hubId', label: 'Hub ID', required: true, placeholder: 'dc-cli hub ID' },
-  { key: 'appUrl', label: 'App URL', required: true, placeholder: 'https://...' },
+  { key: 'hubId', label: 'Hub ID', required: true, placeholder: 'Amplience hub ID' },
   { key: 'repoContent', label: 'Content repo ID', required: true, placeholder: 'DC repository ID' },
   { key: 'repoSlots', label: 'Slots repo ID', required: true, placeholder: 'DC repository ID' },
-  { key: 'clientId', label: 'Client ID', placeholder: 'Leave blank to use dc-cli credentials' },
-  {
-    key: 'clientSecret',
-    label: 'Client secret',
-    placeholder: 'Leave blank to use dc-cli credentials',
-  },
   {
     key: 'stagingHost',
     label: 'Staging host (VSE)',
     placeholder: 'Optional — enables staging preview',
   },
 ]
+
+const CONFIG_FIELDS: FieldMeta[] = [
+  { key: 'appUrl', label: 'Localhost URL', required: true, placeholder: 'http://localhost:3000' },
+  {
+    key: 'defaultBrand',
+    label: 'Default brand',
+    placeholder: 'e.g. acme — sets NEXT_PUBLIC_BRAND',
+  },
+]
+
+// ── Component ─────────────────────────────────────────────────────────────────
 
 export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) {
   const isEdit = initial !== undefined
@@ -45,12 +65,16 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
   const [error, setError] = useState<string | null>(null)
   const firstFieldRef = useRef<HTMLInputElement>(null)
 
-  // Auto-focus first editable field
+  // Discovery state
+  const [discovering, setDiscovering] = useState(false)
+  const [discoverError, setDiscoverError] = useState<string | null>(null)
+  const [discoveredHubs, setDiscoveredHubs] = useState<DiscoveredHub[] | null>(null)
+  const [autoFilled, setAutoFilled] = useState<Set<string>>(new Set())
+
   useEffect(() => {
     firstFieldRef.current?.focus()
   }, [])
 
-  // Close on Escape
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape' && !saving) onCancel()
@@ -59,9 +83,60 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [saving, onCancel])
 
-  function set(key: Field, value: string | boolean) {
+  function set(key: keyof Environment, value: string | boolean) {
     setForm((prev) => ({ ...prev, [key]: value }))
+    // Clear auto-filled marker if the user edits the field manually
+    if (autoFilled.has(key)) {
+      setAutoFilled((prev) => {
+        const next = new Set(prev)
+        next.delete(key)
+        return next
+      })
+    }
   }
+
+  // ── Discovery ──────────────────────────────────────────────────────────────
+
+  function applyHub(hub: DiscoveredHub) {
+    const slotsRepo = hub.repos.find((r) => r.features.includes('slots'))
+    const contentRepo = hub.repos.find((r) => !r.features.includes('slots'))
+    const filled = new Set<string>(['hubName', 'hubId'])
+    const updates: Partial<Environment> = { hubName: hub.name, hubId: hub.id }
+    if (contentRepo !== undefined) {
+      updates.repoContent = contentRepo.id
+      filled.add('repoContent')
+    }
+    if (slotsRepo !== undefined) {
+      updates.repoSlots = slotsRepo.id
+      filled.add('repoSlots')
+    }
+    if (hub.stagingHost !== undefined) {
+      updates.stagingHost = hub.stagingHost
+      filled.add('stagingHost')
+    }
+    setForm((prev) => ({ ...prev, ...updates }))
+    setAutoFilled(filled)
+  }
+
+  async function handleDiscover() {
+    if (!form.clientId || !form.clientSecret) return
+    setDiscovering(true)
+    setDiscoverError(null)
+    setDiscoveredHubs(null)
+    try {
+      const result = await api.discover(form.clientId, form.clientSecret)
+      setDiscoveredHubs(result.hubs)
+      if (result.hubs.length === 1 && result.hubs[0] !== undefined) {
+        applyHub(result.hubs[0])
+      }
+    } catch (err) {
+      setDiscoverError(err instanceof Error ? err.message : 'Discovery failed')
+    } finally {
+      setDiscovering(false)
+    }
+  }
+
+  // ── Submit ─────────────────────────────────────────────────────────────────
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -75,11 +150,52 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
     }
   }
 
+  // ── Helpers ────────────────────────────────────────────────────────────────
+
+  function renderField(meta: FieldMeta, idx: number) {
+    const { key, label, required, placeholder } = meta
+    const isAutoFilled = autoFilled.has(key)
+    return (
+      <div className="field" key={key}>
+        <label htmlFor={key}>
+          {label}
+          {required && <span className="required">*</span>}
+          {isAutoFilled && <span className="badge badge--autofill">Auto-filled</span>}
+        </label>
+        <input
+          ref={idx === 0 ? firstFieldRef : undefined}
+          id={key}
+          type={key === 'clientSecret' ? 'password' : 'text'}
+          value={String(form[key])}
+          placeholder={placeholder}
+          required={required}
+          autoComplete="off"
+          onChange={(e) => set(key, e.target.value)}
+          disabled={isEdit && key === 'name'}
+        />
+        {isEdit && key === 'name' && (
+          <p className="hint">Identifier cannot be changed after creation.</p>
+        )}
+      </div>
+    )
+  }
+
+  // ── Render ─────────────────────────────────────────────────────────────────
+
   return (
-    <div className="modal-backdrop">
-      <div className="modal">
+    <div
+      className="modal-backdrop"
+      role="presentation"
+      onClick={(e) => {
+        if (e.target === e.currentTarget && !saving) onCancel()
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape' && !saving) onCancel()
+      }}
+    >
+      <div className="modal" role="dialog" aria-modal="true">
         <div className="modal__header">
-          <h2>{isEdit ? 'Edit hub' : 'Add hub'}</h2>
+          <h2>{isEdit ? 'Edit environment' : 'Add environment'}</h2>
           <button
             type="button"
             className="modal__close"
@@ -98,28 +214,67 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
           noValidate
         >
           <div className="form-fields">
-            {TEXT_FIELDS.map(({ key, label, required, placeholder }, idx) => (
-              <div className="field" key={key}>
-                <label htmlFor={key}>
-                  {label}
-                  {required && <span className="required">*</span>}
-                </label>
-                <input
-                  ref={idx === 0 ? firstFieldRef : undefined}
-                  id={key}
-                  type={key === 'clientSecret' ? 'password' : 'text'}
-                  value={String(form[key])}
-                  placeholder={placeholder}
-                  required={required}
-                  autoComplete="off"
-                  onChange={(e) => set(key, e.target.value)}
-                  disabled={isEdit && key === 'name'}
-                />
-                {isEdit && key === 'name' && (
-                  <p className="hint">Identifier cannot be changed after creation.</p>
+            {/* ── Identity ── */}
+            {IDENTITY_FIELDS.map((f, i) => renderField(f, i))}
+
+            {/* ── Credentials + discover ── */}
+            <div className="form-section">
+              <span className="form-section__label">Credentials</span>
+            </div>
+            {CREDENTIAL_FIELDS.map((f) => renderField(f, 99))}
+
+            <div className="form-discover">
+              <button
+                type="button"
+                className="btn btn--sm btn--ghost form-discover__btn"
+                onClick={() => {
+                  void handleDiscover()
+                }}
+                disabled={discovering || saving || !form.clientId || !form.clientSecret}
+              >
+                {discovering ? (
+                  <>
+                    <span className="spinner spinner--sm" aria-hidden="true" /> Fetching…
+                  </>
+                ) : (
+                  '↓ Fetch hub details'
                 )}
+              </button>
+              {discoverError !== null && <p className="form-discover__error">{discoverError}</p>}
+            </div>
+
+            {/* Hub picker — only shown when credentials resolve to multiple hubs */}
+            {discoveredHubs !== null && discoveredHubs.length > 1 && (
+              <div className="field">
+                <label htmlFor="hub-picker">Hub</label>
+                <select
+                  id="hub-picker"
+                  onChange={(e) => {
+                    const hub = discoveredHubs[Number(e.target.value)]
+                    if (hub !== undefined) applyHub(hub)
+                  }}
+                >
+                  <option value="">— select a hub —</option>
+                  {discoveredHubs.map((hub, i) => (
+                    <option key={hub.id} value={i}>
+                      {hub.label || hub.name}
+                    </option>
+                  ))}
+                </select>
               </div>
-            ))}
+            )}
+
+            {/* ── Hub details ── */}
+            <div className="form-section">
+              <span className="form-section__label">Hub details</span>
+            </div>
+            {HUB_FIELDS.map((f) => renderField(f, 99))}
+
+            {/* ── Config ── */}
+            <div className="form-section">
+              <span className="form-section__label">Local Config</span>
+            </div>
+            {CONFIG_FIELDS.map((f) => renderField(f, 99))}
 
             <div className="field field--checkbox">
               <label htmlFor="republish">
@@ -141,7 +296,7 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
               Cancel
             </button>
             <button type="submit" className="btn btn--primary" disabled={saving}>
-              {saving ? 'Saving…' : isEdit ? 'Save changes' : 'Add hub'}
+              {saving ? 'Saving…' : isEdit ? 'Save changes' : 'Add environment'}
             </button>
           </div>
         </form>
