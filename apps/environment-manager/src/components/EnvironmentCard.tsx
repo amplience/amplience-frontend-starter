@@ -35,6 +35,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit }: Props) {
   const [stats, setStats] = useState<EnvironmentStats | null>(null)
   const [statsError, setStatsError] = useState<string | null>(null)
   const [op, setOp] = useState<ActiveOp | null>(null)
+  const [logExpanded, setLogExpanded] = useState(false)
   const logRef = useRef<HTMLPreElement>(null)
 
   const loadStats = useCallback(() => {
@@ -83,6 +84,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit }: Props) {
     }
 
     setOp({ key, log: '', status: 'running' })
+    setLogExpanded(false)
 
     try {
       const res = await fetch(`/api/environments/${encodeURIComponent(env.name)}/${key}`, {
@@ -266,25 +268,55 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit }: Props) {
 
       {/* Live log panel */}
       {op && (
-        <div className={`env-card__log log--${op.status}`}>
-          <div className="log-header">
-            <span className="log-title">{OP_LABELS[op.key]}</span>
-            {op.status === 'running' && (
-              <span className="log-status">
-                <span className="spinner spinner--sm" aria-hidden="true" /> running…
+        <div className={`env-card__log log--${op.status}${logExpanded ? ' log--expanded' : ''}`}>
+          {/* Clicking the header row toggles the log body; the X button is excluded via stopPropagation */}
+          <div
+            className="log-header"
+            role="button"
+            tabIndex={0}
+            onClick={() => setLogExpanded((v) => !v)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') setLogExpanded((v) => !v)
+            }}
+          >
+            <span className="log-header__left">
+              <span
+                className={`log-caret${logExpanded ? ' log-caret--open' : ''}`}
+                aria-hidden="true"
+              >
+                ›
               </span>
-            )}
-            {op.status === 'done' && <span className="log-status log-status--ok"> ✓ done</span>}
-            {op.status === 'error' && <span className="log-status log-status--err"> ⚠ failed</span>}
+              <span className="log-title">{OP_LABELS[op.key]}</span>
+              {op.status === 'running' && (
+                <span className="log-status">
+                  <span className="spinner spinner--sm" aria-hidden="true" /> running…
+                </span>
+              )}
+              {op.status === 'done' && <span className="log-status log-status--ok">✓ done</span>}
+              {op.status === 'error' && (
+                <span className="log-status log-status--err">⚠ failed</span>
+              )}
+            </span>
             {op.status !== 'running' && (
-              <button className="log-close" onClick={() => setOp(null)} aria-label="Dismiss log">
+              <button
+                className="log-close"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setOp(null)
+                }}
+                aria-label="Dismiss log"
+              >
                 ✕
               </button>
             )}
           </div>
-          <pre ref={logRef} className="log-body">
-            {op.log || '…'}
-          </pre>
+          <div className="log-body-wrapper">
+            <div className="log-body-inner">
+              <pre ref={logRef} className="log-body">
+                {op.log || '…'}
+              </pre>
+            </div>
+          </div>
         </div>
       )}
     </div>

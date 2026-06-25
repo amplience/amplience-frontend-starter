@@ -12,11 +12,17 @@
  *   2. Archives every content item in the content and slots repositories
  *      so previously-published items stop being served by Delivery.
  *
+ *   3. Archives every content type in the hub.
+ *
+ *   4. Archives every content type schema in the hub so the next
+ *      hub:import:schemas registers them fresh.
+ *
  * Configuration is read from environment variables (same set as
  * hub-import.mjs). Run via the environment-manager GUI which injects
  * the selected environment's credentials directly, or manually:
  *
  *   AMPLIENCE_HUB_NAME=myhub \
+ *   AMPLIENCE_HUB_ID=abc123 \
  *   AMPLIENCE_REPO_CONTENT=abc123 \
  *   AMPLIENCE_REPO_SLOTS=def456 \
  *   node packages/schemas/scripts/hub-wipe.mjs
@@ -81,6 +87,7 @@ const dcCli = (...args) =>
 const hubName = require_('AMPLIENCE_HUB_NAME', 'identify the hub mapping file')
 const contentRepo = require_('AMPLIENCE_REPO_CONTENT', 'target the content repository')
 const slotsRepo = require_('AMPLIENCE_REPO_SLOTS', 'target the slots repository')
+require_('AMPLIENCE_HUB_ID', 'archive content type schemas (--hubId is required by dc-cli)')
 
 // 1. Delete mapping file
 const mapFile = path.join(os.homedir(), '.amplience', 'imports', `quadratic-${hubName}.json`)
@@ -99,5 +106,15 @@ await dcCli('content-item', 'archive', '--repoId', contentRepo, '-f')
 
 console.log(`\nArchiving all content in slots repo (${slotsRepo})…`)
 await dcCli('content-item', 'archive', '--repoId', slotsRepo, '-f')
+
+// 3. Archive all content types in the hub.
+// Omitting the id positional archives all types; --hubId is required and
+// is injected via credentialFlags() when AMPLIENCE_HUB_ID is set.
+console.log('\nArchiving all content types…')
+await dcCli('content-type', 'archive', '-f')
+
+// 4. Archive all content type schemas in the hub.
+console.log('\nArchiving all content type schemas…')
+await dcCli('content-type-schema', 'archive', '-f')
 
 console.log('\n✓ Hub wipe complete — run Seed to repopulate from fixtures.')
