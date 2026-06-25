@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import type { Environment } from '../types.js'
 import { EMPTY_ENV } from '../types.js'
@@ -7,6 +7,7 @@ type Props = {
   initial?: Environment
   onSave: (env: Environment) => Promise<void>
   onCancel: () => void
+  onDelete?: () => void
 }
 
 type Field = keyof Environment
@@ -37,11 +38,26 @@ const TEXT_FIELDS: { key: Field; label: string; required?: boolean; placeholder?
   },
 ]
 
-export function EnvironmentForm({ initial, onSave, onCancel }: Props) {
+export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) {
   const isEdit = initial !== undefined
   const [form, setForm] = useState<Environment>(initial ?? EMPTY_ENV)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const firstFieldRef = useRef<HTMLInputElement>(null)
+
+  // Auto-focus first editable field
+  useEffect(() => {
+    firstFieldRef.current?.focus()
+  }, [])
+
+  // Close on Escape
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape' && !saving) onCancel()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [saving, onCancel])
 
   function set(key: Field, value: string | boolean) {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -62,7 +78,18 @@ export function EnvironmentForm({ initial, onSave, onCancel }: Props) {
   return (
     <div className="modal-backdrop">
       <div className="modal">
-        <h2>{isEdit ? 'Edit environment' : 'Add environment'}</h2>
+        <div className="modal__header">
+          <h2>{isEdit ? 'Edit hub' : 'Add hub'}</h2>
+          <button
+            type="button"
+            className="modal__close"
+            onClick={onCancel}
+            disabled={saving}
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        </div>
 
         <form
           onSubmit={(e) => {
@@ -71,13 +98,14 @@ export function EnvironmentForm({ initial, onSave, onCancel }: Props) {
           noValidate
         >
           <div className="form-fields">
-            {TEXT_FIELDS.map(({ key, label, required, placeholder }) => (
+            {TEXT_FIELDS.map(({ key, label, required, placeholder }, idx) => (
               <div className="field" key={key}>
                 <label htmlFor={key}>
                   {label}
                   {required && <span className="required">*</span>}
                 </label>
                 <input
+                  ref={idx === 0 ? firstFieldRef : undefined}
                   id={key}
                   type={key === 'clientSecret' ? 'password' : 'text'}
                   value={String(form[key])}
@@ -113,10 +141,32 @@ export function EnvironmentForm({ initial, onSave, onCancel }: Props) {
               Cancel
             </button>
             <button type="submit" className="btn btn--primary" disabled={saving}>
-              {saving ? 'Saving…' : isEdit ? 'Save changes' : 'Add environment'}
+              {saving ? 'Saving…' : isEdit ? 'Save changes' : 'Add hub'}
             </button>
           </div>
         </form>
+
+        {isEdit && onDelete !== undefined && (
+          <div className="form-danger-zone">
+            <p className="form-danger-zone__label">Danger zone</p>
+            <button
+              type="button"
+              className="btn btn--danger"
+              disabled={saving}
+              onClick={() => {
+                if (
+                  confirm(
+                    `Permanently delete "${initial?.name ?? 'this environment'}"? This cannot be undone.`,
+                  )
+                ) {
+                  onDelete()
+                }
+              }}
+            >
+              Delete environment
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

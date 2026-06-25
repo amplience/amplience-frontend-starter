@@ -20,6 +20,24 @@ export type Config = {
   environments: Environment[]
 }
 
+export type EnvironmentStats = {
+  schemas: number
+  types: number
+  items: number
+}
+
+export type OpKey =
+  | 'seed-schemas'
+  | 'sync-schemas'
+  | 'seed-types'
+  | 'sync-types'
+  | 'seed-items'
+  | 'sync-items'
+  | 'wipe-items'
+  | 'seed-all'
+  | 'sync-all'
+  | 'wipe-all'
+
 export const EMPTY_ENV: Environment = {
   name: '',
   label: '',

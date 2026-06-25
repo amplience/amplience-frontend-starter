@@ -12,20 +12,19 @@ export function FixturesCard({ isActive, onActivate }: Props) {
           <span className="badge badge--builtin">Built-in</span>
           {isActive && <span className="badge badge--active">Active</span>}
         </div>
+        <div className="env-card__header-actions">
+          {!isActive && (
+            <button className="btn btn--sm btn--primary" onClick={onActivate}>
+              Set active
+            </button>
+          )}
+        </div>
       </div>
 
       <p className="env-card__description">
         Serves content from bundled fixture files — no hub connection or credentials needed. The
         default for local development.
       </p>
-
-      <div className="env-card__actions">
-        {!isActive && (
-          <button className="btn btn--sm btn--primary" onClick={onActivate}>
-            Set active
-          </button>
-        )}
-      </div>
     </div>
   )
 }

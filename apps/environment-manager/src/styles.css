@@ -179,6 +179,15 @@ body {
   gap: 1rem;
 }
 
+.env-list__title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
 .env-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -284,13 +293,143 @@ body {
   flex-wrap: wrap;
 }
 
+/* Header right-side actions (Set active + cog) */
+.env-card__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.btn--icon {
+  padding: 0.3em 0.5em;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+/* Icon-only ghost button — no border/background, just the icon with hover tint.
+   Sized to occupy similar space to a bordered btn--sm without the border box. */
+.btn--icon-only {
+  background: none;
+  border: none;
+  padding: 0.2rem 0.3rem;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.btn--icon-only:hover:not(:disabled) {
+  color: var(--color-text);
+  background: var(--color-hover);
+}
+
+.btn--icon-only:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Stats table */
+.env-card__stats {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.env-card__stats th {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  padding: 0 0 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.env-card__stats td {
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.825rem;
+  vertical-align: middle;
+}
+
+.env-card__stats tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.env-card__stats .col-resource {
+  width: 44%;
+}
+
+.env-card__stats .col-count {
+  width: 16%;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
+}
+
+.env-card__stats .col-actions {
+  width: 40%;
+  text-align: right;
+}
+
+/* Inline button group for table cells */
+.btn-group {
+  display: inline-flex;
+  gap: 0.4rem;
+}
+
+/* Invisible placeholder that reserves the same height as a btn--sm so the
+   actions column doesn't collapse and cause CLS while stats are loading.
+   Uses the same font-size and padding as btn--sm so it computes identically. */
+.btn-skeleton {
+  display: inline-block;
+  visibility: hidden;
+  font-size: 0.8rem;
+  padding: 0.3em 0.7em;
+  line-height: normal;
+  border: solid 1px transparent;
+  width: 3em; /* roughly "Seed" width at 0.8rem */
+}
+
+.btn-skeleton--wide {
+  width: 4.5em; /* roughly "Sync all" / "Wipe all" width */
+}
+
+/* Small spinner variant for table count cells */
+.spinner--sm {
+  width: 0.6em;
+  height: 0.6em;
+  border-width: 1.5px;
+}
+
+/* Stats error message */
+.env-card__stats-error {
+  font-size: 0.8rem;
+  color: var(--color-danger);
+  margin-bottom: 0.75rem;
+}
+
+/* Footer "All resources" label */
+.env-card__ops-label {
+  margin-right: auto;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
 /* ── Operation buttons ─────────────────────────────────────────────────────── */
 
 .env-card__ops {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
-  margin-top: 0.75rem;
+  justify-content: flex-end;
+  align-items: center;
   padding-top: 0.75rem;
   border-top: 1px solid var(--color-border);
 }
@@ -380,6 +519,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.4rem;
   padding: 0.4em 0.75em;
   background: var(--color-surface-2);
   border-bottom: 1px solid var(--color-border);
@@ -393,6 +533,10 @@ body {
 .log-status {
   font-weight: 400;
   color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  margin-right: auto;
+  gap: 0.3em;
 }
 
 .log-status--ok {
@@ -457,10 +601,43 @@ body {
   overflow-y: auto;
 }
 
-.modal h2 {
+.modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal__header h2 {
   font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 1.5rem;
+  margin: 0;
+}
+
+.modal__close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  line-height: 1;
+  padding: 0.2rem 0.3rem;
+  border-radius: var(--radius-sm);
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.modal__close:hover:not(:disabled) {
+  color: var(--color-text);
+  background: var(--color-hover);
+}
+
+.modal__close:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 /* ── Form ──────────────────────────────────────────────────────────────────── */
@@ -547,6 +724,26 @@ body {
   display: flex;
   justify-content: flex-end;
   gap: 0.75rem;
+}
+
+/* ── Form danger zone ──────────────────────────────────────────────────────── */
+
+.form-danger-zone {
+  border-top: 1px solid color-mix(in srgb, var(--color-danger) 25%, transparent);
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.form-danger-zone__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-danger);
 }
 
 /* ── Misc ──────────────────────────────────────────────────────────────────── */

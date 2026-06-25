@@ -43,7 +43,6 @@ export function App() {
   }
 
   async function handleDelete(name: string) {
-    if (!confirm(`Delete environment "${name}"? This cannot be undone.`)) return
     setConfig(await api.remove(name))
   }
 
@@ -58,7 +57,7 @@ export function App() {
             </p>
           </div>
           <button className="btn btn--primary btn--add" onClick={() => setModal({ mode: 'add' })}>
-            + Add environment
+            + Add hub
           </button>
         </div>
       </header>
@@ -81,6 +80,7 @@ export function App() {
 
         {config !== null && (
           <div className="env-list">
+            <h2 className="env-list__title">Content Sources</h2>
             <FixturesCard
               isActive={config.active === FIXTURES_NAME}
               onActivate={() => {
@@ -96,9 +96,6 @@ export function App() {
                   void handleActivate(env.name)
                 }}
                 onEdit={() => setModal({ mode: 'edit', env })}
-                onDelete={() => {
-                  void handleDelete(env.name)
-                }}
               />
             ))}
           </div>
@@ -110,6 +107,13 @@ export function App() {
           {...(modal.mode === 'edit' ? { initial: modal.env } : {})}
           onSave={handleSave}
           onCancel={() => setModal(null)}
+          {...(modal.mode === 'edit'
+            ? {
+                onDelete: () => {
+                  void handleDelete(modal.env.name).then(() => setModal(null))
+                },
+              }
+            : {})}
         />
       )}
     </div>

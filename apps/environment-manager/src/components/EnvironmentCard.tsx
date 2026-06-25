@@ -1,39 +1,63 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
-import type { Environment } from '../types.js'
+import { api } from '../api.js'
+import type { Environment, EnvironmentStats, OpKey } from '../types.js'
 
 type Props = {
   env: Environment
   isActive: boolean
   onActivate: () => void
   onEdit: () => void
-  onDelete: () => void
 }
 
-type OpType = 'seed' | 'sync' | 'wipe'
 type OpStatus = 'running' | 'done' | 'error'
 
 type ActiveOp = {
-  type: OpType
+  key: OpKey
   log: string
   status: OpStatus
 }
 
-const OP_LABELS: Record<OpType, string> = {
-  seed: 'Seed',
-  sync: 'Sync',
-  wipe: 'Wipe',
+const OP_LABELS: Record<OpKey, string> = {
+  'seed-schemas': 'Seed schemas',
+  'sync-schemas': 'Sync schemas',
+  'seed-types': 'Seed content types',
+  'sync-types': 'Sync content types',
+  'seed-items': 'Seed content items',
+  'sync-items': 'Sync content items',
+  'wipe-items': 'Wipe content items',
+  'seed-all': 'Seed all',
+  'sync-all': 'Sync all',
+  'wipe-all': 'Wipe all',
 }
 
-const OP_DESCRIPTIONS: Record<OpType, string> = {
-  seed: 'Import schemas, types and content — force-publishes everything (use for initial setup)',
-  sync: 'Re-import and publish only new or changed items (use for ongoing updates)',
-  wipe: 'Archive all content and reset the import mapping',
-}
-
-export function EnvironmentCard({ env, isActive, onActivate, onEdit, onDelete }: Props) {
+export function EnvironmentCard({ env, isActive, onActivate, onEdit }: Props) {
+  const [stats, setStats] = useState<EnvironmentStats | null>(null)
+  const [statsError, setStatsError] = useState<string | null>(null)
   const [op, setOp] = useState<ActiveOp | null>(null)
   const logRef = useRef<HTMLPreElement>(null)
+
+  const loadStats = useCallback(() => {
+    void api
+      .stats(env.name)
+      .then((s) => {
+        setStats(s)
+        setStatsError(null)
+      })
+      .catch((err: unknown) => {
+        setStatsError(err instanceof Error ? err.message : 'Failed to fetch stats')
+      })
+  }, [env.name])
+
+  function refreshStats() {
+    setStats(null)
+    setStatsError(null)
+    loadStats()
+  }
+
+  useEffect(() => {
+    loadStats()
+  }, [loadStats])
 
   // Auto-scroll the log panel as new output arrives
   useEffect(() => {
@@ -44,19 +68,24 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onDelete }:
 
   const isRunning = op?.status === 'running'
 
-  async function runOp(type: OpType) {
-    if (type === 'wipe') {
-      const msg =
-        `Wipe all content from "${env.label || env.name}"?\n\n` +
-        'This archives all published content and deletes the import mapping. ' +
-        'Run Seed afterwards to repopulate.'
-      if (!confirm(msg)) return
+  async function runOp(key: OpKey) {
+    if (key === 'wipe-items' || key === 'wipe-all') {
+      const label = env.label || env.name
+      const what = key === 'wipe-all' ? 'all content items' : 'content items'
+      if (
+        !confirm(
+          `Wipe ${what} from "${label}"?\n\n` +
+            'This archives all published content and deletes the import mapping. ' +
+            'Run Seed afterwards to repopulate.',
+        )
+      )
+        return
     }
 
-    setOp({ type, log: '', status: 'running' })
+    setOp({ key, log: '', status: 'running' })
 
     try {
-      const res = await fetch(`/api/environments/${encodeURIComponent(env.name)}/${type}`, {
+      const res = await fetch(`/api/environments/${encodeURIComponent(env.name)}/${key}`, {
         method: 'POST',
       })
 
@@ -74,100 +103,179 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onDelete }:
         setOp((prev) => (prev ? { ...prev, log: prev.log + text } : null))
       }
 
-      // Determine final status from last line of output
       setOp((prev) => {
         if (!prev) return null
-        const failed = prev.log.includes('✗')
-        return { ...prev, status: failed ? 'error' : 'done' }
+        return { ...prev, status: prev.log.includes('✗') ? 'error' : 'done' }
       })
+
+      // Refresh counts after the operation settles
+      loadStats()
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error'
       setOp((prev) => (prev ? { ...prev, status: 'error', log: `${prev.log}\n✗ ${msg}` } : null))
     }
   }
 
+  const allEmpty = stats !== null && stats.schemas === 0 && stats.types === 0 && stats.items === 0
+
   return (
     <div className={`env-card${isActive ? ' env-card--active' : ''}`}>
+      {/* Header */}
       <div className="env-card__header">
         <div>
           <span className="env-card__label">{env.label || env.name}</span>
           {isActive && <span className="badge badge--active">Active</span>}
         </div>
-        <span className="env-card__name">{env.name}</span>
-      </div>
-
-      <dl className="env-card__meta">
-        <div>
-          <dt>Hub</dt>
-          <dd>{env.hubName || <span className="dim">—</span>}</dd>
-        </div>
-        <div>
-          <dt>App URL</dt>
-          <dd>{env.appUrl || <span className="dim">—</span>}</dd>
-        </div>
-        <div>
-          <dt>Content repo</dt>
-          <dd>{env.repoContent ? mask(env.repoContent) : <span className="dim">—</span>}</dd>
-        </div>
-        <div>
-          <dt>Slots repo</dt>
-          <dd>{env.repoSlots ? mask(env.repoSlots) : <span className="dim">—</span>}</dd>
-        </div>
-        {env.stagingHost && (
-          <div>
-            <dt>Staging host</dt>
-            <dd>{env.stagingHost}</dd>
-          </div>
-        )}
-      </dl>
-
-      {/* Management actions */}
-      <div className="env-card__actions">
-        {!isActive && (
-          <button className="btn btn--sm btn--primary" onClick={onActivate}>
-            Set active
-          </button>
-        )}
-        <button className="btn btn--sm btn--ghost" onClick={onEdit} disabled={isRunning}>
-          Edit
-        </button>
-        <button className="btn btn--sm btn--danger" onClick={onDelete} disabled={isRunning}>
-          Delete
-        </button>
-      </div>
-
-      {/* Operation buttons */}
-      <div className="env-card__ops">
-        {(['seed', 'sync', 'wipe'] as const).map((type) => (
+        <div className="env-card__header-actions">
+          {!isActive && (
+            <button className="btn btn--sm btn--primary" onClick={onActivate} disabled={isRunning}>
+              Set active
+            </button>
+          )}
           <button
-            key={type}
-            className={`btn btn--sm btn--op btn--op-${type}${isRunning && op?.type === type ? ' btn--op-running' : ''}`}
+            className="btn--icon-only"
+            onClick={refreshStats}
+            disabled={isRunning || stats === null}
+            aria-label="Refresh stats"
+            title="Refresh counts"
+          >
+            ↻
+          </button>
+          <button
+            className="btn--icon-only"
+            onClick={onEdit}
+            disabled={isRunning}
+            aria-label="Environment settings"
+            title="Settings"
+          >
+            ⚙
+          </button>
+        </div>
+      </div>
+
+      {/* Resource stats table */}
+      <table className="env-card__stats">
+        <thead>
+          <tr>
+            <th className="col-resource">Resource</th>
+            <th className="col-count">Count</th>
+            <th className="col-actions"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ResourceRow
+            label="Content type schemas"
+            count={statsError !== null ? -1 : (stats?.schemas ?? null)}
+            seedKey="seed-schemas"
+            syncKey="sync-schemas"
+            isRunning={isRunning}
+            activeOpKey={op?.key ?? null}
+            onRun={(key) => {
+              void runOp(key)
+            }}
+          />
+          <ResourceRow
+            label="Content types"
+            count={statsError !== null ? -1 : (stats?.types ?? null)}
+            seedKey="seed-types"
+            syncKey="sync-types"
+            isRunning={isRunning}
+            activeOpKey={op?.key ?? null}
+            onRun={(key) => {
+              void runOp(key)
+            }}
+          />
+          <ResourceRow
+            label="Content items"
+            count={statsError !== null ? -1 : (stats?.items ?? null)}
+            seedKey="seed-items"
+            syncKey="sync-items"
+            wipeKey="wipe-items"
+            isRunning={isRunning}
+            activeOpKey={op?.key ?? null}
+            onRun={(key) => {
+              void runOp(key)
+            }}
+          />
+        </tbody>
+      </table>
+
+      {statsError !== null && (
+        <p className="env-card__stats-error">
+          Could not load stats: {statsError}{' '}
+          <button className="btn btn--sm btn--ghost" onClick={loadStats}>
+            Retry
+          </button>
+        </p>
+      )}
+
+      {/* Footer: all-resources operations */}
+      <div className="env-card__ops">
+        <span className="env-card__ops-label">All resources</span>
+        {stats === null && statsError === null ? (
+          <>
+            <div className="btn-skeleton btn-skeleton--wide" aria-hidden="true">
+              &nbsp;
+            </div>
+            <div className="btn-skeleton btn-skeleton--wide" aria-hidden="true">
+              &nbsp;
+            </div>
+          </>
+        ) : allEmpty ? (
+          <button
+            className={`btn btn--sm btn--op btn--op-seed${isRunning && op?.key === 'seed-all' ? ' btn--op-running' : ''}`}
             onClick={() => {
-              void runOp(type)
+              void runOp('seed-all')
             }}
             disabled={isRunning}
-            title={OP_DESCRIPTIONS[type]}
           >
-            {isRunning && op?.type === type ? (
+            {isRunning && op?.key === 'seed-all' ? (
               <span className="spinner" aria-hidden="true" />
             ) : null}
-            {OP_LABELS[type]}
+            Seed all
           </button>
-        ))}
+        ) : (
+          <>
+            <button
+              className={`btn btn--sm btn--op btn--op-sync${isRunning && op?.key === 'sync-all' ? ' btn--op-running' : ''}`}
+              onClick={() => {
+                void runOp('sync-all')
+              }}
+              disabled={isRunning}
+            >
+              {isRunning && op?.key === 'sync-all' ? (
+                <span className="spinner" aria-hidden="true" />
+              ) : null}
+              Sync all
+            </button>
+            <button
+              className={`btn btn--sm btn--op btn--op-wipe${isRunning && op?.key === 'wipe-all' ? ' btn--op-running' : ''}`}
+              onClick={() => {
+                void runOp('wipe-all')
+              }}
+              disabled={isRunning}
+            >
+              {isRunning && op?.key === 'wipe-all' ? (
+                <span className="spinner" aria-hidden="true" />
+              ) : null}
+              Wipe all
+            </button>
+          </>
+        )}
       </div>
 
       {/* Live log panel */}
       {op && (
         <div className={`env-card__log log--${op.status}`}>
           <div className="log-header">
-            <span className="log-title">
-              {OP_LABELS[op.type]}
-              {op.status === 'running' && <span className="log-status"> — running…</span>}
-              {op.status === 'done' && <span className="log-status log-status--ok"> — done</span>}
-              {op.status === 'error' && (
-                <span className="log-status log-status--err"> — failed</span>
-              )}
-            </span>
+            <span className="log-title">{OP_LABELS[op.key]}</span>
+            {op.status === 'running' && (
+              <span className="log-status">
+                <span className="spinner spinner--sm" aria-hidden="true" /> running…
+              </span>
+            )}
+            {op.status === 'done' && <span className="log-status log-status--ok"> ✓ done</span>}
+            {op.status === 'error' && <span className="log-status log-status--err"> ⚠ failed</span>}
             {op.status !== 'running' && (
               <button className="log-close" onClick={() => setOp(null)} aria-label="Dismiss log">
                 ✕
@@ -183,8 +291,92 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onDelete }:
   )
 }
 
-/** Show only the last 6 chars of an ID to confirm it's set without exposing it fully. */
-function mask(value: string): string {
-  if (value.length <= 6) return '••••••'
-  return `••••${value.slice(-6)}`
+// ── ResourceRow ───────────────────────────────────────────────────────────────
+
+type ResourceRowProps = {
+  label: string
+  /** null = loading, -1 = error, ≥0 = actual count */
+  count: number | null
+  seedKey: OpKey
+  syncKey: OpKey
+  wipeKey?: OpKey
+  isRunning: boolean
+  activeOpKey: OpKey | null
+  onRun: (key: OpKey) => void
+}
+
+function ResourceRow({
+  label,
+  count,
+  seedKey,
+  syncKey,
+  wipeKey,
+  isRunning,
+  activeOpKey,
+  onRun,
+}: ResourceRowProps) {
+  return (
+    <tr>
+      <td className="col-resource">{label}</td>
+      <td className="col-count">
+        {count === null ? (
+          <span className="spinner spinner--sm" aria-label="Loading" />
+        ) : count === -1 ? (
+          <span className="dim" title="Could not fetch count">
+            —
+          </span>
+        ) : (
+          count.toLocaleString()
+        )}
+      </td>
+      <td className="col-actions">
+        {count === null && (
+          <div className="btn-skeleton" aria-hidden="true">
+            &nbsp;
+          </div>
+        )}
+        {count !== null && count !== -1 && (
+          <div className="btn-group">
+            {count === 0 ? (
+              <button
+                className={`btn btn--sm btn--op btn--op-seed${isRunning && activeOpKey === seedKey ? ' btn--op-running' : ''}`}
+                onClick={() => onRun(seedKey)}
+                disabled={isRunning}
+              >
+                {isRunning && activeOpKey === seedKey ? (
+                  <span className="spinner" aria-hidden="true" />
+                ) : null}
+                Seed
+              </button>
+            ) : (
+              <>
+                <button
+                  className={`btn btn--sm btn--op btn--op-sync${isRunning && activeOpKey === syncKey ? ' btn--op-running' : ''}`}
+                  onClick={() => onRun(syncKey)}
+                  disabled={isRunning}
+                >
+                  {isRunning && activeOpKey === syncKey ? (
+                    <span className="spinner" aria-hidden="true" />
+                  ) : null}
+                  Sync
+                </button>
+                {wipeKey !== undefined && (
+                  <button
+                    className={`btn btn--sm btn--op btn--op-wipe${isRunning && activeOpKey === wipeKey ? ' btn--op-running' : ''}`}
+                    onClick={() => onRun(wipeKey)}
+                    disabled={isRunning}
+                  >
+                    {isRunning && activeOpKey === wipeKey ? (
+                      <span className="spinner" aria-hidden="true" />
+                    ) : null}
+                    Wipe
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+        )}
+      </td>
+    </tr>
+  )
 }

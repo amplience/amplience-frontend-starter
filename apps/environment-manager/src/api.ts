@@ -1,4 +1,4 @@
-import type { Config, Environment } from './types.js'
+import type { Config, Environment, EnvironmentStats } from './types.js'
 
 const BASE = '/api'
 
@@ -31,4 +31,6 @@ export const api = {
     request<Config>(`/environments/${encodeURIComponent(name)}/activate`, { method: 'PATCH' }),
   remove: (name: string) =>
     request<Config>(`/environments/${encodeURIComponent(name)}`, { method: 'DELETE' }),
+  stats: (name: string) =>
+    request<EnvironmentStats>(`/environments/${encodeURIComponent(name)}/stats`),
 }
