@@ -414,8 +414,8 @@ app.get('/api/environments/:name/stats', async (c) => {
   try {
     const token = await getAmplToken(env.clientId, env.clientSecret)
     const [schemas, types, contentItems, slotItems] = await Promise.all([
-      fetchCount(token, `${AMPL_API}/hubs/${env.hubId}/content-type-schemas`),
-      fetchCount(token, `${AMPL_API}/hubs/${env.hubId}/content-types`),
+      fetchCount(token, `${AMPL_API}/hubs/${env.hubId}/content-type-schemas?status=ACTIVE`),
+      fetchCount(token, `${AMPL_API}/hubs/${env.hubId}/content-types?status=ACTIVE`),
       fetchCount(
         token,
         `${AMPL_API}/content-repositories/${env.repoContent}/content-items?status=ACTIVE`,
