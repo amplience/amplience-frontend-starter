@@ -139,6 +139,7 @@
 [data-brand='azure-harvest'] {
   --font-heading: var(--nf-inter), 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-body: var(--nf-inter), 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-code: var(--nf-jetbrains-mono), 'Courier New', monospace;
   --color-primary: #0066ff;
   --color-primary-contrast: #ffffff;
   --color-secondary: #5b75ba;

@@ -3,6 +3,9 @@
 .env.*
 !.env.example
 
+# Local environment config (credentials — never commit)
+quadratic.config.json
+
 # IDE settings
 .vscode/settings.json
 .vscode/css-custom-data.json

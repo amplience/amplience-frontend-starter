@@ -101,33 +101,36 @@ describe('MediaCard', () => {
   })
 
   describe('linking', () => {
-    it('wraps content in a link when href is provided', () => {
-      render(<MediaCard title="Title" href="/products" />)
+    it('wraps content in a link when links.href is provided', () => {
+      render(<MediaCard title="Title" links={{ href: '/products' }} />)
       const link = screen.getByRole('link')
       expect(link.getAttribute('href')).toBe('/products')
     })
 
-    it('does not render a link when href is omitted', () => {
+    it('does not render a link when links is omitted', () => {
       render(<MediaCard title="Title" />)
       expect(screen.queryByRole('link')).toBeNull()
     })
 
     it('renders external links with target="_blank"', () => {
-      render(<MediaCard title="Title" href="https://example.com" />)
+      render(<MediaCard title="Title" links={{ href: 'https://example.com' }} />)
       expect(screen.getByRole('link').getAttribute('target')).toBe('_blank')
     })
   })
 
   describe('CTA', () => {
-    it('renders a CTA button when cta is provided and href is absent', () => {
-      render(<MediaCard title="Title" cta={{ label: 'Shop now', href: '/shop' }} />)
+    it('renders a CTA button when links.cta is provided and links.href is absent', () => {
+      render(<MediaCard title="Title" links={{ cta: { label: 'Shop now', href: '/shop' } }} />)
       const link = screen.getByRole('link', { name: 'Shop now' })
       expect(link.getAttribute('href')).toBe('/shop')
     })
 
-    it('does not render a CTA when href is also set', () => {
+    it('does not render a CTA when links.href is also set', () => {
       render(
-        <MediaCard title="Title" href="/products" cta={{ label: 'Shop now', href: '/shop' }} />,
+        <MediaCard
+          title="Title"
+          links={{ href: '/products', cta: { label: 'Shop now', href: '/shop' } }}
+        />,
       )
       // Only the card-level link should exist, not a separate 'Shop now' link
       expect(screen.queryByRole('link', { name: 'Shop now' })).toBeNull()

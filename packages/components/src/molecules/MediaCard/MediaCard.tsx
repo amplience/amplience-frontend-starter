@@ -35,16 +35,7 @@ export type MediaCardCtaProps = {
   color?: ButtonColor
 }
 
-export type MediaCardProps = {
-  /** Card heading. Rendered as an h3 by default; override via headingVariant. */
-  title: string
-  /** Optional body copy below the title. */
-  description?: string
-  /**
-   * Cover image. Renders flush with the card edge (no Card padding).
-   * All Image atom props are accepted (src, alt, width, height, aspectRatio …).
-   */
-  image?: ImageProps
+export type MediaCardLinks = {
   /**
    * Makes the entire card a single link. When set, `cta` is ignored —
    * avoid nesting interactive elements inside an already-interactive card.
@@ -56,6 +47,20 @@ export type MediaCardProps = {
    * is not set. Use `href` when you want the whole card to be clickable.
    */
   cta?: MediaCardCtaProps
+}
+
+export type MediaCardProps = {
+  /** Card heading. Rendered as an h3 by default; override via headingVariant. */
+  title: string
+  /** Optional body copy below the title. */
+  description?: string
+  /**
+   * Cover image. Renders flush with the card edge (no Card padding).
+   * All Image atom props are accepted (src, alt, width, height, aspectRatio …).
+   */
+  image?: ImageProps
+  /** Card-level link and CTA — see MediaCardLinks. */
+  links?: MediaCardLinks
   /**
    * Image/body arrangement — see MediaCardLayout.
    * Defaults to 'above'.
@@ -103,14 +108,14 @@ export function MediaCard({
   title,
   description,
   image,
-  href,
-  cta,
+  links,
   layout = 'above',
   headingVariant = 'h3',
   elevation = 'raised',
   color = 'white',
   className,
 }: MediaCardProps) {
+  const { href, cta } = links ?? {}
   const isLinked = href != null
 
   const mediaEl = image != null && (

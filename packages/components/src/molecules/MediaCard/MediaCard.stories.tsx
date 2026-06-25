@@ -23,7 +23,7 @@ const meta = {
       control: 'select',
       options: ['white', 'light', 'dark', 'black', 'primary', 'secondary', 'tertiary'],
     },
-    href: { control: 'text' },
+    links: { control: 'object' },
     description: { control: 'text' },
   },
   parameters: {
@@ -129,7 +129,7 @@ export const WholeCardLink: Story = {
   name: 'Linked — whole card',
   render: () => (
     <div style={{ maxWidth: 360 }}>
-      <MediaCard {...baseCopy} image={{ ...landscapeImage }} href="/products/spring" />
+      <MediaCard {...baseCopy} image={{ ...landscapeImage }} links={{ href: '/products/spring' }} />
     </div>
   ),
 }
@@ -141,7 +141,7 @@ export const ExplicitCta: Story = {
       <MediaCard
         {...baseCopy}
         image={{ ...landscapeImage }}
-        cta={{ label: 'Shop now', href: '/products/spring' }}
+        links={{ cta: { label: 'Shop now', href: '/products/spring' } }}
       />
     </div>
   ),
@@ -155,7 +155,7 @@ export const LinkedExternal: Story = {
         title="Amplience"
         description="The content management platform powering this accelerator."
         image={{ ...landscapeImage }}
-        href="https://amplience.com"
+        links={{ href: 'https://amplience.com' }}
       />
     </div>
   ),
@@ -172,7 +172,7 @@ export const TextOnly: Story = {
       <MediaCard
         title="Text-only card"
         description="Image is optional. The body padding applies directly when no media is present."
-        cta={{ label: 'Learn more', href: '/about' }}
+        links={{ cta: { label: 'Learn more', href: '/about' } }}
       />
     </div>
   ),
@@ -270,7 +270,7 @@ export const InGrid: Story = {
             height: 450,
             unoptimized: true,
           }}
-          href={`/collections/${seed}`}
+          links={{ href: `/collections/${seed}` }}
         />
       ))}
     </div>

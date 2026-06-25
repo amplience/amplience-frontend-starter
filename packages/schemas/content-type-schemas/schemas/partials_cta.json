@@ -26,24 +26,24 @@
   "properties": {
     "label": {
       "type": "string",
-      "title": "Label",
+      "title": "CTA Text",
       "minLength": 1
     },
     "href": {
       "type": "string",
-      "title": "URL / path",
+      "title": "CTA Link",
       "pattern": "^(?!https?\\/\\/)(?:(?:https?:\\/\\/)(?:localhost|(?:[A-Za-z0-9-]+\\.)+[A-Za-z]{2,})(?::\\d{2,5})?(?:\\/[^\\s?#]*)?(?:\\?[^\\s#]*)?(?:#[^\\s]*)?|\\/(?:[^\\s?#]+(?:\\/[^\\s?#]*)*)?(?:\\?[^\\s#]*)?(?:#[^\\s]*)?|(?:\\.\\.?\\/)?[^\\s/:?#]+(?:\\/[^\\s?#]*)*(?:\\?[^\\s#]*)?(?:#[^\\s]*)?)$"
     },
     "variant": {
       "type": "string",
       "enum": ["text", "solid", "outlined"],
-      "title": "Variant",
+      "title": "Button Variant",
       "default": "solid"
     },
     "color": {
       "type": "string",
       "enum": ["primary", "secondary", "tertiary", "black", "white"],
-      "title": "Colour"
+      "title": "Button Colour"
     }
   },
   "propertyOrder": ["label", "href", "variant", "color"],

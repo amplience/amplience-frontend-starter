@@ -1,13 +1,17 @@
 {
   "id": "a1b2c3d4-0001-4000-8000-000000000019",
-  "label": "Home — card: time to value",
+  "label": "Home \u2014 card: time to value",
   "body": {
     "_meta": {
-      "name": "Home — card: time to value",
+      "name": "Home \u2014 card: time to value",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000019",
       "deliveryKeys": {
-        "values": [{ "value": "home/card-time-to-value" }]
+        "values": [
+          {
+            "value": "home/card-time-to-value"
+          }
+        ]
       }
     },
     "title": "Faster time to value",
@@ -18,11 +22,13 @@
       "width": 800,
       "height": 450
     },
-    "cta": {
-      "label": "Find out more",
-      "href": "/features/accelerator",
-      "variant": "solid",
-      "color": "primary"
+    "links": {
+      "cta": {
+        "label": "Find out more",
+        "href": "/features/accelerator",
+        "variant": "solid",
+        "color": "primary"
+      }
     }
   }
 }

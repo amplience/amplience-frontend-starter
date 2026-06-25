@@ -27,10 +27,32 @@ export const cormorantGaramond = Cormorant_Garamond({
   display: 'swap',
 })
 
+// azure-harvest — clean tech/SaaS
+export const inter = Inter({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  variable: '--nf-inter',
+  display: 'swap',
+})
+
+export const jetbrainsMono = Jost({
+  subsets: ['latin'],
+  weight: ['300', '400', '500'],
+  variable: '--nf-jetbrains-mono',
+  display: 'swap',
+})
+
 export const jost = Jost({
   subsets: ['latin'],
   weight: ['300', '400', '500'],
   variable: '--nf-jost',
+  display: 'swap',
+})
+
+export const lato = Lato({
+  subsets: ['latin'],
+  weight: ['300', '400', '700'],
+  variable: '--nf-lato',
   display: 'swap',
 })
 
@@ -42,18 +64,10 @@ export const playfairDisplay = Playfair_Display({
   display: 'swap',
 })
 
-export const lato = Lato({
+export const roboto = Roboto({
   subsets: ['latin'],
-  weight: ['300', '400', '700'],
-  variable: '--nf-lato',
-  display: 'swap',
-})
-
-// azure-harvest — clean tech/SaaS
-export const inter = Inter({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
-  variable: '--nf-inter',
+  weight: ['300', '400', '500'],
+  variable: '--nf-roboto',
   display: 'swap',
 })
 
@@ -65,20 +79,14 @@ export const robotoSlab = Roboto_Slab({
   display: 'swap',
 })
 
-export const roboto = Roboto({
-  subsets: ['latin'],
-  weight: ['300', '400', '500'],
-  variable: '--nf-roboto',
-  display: 'swap',
-})
-
 // Convenience array — spread into <html className> in the app layout.
 export const brandFonts = [
   cormorantGaramond,
-  jost,
-  playfairDisplay,
-  lato,
   inter,
-  robotoSlab,
+  jetbrainsMono,
+  jost,
+  lato,
+  playfairDisplay,
   roboto,
+  robotoSlab,
 ]
