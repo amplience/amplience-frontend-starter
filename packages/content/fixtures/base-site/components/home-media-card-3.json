@@ -1,28 +1,34 @@
 {
   "id": "a1b2c3d4-0001-4000-8000-000000000013",
-  "label": "Home — card: brand adaptable",
+  "label": "Home \u2014 card: brand adaptable",
   "body": {
     "_meta": {
-      "name": "Home — card: brand adaptable",
+      "name": "Home \u2014 card: brand adaptable",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000013",
       "deliveryKeys": {
-        "values": [{ "value": "home/card-brand" }]
+        "values": [
+          {
+            "value": "home/card-brand"
+          }
+        ]
       }
     },
     "title": "Adapts to your brand",
-    "description": "CSS custom properties let editors control colour, typography, and spacing through content — no code changes required.",
+    "description": "CSS custom properties let editors control colour, typography, and spacing through content \u2014 no code changes required.",
     "image": {
       "src": "https://picsum.photos/seed/ql-card-brand/800/450",
       "alt": "Brand theming via content-controlled CSS variables",
       "width": 800,
       "height": 450
     },
-    "cta": {
-      "label": "See how",
-      "href": "/features/theming",
-      "variant": "solid",
-      "color": "primary"
+    "links": {
+      "cta": {
+        "label": "See how",
+        "href": "/features/theming",
+        "variant": "solid",
+        "color": "primary"
+      }
     }
   }
 }

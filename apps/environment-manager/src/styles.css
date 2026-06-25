@@ -24,7 +24,10 @@
   --color-modal-backdrop: rgba(0, 0, 0, 0.7);
   --radius: 8px;
   --radius-sm: 4px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-code: 'JetBrains Mono', 'Courier New', monospace;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: var(--font-body);
+  font-family: var(--font-body);
   font-size: 14px;
   line-height: 1.5;
 }
@@ -90,7 +93,7 @@ body {
 }
 
 .app-header__sub code {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-family: var(--font-code);
   background: var(--color-surface-2);
   padding: 0.1em 0.4em;
   border-radius: var(--radius-sm);
@@ -231,7 +234,7 @@ body {
 .env-card__name {
   font-size: 0.75rem;
   color: var(--color-text-muted);
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-family: var(--font-code);
   margin-top: 0.2rem;
 }
 
@@ -281,7 +284,7 @@ body {
 
 .env-card__meta dd {
   font-size: 0.825rem;
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-family: var(--font-code);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -438,7 +441,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.4em;
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-family: var(--font-code);
   letter-spacing: 0.02em;
 }
 
@@ -566,7 +569,7 @@ body {
 .log-body {
   background: var(--color-bg);
   color: var(--color-text);
-  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  font-family: var(--font-code);
   font-size: 0.75rem;
   line-height: 1.6;
   margin: 0;

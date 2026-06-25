@@ -1,28 +1,34 @@
 {
   "id": "a1b2c3d4-0001-4000-8000-000000000018",
-  "label": "Home — card: headless best practices",
+  "label": "Home \u2014 card: headless best practices",
   "body": {
     "_meta": {
-      "name": "Home — card: headless best practices",
+      "name": "Home \u2014 card: headless best practices",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000018",
       "deliveryKeys": {
-        "values": [{ "value": "home/card-best-practices" }]
+        "values": [
+          {
+            "value": "home/card-best-practices"
+          }
+        ]
       }
     },
     "title": "Headless best practices",
-    "description": "Server Components, slot-based routing, and a composable block architecture — headless done right, ready to show any client.",
+    "description": "Server Components, slot-based routing, and a composable block architecture \u2014 headless done right, ready to show any client.",
     "image": {
       "src": "https://picsum.photos/seed/ql-card-headless/800/450",
       "alt": "Headless CMS architecture patterns",
       "width": 800,
       "height": 450
     },
-    "cta": {
-      "label": "Explore the architecture",
-      "href": "/features/architecture",
-      "variant": "solid",
-      "color": "primary"
+    "links": {
+      "cta": {
+        "label": "Explore the architecture",
+        "href": "/features/architecture",
+        "variant": "solid",
+        "color": "primary"
+      }
     }
   }
 }

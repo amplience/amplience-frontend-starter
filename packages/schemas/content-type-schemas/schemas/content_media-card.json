@@ -17,7 +17,7 @@
         "items": [
           {
             "label": "📝 Content",
-            "pointers": ["/image", "/title", "/description", "/href", "/cta"]
+            "pointers": ["/image", "/title", "/description", "/links"]
           },
           {
             "label": "⚙️ Options",
@@ -29,6 +29,14 @@
   },
   "type": "object",
   "properties": {
+    "image": {
+      "title": "Image",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/image"
+        }
+      ]
+    },
     "title": {
       "type": "string",
       "title": "Title",
@@ -39,37 +47,35 @@
       "title": "Description",
       "ui:component": "text-area"
     },
-    "image": {
-      "title": "Image",
-      "allOf": [
-        {
-          "$ref": "https://quadratic.amplience.com/v2/partials/image"
-        }
-      ]
-    },
-    "href": {
-      "type": "string",
-      "title": "Link",
-      "description": "Makes the entire card a single link. When set, the CTA is ignored."
-    },
-    "if": {
+    "links": {
+      "type": "object",
+      "title": "Links",
       "properties": {
         "href": {
-          "const": ""
+          "type": "string",
+          "title": "Card Link",
+          "description": "Makes the entire card a single link. When set, the CTA is ignored."
         }
-      }
-    },
-    "then": {
-      "properties": {
-        "cta": {
-          "title": "CTA",
-          "type": "object",
-          "allOf": [
-            {
-              "$ref": "https://quadratic.amplience.com/v2/partials/cta"
-            }
-          ],
-          "description": "Rendered inside the card body. Only used when Link is not set."
+      },
+      "if": {
+        "properties": {
+          "href": {
+            "const": ""
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "cta": {
+            "title": "CTA",
+            "type": "object",
+            "allOf": [
+              {
+                "$ref": "https://quadratic.amplience.com/v2/partials/cta"
+              }
+            ],
+            "description": "Rendered inside the card body. Only used when Link is not set."
+          }
         }
       }
     },
@@ -90,15 +96,13 @@
     "elevation": {
       "type": "string",
       "enum": ["flat", "raised", "bordered"],
-      "title": "Elevation",
-      "description": "Card surface treatment.",
+      "title": "Card Type",
       "default": "raised"
     },
     "color": {
       "type": "string",
       "enum": ["white", "light", "dark", "black", "primary", "secondary", "tertiary"],
-      "title": "Surface colour",
-      "description": "Card surface colour.",
+      "title": "Card colour",
       "default": "white"
     }
   },
