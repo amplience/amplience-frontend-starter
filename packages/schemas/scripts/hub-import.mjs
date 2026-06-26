@@ -35,7 +35,7 @@
  * .env.example), and plain exported variables work the same way:
  *
  *   AMPLIENCE_HUB_NAME       hub name — visualization URIs + map-file name
- *   LOCALHOST_URL            localhost origin — fills ${localhostUrl} in viz URIs
+ *   LOCALHOST_URL            localhost origin — fills ${localhostUrl} in viz URIs (default: http://localhost:3000)
  *   AMPLIENCE_REPO_CONTENT   repository id for pages + components (content step)
  *   AMPLIENCE_REPO_SLOTS     repository id for slots (content step)
  *   AMPLIENCE_CLIENT_ID      ┐ optional — when all three are set they're
@@ -47,14 +47,42 @@
  * unpublished content. The staging VSE serves latest either way.
  */
 import { spawn } from 'node:child_process'
-import { cpSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const packageRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
+const repoRoot = path.join(packageRoot, '..', '..')
 const fixturesDir = path.join(packageRoot, '..', 'content', 'fixtures', 'base-site')
 const stagingDir = path.join(packageRoot, '.import')
+
+/**
+ * Load webApps for a given hub name from quadratic.config.json.
+ * Falls back to the example config if the real one isn't present.
+ * Returns an empty array if the config can't be found or the hub isn't listed.
+ */
+function loadWebApps(hubName) {
+  const configPath = existsSync(path.join(repoRoot, 'quadratic.config.json'))
+    ? path.join(repoRoot, 'quadratic.config.json')
+    : path.join(repoRoot, 'quadratic.config.example.json')
+  if (!existsSync(configPath)) return []
+  try {
+    const config = JSON.parse(readFileSync(configPath, 'utf8'))
+    const envEntry = config.environments?.find((e) => e.hubName === hubName)
+    return envEntry?.webApps ?? []
+  } catch {
+    return []
+  }
+}
 
 const step = process.argv[2] ?? 'all'
 const steps = ['schemas', 'types', 'content', 'all']
@@ -131,22 +159,49 @@ const importSchemas = async () => {
 
 const importTypes = async () => {
   const hubName = require_('AMPLIENCE_HUB_NAME', 'fill the ${hub} token in visualization URIs')
-  let localhostUrl = require_(
-    'LOCALHOST_URL',
-    'fill the ${localhostUrl} token in the Web (localhost) visualization URI',
-  )
+  let localhostUrl = env('LOCALHOST_URL') ?? 'http://localhost:3000'
   while (localhostUrl.endsWith('/')) localhostUrl = localhostUrl.slice(0, -1)
+
+  // Additional deployed sites — sourced from quadratic.config.json at import time.
+  // Strip trailing slashes from each URL for consistency.
+  const webApps = loadWebApps(hubName).map((site) => ({
+    ...site,
+    url: site.url.replace(/\/+$/, ''),
+  }))
+  if (webApps.length > 0) {
+    console.log(`\n→ Found ${webApps.length} additional web app(s) for hub "${hubName}":`)
+    for (const site of webApps)
+      console.log(`  • ${site.label !== '' ? `Web (${site.label})` : 'Web'} — ${site.url}`)
+  }
+
   const source = path.join(packageRoot, 'content-types')
   const staged = path.join(stagingDir, 'content-types')
   rmSync(staged, { recursive: true, force: true })
   mkdirSync(staged, { recursive: true })
+
   for (const file of readdirSync(source)) {
-    const body = readFileSync(path.join(source, file), 'utf8')
-    writeFileSync(
-      path.join(staged, file),
-      body.replaceAll('${hub}', hubName).replaceAll('${localhostUrl}', localhostUrl),
+    // Parse as JSON so we can mutate the visualizations array cleanly.
+    const raw = readFileSync(path.join(source, file), 'utf8')
+    const data = JSON.parse(
+      raw.replaceAll('${hub}', hubName).replaceAll('${localhostUrl}', localhostUrl),
     )
+
+    // Inject one Web (label) entry per webApp, immediately after the localhost entry.
+    const vizs = data.settings?.visualizations
+    if (Array.isArray(vizs) && webApps.length > 0) {
+      const localhostIdx = vizs.findIndex((v) => v.label === 'Web (localhost)')
+      const insertAt = localhostIdx >= 0 ? localhostIdx : vizs.length - 1
+      const extra = webApps.map((site) => ({
+        label: site.label !== '' ? `Web (${site.label})` : 'Web',
+        templatedUri: `${site.url}/visualization?vse={{vse.domain}}&content={{content.sys.id}}`,
+        default: false,
+      }))
+      vizs.splice(insertAt, 0, ...extra)
+    }
+
+    writeFileSync(path.join(staged, file), JSON.stringify(data, null, 2) + '\n')
   }
+
   await dcCli('content-type', 'import', staged, '--sync')
 }
 

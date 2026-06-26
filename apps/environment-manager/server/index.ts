@@ -25,18 +25,21 @@ const FIXTURES_NAME = 'fixtures'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
+type WebApp = { label: string; url: string; brand: string }
+
 type Environment = {
   name: string
   label: string
   hubName: string
   hubId: string
-  appUrl: string
+  localhostUrl: string
   repoContent: string
   repoSlots: string
   clientId: string
   clientSecret: string
   stagingHost: string
   defaultBrand: string
+  webApps: WebApp[]
   republish: boolean
 }
 
@@ -108,7 +111,7 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
   const clientId = env !== null && env.clientId !== '' ? env.clientId : undefined
   const clientSecret = env !== null && env.clientSecret !== '' ? env.clientSecret : undefined
   const hubId = env !== null && env.hubId !== '' ? env.hubId : undefined
-  const appUrl = env !== null && env.appUrl !== '' ? env.appUrl : undefined
+  const localhostUrl = env !== null && env.localhostUrl !== '' ? env.localhostUrl : undefined
   const repoContent = env !== null && env.repoContent !== '' ? env.repoContent : undefined
   const repoSlots = env !== null && env.repoSlots !== '' ? env.repoSlots : undefined
   const defaultBrand = env !== null && env.defaultBrand !== '' ? env.defaultBrand : undefined
@@ -132,7 +135,7 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
     updateEnvVars(existingSchemas, {
       AMPLIENCE_HUB_NAME: hubName,
       AMPLIENCE_HUB_ID: hubId,
-      LOCALHOST_URL: appUrl,
+      LOCALHOST_URL: localhostUrl,
       AMPLIENCE_REPO_CONTENT: repoContent,
       AMPLIENCE_REPO_SLOTS: repoSlots,
       AMPLIENCE_CLIENT_ID: clientId,
@@ -271,7 +274,7 @@ function buildEnv(env: Environment, republish = false): NodeJS.ProcessEnv {
     ...process.env,
     PATH: `${dcCliBin}:${rootBin}:${process.env.PATH ?? ''}`,
     AMPLIENCE_HUB_NAME: env.hubName,
-    AMPLIENCE_APP_URL: env.appUrl,
+    LOCALHOST_URL: env.localhostUrl,
     AMPLIENCE_REPO_CONTENT: env.repoContent,
     AMPLIENCE_REPO_SLOTS: env.repoSlots,
     AMPLIENCE_CLIENT_ID: env.clientId,
@@ -432,6 +435,12 @@ app.put('/api/environments/:name', async (c) => {
 
   config.environments[idx] = body
   await writeConfig(config)
+
+  // If the updated environment is currently active, keep the env files in sync.
+  if (config.active === body.name) {
+    await writeActiveEnvFiles(body)
+  }
+
   return c.json(config)
 })
 

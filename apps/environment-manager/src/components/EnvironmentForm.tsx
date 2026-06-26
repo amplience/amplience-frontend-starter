@@ -13,8 +13,13 @@ type Props = {
 
 // ── Field groups ──────────────────────────────────────────────────────────────
 
+/** Only string-valued keys — excludes boolean fields (republish) and array fields (webApps). */
+type StringEnvKey = {
+  [K in keyof Environment]: Environment[K] extends string ? K : never
+}[keyof Environment]
+
 type FieldMeta = {
-  key: keyof Environment
+  key: StringEnvKey
   label: string
   required?: boolean
   placeholder?: string
@@ -48,7 +53,12 @@ const HUB_FIELDS: FieldMeta[] = [
 ]
 
 const CONFIG_FIELDS: FieldMeta[] = [
-  { key: 'appUrl', label: 'Localhost URL', required: true, placeholder: 'http://localhost:3000' },
+  {
+    key: 'localhostUrl',
+    label: 'Localhost URL',
+    required: true,
+    placeholder: 'http://localhost:3000',
+  },
   {
     key: 'defaultBrand',
     label: 'Default brand',
