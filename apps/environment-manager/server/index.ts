@@ -148,11 +148,11 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
 
 // ── Amplience Management API helpers ─────────────────────────────────────────
 
-const AMPL_AUTH = 'https://auth.amplience.net/oauth/token'
-const AMPL_API = 'https://api.amplience.net/v2/content'
+const AMPLIENCE_AUTH = 'https://auth.amplience.net/oauth/token'
+const AMPLIENCE_API = 'https://api.amplience.net/v2/content'
 
-async function getAmplToken(clientId: string, clientSecret: string): Promise<string> {
-  const res = await fetch(AMPL_AUTH, {
+async function getAmplienceToken(clientId: string, clientSecret: string): Promise<string> {
+  const res = await fetch(AMPLIENCE_AUTH, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
@@ -179,7 +179,13 @@ async function fetchCount(token: string, url: string): Promise<number> {
 // ── Hub discovery ─────────────────────────────────────────────────────────────
 
 type DiscoveredRepo = { id: string; name: string; label: string; features: string[] }
-type DiscoveredHub = { id: string; name: string; label: string; repos: DiscoveredRepo[] }
+type DiscoveredHub = {
+  id: string
+  name: string
+  label: string
+  repos: DiscoveredRepo[]
+  stagingHost?: string
+}
 
 /**
  * Fetch the hubs + content repositories accessible to a given credential pair.
@@ -187,12 +193,12 @@ type DiscoveredHub = { id: string; name: string; label: string; repos: Discovere
  * guessed. URI template variables (e.g. {?page,size}) are stripped before use.
  */
 async function discoverHubs(clientId: string, clientSecret: string): Promise<DiscoveredHub[]> {
-  const token = await getAmplToken(clientId, clientSecret)
+  const token = await getAmplienceToken(clientId, clientSecret)
 
   const strip = (href: string) => href.replace(/\{[^}]*\}/g, '')
 
   // List all hubs visible to these credentials
-  const hubsRes = await fetch(`${AMPL_API}/hubs?size=50`, {
+  const hubsRes = await fetch(`${AMPLIENCE_API}/hubs?size=50`, {
     headers: { Authorization: `Bearer ${token}` },
   })
   if (!hubsRes.ok) throw new Error(`Failed to list hubs: HTTP ${hubsRes.status}`)
@@ -221,16 +227,23 @@ async function discoverHubs(clientId: string, clientSecret: string): Promise<Dis
         hub.settings?.previewVirtualStagingEnvironment?.hostname ??
         hub.settings?.virtualStagingEnvironment?.hostname
 
+      const base = {
+        id: hub.id,
+        name: hub.name,
+        label: hub.label ?? hub.name,
+        ...(stagingHost !== undefined ? { stagingHost } : {}),
+      }
+
       const reposHref = hub._links?.['content-repositories']?.href
       if (!reposHref) {
-        return { id: hub.id, name: hub.name, label: hub.label ?? hub.name, repos: [], stagingHost }
+        return { ...base, repos: [] }
       }
 
       const reposRes = await fetch(`${strip(reposHref)}?size=50`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       if (!reposRes.ok) {
-        return { id: hub.id, name: hub.name, label: hub.label ?? hub.name, repos: [], stagingHost }
+        return { ...base, repos: [] }
       }
 
       const reposBody = (await reposRes.json()) as {
@@ -253,7 +266,7 @@ async function discoverHubs(clientId: string, clientSecret: string): Promise<Dis
         }),
       )
 
-      return { id: hub.id, name: hub.name, label: hub.label ?? hub.name, repos, stagingHost }
+      return { ...base, repos }
     }),
   )
 }
@@ -284,7 +297,7 @@ function buildEnv(env: Environment, republish = false): NodeJS.ProcessEnv {
   }
 }
 
-type StreamWriter = { write: (text: string) => Promise<void> }
+type StreamWriter = { write: (text: string) => Promise<unknown> }
 
 /**
  * Spawn a Node script, piping stdout + stderr into the Hono stream.
@@ -522,17 +535,17 @@ app.get('/api/environments/:name/stats', async (c) => {
   }
 
   try {
-    const token = await getAmplToken(env.clientId, env.clientSecret)
+    const token = await getAmplienceToken(env.clientId, env.clientSecret)
     const [schemas, types, contentItems, slotItems] = await Promise.all([
-      fetchCount(token, `${AMPL_API}/hubs/${env.hubId}/content-type-schemas?status=ACTIVE`),
-      fetchCount(token, `${AMPL_API}/hubs/${env.hubId}/content-types?status=ACTIVE`),
+      fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/content-type-schemas?status=ACTIVE`),
+      fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/content-types?status=ACTIVE`),
       fetchCount(
         token,
-        `${AMPL_API}/content-repositories/${env.repoContent}/content-items?status=ACTIVE`,
+        `${AMPLIENCE_API}/content-repositories/${env.repoContent}/content-items?status=ACTIVE`,
       ),
       fetchCount(
         token,
-        `${AMPL_API}/content-repositories/${env.repoSlots}/content-items?status=ACTIVE`,
+        `${AMPLIENCE_API}/content-repositories/${env.repoSlots}/content-items?status=ACTIVE`,
       ),
     ])
     return c.json({ schemas, types, items: contentItems + slotItems })
