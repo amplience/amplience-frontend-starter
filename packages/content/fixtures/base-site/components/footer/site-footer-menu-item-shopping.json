@@ -1,0 +1,56 @@
+{
+  "id": "a1b2c3d4-0005-4000-8000-000000000017",
+  "label": "Footer menu item — Shopping",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Shopping",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000017",
+      "deliveryKeys": { "values": [{ "value": "site/footer-menu-item-shopping" }] }
+    },
+    "label": "Shopping",
+    "link": "/shopping",
+    "children": [
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000018",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000019",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000020",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000021",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000022",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000023",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000024",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000025",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      }
+    ]
+  }
+}

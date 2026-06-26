@@ -1,0 +1,41 @@
+{
+  "id": "a1b2c3d4-0005-4000-8000-000000000026",
+  "label": "Footer menu item — Company",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Company",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000026",
+      "deliveryKeys": { "values": [{ "value": "site/footer-menu-item-company" }] }
+    },
+    "label": "Company",
+    "link": "/company",
+    "children": [
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000027",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000028",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000029",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000030",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000031",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      }
+    ]
+  }
+}

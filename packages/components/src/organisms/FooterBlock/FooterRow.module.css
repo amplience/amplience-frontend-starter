@@ -1,0 +1,71 @@
+/*
+ * FooterRow styles.
+ *
+ * A horizontal flex row inside the footer. Each row carries its own
+ * background and foreground colour, applied via data attributes so brands
+ * override under [data-brand] without touching this file.
+ *
+ * Layout:
+ *   .root  — full-viewport-width band; background colour and vertical rhythm
+ *            live here so the colour field always bleeds edge-to-edge.
+ *   .inner — the Container inside .root; constrained to maxWidth, centred,
+ *            with site-gutter padding. Flex layout sits here so items align
+ *            within the content boundary, not the screen edge.
+ *
+ * Colour:
+ *   data-background-color maps to the corresponding --color-* token.
+ *   data-foreground-color sets `color` so icons and text inside this row
+ *   inherit the foreground colour automatically via currentColor.
+ */
+
+.root {
+  width: 100%;
+}
+
+.inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-6) var(--spacing-3);
+  padding-block: var(--spacing-8);
+}
+
+/* ---------------------------------------------------------------------------
+   Colour variants
+   --------------------------------------------------------------------------- */
+
+.root[data-color='white'] {
+  background-color: var(--color-white);
+  color: var(--color-black);
+}
+
+.root[data-color='light'] {
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
+}
+
+.root[data-color='dark'] {
+  background-color: var(--color-gray-800);
+  color: var(--color-white);
+}
+
+.root[data-color='black'] {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.root[data-color='primary'] {
+  background-color: var(--color-primary);
+  color: var(--color-primary-contrast);
+}
+
+.root[data-color='secondary'] {
+  background-color: var(--color-secondary);
+  color: var(--color-secondary-contrast);
+}
+
+.root[data-color='tertiary'] {
+  background-color: var(--color-tertiary);
+  color: var(--color-tertiary-contrast);
+}

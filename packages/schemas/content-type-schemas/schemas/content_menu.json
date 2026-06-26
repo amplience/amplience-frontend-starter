@@ -21,7 +21,7 @@
           },
           {
             "label": "⚙️ Options",
-            "pointers": ["/useMobileLayout"]
+            "pointers": ["/useMobileLayout", "/display"]
           }
         ]
       }
@@ -52,7 +52,14 @@
       "type": "boolean",
       "title": "Use mobile menu layout on small screens",
       "description": "Collapses the menu into a hamburger drawer on small viewports."
+    },
+    "display": {
+      "type": "string",
+      "enum": ["dropdownOnHover", "megaMenuOnHover", "megaMenu"],
+      "title": "Display mode",
+      "description": "Controls how the menu renders: dropdownOnHover (default top-nav), megaMenuOnHover (wide panel on hover), or megaMenu (always expanded, for footers).",
+      "default": "dropdownOnHover"
     }
   },
-  "propertyOrder": ["items", "useMobileLayout"]
+  "propertyOrder": ["items", "useMobileLayout", "display"]
 }

@@ -49,14 +49,14 @@ export function IconButton({ icon, label, link, className }: IconButtonProps) {
 
   if (link) {
     return (
-      <a href={link} className={clsx(styles.root, className)} aria-label={label}>
+      <a href={link} className={clsx('IconButton', styles.root, className)} aria-label={label}>
         {inner}
       </a>
     )
   }
 
   return (
-    <button type="button" className={clsx(styles.root, className)} aria-label={label}>
+    <button type="button" className={clsx('IconButton', styles.root, className)} aria-label={label}>
       {inner}
     </button>
   )

@@ -1,0 +1,14 @@
+{
+  "id": "a1b2c3d4-0005-4000-8000-000000000029",
+  "label": "Footer menu item — Sustainability",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Sustainability",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000029",
+      "deliveryKeys": { "values": [{ "value": "site/footer-menu-item-company-sustainability" }] }
+    },
+    "label": "Sustainability",
+    "link": "/company/sustainability"
+  }
+}

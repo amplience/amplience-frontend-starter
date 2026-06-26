@@ -14,14 +14,21 @@
 
 .root {
   display: inline-flex;
+  padding: var(--spacing-2) var(--spacing-3);
   align-items: center;
   flex-shrink: 0;
   text-decoration: none;
+
+  &:hover {
+    opacity: 0.75;
+    transition: 0.15s ease-in;
+  }
 }
 
 .image {
   display: block;
   height: var(--logo-height, 40px);
+  box-sizing: content-box;
   width: auto;
   object-fit: contain;
 }

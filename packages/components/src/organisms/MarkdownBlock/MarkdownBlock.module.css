@@ -6,7 +6,7 @@
  * Brands override via --markdown-block-* tokens under [data-brand].
  */
 
-.root {
+.container {
   padding-block: var(--spacing-10);
 }
 

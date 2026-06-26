@@ -90,7 +90,7 @@ export function ColumnsBlock({
       data-background-color={backgroundColor}
       style={Object.keys(cssVars).length > 0 ? cssVars : undefined}
     >
-      <Container maxWidth={maxWidth} gutter={gutter}>
+      <Container className={styles.container ?? ''} maxWidth={maxWidth} gutter={gutter}>
         <div className={styles.columns}>{children}</div>
       </Container>
     </section>

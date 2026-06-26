@@ -21,7 +21,7 @@
           },
           {
             "label": "⚙️ Options",
-            "pointers": ["/backgroundColor", "/foregroundColor"]
+            "pointers": ["/backgroundColor"]
           }
         ]
       }
@@ -58,12 +58,6 @@
       "type": "string",
       "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"],
       "title": "Background colour"
-    },
-    "foregroundColor": {
-      "type": "string",
-      "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"],
-      "title": "Foreground colour",
-      "description": "Applied to text and icons within this row."
     }
   },
   "propertyOrder": ["items", "backgroundColor", "foregroundColor"]

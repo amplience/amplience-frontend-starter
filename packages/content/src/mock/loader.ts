@@ -13,6 +13,37 @@ import aboutHero from '../../fixtures/base-site/components/about-hero.json' with
 import aboutMarkdown from '../../fixtures/base-site/components/about-markdown.json' with { type: 'json' }
 import docsHero from '../../fixtures/base-site/components/docs-hero.json' with { type: 'json' }
 import docsMarkdown from '../../fixtures/base-site/components/docs-markdown.json' with { type: 'json' }
+import siteFooterMenuCompany from '../../fixtures/base-site/components/footer/site-footer-menu-company.json' with { type: 'json' }
+import siteFooterMenuDelivery from '../../fixtures/base-site/components/footer/site-footer-menu-delivery.json' with { type: 'json' }
+import siteFooterMenuHelp from '../../fixtures/base-site/components/footer/site-footer-menu-help.json' with { type: 'json' }
+import siteFooterMenuItemCompanyCareers from '../../fixtures/base-site/components/footer/site-footer-menu-item-company-careers.json' with { type: 'json' }
+import siteFooterMenuItemCompanyFaqs from '../../fixtures/base-site/components/footer/site-footer-menu-item-company-faqs.json' with { type: 'json' }
+import siteFooterMenuItemCompanyModernSlavery from '../../fixtures/base-site/components/footer/site-footer-menu-item-company-modern-slavery.json' with { type: 'json' }
+import siteFooterMenuItemCompanyStory from '../../fixtures/base-site/components/footer/site-footer-menu-item-company-story.json' with { type: 'json' }
+import siteFooterMenuItemCompanySustainability from '../../fixtures/base-site/components/footer/site-footer-menu-item-company-sustainability.json' with { type: 'json' }
+import siteFooterMenuItemCompany from '../../fixtures/base-site/components/footer/site-footer-menu-item-company.json' with { type: 'json' }
+import siteFooterMenuItemDeliveryCollection from '../../fixtures/base-site/components/footer/site-footer-menu-item-delivery-collection.json' with { type: 'json' }
+import siteFooterMenuItemDeliveryInternational from '../../fixtures/base-site/components/footer/site-footer-menu-item-delivery-international.json' with { type: 'json' }
+import siteFooterMenuItemDeliveryReturns from '../../fixtures/base-site/components/footer/site-footer-menu-item-delivery-returns.json' with { type: 'json' }
+import siteFooterMenuItemDeliveryTrack from '../../fixtures/base-site/components/footer/site-footer-menu-item-delivery-track.json' with { type: 'json' }
+import siteFooterMenuItemDelivery from '../../fixtures/base-site/components/footer/site-footer-menu-item-delivery.json' with { type: 'json' }
+import siteFooterMenuItemHelpContact from '../../fixtures/base-site/components/footer/site-footer-menu-item-help-contact.json' with { type: 'json' }
+import siteFooterMenuItemHelpCustomerServices from '../../fixtures/base-site/components/footer/site-footer-menu-item-help-customer-services.json' with { type: 'json' }
+import siteFooterMenuItemHelpServices from '../../fixtures/base-site/components/footer/site-footer-menu-item-help-services.json' with { type: 'json' }
+import siteFooterMenuItemHelpStores from '../../fixtures/base-site/components/footer/site-footer-menu-item-help-stores.json' with { type: 'json' }
+import siteFooterMenuItemHelp from '../../fixtures/base-site/components/footer/site-footer-menu-item-help.json' with { type: 'json' }
+import siteFooterMenuItemShoppingApps from '../../fixtures/base-site/components/footer/site-footer-menu-item-shopping-apps.json' with { type: 'json' }
+import siteFooterMenuItemShoppingBlackFriday from '../../fixtures/base-site/components/footer/site-footer-menu-item-shopping-black-friday.json' with { type: 'json' }
+import siteFooterMenuItemShoppingBrands from '../../fixtures/base-site/components/footer/site-footer-menu-item-shopping-brands.json' with { type: 'json' }
+import siteFooterMenuItemShoppingCookies from '../../fixtures/base-site/components/footer/site-footer-menu-item-shopping-cookies.json' with { type: 'json' }
+import siteFooterMenuItemShoppingGiftCards from '../../fixtures/base-site/components/footer/site-footer-menu-item-shopping-gift-cards.json' with { type: 'json' }
+import siteFooterMenuItemShoppingPrivacy from '../../fixtures/base-site/components/footer/site-footer-menu-item-shopping-privacy.json' with { type: 'json' }
+import siteFooterMenuItemShoppingSecure from '../../fixtures/base-site/components/footer/site-footer-menu-item-shopping-secure.json' with { type: 'json' }
+import siteFooterMenuItemShoppingTerms from '../../fixtures/base-site/components/footer/site-footer-menu-item-shopping-terms.json' with { type: 'json' }
+import siteFooterMenuItemShopping from '../../fixtures/base-site/components/footer/site-footer-menu-item-shopping.json' with { type: 'json' }
+import siteFooterMenuShopping from '../../fixtures/base-site/components/footer/site-footer-menu-shopping.json' with { type: 'json' }
+import siteFooterRow1 from '../../fixtures/base-site/components/footer/site-footer-row-1.json' with { type: 'json' }
+import siteFooter from '../../fixtures/base-site/components/footer/site-footer.json' with { type: 'json' }
 import siteHeaderGroupIcons from '../../fixtures/base-site/components/header/site-header-group-icons.json' with { type: 'json' }
 import siteHeaderRow1 from '../../fixtures/base-site/components/header/site-header-row-1.json' with { type: 'json' }
 import siteHeaderRow2 from '../../fixtures/base-site/components/header/site-header-row-2.json' with { type: 'json' }
@@ -21,7 +52,9 @@ import siteIconButtonCart from '../../fixtures/base-site/components/header/site-
 import siteIconButtonLocation from '../../fixtures/base-site/components/header/site-icon-button-location.json' with { type: 'json' }
 import siteIconButtonUser from '../../fixtures/base-site/components/header/site-icon-button-user.json' with { type: 'json' }
 import siteLogo from '../../fixtures/base-site/components/header/site-logo.json' with { type: 'json' }
+import siteMenuItemAbout from '../../fixtures/base-site/components/header/site-menu-item-about.json' with { type: 'json' }
 import siteMenuItemBlog from '../../fixtures/base-site/components/header/site-menu-item-blog.json' with { type: 'json' }
+import siteMenuItemDocs from '../../fixtures/base-site/components/header/site-menu-item-docs.json' with { type: 'json' }
 import siteMenuItemKidsBaby from '../../fixtures/base-site/components/header/site-menu-item-kids-baby.json' with { type: 'json' }
 import siteMenuItemKidsBoys from '../../fixtures/base-site/components/header/site-menu-item-kids-boys.json' with { type: 'json' }
 import siteMenuItemKidsGirls from '../../fixtures/base-site/components/header/site-menu-item-kids-girls.json' with { type: 'json' }
@@ -89,6 +122,39 @@ const fixtures: readonly EnrichedContentItem[] = [
   siteMenuItemKidsGirls,
   siteMenuItemKidsBaby,
   siteMenuItemBlog,
+  siteMenuItemAbout,
+  siteMenuItemDocs,
+  siteFooter,
+  siteFooterRow1,
+  siteFooterMenuDelivery,
+  siteFooterMenuHelp,
+  siteFooterMenuShopping,
+  siteFooterMenuCompany,
+  siteFooterMenuItemDelivery,
+  siteFooterMenuItemDeliveryTrack,
+  siteFooterMenuItemDeliveryCollection,
+  siteFooterMenuItemDeliveryReturns,
+  siteFooterMenuItemDeliveryInternational,
+  siteFooterMenuItemHelp,
+  siteFooterMenuItemHelpCustomerServices,
+  siteFooterMenuItemHelpContact,
+  siteFooterMenuItemHelpStores,
+  siteFooterMenuItemHelpServices,
+  siteFooterMenuItemShopping,
+  siteFooterMenuItemShoppingGiftCards,
+  siteFooterMenuItemShoppingBrands,
+  siteFooterMenuItemShoppingTerms,
+  siteFooterMenuItemShoppingSecure,
+  siteFooterMenuItemShoppingPrivacy,
+  siteFooterMenuItemShoppingCookies,
+  siteFooterMenuItemShoppingApps,
+  siteFooterMenuItemShoppingBlackFriday,
+  siteFooterMenuItemCompany,
+  siteFooterMenuItemCompanyStory,
+  siteFooterMenuItemCompanyCareers,
+  siteFooterMenuItemCompanySustainability,
+  siteFooterMenuItemCompanyModernSlavery,
+  siteFooterMenuItemCompanyFaqs,
   homePage,
   homeMainSlot,
   homeHero,

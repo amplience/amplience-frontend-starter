@@ -15,18 +15,19 @@ import { renderContent } from '../../src/renderer'
  * this layout never runs for them.
  */
 export default async function SiteLayout({ children }: { children: ReactNode }) {
-  let header: ReactNode = null
-  try {
-    const headerContent = await client.getByKey('site/header', { depth: 'all' })
-    header = renderContent(headerContent, registry)
-  } catch {
-    // Header is site furniture — a fetch failure must not break the page tree.
-  }
+  const [headerResult, footerResult] = await Promise.allSettled([
+    client.getByKey('site/header', { depth: 'all' }),
+    client.getByKey('site/footer', { depth: 'all' }),
+  ])
+  const header =
+    headerResult.status === 'fulfilled' ? renderContent(headerResult.value, registry) : null
+  const footer =
+    footerResult.status === 'fulfilled' ? renderContent(footerResult.value, registry) : null
   return (
     <>
       {header}
       <main>{children}</main>
-      <footer>Footer goes here</footer>
+      {footer}
     </>
   )
 }

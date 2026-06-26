@@ -143,21 +143,34 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
   }
 
   // For page items, render with site chrome so the visualization matches what
-  // a visitor would see. The header is fetched via the same VSE client so the
-  // editor sees the latest-saved version of the header too.
+  // a visitor would see. The header and footer are fetched via the same VSE
+  // client so the editor sees the latest-saved version of both too.
   let header: ReactNode = null
-  try {
-    const headerContent = await client.getByKey('site/header', { depth: 'all' })
-    header = renderContent(headerContent, registry)
-  } catch {
-    // Not fatal — render without header rather than breaking the visualization.
+  let footer: ReactNode = null
+  const [headerResult, footerResult] = await Promise.allSettled([
+    client.getByKey('site/header', { depth: 'all' }),
+    client.getByKey('site/footer', { depth: 'all' }),
+  ])
+  if (headerResult.status === 'fulfilled') {
+    try {
+      header = renderContent(headerResult.value, registry)
+    } catch {
+      // Not fatal — render without header rather than breaking the visualization.
+    }
+  }
+  if (footerResult.status === 'fulfilled') {
+    try {
+      footer = renderContent(footerResult.value, registry)
+    } catch {
+      // Not fatal — render without footer rather than breaking the visualization.
+    }
   }
 
   return (
     <>
       {header}
       <main>{renderContent(item, registry, { isTopOfPage: true })}</main>
-      <footer>Footer goes here</footer>
+      {footer}
     </>
   )
 }

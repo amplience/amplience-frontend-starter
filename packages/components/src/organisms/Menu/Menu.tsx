@@ -7,6 +7,8 @@ import styles from './Menu.module.css'
 // Types
 // ---------------------------------------------------------------------------
 
+export type MenuDisplay = 'dropdownOnHover' | 'megaMenuOnHover' | 'megaMenu'
+
 export type MenuProps = {
   /**
    * When true, applies `data-mobile-layout` which CSS uses to hide the item
@@ -15,6 +17,8 @@ export type MenuProps = {
    * the nav element via JavaScript.
    */
   useMobileLayout?: boolean
+  /** Controls how the menu renders its submenus. Defaults to dropdownOnHover. */
+  display?: MenuDisplay
   children?: ReactNode
   className?: string
 }
@@ -39,11 +43,17 @@ export type MenuProps = {
  *   `aria-label="Site navigation"` distinguishes this nav from any other
  *   navigation landmarks on the page (e.g. breadcrumbs, footer nav).
  */
-export function Menu({ useMobileLayout = false, children, className }: MenuProps) {
+export function Menu({
+  useMobileLayout = false,
+  display = 'dropdownOnHover',
+  children,
+  className,
+}: MenuProps) {
   return (
     <nav
-      className={clsx(styles.root, className)}
+      className={clsx('Menu', styles.root, className)}
       data-mobile-layout={useMobileLayout || undefined}
+      data-display={display}
       aria-label="Site navigation"
     >
       <ul className={styles.list}>{children}</ul>

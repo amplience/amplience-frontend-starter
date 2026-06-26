@@ -40,6 +40,14 @@ import {
   COLUMNS_BLOCK_SCHEMA,
   columnsBlockRegistryEntry,
 } from './organisms/ColumnsBlock/ColumnsBlock.registry'
+import {
+  FOOTER_BLOCK_SCHEMA,
+  footerBlockRegistryEntry,
+} from './organisms/FooterBlock/FooterBlock.registry'
+import {
+  FOOTER_ROW_SCHEMA,
+  footerRowRegistryEntry,
+} from './organisms/FooterBlock/FooterRow.registry'
 import { GRID_BLOCK_SCHEMA, gridBlockRegistryEntry } from './organisms/GridBlock/GridBlock.registry'
 import {
   HEADER_BLOCK_SCHEMA,
@@ -131,6 +139,8 @@ export const defaultRegistry: Registry = createRegistry([
   [ICON_BUTTON_SCHEMA, iconButtonRegistryEntry],
   [MENU_SCHEMA, menuRegistryEntry],
   [MENU_ITEM_SCHEMA, menuItemRegistryEntry],
+  [FOOTER_BLOCK_SCHEMA, footerBlockRegistryEntry],
+  [FOOTER_ROW_SCHEMA, footerRowRegistryEntry],
 ])
 
 // Re-export the schema URIs and entries so deployments composing bespoke
@@ -171,3 +181,4 @@ export {
   MENU_ITEM_SCHEMA,
   menuItemRegistryEntry,
 }
+export { FOOTER_BLOCK_SCHEMA, footerBlockRegistryEntry, FOOTER_ROW_SCHEMA, footerRowRegistryEntry }

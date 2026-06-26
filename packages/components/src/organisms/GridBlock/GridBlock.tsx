@@ -138,7 +138,7 @@ export function GridBlock({
       data-background-color={backgroundColor}
       style={cssVars}
     >
-      <Container maxWidth={maxWidth} gutter={gutter}>
+      <Container className={styles.container ?? ''} maxWidth={maxWidth} gutter={gutter}>
         <div className={styles.grid}>{children}</div>
       </Container>
     </section>

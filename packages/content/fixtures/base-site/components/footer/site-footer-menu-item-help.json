@@ -1,0 +1,36 @@
+{
+  "id": "a1b2c3d4-0005-4000-8000-000000000012",
+  "label": "Footer menu item — Help",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Help",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000012",
+      "deliveryKeys": { "values": [{ "value": "site/footer-menu-item-help" }] }
+    },
+    "label": "Help",
+    "link": "/help",
+    "children": [
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000013",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000014",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000015",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000016",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      }
+    ]
+  }
+}

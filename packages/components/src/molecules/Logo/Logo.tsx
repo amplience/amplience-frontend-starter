@@ -39,7 +39,7 @@ export function Logo({ image, link, className }: LogoProps) {
 
   if (link) {
     return (
-      <a href={link} className={clsx(styles.root, className)} aria-label="Home">
+      <a href={link} className={clsx('Logo', styles.root, className)} aria-label="Home">
         {img}
       </a>
     )

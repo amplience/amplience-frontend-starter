@@ -1,0 +1,45 @@
+{
+  "id": "a1b2c3d4-0005-4000-8000-000000000002",
+  "label": "Site — footer row 1",
+  "body": {
+    "_meta": {
+      "name": "Site — footer row 1",
+      "schema": "https://quadratic.amplience.com/v2/content/footer-row",
+      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000002",
+      "deliveryKeys": {
+        "values": [{ "value": "site/footer-row-1" }]
+      }
+    },
+    "backgroundColor": "dark",
+    "items": [
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000003",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000004",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000005",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000006",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

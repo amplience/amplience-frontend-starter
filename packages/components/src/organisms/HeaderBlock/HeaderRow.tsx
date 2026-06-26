@@ -1,6 +1,8 @@
 import clsx from 'clsx'
 import type { ReactNode } from 'react'
 
+import { Container } from '../../atoms/Container/Container'
+import type { ContainerProps } from '../../atoms/Container/Container'
 import styles from './HeaderRow.module.css'
 
 // ---------------------------------------------------------------------------
@@ -24,10 +26,11 @@ export type HeaderRowProps = {
    */
   backgroundColor?: HeaderRowColorToken
   /**
-   * Foreground (text + icon) colour token for this row. Inherits down the
-   * tree so Logos and IconButtons pick it up automatically.
+   * Max-width of the inner content container. The row itself always spans the
+   * full viewport width so the background colour bleeds edge-to-edge; only the
+   * items inside are constrained. Defaults to `"default"`.
    */
-  foregroundColor?: HeaderRowColorToken
+  maxWidth?: ContainerProps['maxWidth']
   children?: ReactNode
   className?: string
 }
@@ -51,17 +54,15 @@ export type HeaderRowProps = {
  */
 export function HeaderRow({
   backgroundColor,
-  foregroundColor,
+  maxWidth = 'default',
   children,
   className,
 }: HeaderRowProps) {
   return (
-    <div
-      className={clsx(styles.root, className)}
-      data-background-color={backgroundColor}
-      data-foreground-color={foregroundColor}
-    >
-      {children}
+    <div className={clsx(styles.root, className)} data-color={backgroundColor}>
+      <Container maxWidth={maxWidth} gutter className={clsx(styles.inner)}>
+        {children}
+      </Container>
     </div>
   )
 }

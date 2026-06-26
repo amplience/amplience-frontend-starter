@@ -1,0 +1,24 @@
+{
+  "id": "a1b2c3d4-0005-4000-8000-000000000005",
+  "label": "Footer menu — Shopping",
+  "body": {
+    "_meta": {
+      "name": "Footer menu — Shopping",
+      "schema": "https://quadratic.amplience.com/v2/content/menu",
+      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000005",
+      "deliveryKeys": {
+        "values": [{ "value": "site/footer-menu-shopping" }]
+      }
+    },
+    "display": "megaMenu",
+    "items": [
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000017",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

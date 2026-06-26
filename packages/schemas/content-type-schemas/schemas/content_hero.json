@@ -149,13 +149,14 @@
     },
     "contentWidth": {
       "type": "number",
-      "title": "Content width (px)",
+      "title": "Foreground Content width (px)",
       "minimum": 0
     },
     "contentPadding": {
       "type": "number",
-      "title": "Content padding (px)",
-      "minimum": 0
+      "title": "Foreground Content top+bottom padding (px)",
+      "minimum": 0,
+      "description": "Padding above and below the foreground content"
     },
     "maxWidth": {
       "type": "string",

@@ -6,9 +6,11 @@
  * override under [data-brand] without touching this file.
  *
  * Layout:
- *   - flex row, centred vertically, full width
- *   - horizontal padding from --site-gutter so items align with page content
- *   - gap between items from --space-3
+ *   .root  — full-viewport-width band; background colour lives here so it
+ *            always bleeds edge-to-edge regardless of maxWidth.
+ *   .inner — the Container inside .root; constrained to maxWidth, centred,
+ *            with site-gutter padding. Flex layout sits here so items align
+ *            within the content boundary, not the screen edge.
  *
  * Colour:
  *   data-background-color maps to the corresponding --color-* token.
@@ -17,62 +19,90 @@
  */
 
 .root {
+  width: 100%;
+}
+
+.inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  padding: var(--space-2, 8px) var(--site-gutter, 16px);
-  gap: var(--space-3, 12px);
+  gap: var(--spacing-3);
 }
 
 /* ---------------------------------------------------------------------------
-   Background colour tokens
+   Colour variants
    --------------------------------------------------------------------------- */
 
-.root[data-background-color='primary'] {
+.root[data-color='white'] {
+  background-color: var(--color-white);
+  color: var(--color-black);
+}
+
+.root[data-color='light'] {
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
+}
+
+.root[data-color='dark'] {
+  background-color: var(--color-gray-800);
+  color: var(--color-white);
+}
+
+.root[data-color='black'] {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.root[data-color='primary'] {
   background-color: var(--color-primary);
+  color: var(--color-primary-contrast);
 }
-.root[data-background-color='secondary'] {
+
+.root[data-color='secondary'] {
   background-color: var(--color-secondary);
+  color: var(--color-secondary-contrast);
 }
-.root[data-background-color='tertiary'] {
+
+.root[data-color='tertiary'] {
   background-color: var(--color-tertiary);
-}
-.root[data-background-color='light'] {
-  background-color: var(--color-light);
-}
-.root[data-background-color='dark'] {
-  background-color: var(--color-dark);
-}
-.root[data-background-color='black'] {
-  background-color: var(--color-black, #000);
-}
-.root[data-background-color='white'] {
-  background-color: var(--color-white, #fff);
+  color: var(--color-tertiary-contrast);
 }
 
 /* ---------------------------------------------------------------------------
-   Foreground colour tokens
+   Bleed — first/last items extend into the Container's gutter padding so their
+   tap targets reach the content boundary. The negative margin cancels exactly
+   the padding added by the Container's gutter, so nothing overflows visually.
+   Targets .inner (the Container) rather than .root, since gutter lives there.
    --------------------------------------------------------------------------- */
 
-.root[data-foreground-color='primary'] {
-  color: var(--color-primary);
+.inner,
+.inner > :global(.MenuGroup):first-child {
+  > :global(.Menu):first-child > ul > li:first-child > a {
+    margin-left: calc(var(--site-gutter) * -1);
+    padding-left: var(--site-gutter);
+  }
+
+  > :global(.Logo),
+  > :global(.IconButton) {
+    &:first-child {
+      margin-left: calc(var(--site-gutter) * -1);
+      padding-left: var(--site-gutter);
+    }
+  }
 }
-.root[data-foreground-color='secondary'] {
-  color: var(--color-secondary);
-}
-.root[data-foreground-color='tertiary'] {
-  color: var(--color-tertiary);
-}
-.root[data-foreground-color='light'] {
-  color: var(--color-light);
-}
-.root[data-foreground-color='dark'] {
-  color: var(--color-dark);
-}
-.root[data-foreground-color='black'] {
-  color: var(--color-black, #000);
-}
-.root[data-foreground-color='white'] {
-  color: var(--color-white, #fff);
+
+.inner,
+.inner > :global(.MenuGroup):last-child {
+  > :global(.Menu):last-child > ul > li:last-child > a {
+    margin-right: calc(var(--site-gutter) * -1);
+    padding-right: var(--site-gutter);
+  }
+
+  > :global(.Logo),
+  > :global(.IconButton) {
+    &:last-child {
+      margin-right: calc(var(--site-gutter) * -1);
+      padding-right: var(--site-gutter);
+    }
+  }
 }

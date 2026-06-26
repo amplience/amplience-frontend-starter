@@ -104,11 +104,15 @@
   height: auto;
 }
 
+.container {
+  z-index: 2;
+}
+
 .content {
   display: flex;
   flex-direction: column;
   gap: var(--hero-content-gap);
-  padding: var(--hero-padding-y) var(--hero-padding-x);
+  padding-block: var(--hero-padding-y);
 }
 
 .buttonGroup {
@@ -450,7 +454,6 @@
 
       & .container {
         position: relative;
-        z-index: 2;
       }
     }
 
@@ -473,7 +476,6 @@
 
       & .container {
         position: relative;
-        z-index: 2;
       }
     }
 
@@ -486,7 +488,6 @@
       & .container {
         position: absolute;
         inset: 0;
-        z-index: 2;
         display: flex;
         flex-direction: column;
         justify-content: var(--hero-v-justify);
@@ -566,7 +567,6 @@
       & .container {
         position: absolute;
         inset: 0;
-        z-index: 2;
         display: flex;
         flex-direction: column;
         justify-content: var(--hero-v-justify);

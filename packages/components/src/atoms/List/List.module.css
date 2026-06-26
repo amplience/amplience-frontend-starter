@@ -52,7 +52,7 @@
 }
 
 .root[data-gap='xs'] {
-  --list-gap: var(--spacing-1);
+  --list-gap: var(--spacing);
 }
 
 .root[data-gap='sm'] {

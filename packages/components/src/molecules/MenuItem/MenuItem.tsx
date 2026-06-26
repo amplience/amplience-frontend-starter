@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { Children } from 'react'
 import type { ReactNode } from 'react'
 
 import styles from './MenuItem.module.css'
@@ -46,7 +47,7 @@ export type MenuItemProps = {
  *   passes `bare: true` context so no additional wrapper is added.
  */
 export function MenuItem({ label, link, children, className }: MenuItemProps) {
-  const hasChildren = !!children
+  const hasChildren = Children.count(children) > 0
 
   return (
     <li className={clsx(styles.root, className)} data-has-children={hasChildren || undefined}>

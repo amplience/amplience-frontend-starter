@@ -8,13 +8,15 @@
  * is consistent whether or not the item is clickable.
  *
  * Sub-menu (.submenu):
- *   Hidden by default; revealed on :hover and :focus-within of the parent <li>
- *   so keyboard users can navigate in without JS. The sub-menu inherits nothing
- *   from the header row — it uses white background and black text as a safe
- *   default, which brands can override via [data-brand].
+ *   Structural CSS only here (list-style, margin, padding). Visibility,
+ *   positioning, and hover-reveal are entirely delegated to Menu.module.css,
+ *   which gates those rules behind [data-display] so each mode
+ *   (dropdownOnHover, megaMenuOnHover, megaMenu) behaves correctly. This file
+ *   must not apply display:none, position:absolute, or box-shadow to .submenu —
+ *   those would leak into megaMenu where the submenu is always visible.
  *
  * Brand overrides:
- *   [data-brand="acme"] .submenu { background: var(--color-dark); color: var(--color-white); }
+ *   [data-brand="acme"] :global([data-display='dropdownOnHover']) .submenu { background: ...; }
  */
 
 .root {
@@ -30,8 +32,8 @@
 .label {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1, 4px);
-  padding: var(--space-2, 8px) var(--space-3, 12px);
+  gap: var(--spacing-1);
+  padding: var(--spacing-2) var(--spacing-3);
   font-size: var(--font-size-sm, 0.875rem);
   font-weight: var(--font-weight-medium, 500);
   color: inherit;
@@ -43,50 +45,37 @@
   cursor: default;
 }
 
-.link:hover {
-  opacity: 0.75;
-}
+.link {
+  &:hover {
+    opacity: 0.75;
+    transition: 0.15s ease-in;
+  }
 
-.link:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
-  border-radius: var(--radius-sm, 2px);
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+    border-radius: var(--radius-sm, 2px);
+  }
 }
 
 /* ---------------------------------------------------------------------------
-   Sub-menu dropdown
+   Sub-menu — structural only
+   Visibility and positioning are owned by Menu.module.css so they can be
+   gated per display mode. This rule only resets the list chrome.
    --------------------------------------------------------------------------- */
 
 .submenu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  min-width: 200px;
-  background-color: var(--color-white, #fff);
-  color: var(--color-black, #000);
-  border-radius: var(--radius-sm, 4px);
-  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.12));
-  padding: var(--space-2, 8px) 0;
   list-style: none;
   margin: 0;
-  z-index: var(--z-submenu, 10);
+  padding: 0;
 }
 
-.root[data-has-children]:hover .submenu,
-.root[data-has-children]:focus-within .submenu {
-  display: block;
-}
-
-/* Sub-menu item links sit flush in the dropdown */
+/* Sub-menu item links: full-width block so the tap target fills the row.
+   Only meaningful inside dropdownOnHover/megaMenuOnHover panels, but the
+   extra display:block is harmless in megaMenu (links are already block there). */
 .submenu .link,
 .submenu .label {
   display: block;
   width: 100%;
-  padding: var(--space-2, 8px) var(--space-4, 16px);
-}
-
-/* data-open allows JS-driven open state as an alternative to :hover */
-.root[data-has-children][data-open] .submenu {
-  display: block;
+  padding: var(--spacing-1) var(--spacing-3);
 }
