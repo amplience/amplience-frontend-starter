@@ -70,7 +70,7 @@ describe('schema manifest', () => {
   })
 
   it('exposes content types as the non-partial subset', () => {
-    expect(contentTypeSchemas).toHaveLength(8)
+    expect(contentTypeSchemas).toHaveLength(17)
     expect(contentTypeSchemas.every((e) => e.validationLevel !== 'PARTIAL')).toBe(true)
     expect(findSchema('https://quadratic.amplience.com/v2/partials/image')?.validationLevel).toBe(
       'PARTIAL',

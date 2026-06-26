@@ -187,16 +187,16 @@ const importTypes = async () => {
     )
 
     // Inject one Web (label) entry per webApp, immediately after the localhost entry.
-    const vizs = data.settings?.visualizations
-    if (Array.isArray(vizs) && webApps.length > 0) {
-      const localhostIdx = vizs.findIndex((v) => v.label === 'Web (localhost)')
-      const insertAt = localhostIdx >= 0 ? localhostIdx : vizs.length - 1
+    const visualisations = data.settings?.visualizations
+    if (Array.isArray(visualisations) && webApps.length > 0) {
+      const localhostIdx = visualisations.findIndex((v) => v.label === 'Web (localhost)')
+      const insertAt = localhostIdx >= 0 ? localhostIdx : visualisations.length - 1
       const extra = webApps.map((site) => ({
         label: site.label !== '' ? `Web (${site.label})` : 'Web',
         templatedUri: `${site.url}/visualization?vse={{vse.domain}}&content={{content.sys.id}}`,
         default: false,
       }))
-      vizs.splice(insertAt, 0, ...extra)
+      visualisations.splice(insertAt, 0, ...extra)
     }
 
     writeFileSync(path.join(staged, file), JSON.stringify(data, null, 2) + '\n')
