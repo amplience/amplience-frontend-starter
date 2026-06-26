@@ -132,7 +132,8 @@ const dcCli = (...args) =>
     const watch = (stream, sink) => {
       stream.on('data', (chunk) => {
         const text = chunk.toString()
-        if (text.includes('ERROR') || text.includes('failed, aborting')) sawError = true
+        if (text.includes('ERROR') || text.includes('Error: ') || text.includes('failed, aborting'))
+          sawError = true
         sink.write(text)
       })
     }

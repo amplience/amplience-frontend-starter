@@ -300,20 +300,37 @@ function buildEnv(env: Environment, republish = false): NodeJS.ProcessEnv {
 type StreamWriter = { write: (text: string) => Promise<unknown> }
 
 /**
+ * Active child processes keyed by environment name.
+ * Used by the cancel endpoint to kill a running operation.
+ */
+const runningOps = new Map<string, ReturnType<typeof spawn>>()
+
+/**
  * Spawn a Node script, piping stdout + stderr into the Hono stream.
- * Resolves on exit 0, rejects with the exit code on failure.
+ * Resolves on clean exit, rejects on non-zero exit or signal kill.
+ * The optional `envName` is used to register the child in `runningOps`
+ * so the cancel endpoint can kill it.
  */
 function runScript(
   stream: StreamWriter,
   scriptPath: string,
   args: string[],
   env: NodeJS.ProcessEnv,
+  envName?: string,
 ): Promise<void> {
   return new Promise((resolve, reject) => {
+    // detached: true puts the child in its own process group so that a
+    // cancel can send SIGKILL to the whole group (node + any dc-cli grandchild).
     const child = spawn('node', [scriptPath, ...args], {
       cwd: SCHEMAS_ROOT,
       env,
+      detached: true,
     })
+
+    if (envName !== undefined) {
+      runningOps.set(envName, child)
+      console.log(`[runScript] registered pid=${String(child.pid)} for env="${envName}"`)
+    }
 
     child.stdout.on('data', (chunk: Buffer) => {
       void stream.write(chunk.toString())
@@ -322,11 +339,15 @@ function runScript(
       void stream.write(chunk.toString())
     })
     child.on('error', (err: Error) => {
+      if (envName !== undefined) runningOps.delete(envName)
       void stream.write(`\n✗ Failed to start process: ${err.message}\n`)
       reject(err)
     })
-    child.on('close', (code: number | null) => {
-      if (code === 0) {
+    child.on('close', (code: number | null, signal: string | null) => {
+      if (envName !== undefined) runningOps.delete(envName)
+      if (signal !== null) {
+        reject(new Error('Aborted'))
+      } else if (code === 0) {
         resolve()
       } else {
         reject(new Error(`Process exited with code ${code ?? 'unknown'}`))
@@ -574,12 +595,47 @@ app.post('/api/environments/:name/:op', async (c) => {
   return streamText(c, async (stream) => {
     await stream.writeln(`▶ ${opCfg.label} — "${env.label || env.name}"…\n`)
     try {
-      await runScript(stream, opCfg.script, opCfg.args, buildEnv(env, opCfg.republish))
+      await runScript(stream, opCfg.script, opCfg.args, buildEnv(env, opCfg.republish), name)
       await stream.writeln('\n✓ Done.')
     } catch (err) {
-      await stream.writeln(`\n✗ Failed: ${err instanceof Error ? err.message : String(err)}`)
+      const msg =
+        err instanceof Error && err.message === 'Aborted'
+          ? 'Aborted by user.'
+          : err instanceof Error
+            ? err.message
+            : String(err)
+      await stream.writeln(`\n✗ ${msg}`)
     }
   })
+})
+
+// DELETE /api/environments/:name/cancel  — kill the running operation for this environment
+app.delete('/api/environments/:name/cancel', (c) => {
+  const { name } = c.req.param()
+  const child = runningOps.get(name)
+  console.log(
+    `[cancel] name="${name}" keys=[${[...runningOps.keys()].join(', ')}] found=${child !== undefined}`,
+  )
+  if (child === undefined) return c.json({ error: 'No running operation.' }, 404)
+  // Kill the entire process group (negative PID) with SIGKILL so dc-cli grandchildren
+  // are also terminated immediately and cannot be ignored by a hung process.
+  const pid = child.pid
+  console.log(`[cancel] pid=${String(pid)} sending SIGKILL to process group -${String(pid)}`)
+  if (pid !== undefined) {
+    try {
+      process.kill(-pid, 'SIGKILL')
+      console.log(`[cancel] process.kill(-${pid}, SIGKILL) succeeded`)
+    } catch (err) {
+      console.log(
+        `[cancel] process.kill failed (${String(err)}), falling back to child.kill('SIGKILL')`,
+      )
+      child.kill('SIGKILL')
+    }
+  } else {
+    console.log(`[cancel] pid undefined, falling back to child.kill('SIGKILL')`)
+    child.kill('SIGKILL')
+  }
+  return c.json({ ok: true })
 })
 
 // ── Start ─────────────────────────────────────────────────────────────────────

@@ -38,4 +38,8 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ clientId, clientSecret }),
     }),
+  cancel: (name: string) =>
+    request<{ ok: boolean }>(`/environments/${encodeURIComponent(name)}/cancel`, {
+      method: 'DELETE',
+    }),
 }

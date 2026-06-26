@@ -44,8 +44,7 @@
               "contentType": {
                 "enum": [
                   "https://quadratic.amplience.com/v2/content/logo",
-                  "https://quadratic.amplience.com/v2/content/menu",
-                  "https://quadratic.amplience.com/v2/content/header-group"
+                  "https://quadratic.amplience.com/v2/content/menu"
                 ]
               }
             }
