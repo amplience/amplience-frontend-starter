@@ -96,6 +96,7 @@ export function App() {
                   void handleActivate(env.name)
                 }}
                 onEdit={() => setModal({ mode: 'edit', env })}
+                onUpdate={setConfig}
               />
             ))}
           </div>

@@ -6,13 +6,14 @@ export type Environment = {
   label: string
   hubName: string
   hubId: string
-  appUrl: string
+  localhostUrl: string
   repoContent: string
   repoSlots: string
   clientId: string
   clientSecret: string
   stagingHost: string
   defaultBrand: string
+  webApps: WebApp[]
   republish: boolean
 }
 
@@ -25,6 +26,12 @@ export type EnvironmentStats = {
   schemas: number
   types: number
   items: number
+}
+
+export type WebApp = {
+  label: string
+  url: string
+  brand: string
 }
 
 export type DiscoveredRepo = {
@@ -63,12 +70,13 @@ export const EMPTY_ENV: Environment = {
   label: '',
   hubName: '',
   hubId: '',
-  appUrl: 'http://localhost:3000',
+  localhostUrl: 'http://localhost:3000',
   repoContent: '',
   repoSlots: '',
   clientId: '',
   clientSecret: '',
   stagingHost: '',
   defaultBrand: '',
+  webApps: [],
   republish: false,
 }

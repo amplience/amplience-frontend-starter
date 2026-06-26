@@ -6,13 +6,14 @@
       "label": "My Hub (example)",
       "hubName": "",
       "hubId": "",
-      "appUrl": "http://localhost:3000",
+      "localhostUrl": "http://localhost:3000",
       "repoContent": "",
       "repoSlots": "",
       "clientId": "",
       "clientSecret": "",
       "stagingHost": "",
       "defaultBrand": "",
+      "webApps": [],
       "republish": false
     }
   ]

@@ -1,14 +1,46 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { api } from '../api.js'
-import type { Environment, EnvironmentStats, OpKey } from '../types.js'
+import type { Config, Environment, EnvironmentStats, OpKey, WebApp } from '../types.js'
 
 type Props = {
   env: Environment
   isActive: boolean
   onActivate: () => void
   onEdit: () => void
+  onUpdate: (updated: Config) => void
 }
+
+const EMPTY_SITE: WebApp = { label: '', url: '', brand: '' }
+
+// ── Micro icons ───────────────────────────────────────────────────────────────
+
+const GlobeIcon = () => (
+  <svg
+    aria-hidden="true"
+    className="site-row__icon"
+    width="12"
+    height="12"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+  >
+    <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM2.04 9h1.96c.08.85.22 1.65.42 2.38A6.02 6.02 0 0 1 2.04 9zm0-2a6.02 6.02 0 0 1 2.38-2.38C4.22 5.35 4.08 6.15 4 7H2.04zM9 4.12c.4.72.72 1.72.88 2.88H6.12c.16-1.16.48-2.16.88-2.88C7.28 4.05 7.64 4 8 4s.72.05 1 .12zM6.12 9h3.76c-.16 1.16-.48 2.16-.88 2.88A6.07 6.07 0 0 1 8 12c-.36 0-.72-.05-1-.12C6.6 11.16 6.28 10.16 6.12 9zm4.84 2.38c.2-.73.34-1.53.42-2.38h1.96a6.02 6.02 0 0 1-2.38 2.38zm.42-4.38c-.08-.85-.22-1.65-.42-2.38A6.02 6.02 0 0 1 13.96 7H12c-.08-.85-.22-1.65-.42-2.38z" />
+  </svg>
+)
+
+const PencilIcon = () => (
+  <svg aria-hidden="true" width="11" height="11" viewBox="0 0 10 10" fill="currentColor">
+    <path d="M7.5 0.5L9.5 2.5L3 9H1V7L7.5 0.5Z" />
+  </svg>
+)
+
+const TrashIcon = () => (
+  <svg aria-hidden="true" width="11" height="12" viewBox="0 0 10 12" fill="currentColor">
+    <path d="M3.5 0h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1z" />
+    <path d="M0 2h10v1H0z" />
+    <path d="M1.5 3.5l.7 8h5.6l.7-8H1.5z" />
+  </svg>
+)
 
 type OpStatus = 'running' | 'done' | 'error'
 
@@ -31,12 +63,131 @@ const OP_LABELS: Record<OpKey, string> = {
   'wipe-all': 'Wipe all',
 }
 
-export function EnvironmentCard({ env, isActive, onActivate, onEdit }: Props) {
+export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }: Props) {
   const [stats, setStats] = useState<EnvironmentStats | null>(null)
   const [statsError, setStatsError] = useState<string | null>(null)
   const [op, setOp] = useState<ActiveOp | null>(null)
   const [logExpanded, setLogExpanded] = useState(false)
   const logRef = useRef<HTMLPreElement>(null)
+
+  // ── Site management ────────────────────────────────────────────────────────
+  const [showAddSite, setShowAddSite] = useState(false)
+  const [siteForm, setSiteForm] = useState<WebApp>(EMPTY_SITE)
+  const [editingWebAppIdx, setEditingWebAppIdx] = useState<number | null>(null)
+  const [editWebAppForm, setEditWebAppForm] = useState<WebApp>(EMPTY_SITE)
+  const [editingLocalhost, setEditingLocalhost] = useState(false)
+  const [editLocalhostForm, setEditLocalhostForm] = useState({
+    localhostUrl: env.localhostUrl,
+    defaultBrand: env.defaultBrand,
+  })
+  const [sitesBusy, setSitesBusy] = useState(false)
+  const addSiteLabelRef = useRef<HTMLInputElement>(null)
+  const editLocalhostUrlRef = useRef<HTMLInputElement>(null)
+  const editWebAppFirstRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (showAddSite) addSiteLabelRef.current?.focus()
+  }, [showAddSite])
+
+  useEffect(() => {
+    if (editingLocalhost) editLocalhostUrlRef.current?.focus()
+  }, [editingLocalhost])
+
+  useEffect(() => {
+    if (editingWebAppIdx !== null) editWebAppFirstRef.current?.focus()
+  }, [editingWebAppIdx])
+
+  function startEditWebApp(index: number) {
+    setShowAddSite(false)
+    setEditingLocalhost(false)
+    setEditingWebAppIdx(index)
+    setEditWebAppForm({ ...env.webApps[index]! })
+  }
+
+  function startEditLocalhost() {
+    setShowAddSite(false)
+    setEditingWebAppIdx(null)
+    setEditLocalhostForm({ localhostUrl: env.localhostUrl, defaultBrand: env.defaultBrand })
+    setEditingLocalhost(true)
+  }
+
+  function cancelSiteEdit() {
+    setEditingWebAppIdx(null)
+    setEditingLocalhost(false)
+  }
+
+  async function handleAddSite(e: React.FormEvent) {
+    e.preventDefault()
+    setSitesBusy(true)
+    try {
+      const updated = await api.update(env.name, { ...env, webApps: [...env.webApps, siteForm] })
+      onUpdate(updated)
+      setSiteForm(EMPTY_SITE)
+      setShowAddSite(false)
+    } finally {
+      setSitesBusy(false)
+    }
+  }
+
+  async function handleSaveWebApp() {
+    if (editingWebAppIdx === null) return
+    setSitesBusy(true)
+    try {
+      const newWebApps = env.webApps.map((app, i) =>
+        i === editingWebAppIdx ? editWebAppForm : app,
+      )
+      const updated = await api.update(env.name, { ...env, webApps: newWebApps })
+      onUpdate(updated)
+      setEditingWebAppIdx(null)
+    } finally {
+      setSitesBusy(false)
+    }
+  }
+
+  async function handleRemoveWebApp() {
+    if (editingWebAppIdx === null) return
+    setSitesBusy(true)
+    try {
+      const updated = await api.update(env.name, {
+        ...env,
+        webApps: env.webApps.filter((_, i) => i !== editingWebAppIdx),
+      })
+      onUpdate(updated)
+      setEditingWebAppIdx(null)
+    } finally {
+      setSitesBusy(false)
+    }
+  }
+
+  async function handleSaveLocalhost() {
+    setSitesBusy(true)
+    try {
+      const updated = await api.update(env.name, { ...env, ...editLocalhostForm })
+      onUpdate(updated)
+      setEditingLocalhost(false)
+    } finally {
+      setSitesBusy(false)
+    }
+  }
+
+  /** Returns the display label for a webApp row — blank label renders as plain "Web". */
+  function siteDisplayLabel(app: WebApp) {
+    return app.label !== '' ? `Web (${app.label})` : 'Web'
+  }
+
+  /** Shared keydown handler for edit-mode inputs: Enter = save, Escape = cancel. */
+  function siteEditKeyDown(onSave: () => void) {
+    return (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        onSave()
+      }
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        cancelSiteEdit()
+      }
+    }
+  }
 
   const loadStats = useCallback(() => {
     void api
@@ -342,10 +493,250 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit }: Props) {
 
       {/* Sites */}
       <div className="env-card__sites">
-        {/* Sites will be listed here with simple info on their URL and their brand */
-        /* Every hub will have a localhost at least, listed with its brand */
-        /* But if the hub is deployed, it will have a URL and brand listed here as well */
-        /* In some cases in the future, there may be multiple deployed sites for a single hub, so we will list them all here */}
+        <div className="sites-header">
+          <span className="sites-header__title">Web apps</span>
+        </div>
+
+        <ul className="site-list">
+          {/* Localhost — always present */}
+          {editingLocalhost ? (
+            <li className="site-row site-row--localhost site-row--editing">
+              <GlobeIcon />
+              <span className="site-row__label--fixed">Web (localhost)</span>
+              <input
+                ref={editLocalhostUrlRef}
+                className="site-row__input site-row__input--url"
+                placeholder="http://localhost:3000"
+                value={editLocalhostForm.localhostUrl}
+                onChange={(e) =>
+                  setEditLocalhostForm((p) => ({ ...p, localhostUrl: e.target.value }))
+                }
+                onKeyDown={siteEditKeyDown(() => {
+                  void handleSaveLocalhost()
+                })}
+                disabled={sitesBusy}
+              />
+              <input
+                className="site-row__input"
+                placeholder="Brand (e.g. acme)"
+                value={editLocalhostForm.defaultBrand}
+                onChange={(e) =>
+                  setEditLocalhostForm((p) => ({ ...p, defaultBrand: e.target.value }))
+                }
+                onKeyDown={siteEditKeyDown(() => {
+                  void handleSaveLocalhost()
+                })}
+                disabled={sitesBusy}
+              />
+              <div className="site-row__actions">
+                <button
+                  type="button"
+                  className="site-action site-action--cancel"
+                  aria-label="Cancel"
+                  onClick={cancelSiteEdit}
+                  disabled={sitesBusy}
+                >
+                  ✕
+                </button>
+                <button
+                  type="button"
+                  className="site-action site-action--save"
+                  aria-label="Save"
+                  onClick={() => {
+                    void handleSaveLocalhost()
+                  }}
+                  disabled={sitesBusy}
+                >
+                  ✓
+                </button>
+              </div>
+            </li>
+          ) : (
+            <li className="site-row site-row--localhost">
+              <GlobeIcon />
+              <span className="site-row__label">Web (localhost)</span>
+              <span className="site-row__url">{env.localhostUrl}</span>
+              {env.defaultBrand !== '' && (
+                <span className="badge badge--brand badge--sm">{env.defaultBrand}</span>
+              )}
+              <button
+                className="btn--icon-only site-row__edit"
+                aria-label="Edit localhost"
+                onClick={startEditLocalhost}
+                disabled={isRunning || sitesBusy || editingWebAppIdx !== null}
+              >
+                <PencilIcon />
+              </button>
+            </li>
+          )}
+
+          {/* Additional deployed sites */}
+          {env.webApps.map((site, i) =>
+            editingWebAppIdx === i ? (
+              <li key={i} className="site-row site-row--editing">
+                <GlobeIcon />
+                <input
+                  ref={editWebAppFirstRef}
+                  className="site-row__input"
+                  placeholder="Label (blank = 'Web')"
+                  value={editWebAppForm.label}
+                  onChange={(e) => setEditWebAppForm((p) => ({ ...p, label: e.target.value }))}
+                  onKeyDown={siteEditKeyDown(() => {
+                    void handleSaveWebApp()
+                  })}
+                  disabled={sitesBusy}
+                />
+                <input
+                  className="site-row__input site-row__input--url"
+                  placeholder="URL (e.g. https://acme.vercel.app)"
+                  value={editWebAppForm.url}
+                  onChange={(e) => setEditWebAppForm((p) => ({ ...p, url: e.target.value }))}
+                  onKeyDown={siteEditKeyDown(() => {
+                    void handleSaveWebApp()
+                  })}
+                  disabled={sitesBusy}
+                />
+                <input
+                  className="site-row__input"
+                  placeholder="Brand (e.g. acme)"
+                  value={editWebAppForm.brand}
+                  onChange={(e) => setEditWebAppForm((p) => ({ ...p, brand: e.target.value }))}
+                  onKeyDown={siteEditKeyDown(() => {
+                    void handleSaveWebApp()
+                  })}
+                  disabled={sitesBusy}
+                />
+                <div className="site-row__actions">
+                  <button
+                    type="button"
+                    className="site-action site-action--cancel"
+                    aria-label="Cancel"
+                    onClick={cancelSiteEdit}
+                    disabled={sitesBusy}
+                  >
+                    ✕
+                  </button>
+                  <button
+                    type="button"
+                    className="site-action site-action--save"
+                    aria-label="Save"
+                    onClick={() => {
+                      void handleSaveWebApp()
+                    }}
+                    disabled={sitesBusy || !editWebAppForm.url}
+                  >
+                    ✓
+                  </button>
+                  <button
+                    type="button"
+                    className="site-action site-action--remove"
+                    aria-label="Remove"
+                    onClick={() => {
+                      void handleRemoveWebApp()
+                    }}
+                    disabled={sitesBusy}
+                  >
+                    <TrashIcon />
+                  </button>
+                </div>
+              </li>
+            ) : (
+              <li key={i} className="site-row">
+                <GlobeIcon />
+                <span className="site-row__label">{siteDisplayLabel(site)}</span>
+                <span className="site-row__url">{site.url}</span>
+                {site.brand !== '' && (
+                  <span className="badge badge--brand badge--sm">{site.brand}</span>
+                )}
+                <button
+                  className="btn--icon-only site-row__edit"
+                  aria-label={`Edit ${siteDisplayLabel(site)}`}
+                  onClick={() => startEditWebApp(i)}
+                  disabled={isRunning || sitesBusy || editingLocalhost}
+                >
+                  <PencilIcon />
+                </button>
+              </li>
+            ),
+          )}
+        </ul>
+
+        {/* Inline add-site form — hidden while editing any row */}
+        {!editingLocalhost &&
+          editingWebAppIdx === null &&
+          (showAddSite ? (
+            <form
+              className="add-site-form"
+              onSubmit={(e) => {
+                void handleAddSite(e)
+              }}
+            >
+              <input
+                ref={addSiteLabelRef}
+                className="add-site-form__input"
+                placeholder="Label (blank = 'Web')"
+                value={siteForm.label}
+                onChange={(e) => setSiteForm((p) => ({ ...p, label: e.target.value }))}
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') {
+                    setShowAddSite(false)
+                    setSiteForm(EMPTY_SITE)
+                  }
+                }}
+              />
+              <input
+                className="add-site-form__input add-site-form__input--url"
+                placeholder="URL (e.g. https://acme.vercel.app)"
+                value={siteForm.url}
+                onChange={(e) => setSiteForm((p) => ({ ...p, url: e.target.value }))}
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') {
+                    setShowAddSite(false)
+                    setSiteForm(EMPTY_SITE)
+                  }
+                }}
+                required
+              />
+              <input
+                className="add-site-form__input"
+                placeholder="Brand (e.g. acme)"
+                value={siteForm.brand}
+                onChange={(e) => setSiteForm((p) => ({ ...p, brand: e.target.value }))}
+                onKeyDown={(e) => {
+                  if (e.key === 'Escape') {
+                    setShowAddSite(false)
+                    setSiteForm(EMPTY_SITE)
+                  }
+                }}
+              />
+              <div className="add-site-form__actions">
+                <button type="submit" className="btn btn--sm btn--primary" disabled={sitesBusy}>
+                  {sitesBusy ? 'Adding…' : 'Add'}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--sm btn--ghost"
+                  onClick={() => {
+                    setShowAddSite(false)
+                    setSiteForm(EMPTY_SITE)
+                  }}
+                  disabled={sitesBusy}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className="add-site-form">
+              <button
+                className="btn btn--sm btn--ghost"
+                onClick={() => setShowAddSite(true)}
+                disabled={isRunning}
+              >
+                + Add site
+              </button>
+            </div>
+          ))}
       </div>
     </div>
   )
