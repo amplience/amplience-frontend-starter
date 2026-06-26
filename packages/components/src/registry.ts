@@ -29,12 +29,30 @@
 
 import type { AnyComponentRegistryEntry, Registry, SchemaURI } from '@amplience/quadratic-types'
 
+import {
+  ICON_BUTTON_SCHEMA,
+  iconButtonRegistryEntry,
+} from './molecules/IconButton/IconButton.registry'
+import { LOGO_SCHEMA, logoRegistryEntry } from './molecules/Logo/Logo.registry'
 import { MEDIA_CARD_SCHEMA, mediaCardRegistryEntry } from './molecules/MediaCard/MediaCard.registry'
+import { MENU_ITEM_SCHEMA, menuItemRegistryEntry } from './molecules/MenuItem/MenuItem.registry'
 import {
   COLUMNS_BLOCK_SCHEMA,
   columnsBlockRegistryEntry,
 } from './organisms/ColumnsBlock/ColumnsBlock.registry'
 import { GRID_BLOCK_SCHEMA, gridBlockRegistryEntry } from './organisms/GridBlock/GridBlock.registry'
+import {
+  HEADER_BLOCK_SCHEMA,
+  headerBlockRegistryEntry,
+} from './organisms/HeaderBlock/HeaderBlock.registry'
+import {
+  HEADER_GROUP_SCHEMA,
+  headerGroupRegistryEntry,
+} from './organisms/HeaderBlock/HeaderGroup.registry'
+import {
+  HEADER_ROW_SCHEMA,
+  headerRowRegistryEntry,
+} from './organisms/HeaderBlock/HeaderRow.registry'
 import { HERO_BLOCK_SCHEMA, heroBlockRegistryEntry } from './organisms/HeroBlock/HeroBlock.registry'
 import {
   IMAGE_BLOCK_SCHEMA,
@@ -44,6 +62,7 @@ import {
   MARKDOWN_BLOCK_SCHEMA,
   markdownBlockRegistryEntry,
 } from './organisms/MarkdownBlock/MarkdownBlock.registry'
+import { MENU_SCHEMA, menuRegistryEntry } from './organisms/Menu/Menu.registry'
 import { SLOT_SCHEMA, slotRegistryEntry } from './organisms/Slot/Slot.registry'
 import {
   PAGE_SCHEMA,
@@ -105,6 +124,13 @@ export const defaultRegistry: Registry = createRegistry([
   [COLUMNS_BLOCK_SCHEMA, columnsBlockRegistryEntry],
   [GRID_BLOCK_SCHEMA, gridBlockRegistryEntry],
   [MEDIA_CARD_SCHEMA, mediaCardRegistryEntry],
+  [HEADER_BLOCK_SCHEMA, headerBlockRegistryEntry],
+  [HEADER_ROW_SCHEMA, headerRowRegistryEntry],
+  [HEADER_GROUP_SCHEMA, headerGroupRegistryEntry],
+  [LOGO_SCHEMA, logoRegistryEntry],
+  [ICON_BUTTON_SCHEMA, iconButtonRegistryEntry],
+  [MENU_SCHEMA, menuRegistryEntry],
+  [MENU_ITEM_SCHEMA, menuItemRegistryEntry],
 ])
 
 // Re-export the schema URIs and entries so deployments composing bespoke
@@ -129,3 +155,19 @@ export {
   slotRegistryEntry,
 }
 export type { PageMetadata, PageMetadataOptions, PageRobots, PageSchema, PageSocialCard }
+export {
+  HEADER_BLOCK_SCHEMA,
+  headerBlockRegistryEntry,
+  HEADER_ROW_SCHEMA,
+  headerRowRegistryEntry,
+  HEADER_GROUP_SCHEMA,
+  headerGroupRegistryEntry,
+  LOGO_SCHEMA,
+  logoRegistryEntry,
+  ICON_BUTTON_SCHEMA,
+  iconButtonRegistryEntry,
+  MENU_SCHEMA,
+  menuRegistryEntry,
+  MENU_ITEM_SCHEMA,
+  menuItemRegistryEntry,
+}

@@ -43,6 +43,13 @@ export const viewport: Viewport = {
   themeColor,
 }
 
+/**
+ * Root layout — the minimal html/body shell shared by every route.
+ *
+ * Header and footer live in `(site)/layout.tsx` so they apply only to the
+ * main site routes, not to the visualization tool or any other isolated route
+ * that needs to control its own chrome.
+ */
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html

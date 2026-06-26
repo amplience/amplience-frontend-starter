@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/content_header-group.json",
+  "schemaId": "https://quadratic.amplience.com/v2/content/header-group",
+  "validationLevel": "CONTENT_TYPE"
+}

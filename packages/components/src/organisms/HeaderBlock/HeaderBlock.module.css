@@ -1,0 +1,25 @@
+/*
+ * HeaderBlock organism styles.
+ *
+ * .root is the <header> element. Background and foreground colours are
+ * applied by child HeaderRow components so each row can carry its own
+ * palette independently.
+ *
+ * Sticky:
+ *   data-sticky enables position:sticky so the header follows the viewport
+ *   without JS. z-index uses a --z-header token so brands can slot it into
+ *   their own stacking context without editing this file.
+ *
+ * Brand overrides:
+ *   [data-brand="acme"] .root { --z-header: 200; }
+ */
+
+.root {
+  width: 100%;
+  z-index: var(--z-header, 100);
+}
+
+.root[data-sticky] {
+  position: sticky;
+  top: 0;
+}

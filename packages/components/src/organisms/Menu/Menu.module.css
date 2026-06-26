@@ -1,0 +1,58 @@
+/*
+ * Menu organism styles.
+ *
+ * .root is the <nav> element. flex:1 makes the menu fill available space in
+ * a HeaderRow, pushing sibling items (e.g. icon buttons) to the edges.
+ *
+ * .list is the top-level <ul> of MenuItem children — a horizontal flex row
+ * on desktop. gap uses --space-1 so items are close-packed; brands can widen
+ * via the token override.
+ *
+ * Mobile layout (data-mobile-layout):
+ *   The list is hidden; the application/brand layer adds a hamburger button
+ *   and toggles data-open on the <nav> to reveal the drawer. The drawer
+ *   inherits background-color from the parent HeaderRow automatically.
+ *
+ * Brand overrides:
+ *   [data-brand="acme"] .list { gap: var(--space-6); }
+ */
+
+.root {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1, 4px);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+/* ---------------------------------------------------------------------------
+   Mobile layout
+   --------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  .root[data-mobile-layout] .list {
+    display: none;
+  }
+
+  .root[data-mobile-layout][data-open] .list {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: inherit;
+    padding: var(--space-4, 16px);
+    box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
+    z-index: var(--z-menu-drawer, 200);
+  }
+}

@@ -37,10 +37,10 @@ import { PAGE_SCHEMA, pageMetadataFromSchema } from '@amplience/quadratic-compon
 import type { PageSchema } from '@amplience/quadratic-components/registry'
 import { isContentClientError } from '@amplience/quadratic-content'
 
-import { client } from '../../lib/content-client'
-import { registry } from '../../lib/registry'
-import { deliveryKeyForSlug, pathForDeliveryKey } from '../../lib/routing'
-import { ContentUnavailableCard, emitContentFailure, renderContent } from '../../src/renderer'
+import { client } from '../../../lib/content-client'
+import { registry } from '../../../lib/registry'
+import { deliveryKeyForSlug, pathForDeliveryKey } from '../../../lib/routing'
+import { ContentUnavailableCard, emitContentFailure, renderContent } from '../../../src/renderer'
 
 type RouteProps = {
   params: Promise<{ slug?: string[] }>

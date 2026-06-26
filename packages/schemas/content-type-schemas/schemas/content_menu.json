@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/menu",
+  "title": "Menu",
+  "description": "A navigation menu — a hierarchy of menu items.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "📝 Content",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "📝 Content",
+            "pointers": ["/items"]
+          },
+          {
+            "label": "⚙️ Options",
+            "pointers": ["/useMobileLayout"]
+          }
+        ]
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "items": {
+      "title": "Menu items",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+          },
+          {
+            "properties": {
+              "contentType": {
+                "enum": ["https://quadratic.amplience.com/v2/content/menu-item"]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "useMobileLayout": {
+      "type": "boolean",
+      "title": "Use mobile menu layout on small screens",
+      "description": "Collapses the menu into a hamburger drawer on small viewports."
+    }
+  },
+  "propertyOrder": ["items", "useMobileLayout"]
+}

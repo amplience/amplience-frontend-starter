@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/menu-item",
+  "title": "Menu Item",
+  "description": "A single item in a navigation menu — with an optional link and optional child items.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "label": {
+      "type": "string",
+      "title": "Label",
+      "description": "Display text for this menu item."
+    },
+    "link": {
+      "type": "string",
+      "title": "Link",
+      "description": "URL this item navigates to. Omit for parent-only items."
+    },
+    "children": {
+      "title": "Child items",
+      "description": "Optional nested menu items.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+          },
+          {
+            "properties": {
+              "contentType": {
+                "enum": ["https://quadratic.amplience.com/v2/content/menu-item"]
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "propertyOrder": ["label", "link", "children"],
+  "required": ["label"]
+}

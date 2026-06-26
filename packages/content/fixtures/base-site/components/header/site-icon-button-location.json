@@ -1,0 +1,17 @@
+{
+  "id": "a1b2c3d4-0004-4000-8000-000000000005",
+  "label": "Site — icon button: store locator",
+  "body": {
+    "_meta": {
+      "name": "Site — icon button: store locator",
+      "schema": "https://quadratic.amplience.com/v2/content/icon-button",
+      "deliveryId": "a1b2c3d4-0004-4000-8000-000000000005",
+      "deliveryKeys": {
+        "values": [{ "value": "site/icon-button-location" }]
+      }
+    },
+    "icon": "map-pin",
+    "label": "Find a store",
+    "link": "/stores"
+  }
+}

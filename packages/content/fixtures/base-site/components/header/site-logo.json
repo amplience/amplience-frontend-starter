@@ -1,0 +1,21 @@
+{
+  "id": "a1b2c3d4-0004-4000-8000-000000000004",
+  "label": "Site — logo",
+  "body": {
+    "_meta": {
+      "name": "Site — logo",
+      "schema": "https://quadratic.amplience.com/v2/content/logo",
+      "deliveryId": "a1b2c3d4-0004-4000-8000-000000000004",
+      "deliveryKeys": {
+        "values": [{ "value": "site/logo" }]
+      }
+    },
+    "image": {
+      "src": "/favicon/apple-touch-icon.png",
+      "alt": "Quadratic logo",
+      "width": 40,
+      "height": 40
+    },
+    "link": "/"
+  }
+}

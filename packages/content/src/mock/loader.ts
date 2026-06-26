@@ -13,6 +13,28 @@ import aboutHero from '../../fixtures/base-site/components/about-hero.json' with
 import aboutMarkdown from '../../fixtures/base-site/components/about-markdown.json' with { type: 'json' }
 import docsHero from '../../fixtures/base-site/components/docs-hero.json' with { type: 'json' }
 import docsMarkdown from '../../fixtures/base-site/components/docs-markdown.json' with { type: 'json' }
+import siteHeaderGroupIcons from '../../fixtures/base-site/components/header/site-header-group-icons.json' with { type: 'json' }
+import siteHeaderRow1 from '../../fixtures/base-site/components/header/site-header-row-1.json' with { type: 'json' }
+import siteHeaderRow2 from '../../fixtures/base-site/components/header/site-header-row-2.json' with { type: 'json' }
+import siteHeader from '../../fixtures/base-site/components/header/site-header.json' with { type: 'json' }
+import siteIconButtonCart from '../../fixtures/base-site/components/header/site-icon-button-cart.json' with { type: 'json' }
+import siteIconButtonLocation from '../../fixtures/base-site/components/header/site-icon-button-location.json' with { type: 'json' }
+import siteIconButtonUser from '../../fixtures/base-site/components/header/site-icon-button-user.json' with { type: 'json' }
+import siteLogo from '../../fixtures/base-site/components/header/site-logo.json' with { type: 'json' }
+import siteMenuItemBlog from '../../fixtures/base-site/components/header/site-menu-item-blog.json' with { type: 'json' }
+import siteMenuItemKidsBaby from '../../fixtures/base-site/components/header/site-menu-item-kids-baby.json' with { type: 'json' }
+import siteMenuItemKidsBoys from '../../fixtures/base-site/components/header/site-menu-item-kids-boys.json' with { type: 'json' }
+import siteMenuItemKidsGirls from '../../fixtures/base-site/components/header/site-menu-item-kids-girls.json' with { type: 'json' }
+import siteMenuItemKids from '../../fixtures/base-site/components/header/site-menu-item-kids.json' with { type: 'json' }
+import siteMenuItemMensJackets from '../../fixtures/base-site/components/header/site-menu-item-mens-jackets.json' with { type: 'json' }
+import siteMenuItemMensShirts from '../../fixtures/base-site/components/header/site-menu-item-mens-shirts.json' with { type: 'json' }
+import siteMenuItemMensTrousers from '../../fixtures/base-site/components/header/site-menu-item-mens-trousers.json' with { type: 'json' }
+import siteMenuItemMens from '../../fixtures/base-site/components/header/site-menu-item-mens.json' with { type: 'json' }
+import siteMenuItemWomensAccessories from '../../fixtures/base-site/components/header/site-menu-item-womens-accessories.json' with { type: 'json' }
+import siteMenuItemWomensDresses from '../../fixtures/base-site/components/header/site-menu-item-womens-dresses.json' with { type: 'json' }
+import siteMenuItemWomensTops from '../../fixtures/base-site/components/header/site-menu-item-womens-tops.json' with { type: 'json' }
+import siteMenuItemWomens from '../../fixtures/base-site/components/header/site-menu-item-womens.json' with { type: 'json' }
+import siteMenuMain from '../../fixtures/base-site/components/header/site-menu-main.json' with { type: 'json' }
 import homeColumns2 from '../../fixtures/base-site/components/home-columns-2.json' with { type: 'json' }
 import homeColumnsImage from '../../fixtures/base-site/components/home-columns-image.json' with { type: 'json' }
 import homeColumnsMarkdown from '../../fixtures/base-site/components/home-columns-markdown.json' with { type: 'json' }
@@ -45,6 +67,28 @@ import type { EnrichedContentItem } from '../types'
  * runtime validation at.
  */
 const fixtures: readonly EnrichedContentItem[] = [
+  siteHeader,
+  siteHeaderRow1,
+  siteHeaderRow2,
+  siteLogo,
+  siteIconButtonLocation,
+  siteIconButtonUser,
+  siteIconButtonCart,
+  siteHeaderGroupIcons,
+  siteMenuMain,
+  siteMenuItemMens,
+  siteMenuItemMensShirts,
+  siteMenuItemMensTrousers,
+  siteMenuItemMensJackets,
+  siteMenuItemWomens,
+  siteMenuItemWomensDresses,
+  siteMenuItemWomensTops,
+  siteMenuItemWomensAccessories,
+  siteMenuItemKids,
+  siteMenuItemKidsBoys,
+  siteMenuItemKidsGirls,
+  siteMenuItemKidsBaby,
+  siteMenuItemBlog,
   homePage,
   homeMainSlot,
   homeHero,

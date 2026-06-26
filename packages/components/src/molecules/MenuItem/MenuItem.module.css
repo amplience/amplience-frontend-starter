@@ -1,0 +1,92 @@
+/*
+ * MenuItem molecule styles.
+ *
+ * .root is a <li>. It is position:relative so the sub-menu can be absolutely
+ * positioned below it without affecting sibling items.
+ *
+ * .link and .label share the same padding/font treatment so the visual rhythm
+ * is consistent whether or not the item is clickable.
+ *
+ * Sub-menu (.submenu):
+ *   Hidden by default; revealed on :hover and :focus-within of the parent <li>
+ *   so keyboard users can navigate in without JS. The sub-menu inherits nothing
+ *   from the header row — it uses white background and black text as a safe
+ *   default, which brands can override via [data-brand].
+ *
+ * Brand overrides:
+ *   [data-brand="acme"] .submenu { background: var(--color-dark); color: var(--color-white); }
+ */
+
+.root {
+  position: relative;
+  list-style: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Item label
+   --------------------------------------------------------------------------- */
+
+.link,
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1, 4px);
+  padding: var(--space-2, 8px) var(--space-3, 12px);
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: var(--font-weight-medium, 500);
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.label {
+  cursor: default;
+}
+
+.link:hover {
+  opacity: 0.75;
+}
+
+.link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+  border-radius: var(--radius-sm, 2px);
+}
+
+/* ---------------------------------------------------------------------------
+   Sub-menu dropdown
+   --------------------------------------------------------------------------- */
+
+.submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background-color: var(--color-white, #fff);
+  color: var(--color-black, #000);
+  border-radius: var(--radius-sm, 4px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.12));
+  padding: var(--space-2, 8px) 0;
+  list-style: none;
+  margin: 0;
+  z-index: var(--z-submenu, 10);
+}
+
+.root[data-has-children]:hover .submenu,
+.root[data-has-children]:focus-within .submenu {
+  display: block;
+}
+
+/* Sub-menu item links sit flush in the dropdown */
+.submenu .link,
+.submenu .label {
+  display: block;
+  width: 100%;
+  padding: var(--space-2, 8px) var(--space-4, 16px);
+}
+
+/* data-open allows JS-driven open state as an alternative to :hover */
+.root[data-has-children][data-open] .submenu {
+  display: block;
+}

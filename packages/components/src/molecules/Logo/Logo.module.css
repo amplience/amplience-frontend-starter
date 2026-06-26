@@ -1,0 +1,27 @@
+/*
+ * Logo molecule styles.
+ *
+ * .root wraps the logo image in an inline-flex container that prevents the
+ * image collapsing the line-height of surrounding flex rows.
+ *
+ * .image constrains the logo to --logo-height (default 40px) and lets the
+ * width scale naturally so the aspect ratio is preserved regardless of the
+ * intrinsic image dimensions.
+ *
+ * Brand resize:
+ *   [data-brand="acme"] { --logo-height: 56px; }
+ */
+
+.root {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.image {
+  display: block;
+  height: var(--logo-height, 40px);
+  width: auto;
+  object-fit: contain;
+}

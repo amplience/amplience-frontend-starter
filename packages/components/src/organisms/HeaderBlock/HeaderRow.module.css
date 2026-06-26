@@ -1,0 +1,78 @@
+/*
+ * HeaderRow styles.
+ *
+ * A horizontal flex row inside the header. Each row carries its own
+ * background and foreground colour, applied via data attributes so brands
+ * override under [data-brand] without touching this file.
+ *
+ * Layout:
+ *   - flex row, centred vertically, full width
+ *   - horizontal padding from --site-gutter so items align with page content
+ *   - gap between items from --space-3
+ *
+ * Colour:
+ *   data-background-color maps to the corresponding --color-* token.
+ *   data-foreground-color sets `color` so icons and text inside this row
+ *   inherit the foreground colour automatically via currentColor.
+ */
+
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-2, 8px) var(--site-gutter, 16px);
+  gap: var(--space-3, 12px);
+}
+
+/* ---------------------------------------------------------------------------
+   Background colour tokens
+   --------------------------------------------------------------------------- */
+
+.root[data-background-color='primary'] {
+  background-color: var(--color-primary);
+}
+.root[data-background-color='secondary'] {
+  background-color: var(--color-secondary);
+}
+.root[data-background-color='tertiary'] {
+  background-color: var(--color-tertiary);
+}
+.root[data-background-color='light'] {
+  background-color: var(--color-light);
+}
+.root[data-background-color='dark'] {
+  background-color: var(--color-dark);
+}
+.root[data-background-color='black'] {
+  background-color: var(--color-black, #000);
+}
+.root[data-background-color='white'] {
+  background-color: var(--color-white, #fff);
+}
+
+/* ---------------------------------------------------------------------------
+   Foreground colour tokens
+   --------------------------------------------------------------------------- */
+
+.root[data-foreground-color='primary'] {
+  color: var(--color-primary);
+}
+.root[data-foreground-color='secondary'] {
+  color: var(--color-secondary);
+}
+.root[data-foreground-color='tertiary'] {
+  color: var(--color-tertiary);
+}
+.root[data-foreground-color='light'] {
+  color: var(--color-light);
+}
+.root[data-foreground-color='dark'] {
+  color: var(--color-dark);
+}
+.root[data-foreground-color='black'] {
+  color: var(--color-black, #000);
+}
+.root[data-foreground-color='white'] {
+  color: var(--color-white, #fff);
+}

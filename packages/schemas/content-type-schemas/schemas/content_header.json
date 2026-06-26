@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/header",
+  "title": "Header",
+  "description": "Site header — one or more rows of navigation content.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "📝 Content",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "📝 Content",
+            "pointers": ["/rows"]
+          },
+          {
+            "label": "⚙️ Options",
+            "pointers": ["/sticky", "/maxWidth"]
+          }
+        ]
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "rows": {
+      "title": "Header rows",
+      "description": "Ordered list of header rows (e.g. logo row, nav row).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+          },
+          {
+            "properties": {
+              "contentType": {
+                "enum": ["https://quadratic.amplience.com/v2/content/header-row"]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sticky": {
+      "type": "boolean",
+      "title": "Sticky",
+      "description": "When true, the header remains fixed at the top of the viewport on scroll."
+    },
+    "maxWidth": {
+      "type": "string",
+      "enum": ["narrow", "default", "wide", "none"],
+      "title": "Max width",
+      "description": "Max-width constraint passed to child Containers.",
+      "default": "default"
+    }
+  },
+  "propertyOrder": ["rows", "sticky", "maxWidth"]
+}

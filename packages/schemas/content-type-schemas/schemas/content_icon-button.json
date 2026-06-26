@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/icon-button",
+  "title": "Icon Button",
+  "description": "A clickable icon from the design system's icon set.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "icon": {
+      "type": "string",
+      "enum": [
+        "menu",
+        "x",
+        "chevron-up",
+        "chevron-down",
+        "chevron-left",
+        "chevron-right",
+        "arrow-left",
+        "arrow-right",
+        "search",
+        "filter",
+        "sliders",
+        "layout-grid",
+        "list",
+        "eye",
+        "plus",
+        "minus",
+        "user",
+        "log-in",
+        "log-out",
+        "shopping-cart",
+        "shopping-bag",
+        "heart",
+        "tag",
+        "credit-card",
+        "package",
+        "truck",
+        "map-pin",
+        "trash",
+        "share",
+        "star",
+        "check",
+        "check-circle",
+        "alert-circle",
+        "info",
+        "cart"
+      ],
+      "title": "Icon"
+    },
+    "label": {
+      "type": "string",
+      "title": "Accessible label",
+      "description": "Screen reader label for this button (required for accessibility)."
+    },
+    "link": {
+      "type": "string",
+      "title": "Link",
+      "description": "URL this button navigates to."
+    }
+  },
+  "propertyOrder": ["icon", "label", "link"],
+  "required": ["icon", "label"]
+}

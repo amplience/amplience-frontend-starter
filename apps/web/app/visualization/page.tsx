@@ -34,7 +34,9 @@
  */
 
 import type { Metadata } from 'next'
+import type { ReactNode } from 'react'
 
+import { PAGE_SCHEMA } from '@amplience/quadratic-components/registry'
 import { isContentClientError, resolveContentConfig } from '@amplience/quadratic-content'
 import { makeSdkContentClient } from '@amplience/quadratic-content/sdk'
 
@@ -134,5 +136,28 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
     return <ContentUnavailableCard error={error} resource={contentId} />
   }
 
-  return renderContent(item, registry, { isTopOfPage: true })
+  const isPage = (item as { _meta?: { schema?: unknown } })?._meta?.schema === PAGE_SCHEMA
+
+  if (!isPage) {
+    return renderContent(item, registry, { isTopOfPage: true })
+  }
+
+  // For page items, render with site chrome so the visualization matches what
+  // a visitor would see. The header is fetched via the same VSE client so the
+  // editor sees the latest-saved version of the header too.
+  let header: ReactNode = null
+  try {
+    const headerContent = await client.getByKey('site/header', { depth: 'all' })
+    header = renderContent(headerContent, registry)
+  } catch {
+    // Not fatal — render without header rather than breaking the visualization.
+  }
+
+  return (
+    <>
+      {header}
+      <main>{renderContent(item, registry, { isTopOfPage: true })}</main>
+      <footer>Footer goes here</footer>
+    </>
+  )
 }
