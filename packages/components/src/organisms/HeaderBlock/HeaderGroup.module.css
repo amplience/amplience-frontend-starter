@@ -1,0 +1,13 @@
+/*
+ * HeaderGroup styles.
+ *
+ * Keeps a set of header items (Logo, IconButton, Menu) visually grouped
+ * within a space-between row. The row spreads its direct children; wrapping
+ * items in a group makes them stick together as one unit.
+ */
+
+.root {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}

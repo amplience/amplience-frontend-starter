@@ -1,0 +1,17 @@
+{
+  "id": "a1b2c3d4-0004-4000-8000-000000000006",
+  "label": "Site — icon button: account",
+  "body": {
+    "_meta": {
+      "name": "Site — icon button: account",
+      "schema": "https://quadratic.amplience.com/v2/content/icon-button",
+      "deliveryId": "a1b2c3d4-0004-4000-8000-000000000006",
+      "deliveryKeys": {
+        "values": [{ "value": "site/icon-button-user" }]
+      }
+    },
+    "icon": "user",
+    "label": "My account",
+    "link": "/account"
+  }
+}

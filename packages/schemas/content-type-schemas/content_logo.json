@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/content_logo.json",
+  "schemaId": "https://quadratic.amplience.com/v2/content/logo",
+  "validationLevel": "CONTENT_TYPE"
+}

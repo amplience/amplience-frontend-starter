@@ -50,7 +50,7 @@
 }
 
 .root[data-gap='xs'] {
-  --stack-gap: var(--spacing-1);
+  --stack-gap: var(--spacing);
 }
 
 .root[data-gap='sm'] {

@@ -1,0 +1,39 @@
+{
+  "id": "a1b2c3d4-0004-4000-8000-000000000017",
+  "label": "Menu item: Kids",
+  "body": {
+    "_meta": {
+      "name": "Menu item: Kids",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "a1b2c3d4-0004-4000-8000-000000000017",
+      "deliveryKeys": {
+        "values": [{ "value": "site/menu-item-kids" }]
+      }
+    },
+    "label": "Kids",
+    "link": "/kids",
+    "children": [
+      {
+        "id": "a1b2c3d4-0004-4000-8000-000000000018",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0004-4000-8000-000000000019",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0004-4000-8000-000000000020",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

@@ -1,8 +1,25 @@
-// Popup entry point.
+/**
+ * Popup entry point.
+ *
+ * Reads preferences from chrome.storage.local (not the DOM), so the popup
+ * reflects the persisted state rather than whatever happens to be injected in
+ * the current tab right now.
+ *
+ * On change:
+ *   1. Write the new value to storage (persists across refreshes).
+ *   2. Send an 'ql-apply' message to the content script (applies instantly
+ *      without a reload; the content script also re-applies on every page
+ *      load, so no DOM-read fallback is needed here).
+ *
+ * Storage keys (shared with entrypoints/content.ts):
+ *   'ql-brand'             — string
+ *   'ql-guides-containers' — boolean
+ */
 
 const pillEl = document.querySelector<HTMLSpanElement>('#pill')
 const pillLabel = document.querySelector<HTMLSpanElement>('#pill-label')
 const brandSelect = document.querySelector<HTMLSelectElement>('#brand-select')
+const guidesContainersEl = document.querySelector<HTMLInputElement>('#guides-containers')
 
 // ---------------------------------------------------------------------------
 // Tab helpers
@@ -37,31 +54,20 @@ async function detectBridge(tabId: number, tabUrl: string): Promise<void> {
 }
 
 // ---------------------------------------------------------------------------
-// INTERIM: Brand switcher — direct DOM manipulation via executeScript.
-// No bridge required: reads/writes data-brand on <html> directly.
-// Replace with bridge brand:set command once QL-84 handshake is in place.
+// Helpers — write to storage then message the content script
 // ---------------------------------------------------------------------------
 
-async function readBrand(tabId: number): Promise<string> {
+/**
+ * Send a message to the content script running in `tabId`. Swallows errors
+ * silently: if the content script isn't injected (e.g. non-matching origin)
+ * the storage write still happened and will take effect on the next page load.
+ */
+async function applyNow(tabId: number, payload: Record<string, unknown>): Promise<void> {
   try {
-    const [result] = await chrome.scripting.executeScript({
-      target: { tabId },
-      func: () => document.documentElement.dataset.brand ?? 'default',
-    })
-    return (result?.result as string | null) ?? 'default'
+    await chrome.tabs.sendMessage(tabId, { type: 'ql-apply', ...payload })
   } catch {
-    return 'default'
+    // Content script not present — change will apply on next full load.
   }
-}
-
-async function setBrand(tabId: number, brand: string): Promise<void> {
-  await chrome.scripting.executeScript({
-    target: { tabId },
-    func: (b: string) => {
-      document.documentElement.dataset.brand = b
-    },
-    args: [brand],
-  })
 }
 
 // ---------------------------------------------------------------------------
@@ -74,14 +80,32 @@ async function init(): Promise<void> {
 
   const { id: tabId, url: tabUrl } = tab
 
-  // Run bridge detection and brand read in parallel.
-  const [, currentBrand] = await Promise.all([detectBridge(tabId, tabUrl), readBrand(tabId)])
+  // Read persisted preferences and detect bridge in parallel.
+  const [, stored] = await Promise.all([
+    detectBridge(tabId, tabUrl),
+    chrome.storage.local.get(['ql-brand', 'ql-guides-containers']),
+  ])
+
+  const currentBrand = (stored['ql-brand'] as string | undefined) ?? 'default'
+  const guidesContainersOn = (stored['ql-guides-containers'] as boolean | undefined) ?? false
 
   if (brandSelect != null) {
     brandSelect.value = currentBrand
 
     brandSelect.addEventListener('change', () => {
-      void setBrand(tabId, brandSelect.value)
+      const brand = brandSelect.value
+      void chrome.storage.local.set({ 'ql-brand': brand })
+      void applyNow(tabId, { brand })
+    })
+  }
+
+  if (guidesContainersEl != null) {
+    guidesContainersEl.checked = guidesContainersOn
+
+    guidesContainersEl.addEventListener('change', () => {
+      const guidesContainers = guidesContainersEl.checked
+      void chrome.storage.local.set({ 'ql-guides-containers': guidesContainers })
+      void applyNow(tabId, { guidesContainers })
     })
   }
 }

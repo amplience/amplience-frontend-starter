@@ -1,0 +1,59 @@
+{
+  "id": "a1b2c3d4-0004-4000-8000-000000000008",
+  "label": "Site — main navigation menu",
+  "body": {
+    "_meta": {
+      "name": "Site — main navigation menu",
+      "schema": "https://quadratic.amplience.com/v2/content/menu",
+      "deliveryId": "a1b2c3d4-0004-4000-8000-000000000008",
+      "deliveryKeys": {
+        "values": [{ "value": "site/menu-main" }]
+      }
+    },
+    "useMobileLayout": true,
+    "items": [
+      {
+        "id": "a1b2c3d4-0004-4000-8000-100000000021",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0004-4000-8000-200000000021",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0004-4000-8000-000000000009",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0004-4000-8000-000000000013",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0004-4000-8000-000000000017",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0004-4000-8000-000000000021",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/content_header-row.json",
+  "schemaId": "https://quadratic.amplience.com/v2/content/header-row",
+  "validationLevel": "CONTENT_TYPE"
+}

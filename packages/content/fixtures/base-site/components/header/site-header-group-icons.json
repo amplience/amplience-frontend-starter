@@ -1,0 +1,37 @@
+{
+  "id": "a1b2c3d4-0004-4000-8000-000000000022",
+  "label": "Site — header icon group",
+  "body": {
+    "_meta": {
+      "name": "Site — header icon group",
+      "schema": "https://quadratic.amplience.com/v2/content/header-group",
+      "deliveryId": "a1b2c3d4-0004-4000-8000-000000000022",
+      "deliveryKeys": {
+        "values": [{ "value": "site/header-group-icons" }]
+      }
+    },
+    "items": [
+      {
+        "id": "a1b2c3d4-0004-4000-8000-000000000005",
+        "contentType": "https://quadratic.amplience.com/v2/content/icon-button",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0004-4000-8000-000000000006",
+        "contentType": "https://quadratic.amplience.com/v2/content/icon-button",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0004-4000-8000-000000000007",
+        "contentType": "https://quadratic.amplience.com/v2/content/icon-button",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

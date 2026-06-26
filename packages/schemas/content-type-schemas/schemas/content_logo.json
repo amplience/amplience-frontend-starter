@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/logo",
+  "title": "Logo",
+  "description": "A brand logo — an image with an optional link.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "image": {
+      "title": "Image",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/image"
+        }
+      ]
+    },
+    "link": {
+      "type": "string",
+      "title": "Link",
+      "description": "URL the logo links to (e.g. \"/\")."
+    }
+  },
+  "propertyOrder": ["image", "link"],
+  "required": ["image"]
+}

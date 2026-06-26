@@ -1,0 +1,16 @@
+{
+  "id": "a1b2c3d4-0004-4000-8000-000000000012",
+  "label": "Menu item: Mens — Jackets",
+  "body": {
+    "_meta": {
+      "name": "Menu item: Mens — Jackets",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "a1b2c3d4-0004-4000-8000-000000000012",
+      "deliveryKeys": {
+        "values": [{ "value": "site/menu-item-mens-jackets" }]
+      }
+    },
+    "label": "Jackets",
+    "link": "/mens/jackets"
+  }
+}

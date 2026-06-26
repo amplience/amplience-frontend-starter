@@ -270,13 +270,13 @@ export function HeroBlock({
         </div>
       )}
 
-      <Container className={styles.container ?? ''} maxWidth={maxWidth}>
+      <Container className={styles.container ?? ''} maxWidth={maxWidth} gutter>
         <div
           className={styles.content}
           style={
             {
               '--contentWidth': `${contentWidth}%`,
-              padding: contentPadding ?? undefined,
+              paddingBlock: contentPadding ?? undefined,
             } as CSSProperties
           }
         >

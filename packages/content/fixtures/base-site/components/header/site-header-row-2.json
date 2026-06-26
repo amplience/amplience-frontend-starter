@@ -1,0 +1,24 @@
+{
+  "id": "a1b2c3d4-0004-4000-8000-000000000003",
+  "label": "Site — header row 2 (nav menu)",
+  "body": {
+    "_meta": {
+      "name": "Site — header row 2",
+      "schema": "https://quadratic.amplience.com/v2/content/header-row",
+      "deliveryId": "a1b2c3d4-0004-4000-8000-000000000003",
+      "deliveryKeys": {
+        "values": [{ "value": "site/header-row-2" }]
+      }
+    },
+    "backgroundColor": "primary",
+    "items": [
+      {
+        "id": "a1b2c3d4-0004-4000-8000-000000000008",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

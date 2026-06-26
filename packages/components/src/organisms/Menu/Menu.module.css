@@ -1,0 +1,224 @@
+/*
+ * Menu organism styles.
+ *
+ * .root is the <nav> element. flex:1 makes the menu fill available space in
+ * a HeaderRow, pushing sibling items (e.g. icon buttons) to the edges.
+ *
+ * .list is the top-level <ul> of MenuItem children — a horizontal flex row
+ * on desktop. gap uses --spacing-1 so items are close-packed; brands can widen
+ * via the token override.
+ *
+ * Mobile layout (data-mobile-layout):
+ *   The list is hidden; the application/brand layer adds a hamburger button
+ *   and toggles data-open on the <nav> to reveal the drawer. The drawer
+ *   inherits background-color from the parent HeaderRow automatically.
+ *
+ * Brand overrides:
+ *   [data-brand="acme"] .list { gap: var(--spacing-6); }
+ */
+
+.root {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+/* ---------------------------------------------------------------------------
+   dropdownOnHover display mode (default)
+   Top-level items are horizontal. Hover on a top-level item shows its
+   submenu as a vertical list positioned absolutely below.
+   --------------------------------------------------------------------------- */
+
+.root[data-display='dropdownOnHover'] .list > li {
+  position: relative;
+}
+
+.root[data-display='dropdownOnHover'] .list > li > ul {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 160px;
+  list-style: none;
+  margin: 0;
+  padding: var(--spacing-2) 0;
+  background-color: var(--color-white);
+  color: var(--color-black);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
+  z-index: var(--z-menu-dropdown, 150);
+  flex-direction: column;
+}
+
+.root[data-display='dropdownOnHover'] .list > li:hover > ul,
+.root[data-display='dropdownOnHover'] .list > li:focus-within > ul {
+  display: flex;
+}
+
+.root[data-display='dropdownOnHover'] .list > li > ul > li > a,
+.root[data-display='dropdownOnHover'] .list > li > ul > li > span {
+  display: block;
+  padding: var(--spacing-2) var(--spacing-4);
+  white-space: nowrap;
+  text-decoration: none;
+  color: inherit;
+}
+
+.root[data-display='dropdownOnHover'] .list > li > ul > li > a:hover,
+.root[data-display='dropdownOnHover'] .list > li > ul > li > span:hover {
+  background-color: var(--color-gray-100);
+}
+
+/* ---------------------------------------------------------------------------
+   megaMenuOnHover display mode
+   Hover on a top-level item shows a wide full-width panel. Level-2 items
+   appear as bold column headers (horizontal), level-3 items list vertically
+   under each header.
+   --------------------------------------------------------------------------- */
+
+.root[data-display='megaMenuOnHover'] {
+  position: static;
+}
+
+.root[data-display='megaMenuOnHover'] .list > li {
+  position: static;
+}
+
+.root[data-display='megaMenuOnHover'] .list > li > ul {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--spacing-8);
+  list-style: none;
+  margin: 0;
+  padding: var(--spacing-6) var(--site-gutter);
+  background-color: var(--color-white);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
+  z-index: var(--z-menu-dropdown, 150);
+}
+
+.root[data-display='megaMenuOnHover'] .list > li:hover > ul,
+.root[data-display='megaMenuOnHover'] .list > li:focus-within > ul {
+  display: flex;
+}
+
+/* Level-2: bold column headers */
+.root[data-display='megaMenuOnHover'] .list > li > ul > li > a,
+.root[data-display='megaMenuOnHover'] .list > li > ul > li > span {
+  display: block;
+  font-weight: bold;
+  padding-bottom: var(--spacing-2);
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+}
+
+/* Level-3: regular-weight sub-items listed vertically */
+.root[data-display='megaMenuOnHover'] .list > li > ul > li > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.root[data-display='megaMenuOnHover'] .list > li > ul > li > ul > li > a,
+.root[data-display='megaMenuOnHover'] .list > li > ul > li > ul > li > span {
+  display: block;
+  font-weight: normal;
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.root[data-display='megaMenuOnHover'] .list > li > ul > li > ul > li > a:hover,
+.root[data-display='megaMenuOnHover'] .list > li > ul > li > ul > li > span:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------------------------
+   megaMenu display mode
+   Always expanded (no hover trigger). Level-1 items are bold column headers
+   laid out horizontally; level-2 items listed vertically under each.
+   Used in the footer.
+   --------------------------------------------------------------------------- */
+
+.root[data-display='megaMenu'] .list {
+  align-items: flex-start;
+}
+
+.root[data-display='megaMenu'] .list > li {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Level-1: bold column header */
+.root[data-display='megaMenu'] .list > li > a,
+.root[data-display='megaMenu'] .list > li > span {
+  display: block;
+  font-weight: bold;
+  padding-bottom: var(--spacing-2);
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Level-2: regular-weight sub-items listed vertically */
+.root[data-display='megaMenu'] .list > li > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.root[data-display='megaMenu'] .list > li > ul > li > a,
+.root[data-display='megaMenu'] .list > li > ul > li > span {
+  display: block;
+  font-weight: normal;
+  text-decoration: none;
+  color: inherit;
+}
+
+.root[data-display='megaMenu'] .list > li > ul > li > a:hover,
+.root[data-display='megaMenu'] .list > li > ul > li > span:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------------------------
+   Mobile layout
+   --------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  .root[data-mobile-layout] .list {
+    display: none;
+  }
+
+  .root[data-mobile-layout][data-open] .list {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: inherit;
+    padding: var(--spacing-4);
+    box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
+    z-index: var(--z-menu-drawer, 200);
+  }
+}

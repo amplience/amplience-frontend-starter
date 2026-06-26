@@ -1,0 +1,25 @@
+/*
+ * FooterBlock organism styles.
+ *
+ * .root is the <footer> element. Background and foreground colours are
+ * applied by child FooterRow components so each row can carry its own
+ * palette independently.
+ *
+ * Sticky:
+ *   data-sticky enables position:sticky so the footer follows the viewport
+ *   without JS. z-index uses a --z-footer token so brands can slot it into
+ *   their own stacking context without editing this file.
+ *
+ * Brand overrides:
+ *   [data-brand="acme"] .root { --z-footer: 100; }
+ */
+
+.root {
+  width: 100%;
+  z-index: var(--z-footer, 10);
+}
+
+.root[data-sticky] {
+  position: sticky;
+  bottom: 0;
+}

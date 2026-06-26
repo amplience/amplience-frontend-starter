@@ -22,7 +22,7 @@ export default defineConfig({
         '128': 'icons/icon-128.png',
       },
     },
-    permissions: ['activeTab', 'scripting'],
+    permissions: ['activeTab', 'scripting', 'storage'],
     // Static grants cover local dev. Custom demo domains are handled via
     // optional_host_permissions — Chrome prompts once per origin.
     host_permissions: ['http://localhost:*/*', 'https://*.vercel.app/*'],

@@ -36,6 +36,9 @@
   box-sizing: border-box;
   background-color: var(--grid-block-background-color);
   color: var(--grid-block-text-color);
+}
+
+.container {
   padding-block: var(--grid-block-padding-y);
 }
 

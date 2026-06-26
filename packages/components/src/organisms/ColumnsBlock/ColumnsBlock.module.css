@@ -30,6 +30,9 @@
   box-sizing: border-box;
   background-color: var(--columns-block-background-color);
   color: var(--columns-block-text-color);
+}
+
+.container {
   padding-block: var(--columns-block-padding-y);
 }
 

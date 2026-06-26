@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/content_icon-button.json",
+  "schemaId": "https://quadratic.amplience.com/v2/content/icon-button",
+  "validationLevel": "CONTENT_TYPE"
+}

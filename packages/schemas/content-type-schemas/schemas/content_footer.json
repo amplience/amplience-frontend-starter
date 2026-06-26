@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/footer",
+  "title": "Footer",
+  "description": "Site footer — one or more rows of navigation content.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "📝 Content",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "📝 Content",
+            "pointers": ["/rows"]
+          },
+          {
+            "label": "⚙️ Options",
+            "pointers": ["/sticky", "/maxWidth"]
+          }
+        ]
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "rows": {
+      "title": "Footer rows",
+      "description": "Ordered list of footer rows.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+          },
+          {
+            "properties": {
+              "contentType": {
+                "enum": ["https://quadratic.amplience.com/v2/content/footer-row"]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sticky": {
+      "type": "boolean",
+      "title": "Sticky",
+      "description": "When true, the footer remains fixed at the bottom of the viewport.",
+      "default": false
+    },
+    "maxWidth": {
+      "type": "string",
+      "enum": ["narrow", "default", "wide", "none"],
+      "title": "Max width",
+      "description": "Max-width constraint passed to child Containers.",
+      "default": "default"
+    }
+  },
+  "propertyOrder": ["rows", "sticky", "maxWidth"]
+}

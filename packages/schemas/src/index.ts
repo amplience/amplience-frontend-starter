@@ -15,11 +15,20 @@
  */
 
 import contentColumns from '../content-type-schemas/schemas/content_columns.json'
+import contentFooterRow from '../content-type-schemas/schemas/content_footer-row.json'
+import contentFooter from '../content-type-schemas/schemas/content_footer.json'
 import contentGrid from '../content-type-schemas/schemas/content_grid.json'
+import contentHeaderGroup from '../content-type-schemas/schemas/content_header-group.json'
+import contentHeaderRow from '../content-type-schemas/schemas/content_header-row.json'
+import contentHeader from '../content-type-schemas/schemas/content_header.json'
 import contentHero from '../content-type-schemas/schemas/content_hero.json'
+import contentIconButton from '../content-type-schemas/schemas/content_icon-button.json'
 import contentImage from '../content-type-schemas/schemas/content_image.json'
+import contentLogo from '../content-type-schemas/schemas/content_logo.json'
 import contentMarkdownBlock from '../content-type-schemas/schemas/content_markdown-block.json'
 import contentMediaCard from '../content-type-schemas/schemas/content_media-card.json'
+import contentMenuItem from '../content-type-schemas/schemas/content_menu-item.json'
+import contentMenu from '../content-type-schemas/schemas/content_menu.json'
 import contentPage from '../content-type-schemas/schemas/content_page.json'
 import partialsCta from '../content-type-schemas/schemas/partials_cta.json'
 import partialsImage from '../content-type-schemas/schemas/partials_image.json'
@@ -62,6 +71,15 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(contentMediaCard, 'CONTENT_TYPE'),
   entry(contentImage, 'CONTENT_TYPE'),
   entry(slotsSlot, 'SLOT'),
+  entry(contentHeader, 'CONTENT_TYPE'),
+  entry(contentHeaderRow, 'CONTENT_TYPE'),
+  entry(contentHeaderGroup, 'CONTENT_TYPE'),
+  entry(contentLogo, 'CONTENT_TYPE'),
+  entry(contentIconButton, 'CONTENT_TYPE'),
+  entry(contentMenu, 'CONTENT_TYPE'),
+  entry(contentMenuItem, 'CONTENT_TYPE'),
+  entry(contentFooter, 'CONTENT_TYPE'),
+  entry(contentFooterRow, 'CONTENT_TYPE'),
 ]
 
 /** Manifest entries that register as content types (CONTENT_TYPE + SLOT). */

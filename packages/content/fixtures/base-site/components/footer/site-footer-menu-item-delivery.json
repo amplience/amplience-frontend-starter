@@ -1,0 +1,38 @@
+{
+  "id": "a1b2c3d4-0005-4000-8000-000000000007",
+  "label": "Footer menu item — Delivery",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Delivery",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000007",
+      "deliveryKeys": {
+        "values": [{ "value": "site/footer-menu-item-delivery" }]
+      }
+    },
+    "label": "Delivery",
+    "link": "/delivery",
+    "children": [
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000008",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000009",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000010",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      },
+      {
+        "id": "a1b2c3d4-0005-4000-8000-000000000011",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": { "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link" }
+      }
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/header-group",
+  "title": "Header Group",
+  "description": "A grouping wrapper for header items — keeps its children visually together within a space-between row.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "items": {
+      "title": "Items",
+      "description": "Ordered list of items to group together (Logo, Menu, or IconButton).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+          },
+          {
+            "properties": {
+              "contentType": {
+                "enum": [
+                  "https://quadratic.amplience.com/v2/content/logo",
+                  "https://quadratic.amplience.com/v2/content/icon-button",
+                  "https://quadratic.amplience.com/v2/content/menu"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "propertyOrder": ["items"]
+}

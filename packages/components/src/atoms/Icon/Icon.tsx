@@ -77,6 +77,7 @@ const icons = {
   'log-out': LogOut,
   // Commerce
   'shopping-cart': ShoppingCart,
+  cart: ShoppingCart,
   'shopping-bag': ShoppingBag,
   heart: Heart,
   tag: Tag,
