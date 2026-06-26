@@ -258,7 +258,8 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
 
       setOp((prev) => {
         if (!prev) return null
-        return { ...prev, status: prev.log.includes('✗') ? 'error' : 'done' }
+        const hasError = prev.log.includes('✗') || prev.log.includes('Error: ')
+        return { ...prev, status: hasError ? 'error' : 'done' }
       })
 
       // Refresh counts after the operation settles
@@ -266,6 +267,15 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error'
       setOp((prev) => (prev ? { ...prev, status: 'error', log: `${prev.log}\n✗ ${msg}` } : null))
+    }
+  }
+
+  async function handleAbort() {
+    try {
+      await api.cancel(env.name)
+    } catch {
+      // If the cancel call itself fails (e.g. op already finished), just let
+      // the stream drain normally — the status will resolve on its own.
     }
   }
 
@@ -468,7 +478,18 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                 <span className="log-status log-status--err">⚠ failed</span>
               )}
             </span>
-            {op.status !== 'running' && (
+            {op.status === 'running' ? (
+              <button
+                className="log-abort"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  void handleAbort()
+                }}
+                aria-label="Abort operation"
+              >
+                ■ Stop
+              </button>
+            ) : (
               <button
                 className="log-close"
                 onClick={(e) => {
@@ -477,7 +498,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                 }}
                 aria-label="Dismiss log"
               >
-                ✕
+                ✕ Dismiss
               </button>
             )}
           </div>

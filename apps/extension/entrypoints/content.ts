@@ -14,7 +14,8 @@
  *      preference in the popup takes effect instantly without a reload.
  *
  * Storage keys (shared with popup/main.ts):
- *   'ql-brand'             — string, e.g. 'default' | 'acme'
+ *   'ql-brand'             — string, e.g. 'default' | 'anyafinn'; absent or
+ *                            'current' means "leave data-brand as the site set it"
  *   'ql-guides-containers' — boolean
  */
 
@@ -50,6 +51,18 @@ function applyBrand(brand: string): void {
   document.documentElement.dataset.brand = brand
 }
 
+/**
+ * Restores data-brand to the value the site rendered into the HTML — called
+ * when the user switches back to "Current Theme" in the popup.
+ */
+function resetBrand(originalBrand: string | undefined): void {
+  if (originalBrand != null) {
+    document.documentElement.dataset.brand = originalBrand
+  } else {
+    delete document.documentElement.dataset.brand
+  }
+}
+
 function applyGuidesContainers(enabled: boolean): void {
   const existing = document.getElementById(GUIDES_CONTAINERS_ID)
   if (enabled && existing == null) {
@@ -81,7 +94,7 @@ function watchHead(getGuidesOn: () => boolean): MutationObserver {
 // ---------------------------------------------------------------------------
 
 type ApplyMessage =
-  | { type: 'ql-apply'; brand: string }
+  | { type: 'ql-apply'; brand: string | null } // null = reset to site's original value
   | { type: 'ql-apply'; guidesContainers: boolean }
 
 // ---------------------------------------------------------------------------
@@ -93,13 +106,20 @@ export default defineContentScript({
   runAt: 'document_end',
 
   async main() {
+    // Snapshot the server-rendered data-brand before we touch anything.
+    // This lets us restore it if the user later picks "Current Theme".
+    const originalBrand = document.documentElement.dataset.brand
+
     // Read all persisted preferences in one call.
     const stored = await chrome.storage.local.get(['ql-brand', 'ql-guides-containers'])
-    const brand = (stored['ql-brand'] as string | undefined) ?? 'default'
+    const brand = stored['ql-brand'] as string | undefined
     let guidesOn = (stored['ql-guides-containers'] as boolean | undefined) ?? false
 
-    // Apply on initial load.
-    applyBrand(brand)
+    // Apply on initial load — skip if no brand stored or 'current' selected,
+    // leaving data-brand exactly as the site set it.
+    if (brand !== undefined && brand !== 'current') {
+      applyBrand(brand)
+    }
     applyGuidesContainers(guidesOn)
 
     // Re-inject guide style if Next.js SPA navigation removes it from <head>.
@@ -109,7 +129,11 @@ export default defineContentScript({
     chrome.runtime.onMessage.addListener((message: ApplyMessage) => {
       if (message.type !== 'ql-apply') return
       if ('brand' in message) {
-        applyBrand(message.brand)
+        if (message.brand === null) {
+          resetBrand(originalBrand)
+        } else {
+          applyBrand(message.brand)
+        }
       }
       if ('guidesContainers' in message) {
         guidesOn = message.guidesContainers

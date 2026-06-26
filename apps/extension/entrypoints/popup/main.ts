@@ -86,7 +86,8 @@ async function init(): Promise<void> {
     chrome.storage.local.get(['ql-brand', 'ql-guides-containers']),
   ])
 
-  const currentBrand = (stored['ql-brand'] as string | undefined) ?? 'default'
+  // No stored brand means "leave the site alone" — represented in the UI as 'current'.
+  const currentBrand = (stored['ql-brand'] as string | undefined) ?? 'current'
   const guidesContainersOn = (stored['ql-guides-containers'] as boolean | undefined) ?? false
 
   if (brandSelect != null) {
@@ -94,8 +95,15 @@ async function init(): Promise<void> {
 
     brandSelect.addEventListener('change', () => {
       const brand = brandSelect.value
-      void chrome.storage.local.set({ 'ql-brand': brand })
-      void applyNow(tabId, { brand })
+      if (brand === 'current') {
+        // Remove the preference entirely — content script will restore the
+        // site's original data-brand on next load; do it instantly now.
+        void chrome.storage.local.remove('ql-brand')
+        void applyNow(tabId, { brand: null })
+      } else {
+        void chrome.storage.local.set({ 'ql-brand': brand })
+        void applyNow(tabId, { brand })
+      }
     })
   }
 
