@@ -15,7 +15,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = path.resolve(__dirname, '..', '..', '..')
 const SCHEMAS_ROOT = path.join(REPO_ROOT, 'packages', 'schemas')
 const CONFIG_PATH = path.join(REPO_ROOT, 'quadratic.config.json')
-const EXAMPLE_PATH = path.join(REPO_ROOT, 'quadratic.config.example.json')
 const WEB_ENV_LOCAL = path.join(REPO_ROOT, 'apps', 'web', '.env.local')
 const SCHEMAS_ENV = path.join(SCHEMAS_ROOT, '.env')
 const PORT = 3099
@@ -51,8 +50,10 @@ type Config = {
 // ── Config helpers ────────────────────────────────────────────────────────────
 
 async function readConfig(): Promise<Config> {
-  const filePath = existsSync(CONFIG_PATH) ? CONFIG_PATH : EXAMPLE_PATH
-  const raw = await readFile(filePath, 'utf-8')
+  if (!existsSync(CONFIG_PATH)) {
+    return { active: FIXTURES_NAME, environments: [] }
+  }
+  const raw = await readFile(CONFIG_PATH, 'utf-8')
   return JSON.parse(raw) as Config
 }
 
@@ -443,9 +444,11 @@ app.post('/api/environments', async (c) => {
 
   config.environments.push(body)
 
-  // Auto-activate if this is the first environment
+  // Auto-activate if this is the first environment, and write env files so
+  // the web app picks up the new hub immediately without a manual activate.
   if (config.environments.length === 1) {
     config.active = body.name
+    await writeActiveEnvFiles(body)
   }
 
   await writeConfig(config)
@@ -643,6 +646,6 @@ app.delete('/api/environments/:name/cancel', (c) => {
 serve({ fetch: app.fetch, port: PORT }, () => {
   console.log(`  ➜  API server running at http://localhost:${PORT}`)
   console.log(
-    `  ➜  Config: ${existsSync(CONFIG_PATH) ? CONFIG_PATH : `${EXAMPLE_PATH} (example — will write to ${CONFIG_PATH})`}`,
+    `  ➜  Config: ${existsSync(CONFIG_PATH) ? CONFIG_PATH : `${CONFIG_PATH} (not yet created — starting blank)`}`,
   )
 })
