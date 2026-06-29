@@ -1,0 +1,20 @@
+{
+  "contentTypeUri": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+  "status": "ACTIVE",
+  "settings": {
+    "label": "Hierarchy Menu Item",
+    "visualizations": [
+      {
+        "label": "Web (localhost)",
+        "templatedUri": "${localhostUrl}/visualization?vse={{vse.domain}}&content={{content.sys.id}}",
+        "default": true
+      },
+      {
+        "label": "JSON",
+        "templatedUri": "https://delivery-preview.visualizations.content.amplience.net?id={{content.sys.id}}&vse={{vse.domain}}&hub=${hub}&realtime=true",
+        "default": false
+      }
+    ]
+  },
+  "repositories": ["content"]
+}
