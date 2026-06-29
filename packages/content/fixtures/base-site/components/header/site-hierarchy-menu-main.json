@@ -1,0 +1,15 @@
+{
+  "id": "c3d4e5f6-0004-4000-8000-000000000001",
+  "label": "Site — main navigation menu (hierarchy)",
+  "body": {
+    "_meta": {
+      "name": "Site — main navigation menu (hierarchy)",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu",
+      "deliveryId": "c3d4e5f6-0004-4000-8000-000000000001",
+      "deliveryKeys": {
+        "values": [{ "value": "site/hierarchy-menu-main" }]
+      }
+    },
+    "useMobileLayout": true
+  }
+}

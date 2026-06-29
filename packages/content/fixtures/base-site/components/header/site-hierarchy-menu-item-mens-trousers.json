@@ -1,0 +1,16 @@
+{
+  "id": "c3d4e5f6-0004-4000-8000-000000000004",
+  "label": "Hierarchy menu item: Mens — Trousers",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Mens — Trousers",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "c3d4e5f6-0004-4000-8000-000000000004",
+      "deliveryKeys": {
+        "values": [{ "value": "site/hierarchy-menu-item-mens-trousers" }]
+      }
+    },
+    "label": "Trousers",
+    "link": "/mens/trousers"
+  }
+}

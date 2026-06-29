@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/hierarchy-menu",
+  "title": "Hierarchy Menu",
+  "description": "A navigation menu managed as an Amplience hierarchy — editors see a native tree UI for authoring nested items. Functionally equivalent to Menu; the difference is authoring experience only. Both content types render using the same Menu and MenuItem components.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    },
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v2/hierarchy#/definitions/hierarchy-node"
+    }
+  ],
+  "trait:hierarchy": {
+    "childContentTypes": ["https://quadratic.amplience.com/v2/content/hierarchy-menu-item"]
+  },
+  "trait:sortable": {
+    "sortBy": [
+      {
+        "key": "default",
+        "paths": ["/_meta/hierarchy/position"]
+      }
+    ]
+  },
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "⚙️ Options",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "⚙️ Options",
+            "pointers": ["/useMobileLayout", "/display"]
+          }
+        ]
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "useMobileLayout": {
+      "type": "boolean",
+      "title": "Use mobile menu layout on small screens",
+      "description": "Collapses the menu into a hamburger drawer on small viewports."
+    },
+    "display": {
+      "type": "string",
+      "enum": ["dropdownOnHover", "megaMenuOnHover", "megaMenu"],
+      "title": "Display mode",
+      "description": "Controls how the menu renders: dropdownOnHover (default top-nav), megaMenuOnHover (wide panel on hover), or megaMenu (always expanded, for footers).",
+      "default": "dropdownOnHover"
+    }
+  },
+  "propertyOrder": ["useMobileLayout", "display"]
+}

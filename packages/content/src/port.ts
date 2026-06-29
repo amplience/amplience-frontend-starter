@@ -31,4 +31,20 @@ export type ContentClient = {
    * Throws `ContentClientError({ kind: 'not-found' })` if no item matches.
    */
   getById<T = unknown>(id: string, opts?: ContentRequestOptions): Promise<ContentItem<T>>
+
+  /**
+   * Fetch a hierarchy content item by its root delivery key and assemble the
+   * full tree inline — children are injected under `items` (root) and
+   * `children` (nodes), matching the shape that `depth: 'all'` produces for
+   * array-based Menu content. This lets the existing dispatcher and registry
+   * entries work without modification.
+   *
+   * Used for HierarchyMenu content types. The mock implementation reads a
+   * static hierarchy manifest; the SDK implementation (QL-129) will use the
+   * dc-delivery-sdk-js Filter API.
+   *
+   * Throws `ContentClientError({ kind: 'not-found' })` if no hierarchy matches
+   * the given root key.
+   */
+  getHierarchy<T = unknown>(rootKey: string): Promise<ContentItem<T>>
 }

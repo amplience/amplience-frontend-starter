@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+  "title": "Hierarchy Menu Item",
+  "description": "A single node in a Hierarchy Menu. Child items are managed by DC's hierarchy tree UI — no inline children array. Renders using the same MenuItem component as the array-based MenuItem content type.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    },
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v2/hierarchy#/definitions/hierarchy-node"
+    }
+  ],
+  "trait:hierarchy": {
+    "childContentTypes": ["https://quadratic.amplience.com/v2/content/hierarchy-menu-item"]
+  },
+  "trait:sortable": {
+    "sortBy": [
+      {
+        "key": "default",
+        "paths": ["/_meta/hierarchy/position"]
+      }
+    ]
+  },
+  "type": "object",
+  "properties": {
+    "label": {
+      "type": "string",
+      "title": "Label",
+      "description": "Display text for this menu item."
+    },
+    "link": {
+      "type": "string",
+      "title": "Link",
+      "description": "URL this item navigates to. Omit for parent-only category labels."
+    }
+  },
+  "propertyOrder": ["label", "link"],
+  "required": ["label"]
+}
