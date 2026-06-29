@@ -72,9 +72,6 @@ type HierarchyMenuStub = {
 }
 
 export async function HierarchyMenuServer(props: HierarchyMenuStub) {
-  // TEMP DEBUG — remove before merge
-  console.log('[HierarchyMenuServer] props._meta:', JSON.stringify(props._meta, null, 2))
-
   const rootKey = props._meta.deliveryKeys?.values?.[0]?.value ?? props._meta.deliveryKey
 
   if (!rootKey) {
