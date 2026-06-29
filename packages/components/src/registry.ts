@@ -81,6 +81,12 @@ import {
 import { MENU_SCHEMA, menuRegistryEntry } from './organisms/Menu/Menu.registry'
 import { SLOT_SCHEMA, slotRegistryEntry } from './organisms/Slot/Slot.registry'
 import {
+  BLOG_ARTICLE_SCHEMA,
+  blogArticleMetadataFromSchema,
+  blogArticleRegistryEntry,
+} from './templates/BlogArticle/BlogArticle.registry'
+import type { BlogArticleSchema } from './templates/BlogArticle/BlogArticle.registry'
+import {
   PAGE_SCHEMA,
   pageMetadataFromSchema,
   pageRegistryEntry,
@@ -133,6 +139,7 @@ export const createRegistryWithout = (base: Registry, exclude: readonly SchemaUR
 
 export const defaultRegistry: Registry = createRegistry([
   [PAGE_SCHEMA, pageRegistryEntry],
+  [BLOG_ARTICLE_SCHEMA, blogArticleRegistryEntry],
   [SLOT_SCHEMA, slotRegistryEntry],
   [HERO_BLOCK_SCHEMA, heroBlockRegistryEntry],
   [IMAGE_BLOCK_SCHEMA, imageBlockRegistryEntry],
@@ -196,3 +203,5 @@ export {
   hierarchyMenuItemRegistryEntry,
 }
 export { FOOTER_BLOCK_SCHEMA, footerBlockRegistryEntry, FOOTER_ROW_SCHEMA, footerRowRegistryEntry }
+export { BLOG_ARTICLE_SCHEMA, blogArticleRegistryEntry, blogArticleMetadataFromSchema }
+export type { BlogArticleSchema }

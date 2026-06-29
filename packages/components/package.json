@@ -23,6 +23,8 @@
     "./list": "./src/atoms/List/List.tsx",
     "./list-item": "./src/atoms/ListItem/ListItem.tsx",
     "./card": "./src/atoms/Card/Card.tsx",
+    "./tag": "./src/atoms/Tag/Tag.tsx",
+    "./tags": "./src/molecules/Tags/Tags.tsx",
     "./media-card": "./src/molecules/MediaCard/MediaCard.tsx",
     "./markdown": "./src/molecules/Markdown/Markdown.tsx",
     "./hero-block": "./src/organisms/HeroBlock/HeroBlock.tsx",

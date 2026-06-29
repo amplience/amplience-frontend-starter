@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/content_blog-article.json",
+  "schemaId": "https://quadratic.amplience.com/v2/content/blog-article",
+  "validationLevel": "CONTENT_TYPE"
+}

@@ -1,0 +1,53 @@
+/*
+ * Tag atom styles.
+ *
+ * The base .root sets shared pill geometry. Colour variants rebind
+ * --tag-background and --tag-color via [data-color] selectors (per
+ * ADR-0002 §conventions 7) — brands override at the [data-brand] layer
+ * without touching component CSS.
+ *
+ * Font size and padding are intentionally compact so tags can sit
+ * comfortably inline alongside body text or in a tight flex row.
+ */
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+
+.root {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--tag-padding-y, 0.2em) var(--tag-padding-x, 0.65em);
+  background: var(--tag-background, var(--color-gray-100));
+  border-radius: var(--tag-border-radius, var(--radius-full, 9999px));
+  color: var(--tag-color, var(--color-gray-700));
+  font-size: var(--tag-font-size, 0.75rem);
+  font-weight: var(--tag-font-weight, 500);
+  line-height: 1;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+/* ---------------------------------------------------------------------------
+   Colour variants
+   --------------------------------------------------------------------------- */
+
+.root[data-color='default'] {
+  --tag-background: var(--color-gray-100);
+  --tag-color: var(--color-gray-700);
+}
+
+.root[data-color='primary'] {
+  --tag-background: color-mix(in srgb, var(--color-primary) 15%, transparent);
+  --tag-color: var(--color-primary);
+}
+
+.root[data-color='secondary'] {
+  --tag-background: color-mix(in srgb, var(--color-secondary) 15%, transparent);
+  --tag-color: var(--color-secondary);
+}
+
+.root[data-color='tertiary'] {
+  --tag-background: color-mix(in srgb, var(--color-tertiary) 15%, transparent);
+  --tag-color: var(--color-tertiary);
+}

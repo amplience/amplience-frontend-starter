@@ -1,0 +1,36 @@
+{
+  "id": "b10ga721-0002-4000-8000-000000000003",
+  "label": "Blog — Accelerating Your Amplience Project with Quadratic",
+  "body": {
+    "_meta": {
+      "name": "Blog — Accelerating Your Amplience Project with Quadratic",
+      "schema": "https://quadratic.amplience.com/v2/content/blog-article",
+      "deliveryKeys": {
+        "values": [{ "value": "blog/quadratic-accelerator" }]
+      }
+    },
+    "title": "Accelerating Your Amplience Project with Quadratic Lite",
+    "description": "Quadratic Lite is an open-source accelerator that ships a recursive renderer, hub import pipeline, and schema-validated fixtures — cutting two sprints of boilerplate down to a 15-minute clone.",
+    "keywords": ["quadratic", "accelerator", "amplience", "next.js", "open-source"],
+    "coverImage": {
+      "src": "https://picsum.photos/seed/blog-quadratic/1200/630",
+      "alt": "Quadratic Lite accelerator — rocket launch illustration",
+      "width": 1200,
+      "height": 630
+    },
+    "author": "Amplience Team",
+    "publishDate": "2026-06-15",
+    "category": "Accelerators",
+    "tags": ["quadratic", "accelerator", "amplience", "next.js"],
+    "readTime": 8,
+    "slots": [
+      {
+        "id": "b10ga721-0002-4000-8000-000000000002",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

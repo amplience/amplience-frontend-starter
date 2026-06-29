@@ -3,12 +3,14 @@ import {
   AlertCircle,
   ArrowLeft,
   ArrowRight,
+  Calendar,
   Check,
   CheckCircle,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   ChevronUp,
+  Clock,
   CreditCard,
   Eye,
   Filter,
@@ -54,6 +56,9 @@ import styles from './Icon.module.css'
 // ---------------------------------------------------------------------------
 
 const icons = {
+  // Content & editorial
+  calendar: Calendar,
+  clock: Clock,
   // Navigation & UI
   menu: Menu,
   x: X,
