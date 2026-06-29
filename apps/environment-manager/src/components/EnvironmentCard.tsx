@@ -64,6 +64,7 @@ const OP_LABELS: Record<OpKey, string> = {
 }
 
 export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }: Props) {
+  const [collapsed, setCollapsed] = useState(true)
   const [stats, setStats] = useState<EnvironmentStats | null>(null)
   const [statsError, setStatsError] = useState<string | null>(null)
   const [op, setOp] = useState<ActiveOp | null>(null)
@@ -219,6 +220,35 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
   }, [op?.log])
 
   const isRunning = op?.status === 'running'
+  const audioCtxRef = useRef<AudioContext | null>(null)
+
+  function playTone(type: 'success' | 'error') {
+    try {
+      audioCtxRef.current ??= new AudioContext()
+      const ctx = audioCtxRef.current
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      if (type === 'success') {
+        osc.type = 'sine'
+        osc.frequency.setValueAtTime(880, ctx.currentTime)
+        osc.frequency.exponentialRampToValueAtTime(1100, ctx.currentTime + 0.08)
+        gain.gain.setValueAtTime(0.18, ctx.currentTime)
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4)
+      } else {
+        osc.type = 'sawtooth'
+        osc.frequency.setValueAtTime(220, ctx.currentTime)
+        osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.25)
+        gain.gain.setValueAtTime(0.22, ctx.currentTime)
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5)
+      }
+      osc.start(ctx.currentTime)
+      osc.stop(ctx.currentTime + 0.55)
+    } catch {
+      // AudioContext unavailable — silent fail
+    }
+  }
 
   async function runOp(key: OpKey) {
     if (key === 'wipe-items' || key === 'wipe-all') {
@@ -259,6 +289,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
       setOp((prev) => {
         if (!prev) return null
         const hasError = prev.log.includes('✗') || prev.log.includes('Error: ')
+        playTone(hasError ? 'error' : 'success')
         return { ...prev, status: hasError ? 'error' : 'done' }
       })
 
@@ -282,9 +313,20 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
   const allEmpty = stats !== null && stats.schemas === 0 && stats.types === 0 && stats.items === 0
 
   return (
-    <div className={`env-card${isActive ? ' env-card--active' : ''}`}>
-      {/* Header */}
-      <div className="env-card__header">
+    <div
+      className={`env-card${isActive ? ' env-card--active' : ''}${collapsed ? ' env-card--collapsed' : ''}`}
+    >
+      {/* Header — click to expand/collapse (Set active button is excluded via stopPropagation) */}
+      <div
+        className="env-card__header"
+        role="button"
+        tabIndex={0}
+        aria-expanded={!collapsed}
+        onClick={() => setCollapsed((v) => !v)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') setCollapsed((v) => !v)
+        }}
+      >
         <div>
           <span className="env-card__label">{env.label || env.name}</span>
           {env.defaultBrand !== '' && (
@@ -311,454 +353,485 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
         </div>
         <div className="env-card__header-actions">
           {!isActive && (
-            <button className="btn btn--sm btn--primary" onClick={onActivate} disabled={isRunning}>
+            <button
+              className="btn btn--sm btn--primary"
+              onClick={(e) => {
+                e.stopPropagation()
+                onActivate()
+              }}
+              disabled={isRunning}
+            >
               Set active
             </button>
           )}
-          <button
-            className="btn--icon-only"
-            onClick={refreshStats}
-            disabled={isRunning || stats === null}
-            aria-label="Refresh stats"
-            title="Refresh counts"
+          <svg
+            className={`env-card__chevron${collapsed ? '' : ' env-card__chevron--open'}`}
+            aria-hidden="true"
+            width="12"
+            height="12"
+            viewBox="0 0 12 12"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
-            ↻
-          </button>
-          <button
-            className="btn--icon-only"
-            onClick={onEdit}
-            disabled={isRunning}
-            aria-label="Environment settings"
-            title="Settings"
-          >
-            ⚙
-          </button>
+            <polyline points="2,4 6,8 10,4" />
+          </svg>
         </div>
       </div>
 
-      {/* Resource stats table */}
-      <table className="env-card__stats">
-        <thead>
-          <tr>
-            <th className="col-resource">Resource</th>
-            <th className="col-count">Count</th>
-            <th className="col-actions"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <ResourceRow
-            label="Content type schemas"
-            count={statsError !== null ? -1 : (stats?.schemas ?? null)}
-            seedKey="seed-schemas"
-            syncKey="sync-schemas"
-            isRunning={isRunning}
-            activeOpKey={op?.key ?? null}
-            onRun={(key) => {
-              void runOp(key)
-            }}
-          />
-          <ResourceRow
-            label="Content types"
-            count={statsError !== null ? -1 : (stats?.types ?? null)}
-            seedKey="seed-types"
-            syncKey="sync-types"
-            isRunning={isRunning}
-            activeOpKey={op?.key ?? null}
-            onRun={(key) => {
-              void runOp(key)
-            }}
-          />
-          <ResourceRow
-            label="Content items"
-            count={statsError !== null ? -1 : (stats?.items ?? null)}
-            seedKey="seed-items"
-            syncKey="sync-items"
-            wipeKey="wipe-items"
-            isRunning={isRunning}
-            activeOpKey={op?.key ?? null}
-            onRun={(key) => {
-              void runOp(key)
-            }}
-          />
-        </tbody>
-      </table>
-
-      {statsError !== null && (
-        <p className="env-card__stats-error">
-          Could not load stats: {statsError}{' '}
-          <button className="btn btn--sm btn--ghost" onClick={loadStats}>
-            Retry
-          </button>
-        </p>
-      )}
-
-      {/* Footer: all-resources operations */}
-      <div className="env-card__ops">
-        <span className="env-card__ops-label">All resources</span>
-        {stats === null && statsError === null ? (
-          <>
-            <div className="btn-skeleton btn-skeleton--wide" aria-hidden="true">
-              &nbsp;
-            </div>
-            <div className="btn-skeleton btn-skeleton--wide" aria-hidden="true">
-              &nbsp;
-            </div>
-          </>
-        ) : allEmpty ? (
-          <button
-            className={`btn btn--sm btn--op btn--op-seed${isRunning && op?.key === 'seed-all' ? ' btn--op-running' : ''}`}
-            onClick={() => {
-              void runOp('seed-all')
-            }}
-            disabled={isRunning}
-          >
-            {isRunning && op?.key === 'seed-all' ? (
-              <span className="spinner" aria-hidden="true" />
-            ) : null}
-            Seed all
-          </button>
-        ) : (
-          <>
-            <button
-              className={`btn btn--sm btn--op btn--op-sync${isRunning && op?.key === 'sync-all' ? ' btn--op-running' : ''}`}
-              onClick={() => {
-                void runOp('sync-all')
-              }}
-              disabled={isRunning}
-            >
-              {isRunning && op?.key === 'sync-all' ? (
-                <span className="spinner" aria-hidden="true" />
-              ) : null}
-              Sync all
-            </button>
-            <button
-              className={`btn btn--sm btn--op btn--op-wipe${isRunning && op?.key === 'wipe-all' ? ' btn--op-running' : ''}`}
-              onClick={() => {
-                void runOp('wipe-all')
-              }}
-              disabled={isRunning}
-            >
-              {isRunning && op?.key === 'wipe-all' ? (
-                <span className="spinner" aria-hidden="true" />
-              ) : null}
-              Wipe all
-            </button>
-          </>
-        )}
-      </div>
-
-      {/* Live log panel */}
-      {op && (
-        <div className={`env-card__log log--${op.status}${logExpanded ? ' log--expanded' : ''}`}>
-          {/* Clicking the header row toggles the log body; the X button is excluded via stopPropagation */}
-          <div
-            className="log-header"
-            role="button"
-            tabIndex={0}
-            onClick={() => setLogExpanded((v) => !v)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') setLogExpanded((v) => !v)
-            }}
-          >
-            <span className="log-header__left">
-              <span
-                className={`log-caret${logExpanded ? ' log-caret--open' : ''}`}
-                aria-hidden="true"
-              >
-                ›
-              </span>
-              <span className="log-title">{OP_LABELS[op.key]}</span>
-              {op.status === 'running' && (
-                <span className="log-status">
-                  <span className="spinner spinner--sm" aria-hidden="true" /> running…
-                </span>
-              )}
-              {op.status === 'done' && <span className="log-status log-status--ok">✓ done</span>}
-              {op.status === 'error' && (
-                <span className="log-status log-status--err">⚠ failed</span>
-              )}
-            </span>
-            {op.status === 'running' ? (
-              <button
-                className="log-abort"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  void handleAbort()
+      {/* Collapsible body */}
+      {!collapsed && (
+        <>
+          {/* Resource stats table */}
+          <table className="env-card__stats">
+            <thead>
+              <tr>
+                <th className="col-resource">Resource</th>
+                <th className="col-count">Count</th>
+                <th className="col-actions">
+                  <button
+                    className="btn--icon-only"
+                    onClick={refreshStats}
+                    disabled={isRunning || stats === null}
+                    aria-label="Refresh stats"
+                    title="Refresh counts"
+                  >
+                    ↻
+                  </button>
+                  <button
+                    className="btn--icon-only"
+                    onClick={onEdit}
+                    disabled={isRunning}
+                    aria-label="Environment settings"
+                    title="Settings"
+                  >
+                    ⚙
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ResourceRow
+                label="Content type schemas"
+                count={statsError !== null ? -1 : (stats?.schemas ?? null)}
+                seedKey="seed-schemas"
+                syncKey="sync-schemas"
+                isRunning={isRunning}
+                activeOpKey={op?.key ?? null}
+                onRun={(key) => {
+                  void runOp(key)
                 }}
-                aria-label="Abort operation"
-              >
-                ■ Stop
-              </button>
-            ) : (
-              <button
-                className="log-close"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setOp(null)
+              />
+              <ResourceRow
+                label="Content types"
+                count={statsError !== null ? -1 : (stats?.types ?? null)}
+                seedKey="seed-types"
+                syncKey="sync-types"
+                isRunning={isRunning}
+                activeOpKey={op?.key ?? null}
+                onRun={(key) => {
+                  void runOp(key)
                 }}
-                aria-label="Dismiss log"
-              >
-                ✕ Dismiss
-              </button>
-            )}
-          </div>
-          <div className="log-body-wrapper">
-            <div className="log-body-inner">
-              <pre ref={logRef} className="log-body">
-                {op.log || '…'}
-              </pre>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Sites */}
-      <div className="env-card__sites">
-        <div className="sites-header">
-          <span className="sites-header__title">Web apps</span>
-        </div>
-
-        <ul className="site-list">
-          {/* Localhost — always present */}
-          {editingLocalhost ? (
-            <li className="site-row site-row--localhost site-row--editing">
-              <GlobeIcon />
-              <span className="site-row__label--fixed">Web (localhost)</span>
-              <input
-                ref={editLocalhostUrlRef}
-                className="site-row__input site-row__input--url"
-                placeholder="http://localhost:3000"
-                value={editLocalhostForm.localhostUrl}
-                onChange={(e) =>
-                  setEditLocalhostForm((p) => ({ ...p, localhostUrl: e.target.value }))
-                }
-                onKeyDown={siteEditKeyDown(() => {
-                  void handleSaveLocalhost()
-                })}
-                disabled={sitesBusy}
               />
-              <input
-                className="site-row__input"
-                placeholder="Brand (e.g. acme)"
-                value={editLocalhostForm.defaultBrand}
-                onChange={(e) =>
-                  setEditLocalhostForm((p) => ({ ...p, defaultBrand: e.target.value }))
-                }
-                onKeyDown={siteEditKeyDown(() => {
-                  void handleSaveLocalhost()
-                })}
-                disabled={sitesBusy}
+              <ResourceRow
+                label="Content items"
+                count={statsError !== null ? -1 : (stats?.items ?? null)}
+                seedKey="seed-items"
+                syncKey="sync-items"
+                wipeKey="wipe-items"
+                isRunning={isRunning}
+                activeOpKey={op?.key ?? null}
+                onRun={(key) => {
+                  void runOp(key)
+                }}
               />
-              <div className="site-row__actions">
-                <button
-                  type="button"
-                  className="site-action site-action--cancel"
-                  aria-label="Cancel"
-                  onClick={cancelSiteEdit}
-                  disabled={sitesBusy}
-                >
-                  ✕
-                </button>
-                <button
-                  type="button"
-                  className="site-action site-action--save"
-                  aria-label="Save"
-                  onClick={() => {
-                    void handleSaveLocalhost()
-                  }}
-                  disabled={sitesBusy}
-                >
-                  ✓
-                </button>
-              </div>
-            </li>
-          ) : (
-            <li className="site-row site-row--localhost">
-              <GlobeIcon />
-              <span className="site-row__label">Web (localhost)</span>
-              <span className="site-row__url">{env.localhostUrl}</span>
-              {env.defaultBrand !== '' && (
-                <span className="badge badge--brand badge--sm">{env.defaultBrand}</span>
-              )}
-              <button
-                className="btn--icon-only site-row__edit"
-                aria-label="Edit localhost"
-                onClick={startEditLocalhost}
-                disabled={isRunning || sitesBusy || editingWebAppIdx !== null}
-              >
-                <PencilIcon />
+            </tbody>
+          </table>
+
+          {statsError !== null && (
+            <p className="env-card__stats-error">
+              Could not load stats: {statsError}{' '}
+              <button className="btn btn--sm btn--ghost" onClick={loadStats}>
+                Retry
               </button>
-            </li>
+            </p>
           )}
 
-          {/* Additional deployed sites */}
-          {env.webApps.map((site, i) =>
-            editingWebAppIdx === i ? (
-              <li key={i} className="site-row site-row--editing">
-                <GlobeIcon />
-                <input
-                  ref={editWebAppFirstRef}
-                  className="site-row__input"
-                  placeholder="Label (blank = 'Web')"
-                  value={editWebAppForm.label}
-                  onChange={(e) => setEditWebAppForm((p) => ({ ...p, label: e.target.value }))}
-                  onKeyDown={siteEditKeyDown(() => {
-                    void handleSaveWebApp()
-                  })}
-                  disabled={sitesBusy}
-                />
-                <input
-                  className="site-row__input site-row__input--url"
-                  placeholder="URL (e.g. https://acme.vercel.app)"
-                  value={editWebAppForm.url}
-                  onChange={(e) => setEditWebAppForm((p) => ({ ...p, url: e.target.value }))}
-                  onKeyDown={siteEditKeyDown(() => {
-                    void handleSaveWebApp()
-                  })}
-                  disabled={sitesBusy}
-                />
-                <input
-                  className="site-row__input"
-                  placeholder="Brand (e.g. acme)"
-                  value={editWebAppForm.brand}
-                  onChange={(e) => setEditWebAppForm((p) => ({ ...p, brand: e.target.value }))}
-                  onKeyDown={siteEditKeyDown(() => {
-                    void handleSaveWebApp()
-                  })}
-                  disabled={sitesBusy}
-                />
-                <div className="site-row__actions">
-                  <button
-                    type="button"
-                    className="site-action site-action--cancel"
-                    aria-label="Cancel"
-                    onClick={cancelSiteEdit}
-                    disabled={sitesBusy}
-                  >
-                    ✕
-                  </button>
-                  <button
-                    type="button"
-                    className="site-action site-action--save"
-                    aria-label="Save"
-                    onClick={() => {
-                      void handleSaveWebApp()
-                    }}
-                    disabled={sitesBusy || !editWebAppForm.url}
-                  >
-                    ✓
-                  </button>
-                  <button
-                    type="button"
-                    className="site-action site-action--remove"
-                    aria-label="Remove"
-                    onClick={() => {
-                      void handleRemoveWebApp()
-                    }}
-                    disabled={sitesBusy}
-                  >
-                    <TrashIcon />
-                  </button>
+          {/* Footer: all-resources operations */}
+          <div className="env-card__ops">
+            <span className="env-card__ops-label">All resources</span>
+            {stats === null && statsError === null ? (
+              <>
+                <div className="btn-skeleton btn-skeleton--wide" aria-hidden="true">
+                  &nbsp;
                 </div>
-              </li>
-            ) : (
-              <li key={i} className="site-row">
-                <GlobeIcon />
-                <span className="site-row__label">{siteDisplayLabel(site)}</span>
-                <span className="site-row__url">{site.url}</span>
-                {site.brand !== '' && (
-                  <span className="badge badge--brand badge--sm">{site.brand}</span>
-                )}
-                <button
-                  className="btn--icon-only site-row__edit"
-                  aria-label={`Edit ${siteDisplayLabel(site)}`}
-                  onClick={() => startEditWebApp(i)}
-                  disabled={isRunning || sitesBusy || editingLocalhost}
-                >
-                  <PencilIcon />
-                </button>
-              </li>
-            ),
-          )}
-        </ul>
-
-        {/* Inline add-site form — hidden while editing any row */}
-        {!editingLocalhost &&
-          editingWebAppIdx === null &&
-          (showAddSite ? (
-            <form
-              className="add-site-form"
-              onSubmit={(e) => {
-                void handleAddSite(e)
-              }}
-            >
-              <input
-                ref={addSiteLabelRef}
-                className="add-site-form__input"
-                placeholder="Label (blank = 'Web')"
-                value={siteForm.label}
-                onChange={(e) => setSiteForm((p) => ({ ...p, label: e.target.value }))}
-                onKeyDown={(e) => {
-                  if (e.key === 'Escape') {
-                    setShowAddSite(false)
-                    setSiteForm(EMPTY_SITE)
-                  }
-                }}
-              />
-              <input
-                className="add-site-form__input add-site-form__input--url"
-                placeholder="URL (e.g. https://acme.vercel.app)"
-                value={siteForm.url}
-                onChange={(e) => setSiteForm((p) => ({ ...p, url: e.target.value }))}
-                onKeyDown={(e) => {
-                  if (e.key === 'Escape') {
-                    setShowAddSite(false)
-                    setSiteForm(EMPTY_SITE)
-                  }
-                }}
-                required
-              />
-              <input
-                className="add-site-form__input"
-                placeholder="Brand (e.g. acme)"
-                value={siteForm.brand}
-                onChange={(e) => setSiteForm((p) => ({ ...p, brand: e.target.value }))}
-                onKeyDown={(e) => {
-                  if (e.key === 'Escape') {
-                    setShowAddSite(false)
-                    setSiteForm(EMPTY_SITE)
-                  }
-                }}
-              />
-              <div className="add-site-form__actions">
-                <button type="submit" className="btn btn--sm btn--primary" disabled={sitesBusy}>
-                  {sitesBusy ? 'Adding…' : 'Add'}
-                </button>
-                <button
-                  type="button"
-                  className="btn btn--sm btn--ghost"
-                  onClick={() => {
-                    setShowAddSite(false)
-                    setSiteForm(EMPTY_SITE)
-                  }}
-                  disabled={sitesBusy}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          ) : (
-            <div className="add-site-form">
+                <div className="btn-skeleton btn-skeleton--wide" aria-hidden="true">
+                  &nbsp;
+                </div>
+              </>
+            ) : allEmpty ? (
               <button
-                className="btn btn--sm btn--ghost"
-                onClick={() => setShowAddSite(true)}
+                className={`btn btn--sm btn--op btn--op-seed${isRunning && op?.key === 'seed-all' ? ' btn--op-running' : ''}`}
+                onClick={() => {
+                  void runOp('seed-all')
+                }}
                 disabled={isRunning}
               >
-                + Add site
+                {isRunning && op?.key === 'seed-all' ? (
+                  <span className="spinner" aria-hidden="true" />
+                ) : null}
+                Seed all
               </button>
+            ) : (
+              <>
+                <button
+                  className={`btn btn--sm btn--op btn--op-sync${isRunning && op?.key === 'sync-all' ? ' btn--op-running' : ''}`}
+                  onClick={() => {
+                    void runOp('sync-all')
+                  }}
+                  disabled={isRunning}
+                >
+                  {isRunning && op?.key === 'sync-all' ? (
+                    <span className="spinner" aria-hidden="true" />
+                  ) : null}
+                  Sync all
+                </button>
+                <button
+                  className={`btn btn--sm btn--op btn--op-wipe${isRunning && op?.key === 'wipe-all' ? ' btn--op-running' : ''}`}
+                  onClick={() => {
+                    void runOp('wipe-all')
+                  }}
+                  disabled={isRunning}
+                >
+                  {isRunning && op?.key === 'wipe-all' ? (
+                    <span className="spinner" aria-hidden="true" />
+                  ) : null}
+                  Wipe all
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Live log panel */}
+          {op && (
+            <div
+              className={`env-card__log log--${op.status}${logExpanded ? ' log--expanded' : ''}`}
+            >
+              {/* Clicking the header row toggles the log body; the X button is excluded via stopPropagation */}
+              <div
+                className="log-header"
+                role="button"
+                tabIndex={0}
+                onClick={() => setLogExpanded((v) => !v)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') setLogExpanded((v) => !v)
+                }}
+              >
+                <span className="log-header__left">
+                  <span
+                    className={`log-caret${logExpanded ? ' log-caret--open' : ''}`}
+                    aria-hidden="true"
+                  >
+                    ›
+                  </span>
+                  <span className="log-title">{OP_LABELS[op.key]}</span>
+                  {op.status === 'running' && (
+                    <span className="log-status">
+                      <span className="spinner spinner--sm" aria-hidden="true" /> running…
+                    </span>
+                  )}
+                  {op.status === 'done' && (
+                    <span className="log-status log-status--ok">✓ done</span>
+                  )}
+                  {op.status === 'error' && (
+                    <span className="log-status log-status--err">⚠ failed</span>
+                  )}
+                </span>
+                {op.status === 'running' ? (
+                  <button
+                    className="log-abort"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      void handleAbort()
+                    }}
+                    aria-label="Abort operation"
+                  >
+                    ■ Stop
+                  </button>
+                ) : (
+                  <button
+                    className="log-close"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setOp(null)
+                    }}
+                    aria-label="Dismiss log"
+                  >
+                    ✕ Dismiss
+                  </button>
+                )}
+              </div>
+              <div className="log-body-wrapper">
+                <div className="log-body-inner">
+                  <pre ref={logRef} className="log-body">
+                    {op.log || '…'}
+                  </pre>
+                </div>
+              </div>
             </div>
-          ))}
-      </div>
+          )}
+
+          {/* Sites */}
+          <div className="env-card__sites">
+            <div className="sites-header">
+              <span className="sites-header__title">Web apps</span>
+            </div>
+
+            <ul className="site-list">
+              {/* Localhost — always present */}
+              {editingLocalhost ? (
+                <li className="site-row site-row--localhost site-row--editing">
+                  <GlobeIcon />
+                  <span className="site-row__label--fixed">Web (localhost)</span>
+                  <input
+                    ref={editLocalhostUrlRef}
+                    className="site-row__input site-row__input--url"
+                    placeholder="http://localhost:3000"
+                    value={editLocalhostForm.localhostUrl}
+                    onChange={(e) =>
+                      setEditLocalhostForm((p) => ({ ...p, localhostUrl: e.target.value }))
+                    }
+                    onKeyDown={siteEditKeyDown(() => {
+                      void handleSaveLocalhost()
+                    })}
+                    disabled={sitesBusy}
+                  />
+                  <input
+                    className="site-row__input"
+                    placeholder="Brand (e.g. acme)"
+                    value={editLocalhostForm.defaultBrand}
+                    onChange={(e) =>
+                      setEditLocalhostForm((p) => ({ ...p, defaultBrand: e.target.value }))
+                    }
+                    onKeyDown={siteEditKeyDown(() => {
+                      void handleSaveLocalhost()
+                    })}
+                    disabled={sitesBusy}
+                  />
+                  <div className="site-row__actions">
+                    <button
+                      type="button"
+                      className="site-action site-action--cancel"
+                      aria-label="Cancel"
+                      onClick={cancelSiteEdit}
+                      disabled={sitesBusy}
+                    >
+                      ✕
+                    </button>
+                    <button
+                      type="button"
+                      className="site-action site-action--save"
+                      aria-label="Save"
+                      onClick={() => {
+                        void handleSaveLocalhost()
+                      }}
+                      disabled={sitesBusy}
+                    >
+                      ✓
+                    </button>
+                  </div>
+                </li>
+              ) : (
+                <li className="site-row site-row--localhost">
+                  <GlobeIcon />
+                  <span className="site-row__label">Web (localhost)</span>
+                  <span className="site-row__url">{env.localhostUrl}</span>
+                  {env.defaultBrand !== '' && (
+                    <span className="badge badge--brand badge--sm">{env.defaultBrand}</span>
+                  )}
+                  <button
+                    className="btn--icon-only site-row__edit"
+                    aria-label="Edit localhost"
+                    onClick={startEditLocalhost}
+                    disabled={isRunning || sitesBusy || editingWebAppIdx !== null}
+                  >
+                    <PencilIcon />
+                  </button>
+                </li>
+              )}
+
+              {/* Additional deployed sites */}
+              {env.webApps.map((site, i) =>
+                editingWebAppIdx === i ? (
+                  <li key={i} className="site-row site-row--editing">
+                    <GlobeIcon />
+                    <input
+                      ref={editWebAppFirstRef}
+                      className="site-row__input"
+                      placeholder="Label (blank = 'Web')"
+                      value={editWebAppForm.label}
+                      onChange={(e) => setEditWebAppForm((p) => ({ ...p, label: e.target.value }))}
+                      onKeyDown={siteEditKeyDown(() => {
+                        void handleSaveWebApp()
+                      })}
+                      disabled={sitesBusy}
+                    />
+                    <input
+                      className="site-row__input site-row__input--url"
+                      placeholder="URL (e.g. https://acme.vercel.app)"
+                      value={editWebAppForm.url}
+                      onChange={(e) => setEditWebAppForm((p) => ({ ...p, url: e.target.value }))}
+                      onKeyDown={siteEditKeyDown(() => {
+                        void handleSaveWebApp()
+                      })}
+                      disabled={sitesBusy}
+                    />
+                    <input
+                      className="site-row__input"
+                      placeholder="Brand (e.g. acme)"
+                      value={editWebAppForm.brand}
+                      onChange={(e) => setEditWebAppForm((p) => ({ ...p, brand: e.target.value }))}
+                      onKeyDown={siteEditKeyDown(() => {
+                        void handleSaveWebApp()
+                      })}
+                      disabled={sitesBusy}
+                    />
+                    <div className="site-row__actions">
+                      <button
+                        type="button"
+                        className="site-action site-action--cancel"
+                        aria-label="Cancel"
+                        onClick={cancelSiteEdit}
+                        disabled={sitesBusy}
+                      >
+                        ✕
+                      </button>
+                      <button
+                        type="button"
+                        className="site-action site-action--save"
+                        aria-label="Save"
+                        onClick={() => {
+                          void handleSaveWebApp()
+                        }}
+                        disabled={sitesBusy || !editWebAppForm.url}
+                      >
+                        ✓
+                      </button>
+                      <button
+                        type="button"
+                        className="site-action site-action--remove"
+                        aria-label="Remove"
+                        onClick={() => {
+                          void handleRemoveWebApp()
+                        }}
+                        disabled={sitesBusy}
+                      >
+                        <TrashIcon />
+                      </button>
+                    </div>
+                  </li>
+                ) : (
+                  <li key={i} className="site-row">
+                    <GlobeIcon />
+                    <span className="site-row__label">{siteDisplayLabel(site)}</span>
+                    <span className="site-row__url">{site.url}</span>
+                    {site.brand !== '' && (
+                      <span className="badge badge--brand badge--sm">{site.brand}</span>
+                    )}
+                    <button
+                      className="btn--icon-only site-row__edit"
+                      aria-label={`Edit ${siteDisplayLabel(site)}`}
+                      onClick={() => startEditWebApp(i)}
+                      disabled={isRunning || sitesBusy || editingLocalhost}
+                    >
+                      <PencilIcon />
+                    </button>
+                  </li>
+                ),
+              )}
+            </ul>
+
+            {/* Inline add-site form — hidden while editing any row */}
+            {!editingLocalhost &&
+              editingWebAppIdx === null &&
+              (showAddSite ? (
+                <form
+                  className="add-site-form"
+                  onSubmit={(e) => {
+                    void handleAddSite(e)
+                  }}
+                >
+                  <input
+                    ref={addSiteLabelRef}
+                    className="add-site-form__input"
+                    placeholder="Label (blank = 'Web')"
+                    value={siteForm.label}
+                    onChange={(e) => setSiteForm((p) => ({ ...p, label: e.target.value }))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Escape') {
+                        setShowAddSite(false)
+                        setSiteForm(EMPTY_SITE)
+                      }
+                    }}
+                  />
+                  <input
+                    className="add-site-form__input add-site-form__input--url"
+                    placeholder="URL (e.g. https://acme.vercel.app)"
+                    value={siteForm.url}
+                    onChange={(e) => setSiteForm((p) => ({ ...p, url: e.target.value }))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Escape') {
+                        setShowAddSite(false)
+                        setSiteForm(EMPTY_SITE)
+                      }
+                    }}
+                    required
+                  />
+                  <input
+                    className="add-site-form__input"
+                    placeholder="Brand (e.g. acme)"
+                    value={siteForm.brand}
+                    onChange={(e) => setSiteForm((p) => ({ ...p, brand: e.target.value }))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Escape') {
+                        setShowAddSite(false)
+                        setSiteForm(EMPTY_SITE)
+                      }
+                    }}
+                  />
+                  <div className="add-site-form__actions">
+                    <button type="submit" className="btn btn--sm btn--primary" disabled={sitesBusy}>
+                      {sitesBusy ? 'Adding…' : 'Add'}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn--sm btn--ghost"
+                      onClick={() => {
+                        setShowAddSite(false)
+                        setSiteForm(EMPTY_SITE)
+                      }}
+                      disabled={sitesBusy}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <div className="add-site-form">
+                  <button
+                    className="btn btn--sm btn--ghost"
+                    onClick={() => setShowAddSite(true)}
+                    disabled={isRunning}
+                  >
+                    + Add site
+                  </button>
+                </div>
+              ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }

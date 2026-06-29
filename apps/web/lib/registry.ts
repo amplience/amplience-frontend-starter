@@ -30,7 +30,34 @@
  * entries for other schemas.
  */
 
-import { defaultRegistry } from '@amplience/quadratic-components/registry'
-import type { Registry } from '@amplience/quadratic-types'
+import { defaultRegistry, HIERARCHY_MENU_SCHEMA } from '@amplience/quadratic-components/registry'
+import type { AnyComponentRegistryEntry, Registry } from '@amplience/quadratic-types'
 
-export const registry: Registry = defaultRegistry
+import { HierarchyMenuServer } from '../src/components/HierarchyMenuServer'
+
+/**
+ * HierarchyMenu is the one entry the deployment overrides.
+ *
+ * The default `hierarchyMenuRegistryEntry` expects `items` to already be
+ * assembled inline — correct for the mock (fixtures) and for any pre-fetched
+ * tree, but not for the header render path where HierarchyMenu arrives as a
+ * flat content-link stub (no `items`). `HierarchyMenuServer` is an async RSC
+ * that reads `_meta.deliveryKey` from the stub and calls `client.getHierarchy`
+ * itself, so the fetch happens at the point of render rather than up-front in
+ * layout.tsx.
+ *
+ * `propsFromSchema` is deliberately omitted: the component needs `_meta`
+ * (for the delivery key), so the dispatcher passes the full content body
+ * through as props rather than stripping the envelope.
+ *
+ * `getChildren` is deliberately omitted: the stub has no `items`, and
+ * `HierarchyMenuServer` handles its own subtree after fetching.
+ */
+const hierarchyMenuServerEntry: AnyComponentRegistryEntry = {
+  component: HierarchyMenuServer,
+}
+
+const registryMap = new Map(defaultRegistry)
+registryMap.set(HIERARCHY_MENU_SCHEMA, hierarchyMenuServerEntry)
+
+export const registry: Registry = registryMap

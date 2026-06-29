@@ -39,6 +39,18 @@ const coreSchemaStub = {
   },
 } as const
 
+/**
+ * Minimal stand-in for the platform-hosted hierarchy schema.
+ * `hierarchy-node` is referenced by `trait:hierarchy` schemas; the stub
+ * accepts any object so AJV can resolve the `$ref` without a network call.
+ */
+const hierarchySchemaStub = {
+  $id: 'http://bigcontent.io/cms/schema/v2/hierarchy',
+  definitions: {
+    'hierarchy-node': { type: 'object' },
+  },
+} as const
+
 const ajv = new Ajv({
   // Schemas carry Amplience vocabulary (`ui:component`, `propertyOrder`)
   // and editor-facing formats (`markdown`) that ajv doesn't know; both are
@@ -48,6 +60,7 @@ const ajv = new Ajv({
   allErrors: true,
 })
 ajv.addSchema(coreSchemaStub)
+ajv.addSchema(hierarchySchemaStub)
 for (const { schema } of schemaManifest) ajv.addSchema(schema)
 
 describe('schema manifest', () => {
@@ -70,7 +83,7 @@ describe('schema manifest', () => {
   })
 
   it('exposes content types as the non-partial subset', () => {
-    expect(contentTypeSchemas).toHaveLength(17)
+    expect(contentTypeSchemas).toHaveLength(19)
     expect(contentTypeSchemas.every((e) => e.validationLevel !== 'PARTIAL')).toBe(true)
     expect(findSchema('https://quadratic.amplience.com/v2/partials/image')?.validationLevel).toBe(
       'PARTIAL',

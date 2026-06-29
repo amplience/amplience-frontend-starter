@@ -27,6 +27,7 @@
  */
 
 import { ContentClient as DcContentClient } from 'dc-delivery-sdk-js'
+import type { HierarchyContentItem } from 'dc-delivery-sdk-js'
 
 import type { ContentClient } from '../port'
 import type { ContentItem, ContentRequestOptions } from '../types'
@@ -161,5 +162,39 @@ export const makeSdkContentClient = (config: SdkContentClientConfig): ContentCli
 
     getById: <T = unknown>(id: string, opts?: ContentRequestOptions) =>
       fetchOne<T>({ id }, opts, `getById("${id}")`),
+
+    getHierarchy: async <T = unknown>(rootKey: string): Promise<ContentItem<T>> => {
+      // Use the SDK's Hierarchy API to fetch the full tree in one request.
+      // `sortKey: 'default'` honours the `trait:sortable` position-based order
+      // configured on both HierarchyMenu and HierarchyMenuItem schemas, so the
+      // rendered menu reflects whatever order the editor dragged nodes into.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let tree: HierarchyContentItem<any>
+      try {
+        tree = await sdk.getHierarchyByKey({ rootKey, sortKey: 'default', maximumDepth: 5 })
+      } catch (error) {
+        throw mapSdkError(error, `getHierarchy("${rootKey}")`)
+      }
+
+      // Transform the SDK's `{ content, children[] }` tree into the inline
+      // body shape our registry entries expect:
+      //   - root node  → children injected as `items`   (HierarchyMenu registry)
+      //   - other nodes → children injected as `children` (HierarchyMenuItem registry)
+      //
+      // JSON.parse(JSON.stringify(...)) strips any SDK helper class instances
+      // (Image, Video wrappers) back to plain JSON — safe for HierarchyMenu/Item
+      // which have no media fields today, and future-proofs if they ever do.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const assemble = (node: HierarchyContentItem<any>, isRoot: boolean): unknown => {
+        const body = JSON.parse(JSON.stringify(node.content)) as Record<string, unknown>
+        if (node.children.length === 0) return body
+        const assembledChildren = node.children.map((child) => assemble(child, false))
+        return isRoot
+          ? { ...body, items: assembledChildren }
+          : { ...body, children: assembledChildren }
+      }
+
+      return assemble(tree, true) as ContentItem<T>
+    },
   }
 }

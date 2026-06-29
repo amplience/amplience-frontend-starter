@@ -35,6 +35,10 @@ import {
 } from './molecules/IconButton/IconButton.registry'
 import { LOGO_SCHEMA, logoRegistryEntry } from './molecules/Logo/Logo.registry'
 import { MEDIA_CARD_SCHEMA, mediaCardRegistryEntry } from './molecules/MediaCard/MediaCard.registry'
+import {
+  HIERARCHY_MENU_ITEM_SCHEMA,
+  hierarchyMenuItemRegistryEntry,
+} from './molecules/MenuItem/HierarchyMenuItem.registry'
 import { MENU_ITEM_SCHEMA, menuItemRegistryEntry } from './molecules/MenuItem/MenuItem.registry'
 import {
   COLUMNS_BLOCK_SCHEMA,
@@ -70,6 +74,10 @@ import {
   MARKDOWN_BLOCK_SCHEMA,
   markdownBlockRegistryEntry,
 } from './organisms/MarkdownBlock/MarkdownBlock.registry'
+import {
+  HIERARCHY_MENU_SCHEMA,
+  hierarchyMenuRegistryEntry,
+} from './organisms/Menu/HierarchyMenu.registry'
 import { MENU_SCHEMA, menuRegistryEntry } from './organisms/Menu/Menu.registry'
 import { SLOT_SCHEMA, slotRegistryEntry } from './organisms/Slot/Slot.registry'
 import {
@@ -139,6 +147,8 @@ export const defaultRegistry: Registry = createRegistry([
   [ICON_BUTTON_SCHEMA, iconButtonRegistryEntry],
   [MENU_SCHEMA, menuRegistryEntry],
   [MENU_ITEM_SCHEMA, menuItemRegistryEntry],
+  [HIERARCHY_MENU_SCHEMA, hierarchyMenuRegistryEntry],
+  [HIERARCHY_MENU_ITEM_SCHEMA, hierarchyMenuItemRegistryEntry],
   [FOOTER_BLOCK_SCHEMA, footerBlockRegistryEntry],
   [FOOTER_ROW_SCHEMA, footerRowRegistryEntry],
 ])
@@ -180,5 +190,9 @@ export {
   menuRegistryEntry,
   MENU_ITEM_SCHEMA,
   menuItemRegistryEntry,
+  HIERARCHY_MENU_SCHEMA,
+  hierarchyMenuRegistryEntry,
+  HIERARCHY_MENU_ITEM_SCHEMA,
+  hierarchyMenuItemRegistryEntry,
 }
 export { FOOTER_BLOCK_SCHEMA, footerBlockRegistryEntry, FOOTER_ROW_SCHEMA, footerRowRegistryEntry }

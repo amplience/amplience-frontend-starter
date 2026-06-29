@@ -236,6 +236,21 @@ Use `if/then/else` to show/hide fields or change validation based on another fie
 }
 ```
 
+To enable drag-and-drop **sibling reordering** within a branch (without this, editors can move nodes between branches but not reorder within the same branch), add `trait:sortable` with the `/_meta/hierarchy/position` path to **every** content type listed in `childContentTypes`, as well as the root type:
+
+```json
+"trait:sortable": {
+  "sortBy": [
+    {
+      "key": "default",
+      "paths": ["/_meta/hierarchy/position"]
+    }
+  ]
+}
+```
+
+> ⚠️ All content types in the `childContentTypes` array must have this trait — not just the root. DC will silently skip drag-and-drop for any node whose type is missing it.
+
 ---
 
 ## Reuse Strategy
@@ -265,3 +280,21 @@ Reference a partial from another schema:
 - Each file must contain **pure JSON** — no markdown, no commentary, no explanation
 - Partial schemas should omit the `allOf` content root reference
 - Order properties logically using `propertyOrder`
+
+### dc-cli schema registration (pointer manifest)
+
+If the project uses [dc-cli](https://github.com/amplience/dc-cli) to sync schemas to a hub, each schema file needs a companion **pointer manifest** in the parent directory. The manifest is the entry point dc-cli uses for import — without it, the schema file exists on disk but never gets pushed to the hub.
+
+Given a schema at `content-type-schemas/schemas/my-type.json`, create a sibling file at `content-type-schemas/my-type.json`:
+
+```json
+{
+  "body": "./schemas/my-type.json",
+  "schemaId": "https://your-schema-uri/my-type",
+  "validationLevel": "CONTENT_TYPE"
+}
+```
+
+`schemaId` must match the `$id` in the schema file exactly. `validationLevel` is almost always `"CONTENT_TYPE"` — use `"SLOT"` only for slot schemas.
+
+A content type registration file (label, visualizations, repositories) is a separate third file and a distinct concern from this schema pair.

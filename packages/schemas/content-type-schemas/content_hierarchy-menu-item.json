@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/content_hierarchy-menu-item.json",
+  "schemaId": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+  "validationLevel": "CONTENT_TYPE"
+}
