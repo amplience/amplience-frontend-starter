@@ -36,7 +36,7 @@ export const Playground: Story = {
 }
 
 export const AsButton: Story = {
-  name: 'All variants — as <button>',
+  name: 'All variants & colors',
   render: () => {
     const variants = ['solid', 'outlined', 'text'] as const
     const colors = ['primary', 'secondary', 'tertiary', 'black', 'white'] as const

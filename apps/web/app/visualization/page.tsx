@@ -47,6 +47,7 @@ import {
   FailureCard,
   renderContent,
 } from '../../src/renderer'
+import { VisualizationClient } from './VisualizationClient'
 
 export const dynamic = 'force-dynamic'
 
@@ -139,7 +140,7 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
   const isPage = (item as { _meta?: { schema?: unknown } })?._meta?.schema === PAGE_SCHEMA
 
   if (!isPage) {
-    return renderContent(item, registry, { isTopOfPage: true })
+    return <VisualizationClient initialModel={item} isTopOfPage />
   }
 
   // For page items, render with site chrome so the visualization matches what
@@ -169,7 +170,9 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
   return (
     <>
       {header}
-      <main>{renderContent(item, registry, { isTopOfPage: true })}</main>
+      <main>
+        <VisualizationClient initialModel={item} isTopOfPage />
+      </main>
       {footer}
     </>
   )

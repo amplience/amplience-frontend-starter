@@ -3,6 +3,34 @@
  * so components render in the same baseline environment as the live app.
  */
 
+/*
+ * Brand fonts — Storybook-only font loading.
+ *
+ * next/font/google is a Next.js build-time transform: next/font/google/index.js
+ * is an empty stub at runtime, so Vite/Storybook gets nothing from it.
+ * We load the same font families directly from Google Fonts instead, then
+ * define the --nf-* CSS custom properties that tokens.css references under
+ * each [data-brand] selector. This exactly replicates what the Next.js build
+ * produces (per-font @font-face + a class that sets --nf-<font-name>), without
+ * coupling to the Next.js pipeline.
+ *
+ * Keep in sync with packages/theme/src/fonts.ts — if a font is added or
+ * removed there, update this import URL and the :root block below.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&family=Jost:wght@300;400;500&family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600;700&family=Roboto:wght@300;400;500&family=Roboto+Slab:wght@400;600;700&display=swap');
+
+:root {
+  --nf-cormorant-garamond: 'Cormorant Garamond';
+  --nf-inter: 'Inter';
+  /* fonts.ts uses Jost for both jost and jetbrainsMono — match that here */
+  --nf-jost: 'Jost';
+  --nf-jetbrains-mono: 'Jost';
+  --nf-lato: 'Lato';
+  --nf-playfair-display: 'Playfair Display';
+  --nf-roboto: 'Roboto';
+  --nf-roboto-slab: 'Roboto Slab';
+}
+
 html {
   -webkit-text-size-adjust: 100%;
 }
@@ -16,9 +44,16 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, Arial,
-    'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
 }
 
 img,
