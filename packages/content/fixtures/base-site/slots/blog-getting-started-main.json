@@ -1,0 +1,22 @@
+{
+  "id": "b10ga721-0001-4000-8000-000000000002",
+  "label": "Blog — Getting Started — main slot",
+  "body": {
+    "_meta": {
+      "name": "Blog — Getting Started — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot",
+      "deliveryKeys": {
+        "values": [{ "value": "blog/getting-started/main" }]
+      }
+    },
+    "components": [
+      {
+        "id": "b10ga721-0001-4000-8000-000000000001",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

@@ -38,6 +38,7 @@ export const makeFailingContentClient = (
       fail(),
     getById: <T = unknown>(_id: string, _opts?: ContentRequestOptions): Promise<ContentItem<T>> =>
       fail(),
+    listBySchema: <T = unknown>(_schemaId: string): Promise<readonly ContentItem<T>[]> => fail(),
     getHierarchy: <T = unknown>(_rootKey: string): Promise<ContentItem<T>> => fail(),
   }
 }

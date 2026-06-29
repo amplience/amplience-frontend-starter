@@ -20,7 +20,7 @@ import hierarchyManifests from '../../fixtures/_hierarchy/manifests.json' with {
 import type { ContentClient } from '../port'
 import type { ContentItem, ContentRequestOptions, EnrichedContentItem } from '../types'
 import { ContentClientError } from '../types'
-import { findById, findByKey } from './loader'
+import { allFixtures, findById, findByKey } from './loader'
 import { resolveDeep } from './resolver'
 
 /**
@@ -100,6 +100,19 @@ export const makeMockContentClient = (): ContentClient => ({
       )
     }
     return Promise.resolve(toContentItem<T>(item, opts))
+  },
+
+  listBySchema: <T = unknown>(schemaId: string): Promise<readonly ContentItem<T>[]> => {
+    // Filter fixtures whose body schema URI matches. Returns bodies at
+    // depth: 'root' (stubs left as-is) — consistent with the SDK adapter
+    // which uses the Filter API's default depth behaviour.
+    const matches = allFixtures()
+      .filter((f) => {
+        const meta = f.body._meta as { schema?: string } | undefined
+        return meta?.schema === schemaId
+      })
+      .map((f) => f.body as ContentItem<T>)
+    return Promise.resolve(matches)
   },
 
   getHierarchy: <T = unknown>(rootKey: string): Promise<ContentItem<T>> => {

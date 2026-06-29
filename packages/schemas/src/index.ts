@@ -14,6 +14,7 @@
  * `content-type-schemas/schemas/<name>.json` is the JSON Schema body.
  */
 
+import contentBlogArticle from '../content-type-schemas/schemas/content_blog-article.json'
 import contentColumns from '../content-type-schemas/schemas/content_columns.json'
 import contentFooterRow from '../content-type-schemas/schemas/content_footer-row.json'
 import contentFooter from '../content-type-schemas/schemas/content_footer.json'
@@ -32,6 +33,7 @@ import contentMediaCard from '../content-type-schemas/schemas/content_media-card
 import contentMenuItem from '../content-type-schemas/schemas/content_menu-item.json'
 import contentMenu from '../content-type-schemas/schemas/content_menu.json'
 import contentPage from '../content-type-schemas/schemas/content_page.json'
+import partialsContentBlocks from '../content-type-schemas/schemas/partials_content-blocks.json'
 import partialsCta from '../content-type-schemas/schemas/partials_cta.json'
 import partialsImage from '../content-type-schemas/schemas/partials_image.json'
 import slotsSlot from '../content-type-schemas/schemas/slots_slot.json'
@@ -65,7 +67,9 @@ const entry = (
 export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(partialsImage, 'PARTIAL'),
   entry(partialsCta, 'PARTIAL'),
+  entry(partialsContentBlocks, 'PARTIAL'),
   entry(contentPage, 'CONTENT_TYPE'),
+  entry(contentBlogArticle, 'CONTENT_TYPE'),
   entry(contentHero, 'CONTENT_TYPE'),
   entry(contentMarkdownBlock, 'CONTENT_TYPE'),
   entry(contentColumns, 'CONTENT_TYPE'),

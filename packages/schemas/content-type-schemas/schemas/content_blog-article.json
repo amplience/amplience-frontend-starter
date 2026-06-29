@@ -1,0 +1,220 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/blog-article",
+  "title": "Blog Article",
+  "description": "A blog article page — editorial metadata plus an ordered list of slots the renderer composes.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "📝 Content",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "📝 Content",
+            "pointers": ["/slots"]
+          },
+          {
+            "label": "📰 Article",
+            "pointers": [
+              "/coverImage",
+              "/author",
+              "/publishDate",
+              "/category",
+              "/tags",
+              "/readTime"
+            ]
+          },
+          {
+            "label": "🔗 URL",
+            "pointers": ["/_meta/deliveryKeys/values"]
+          },
+          {
+            "label": "⚙️ Metadata",
+            "pointers": [
+              "/title",
+              "/description",
+              "/keywords",
+              "/canonicalUrl",
+              "/robots",
+              "/social"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "_meta": {
+      "title": "Delivery",
+      "type": "object",
+      "properties": {
+        "deliveryKeys": {
+          "title": "Delivery keys",
+          "description": "Variant delivery keys for this item. Use the blog/{slug} convention — e.g. blog/getting-started.",
+          "type": "object",
+          "properties": {
+            "values": {
+              "title": "URL",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "title": "URL",
+                    "minLength": 1,
+                    "maxLength": 150
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "title": {
+      "type": "string",
+      "title": "Title",
+      "description": "Article headline — <title> and SEO."
+    },
+    "description": {
+      "type": "string",
+      "title": "Description",
+      "description": "Meta description — search snippets and social previews.",
+      "ui:component": "text-area"
+    },
+    "keywords": {
+      "type": "array",
+      "title": "Keywords",
+      "description": "Meta keywords.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "social": {
+      "type": "object",
+      "title": "Social card",
+      "description": "Open Graph overrides. Unset fields fall back to the article's own title and description.",
+      "properties": {
+        "title": {
+          "type": "string",
+          "title": "Social title"
+        },
+        "description": {
+          "type": "string",
+          "title": "Social description",
+          "ui:component": "text-area"
+        },
+        "image": {
+          "title": "Social image",
+          "allOf": [
+            {
+              "$ref": "https://quadratic.amplience.com/v2/partials/image"
+            }
+          ]
+        }
+      },
+      "propertyOrder": ["title", "description", "image"]
+    },
+    "canonicalUrl": {
+      "type": "string",
+      "title": "Canonical URL",
+      "description": "Rarely set — when absent, the canonical defaults to the article's /blog/{slug} path."
+    },
+    "robots": {
+      "type": "object",
+      "title": "Robots",
+      "description": "Absent flags mean indexable and followable — editors opt out, never in.",
+      "properties": {
+        "noindex": {
+          "type": "boolean",
+          "title": "No index"
+        },
+        "nofollow": {
+          "type": "boolean",
+          "title": "No follow"
+        }
+      }
+    },
+    "coverImage": {
+      "title": "Cover Image",
+      "description": "Hero image for the article — shown in the article header and article cards on the archive page.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/image"
+        }
+      ]
+    },
+    "author": {
+      "type": "string",
+      "title": "Author",
+      "description": "Author's display name."
+    },
+    "publishDate": {
+      "type": "string",
+      "title": "Publish Date",
+      "description": "ISO 8601 date string, e.g. 2026-06-29. Drives the date shown on the article and archive sort order."
+    },
+    "category": {
+      "type": "string",
+      "title": "Category",
+      "description": "Free-text category label (e.g. \"Getting Started\", \"Best Practices\"). A managed DC content type is the natural MVP upgrade path."
+    },
+    "tags": {
+      "type": "array",
+      "title": "Tags",
+      "description": "Topic tags — used for filtering and display.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "readTime": {
+      "type": "number",
+      "title": "Read Time (minutes)",
+      "description": "Estimated reading time in minutes.",
+      "minimum": 1
+    },
+    "slots": {
+      "title": "Slots",
+      "description": "Ordered slots composing the article body — same pattern as Page.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+          },
+          {
+            "properties": {
+              "contentType": {
+                "enum": ["https://quadratic.amplience.com/v2/slots/slot"]
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "propertyOrder": [
+    "title",
+    "description",
+    "keywords",
+    "social",
+    "canonicalUrl",
+    "robots",
+    "coverImage",
+    "author",
+    "publishDate",
+    "category",
+    "tags",
+    "readTime",
+    "slots"
+  ]
+}

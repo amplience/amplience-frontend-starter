@@ -33,6 +33,21 @@ export type ContentClient = {
   getById<T = unknown>(id: string, opts?: ContentRequestOptions): Promise<ContentItem<T>>
 
   /**
+   * List all published content items whose `_meta.schema` matches `schemaId`.
+   * Backed by the DC Delivery Filter API in the SDK adapter and by a
+   * schema-URI filter over in-memory fixtures in the mock.
+   *
+   * Pagination is handled internally — the returned array contains every
+   * matching item across all pages. Suitable for listing-style routes (the
+   * `/blog` archive) and `generateStaticParams` enumeration in SSG routes.
+   *
+   * Items are returned at `depth: 'root'` — content-link references are left
+   * as stubs. Callers that need the full tree for a specific item should
+   * follow up with `getByKey` / `getById`.
+   */
+  listBySchema<T = unknown>(schemaId: string): Promise<readonly ContentItem<T>[]>
+
+  /**
    * Fetch a hierarchy content item by its root delivery key and assemble the
    * full tree inline — children are injected under `items` (root) and
    * `children` (nodes), matching the shape that `depth: 'all'` produces for

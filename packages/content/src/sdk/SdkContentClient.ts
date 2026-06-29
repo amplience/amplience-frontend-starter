@@ -163,6 +163,51 @@ export const makeSdkContentClient = (config: SdkContentClientConfig): ContentCli
     getById: <T = unknown>(id: string, opts?: ContentRequestOptions) =>
       fetchOne<T>({ id }, opts, `getById("${id}")`),
 
+    listBySchema: async <T = unknown>(schemaId: string): Promise<readonly ContentItem<T>[]> => {
+      // Collect all pages from the DC Filter API. The Filter API caps page
+      // size at 12; `page.next` is present whenever there are more results.
+      // We collect everything before returning so callers don't need to think
+      // about pagination — at the volumes a headless site typically has (tens
+      // to low-hundreds of content items per type) this is fine.
+      const results: ContentItem<T>[] = []
+
+      // Use `Awaited<ReturnType<...>>` so we don't import the non-barrel
+      // FilterByResponse type directly from the SDK's internal module path.
+      // `filterByContentType` returns `FilterBy<any>` (the generic is erased at
+      // the `typeof` level); we cast results to `ContentItem<T>` below.
+      type FilterPage = Awaited<ReturnType<ReturnType<typeof sdk.filterByContentType>['request']>>
+
+      let response: FilterPage
+      try {
+        response = await sdk
+          .filterByContentType<T>(schemaId)
+          .request({ depth: 'root', format: 'inlined' })
+      } catch (error) {
+        throw mapSdkError(error, `listBySchema("${schemaId}")`)
+      }
+
+      for (const entry of response.responses) {
+        results.push(entry.content as unknown as ContentItem<T>)
+      }
+
+      // Follow pagination cursors until exhausted.
+      let nextPage = response.page.next
+      while (nextPage) {
+        let page: FilterPage
+        try {
+          page = await nextPage()
+        } catch (error) {
+          throw mapSdkError(error, `listBySchema("${schemaId}") — pagination`)
+        }
+        for (const entry of page.responses) {
+          results.push(entry.content as unknown as ContentItem<T>)
+        }
+        nextPage = page.page.next
+      }
+
+      return results
+    },
+
     getHierarchy: async <T = unknown>(rootKey: string): Promise<ContentItem<T>> => {
       // Use the SDK's Hierarchy API to fetch the full tree in one request.
       // `sortKey: 'default'` honours the `trait:sortable` position-based order

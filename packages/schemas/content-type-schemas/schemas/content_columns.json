@@ -34,26 +34,7 @@
       "description": "One content item per column.",
       "type": "array",
       "items": {
-        "type": "object",
-        "allOf": [
-          {
-            "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
-          },
-          {
-            "properties": {
-              "contentType": {
-                "enum": [
-                  "https://quadratic.amplience.com/v2/content/hero",
-                  "https://quadratic.amplience.com/v2/content/markdown-block",
-                  "https://quadratic.amplience.com/v2/content/columns",
-                  "https://quadratic.amplience.com/v2/content/grid",
-                  "https://quadratic.amplience.com/v2/content/media-card",
-                  "https://quadratic.amplience.com/v2/content/image"
-                ]
-              }
-            }
-          }
-        ]
+        "$ref": "https://quadratic.amplience.com/v2/partials/content-blocks"
       }
     },
     "gap": {
