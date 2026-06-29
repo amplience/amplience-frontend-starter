@@ -161,5 +161,17 @@ export const makeSdkContentClient = (config: SdkContentClientConfig): ContentCli
 
     getById: <T = unknown>(id: string, opts?: ContentRequestOptions) =>
       fetchOne<T>({ id }, opts, `getById("${id}")`),
+
+    // TODO (QL-129): replace with real Filter API traversal.
+    // Returning a rejected promise (rather than being absent) is intentional
+    // and permanent: Promise.allSettled in layout.tsx degrades gracefully so
+    // sites that don't use HierarchyMenu at all are unaffected.
+    getHierarchy: <T = unknown>(_rootKey: string): Promise<ContentItem<T>> =>
+      Promise.reject(
+        new ContentClientError(
+          'not-found',
+          'getHierarchy is not yet implemented in SdkContentClient (QL-129).',
+        ),
+      ),
   }
 }
