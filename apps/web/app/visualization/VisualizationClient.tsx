@@ -28,7 +28,7 @@
  * in place (ADR-0010 §5B) rather than crashing.
  */
 import { init } from 'dc-visualization-sdk'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 
 import { defaultRegistry } from '@amplience/quadratic-components/registry'
 import type { RenderContext } from '@amplience/quadratic-types'
@@ -58,6 +58,7 @@ type Props = {
 
 export function VisualizationClient({ initialModel, isTopOfPage }: Props) {
   const [model, setModel] = useState(initialModel)
+  const [, startTransition] = useTransition()
 
   useEffect(() => {
     let unsubscribe: (() => void) | undefined
@@ -67,9 +68,15 @@ export function VisualizationClient({ initialModel, isTopOfPage }: Props) {
         // form.changed delivers models in CDv2Response shape: { content: body }.
         // Extract .content so the renderer receives the same { _meta, ...fields }
         // shape as the server-side getById() fetch.
+        //
+        // startTransition marks the re-render as non-urgent: React coalesces
+        // rapid updates (e.g. every keystroke) and skips intermediate renders
+        // when a new model arrives before the previous one finishes painting.
         unsubscribe = sdk.form.changed(
           ({ content }) => {
-            setModel(content)
+            startTransition(() => {
+              setModel(content)
+            })
           },
           { format: 'inlined', depth: 'all' },
         )
