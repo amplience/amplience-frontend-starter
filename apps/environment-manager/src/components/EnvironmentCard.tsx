@@ -219,6 +219,35 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
   }, [op?.log])
 
   const isRunning = op?.status === 'running'
+  const audioCtxRef = useRef<AudioContext | null>(null)
+
+  function playTone(type: 'success' | 'error') {
+    try {
+      audioCtxRef.current ??= new AudioContext()
+      const ctx = audioCtxRef.current
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      if (type === 'success') {
+        osc.type = 'sine'
+        osc.frequency.setValueAtTime(880, ctx.currentTime)
+        osc.frequency.exponentialRampToValueAtTime(1100, ctx.currentTime + 0.08)
+        gain.gain.setValueAtTime(0.18, ctx.currentTime)
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4)
+      } else {
+        osc.type = 'sawtooth'
+        osc.frequency.setValueAtTime(220, ctx.currentTime)
+        osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.25)
+        gain.gain.setValueAtTime(0.22, ctx.currentTime)
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5)
+      }
+      osc.start(ctx.currentTime)
+      osc.stop(ctx.currentTime + 0.55)
+    } catch {
+      // AudioContext unavailable — silent fail
+    }
+  }
 
   async function runOp(key: OpKey) {
     if (key === 'wipe-items' || key === 'wipe-all') {
@@ -259,6 +288,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
       setOp((prev) => {
         if (!prev) return null
         const hasError = prev.log.includes('✗') || prev.log.includes('Error: ')
+        playTone(hasError ? 'error' : 'success')
         return { ...prev, status: hasError ? 'error' : 'done' }
       })
 
