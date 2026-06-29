@@ -17,15 +17,18 @@
     "@amplience/quadratic-content": "workspace:*",
     "@amplience/quadratic-theme": "workspace:*",
     "@amplience/quadratic-types": "workspace:*",
+    "dc-visualization-sdk": "^1.1.0",
     "next": "^16.2.7",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
     "@amplience/quadratic-config": "workspace:*",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^25.9.1",
     "@types/react": "^19.2.16",
     "@types/react-dom": "^19.0.0",
+    "jsdom": "^29.1.1",
     "typescript": "^6.0.3"
   }
 }
