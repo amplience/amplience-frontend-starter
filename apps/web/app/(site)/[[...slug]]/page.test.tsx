@@ -34,6 +34,7 @@ vi.mock('@amplience/quadratic-content/mock', async (importOriginal) => {
 const makeStubClient = (impl: Partial<ContentClient>): ContentClient => ({
   getByKey: () => Promise.reject(new Error('stub: getByKey not implemented')),
   getById: () => Promise.reject(new Error('stub: getById not implemented')),
+  getHierarchy: () => Promise.reject(new Error('stub: getHierarchy not implemented')),
   ...impl,
 })
 

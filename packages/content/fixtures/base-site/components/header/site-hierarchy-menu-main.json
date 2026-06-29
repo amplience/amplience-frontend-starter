@@ -8,8 +8,12 @@
       "deliveryId": "c3d4e5f6-0004-4000-8000-000000000001",
       "deliveryKeys": {
         "values": [{ "value": "site/hierarchy-menu-main" }]
+      },
+      "hierarchy": {
+        "root": true
       }
     },
-    "useMobileLayout": true
+    "useMobileLayout": true,
+    "display": "dropdownOnHover"
   }
 }

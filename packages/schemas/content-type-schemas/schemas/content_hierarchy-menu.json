@@ -22,21 +22,6 @@
       }
     ]
   },
-  "ui:component": {
-    "name": "tabs",
-    "params": {
-      "tabs": {
-        "defaultTab": "⚙️ Options",
-        "variant": "outline",
-        "items": [
-          {
-            "label": "⚙️ Options",
-            "pointers": ["/useMobileLayout", "/display"]
-          }
-        ]
-      }
-    }
-  },
   "type": "object",
   "properties": {
     "useMobileLayout": {

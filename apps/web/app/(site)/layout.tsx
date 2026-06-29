@@ -15,23 +15,17 @@ import { renderContent } from '../../src/renderer'
  * this layout never runs for them.
  */
 export default async function SiteLayout({ children }: { children: ReactNode }) {
-  const [headerResult, footerResult, hierarchyMenuResult] = await Promise.allSettled([
+  const [headerResult, footerResult] = await Promise.allSettled([
     client.getByKey('site/header', { depth: 'all' }),
     client.getByKey('site/footer', { depth: 'all' }),
-    client.getHierarchy('site/hierarchy-menu-main'),
   ])
   const header =
     headerResult.status === 'fulfilled' ? renderContent(headerResult.value, registry) : null
   const footer =
     footerResult.status === 'fulfilled' ? renderContent(footerResult.value, registry) : null
-  const hierarchyMenu =
-    hierarchyMenuResult.status === 'fulfilled'
-      ? renderContent(hierarchyMenuResult.value, registry)
-      : null
   return (
     <>
       {header}
-      {hierarchyMenu}
       <main>{children}</main>
       {footer}
     </>
