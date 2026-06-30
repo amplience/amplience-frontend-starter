@@ -2,7 +2,13 @@
   "contentTypeUri": "https://quadratic.amplience.com/v2/content/markdown-block",
   "status": "ACTIVE",
   "settings": {
-    "label": "Markdown block",
+    "label": "Markdown Block",
+    "icons": [
+      {
+        "size": 256,
+        "url": "http://bigcontent.io/cms/icons/ca-types-default.png"
+      }
+    ],
     "visualizations": [
       {
         "label": "Web (localhost)",

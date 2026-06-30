@@ -3,6 +3,12 @@
   "status": "ACTIVE",
   "settings": {
     "label": "Footer",
+    "icons": [
+      {
+        "size": 256,
+        "url": "http://bigcontent.io/cms/icons/ca-types-default.png"
+      }
+    ],
     "visualizations": [
       {
         "label": "Web (localhost)",
