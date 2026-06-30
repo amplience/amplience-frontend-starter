@@ -2,7 +2,13 @@
   "contentTypeUri": "https://quadratic.amplience.com/v2/content/grid",
   "status": "ACTIVE",
   "settings": {
-    "label": "Grid",
+    "label": "Grid Block",
+    "icons": [
+      {
+        "size": 256,
+        "url": "http://bigcontent.io/cms/icons/ca-types-default.png"
+      }
+    ],
     "visualizations": [
       {
         "label": "Web (localhost)",

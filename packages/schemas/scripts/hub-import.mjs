@@ -187,6 +187,14 @@ const importTypes = async () => {
       raw.replaceAll('${hub}', hubName).replaceAll('${localhostUrl}', localhostUrl),
     )
 
+    // If there's at least one webApp, inject a custom card thumbnail using the first one's URL.
+    if (webApps.length > 0) {
+      const firstWebAppUrl = webApps[0].url
+      if (data.settings?.cards?.[0]) {
+        data.settings.cards[0].templatedUri = `${firstWebAppUrl}/visualization?vse={{vse.domain}}&content={{content.sys.id}}&isThumbnail=true`
+      }
+    }
+
     // Inject one Web (label) entry per webApp, immediately after the localhost entry.
     const visualisations = data.settings?.visualizations
     if (Array.isArray(visualisations) && webApps.length > 0) {

@@ -36,7 +36,7 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
-import { PAGE_SCHEMA } from '@amplience/quadratic-components/registry'
+import { BLOG_ARTICLE_SCHEMA, PAGE_SCHEMA } from '@amplience/quadratic-components/registry'
 import { isContentClientError, resolveContentConfig } from '@amplience/quadratic-content'
 import { makeSdkContentClient } from '@amplience/quadratic-content/sdk'
 
@@ -86,7 +86,11 @@ const single = (value: string | string[] | undefined): string | undefined =>
   typeof value === 'string' && value !== '' ? value : undefined
 
 type RouteProps = {
-  searchParams: Promise<{ vse?: string | string[]; content?: string | string[] }>
+  searchParams: Promise<{
+    vse?: string | string[]
+    content?: string | string[]
+    isThumbnail?: string | string[]
+  }>
 }
 
 const misconfigured = (summary: string) => (
@@ -101,6 +105,7 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
   const params = await searchParams
   const vse = single(params.vse)
   const contentId = single(params.content)
+  const isThumbnail = single(params.isThumbnail)
 
   if (vse === undefined || contentId === undefined) {
     return misconfigured(
@@ -137,9 +142,26 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
     return <ContentUnavailableCard error={error} resource={contentId} />
   }
 
-  const isPage = (item as { _meta?: { schema?: unknown } })?._meta?.schema === PAGE_SCHEMA
+  const isTopLevel = [PAGE_SCHEMA, BLOG_ARTICLE_SCHEMA].includes(
+    (item as { _meta?: { schema?: string } })?._meta?.schema ?? '',
+  )
 
-  if (!isPage) {
+  if (isThumbnail) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh',
+        }}
+      >
+        <VisualizationClient initialModel={item} isTopOfPage />
+      </div>
+    )
+  }
+
+  if (!isTopLevel) {
     return <VisualizationClient initialModel={item} isTopOfPage />
   }
 
