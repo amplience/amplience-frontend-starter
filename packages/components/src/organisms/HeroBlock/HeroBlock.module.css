@@ -71,12 +71,6 @@
   background-color: var(--hero-background-color);
   color: var(--hero-text-color);
 
-  /* Height constraints — set as inline px vars by the minHeight/maxHeight
-     props; brands can also override under [data-brand]. min-height applies
-     in all layout modes; max-height is gated on its data attribute (below)
-     so the overflow clip only exists when a cap was actually requested. */
-  min-height: var(--hero-min-height, auto);
-
   /* Vertical position — applies whenever the section is taller than its
      in-flow children (a minHeight'd text-only hero, or fitToContent with
      minHeight slack). No effect when height is content-driven (no slack).
@@ -372,6 +366,8 @@
 
 @media (max-width: 768px) {
   .root:not([data-content-position-mobile='beneath']) {
+    min-height: var(--hero-min-height, auto);
+
     &[data-horizontal-position='left'] .content {
       margin-inline: 0 auto;
     }
@@ -387,6 +383,8 @@
 
 @media (min-width: 769px) {
   .root:not([data-content-position-desktop='beneath']) {
+    min-height: var(--hero-min-height, auto);
+
     & .content {
       width: var(--contentWidth);
     }
