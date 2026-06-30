@@ -151,12 +151,17 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'center',
           alignItems: 'center',
           minHeight: '100vh',
         }}
       >
-        <VisualizationClient initialModel={item} isTopOfPage />
+        <div
+          style={{
+            marginInline: 'auto',
+          }}
+        >
+          <VisualizationClient initialModel={item} isTopOfPage />
+        </div>
       </div>
     )
   }
