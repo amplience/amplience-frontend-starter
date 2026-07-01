@@ -7,6 +7,11 @@ settings:
 overrides:
   '@types/react': 19.2.17
   shell-quote: '>=1.8.4'
+  axios: '>=1.16.0 <2.0.0'
+  lodash: '>=4.18.0 <5.0.0'
+  undici: ^7.28.0
+  uuid: '>=11.1.1 <12.0.0'
+  tmp: ^0.2.7
 
 importers:
 
@@ -2319,10 +2324,7 @@ packages:
   axios-retry@4.5.0:
     resolution: {integrity: sha512-aR99oXhpEDGo0UuAlYcn2iGRds30k366Zfa05XWScR9QaQD4JYiP3/1Qt1u7YlefUOK+cn0CcwoL1oefavQUlQ==}
     peerDependencies:
-      axios: 0.x || 1.x
-
-  axios@1.12.2:
-    resolution: {integrity: sha512-vMJzPewAlRyOgxV2dU0Cuz2O8zzzx9VYtbJOaBgXFeLc4IV/Eg50n4LowmehOOR61S8ZMpc2K5Sa7g6A4jfkUw==}
+      axios: '>=1.16.0 <2.0.0'
 
   axios@1.17.0:
     resolution: {integrity: sha512-J8SwNxprqqpbfenehxWYXE7CW+wM1BB4w3+N+g+/Wx40xM4rsLrfPmHHxSWIxJLYDgSY/HqlFPIYb2/S3rxafw==}
@@ -3839,8 +3841,8 @@ packages:
   lodash.once@4.1.1:
     resolution: {integrity: sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==}
 
-  lodash@4.17.21:
-    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+  lodash@4.18.1:
+    resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
 
   log-update@6.1.0:
     resolution: {integrity: sha512-9ie8ItPR6tjY5uYJh8K/Zrv/RMZ5VOlOWvtZdEHYSTFKZfIBPQa9tOAEeAWhd+AnIneLJ22w5fjOYtoutpWq5w==}
@@ -4374,9 +4376,6 @@ packages:
 
   proto-list@1.2.4:
     resolution: {integrity: sha512-vtK/94akxsTMhe0/cbfpR+syPuszcuwhqVjJq26CuNDgFGj682oRBXOP5MJpv2r7JtE8MsiepGIqvvOTBwn2vA==}
-
-  proxy-from-env@1.1.0:
-    resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
 
   proxy-from-env@2.1.0:
     resolution: {integrity: sha512-cJ+oHTW1VAEa8cJslgmUZrc+sjRKgAKl3Zyse6+PV38hZe/V6Z14TbCuXcan9F9ghlz4QrFr2c92TNF82UkYHA==}
@@ -4923,8 +4922,8 @@ packages:
   tmcp@1.19.4:
     resolution: {integrity: sha512-fMoUJ3Gef9iA0yKZNeW2SQCCKTluCwghUyOz/qxPS8XxrQk6Jlw4lgql3S+s6L//FteLeSJ7erKxMWl727mZoQ==}
 
-  tmp@0.2.5:
-    resolution: {integrity: sha512-voyz6MApa1rQGUxT3E+BK7/ROe8itEx7vD8/HEvt4xwXucvQ5G5oeEiHkmHZJuBO21RpOf+YYm9MOivj709jow==}
+  tmp@0.2.7:
+    resolution: {integrity: sha512-e0votIpp4Uo2AJYSzVHV6xCcawuiez3DzqDAbrTc3YxBkplN6e+dM13ZeIcZnDg/QpSuU2zfZ3rzwY8ukEnaXw==}
     engines: {node: '>=14.14'}
 
   to-regex-range@5.0.1:
@@ -5038,8 +5037,8 @@ packages:
   undici-types@8.3.0:
     resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
 
-  undici@7.27.0:
-    resolution: {integrity: sha512-+t2Z/GwkZQDtu00813aP66ygViGtPHKhhoFZpQKpKrE+9jIgES+Zw+mFNaDWOVRKiuJjuqKHzD3B1sfGg8+ZOQ==}
+  undici@7.28.0:
+    resolution: {integrity: sha512-cRZYrTDwWznlnRiPjggAGxZXanty6M8RV1ff8Wm4LWXBp7/IG8v5DnOm74DtUBp9OONpK75YlPnIjQqX0dBDtA==}
     engines: {node: '>=20.18.1'}
 
   unified@11.0.5:
@@ -5121,9 +5120,8 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  uuid@8.3.2:
-    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
-    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
+  uuid@11.1.1:
+    resolution: {integrity: sha512-vIYxrBCC/N/K+Js3qSN88go7kIfNPssr/hHCesKCQNAjmgvYS2oqr69kIufEG+O4+PfezOH4EbIeHCfFov8ZgQ==}
     hasBin: true
 
   valibot@1.2.0:
@@ -5472,8 +5470,8 @@ snapshots:
   '@amplience/dc-cli@0.31.0':
     dependencies:
       ajv: 6.12.6
-      axios: 1.12.2
-      axios-retry: 4.5.0(axios@1.12.2)
+      axios: 1.17.0
+      axios-retry: 4.5.0(axios@1.17.0)
       bottleneck: 2.19.5
       chalk: 2.4.2
       cli-progress: 3.12.0
@@ -5481,7 +5479,7 @@ snapshots:
       enquirer: 2.3.6
       fs-extra: 10.1.0
       graceful-fs: 4.2.11
-      lodash: 4.17.21
+      lodash: 4.18.1
       node-fetch: 2.7.0
       rimraf: 3.0.2
       sanitize-filename: 1.6.3
@@ -5491,6 +5489,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
       - encoding
+      - supports-color
 
   '@asamuzakjp/css-color@5.1.11':
     dependencies:
@@ -7180,23 +7179,10 @@ snapshots:
 
   axe-core@4.11.4: {}
 
-  axios-retry@4.5.0(axios@1.12.2):
-    dependencies:
-      axios: 1.12.2
-      is-retry-allowed: 2.2.0
-
   axios-retry@4.5.0(axios@1.17.0):
     dependencies:
       axios: 1.17.0
       is-retry-allowed: 2.2.0
-
-  axios@1.12.2:
-    dependencies:
-      follow-redirects: 1.16.0
-      form-data: 4.0.6
-      proxy-from-env: 1.1.0
-    transitivePeerDependencies:
-      - debug
 
   axios@1.17.0:
     dependencies:
@@ -7533,11 +7519,12 @@ snapshots:
 
   dc-management-sdk-js@3.3.0:
     dependencies:
-      axios: 1.12.2
-      axios-retry: 4.5.0(axios@1.12.2)
+      axios: 1.17.0
+      axios-retry: 4.5.0(axios@1.17.0)
       url-template: 2.0.8
     transitivePeerDependencies:
       - debug
+      - supports-color
 
   dc-visualization-sdk@1.1.0:
     dependencies:
@@ -8652,7 +8639,7 @@ snapshots:
       saxes: 6.0.0
       symbol-tree: 3.2.4
       tough-cookie: 6.0.1
-      undici: 7.27.0
+      undici: 7.28.0
       w3c-xmlserializer: 5.0.0
       webidl-conversions: 8.0.1
       whatwg-mimetype: 5.0.0
@@ -8862,7 +8849,7 @@ snapshots:
 
   lodash.once@4.1.1: {}
 
-  lodash@4.17.21: {}
+  lodash@4.18.1: {}
 
   log-update@6.1.0:
     dependencies:
@@ -9268,7 +9255,7 @@ snapshots:
       is-wsl: 2.2.0
       semver: 7.8.0
       shellwords: 0.1.1
-      uuid: 8.3.2
+      uuid: 11.1.1
       which: 2.0.2
 
   node-releases@2.0.44: {}
@@ -9591,8 +9578,6 @@ snapshots:
   property-information@7.2.0: {}
 
   proto-list@1.2.4: {}
-
-  proxy-from-env@1.1.0: {}
 
   proxy-from-env@2.1.0: {}
 
@@ -10251,7 +10236,7 @@ snapshots:
   table@5.4.6:
     dependencies:
       ajv: 6.15.0
-      lodash: 4.17.21
+      lodash: 4.18.1
       slice-ansi: 2.1.0
       string-width: 3.1.0
 
@@ -10294,7 +10279,7 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  tmp@0.2.5: {}
+  tmp@0.2.7: {}
 
   to-regex-range@5.0.1:
     dependencies:
@@ -10407,7 +10392,7 @@ snapshots:
 
   undici-types@8.3.0: {}
 
-  undici@7.27.0: {}
+  undici@7.28.0: {}
 
   unified@11.0.5:
     dependencies:
@@ -10519,7 +10504,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  uuid@8.3.2: {}
+  uuid@11.1.1: {}
 
   valibot@1.2.0(typescript@6.0.3):
     optionalDependencies:
@@ -10652,7 +10637,7 @@ snapshots:
       source-map-support: 0.5.21
       strip-bom: 5.0.0
       strip-json-comments: 5.0.2
-      tmp: 0.2.5
+      tmp: 0.2.7
       update-notifier: 7.3.1
       watchpack: 2.4.4
       zip-dir: 2.0.0
