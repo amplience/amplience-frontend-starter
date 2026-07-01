@@ -22,13 +22,7 @@ export type HeroBlockOverlayStyle = 'gradient' | 'solid' | 'hard'
 export type HeroBlockTextColor = HeroBlockColorToken
 /** Shared palette type — used for both backgroundColor and overlayColor. */
 export type HeroBlockColorToken =
-  | 'primary'
-  | 'secondary'
-  | 'tertiary'
-  | 'light'
-  | 'dark'
-  | 'black'
-  | 'white'
+  'primary' | 'secondary' | 'tertiary' | 'light' | 'dark' | 'black' | 'white'
 export type HeroBlockBackgroundColor = HeroBlockColorToken
 export type HeroBlockOverlayColor = HeroBlockColorToken
 

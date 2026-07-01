@@ -13,13 +13,7 @@ import styles from './ImageBlock.module.css'
 // ---------------------------------------------------------------------------
 
 export type ImageBlockColorToken =
-  | 'primary'
-  | 'secondary'
-  | 'tertiary'
-  | 'light'
-  | 'dark'
-  | 'black'
-  | 'white'
+  'primary' | 'secondary' | 'tertiary' | 'light' | 'dark' | 'black' | 'white'
 
 export type ImageBlockBackgroundColor = ImageBlockColorToken
 

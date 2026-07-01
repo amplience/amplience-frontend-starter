@@ -13,13 +13,7 @@ import styles from './MarkdownBlock.module.css'
 // ---------------------------------------------------------------------------
 
 export type MarkdownBlockColorToken =
-  | 'primary'
-  | 'secondary'
-  | 'tertiary'
-  | 'light'
-  | 'dark'
-  | 'black'
-  | 'white'
+  'primary' | 'secondary' | 'tertiary' | 'light' | 'dark' | 'black' | 'white'
 
 export type MarkdownBlockCtaProps = {
   label: string

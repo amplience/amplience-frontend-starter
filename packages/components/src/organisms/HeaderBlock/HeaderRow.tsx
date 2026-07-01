@@ -10,13 +10,7 @@ import styles from './HeaderRow.module.css'
 // ---------------------------------------------------------------------------
 
 export type HeaderRowColorToken =
-  | 'primary'
-  | 'secondary'
-  | 'tertiary'
-  | 'light'
-  | 'dark'
-  | 'black'
-  | 'white'
+  'primary' | 'secondary' | 'tertiary' | 'light' | 'dark' | 'black' | 'white'
 
 export type HeaderRowProps = {
   /**

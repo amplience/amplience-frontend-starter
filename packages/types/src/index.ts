@@ -137,6 +137,4 @@ export type PropsValidationFailure = {
 
 /** Union of everything the dispatcher can emit when dispatch fails. */
 export type RendererFailure =
-  | SchemaUnknownFailure
-  | ComponentUnregisteredFailure
-  | PropsValidationFailure
+  SchemaUnknownFailure | ComponentUnregisteredFailure | PropsValidationFailure

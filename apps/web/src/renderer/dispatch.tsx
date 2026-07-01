@@ -131,8 +131,7 @@ export function renderContent(
 
   const component = entry.component as ComponentType<Record<string, unknown>> | undefined
   const adapt = entry.propsFromSchema as
-    | ((schema: unknown, ctx: RenderContext) => unknown)
-    | undefined
+    ((schema: unknown, ctx: RenderContext) => unknown) | undefined
   const validate = entry.validate as ((schema: unknown) => boolean) | undefined
   const getChildren = entry.getChildren as ((schema: unknown) => readonly unknown[]) | undefined
 

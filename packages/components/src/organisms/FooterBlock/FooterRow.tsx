@@ -10,13 +10,7 @@ import styles from './FooterRow.module.css'
 // ---------------------------------------------------------------------------
 
 export type FooterRowColorToken =
-  | 'primary'
-  | 'secondary'
-  | 'tertiary'
-  | 'light'
-  | 'dark'
-  | 'black'
-  | 'white'
+  'primary' | 'secondary' | 'tertiary' | 'light' | 'dark' | 'black' | 'white'
 
 export type FooterRowProps = {
   /**
