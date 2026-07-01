@@ -94,3 +94,7 @@ To register a deployed site against a hub, open that hub's card in `env-manager`
 ## Contributing
 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the workflow, and [`docs/editor-setup.md`](docs/editor-setup.md) for recommended (optional) editor settings.
+
+## Troubleshooting
+
+If you see a `[DEP0169] DeprecationWarning: url.parse()` line, that's coming from inside pnpm's own bundled code (not this project) — see [pnpm#9492](https://github.com/pnpm/pnpm/issues/9492). It's cosmetic; silence it by adding `export NODE_OPTIONS="--disable-warning=DEP0169"` to your shell profile.
