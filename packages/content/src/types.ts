@@ -86,11 +86,7 @@ export type ContentRequestOptions = {
 
 /** Discriminator for typed errors emitted by any ContentClient implementation. */
 export type ContentClientErrorKind =
-  | 'not-found'
-  | 'unauthorised'
-  | 'network'
-  | 'malformed'
-  | 'unknown'
+  'not-found' | 'unauthorised' | 'network' | 'malformed' | 'unknown'
 
 /**
  * Typed error surface for ContentClient failures. The renderer's loud-failure

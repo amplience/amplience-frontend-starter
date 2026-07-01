@@ -10,13 +10,7 @@ import styles from './ColumnsBlock.module.css'
 // ---------------------------------------------------------------------------
 
 export type ColumnsBlockColorToken =
-  | 'primary'
-  | 'secondary'
-  | 'tertiary'
-  | 'light'
-  | 'dark'
-  | 'black'
-  | 'white'
+  'primary' | 'secondary' | 'tertiary' | 'light' | 'dark' | 'black' | 'white'
 
 export type ColumnsBlockBackgroundColor = ColumnsBlockColorToken
 

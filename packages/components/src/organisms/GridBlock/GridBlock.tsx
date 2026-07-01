@@ -10,13 +10,7 @@ import styles from './GridBlock.module.css'
 // ---------------------------------------------------------------------------
 
 export type GridBlockColorToken =
-  | 'primary'
-  | 'secondary'
-  | 'tertiary'
-  | 'light'
-  | 'dark'
-  | 'black'
-  | 'white'
+  'primary' | 'secondary' | 'tertiary' | 'light' | 'dark' | 'black' | 'white'
 
 export type GridBlockBackgroundColor = GridBlockColorToken
 
