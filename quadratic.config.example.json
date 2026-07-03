@@ -13,7 +13,7 @@
       "clientSecret": "",
       "stagingHost": "",
       "defaultBrand": "",
-      "mainSite": "",
+      "defaultSite": "",
       "webApps": [],
       "republish": false
     }

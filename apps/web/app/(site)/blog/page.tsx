@@ -44,7 +44,7 @@ type BlogArticleCardProps = {
 function BlogArticleCard({ article, slug }: BlogArticleCardProps) {
   const href = `/blog/${slug}`
 
-  /* If there's an author, prepend it to the description (separated with a bulletpoint character) */
+  /* If there's an author, prepend it to the description (separated with a bullet point character) */
   /* Same goes for the publish date, if present. */
   const cardContent = [
     article.author ? `By ${article.author}` : undefined,

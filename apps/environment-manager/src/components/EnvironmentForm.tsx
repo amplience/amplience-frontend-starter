@@ -65,9 +65,9 @@ const CONFIG_FIELDS: FieldMeta[] = [
     placeholder: 'e.g. acme — sets NEXT_PUBLIC_BRAND',
   },
   {
-    key: 'mainSite',
-    label: 'Main site',
-    placeholder: 'e.g. acme — delivery-key namespace, sets SITE_NAME',
+    key: 'defaultSite',
+    label: 'Default site',
+    placeholder: 'e.g. acme — defaults to hub name if empty',
   },
 ]
 
@@ -130,12 +130,12 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
       filled.add('stagingHost')
     }
     setForm((prev) => {
-      // Main site defaults to the hub name (ADR-0014) — prefill it so the
+      // Default site defaults to the hub name (ADR-0014) — prefill it so the
       // convention is visible and editable, but never clobber a custom value.
       const next = { ...prev, ...updates }
-      if ((prev.mainSite ?? '') === '' || prev.mainSite === prev.hubName) {
-        next.mainSite = hub.name
-        filled.add('mainSite')
+      if ((prev.defaultSite ?? '') === '' || prev.defaultSite === prev.hubName) {
+        next.defaultSite = hub.name
+        filled.add('defaultSite')
       }
       return next
     })

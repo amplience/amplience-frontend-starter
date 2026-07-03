@@ -36,7 +36,7 @@ You can start this by running `pnpm sb` or `pnpm storybook`
 
 ## Connecting to a hub
 
-The local dev server can also be pointed at a real Amplience hub instead of the fixtures. Adding one takes about 40 seconds via the environment manager GUI:
+The local dev server can also be pointed at a real Amplience hub instead of the fixtures. Adding one takes about 50 seconds via the environment manager GUI:
 
 1. Run `pnpm env-manager` to start the GUI
 2. Click **+ Add hub**

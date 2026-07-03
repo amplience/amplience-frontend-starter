@@ -13,11 +13,7 @@ export type Environment = {
   clientSecret: string
   stagingHost: string
   defaultBrand: string
-  /**
-   * Delivery-key namespace for the hub's main frontend (SITE_NAME,
-   * ADR-0014). Blank = the runtime default (the hub name).
-   */
-  mainSite: string
+  defaultSite: string
   webApps: WebApp[]
   republish: boolean
 }
@@ -37,8 +33,7 @@ export type WebApp = {
   label: string
   url: string
   brand: string
-  /** Delivery-key namespace the deployed site serves (its SITE_NAME, ADR-0014). */
-  sitename: string
+  name: string
 }
 
 export type DiscoveredRepo = {
@@ -84,7 +79,7 @@ export const EMPTY_ENV: Environment = {
   clientSecret: '',
   stagingHost: '',
   defaultBrand: '',
-  mainSite: '',
+  defaultSite: '',
   webApps: [],
   republish: false,
 }

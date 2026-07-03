@@ -22,7 +22,7 @@ export function FixturesCard({ isActive, onActivate }: Props) {
           if (e.key === 'Enter' || e.key === ' ') setCollapsed((v) => !v)
         }}
       >
-        <div>
+        <div className="env-card__header-labels">
           <span className="env-card__label">Local Fixtures</span>
           <span className="badge badge--builtin">Built-in</span>
           {isActive && <span className="badge badge--active">Active</span>}
