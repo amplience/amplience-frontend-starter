@@ -5,14 +5,7 @@
     "_meta": {
       "name": "Home \u2014 card: brand adaptable",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
-      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000013",
-      "deliveryKeys": {
-        "values": [
-          {
-            "value": "base-site/home/card-brand"
-          }
-        ]
-      }
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000013"
     },
     "title": "Adapts to your brand",
     "description": "CSS custom properties let editors control colour, typography, and spacing through content \u2014 no code changes required.",

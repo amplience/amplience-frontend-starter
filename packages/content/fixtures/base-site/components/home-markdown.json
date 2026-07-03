@@ -5,10 +5,7 @@
     "_meta": {
       "name": "Home — intro markdown",
       "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
-      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000016",
-      "deliveryKeys": {
-        "values": [{ "value": "base-site/home/markdown" }]
-      }
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000016"
     },
     "content": "### Key concepts\n\n- **Mock content client** — fixture-based, works offline and in Storybook\n- **Slot renderer** — dispatches on `_meta.schema`; unknown types fall back to a `<Placeholder>`\n- **Atomic design** — atoms → molecules → organisms, all token-driven\n\n> Brands override design tokens under `[data-brand]` without touching component files.",
     "maxWidth": "narrow",

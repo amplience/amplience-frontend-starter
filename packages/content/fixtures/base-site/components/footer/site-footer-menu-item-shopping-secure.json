@@ -5,8 +5,7 @@
     "_meta": {
       "name": "Footer menu item — Secure shopping",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000021",
-      "deliveryKeys": { "values": [{ "value": "base-site/site/footer-menu-item-shopping-secure" }] }
+      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000021"
     },
     "label": "Secure shopping",
     "link": "/shopping/secure"

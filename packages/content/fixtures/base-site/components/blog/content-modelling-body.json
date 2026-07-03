@@ -5,14 +5,7 @@
     "_meta": {
       "name": "Blog \u2014 Content Modelling \u2014 body",
       "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
-      "deliveryId": "b10ga721-0003-4000-8000-000000000001",
-      "deliveryKeys": {
-        "values": [
-          {
-            "value": "base-site/blog/content-modelling/body"
-          }
-        ]
-      }
+      "deliveryId": "b10ga721-0003-4000-8000-000000000001"
     },
     "content": "## Content Modelling: The Foundation of Everything\n\nA content model is a blueprint for how your content is structured. Get it right early and your editors will thank you; get it wrong and you'll be wrestling with schema migrations for years. Here are the principles that guide Amplience content modelling in practice.\n\n## 1. Separate Structure From Presentation\n\nThe most common mistake is baking visual concerns into your content types. A field called `backgroundColor` or `layoutVariant` is a sign you're modelling presentation rather than content. Instead, store facts:\n\n- `title`, `description`, `callToAction` \u2014 not `heroStyle: 'dark-overlay'`\n- `publishDate`, `author`, `category` \u2014 not `cardStyle: 'featured'`\n\nPresentation is the renderer's job. Content types should answer *what is this?* not *how should this look?*\n\n## 2. Use Partials for Shared Shapes\n\nAmplience supports JSON Schema `$ref` for referencing shared definitions \u2014 Quadratic calls these **partials**. Common shapes like an image with alt text, a CTA button, or an address belong in partials, not copy-pasted into every schema that needs them.\n\nWhen the image shape needs a new field, you update one partial and every content type using it inherits the change.\n\n## 3. Slots and Blocks: the Composability Pattern\n\nAmplience's native composability model is **page \u2192 slots \u2192 blocks**:\n\n- A **page** holds an ordered list of slot content-links.\n- A **slot** holds an ordered list of block content-links.\n- **Blocks** are atomic components: hero, markdown, image, columns, grid.\n\nThis three-level structure gives editors maximum flexibility while keeping blocks reusable across page types \u2014 a hero on a landing page is the same hero on a blog article.\n\n## 4. Delivery Keys Are Your URL Contract\n\nDelivery keys are the stable identifiers editors set on content items. They're what your code fetches by \u2014 so treat them as a URL contract:\n\n- `homepage` \u2192 the homepage\n- `blog/getting-started` \u2192 a blog article\n- `site/header` \u2192 the global header\n\nNamespace keys with a prefix (`blog/`, `site/`) so your routing logic can distinguish content types by key pattern without fetching the item first.\n\n## 5. Design for the Filter API\n\nIf you'll ever need to list all items of a type (a blog archive, a product listing), design your content type to be filterable from day one. The Amplience Filter API queries by schema URI \u2014 so any content type can be listed, no `BlogArchive` content type needed.",
     "gutter": true

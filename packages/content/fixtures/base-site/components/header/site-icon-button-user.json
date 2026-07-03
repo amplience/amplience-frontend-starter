@@ -5,10 +5,7 @@
     "_meta": {
       "name": "Site — icon button: account",
       "schema": "https://quadratic.amplience.com/v2/content/icon-button",
-      "deliveryId": "a1b2c3d4-0004-4000-8000-000000000006",
-      "deliveryKeys": {
-        "values": [{ "value": "base-site/site/icon-button-user" }]
-      }
+      "deliveryId": "a1b2c3d4-0004-4000-8000-000000000006"
     },
     "icon": "user",
     "label": "My account",

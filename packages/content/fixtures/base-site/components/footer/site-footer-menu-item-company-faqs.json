@@ -5,8 +5,7 @@
     "_meta": {
       "name": "Footer menu item — FAQs",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000031",
-      "deliveryKeys": { "values": [{ "value": "base-site/site/footer-menu-item-company-faqs" }] }
+      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000031"
     },
     "label": "FAQs",
     "link": "/company/faqs"

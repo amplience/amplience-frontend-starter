@@ -5,10 +5,7 @@
     "_meta": {
       "name": "Home — Quadratic attributes grid",
       "schema": "https://quadratic.amplience.com/v2/content/grid",
-      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000010",
-      "deliveryKeys": {
-        "values": [{ "value": "base-site/home/grid" }]
-      }
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000010"
     },
     "sizingMode": "auto",
     "minItemWidth": 280,

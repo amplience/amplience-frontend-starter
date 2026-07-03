@@ -5,14 +5,7 @@
     "_meta": {
       "name": "Home \u2014 card: time to value",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
-      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000019",
-      "deliveryKeys": {
-        "values": [
-          {
-            "value": "base-site/home/card-time-to-value"
-          }
-        ]
-      }
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000019"
     },
     "title": "Faster time to value",
     "description": "Skip the boilerplate. Quadratic Lite gets new Amplience implementations to a working frontend faster, so teams can focus on what matters.",

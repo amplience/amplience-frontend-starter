@@ -5,8 +5,7 @@
     "_meta": {
       "name": "Footer menu item — Our apps",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000024",
-      "deliveryKeys": { "values": [{ "value": "base-site/site/footer-menu-item-shopping-apps" }] }
+      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000024"
     },
     "label": "Our apps",
     "link": "/shopping/apps"
