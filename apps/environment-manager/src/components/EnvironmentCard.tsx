@@ -237,6 +237,11 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
   // may still hold a timestamp from the previous one.
   const opSeconds =
     op === null ? 0 : Math.max(0, Math.round(((op.endedAt ?? now) - op.startedAt) / 1000))
+  // 59s → 1m → 1m 1s …
+  const opElapsed =
+    opSeconds < 60
+      ? `${opSeconds}s`
+      : `${Math.floor(opSeconds / 60)}m${opSeconds % 60 === 0 ? '' : ` ${opSeconds % 60}s`}`
 
   const audioCtxRef = useRef<AudioContext | null>(null)
 
@@ -562,14 +567,14 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                   {op.status === 'running' && (
                     <span className="log-status">
                       <span className="spinner spinner--sm" aria-hidden="true" /> running for{' '}
-                      {opSeconds}s…
+                      {opElapsed}…
                     </span>
                   )}
                   {op.status === 'done' && (
-                    <span className="log-status log-status--ok">✓ done in {opSeconds}s</span>
+                    <span className="log-status log-status--ok">✓ done in {opElapsed}</span>
                   )}
                   {op.status === 'error' && (
-                    <span className="log-status log-status--err">⚠ errored in {opSeconds}s</span>
+                    <span className="log-status log-status--err">⚠ errored in {opElapsed}</span>
                   )}
                 </span>
                 {op.status === 'running' ? (
