@@ -117,13 +117,13 @@ describe('ContentPage — metadata (QL-76)', () => {
 
   it('marks non-page items noindex (keyed component fragment)', async () => {
     const { generateMetadata } = await loadRoute()
-    const meta = await generateMetadata(routeProps(['about', 'hero']))
+    const meta = await generateMetadata(routeProps(['site', 'footer']))
     expect(meta.robots).toEqual({ index: false, follow: false })
   })
 
   it('marks non-page items noindex (keyed slot)', async () => {
     const { generateMetadata } = await loadRoute()
-    const meta = await generateMetadata(routeProps(['docs', 'main']))
+    const meta = await generateMetadata(routeProps(['site', 'header']))
     expect(meta.robots).toEqual({ index: false, follow: false })
   })
 
