@@ -48,6 +48,10 @@ type ActiveOp = {
   key: OpKey
   log: string
   status: OpStatus
+  /** Epoch ms when the operation started — drives the elapsed counter. */
+  startedAt: number
+  /** Epoch ms when the operation settled (done or error); absent while running. */
+  endedAt?: number
 }
 
 const OP_LABELS: Record<OpKey, string> = {
@@ -220,6 +224,20 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
   }, [op?.log])
 
   const isRunning = op?.status === 'running'
+
+  // Elapsed-time counter: ticks once a second while an op runs; settled ops
+  // read their fixed duration from endedAt instead, so the tick can stop.
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    if (!isRunning) return
+    const timer = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(timer)
+  }, [isRunning])
+  // The Math.max clamp also covers the first second of a new run, when `now`
+  // may still hold a timestamp from the previous one.
+  const opSeconds =
+    op === null ? 0 : Math.max(0, Math.round(((op.endedAt ?? now) - op.startedAt) / 1000))
+
   const audioCtxRef = useRef<AudioContext | null>(null)
 
   function playTone(type: 'success' | 'error') {
@@ -264,7 +282,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
         return
     }
 
-    setOp({ key, log: '', status: 'running' })
+    setOp({ key, log: '', status: 'running', startedAt: Date.now() })
     setLogExpanded(false)
 
     try {
@@ -290,14 +308,18 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
         if (!prev) return null
         const hasError = prev.log.includes('✗') || prev.log.includes('Error: ')
         playTone(hasError ? 'error' : 'success')
-        return { ...prev, status: hasError ? 'error' : 'done' }
+        return { ...prev, status: hasError ? 'error' : 'done', endedAt: Date.now() }
       })
 
       // Refresh counts after the operation settles
       loadStats()
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error'
-      setOp((prev) => (prev ? { ...prev, status: 'error', log: `${prev.log}\n✗ ${msg}` } : null))
+      setOp((prev) =>
+        prev
+          ? { ...prev, status: 'error', log: `${prev.log}\n✗ ${msg}`, endedAt: Date.now() }
+          : null,
+      )
     }
   }
 
@@ -539,14 +561,15 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                   <span className="log-title">{OP_LABELS[op.key]}</span>
                   {op.status === 'running' && (
                     <span className="log-status">
-                      <span className="spinner spinner--sm" aria-hidden="true" /> running…
+                      <span className="spinner spinner--sm" aria-hidden="true" /> running for{' '}
+                      {opSeconds}s…
                     </span>
                   )}
                   {op.status === 'done' && (
-                    <span className="log-status log-status--ok">✓ done</span>
+                    <span className="log-status log-status--ok">✓ done in {opSeconds}s</span>
                   )}
                   {op.status === 'error' && (
-                    <span className="log-status log-status--err">⚠ failed</span>
+                    <span className="log-status log-status--err">⚠ errored in {opSeconds}s</span>
                   )}
                 </span>
                 {op.status === 'running' ? (
