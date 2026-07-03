@@ -24,6 +24,33 @@
   },
   "type": "object",
   "properties": {
+    "_meta": {
+      "title": "Delivery",
+      "type": "object",
+      "properties": {
+        "deliveryKeys": {
+          "title": "Delivery keys",
+          "type": "object",
+          "properties": {
+            "values": {
+              "title": "Delivery Keys",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "title": "Delivery Key",
+                    "minLength": 1,
+                    "maxLength": 150
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "useMobileLayout": {
       "type": "boolean",
       "title": "Use mobile menu layout on small screens",
