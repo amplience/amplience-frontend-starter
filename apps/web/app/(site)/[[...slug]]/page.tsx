@@ -37,7 +37,7 @@ import { PAGE_SCHEMA, pageMetadataFromSchema } from '@amplience/quadratic-compon
 import type { PageSchema } from '@amplience/quadratic-components/registry'
 import { isContentClientError } from '@amplience/quadratic-content'
 
-import { client } from '../../../lib/content-client'
+import { client, siteName } from '../../../lib/content-client'
 import { registry } from '../../../lib/registry'
 import { deliveryKeyForSlug, pathForDeliveryKey } from '../../../lib/routing'
 import { ContentUnavailableCard, emitContentFailure, renderContent } from '../../../src/renderer'
@@ -59,7 +59,7 @@ const isPageItem = (item: PageSchema): boolean => {
 
 export async function generateMetadata({ params }: RouteProps): Promise<Metadata> {
   const { slug } = await params
-  const key = deliveryKeyForSlug(slug)
+  const key = deliveryKeyForSlug(siteName, slug)
   if (key === null) notFound()
   try {
     // depth: 'root' — metadata lives on the page item itself; no need to
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
     const page = await client.getByKey<PageSchema>(key, { depth: 'root' })
     // `path` feeds the self-referencing canonical default; it resolves
     // absolute against the layout's metadataBase (SITE_URL).
-    const metadata = pageMetadataFromSchema(page, { path: pathForDeliveryKey(key) })
+    const metadata = pageMetadataFromSchema(page, { path: pathForDeliveryKey(siteName, key) })
     // Component fragments stay out of the index regardless of what the
     // content sets — they're thin, navless duplicates of page content.
     if (!isPageItem(page)) return { ...metadata, robots: { index: false, follow: false } }
@@ -82,7 +82,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
 
 export default async function ContentPage({ params }: RouteProps) {
   const { slug } = await params
-  const key = deliveryKeyForSlug(slug)
+  const key = deliveryKeyForSlug(siteName, slug)
   if (key === null) notFound()
   let page: unknown
   try {

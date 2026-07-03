@@ -6,7 +6,7 @@
       "name": "Blog — Getting Started — main slot",
       "schema": "https://quadratic.amplience.com/v2/slots/slot",
       "deliveryKeys": {
-        "values": [{ "value": "blog/getting-started/main" }]
+        "values": [{ "value": "base-site/blog/getting-started/main" }]
       }
     },
     "components": [

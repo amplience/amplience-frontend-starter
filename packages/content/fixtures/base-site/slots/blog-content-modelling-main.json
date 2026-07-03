@@ -6,7 +6,7 @@
       "name": "Blog — Content Modelling — main slot",
       "schema": "https://quadratic.amplience.com/v2/slots/slot",
       "deliveryKeys": {
-        "values": [{ "value": "blog/content-modelling/main" }]
+        "values": [{ "value": "base-site/blog/content-modelling/main" }]
       }
     },
     "components": [

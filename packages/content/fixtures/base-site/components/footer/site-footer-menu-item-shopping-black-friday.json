@@ -6,7 +6,9 @@
       "name": "Footer menu item — Black Friday",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
       "deliveryId": "a1b2c3d4-0005-4000-8000-000000000025",
-      "deliveryKeys": { "values": [{ "value": "site/footer-menu-item-shopping-black-friday" }] }
+      "deliveryKeys": {
+        "values": [{ "value": "base-site/site/footer-menu-item-shopping-black-friday" }]
+      }
     },
     "label": "Black Friday",
     "link": "/shopping/black-friday"

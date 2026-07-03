@@ -26,6 +26,15 @@ environment values.
    - slots: `6a03b813c09912743234ee8a`
 4. **Node + pnpm** per the repo root README; `pnpm install` pulls dc-cli as
    a dev dependency, so no global install is involved.
+5. **A site name** (ADR-0014). Every delivery key on the hub lives under it
+   — `<siteName>/homepage`, `<siteName>/about` — and the frontend deployment
+   reading the hub resolves the same value. By default it _is_ the hub name
+   (both the import and the web app apply that default, so they agree with
+   no configuration); set `SITE_NAME` on both sides for a site not named
+   after its hub. Lowercase letters, digits, and single hyphens. Choose it
+   deliberately: it is baked into every key the seed creates (and every key
+   editors add afterwards), so changing it later means re-keying all
+   content. It names the frontend consumer, not the brand.
 
 ## Configure
 
@@ -35,7 +44,8 @@ the `hub:import` scripts load it automatically (Node's `--env-file-if-exists`,
 no dotenv dependency):
 
 ```sh
-AMPLIENCE_HUB_NAME="quadraticlite"          # visualization URIs
+AMPLIENCE_HUB_NAME="quadraticlite"          # visualization URIs + default site name
+# SITE_NAME="my-site"                       # delivery-key namespace override (ADR-0014)
 AMPLIENCE_APP_URL="https://quadratic-lite-web.vercel.app"  # Production viz origin
 AMPLIENCE_REPO_CONTENT="6a03b80d273dc65652a8dd1a"
 AMPLIENCE_REPO_SLOTS="6a03b813c09912743234ee8a"
@@ -63,11 +73,11 @@ pnpm hub:import
 That executes three steps in order; each is also runnable on its own from
 `packages/schemas/` when iterating:
 
-| Step | Script                    | What happens                                                                                                                                     |
-| ---- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1    | `pnpm hub:import:schemas` | Registers the JSON Schemas (8 types + 2 partials) from `content-type-schemas/`                                                                   |
-| 2    | `pnpm hub:import:types`   | Stages `content-types/` with `${hub}` and `${appUrl}` substituted, imports with `--sync` so visualization changes reach already-registered types |
-| 3    | `pnpm hub:import:content` | Imports fixtures leaf-first — components → slots → pages — each into its repository, with `--publish`                                            |
+| Step | Script                    | What happens                                                                                                                                                                                                                          |
+| ---- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | `pnpm hub:import:schemas` | Registers the JSON Schemas (8 types + 2 partials) from `content-type-schemas/`                                                                                                                                                        |
+| 2    | `pnpm hub:import:types`   | Stages `content-types/` with `${hub}` and `${appUrl}` substituted, imports with `--sync` so visualization changes reach already-registered types                                                                                      |
+| 3    | `pnpm hub:import:content` | Stages fixtures with delivery keys re-prefixed from `base-site/` to the site namespace (`SITE_NAME`, default: hub name — ADR-0014), then imports leaf-first — components → slots → pages — each into its repository, with `--publish` |
 
 The leaf-first order exists because dc-cli rewrites cross-item links using
 a mapping file: by the time a slot or page arrives, every item it links to
@@ -89,7 +99,7 @@ and starter content alike.
    with all keys in `_meta.deliveryKeys`):
 
    ```sh
-   curl "https://<hubName>.cdn.content.amplience.net/content/key/homepage?depth=all&format=inlined"
+   curl "https://<hubName>.cdn.content.amplience.net/content/key/<siteName>/homepage?depth=all&format=inlined"
    ```
 
    If a key 404s immediately after publishing, you may be seeing the CDN's
@@ -101,7 +111,7 @@ and starter content alike.
    the latest saved (not necessarily published) versions:
 
    ```sh
-   curl "https://<vse-domain>/content/key/homepage?depth=all&format=inlined"
+   curl "https://<vse-domain>/content/key/<siteName>/homepage?depth=all&format=inlined"
    ```
 
 A failed step exits non-zero with dc-cli's own output — fix and re-run that

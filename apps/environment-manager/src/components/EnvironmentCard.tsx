@@ -11,7 +11,7 @@ type Props = {
   onUpdate: (updated: Config) => void
 }
 
-const EMPTY_SITE: WebApp = { label: '', url: '', brand: '' }
+const EMPTY_SITE: WebApp = { label: '', url: '', brand: '', sitename: '' }
 
 // ── Micro icons ───────────────────────────────────────────────────────────────
 
@@ -698,6 +698,18 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                       })}
                       disabled={sitesBusy}
                     />
+                    <input
+                      className="site-row__input"
+                      placeholder="Site name (e.g. acme-store)"
+                      value={editWebAppForm.sitename ?? ''}
+                      onChange={(e) =>
+                        setEditWebAppForm((p) => ({ ...p, sitename: e.target.value }))
+                      }
+                      onKeyDown={siteEditKeyDown(() => {
+                        void handleSaveWebApp()
+                      })}
+                      disabled={sitesBusy}
+                    />
                     <div className="site-row__actions">
                       <button
                         type="button"
@@ -738,7 +750,14 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                     <span className="site-row__label">{siteDisplayLabel(site)}</span>
                     <span className="site-row__url">{site.url}</span>
                     {site.brand !== '' && (
-                      <span className="badge badge--brand badge--sm">{site.brand}</span>
+                      <span className="badge badge--brand badge--sm" title="Brand">
+                        {site.brand}
+                      </span>
+                    )}
+                    {(site.sitename ?? '') !== '' && (
+                      <span className="badge badge--sm" title="Site name (delivery-key namespace)">
+                        {site.sitename}
+                      </span>
                     )}
                     <button
                       className="btn--icon-only site-row__edit"
@@ -794,6 +813,18 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                     placeholder="Brand (e.g. acme)"
                     value={siteForm.brand}
                     onChange={(e) => setSiteForm((p) => ({ ...p, brand: e.target.value }))}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Escape') {
+                        setShowAddSite(false)
+                        setSiteForm(EMPTY_SITE)
+                      }
+                    }}
+                  />
+                  <input
+                    className="add-site-form__input"
+                    placeholder="Site name (e.g. acme-store)"
+                    value={siteForm.sitename}
+                    onChange={(e) => setSiteForm((p) => ({ ...p, sitename: e.target.value }))}
                     onKeyDown={(e) => {
                       if (e.key === 'Escape') {
                         setShowAddSite(false)

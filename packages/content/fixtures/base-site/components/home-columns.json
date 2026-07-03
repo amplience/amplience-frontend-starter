@@ -7,7 +7,7 @@
       "schema": "https://quadratic.amplience.com/v2/content/columns",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000014",
       "deliveryKeys": {
-        "values": [{ "value": "home/columns" }]
+        "values": [{ "value": "base-site/home/columns" }]
       }
     },
     "gap": 24,

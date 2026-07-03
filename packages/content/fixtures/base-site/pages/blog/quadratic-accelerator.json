@@ -6,7 +6,7 @@
       "name": "Blog — Accelerating Your Amplience Project with Quadratic",
       "schema": "https://quadratic.amplience.com/v2/content/blog-article",
       "deliveryKeys": {
-        "values": [{ "value": "blog/quadratic-accelerator" }]
+        "values": [{ "value": "base-site/blog/quadratic-accelerator" }]
       }
     },
     "title": "Accelerating Your Amplience Project with Quadratic Lite",

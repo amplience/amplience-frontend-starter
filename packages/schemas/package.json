@@ -24,6 +24,7 @@
   "devDependencies": {
     "@amplience/dc-cli": "^0.31.0",
     "@amplience/quadratic-config": "workspace:*",
-    "ajv": "^8.20.0"
+    "ajv": "^8.20.0",
+    "dc-management-sdk-js": "^3.3.0"
   }
 }

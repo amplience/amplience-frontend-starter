@@ -6,7 +6,7 @@
       "name": "Blog — Content Modelling Best Practices in Amplience",
       "schema": "https://quadratic.amplience.com/v2/content/blog-article",
       "deliveryKeys": {
-        "values": [{ "value": "blog/content-modelling" }]
+        "values": [{ "value": "base-site/blog/content-modelling" }]
       }
     },
     "title": "Content Modelling Best Practices in Amplience",

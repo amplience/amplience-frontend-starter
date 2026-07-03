@@ -7,7 +7,7 @@
       "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000021",
       "deliveryKeys": {
-        "values": [{ "value": "home/intro-markdown" }]
+        "values": [{ "value": "base-site/home/intro-markdown" }]
       }
     },
     "content": "## What's in the box\n\nA **recursive renderer**, a content-client abstraction with mock and SDK adapters, an atomic-design component library, and an automation CLI for hub provisioning.\n\nClone, point at an Amplience hub, ship.",

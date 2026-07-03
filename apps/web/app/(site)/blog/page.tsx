@@ -20,11 +20,12 @@ import type { Metadata } from 'next'
 
 import { Container } from '@amplience/quadratic-components/container'
 import { GridBlock } from '@amplience/quadratic-components/grid-block'
+import { HeroBlock } from '@amplience/quadratic-components/hero-block'
 import { MediaCard } from '@amplience/quadratic-components/media-card'
 import { BLOG_ARTICLE_SCHEMA } from '@amplience/quadratic-components/registry'
 import type { BlogArticleSchema } from '@amplience/quadratic-components/registry'
 
-import { client } from '../../../lib/content-client'
+import { client, siteName } from '../../../lib/content-client'
 
 export const metadata: Metadata = {
   title: 'Blog',
@@ -85,13 +86,15 @@ const deliveryKeyFromMeta = (meta: unknown): string | undefined => {
 export default async function BlogArchivePage() {
   const all = await client.listBySchema<BlogArticleSchema>(BLOG_ARTICLE_SCHEMA)
 
-  // Keep only items whose delivery key starts with `blog/` (guards against
-  // any non-blog-route articles that might share the schema in future).
+  // Keep only items keyed under this site's `<site>/blog/` namespace
+  // (ADR-0014) — articles on other sites of the same hub, or non-blog-route
+  // articles sharing the schema, stay out of this archive.
+  const blogPrefix = `${siteName}/blog/`
   const articles = all
     .flatMap((article) => {
       const key = deliveryKeyFromMeta((article as { _meta?: unknown })._meta)
-      if (!key?.startsWith('blog/')) return []
-      return [{ article: article, slug: key.slice('blog/'.length) }]
+      if (!key?.startsWith(blogPrefix)) return []
+      return [{ article: article, slug: key.slice(blogPrefix.length) }]
     })
     .sort((a, b) => {
       // Newest first; fall back to stable lexicographic order for ties.
@@ -103,9 +106,12 @@ export default async function BlogArchivePage() {
   return (
     <main data-blog-archive>
       <header data-blog-archive-header>
-        <Container gutter>
-          <h1 data-blog-archive-title>Blog</h1>
-        </Container>
+        <HeroBlock
+          title="Blog"
+          backgroundColor="dark"
+          contentPadding={30}
+          subtitle="Articles, guides, and updates from the Amplience team."
+        />
       </header>
       {articles.length === 0 ? (
         <Container gutter>

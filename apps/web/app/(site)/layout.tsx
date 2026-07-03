@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import { client } from '../../lib/content-client'
+import { client, siteName } from '../../lib/content-client'
 import { registry } from '../../lib/registry'
 import { renderContent } from '../../src/renderer'
 
@@ -16,8 +16,8 @@ import { renderContent } from '../../src/renderer'
  */
 export default async function SiteLayout({ children }: { children: ReactNode }) {
   const [headerResult, footerResult] = await Promise.allSettled([
-    client.getByKey('site/header', { depth: 'all' }),
-    client.getByKey('site/footer', { depth: 'all' }),
+    client.getByKey(`${siteName}/site/header`, { depth: 'all' }),
+    client.getByKey(`${siteName}/site/footer`, { depth: 'all' }),
   ])
   const header =
     headerResult.status === 'fulfilled' ? renderContent(headerResult.value, registry) : null

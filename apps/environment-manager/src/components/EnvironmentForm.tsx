@@ -64,6 +64,11 @@ const CONFIG_FIELDS: FieldMeta[] = [
     label: 'Default brand',
     placeholder: 'e.g. acme — sets NEXT_PUBLIC_BRAND',
   },
+  {
+    key: 'mainSite',
+    label: 'Main site',
+    placeholder: 'e.g. acme — delivery-key namespace, sets SITE_NAME',
+  },
 ]
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -124,7 +129,16 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
       updates.stagingHost = hub.stagingHost
       filled.add('stagingHost')
     }
-    setForm((prev) => ({ ...prev, ...updates }))
+    setForm((prev) => {
+      // Main site defaults to the hub name (ADR-0014) — prefill it so the
+      // convention is visible and editable, but never clobber a custom value.
+      const next = { ...prev, ...updates }
+      if ((prev.mainSite ?? '') === '' || prev.mainSite === prev.hubName) {
+        next.mainSite = hub.name
+        filled.add('mainSite')
+      }
+      return next
+    })
     setAutoFilled(filled)
   }
 
@@ -176,7 +190,7 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
           ref={idx === 0 ? firstFieldRef : undefined}
           id={key}
           type={key === 'clientSecret' ? 'password' : 'text'}
-          value={String(form[key])}
+          value={String(form[key] ?? '')}
           placeholder={placeholder}
           required={required}
           autoComplete="off"

@@ -6,7 +6,7 @@
       "name": "About page",
       "schema": "https://quadratic.amplience.com/v2/content/page",
       "deliveryKeys": {
-        "values": [{ "value": "about" }, { "value": "about-us" }]
+        "values": [{ "value": "base-site/about" }, { "value": "base-site/about-us" }]
       }
     },
     "title": "About Quadratic Lite",

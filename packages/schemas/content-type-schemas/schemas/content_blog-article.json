@@ -57,7 +57,7 @@
       "properties": {
         "deliveryKeys": {
           "title": "Delivery keys",
-          "description": "Variant delivery keys for this item. Use the blog/{slug} convention — e.g. blog/getting-started.",
+          "description": "Variant delivery keys for this item. Use the {site}/blog/{slug} convention (ADR-0014) — e.g. acme/blog/getting-started.",
           "type": "object",
           "properties": {
             "values": {

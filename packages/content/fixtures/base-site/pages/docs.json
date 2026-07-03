@@ -6,7 +6,7 @@
       "name": "Docs page",
       "schema": "https://quadratic.amplience.com/v2/content/page",
       "deliveryKeys": {
-        "values": [{ "value": "docs" }]
+        "values": [{ "value": "base-site/docs" }]
       }
     },
     "title": "Documentation",

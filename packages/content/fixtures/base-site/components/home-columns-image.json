@@ -7,7 +7,7 @@
       "schema": "https://quadratic.amplience.com/v2/content/image",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000015",
       "deliveryKeys": {
-        "values": [{ "value": "home/columns-image" }]
+        "values": [{ "value": "base-site/home/columns-image" }]
       }
     },
     "image": {

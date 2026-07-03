@@ -7,7 +7,7 @@
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "a1b2c3d4-0002-4000-8000-000000000003",
       "deliveryKeys": {
-        "values": [{ "value": "about/hero" }]
+        "values": [{ "value": "base-site/about/hero" }]
       }
     },
     "title": "The head for your headless CMS.",

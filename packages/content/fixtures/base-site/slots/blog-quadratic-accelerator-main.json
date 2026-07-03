@@ -6,7 +6,7 @@
       "name": "Blog — Quadratic Accelerator — main slot",
       "schema": "https://quadratic.amplience.com/v2/slots/slot",
       "deliveryKeys": {
-        "values": [{ "value": "blog/quadratic-accelerator/main" }]
+        "values": [{ "value": "base-site/blog/quadratic-accelerator/main" }]
       }
     },
     "components": [

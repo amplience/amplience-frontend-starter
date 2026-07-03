@@ -7,7 +7,7 @@
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
       "deliveryId": "a1b2c3d4-0004-4000-8000-000000000021",
       "deliveryKeys": {
-        "values": [{ "value": "site/menu-item-blog" }]
+        "values": [{ "value": "base-site/site/menu-item-blog" }]
       }
     },
     "label": "Blog",

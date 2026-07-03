@@ -7,7 +7,7 @@
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
       "deliveryId": "a1b2c3d4-0004-4000-8000-000000000017",
       "deliveryKeys": {
-        "values": [{ "value": "site/menu-item-kids" }]
+        "values": [{ "value": "base-site/site/menu-item-kids" }]
       }
     },
     "label": "Kids",

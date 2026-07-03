@@ -38,7 +38,7 @@ describe('loader', () => {
     const keyless = findById('a1b2c3d4-0003-4000-8000-000000000003')
     expect(keyless).toBeDefined()
     expect(keyless?.body._meta.deliveryKeys).toBeUndefined()
-    expect(findByKey('docs/markdown')).toBeUndefined()
+    expect(findByKey('base-site/docs/markdown')).toBeUndefined()
   })
 
   it('returns undefined for unknown ids and keys', () => {

@@ -6,7 +6,7 @@
       "name": "Docs — main slot",
       "schema": "https://quadratic.amplience.com/v2/slots/slot",
       "deliveryKeys": {
-        "values": [{ "value": "docs/main" }]
+        "values": [{ "value": "base-site/docs/main" }]
       }
     },
     "components": [

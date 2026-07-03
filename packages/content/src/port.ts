@@ -14,8 +14,8 @@ import type { ContentItem, ContentRequestOptions } from './types'
 
 export type ContentClient = {
   /**
-   * Fetch a content item by its delivery key (e.g. `"homepage"`,
-   * `"blog/welcome"`). Returns the delivery shape — body with `_meta`,
+   * Fetch a content item by its delivery key (e.g. `"acme/homepage"`,
+   * `"acme/blog/welcome"`). Returns the delivery shape — body with `_meta`,
    * content-links resolved per `opts.depth`.
    *
    * Throws `ContentClientError({ kind: 'not-found' })` if no item matches.

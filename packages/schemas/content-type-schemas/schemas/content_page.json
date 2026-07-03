@@ -46,7 +46,7 @@
       "properties": {
         "deliveryKeys": {
           "title": "Delivery keys",
-          "description": "Variant delivery keys for this item. Any key retrieves the item; all keys are returned in the delivery response.",
+          "description": "Variant delivery keys for this item, namespaced by site (ADR-0014): {site}/{path} — e.g. acme/about/team. Any key retrieves the item; all keys are returned in the delivery response.",
           "type": "object",
           "properties": {
             "values": {

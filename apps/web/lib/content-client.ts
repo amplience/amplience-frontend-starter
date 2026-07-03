@@ -24,3 +24,11 @@ const config = resolveContentConfig()
 
 export const client: ContentClient =
   config.kind === 'sdk' ? makeSdkContentClient(config) : makeMockContentClient()
+
+/**
+ * The deployment's site name (ADR-0014) — the namespace prefix on every
+ * delivery key this deployment reads. Resolved by the same single
+ * env-reading function as the client selection, exported here so routes
+ * and layouts share one value.
+ */
+export const siteName: string = config.siteName

@@ -7,7 +7,7 @@
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
       "deliveryId": "a1b2c3d4-0004-4000-8000-000000000012",
       "deliveryKeys": {
-        "values": [{ "value": "site/menu-item-mens-jackets" }]
+        "values": [{ "value": "base-site/site/menu-item-mens-jackets" }]
       }
     },
     "label": "Jackets",
