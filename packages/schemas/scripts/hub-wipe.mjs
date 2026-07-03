@@ -9,12 +9,29 @@
  *      Without the mapping the next hub:import creates new items rather
  *      than updating existing ones, which is what "start fresh" means.
  *
- *   2. Archives every content item in the content and slots repositories
+ *   2. Frees delivery keys held by *already-archived* items. Delivery keys
+ *      are unique hub-wide and archived items keep theirs reserved, so an
+ *      item archived without its keys being stripped (the DC UI archives
+ *      this way, as did older dc-cli versions that predate multi-value
+ *      `deliveryKeys`) leaves the next seed hitting 409
+ *      CONTENT_ITEM_DELIVERY_KEYS_DUPLICATE — the map is gone, dc-cli
+ *      creates fresh items, and the old archived item still owns the key.
+ *      dc-cli itself can't reach these: `content-item archive` (and the
+ *      `hub clean` content step, which is the same handler) only
+ *      enumerates ACTIVE items. Each offender is unarchived, stripped,
+ *      and re-archived via dc-cli's own management SDK. Read-only when
+ *      there are no offenders. Needs AMPLIENCE_CLIENT_ID /
+ *      AMPLIENCE_CLIENT_SECRET — when only a dc-cli active configuration
+ *      is available it is skipped with a warning.
+ *
+ *   3. Archives every content item in the content and slots repositories
  *      so previously-published items stop being served by Delivery.
+ *      dc-cli strips delivery keys (legacy and multi-value) from each
+ *      item before archiving it, so active items need no separate pass.
  *
- *   3. Archives every content type in the hub.
+ *   4. Archives every content type in the hub.
  *
- *   4. Archives every content type schema in the hub so the next
+ *   5. Archives every content type schema in the hub so the next
  *      hub:import:schemas registers them fresh.
  *
  * Configuration is read from environment variables (same set as
@@ -31,6 +48,7 @@ import { spawn } from 'node:child_process'
 import { existsSync, rmSync } from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
+import { DynamicContent } from 'dc-management-sdk-js'
 
 const env = (name) => {
   const value = process.env[name]
@@ -82,6 +100,44 @@ const dcCli = (...args) =>
     })
   })
 
+// ── Stranded delivery-key freeing ─────────────────────────────────────────────
+
+/** Whether an item body still holds any delivery key (legacy or multi-value). */
+const hasDeliveryKeys = (body) =>
+  Boolean(body?._meta?.deliveryKey) || (body?._meta?.deliveryKeys?.values?.length ?? 0) > 0
+
+/**
+ * Free delivery keys held by *archived* items: unarchive, strip (the same
+ * body mutation dc-cli's archive applies to active items), re-archive.
+ * Read-only unless an offender is found, and idempotent — a re-run finds
+ * nothing left to strip. Uses dc-cli's own management SDK.
+ */
+const freeArchivedDeliveryKeys = async (client, repoId, repoLabel) => {
+  const repo = await client.contentRepositories.get(repoId)
+
+  // Collect the full list before mutating — re-archiving while paginating
+  // would shift the pages underneath the walk.
+  const archived = []
+  for (let page = 0; ; page++) {
+    const result = await repo.related.contentItems.list({ status: 'ARCHIVED', size: 100, page })
+    archived.push(...result.getItems())
+    if (page >= (result.page?.totalPages ?? 1) - 1) break
+  }
+
+  let freed = 0
+  for (const item of archived) {
+    // Belt and braces: trust the item's own status over the list filter.
+    if (item.status !== 'ARCHIVED' || !hasDeliveryKeys(item.body)) continue
+    const unarchived = await item.related.unarchive()
+    unarchived.body._meta.deliveryKey = null
+    unarchived.body._meta.deliveryKeys = null
+    const updated = await unarchived.related.update(unarchived)
+    await updated.related.archive()
+    freed += 1
+  }
+  console.log(`✓ Freed delivery keys on ${freed} archived item(s) in ${repoLabel} repo`)
+}
+
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 const hubName = require_('AMPLIENCE_HUB_NAME', 'identify the hub mapping file')
@@ -98,7 +154,23 @@ if (existsSync(mapFile)) {
   console.log(`  Mapping file not present (already clean): ${mapFile}`)
 }
 
-// 2. Archive all content items in both repos.
+// 2. Free delivery keys stranded on archived items (see module doc).
+const clientId = env('AMPLIENCE_CLIENT_ID')
+const clientSecret = env('AMPLIENCE_CLIENT_SECRET')
+if (clientId !== undefined && clientSecret !== undefined) {
+  console.log('\nChecking archived items for stranded delivery keys…')
+  const client = new DynamicContent({ client_id: clientId, client_secret: clientSecret })
+  await freeArchivedDeliveryKeys(client, contentRepo, 'content')
+  await freeArchivedDeliveryKeys(client, slotsRepo, 'slots')
+} else {
+  console.warn(
+    '\n⚠ AMPLIENCE_CLIENT_ID/SECRET not set — cannot check archived items for ' +
+      'stranded delivery keys. If a previous archive kept keys (DC UI, older ' +
+      'dc-cli), the next seed may fail with CONTENT_ITEM_DELIVERY_KEYS_DUPLICATE.',
+  )
+}
+
+// 3. Archive all content items in both repos.
 // Omitting the id positional archives all items in scope (dc-cli behaviour).
 // --repoId scopes to the target repo; -f skips the confirmation prompt.
 console.log(`\nArchiving all content in content repo (${contentRepo})…`)
@@ -107,13 +179,13 @@ await dcCli('content-item', 'archive', '--repoId', contentRepo, '-f')
 console.log(`\nArchiving all content in slots repo (${slotsRepo})…`)
 await dcCli('content-item', 'archive', '--repoId', slotsRepo, '-f')
 
-// 3. Archive all content types in the hub.
+// 4. Archive all content types in the hub.
 // Omitting the id positional archives all types; --hubId is required and
 // is injected via credentialFlags() when AMPLIENCE_HUB_ID is set.
 console.log('\nArchiving all content types…')
 await dcCli('content-type', 'archive', '-f')
 
-// 4. Archive all content type schemas in the hub.
+// 5. Archive all content type schemas in the hub.
 console.log('\nArchiving all content type schemas…')
 await dcCli('content-type-schema', 'archive', '-f')
 

@@ -7,7 +7,7 @@
       "schema": "https://quadratic.amplience.com/v2/content/header",
       "deliveryId": "a1b2c3d4-0004-4000-8000-000000000001",
       "deliveryKeys": {
-        "values": [{ "value": "site/header" }]
+        "values": [{ "value": "base-site/site/header" }]
       }
     },
     "sticky": true,

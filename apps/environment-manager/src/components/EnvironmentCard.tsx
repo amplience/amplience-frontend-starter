@@ -11,7 +11,7 @@ type Props = {
   onUpdate: (updated: Config) => void
 }
 
-const EMPTY_SITE: WebApp = { label: '', url: '', brand: '' }
+const EMPTY_SITE: WebApp = { label: '', url: '', brand: '', name: '' }
 
 // ── Micro icons ───────────────────────────────────────────────────────────────
 
@@ -48,6 +48,10 @@ type ActiveOp = {
   key: OpKey
   log: string
   status: OpStatus
+  /** Epoch ms when the operation started — drives the elapsed counter. */
+  startedAt: number
+  /** Epoch ms when the operation settled (done or error); absent while running. */
+  endedAt?: number
 }
 
 const OP_LABELS: Record<OpKey, string> = {
@@ -80,6 +84,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
   const [editLocalhostForm, setEditLocalhostForm] = useState({
     localhostUrl: env.localhostUrl,
     defaultBrand: env.defaultBrand,
+    defaultSite: env.defaultSite ?? '',
   })
   const [sitesBusy, setSitesBusy] = useState(false)
   const addSiteLabelRef = useRef<HTMLInputElement>(null)
@@ -108,7 +113,11 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
   function startEditLocalhost() {
     setShowAddSite(false)
     setEditingWebAppIdx(null)
-    setEditLocalhostForm({ localhostUrl: env.localhostUrl, defaultBrand: env.defaultBrand })
+    setEditLocalhostForm({
+      localhostUrl: env.localhostUrl,
+      defaultBrand: env.defaultBrand,
+      defaultSite: env.defaultSite ?? '',
+    })
     setEditingLocalhost(true)
   }
 
@@ -220,6 +229,25 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
   }, [op?.log])
 
   const isRunning = op?.status === 'running'
+
+  // Elapsed-time counter: ticks once a second while an op runs; settled ops
+  // read their fixed duration from endedAt instead, so the tick can stop.
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    if (!isRunning) return
+    const timer = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(timer)
+  }, [isRunning])
+  // The Math.max clamp also covers the first second of a new run, when `now`
+  // may still hold a timestamp from the previous one.
+  const opSeconds =
+    op === null ? 0 : Math.max(0, Math.round(((op.endedAt ?? now) - op.startedAt) / 1000))
+  // 59s → 1m → 1m 1s …
+  const opElapsed =
+    opSeconds < 60
+      ? `${opSeconds}s`
+      : `${Math.floor(opSeconds / 60)}m${opSeconds % 60 === 0 ? '' : ` ${opSeconds % 60}s`}`
+
   const audioCtxRef = useRef<AudioContext | null>(null)
 
   function playTone(type: 'success' | 'error') {
@@ -264,7 +292,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
         return
     }
 
-    setOp({ key, log: '', status: 'running' })
+    setOp({ key, log: '', status: 'running', startedAt: Date.now() })
     setLogExpanded(false)
 
     try {
@@ -290,14 +318,18 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
         if (!prev) return null
         const hasError = prev.log.includes('✗') || prev.log.includes('Error: ')
         playTone(hasError ? 'error' : 'success')
-        return { ...prev, status: hasError ? 'error' : 'done' }
+        return { ...prev, status: hasError ? 'error' : 'done', endedAt: Date.now() }
       })
 
       // Refresh counts after the operation settles
       loadStats()
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error'
-      setOp((prev) => (prev ? { ...prev, status: 'error', log: `${prev.log}\n✗ ${msg}` } : null))
+      setOp((prev) =>
+        prev
+          ? { ...prev, status: 'error', log: `${prev.log}\n✗ ${msg}`, endedAt: Date.now() }
+          : null,
+      )
     }
   }
 
@@ -327,7 +359,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
           if (e.key === 'Enter' || e.key === ' ') setCollapsed((v) => !v)
         }}
       >
-        <div>
+        <div className="env-card__header-labels">
           <span className="env-card__label">{env.label || env.name}</span>
           {env.defaultBrand !== '' && (
             <span className="badge badge--brand">
@@ -539,14 +571,15 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                   <span className="log-title">{OP_LABELS[op.key]}</span>
                   {op.status === 'running' && (
                     <span className="log-status">
-                      <span className="spinner spinner--sm" aria-hidden="true" /> running…
+                      <span className="spinner spinner--sm" aria-hidden="true" /> running for{' '}
+                      {opElapsed}…
                     </span>
                   )}
                   {op.status === 'done' && (
-                    <span className="log-status log-status--ok">✓ done</span>
+                    <span className="log-status log-status--ok">✓ done in {opElapsed}</span>
                   )}
                   {op.status === 'error' && (
-                    <span className="log-status log-status--err">⚠ failed</span>
+                    <span className="log-status log-status--err">⚠ errored in {opElapsed}</span>
                   )}
                 </span>
                 {op.status === 'running' ? (
@@ -586,7 +619,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
           {/* Sites */}
           <div className="env-card__sites">
             <div className="sites-header">
-              <span className="sites-header__title">Web apps</span>
+              <span className="sites-header__title">Sites</span>
             </div>
 
             <ul className="site-list">
@@ -608,18 +641,51 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                     })}
                     disabled={sitesBusy}
                   />
-                  <input
-                    className="site-row__input"
-                    placeholder="Brand (e.g. acme)"
-                    value={editLocalhostForm.defaultBrand}
-                    onChange={(e) =>
-                      setEditLocalhostForm((p) => ({ ...p, defaultBrand: e.target.value }))
-                    }
-                    onKeyDown={siteEditKeyDown(() => {
-                      void handleSaveLocalhost()
-                    })}
-                    disabled={sitesBusy}
-                  />
+                  <label>
+                    <svg
+                      aria-hidden="true"
+                      width="8"
+                      height="10"
+                      viewBox="0 0 8 10"
+                      fill="currentColor"
+                      style={{
+                        display: 'inline-block',
+                        verticalAlign: 'middle',
+                        marginRight: '0.25em',
+                        marginTop: '-1px',
+                      }}
+                    >
+                      <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
+                    </svg>
+                    <span className="visually-hidden">Brand</span>
+                    <input
+                      className="site-row__input"
+                      placeholder="Brand (e.g. acme)"
+                      value={editLocalhostForm.defaultBrand}
+                      onChange={(e) =>
+                        setEditLocalhostForm((p) => ({ ...p, defaultBrand: e.target.value }))
+                      }
+                      onKeyDown={siteEditKeyDown(() => {
+                        void handleSaveLocalhost()
+                      })}
+                      disabled={sitesBusy}
+                    />
+                  </label>
+                  <label>
+                    #
+                    <input
+                      className="site-row__input"
+                      placeholder="Site name (blank = hub name)"
+                      value={editLocalhostForm.defaultSite}
+                      onChange={(e) =>
+                        setEditLocalhostForm((p) => ({ ...p, defaultSite: e.target.value }))
+                      }
+                      onKeyDown={siteEditKeyDown(() => {
+                        void handleSaveLocalhost()
+                      })}
+                      disabled={sitesBusy}
+                    />
+                  </label>
                   <div className="site-row__actions">
                     <button
                       type="button"
@@ -649,7 +715,32 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                   <span className="site-row__label">Web (localhost)</span>
                   <span className="site-row__url">{env.localhostUrl}</span>
                   {env.defaultBrand !== '' && (
-                    <span className="badge badge--brand badge--sm">{env.defaultBrand}</span>
+                    <span className="badge badge--brand badge--sm" title="Brand">
+                      <svg
+                        aria-hidden="true"
+                        width="8"
+                        height="10"
+                        viewBox="0 0 8 10"
+                        fill="currentColor"
+                        style={{
+                          display: 'inline-block',
+                          verticalAlign: 'middle',
+                          marginRight: '0.25em',
+                          marginTop: '-1px',
+                        }}
+                      >
+                        <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
+                      </svg>
+                      {env.defaultBrand}
+                    </span>
+                  )}
+                  {(env.defaultSite ?? '') !== '' && (
+                    <span
+                      className="badge badge--brand badge--sm"
+                      title="Site name (delivery-key namespace)"
+                    >
+                      # {env.defaultSite}
+                    </span>
                   )}
                   <button
                     className="btn--icon-only site-row__edit"
@@ -688,16 +779,49 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                       })}
                       disabled={sitesBusy}
                     />
-                    <input
-                      className="site-row__input"
-                      placeholder="Brand (e.g. acme)"
-                      value={editWebAppForm.brand}
-                      onChange={(e) => setEditWebAppForm((p) => ({ ...p, brand: e.target.value }))}
-                      onKeyDown={siteEditKeyDown(() => {
-                        void handleSaveWebApp()
-                      })}
-                      disabled={sitesBusy}
-                    />
+                    <label>
+                      <svg
+                        aria-hidden="true"
+                        width="8"
+                        height="10"
+                        viewBox="0 0 8 10"
+                        fill="currentColor"
+                        style={{
+                          display: 'inline-block',
+                          verticalAlign: 'middle',
+                          marginRight: '0.25em',
+                          marginTop: '-1px',
+                        }}
+                      >
+                        <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
+                      </svg>
+                      <span className="visually-hidden">Brand</span>
+                      <input
+                        className="site-row__input"
+                        placeholder="Brand (e.g. acme)"
+                        value={editWebAppForm.brand}
+                        onChange={(e) =>
+                          setEditWebAppForm((p) => ({ ...p, brand: e.target.value }))
+                        }
+                        onKeyDown={siteEditKeyDown(() => {
+                          void handleSaveWebApp()
+                        })}
+                        disabled={sitesBusy}
+                      />
+                    </label>
+                    <label>
+                      #
+                      <input
+                        className="site-row__input"
+                        placeholder="Site name (e.g. acme-store)"
+                        value={editWebAppForm.name ?? ''}
+                        onChange={(e) => setEditWebAppForm((p) => ({ ...p, name: e.target.value }))}
+                        onKeyDown={siteEditKeyDown(() => {
+                          void handleSaveWebApp()
+                        })}
+                        disabled={sitesBusy}
+                      />
+                    </label>
                     <div className="site-row__actions">
                       <button
                         type="button"
@@ -738,7 +862,32 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                     <span className="site-row__label">{siteDisplayLabel(site)}</span>
                     <span className="site-row__url">{site.url}</span>
                     {site.brand !== '' && (
-                      <span className="badge badge--brand badge--sm">{site.brand}</span>
+                      <span className="badge badge--brand badge--sm" title="Brand">
+                        <svg
+                          aria-hidden="true"
+                          width="8"
+                          height="10"
+                          viewBox="0 0 8 10"
+                          fill="currentColor"
+                          style={{
+                            display: 'inline-block',
+                            verticalAlign: 'middle',
+                            marginRight: '0.25em',
+                            marginTop: '-1px',
+                          }}
+                        >
+                          <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
+                        </svg>
+                        {site.brand}
+                      </span>
+                    )}
+                    {(site.name ?? '') !== '' && (
+                      <span
+                        className="badge badge--brand badge--sm"
+                        title="Site name (delivery-key namespace)"
+                      >
+                        # {site.name}
+                      </span>
                     )}
                     <button
                       className="btn--icon-only site-row__edit"
@@ -789,18 +938,51 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                     }}
                     required
                   />
-                  <input
-                    className="add-site-form__input"
-                    placeholder="Brand (e.g. acme)"
-                    value={siteForm.brand}
-                    onChange={(e) => setSiteForm((p) => ({ ...p, brand: e.target.value }))}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Escape') {
-                        setShowAddSite(false)
-                        setSiteForm(EMPTY_SITE)
-                      }
-                    }}
-                  />
+                  <label>
+                    <svg
+                      aria-hidden="true"
+                      width="8"
+                      height="10"
+                      viewBox="0 0 8 10"
+                      fill="currentColor"
+                      style={{
+                        display: 'inline-block',
+                        verticalAlign: 'middle',
+                        marginRight: '0.25em',
+                        marginTop: '-1px',
+                      }}
+                    >
+                      <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
+                    </svg>
+                    <span className="visually-hidden">Brand</span>
+                    <input
+                      className="add-site-form__input"
+                      placeholder="Brand (e.g. acme)"
+                      value={siteForm.brand}
+                      onChange={(e) => setSiteForm((p) => ({ ...p, brand: e.target.value }))}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Escape') {
+                          setShowAddSite(false)
+                          setSiteForm(EMPTY_SITE)
+                        }
+                      }}
+                    />
+                  </label>
+                  <label>
+                    #
+                    <input
+                      className="add-site-form__input"
+                      placeholder="Site name (e.g. acme-store)"
+                      value={siteForm.name}
+                      onChange={(e) => setSiteForm((p) => ({ ...p, name: e.target.value }))}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Escape') {
+                          setShowAddSite(false)
+                          setSiteForm(EMPTY_SITE)
+                        }
+                      }}
+                    />
+                  </label>
                   <div className="add-site-form__actions">
                     <button type="submit" className="btn btn--sm btn--primary" disabled={sitesBusy}>
                       {sitesBusy ? 'Adding…' : 'Add'}

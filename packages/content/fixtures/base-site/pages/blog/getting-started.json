@@ -6,7 +6,7 @@
       "name": "Blog — Getting Started with Amplience",
       "schema": "https://quadratic.amplience.com/v2/content/blog-article",
       "deliveryKeys": {
-        "values": [{ "value": "blog/getting-started" }]
+        "values": [{ "value": "base-site/blog/getting-started" }]
       }
     },
     "title": "Getting Started with Amplience",

@@ -35,6 +35,17 @@
  * .env.example), and plain exported variables work the same way:
  *
  *   AMPLIENCE_HUB_NAME       hub name — visualization URIs + map-file name
+ *   SITE_NAME                the site namespace the seeded keys live under
+ *                            (ADR-0014) — fixtures are authored under the
+ *                            fixture site's own name (base-site/…) and the
+ *                            content step re-prefixes them to
+ *                            <SITE_NAME>/… while staging, the same way the
+ *                            types step fills ${hub}. Defaults to
+ *                            AMPLIENCE_HUB_NAME — the same default the web
+ *                            app's resolveContentConfig applies, so a hub
+ *                            and its deployment agree without either
+ *                            setting it. Set it explicitly for a site not
+ *                            named after its hub.
  *   LOCALHOST_URL            localhost origin — fills ${localhostUrl} in viz URIs (default: http://localhost:3000)
  *   AMPLIENCE_REPO_CONTENT   repository id for pages + components (content step)
  *   AMPLIENCE_REPO_SLOTS     repository id for slots (content step)
@@ -129,11 +140,13 @@ const dcCli = (...args) =>
       shell: false,
     })
     let sawError = false
+    let sawDuplicateKeys = false
     const watch = (stream, sink) => {
       stream.on('data', (chunk) => {
         const text = chunk.toString()
         if (text.includes('ERROR') || text.includes('Error: ') || text.includes('failed, aborting'))
           sawError = true
+        if (text.includes('CONTENT_ITEM_DELIVERY_KEYS_DUPLICATE')) sawDuplicateKeys = true
         sink.write(text)
       })
     }
@@ -147,6 +160,15 @@ const dcCli = (...args) =>
     })
     child.on('close', (code) => {
       if (code !== 0 || sawError) {
+        if (sawDuplicateKeys) {
+          console.error(
+            '\nℹ CONTENT_ITEM_DELIVERY_KEYS_DUPLICATE: an item already on the hub ' +
+              '(possibly archived — archived items keep their delivery keys reserved) ' +
+              'holds a key this import needs, and the dc-cli map does not reference it. ' +
+              'Run hub:wipe (which frees delivery keys, including on archived items) ' +
+              'and re-seed, or remove the key from the conflicting item in DC.',
+          )
+        }
         console.error(`\n✗ dc-cli reported a failure (exit ${code ?? 'unknown'}) — aborting.`)
         process.exit(code === 0 || code === null ? 1 : code)
       }
@@ -242,8 +264,39 @@ const markStagedItemsPublishable = (dir) => {
   }
 }
 
+/**
+ * Fixtures are authored under the fixture site's own namespace
+ * (`base-site/…`, ADR-0014). Seeding a hub re-prefixes every delivery key
+ * to the chosen SITE_NAME while staging, so the hub's keys match what the
+ * deployment (whose SITE_NAME must be the same value) will ask for. Seeding
+ * with SITE_NAME=base-site is simply the identity case.
+ */
+const FIXTURE_SITE_PREFIX = 'base-site/'
+
+const namespaceStagedDeliveryKeys = (dir, siteName) => {
+  for (const entry of readdirSync(dir, { recursive: true, withFileTypes: true })) {
+    if (!entry.isFile() || !entry.name.endsWith('.json')) continue
+    const file = path.join(entry.parentPath ?? entry.path, entry.name)
+    const item = JSON.parse(readFileSync(file, 'utf8'))
+    const values = item.body?._meta?.deliveryKeys?.values
+    if (!Array.isArray(values)) continue
+    let changed = false
+    for (const v of values) {
+      if (typeof v.value === 'string' && v.value.startsWith(FIXTURE_SITE_PREFIX)) {
+        v.value = `${siteName}/${v.value.slice(FIXTURE_SITE_PREFIX.length)}`
+        changed = true
+      }
+    }
+    if (changed) writeFileSync(file, JSON.stringify(item, null, 2))
+  }
+}
+
 const importContent = async () => {
   const hubName = require_('AMPLIENCE_HUB_NAME', 'name the shared mapping file')
+  // Same default the web app's resolveContentConfig applies (ADR-0014) —
+  // seed and deployment agree on the namespace without a second variable.
+  const siteName = env('SITE_NAME') ?? hubName
+  console.log(`\n→ Seeding delivery keys under the "${siteName}/" site namespace`)
   const contentRepo = require_('AMPLIENCE_REPO_CONTENT', 'target the content repository')
   const slotsRepo = require_('AMPLIENCE_REPO_SLOTS', 'target the slots repository')
 
@@ -268,6 +321,7 @@ const importContent = async () => {
     rmSync(staged, { recursive: true, force: true })
     mkdirSync(staged, { recursive: true })
     cpSync(path.join(fixturesDir, dir), staged, { recursive: true })
+    namespaceStagedDeliveryKeys(staged, siteName)
     markStagedItemsPublishable(staged)
     await dcCli(
       'content-item',

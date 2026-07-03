@@ -5,10 +5,7 @@
     "_meta": {
       "name": "Docs — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "a1b2c3d4-0002-4000-9000-000000000003",
-      "deliveryKeys": {
-        "values": [{ "value": "docs/hero" }]
-      }
+      "deliveryId": "a1b2c3d4-0002-4000-9000-000000000003"
     },
     "title": "Documentation",
     "image": {

@@ -176,8 +176,8 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
   let header: ReactNode = null
   let footer: ReactNode = null
   const [headerResult, footerResult] = await Promise.allSettled([
-    client.getByKey('site/header', { depth: 'all' }),
-    client.getByKey('site/footer', { depth: 'all' }),
+    client.getByKey(`${config.siteName}/site/header`, { depth: 'all' }),
+    client.getByKey(`${config.siteName}/site/footer`, { depth: 'all' }),
   ])
   if (headerResult.status === 'fulfilled') {
     try {

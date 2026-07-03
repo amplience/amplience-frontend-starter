@@ -254,7 +254,7 @@ const maps = buildMaps(fixtures)
 /** Lookup by delivery ID (UUID). Undefined when no fixture matches. */
 export const findById = (id: string): EnrichedContentItem | undefined => maps.byId.get(id)
 
-/** Lookup by delivery key (e.g. `"homepage"`). Undefined when no fixture matches. */
+/** Lookup by delivery key (e.g. `"base-site/homepage"`). Undefined when no fixture matches. */
 export const findByKey = (key: string): EnrichedContentItem | undefined => maps.byKey.get(key)
 
 /** All loaded fixtures, for tests and introspection. */

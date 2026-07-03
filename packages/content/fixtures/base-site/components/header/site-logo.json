@@ -5,10 +5,7 @@
     "_meta": {
       "name": "Site — logo",
       "schema": "https://quadratic.amplience.com/v2/content/logo",
-      "deliveryId": "a1b2c3d4-0004-4000-8000-000000000004",
-      "deliveryKeys": {
-        "values": [{ "value": "site/logo" }]
-      }
+      "deliveryId": "a1b2c3d4-0004-4000-8000-000000000004"
     },
     "image": {
       "src": "/favicon/icon-192.png",

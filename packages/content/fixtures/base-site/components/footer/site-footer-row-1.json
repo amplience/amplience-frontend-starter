@@ -5,10 +5,7 @@
     "_meta": {
       "name": "Site — footer row 1",
       "schema": "https://quadratic.amplience.com/v2/content/footer-row",
-      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000002",
-      "deliveryKeys": {
-        "values": [{ "value": "site/footer-row-1" }]
-      }
+      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000002"
     },
     "backgroundColor": "dark",
     "items": [

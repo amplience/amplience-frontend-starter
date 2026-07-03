@@ -26,7 +26,7 @@ import {
 import type { BlogArticleSchema } from '@amplience/quadratic-components/registry'
 import { isContentClientError } from '@amplience/quadratic-content'
 
-import { client } from '../../../../lib/content-client'
+import { client, siteName } from '../../../../lib/content-client'
 import { registry } from '../../../../lib/registry'
 import { ContentUnavailableCard, emitContentFailure, renderContent } from '../../../../src/renderer'
 
@@ -41,20 +41,25 @@ const deliveryKeyFromMeta = (meta: unknown): string | undefined => {
 }
 
 export async function generateStaticParams() {
+  // Enumerate only this site's articles (ADR-0014) — the schema is shared
+  // hub-wide, the `<site>/blog/` namespace is not.
+  const blogPrefix = `${siteName}/blog/`
   const articles = await client.listBySchema(BLOG_ARTICLE_SCHEMA)
   return articles.flatMap((article) => {
     const key = deliveryKeyFromMeta((article as { _meta?: unknown })._meta)
-    if (!key?.startsWith('blog/')) return []
-    return [{ slug: key.slice('blog/'.length) }]
+    if (!key?.startsWith(blogPrefix)) return []
+    return [{ slug: key.slice(blogPrefix.length) }]
   })
 }
 
 export async function generateMetadata({ params }: RouteProps): Promise<Metadata> {
   const { slug } = await params
-  const key = `blog/${slug}`
+  const key = `${siteName}/blog/${slug}`
   try {
     const article = await client.getByKey<BlogArticleSchema>(key, { depth: 'root' })
-    return blogArticleMetadataFromSchema(article, { path: `/${key}` })
+    // The canonical path is the URL, not the key — the site prefix never
+    // surfaces in public URLs (ADR-0014).
+    return blogArticleMetadataFromSchema(article, { path: `/blog/${slug}` })
   } catch (error) {
     if (isContentClientError(error)) return {}
     throw error
@@ -63,7 +68,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
 
 export default async function BlogArticlePage({ params }: RouteProps) {
   const { slug } = await params
-  const key = `blog/${slug}`
+  const key = `${siteName}/blog/${slug}`
   let article: unknown
   try {
     article = await client.getByKey(key, { depth: 'all' })

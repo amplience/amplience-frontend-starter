@@ -5,14 +5,7 @@
     "_meta": {
       "name": "Home \u2014 card: content rendering",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
-      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000011",
-      "deliveryKeys": {
-        "values": [
-          {
-            "value": "home/card-content-rendering"
-          }
-        ]
-      }
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000011"
     },
     "title": "Renders any content",
     "description": "Every schema you define in Amplience Dynamic Content is rendered automatically \u2014 from hero banners to rich editorial layouts.",

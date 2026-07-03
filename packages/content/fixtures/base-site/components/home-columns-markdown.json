@@ -5,10 +5,7 @@
     "_meta": {
       "name": "Home — columns copy",
       "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
-      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000017",
-      "deliveryKeys": {
-        "values": [{ "value": "home/columns-markdown" }]
-      }
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000017"
     },
     "content": "## Built for speed\n\nQuadratic Lite removes the boilerplate so your team can focus on content and experience — not infrastructure.\n\n- **Mock-first** — build and test offline without a live hub\n- **Token-driven** — swap brands by redefining CSS variables\n- **Composable** — atoms, molecules, and organisms stack cleanly\n\nReady to ship? Clone the repo, point it at your Amplience hub, and go."
   }

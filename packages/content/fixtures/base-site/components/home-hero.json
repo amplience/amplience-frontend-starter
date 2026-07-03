@@ -5,10 +5,7 @@
     "_meta": {
       "name": "Home — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000003",
-      "deliveryKeys": {
-        "values": [{ "value": "home/hero" }]
-      }
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000003"
     },
     "title": "Build composable sites without the boilerplates.",
     "subtitle": "Quadratic Lite is the open-source accelerator for Amplience-backed projects!",

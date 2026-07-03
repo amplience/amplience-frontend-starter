@@ -5,14 +5,7 @@
     "_meta": {
       "name": "Blog \u2014 Quadratic Accelerator \u2014 body",
       "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
-      "deliveryId": "b10ga721-0002-4000-8000-000000000001",
-      "deliveryKeys": {
-        "values": [
-          {
-            "value": "blog/quadratic-accelerator/body"
-          }
-        ]
-      }
+      "deliveryId": "b10ga721-0002-4000-8000-000000000001"
     },
     "content": "## Why Start From Scratch?\n\nEvery Amplience project needs the same scaffolding: a delivery client, a content renderer, a schema pipeline, a hub import script, a visualization endpoint. Most teams build this from scratch for every engagement \u2014 spending the first two sprints on boilerplate rather than differentiation.\n\n**Quadratic Lite** is the answer to that problem. It's an open-source accelerator that ships all of that infrastructure pre-built, opinionated, and ready to clone.\n\n## What You Get Out of the Box\n\n### Recursive Content Renderer\n\nThe renderer is the heart of the system. It reads the schema URI from a content item's `_meta.schema`, looks up the matching component in a registry, maps the schema fields to React props, and recursively renders any nested content. Add a new content type and it renders automatically \u2014 no route code, no switch statements.\n\n### Hub Import Pipeline\n\nThe `pnpm hub:import` command wires `dc-cli` calls in the correct order \u2014 schemas first, then content types, then content \u2014 using a shared mapping file so cross-repository content links resolve correctly. Run it against a fresh hub and you get a fully populated demo site in minutes.\n\n### Schema-Validated Fixtures\n\nEvery fixture file is validated against its JSON Schema in CI using AJV. This means your seed content can never drift from your schema definitions \u2014 a broken fixture fails the build before it reaches the hub.\n\n## Getting Started in 15 Minutes\n\nFrom first clone to a running, hub-connected site in under 15 minutes. That's the Quadratic promise.",
     "gutter": true

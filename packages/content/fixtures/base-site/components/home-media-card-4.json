@@ -5,14 +5,7 @@
     "_meta": {
       "name": "Home \u2014 card: headless best practices",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
-      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000018",
-      "deliveryKeys": {
-        "values": [
-          {
-            "value": "home/card-best-practices"
-          }
-        ]
-      }
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000018"
     },
     "title": "Headless best practices",
     "description": "Server Components, slot-based routing, and a composable block architecture \u2014 headless done right, ready to show any client.",

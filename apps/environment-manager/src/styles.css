@@ -265,7 +265,6 @@ body {
   font-weight: 600;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  margin-left: 0.6rem;
   vertical-align: middle;
 }
 
@@ -325,6 +324,13 @@ body {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+}
+
+.env-card__header-labels {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
 }
 
 /* Header right-side actions (Set active + cog) */
@@ -709,7 +715,7 @@ body {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.5rem;
 }
 
 .site-row {
@@ -717,7 +723,6 @@ body {
   align-items: center;
   gap: 0.5rem;
   font-size: 0.8rem;
-  min-height: 1.75rem;
 }
 
 .site-row__icon {
@@ -776,8 +781,6 @@ body {
 /* Edit-mode row layout */
 .site-row--editing {
   flex-wrap: wrap;
-  gap: 0.35rem;
-  padding: 0.35rem 0;
 }
 
 .site-row__label--fixed {
@@ -789,7 +792,7 @@ body {
 
 .site-row__input {
   flex: 1;
-  min-width: 80px;
+  min-width: 85.81px;
   padding: 0.25em 0.45em;
   font-size: 0.78rem;
   background: var(--color-input-bg);
@@ -802,7 +805,7 @@ body {
 
 .site-row__input--url {
   flex: 2;
-  min-width: 140px;
+  min-width: 120px;
 }
 
 .site-row__input:focus {
@@ -1170,4 +1173,18 @@ body {
 
 .dim {
   color: var(--color-text-muted);
+}
+
+/* Visually hides content while keeping it available to screen readers. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

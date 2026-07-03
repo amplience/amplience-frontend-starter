@@ -6,9 +6,6 @@
       "name": "Hierarchy menu item: Womens — Dresses",
       "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
       "deliveryId": "c3d4e5f6-0004-4000-8000-000000000007",
-      "deliveryKeys": {
-        "values": [{ "value": "site/hierarchy-menu-item-womens-dresses" }]
-      },
       "hierarchy": {
         "parentId": "c3d4e5f6-0004-4000-8000-000000000006",
         "root": false,

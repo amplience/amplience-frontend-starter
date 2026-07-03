@@ -5,14 +5,7 @@
     "_meta": {
       "name": "Home \u2014 card: zero-config start",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
-      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000012",
-      "deliveryKeys": {
-        "values": [
-          {
-            "value": "home/card-zero-config"
-          }
-        ]
-      }
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000012"
     },
     "title": "Works out of the box",
     "description": "Clone, connect your Amplience hub, and you have a fully functional frontend in minutes. Minimal configuration, maximum velocity.",

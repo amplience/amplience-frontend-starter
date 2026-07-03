@@ -5,10 +5,7 @@
     "_meta": {
       "name": "About — story markdown",
       "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
-      "deliveryId": "a1b2c3d4-0002-4000-8000-000000000004",
-      "deliveryKeys": {
-        "values": [{ "value": "about/markdown" }]
-      }
+      "deliveryId": "a1b2c3d4-0002-4000-8000-000000000004"
     },
     "content": "## Why Quadratic exists\n\nA headless CMS is powerful, but there's an inherent challenge: **how do you demonstrate a headless system without a head?** Content lives in Amplience Dynamic Content, beautifully structured and ready to deliver — but clients, stakeholders, and content teams need to *see* how that content becomes a digital experience before investing in a custom frontend.\n\nQuadratic is the answer: a composable, flexible Next.js frontend that renders any content you create in Amplience, works out of the box, and adapts to your brand through content-controlled styling.\n\n### What that means in practice\n\n- **Zero-deployment content management** — pages, navigation, styling, and layouts are all managed from the CMS. Publish and go.\n- **Maximum flexibility** — composable components nest inside one another; one frontend serves infinite brand expressions.\n- **An accelerator, not just a demo** — validate a content strategy in weeks, then keep building on the same foundation.\n\nQuadratic Lite is the open-source distillation of those ideas: the same recursive, content-driven rendering engine, rebuilt lean.",
     "maxWidth": "narrow",

@@ -5,14 +5,7 @@
     "_meta": {
       "name": "Blog \u2014 Getting Started \u2014 body",
       "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
-      "deliveryId": "b10ga721-0001-4000-8000-000000000001",
-      "deliveryKeys": {
-        "values": [
-          {
-            "value": "blog/getting-started/body"
-          }
-        ]
-      }
+      "deliveryId": "b10ga721-0001-4000-8000-000000000001"
     },
     "content": "## What is Amplience?\n\nAmplience is a headless CMS and DAM platform designed for enterprise content teams who need to move fast without losing control. Rather than tying content to a specific presentation layer, Amplience stores content as structured data in the Dynamic Content hub and delivers it via a CDN-backed delivery API \u2014 meaning the same article, product description, or campaign asset can power your website, your mobile app, and any other channel from a single source of truth.\n\n## Setting Up Your First Hub\n\nEvery Amplience project starts with a **hub** \u2014 the top-level workspace that contains your content types, repositories, and published assets.\n\n1. **Sign in** to [Dynamic Content](https://content.amplience.net) and create or join a hub.\n2. **Create a repository** \u2014 repositories are where your content items live. For a typical site you'll want at least a content repo (pages, components) and a slots repo.\n3. **Install the DC CLI** \u2014 the `dc-cli` command-line tool is how you push schemas and content types from code to your hub:\n\n4. **Define a content type schema** \u2014 schemas are JSON Schema documents that describe the shape of your content. Amplience validates every content item against its schema, so your editors can't save invalid data.\n\n## Connecting to the Delivery API\n\nOnce content is published in DC, fetch it from the delivery API using your hub name:\n\nYou're now fetching live content. From here, Quadratic Lite takes over \u2014 see the next post in this series for how the accelerator wires this delivery client into a Next.js App Router site in minutes.",
     "gutter": true

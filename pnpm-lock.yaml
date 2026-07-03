@@ -329,6 +329,9 @@ importers:
       ajv:
         specifier: ^8.20.0
         version: 8.20.0
+      dc-management-sdk-js:
+        specifier: ^3.3.0
+        version: 3.3.0
 
   packages/theme:
     dependencies:

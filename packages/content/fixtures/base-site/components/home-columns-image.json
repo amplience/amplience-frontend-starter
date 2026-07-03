@@ -5,10 +5,7 @@
     "_meta": {
       "name": "Home — columns feature image",
       "schema": "https://quadratic.amplience.com/v2/content/image",
-      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000015",
-      "deliveryKeys": {
-        "values": [{ "value": "home/columns-image" }]
-      }
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000015"
     },
     "image": {
       "src": "https://picsum.photos/seed/ql-cols/600/800",

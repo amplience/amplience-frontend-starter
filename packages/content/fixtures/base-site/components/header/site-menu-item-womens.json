@@ -5,10 +5,7 @@
     "_meta": {
       "name": "Menu item: Womens",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "a1b2c3d4-0004-4000-8000-000000000013",
-      "deliveryKeys": {
-        "values": [{ "value": "site/menu-item-womens" }]
-      }
+      "deliveryId": "a1b2c3d4-0004-4000-8000-000000000013"
     },
     "label": "Womens",
     "link": "/womens",

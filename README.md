@@ -36,7 +36,7 @@ You can start this by running `pnpm sb` or `pnpm storybook`
 
 ## Connecting to a hub
 
-The local dev server can also be pointed at a real Amplience hub instead of the fixtures. Adding one takes about 40 seconds via the environment manager GUI:
+The local dev server can also be pointed at a real Amplience hub instead of the fixtures. Adding one takes about 50 seconds via the environment manager GUI:
 
 1. Run `pnpm env-manager` to start the GUI
 2. Click **+ Add hub**
@@ -51,16 +51,16 @@ You can then switch the local dev server between the fixtures (default) and any 
 
 ## Seeding and syncing a hub
 
-Once a hub is added, you can push the Quadratic Lite content model and starter content to it. (Takes typically 1min 40sec)
+Once a hub is added, you can push the Quadratic Lite content model and starter content to it. (Takes typically 1min 45sec)
 
 You can either do it via the environment-manager GUI as mentioned above, or you could use the terminal if you prefer.
 
 Example terminal commands:
 
 ```sh
-pnpm hub:import # imports schemas, content types, then fixture content (~1m40s end to end)
+pnpm hub:import # imports schemas, content types, then fixture content (~1m45s end to end)
 
-pnpm hub:wipe   # clears out the content, then content-types then schemas (~40s end to end)
+pnpm hub:wipe   # frees delivery keys, then clears content, content-types, schemas (~45s end to end)
 
 pnpm hub:import:schemas # Only imports the schemas
 ```
@@ -75,10 +75,13 @@ The same import command is also how you push local changes to a hub you've alrea
 | -------------------- | ---------------------------------------------------------------- |
 | `AMPLIENCE_HUB_NAME` | Hub to read content from. Unset = fixture data, no hub required. |
 
+Delivery keys are namespaced by site (ADR-0014): keys on the hub are `<site>/<path>`, so the `acme` site's `/about` page is the item keyed `acme/about` (the name never appears in URLs). The site name defaults to the hub name — the same default `pnpm hub:import` seeds under, so hub and deployment agree out of the box. Set `SITE_NAME` explicitly for a site not named after its hub (lowercase letters, digits, single hyphens — and pick it once: it's baked into every delivery key, so changing it later means re-keying all content).
+
 Everything else is optional, with sensible accelerator defaults:
 
 | Variable                 | Purpose                                                                       |
 | ------------------------ | ----------------------------------------------------------------------------- |
+| `SITE_NAME`              | Delivery-key namespace override (see above). Defaults to the hub name.        |
 | `NEXT_PUBLIC_BRAND`      | Selects the brand theme (`data-brand`, scoping the CSS-variable overrides).   |
 | `FAVICON_BASE_URL`       | Base path for a custom favicon set, e.g. `/favicon`.                          |
 | `SITE_TITLE`             | Default site title (also feeds the `"<page title> \| SITE_TITLE"` template).  |
@@ -89,7 +92,7 @@ Everything else is optional, with sensible accelerator defaults:
 
 See [`apps/web/.env.example`](apps/web/.env.example) for the full list, defaults, and notes.
 
-To register a deployed site against a hub, open that hub's card in `env-manager` and click **+ Add site**, giving it a URL and brand. This doesn't do anything to Vercel itself yet (that link-up is planned) — it's for reference only, but once set, the site gets added as a visualization option in the CMS whenever you next seed or sync that hub's content types.
+To register a deployed site against a hub, open that hub's card in `env-manager` and click **+ Add site**, giving it a URL, brand, and site name. This doesn't do anything to Vercel itself yet (that link-up is planned) — it's for reference only, but once set, the site gets added as a visualization option in the CMS whenever you next seed or sync that hub's content types.
 
 ## Contributing
 

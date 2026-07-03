@@ -13,6 +13,7 @@ export type Environment = {
   clientSecret: string
   stagingHost: string
   defaultBrand: string
+  defaultSite: string
   webApps: WebApp[]
   republish: boolean
 }
@@ -32,6 +33,7 @@ export type WebApp = {
   label: string
   url: string
   brand: string
+  name: string
 }
 
 export type DiscoveredRepo = {
@@ -77,6 +79,7 @@ export const EMPTY_ENV: Environment = {
   clientSecret: '',
   stagingHost: '',
   defaultBrand: '',
+  defaultSite: '',
   webApps: [],
   republish: false,
 }

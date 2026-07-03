@@ -111,19 +111,21 @@ describe('request shaping', () => {
   it('defaults depth to root and always asks for inlined format', async () => {
     const capture = { configs: [] as AxiosishConfig[] }
     const client = makeClient({}, capture)
-    await client.getByKey('homepage')
+    await client.getByKey('base-site/homepage')
     const payload = parsePayload(first(capture.configs))
     expect(payload.parameters).toMatchObject({ depth: 'root', format: 'inlined' })
-    expect(payload.requests).toEqual([{ key: 'homepage' }])
+    expect(payload.requests).toEqual([{ key: 'base-site/homepage' }])
   })
 
   it('targets the hub CDN host by default and the VSE when stagingHost is set', async () => {
     const cdnCapture = { configs: [] as AxiosishConfig[] }
-    await makeClient({}, cdnCapture).getByKey('homepage')
+    await makeClient({}, cdnCapture).getByKey('base-site/homepage')
     expect(first(cdnCapture.configs).baseURL).toContain('fixturehub')
 
     const vseCapture = { configs: [] as AxiosishConfig[] }
-    await makeClient({ stagingHost: 'abc.staging.bigcontent.io' }, vseCapture).getByKey('homepage')
+    await makeClient({ stagingHost: 'abc.staging.bigcontent.io' }, vseCapture).getByKey(
+      'base-site/homepage',
+    )
     expect(first(vseCapture.configs).baseURL).toContain('abc.staging.bigcontent.io')
   })
 })

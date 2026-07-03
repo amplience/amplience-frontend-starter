@@ -24,7 +24,7 @@ const FIXTURES_NAME = 'fixtures'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type WebApp = { label: string; url: string; brand: string }
+type WebApp = { label: string; url: string; brand: string; sitename: string }
 
 type Environment = {
   name: string
@@ -38,6 +38,8 @@ type Environment = {
   clientSecret: string
   stagingHost: string
   defaultBrand: string
+  /** SITE_NAME for the hub's main frontend (ADR-0014); blank = hub-name default. */
+  defaultSite: string
   webApps: WebApp[]
   republish: boolean
 }
@@ -116,6 +118,9 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
   const repoContent = env !== null && env.repoContent !== '' ? env.repoContent : undefined
   const repoSlots = env !== null && env.repoSlots !== '' ? env.repoSlots : undefined
   const defaultBrand = env !== null && env.defaultBrand !== '' ? env.defaultBrand : undefined
+  // Blank default site means "use the runtime default" (the hub name, ADR-0014)
+  // — comment the var out rather than writing an empty value.
+  const defaultSite = env !== null && (env.defaultSite ?? '') !== '' ? env.defaultSite : undefined
 
   // apps/web/.env.local — only the vars the web app needs
   const existingWeb = existsSync(WEB_ENV_LOCAL) ? await readFile(WEB_ENV_LOCAL, 'utf-8') : ''
@@ -125,6 +130,7 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
       AMPLIENCE_HUB_NAME: hubName,
       AMPLIENCE_STAGING_HOST: stagingHost,
       NEXT_PUBLIC_BRAND: defaultBrand,
+      SITE_NAME: defaultSite,
     }),
     'utf-8',
   )
@@ -142,6 +148,7 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
       AMPLIENCE_CLIENT_ID: clientId,
       AMPLIENCE_CLIENT_SECRET: clientSecret,
       AMPLIENCE_STAGING_HOST: stagingHost,
+      SITE_NAME: defaultSite,
     }),
     'utf-8',
   )
@@ -295,6 +302,8 @@ function buildEnv(env: Environment, republish = false): NodeJS.ProcessEnv {
     AMPLIENCE_CLIENT_SECRET: env.clientSecret,
     AMPLIENCE_HUB_ID: env.hubId,
     AMPLIENCE_REPUBLISH: republish || env.republish ? '1' : '',
+    // Blank = let hub-import apply its own default (the hub name, ADR-0014).
+    ...((env.defaultSite ?? '') !== '' && { SITE_NAME: env.defaultSite }),
   }
 }
 

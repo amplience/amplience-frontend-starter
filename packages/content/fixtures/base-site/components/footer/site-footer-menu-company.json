@@ -5,10 +5,7 @@
     "_meta": {
       "name": "Footer menu — Company",
       "schema": "https://quadratic.amplience.com/v2/content/menu",
-      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000006",
-      "deliveryKeys": {
-        "values": [{ "value": "site/footer-menu-company" }]
-      }
+      "deliveryId": "a1b2c3d4-0005-4000-8000-000000000006"
     },
     "display": "megaMenu",
     "items": [

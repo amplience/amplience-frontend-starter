@@ -7,7 +7,7 @@
  * pick an implementation from its result.
  */
 
-export { resolveContentConfig } from './config'
+export { FIXTURE_SITE_NAME, resolveContentConfig } from './config'
 export type { ContentClientSelection } from './config'
 export type { ContentClient } from './port'
 export {
