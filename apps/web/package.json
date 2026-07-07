@@ -4,6 +4,14 @@
   "private": true,
   "description": "Next.js accelerator application.",
   "type": "module",
+  "//browserslist": "Modern evergreen target. Next.js reads this to decide which JS features to transpile/polyfill; without it, Next assumes old browsers and ships polyfills for Array.at/flat/flatMap, Object.fromEntries/hasOwn, String.trimStart/End (~14 KiB) that no supported browser needs.",
+  "browserslist": [
+    "chrome >= 100",
+    "edge >= 100",
+    "firefox >= 100",
+    "safari >= 16",
+    "not dead"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",

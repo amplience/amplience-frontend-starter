@@ -255,9 +255,23 @@ export function HeroBlock({
     >
       {hasImage && (
         <div className={styles.media}>
-          {/* Default before the spread: an authored `priority` overrides. */}
+          {/*
+            Defaults sit before the spread so authored `image` props win.
+            - priority: top-of-page hero is the likely LCP element. Triggers
+              the head preload and eager loading.
+            - fetchPriority: next/image (v16) no longer derives fetchpriority
+              from `priority`, so we set it explicitly for the LCP hero. This
+              lands `fetchpriority="high"` on both the <img> and the preload
+              link — the "LCP request discovery" audit fix.
+            - sizes: the media image is full-bleed (width:100% of the section,
+              which spans the viewport), so it renders at ~100vw at every
+              breakpoint. Declaring it lets next/image preload the correctly
+              sized candidate instead of defaulting to the largest 3840px image.
+          */}
           <Image
             priority={isTopOfPage}
+            fetchPriority={isTopOfPage ? 'high' : undefined}
+            sizes="100vw"
             {...image}
             className={clsx(styles.image, image.className)}
           />

@@ -114,9 +114,18 @@ export function ImageBlock({
   isTopOfPage = false,
   className,
 }: ImageBlockProps) {
-  // Default before the spread: an authored `priority` overrides.
+  // Defaults before the spread: authored `image` props override. A full-bleed
+  // image spans the viewport, so declaring sizes="100vw" lets next/image
+  // preload the right candidate (with fetchpriority when priority is set)
+  // rather than defaulting to the largest 3840px image.
   const imageEl = (
-    <Image priority={isTopOfPage} {...image} className={clsx(styles.image, image.className)} />
+    <Image
+      priority={isTopOfPage}
+      fetchPriority={isTopOfPage ? 'high' : undefined}
+      sizes={fullBleed ? '100vw' : undefined}
+      {...image}
+      className={clsx(styles.image, image.className)}
+    />
   )
 
   const figure = (
