@@ -314,7 +314,7 @@ importers:
         specifier: workspace:*
         version: link:../config
 
-  packages/schemas:
+  packages/hub-management:
     dependencies:
       '@amplience/quadratic-content':
         specifier: workspace:*

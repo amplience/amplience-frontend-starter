@@ -2,7 +2,7 @@
 
 How a fresh Dynamic Content hub comes to carry the Quadratic Lite content
 model and starter content. Everything the hub needs lives in this repo —
-settings, schemas, content types and extensions in `packages/schemas/`,
+settings, schemas, content types and extensions in `packages/hub-management/`,
 starter content in
 `packages/content/fixtures/base-site/` (the same files the mock client
 serves, so the hub and local dev never drift) — and one command pushes it
@@ -40,7 +40,7 @@ environment values.
 ## Configure
 
 The import reads its configuration from the environment. The usual home for
-it is `packages/schemas/.env` — copy `.env.example` there and fill it in;
+it is `packages/hub-management/.env` — copy `.env.example` there and fill it in;
 the `hub:import` scripts load it automatically (Node's `--env-file-if-exists`,
 no dotenv dependency):
 
@@ -73,7 +73,7 @@ pnpm hub:import
 
 That executes five steps in order (mirroring dc-cli's own `hub clone`
 pipeline: settings → schema → type → extension → content); each is also
-runnable on its own from `packages/schemas/` when iterating:
+runnable on its own from `packages/hub-management/` when iterating:
 
 | Step | Script                       | What happens                                                                                                                                                                                                                                                                                          |
 | ---- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -131,9 +131,9 @@ force-publishes everything regardless.
 
 ## What this paves
 
-The fixture-validation test (`packages/schemas/src/fixtures.test.ts`) keeps
+The fixture-validation test (`packages/hub-management/src/fixtures.test.ts`) keeps
 fixtures and schemas agreeing in CI with no hub access, so a contributor PR
 that changes either is checked before it ever reaches a hub. The schema
-manifest (`packages/schemas/src/index.ts`) and this import sequence are the
+manifest (`packages/hub-management/src/index.ts`) and this import sequence are the
 inputs the QL-58 automation CLI formalises — and that CLI is in turn what
 the self-serve setup GUI drives.

@@ -42,4 +42,4 @@ pnpm-debug.log*
 coverage
 
 # QL-92 hub-import staging (INTERIM dc-cli wrapper)
-packages/schemas/.import
+packages/hub-management/.import

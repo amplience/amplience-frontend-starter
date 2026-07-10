@@ -42,7 +42,7 @@
  * run when an ERROR line went past.
  *
  * Configuration comes from the environment — the package scripts load
- * `packages/schemas/.env` when present (node --env-file-if-exists; see
+ * `packages/hub-management/.env` when present (node --env-file-if-exists; see
  * .env.example), and plain exported variables work the same way:
  *
  *   AMPLIENCE_HUB_NAME       hub name — visualization URIs + map-file name

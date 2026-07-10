@@ -1,8 +1,8 @@
 {
-  "name": "@amplience/quadratic-schemas",
+  "name": "@amplience/quadratic-hub-management",
   "version": "0.0.0",
   "private": true,
-  "description": "Content-type schemas as code (ADR-0012). The canonical JSON Schemas for the base-site content model, in the layout dc-cli imports — wrappers at content-type-schemas/, schema bodies at content-type-schemas/schemas/. INTERIM: imported via dc-cli wrapper scripts until the automation CLI (QL-58) supersedes them.",
+  "description": "Hub configuration as code (ADR-0012). The canonical settings, content-type schemas, content types and extensions for the base-site model, each in the layout dc-cli imports — settings/, content-type-schemas/ (bodies at content-type-schemas/schemas/), content-types/, extensions/. INTERIM: seeded via dc-cli wrapper scripts until the automation CLI (QL-58) supersedes them.",
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",

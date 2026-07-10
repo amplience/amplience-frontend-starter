@@ -46,11 +46,13 @@
     "test:watch": "vitest",
     "storybook": "pnpm --filter @amplience/quadratic-components storybook",
     "sb": "pnpm storybook",
-    "hub:import": "pnpm --filter @amplience/quadratic-schemas hub:import",
-    "hub:import:schemas": "pnpm --filter @amplience/quadratic-schemas hub:import:schemas",
-    "hub:import:types": "pnpm --filter @amplience/quadratic-schemas hub:import:types",
-    "hub:import:content": "pnpm --filter @amplience/quadratic-schemas hub:import:content",
-    "hub:wipe": "pnpm --filter @amplience/quadratic-schemas hub:wipe",
+    "hub:import": "pnpm --filter @amplience/quadratic-hub-management hub:import",
+    "hub:import:settings": "pnpm --filter @amplience/quadratic-hub-management hub:import:settings",
+    "hub:import:schemas": "pnpm --filter @amplience/quadratic-hub-management hub:import:schemas",
+    "hub:import:types": "pnpm --filter @amplience/quadratic-hub-management hub:import:types",
+    "hub:import:extensions": "pnpm --filter @amplience/quadratic-hub-management hub:import:extensions",
+    "hub:import:content": "pnpm --filter @amplience/quadratic-hub-management hub:import:content",
+    "hub:wipe": "pnpm --filter @amplience/quadratic-hub-management hub:wipe",
     "env-manager": "pnpm --filter @amplience/environment-manager dev"
   },
   "devDependencies": {

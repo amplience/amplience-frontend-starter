@@ -51,7 +51,7 @@
  *   AMPLIENCE_HUB_ID=abc123 \
  *   AMPLIENCE_REPO_CONTENT=abc123 \
  *   AMPLIENCE_REPO_SLOTS=def456 \
- *   node packages/schemas/scripts/hub-wipe.mjs
+ *   node packages/hub-management/scripts/hub-wipe.mjs
  */
 import { spawn } from 'node:child_process'
 import { existsSync, rmSync } from 'node:fs'

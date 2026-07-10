@@ -13,10 +13,10 @@ import { streamText } from 'hono/streaming'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // apps/environment-manager/server/ → 3 levels up → repo root
 const REPO_ROOT = path.resolve(__dirname, '..', '..', '..')
-const SCHEMAS_ROOT = path.join(REPO_ROOT, 'packages', 'schemas')
+const HUB_MANAGEMENT_ROOT = path.join(REPO_ROOT, 'packages', 'hub-management')
 const CONFIG_PATH = path.join(REPO_ROOT, 'quadratic.config.json')
 const WEB_ENV_LOCAL = path.join(REPO_ROOT, 'apps', 'web', '.env.local')
-const SCHEMAS_ENV = path.join(SCHEMAS_ROOT, '.env')
+const HUB_MANAGEMENT_ENV = path.join(HUB_MANAGEMENT_ROOT, '.env')
 const PORT = 3099
 
 /** Sentinel name for the built-in "Local Fixtures" entry — never stored in config.json. */
@@ -101,7 +101,7 @@ function updateEnvVars(content: string, vars: Record<string, string | undefined>
 }
 
 /**
- * Write Amplience connection vars to apps/web/.env.local AND packages/schemas/.env
+ * Write Amplience connection vars to apps/web/.env.local AND packages/hub-management/.env
  * so that both the web app and the CLI scripts (`pnpm hub:import` etc.) stay in sync
  * with the active environment.
  * Pass null (for Fixtures) to comment Amplience vars out; the web app falls back to
@@ -135,11 +135,13 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
     'utf-8',
   )
 
-  // packages/schemas/.env — full set of vars consumed by hub:import / hub:wipe scripts
-  const existingSchemas = existsSync(SCHEMAS_ENV) ? await readFile(SCHEMAS_ENV, 'utf-8') : ''
+  // packages/hub-management/.env — full set of vars consumed by hub:import / hub:wipe scripts
+  const existingHubEnv = existsSync(HUB_MANAGEMENT_ENV)
+    ? await readFile(HUB_MANAGEMENT_ENV, 'utf-8')
+    : ''
   await writeFile(
-    SCHEMAS_ENV,
-    updateEnvVars(existingSchemas, {
+    HUB_MANAGEMENT_ENV,
+    updateEnvVars(existingHubEnv, {
       AMPLIENCE_HUB_NAME: hubName,
       AMPLIENCE_HUB_ID: hubId,
       LOCALHOST_URL: localhostUrl,
@@ -285,11 +287,11 @@ async function discoverHubs(clientId: string, clientSecret: string): Promise<Dis
  * Build the env vars to inject into a spawned script.
  * Spreads process.env so PATH, HOME, etc. are inherited, then layers the
  * selected environment's Amplience credentials on top.
- * dc-cli is a devDependency of packages/schemas — prepend its bin dir to PATH
+ * dc-cli is a devDependency of packages/hub-management — prepend its bin dir to PATH
  * so node_modules/.bin/dc-cli is found when running scripts directly.
  */
 function buildEnv(env: Environment, republish = false): NodeJS.ProcessEnv {
-  const dcCliBin = path.join(SCHEMAS_ROOT, 'node_modules', '.bin')
+  const dcCliBin = path.join(HUB_MANAGEMENT_ROOT, 'node_modules', '.bin')
   const rootBin = path.join(REPO_ROOT, 'node_modules', '.bin')
   return {
     ...process.env,
@@ -332,7 +334,7 @@ function runScript(
     // detached: true puts the child in its own process group so that a
     // cancel can send SIGKILL to the whole group (node + any dc-cli grandchild).
     const child = spawn('node', [scriptPath, ...args], {
-      cwd: SCHEMAS_ROOT,
+      cwd: HUB_MANAGEMENT_ROOT,
       env,
       detached: true,
     })
@@ -368,8 +370,8 @@ function runScript(
 
 // ── Operation config ─────────────────────────────────────────────────────────
 
-const HUB_IMPORT_SCRIPT = path.join(SCHEMAS_ROOT, 'scripts', 'hub-import.mjs')
-const HUB_WIPE_SCRIPT = path.join(SCHEMAS_ROOT, 'scripts', 'hub-wipe.mjs')
+const HUB_IMPORT_SCRIPT = path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'hub-import.mjs')
+const HUB_WIPE_SCRIPT = path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'hub-wipe.mjs')
 
 type OpConfig = { script: string; args: string[]; republish: boolean; label: string }
 
