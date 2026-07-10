@@ -33,7 +33,15 @@ vi.mock('next/image', () => ({
 
 afterEach(cleanup)
 
-const sampleImage = { src: '/hero.jpg', alt: 'Hero image', width: 1200, height: 600 } as const
+const sampleMedia = {
+  mediaType: 'ManualImage' as const,
+  image: {
+    src: '/hero.jpg',
+    alt: 'Hero image',
+    width: 1200,
+    height: 600,
+  },
+}
 
 describe('HeroBlock', () => {
   describe('structure', () => {
@@ -122,7 +130,7 @@ describe('HeroBlock', () => {
 
   describe('image', () => {
     it('renders image when provided', () => {
-      render(<HeroBlock title="Title" image={sampleImage} />)
+      render(<HeroBlock title="Title" media={sampleMedia} />)
       expect(screen.getByAltText('Hero image')).toBeTruthy()
     })
 
@@ -134,17 +142,12 @@ describe('HeroBlock', () => {
 
   describe('image loading priority', () => {
     it('does not prioritise the image by default (next/image lazy-loads)', () => {
-      render(<HeroBlock title="Title" image={sampleImage} />)
+      render(<HeroBlock title="Title" media={sampleMedia} />)
       expect(screen.getByAltText('Hero image').getAttribute('data-priority')).toBeNull()
     })
 
     it('prioritises the image at the top of the page', () => {
-      render(<HeroBlock title="Title" image={sampleImage} isTopOfPage />)
-      expect(screen.getByAltText('Hero image').getAttribute('data-priority')).toBe('true')
-    })
-
-    it('lets an authored image.priority override the position default', () => {
-      render(<HeroBlock title="Title" image={{ ...sampleImage, priority: true }} />)
+      render(<HeroBlock title="Title" media={sampleMedia} isTopOfPage />)
       expect(screen.getByAltText('Hero image').getAttribute('data-priority')).toBe('true')
     })
   })
@@ -159,53 +162,107 @@ describe('HeroBlock', () => {
     })
 
     it('sets data-content-position-mobile from prop', () => {
-      render(<HeroBlock title="Title" image={sampleImage} contentPositionMobile="beneath" />)
+      render(<HeroBlock title="Title" media={sampleMedia} contentPositionMobile="beneath" />)
       expect(screen.getByRole('region').getAttribute('data-content-position-mobile')).toBe(
         'beneath',
       )
     })
 
     it('sets data-content-position-desktop from prop', () => {
-      render(<HeroBlock title="Title" image={sampleImage} contentPositionDesktop="beneath" />)
+      render(<HeroBlock title="Title" media={sampleMedia} contentPositionDesktop="beneath" />)
       expect(screen.getByRole('region').getAttribute('data-content-position-desktop')).toBe(
         'beneath',
       )
     })
 
     it('defaults content positions to overlay when image is present', () => {
-      render(<HeroBlock title="Title" image={sampleImage} />)
+      render(<HeroBlock title="Title" media={sampleMedia} />)
       const section = screen.getByRole('region')
       expect(section.getAttribute('data-content-position-mobile')).toBe('overlay')
       expect(section.getAttribute('data-content-position-desktop')).toBe('overlay')
     })
 
     it('sets data-height-behaviour from prop', () => {
-      render(<HeroBlock title="Title" image={sampleImage} heightBehaviour="fitToImage" />)
+      render(<HeroBlock title="Title" media={sampleMedia} heightBehaviour="fitToImage" />)
       expect(screen.getByRole('region').getAttribute('data-height-behaviour')).toBe('fitToImage')
     })
 
     it('defaults height-behaviour to flexible when image is present', () => {
-      render(<HeroBlock title="Title" image={sampleImage} />)
+      render(<HeroBlock title="Title" media={sampleMedia} />)
       expect(screen.getByRole('region').getAttribute('data-height-behaviour')).toBe('flexible')
     })
 
-    it('sets --image-aspect-ratio inline style for flexible overlay', () => {
-      render(<HeroBlock title="Title" image={sampleImage} />)
+    it('sets --media-aspect-ratio inline style for flexible overlay', () => {
+      render(<HeroBlock title="Title" media={sampleMedia} />)
       const style = screen.getByRole('region').getAttribute('style') ?? ''
-      expect(style).toContain('--image-aspect-ratio: 1200 / 600')
+      expect(style).toContain('--media-aspect-ratio: 1200 / 600')
     })
 
-    it('does not set --image-aspect-ratio for fitToContent', () => {
-      render(<HeroBlock title="Title" image={sampleImage} heightBehaviour="fitToContent" />)
+    it('does not set --media-aspect-ratio for fitToContent', () => {
+      render(<HeroBlock title="Title" media={sampleMedia} heightBehaviour="fitToContent" />)
       const style = screen.getByRole('region').getAttribute('style') ?? ''
-      expect(style).not.toContain('--image-aspect-ratio')
+      expect(style).not.toContain('--media-aspect-ratio')
+    })
+
+    it('uses the extension-written aspectRatio for an unlocked DynamicImage in flexible overlay', () => {
+      const dynamicMedia = {
+        mediaType: 'DynamicImage' as const,
+        image: {
+          image: {
+            name: 'hero-image',
+            endpoint: 'my-store',
+            defaultHost: 'cdn.media.amplience.net',
+          },
+          aspectLock: 'none',
+          srcWidth: 1200,
+          srcHeight: 896,
+          aspectRatio: 1.3393,
+        },
+      }
+      render(<HeroBlock title="Title" media={dynamicMedia} />)
+      const style = screen.getByRole('region').getAttribute('style') ?? ''
+      expect(style).toContain('--media-aspect-ratio: 1.3393')
+    })
+
+    it('prefers the authored aspectLock over the extension-written aspectRatio', () => {
+      const dynamicMedia = {
+        mediaType: 'DynamicImage' as const,
+        image: {
+          image: {
+            name: 'hero-image',
+            endpoint: 'my-store',
+            defaultHost: 'cdn.media.amplience.net',
+          },
+          aspectLock: '16:9',
+          aspectRatio: 1.3393,
+        },
+      }
+      render(<HeroBlock title="Title" media={dynamicMedia} />)
+      const style = screen.getByRole('region').getAttribute('style') ?? ''
+      expect(style).toContain('--media-aspect-ratio: 16 / 9')
+    })
+
+    it('sets no --media-aspect-ratio when the ratio is unresolvable (no guessed default)', () => {
+      const dynamicMedia = {
+        mediaType: 'DynamicImage' as const,
+        image: {
+          image: {
+            name: 'hero-image',
+            endpoint: 'my-store',
+            defaultHost: 'cdn.media.amplience.net',
+          },
+        },
+      }
+      render(<HeroBlock title="Title" media={dynamicMedia} />)
+      const style = screen.getByRole('region').getAttribute('style') ?? ''
+      expect(style).not.toContain('--media-aspect-ratio')
     })
 
     it('supports differing mobile and desktop positions', () => {
       render(
         <HeroBlock
           title="Title"
-          image={sampleImage}
+          media={sampleMedia}
           contentPositionMobile="beneath"
           contentPositionDesktop="overlay"
         />,
@@ -218,12 +275,12 @@ describe('HeroBlock', () => {
 
   describe('overlay and background', () => {
     it('sets data-overlay-style when image is present', () => {
-      render(<HeroBlock title="Title" image={sampleImage} />)
+      render(<HeroBlock title="Title" media={sampleMedia} />)
       expect(screen.getByRole('region').getAttribute('data-overlay-style')).toBe('gradient')
     })
 
     it('forwards overlayStyle as data attribute', () => {
-      render(<HeroBlock title="Title" image={sampleImage} overlayStyle="solid" />)
+      render(<HeroBlock title="Title" media={sampleMedia} overlayStyle="solid" />)
       expect(screen.getByRole('region').getAttribute('data-overlay-style')).toBe('solid')
     })
 
@@ -233,13 +290,13 @@ describe('HeroBlock', () => {
     })
 
     it('sets --hero-scrim-opacity inline style when image is present', () => {
-      render(<HeroBlock title="Title" image={sampleImage} overlayIntensity={60} />)
+      render(<HeroBlock title="Title" media={sampleMedia} overlayIntensity={60} />)
       const style = screen.getByRole('region').getAttribute('style') ?? ''
       expect(style).toContain('--hero-scrim-opacity: 0.6')
     })
 
     it('sets --hero-scrim-opacity to 0 by default', () => {
-      render(<HeroBlock title="Title" image={sampleImage} />)
+      render(<HeroBlock title="Title" media={sampleMedia} />)
       const style = screen.getByRole('region').getAttribute('style') ?? ''
       expect(style).toContain('--hero-scrim-opacity: 0')
     })
@@ -261,7 +318,7 @@ describe('HeroBlock', () => {
     })
 
     it('sets data-text-color with or without an image', () => {
-      render(<HeroBlock title="Title" image={sampleImage} textColor="dark" />)
+      render(<HeroBlock title="Title" media={sampleMedia} textColor="dark" />)
       expect(screen.getByRole('region').getAttribute('data-text-color')).toBe('dark')
     })
 
@@ -276,7 +333,7 @@ describe('HeroBlock', () => {
     })
 
     it('sets data-overlay-color when image is present', () => {
-      render(<HeroBlock title="Title" image={sampleImage} overlayColor="primary" />)
+      render(<HeroBlock title="Title" media={sampleMedia} overlayColor="primary" />)
       expect(screen.getByRole('region').getAttribute('data-overlay-color')).toBe('primary')
     })
 

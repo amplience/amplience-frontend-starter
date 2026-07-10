@@ -7,8 +7,9 @@
  *
  * HEIGHT BEHAVIOURS (data-height-behaviour, overlay only):
  *   'flexible'     — height = max(image aspect-ratio, content). Uses a
- *                    CSS grid stacking trick; requires --image-aspect-ratio
- *                    to be set as an inline CSS custom property.
+ *                    CSS grid stacking trick; requires --media-aspect-ratio
+ *                    to be set as an inline CSS custom property (authored
+ *                    ratio, or intrinsic ratio via HeroBlockServer).
  *   'fitToContent' — content drives height; image absolutely fills the space.
  *   'fitToImage'   — image drives height; content is positioned absolutely.
  *
@@ -70,6 +71,7 @@
   box-sizing: border-box;
   background-color: var(--hero-background-color);
   color: var(--hero-text-color);
+  overflow: hidden;
 
   /* Vertical position — applies whenever the section is taller than its
      in-flow children (a minHeight'd text-only hero, or fitToContent with
@@ -84,7 +86,6 @@
 
 .root[data-max-height='true'] {
   max-height: var(--hero-max-height);
-  overflow: hidden;
 }
 
 /* ---------------------------------------------------------------------------
@@ -420,18 +421,29 @@
     /* ── flexible ─────────────────────────────────────────────────────────
        Height = max(image's natural ratio height, content height).
        ::before spacer contributes the image's aspect-ratio height to the
-       grid row; .media stretches to fill whatever the row becomes.
+       grid row; .media stretches to fill whatever the row becomes. The
+       spacer OWNS the row height — the media element must not contribute
+       its own ratio box, so DynamicImage's --di-aspect-ratio is neutralised
+       on .image below.
        ──────────────────────────────────────────────────────────────────── */
     &[data-height-behaviour='flexible'] {
       display: grid;
       align-items: var(--hero-v-justify);
+      grid-template-columns: 1fr;
 
-      /* Invisible spacer — drives the grid row to the image's natural height */
-      & .media::before {
+      /* Invisible spacer — must be a pseudo-element of the grid container (.root),
+         NOT of .media. Only direct children/pseudo-elements of a grid container
+         become grid items; .media::before is child content of .media and its
+         grid-area would be ignored. ::after is reserved for the scrim overlay.
+         --media-aspect-ratio = authored ratio (aspectLock / ManualImage dims)
+         or the intrinsic ratio resolved by HeroBlockServer; when unset the
+         declaration is invalid, the spacer has no height, and content alone
+         drives the row. */
+      &::before {
         content: '';
         grid-area: 1 / 1;
         width: 100%;
-        aspect-ratio: var(--image-aspect-ratio);
+        aspect-ratio: var(--media-aspect-ratio);
         visibility: hidden;
       }
 
@@ -448,6 +460,10 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        /* The spacer owns the image ratio in this layout — stop the
+           DynamicImage container's own ratio box (--di-aspect-ratio) from
+           also contributing height to the grid row. */
+        aspect-ratio: auto;
       }
 
       & .container {
@@ -513,12 +529,15 @@
     &[data-height-behaviour='flexible'] {
       display: grid;
       align-items: var(--hero-v-justify);
+      grid-template-columns: 1fr;
 
-      & .media::before {
+      /* Invisible spacer — see the mobile flexible block above for the full
+         rationale (grid-item pseudo-element + --media-aspect-ratio source). */
+      &::before {
         content: '';
         grid-area: 1 / 1;
         width: 100%;
-        aspect-ratio: var(--image-aspect-ratio);
+        aspect-ratio: var(--media-aspect-ratio);
         visibility: hidden;
       }
 
@@ -534,6 +553,8 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        /* The spacer owns the image ratio — see mobile flexible block. */
+        aspect-ratio: auto;
       }
 
       & .content {

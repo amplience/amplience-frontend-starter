@@ -1,29 +1,56 @@
 {
   "id": "a1b2c3d4-0001-4000-8000-000000000003",
-  "label": "Home — hero",
+  "label": "Home \u2014 hero",
   "body": {
     "_meta": {
-      "name": "Home — hero",
+      "name": "Home \u2014 hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000003"
     },
     "title": "Build composable sites without the boilerplates.",
     "subtitle": "Quadratic Lite is the open-source accelerator for Amplience-backed projects!",
-    "image": {
-      "src": "https://picsum.photos/seed/ql-hero/1200/600",
-      "alt": "Hero — Quadratic Lite accelerator",
-      "width": 1200,
-      "height": 600
+    "media": {
+      "mediaType": "DynamicImage",
+      "image": {
+        "image": {
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
+          },
+          "id": "cb7c89ac-632a-49ac-8d9f-6a57cb6289e4",
+          "name": "facial_toner_nature_scene",
+          "endpoint": "quadraticdemo",
+          "defaultHost": "cdn.media.amplience.net",
+          "mimeType": "image/jpeg",
+          "altText": "Dr. Hauschka Facial Toner spray bottle on mossy rocks with petals and flowers."
+        },
+        "crop": [27, 131, 1136, 658],
+        "fliph": false,
+        "flipv": false,
+        "poi": {
+          "x": -1,
+          "y": -1
+        },
+        "query": "crop={2.25%},{14.62%},{94.67%},{73.44%}",
+        "aspectLock": "none",
+        "srcWidth": 1200,
+        "srcHeight": 896,
+        "aspectRatio": 1.7264
+      },
+      "imageAltText": "Dr. Hauschka Facial Toner spray bottle on mossy rocks with petals and flowers."
     },
-    "contentPositionMobile": "beneath",
+    "contentPositionMobile": "overlay",
     "contentPositionDesktop": "overlay",
-    "heightBehaviour": "fitToContent",
-    "minHeight": 600,
+    "heightBehaviour": "flexible",
     "overlayIntensity": 50,
     "verticalPosition": "center",
     "backgroundColor": "dark",
     "ctas": [
-      { "label": "About", "href": "/about", "variant": "solid", "color": "primary" },
+      {
+        "label": "About",
+        "href": "/about",
+        "variant": "solid",
+        "color": "primary"
+      },
       {
         "label": "Read the docs",
         "href": "/docs",

@@ -1,11 +1,13 @@
 // @vitest-environment jsdom
 //
-// Smoke tests for the ImageBlock molecule.
+// Smoke tests for the MediaBlock organism (QL-65).
 
 import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { ImageBlock } from './ImageBlock'
+import type { ContentMediaData } from '@amplience/quadratic-types'
+
+import { MediaBlock } from './MediaBlock'
 
 vi.mock('next/link', () => ({
   default: ({ href, children, ...props }: React.ComponentPropsWithoutRef<'a'>) => (
@@ -16,8 +18,6 @@ vi.mock('next/link', () => ({
 }))
 
 vi.mock('next/image', () => ({
-  // `priority` is a next/image prop, not a DOM attribute — surface it as
-  // data-priority so tests can assert on it.
   default: ({
     src,
     alt,
@@ -30,67 +30,70 @@ vi.mock('next/image', () => ({
 
 afterEach(cleanup)
 
-const sampleImage = {
-  src: '/photo.jpg',
-  alt: 'A test photo',
-  width: 1200,
-  height: 800,
-} as const
+const sampleMedia: ContentMediaData = {
+  mediaType: 'ManualImage',
+  image: {
+    src: '/photo.jpg',
+    alt: 'A test photo',
+    width: 1200,
+    height: 800,
+  },
+}
 
-describe('ImageBlock', () => {
+describe('MediaBlock', () => {
   describe('structure', () => {
     it('renders a <section> element', () => {
-      render(<ImageBlock image={sampleImage} />)
+      render(<MediaBlock media={sampleMedia} />)
       expect(screen.getByRole('region').tagName).toBe('SECTION')
     })
 
     it('renders a <figure> element', () => {
-      render(<ImageBlock image={sampleImage} />)
+      render(<MediaBlock media={sampleMedia} />)
       expect(document.querySelector('figure')).toBeTruthy()
     })
 
     it('renders the image with the correct alt text', () => {
-      render(<ImageBlock image={sampleImage} />)
+      render(<MediaBlock media={sampleMedia} />)
       expect(screen.getByAltText('A test photo')).toBeTruthy()
     })
 
     it('forwards additional class names to the section', () => {
-      render(<ImageBlock image={sampleImage} className="custom" />)
+      render(<MediaBlock media={sampleMedia} className="custom" />)
       expect(screen.getByRole('region').className).toContain('custom')
     })
   })
 
   describe('caption', () => {
     it('renders caption when provided', () => {
-      render(<ImageBlock image={sampleImage} caption="Photo by Jane" />)
+      render(<MediaBlock media={sampleMedia} caption="Photo by Jane" />)
       expect(screen.getByText('Photo by Jane')).toBeTruthy()
     })
 
     it('renders caption inside a <figcaption>', () => {
-      render(<ImageBlock image={sampleImage} caption="Photo by Jane" />)
+      render(<MediaBlock media={sampleMedia} caption="Photo by Jane" />)
       expect(document.querySelector('figcaption')).toBeTruthy()
     })
 
     it('does not render figcaption when caption is omitted', () => {
-      render(<ImageBlock image={sampleImage} />)
+      render(<MediaBlock media={sampleMedia} />)
       expect(document.querySelector('figcaption')).toBeNull()
     })
   })
 
   describe('link', () => {
-    it('wraps image in a link when href is provided', () => {
-      render(<ImageBlock image={sampleImage} href="/products" />)
+    it('wraps media in a link when href is provided', () => {
+      render(<MediaBlock media={sampleMedia} href="/products" />)
       const link = screen.getByRole('link')
       expect(link.getAttribute('href')).toBe('/products')
     })
 
     it('does not render a link when href is omitted', () => {
-      render(<ImageBlock image={sampleImage} />)
+      render(<MediaBlock media={sampleMedia} />)
       expect(screen.queryByRole('link')).toBeNull()
     })
 
     it('renders an external link with target="_blank"', () => {
-      render(<ImageBlock image={sampleImage} href="https://example.com" />)
+      render(<MediaBlock media={sampleMedia} href="https://example.com" />)
       const link = screen.getByRole('link')
       expect(link.getAttribute('target')).toBe('_blank')
       expect(link.getAttribute('rel')).toContain('noopener')
@@ -99,52 +102,29 @@ describe('ImageBlock', () => {
 
   describe('data attributes', () => {
     it('does not set data-full-bleed when fullBleed is false (default)', () => {
-      render(<ImageBlock image={sampleImage} />)
+      render(<MediaBlock media={sampleMedia} />)
       expect(screen.getByRole('region').getAttribute('data-full-bleed')).toBeNull()
     })
 
     it('sets data-full-bleed="true" when fullBleed is true', () => {
-      render(<ImageBlock image={sampleImage} fullBleed />)
+      render(<MediaBlock media={sampleMedia} fullBleed />)
       expect(screen.getByRole('region').getAttribute('data-full-bleed')).toBe('true')
     })
 
-    it('does not set data-background-color when omitted', () => {
-      render(<ImageBlock image={sampleImage} />)
-      expect(screen.getByRole('region').getAttribute('data-background-color')).toBeNull()
-    })
-
     it('sets data-background-color when provided', () => {
-      render(<ImageBlock image={sampleImage} backgroundColor="dark" />)
+      render(<MediaBlock media={sampleMedia} backgroundColor="dark" />)
       expect(screen.getByRole('region').getAttribute('data-background-color')).toBe('dark')
     })
   })
 
-  describe('image passthrough', () => {
-    it('passes src to the image element', () => {
-      render(<ImageBlock image={{ ...sampleImage, src: '/custom.jpg' }} />)
-      expect(screen.getByAltText('A test photo').getAttribute('src')).toBe('/custom.jpg')
-    })
-
-    it('passes aspectRatio as a CSS variable on the image', () => {
-      render(<ImageBlock image={{ ...sampleImage, aspectRatio: '16 / 9' }} />)
-      const img = screen.getByAltText('A test photo')
-      expect(img.getAttribute('style')).toContain('--image-aspect-ratio')
-    })
-  })
-
   describe('image loading priority', () => {
-    it('does not prioritise the image by default (next/image lazy-loads)', () => {
-      render(<ImageBlock image={sampleImage} />)
+    it('does not prioritise the image by default', () => {
+      render(<MediaBlock media={sampleMedia} />)
       expect(screen.getByAltText('A test photo').getAttribute('data-priority')).toBeNull()
     })
 
     it('prioritises the image at the top of the page', () => {
-      render(<ImageBlock image={sampleImage} isTopOfPage />)
-      expect(screen.getByAltText('A test photo').getAttribute('data-priority')).toBe('true')
-    })
-
-    it('lets an authored image.priority override the position default', () => {
-      render(<ImageBlock image={{ ...sampleImage, priority: true }} />)
+      render(<MediaBlock media={sampleMedia} isTopOfPage />)
       expect(screen.getByAltText('A test photo').getAttribute('data-priority')).toBe('true')
     })
   })

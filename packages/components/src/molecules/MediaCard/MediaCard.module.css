@@ -122,7 +122,7 @@
   object-fit: cover;
 }
 
-/* beside / dynamic-wide: match body height */
+/* beside / dynamic-wide: image fills the flex-row height; drop fixed ratio */
 .inner[data-layout='beside'] > .media,
 .inner[data-layout='dynamic'] > .media {
   > .image {

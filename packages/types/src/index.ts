@@ -138,3 +138,92 @@ export type PropsValidationFailure = {
 /** Union of everything the dispatcher can emit when dispatch fails. */
 export type RendererFailure =
   SchemaUnknownFailure | ComponentUnregisteredFailure | PropsValidationFailure
+
+// ---------------------------------------------------------------------------
+// Amplience media types (QL-65)
+// ---------------------------------------------------------------------------
+
+/**
+ * Resolved Amplience image-link — the raw reference returned by DC delivery
+ * for an image-link field.
+ * Mirrors http://bigcontent.io/cms/schema/v1/core#/definitions/image-link
+ */
+export type AmplienceImageLink = {
+  readonly name: string
+  readonly endpoint: string
+  readonly defaultHost: string
+  readonly id?: string
+}
+
+/**
+ * The delivery shape of a field using the image-poi extension.
+ * The extension bakes all DI transform params into `query` at authoring time,
+ * and writes the asset's dimensions alongside them, so the payload is fully
+ * self-describing — renderers never fetch the DI metadata endpoint.
+ * The renderer only needs image (for base URL), query (for transforms), and
+ * aspectLock/aspectRatio (for CSS box sizing).
+ * Other fields the extension stores (crop coordinates, poi coordinates, rot,
+ * hue, etc.) are present in the delivery payload but are already encoded into
+ * `query` and do not need to be read by the renderer.
+ */
+export type TransformedImageField = {
+  readonly image: AmplienceImageLink
+  /** Pre-baked DI query string — everything except `w=`. E.g. "?sm=aspect&aspect=16:9" */
+  readonly query?: string
+  /** Authored crop aspect ratio e.g. "16:9". Used at render time for CSS aspect-ratio. */
+  readonly aspectLock?: string
+  /** Original asset width in px, written by the extension at authoring time. */
+  readonly srcWidth?: number
+  /** Original asset height in px, written by the extension at authoring time. */
+  readonly srcHeight?: number
+  /**
+   * The RENDERED aspect ratio as a decimal (e.g. 1.7264), written by the
+   * extension at authoring time. Crop-aware: the crop region's w/h when a
+   * crop is drawn, otherwise the original asset's. Preferred sizing source
+   * when no aspectLock is authored. Optional: content authored before the
+   * extension change carries none of the dimension fields.
+   */
+  readonly aspectRatio?: number
+}
+
+/**
+ * ManualImage mode — a direct URL with intrinsic dimensions entered by the author.
+ * Maps to the <ManualImage> molecule.
+ */
+export type ManualImageData = {
+  readonly mediaType: 'ManualImage'
+  readonly image: {
+    readonly src: string
+    readonly width: number
+    readonly height: number
+    readonly alt: string
+    /** Optional CSS aspect-ratio override e.g. "16 / 9" (CSS slash format). */
+    readonly aspectRatio?: string
+  }
+}
+
+/**
+ * DynamicImage mode — a DAM asset picked via the image-poi extension.
+ * Maps to the <DynamicImage> molecule.
+ *
+ * `image` is the full image-poi field delivered by DC: base image-link plus
+ * pre-baked DI transforms (crop, POI, smart scaling) in `query`, and the
+ * authored crop aspect ratio in `aspectLock`.
+ * The renderer appends fmt=webp&w={width} via the DI loader for responsive srcset.
+ */
+export type DynamicImageData = {
+  readonly mediaType: 'DynamicImage'
+  /** Full image-poi field — base image-link plus pre-baked DI transforms. */
+  readonly image: TransformedImageField
+  /** Alt text pre-populated from DAM by automated-alt-text extension, author-overridable */
+  readonly imageAltText?: string
+}
+
+/**
+ * Union of all media modes, discriminated by mediaType.
+ * Accepted by <ContentMedia> and used as the media prop type by all blocks.
+ *
+ * Currently: ManualImage | DynamicImage.
+ * Future: DynamicVideo | ExternalVideo | BynderImage | …
+ */
+export type ContentMediaData = ManualImageData | DynamicImageData

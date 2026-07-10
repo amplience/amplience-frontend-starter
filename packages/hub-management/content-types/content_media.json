@@ -1,8 +1,8 @@
 {
-  "contentTypeUri": "https://quadratic.amplience.com/v2/content/image",
+  "contentTypeUri": "https://quadratic.amplience.com/v2/content/media",
   "status": "ACTIVE",
   "settings": {
-    "label": "Image Block",
+    "label": "Media block",
     "icons": [
       {
         "size": 256,

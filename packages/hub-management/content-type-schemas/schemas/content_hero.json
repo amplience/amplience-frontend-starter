@@ -25,7 +25,7 @@
           },
           {
             "label": "🖼️ Background",
-            "pointers": ["/image", "/backgroundColor"]
+            "pointers": ["/media", "/backgroundColor"]
           },
           {
             "label": "⚙️ Layout",
@@ -60,11 +60,11 @@
       "title": "Subtitle",
       "ui:component": "text-area"
     },
-    "image": {
-      "title": "Image",
+    "media": {
+      "title": "Media",
       "allOf": [
         {
-          "$ref": "https://quadratic.amplience.com/v2/partials/image"
+          "$ref": "https://quadratic.amplience.com/v2/partials/media"
         }
       ]
     },
@@ -179,7 +179,7 @@
   "propertyOrder": [
     "title",
     "subtitle",
-    "image",
+    "media",
     "ctas",
     "contentPositionMobile",
     "contentPositionDesktop",

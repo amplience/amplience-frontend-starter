@@ -29,11 +29,11 @@
   },
   "type": "object",
   "properties": {
-    "image": {
-      "title": "Image",
+    "media": {
+      "title": "Media",
       "allOf": [
         {
-          "$ref": "https://quadratic.amplience.com/v2/partials/image"
+          "$ref": "https://quadratic.amplience.com/v2/partials/media"
         }
       ]
     },
@@ -109,7 +109,7 @@
   "propertyOrder": [
     "title",
     "description",
-    "image",
+    "media",
     "href",
     "cta",
     "layout",

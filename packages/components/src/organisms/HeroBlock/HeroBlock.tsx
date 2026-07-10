@@ -1,12 +1,14 @@
 import clsx from 'clsx'
 import { useId, type CSSProperties } from 'react'
 
+import type { ContentMediaData } from '@amplience/quadratic-types'
+
 import { Button, type ButtonProps } from '../../atoms/Button/Button'
 import { Container } from '../../atoms/Container/Container'
 import type { ContainerProps } from '../../atoms/Container/Container'
-import { Image } from '../../atoms/Image/Image'
-import type { ImageProps } from '../../atoms/Image/Image'
 import { Typography } from '../../atoms/Typography/Typography'
+import { ContentMedia } from '../../molecules/ContentMedia/ContentMedia'
+import { resolveDiAspectRatio } from '../../molecules/DynamicImage/di-utils'
 import styles from './HeroBlock.module.css'
 
 // ---------------------------------------------------------------------------
@@ -37,11 +39,10 @@ export type HeroBlockProps = {
   title: string
   subtitle?: string
   /**
-   * Optional hero image. Passed through to the Image atom — all Image props
-   * (src, alt, width, height, aspectRatio, priority …) are available.
-   * Omit for a text-only hero.
+   * Optional hero media. Accepts ManualImage (direct URL) or DynamicImage
+   * (Amplience DAM asset). Omit for a text-only hero.
    */
-  image?: ImageProps
+  media?: ContentMediaData
   ctas?: HeroBlockCtaProps[]
   /**
    * Where the content sits relative to the image on mobile (≤ 768px).
@@ -58,7 +59,10 @@ export type HeroBlockProps = {
   /**
    * Determines the hero's height when content overlays the image.
    *   'flexible'     — height = max(image's natural ratio, content). Default.
-   *                    Uses a CSS grid stacking trick with a ::before spacer.
+   *                    Uses a CSS grid stacking trick with a ::before spacer
+   *                    sized by --media-aspect-ratio, resolved entirely from
+   *                    the delivery payload (aspectLock, extension-written
+   *                    ratio, or ManualImage dimensions).
    *   'fitToContent' — content drives height; image crops to fill.
    *   'fitToImage'   — image drives height; content sits absolutely on top.
    *                    Warning: content may clip at narrow viewports if it
@@ -148,8 +152,7 @@ export type HeroBlockProps = {
    * renderer via RenderContext, not authored). A top-of-page hero image is
    * the likely LCP element, so it renders with next/image `priority` —
    * eager load, `fetchpriority="high"`, and a head preload hint. Below the
-   * fold, next/image's default lazy loading applies. An explicit
-   * `image.priority` still wins. Defaults to false.
+   * fold, next/image's default lazy loading applies. Defaults to false.
    */
   isTopOfPage?: boolean
   className?: string
@@ -185,12 +188,12 @@ export type HeroBlockProps = {
  *   <Hero title="Welcome" subtitle="…" cta={[{ label: 'Start', href: '/docs' }]} />
  *
  *   // Overlay hero (default)
- *   <Hero title="Welcome" image={{ src: '/hero.jpg', alt: 'Hero', width: 1600, height: 900 }} />
+ *   <Hero title="Welcome" media={{ mediaType: 'ManualImage', src: '/hero.jpg', alt: 'Hero', width: 1600, height: 900 }} />
  *
  *   // Beneath on mobile, overlay on desktop
  *   <Hero
  *     title="Welcome"
- *     image={…}
+ *     media={…}
  *     contentPositionMobile="beneath"
  *     contentPositionDesktop="overlay"
  *   />
@@ -198,7 +201,7 @@ export type HeroBlockProps = {
 export function HeroBlock({
   title,
   subtitle,
-  image,
+  media,
   ctas,
   contentPositionMobile = 'overlay',
   contentPositionDesktop = 'overlay',
@@ -219,41 +222,58 @@ export function HeroBlock({
   isTopOfPage = false,
   className,
 }: HeroBlockProps) {
-  // The ::before spacer in 'flexible' overlay mode needs the image aspect
+  const hasMedia = media != null
+  const titleId = useId()
+
+  // The ::before spacer in 'flexible' overlay mode needs the media aspect
   // ratio as a CSS custom property. Only set when at least one breakpoint
   // uses overlay + flexible.
-  const hasImage = image != null
-  const titleId = useId()
   const needsAspectRatio =
-    hasImage &&
+    hasMedia &&
     heightBehaviour === 'flexible' &&
     (contentPositionMobile === 'overlay' || contentPositionDesktop === 'overlay')
+
+  // The media's displayed ratio, resolved from the delivery payload alone:
+  //   ManualImage  — explicit aspectRatio override, else intrinsic width/height
+  //   DynamicImage — the image-poi aspectLock ('none' = author unlocked it),
+  //                  else the crop-aware ratio the di-transform extension
+  //                  wrote into the field at pick time.
+  // No guessed default: undefined means no spacer height (content drives it).
+  function getAspectRatioCss(m: ContentMediaData): string | undefined {
+    if (m.mediaType === 'ManualImage') {
+      return m.image.aspectRatio ?? `${m.image.width} / ${m.image.height}`
+    }
+    return resolveDiAspectRatio(m.image)
+  }
 
   return (
     <section
       aria-labelledby={titleId}
       className={clsx(styles.root, className)}
-      data-content-position-mobile={hasImage ? contentPositionMobile : undefined}
-      data-content-position-desktop={hasImage ? contentPositionDesktop : undefined}
-      data-height-behaviour={hasImage ? heightBehaviour : undefined}
+      data-content-position-mobile={hasMedia ? contentPositionMobile : undefined}
+      data-content-position-desktop={hasMedia ? contentPositionDesktop : undefined}
+      data-height-behaviour={hasMedia ? heightBehaviour : undefined}
       data-vertical-position={verticalPosition}
       data-horizontal-position={horizontalPosition}
       data-text-align={textAlign}
-      data-overlay-color={hasImage ? overlayColor : undefined}
-      data-overlay-style={hasImage ? overlayStyle : undefined}
+      data-overlay-color={hasMedia ? overlayColor : undefined}
+      data-overlay-style={hasMedia ? overlayStyle : undefined}
       data-background-color={backgroundColor}
       data-text-color={textColor}
       data-max-height={maxHeight != null ? true : undefined}
       style={(() => {
         const vars: Record<string, string | number> = {}
-        if (needsAspectRatio) vars['--image-aspect-ratio'] = `${image.width} / ${image.height}`
-        if (hasImage) vars['--hero-scrim-opacity'] = overlayIntensity / 100
+        if (needsAspectRatio) {
+          const ratio = getAspectRatioCss(media)
+          if (ratio !== undefined) vars['--media-aspect-ratio'] = ratio
+        }
+        if (hasMedia) vars['--hero-scrim-opacity'] = overlayIntensity / 100
         if (minHeight != null) vars['--hero-min-height'] = `${minHeight}px`
         if (maxHeight != null) vars['--hero-max-height'] = `${maxHeight}px`
         return Object.keys(vars).length > 0 ? vars : undefined
       })()}
     >
-      {hasImage && (
+      {hasMedia && (
         <div className={styles.media}>
           {/*
             Defaults sit before the spread so authored `image` props win.
@@ -268,12 +288,12 @@ export function HeroBlock({
               breakpoint. Declaring it lets next/image preload the correctly
               sized candidate instead of defaulting to the largest 3840px image.
           */}
-          <Image
+          <ContentMedia
             priority={isTopOfPage}
-            fetchPriority={isTopOfPage ? 'high' : undefined}
+            {...(isTopOfPage && { fetchPriority: 'high' })}
             sizes="100vw"
-            {...image}
-            className={clsx(styles.image, image.className)}
+            {...media}
+            {...(styles.image !== undefined && { className: styles.image })}
           />
         </div>
       )}

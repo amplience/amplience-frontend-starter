@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/partials/media",
+  "title": "Media",
+  "type": "object",
+  "properties": {
+    "mediaType": {
+      "type": "string",
+      "title": "Media source",
+      "description": "Choose DynamicImage to pick from the media library, or ManualImage to enter a URL directly.",
+      "enum": ["DynamicImage", "ManualImage"],
+      "default": "DynamicImage",
+      "ui:widget": "radio"
+    }
+  },
+  "if": {
+    "properties": { "mediaType": { "const": "DynamicImage" } },
+    "required": ["mediaType"]
+  },
+  "then": {
+    "properties": {
+      "image": {
+        "title": "Image",
+        "description": "Pick from the Amplience media library. Use the crop and POI handles to set framing.",
+        "type": "object",
+        "properties": {
+          "image": {
+            "title": "Base image",
+            "allOf": [
+              {
+                "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
+              }
+            ]
+          },
+          "crop": {
+            "title": "Crop",
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": { "type": "number", "default": 0 }
+          },
+          "poi": {
+            "title": "Point of interest",
+            "type": "object",
+            "properties": {
+              "x": { "title": "X", "type": "number" },
+              "y": { "title": "Y", "type": "number" }
+            }
+          },
+          "rot": { "title": "Rotate", "type": "number" },
+          "hue": { "title": "Hue", "type": "number" },
+          "sat": { "title": "Saturation", "type": "number" },
+          "bri": { "title": "Brightness", "type": "number" },
+          "fliph": { "title": "Flip horizontal", "type": "boolean" },
+          "flipv": { "title": "Flip vertical", "type": "boolean" },
+          "aspectLock": {
+            "title": "Crop aspect ratio",
+            "description": "Aspect ratio used when resizing the crop rectangle, e.g. \"16:9\". \"none\" unlocks aspect.",
+            "type": "string"
+          },
+          "query": {
+            "title": "DI query string",
+            "description": "Pre-baked DI transform params (crop, POI, smart scaling). Appended to the base URL by the renderer.",
+            "type": "string"
+          },
+          "srcWidth": {
+            "title": "Source Width",
+            "description": "Intrinsic width of the source image in pixels (from DI metadata). Written by the extension so consumers can reserve layout space without a second call.",
+            "type": "number"
+          },
+          "srcHeight": {
+            "title": "Source Height",
+            "description": "Intrinsic height of the source image in pixels (from DI metadata). Written by the extension so consumers can reserve layout space without a second call.",
+            "type": "number"
+          },
+          "aspectRatio": {
+            "title": "Aspect Ratio",
+            "description": "Aspect ratio (width / height) of the delivered image: the crop rectangle when a crop is active, otherwise the source image. Bind directly to CSS aspect-ratio to avoid layout shift (CLS).",
+            "type": "number"
+          }
+        },
+        "ui:extension": {
+          "name": "image-poi",
+          "params": {
+            "useVSE": true
+          }
+        }
+      },
+      "imageAltText": {
+        "title": "Image Alt Text",
+        "description": "Auto-populated from the media library asset for the current locale. Override here if needed.",
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 200,
+        "ui:extension": {
+          "name": "automated-alt-text",
+          "params": {
+            "image": "/image"
+          }
+        }
+      }
+    }
+  },
+  "else": {
+    "properties": {
+      "image": {
+        "title": "Image",
+        "type": "object",
+        "properties": {
+          "src": {
+            "type": "string",
+            "title": "Image URL"
+          },
+          "alt": {
+            "type": "string",
+            "title": "Alt text",
+            "description": "Accessible description of the image.",
+            "maxLength": 200
+          },
+          "width": {
+            "type": "integer",
+            "title": "Width (px)",
+            "minimum": 1
+          },
+          "height": {
+            "type": "integer",
+            "title": "Height (px)",
+            "minimum": 1
+          },
+          "aspectRatio": {
+            "type": "string",
+            "title": "CSS aspect ratio",
+            "description": "Optional layout override e.g. \"16 / 9\" (CSS slash format)."
+          }
+        },
+        "required": ["src", "alt", "width", "height"]
+      }
+    },
+    "required": ["mediaType", "image"]
+  }
+}

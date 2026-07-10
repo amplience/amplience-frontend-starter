@@ -23,12 +23,15 @@ vi.mock('next/image', () => ({
 
 afterEach(cleanup)
 
-const sampleImage = {
-  src: '/product.jpg',
-  alt: 'A product photo',
-  width: 800,
-  height: 450,
-} as const
+const sampleMedia = {
+  mediaType: 'ManualImage' as const,
+  image: {
+    src: '/product.jpg',
+    alt: 'A product photo',
+    width: 800,
+    height: 450,
+  },
+}
 
 describe('MediaCard', () => {
   describe('structure', () => {
@@ -67,7 +70,7 @@ describe('MediaCard', () => {
 
   describe('image', () => {
     it('renders the image when provided', () => {
-      render(<MediaCard title="Title" image={sampleImage} />)
+      render(<MediaCard title="Title" media={sampleMedia} />)
       expect(screen.getByAltText('A product photo')).toBeTruthy()
     })
 

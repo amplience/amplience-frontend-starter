@@ -39,21 +39,25 @@ type Story = StoryObj<typeof MediaCard>
 // Shared fixtures
 // ---------------------------------------------------------------------------
 
-const landscapeImage = {
-  src: 'https://picsum.photos/seed/ql-mc/800/450',
-  alt: 'A sample product image',
-  width: 800,
-  height: 450,
-  unoptimized: true,
-} as const
+const landscapeMedia = {
+  mediaType: 'ManualImage' as const,
+  image: {
+    src: 'https://picsum.photos/seed/ql-mc/800/450',
+    alt: 'A sample product image',
+    width: 800,
+    height: 450,
+  },
+}
 
-const squareImage = {
-  src: 'https://picsum.photos/seed/ql-mc-sq/600/600',
-  alt: 'A square product image',
-  width: 600,
-  height: 600,
-  unoptimized: true,
-} as const
+const squareMedia = {
+  mediaType: 'ManualImage' as const,
+  image: {
+    src: 'https://picsum.photos/seed/ql-mc-sq/600/600',
+    alt: 'A square product image',
+    width: 600,
+    height: 600,
+  },
+}
 
 const baseCopy = {
   title: 'Spring collection',
@@ -69,7 +73,7 @@ export const Playground: Story = {
   parameters: { controls: { disable: false } },
   args: {
     ...baseCopy,
-    image: { ...landscapeImage },
+    media: { ...landscapeMedia },
     layout: 'above',
     elevation: 'raised',
     color: 'white',
@@ -84,7 +88,7 @@ export const Above: Story = {
   name: 'Layout — above (default)',
   render: () => (
     <div style={{ maxWidth: 360 }}>
-      <MediaCard {...baseCopy} image={{ ...landscapeImage }} layout="above" />
+      <MediaCard {...baseCopy} media={{ ...landscapeMedia }} layout="above" />
     </div>
   ),
 }
@@ -93,7 +97,7 @@ export const Beside: Story = {
   name: 'Layout — beside',
   render: () => (
     <div style={{ maxWidth: 560 }}>
-      <MediaCard {...baseCopy} image={{ ...squareImage }} layout="beside" />
+      <MediaCard {...baseCopy} media={{ ...squareMedia }} layout="beside" />
     </div>
   ),
 }
@@ -102,7 +106,7 @@ export const Dynamic: Story = {
   name: 'Layout — dynamic (resize to see switch at 380px)',
   render: () => (
     <div style={{ maxWidth: 560, resize: 'horizontal', overflow: 'hidden' }}>
-      <MediaCard {...baseCopy} image={{ ...squareImage }} layout="dynamic" />
+      <MediaCard {...baseCopy} media={{ ...squareMedia }} layout="dynamic" />
     </div>
   ),
 }
@@ -114,7 +118,7 @@ export const Overlay: Story = {
       <MediaCard
         title="Spring collection"
         description="Lightweight, versatile pieces."
-        image={{ ...landscapeImage }}
+        media={{ ...landscapeMedia }}
         layout="overlay"
       />
     </div>
@@ -129,7 +133,7 @@ export const WholeCardLink: Story = {
   name: 'Linked — whole card',
   render: () => (
     <div style={{ maxWidth: 360 }}>
-      <MediaCard {...baseCopy} image={{ ...landscapeImage }} links={{ href: '/products/spring' }} />
+      <MediaCard {...baseCopy} media={{ ...landscapeMedia }} links={{ href: '/products/spring' }} />
     </div>
   ),
 }
@@ -140,7 +144,7 @@ export const ExplicitCta: Story = {
     <div style={{ maxWidth: 360 }}>
       <MediaCard
         {...baseCopy}
-        image={{ ...landscapeImage }}
+        media={{ ...landscapeMedia }}
         links={{ cta: { label: 'Shop now', href: '/products/spring' } }}
       />
     </div>
@@ -154,7 +158,7 @@ export const LinkedExternal: Story = {
       <MediaCard
         title="Amplience"
         description="The content management platform powering this accelerator."
-        image={{ ...landscapeImage }}
+        media={{ ...landscapeMedia }}
         links={{ href: 'https://amplience.com' }}
       />
     </div>
@@ -186,7 +190,7 @@ export const Flat: Story = {
   name: 'Elevation — flat',
   render: () => (
     <div style={{ maxWidth: 360 }}>
-      <MediaCard {...baseCopy} image={{ ...landscapeImage }} elevation="flat" />
+      <MediaCard {...baseCopy} media={{ ...landscapeMedia }} elevation="flat" />
     </div>
   ),
 }
@@ -195,7 +199,7 @@ export const Bordered: Story = {
   name: 'Elevation — bordered',
   render: () => (
     <div style={{ maxWidth: 360 }}>
-      <MediaCard {...baseCopy} image={{ ...landscapeImage }} elevation="bordered" />
+      <MediaCard {...baseCopy} media={{ ...landscapeMedia }} elevation="bordered" />
     </div>
   ),
 }
@@ -207,7 +211,7 @@ export const ColorDark: Story = {
       <MediaCard
         title="Dark surface card"
         description="Coloured surfaces automatically apply a contrasting text colour."
-        image={{ ...landscapeImage }}
+        media={{ ...landscapeMedia }}
         color="dark"
       />
     </div>
@@ -263,12 +267,14 @@ export const InGrid: Story = {
           key={seed}
           title={title}
           description={description}
-          image={{
-            src: `https://picsum.photos/seed/${seed}/800/450`,
-            alt: title,
-            width: 800,
-            height: 450,
-            unoptimized: true,
+          media={{
+            mediaType: 'ManualImage' as const,
+            image: {
+              src: `https://picsum.photos/seed/${seed}/800/450`,
+              alt: title,
+              width: 800,
+              height: 450,
+            },
           }}
           links={{ href: `/collections/${seed}` }}
         />

@@ -67,13 +67,13 @@ import {
 } from './organisms/HeaderBlock/HeaderRow.registry'
 import { HERO_BLOCK_SCHEMA, heroBlockRegistryEntry } from './organisms/HeroBlock/HeroBlock.registry'
 import {
-  IMAGE_BLOCK_SCHEMA,
-  imageBlockRegistryEntry,
-} from './organisms/ImageBlock/ImageBlock.registry'
-import {
   MARKDOWN_BLOCK_SCHEMA,
   markdownBlockRegistryEntry,
 } from './organisms/MarkdownBlock/MarkdownBlock.registry'
+import {
+  MEDIA_BLOCK_SCHEMA,
+  mediaBlockRegistryEntry,
+} from './organisms/MediaBlock/MediaBlock.registry'
 import {
   HIERARCHY_MENU_SCHEMA,
   hierarchyMenuRegistryEntry,
@@ -142,7 +142,7 @@ export const defaultRegistry: Registry = createRegistry([
   [BLOG_ARTICLE_SCHEMA, blogArticleRegistryEntry],
   [SLOT_SCHEMA, slotRegistryEntry],
   [HERO_BLOCK_SCHEMA, heroBlockRegistryEntry],
-  [IMAGE_BLOCK_SCHEMA, imageBlockRegistryEntry],
+  [MEDIA_BLOCK_SCHEMA, mediaBlockRegistryEntry],
   [MARKDOWN_BLOCK_SCHEMA, markdownBlockRegistryEntry],
   [COLUMNS_BLOCK_SCHEMA, columnsBlockRegistryEntry],
   [GRID_BLOCK_SCHEMA, gridBlockRegistryEntry],
@@ -169,8 +169,8 @@ export {
   gridBlockRegistryEntry,
   HERO_BLOCK_SCHEMA,
   heroBlockRegistryEntry,
-  IMAGE_BLOCK_SCHEMA,
-  imageBlockRegistryEntry,
+  MEDIA_BLOCK_SCHEMA,
+  mediaBlockRegistryEntry,
   MARKDOWN_BLOCK_SCHEMA,
   markdownBlockRegistryEntry,
   MEDIA_CARD_SCHEMA,

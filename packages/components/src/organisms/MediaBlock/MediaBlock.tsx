@@ -1,28 +1,29 @@
 import clsx from 'clsx'
 
+import type { ContentMediaData } from '@amplience/quadratic-types'
+
 import { Container } from '../../atoms/Container/Container'
 import type { ContainerProps } from '../../atoms/Container/Container'
-import { Image } from '../../atoms/Image/Image'
-import type { ImageProps } from '../../atoms/Image/Image'
 import { Link } from '../../atoms/Link/Link'
 import { Typography } from '../../atoms/Typography/Typography'
-import styles from './ImageBlock.module.css'
+import { ContentMedia } from '../../molecules/ContentMedia/ContentMedia'
+import styles from './MediaBlock.module.css'
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-export type ImageBlockColorToken =
+export type MediaBlockColorToken =
   'primary' | 'secondary' | 'tertiary' | 'light' | 'dark' | 'black' | 'white'
 
-export type ImageBlockBackgroundColor = ImageBlockColorToken
+export type MediaBlockBackgroundColor = MediaBlockColorToken
 
-export type ImageBlockProps = {
+export type MediaBlockProps = {
   /**
-   * Image to render. All Image atom props are accepted (src, alt, width,
-   * height, aspectRatio, priority, unoptimized, etc.).
+   * Media to render. Accepts either a ManualImage (direct URL) or DynamicImage
+   * (Amplience DAM asset via image-poi extension).
    */
-  image: ImageProps
+  media: ContentMediaData
   /**
    * Optional caption rendered below the image in a <figcaption>.
    */
@@ -44,7 +45,7 @@ export type ImageBlockProps = {
   /**
    * Background colour of the section, drawn from the design token palette.
    */
-  backgroundColor?: ImageBlockBackgroundColor
+  backgroundColor?: MediaBlockBackgroundColor
   /**
    * Max-width constraint passed through to the inner Container atom.
    * Ignored when fullBleed is true.
@@ -53,7 +54,7 @@ export type ImageBlockProps = {
   maxWidth?: ContainerProps['maxWidth']
   /**
    * When true, strips the outer `<section>` and `<Container>` wrapper and
-   * renders only the `<figure>`. Use when ImageBlock is nested inside a layout
+   * renders only the `<figure>`. Use when MediaBlock is nested inside a layout
    * component (ColumnsBlock, GridBlock) that already provides container
    * semantics — avoids double-padding and misaligned max-width caps.
    * Defaults to false.
@@ -64,8 +65,7 @@ export type ImageBlockProps = {
    * renderer via RenderContext, not authored). A top-of-page image is the
    * likely LCP element, so it renders with next/image `priority` — eager
    * load, `fetchpriority="high"`, and a head preload hint. Below the fold,
-   * next/image's default lazy loading applies. An explicit `image.priority`
-   * still wins. Defaults to false.
+   * next/image's default lazy loading applies. Defaults to false.
    */
   isTopOfPage?: boolean
   className?: string
@@ -76,35 +76,21 @@ export type ImageBlockProps = {
 // ---------------------------------------------------------------------------
 
 /**
- * ImageBlock molecule — a standalone image section on a page.
+ * MediaBlock organism — a standalone media section on a page.
  *
- * Composes the Image atom inside a semantic <figure> element, with optional:
+ * Composes ContentMedia inside a semantic <figure> element, with optional:
  *   - caption  — <figcaption> below the image
- *   - href     — wraps image in a Link (internal or external)
+ *   - href     — wraps media in a Link (internal or external)
  *   - fullBleed — image runs edge-to-edge (no Container padding)
  *
- * All visual theming reads from --image-block-* CSS variables; brands
+ * Supports both ManualImage (direct URL) and DynamicImage (Amplience DAM)
+ * via the ContentMediaData discriminated union.
+ *
+ * All visual theming reads from --media-block-* CSS variables; brands
  * override under [data-brand] without touching this file.
- *
- * Usage:
- *   // Contained
- *   <ImageBlock image={{ src: '/photo.jpg', alt: 'Photo', width: 1200, height: 800 }} />
- *
- *   // Full-bleed with caption
- *   <ImageBlock
- *     fullBleed
- *     image={{ src: '/banner.jpg', alt: 'Banner', width: 1920, height: 600 }}
- *     caption="Photography by Jane Smith"
- *   />
- *
- *   // Linked image
- *   <ImageBlock
- *     image={{ src: '/promo.jpg', alt: 'Promo', width: 800, height: 600 }}
- *     href="/products/spring-collection"
- *   />
  */
-export function ImageBlock({
-  image,
+export function MediaBlock({
+  media,
   caption,
   href,
   fullBleed,
@@ -113,18 +99,18 @@ export function ImageBlock({
   bare = false,
   isTopOfPage = false,
   className,
-}: ImageBlockProps) {
+}: MediaBlockProps) {
   // Defaults before the spread: authored `image` props override. A full-bleed
   // image spans the viewport, so declaring sizes="100vw" lets next/image
   // preload the right candidate (with fetchpriority when priority is set)
   // rather than defaulting to the largest 3840px image.
-  const imageEl = (
-    <Image
+  const mediaEl = (
+    <ContentMedia
       priority={isTopOfPage}
-      fetchPriority={isTopOfPage ? 'high' : undefined}
-      sizes={fullBleed ? '100vw' : undefined}
-      {...image}
-      className={clsx(styles.image, image.className)}
+      {...(isTopOfPage && { fetchPriority: 'high' })}
+      {...(fullBleed && { sizes: '100vw' })}
+      {...media}
+      {...(styles.image !== undefined && { className: styles.image })}
     />
   )
 
@@ -132,10 +118,10 @@ export function ImageBlock({
     <figure className={clsx(styles.figure, bare && className)}>
       {href ? (
         <Link href={href} className={clsx(styles.link)}>
-          {imageEl}
+          {mediaEl}
         </Link>
       ) : (
-        imageEl
+        mediaEl
       )}
       {caption && (
         <figcaption className={styles.caption}>

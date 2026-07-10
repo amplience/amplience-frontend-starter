@@ -1,18 +1,21 @@
 {
   "id": "a1b2c3d4-0002-4000-9000-000000000003",
-  "label": "Docs — hero",
+  "label": "Docs \u2014 hero",
   "body": {
     "_meta": {
-      "name": "Docs — hero",
+      "name": "Docs \u2014 hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "a1b2c3d4-0002-4000-9000-000000000003"
     },
     "title": "Documentation",
-    "image": {
-      "src": "https://picsum.photos/seed/ql-docs/1200/600",
-      "alt": "Docs Quadratic Lite",
-      "width": 1200,
-      "height": 600
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/ql-docs/1200/600",
+        "alt": "Docs Quadratic Lite",
+        "width": 1200,
+        "height": 600
+      }
     },
     "contentPositionMobile": "beneath",
     "contentPositionDesktop": "overlay",
@@ -22,8 +25,18 @@
     "verticalPosition": "center",
     "backgroundColor": "dark",
     "ctas": [
-      { "label": "← Home", "href": "/", "variant": "outlined", "color": "white" },
-      { "label": "About", "href": "/about", "variant": "outlined", "color": "white" }
+      {
+        "label": "\u2190 Home",
+        "href": "/",
+        "variant": "outlined",
+        "color": "white"
+      },
+      {
+        "label": "About",
+        "href": "/about",
+        "variant": "outlined",
+        "color": "white"
+      }
     ]
   }
 }

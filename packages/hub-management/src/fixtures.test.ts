@@ -36,6 +36,18 @@ const coreSchemaStub = {
         contentType: { type: 'string' },
       },
     },
+    // Referenced by partials/media (DynamicImage branch, image-poi extension).
+    // Mirrors the fields the renderer requires to build a DI URL.
+    'image-link': {
+      type: 'object',
+      required: ['name', 'endpoint', 'defaultHost'],
+      properties: {
+        id: { type: 'string' },
+        name: { type: 'string' },
+        endpoint: { type: 'string' },
+        defaultHost: { type: 'string' },
+      },
+    },
   },
 } as const
 

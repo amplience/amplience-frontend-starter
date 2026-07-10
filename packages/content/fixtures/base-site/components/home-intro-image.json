@@ -1,17 +1,31 @@
 {
   "id": "a1b2c3d4-0001-4000-8000-000000000022",
-  "label": "Home — columns feature image",
+  "label": "Home \u2014 columns feature image",
   "body": {
     "_meta": {
       "name": "Home — columns feature image",
-      "schema": "https://quadratic.amplience.com/v2/content/image",
+      "schema": "https://quadratic.amplience.com/v2/content/media",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000022"
     },
-    "image": {
-      "src": "https://picsum.photos/seed/qlcols/800/500",
-      "alt": "Quadratic Lite — accelerator for composable Amplience sites",
-      "width": 800,
-      "height": 500
+    "media": {
+      "mediaType": "DynamicImage",
+      "image": {
+        "image": {
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
+          },
+          "id": "cb7c89ac-632a-49ac-8d9f-6a57cb6289e4",
+          "name": "facial_toner_nature_scene",
+          "endpoint": "quadraticdemo",
+          "defaultHost": "cdn.media.amplience.net",
+          "mimeType": "image/jpeg",
+          "altText": "Dr. Hauschka Facial Toner spray bottle on mossy rocks with petals and flowers."
+        },
+        "srcWidth": 1200,
+        "srcHeight": 896,
+        "aspectRatio": 1.3393
+      },
+      "imageAltText": "Dr. Hauschka Facial Toner spray bottle on mossy rocks with petals and flowers."
     },
     "caption": "Built on Amplience. Shipped with mocks."
   }

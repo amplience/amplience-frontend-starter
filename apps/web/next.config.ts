@@ -8,10 +8,11 @@ const nextConfig: NextConfig = {
 
   images: {
     remotePatterns: [
-      // picsum.photos — used for placeholder images in stories and fixtures.
-      // Seeded URLs (e.g. /seed/ql-hero/800/600) return consistent images
-      // across reloads, which is important for visual regression snapshots.
-      { protocol: 'https', hostname: 'picsum.photos' },
+      // Allows images from any https URL to be used in the Next.js Image component.
+      // If you wish to restrict this to specific domains, you can replace the wildcard with a specific hostname or pattern.
+      // For example, to allow images from "example.com", you would use:
+      // { protocol: 'https', hostname: 'example.com' },
+      { protocol: 'https', hostname: '**' },
     ],
   },
 }
