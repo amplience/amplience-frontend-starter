@@ -1,0 +1,12 @@
+{
+  "name": "automated-alt-text",
+  "label": "Automated Alt-Text",
+  "description": "Extension to automatically pull in available alt text for an image from the Amplience Content Hub for Compliance",
+  "url": "https://automatic-alt-text.extensions.content.amplience.net",
+  "height": 200,
+  "enabledForAllContentTypes": false,
+  "category": "CONTENT_FIELD",
+  "parameters": "{\n  \"generateAltTextSettings\": {\n    \"templateId\": \"Q29udGVudEdlbmVyYXRpb25CcmllZlRlbXBsYXRlOmFsdC10ZXh0\",\n    \"modeId\": \"Q29udGVudEdlbmVyYXRpb25Nb2RlbDpmY2E3ZTUzNS00YmE1LTRlODQtODkzYy0xMDg0YWM1ZGM0NDU=\"\n  }\n}",
+  "snippets": [],
+  "settings": "{\"API\":{\"READ\":true,\"EDIT\":false},\"SANDBOX\":{\"SAME_ORIGIN\":true,\"MODALS\":false,\"NAVIGATION\":false,\"POPUPS\":false,\"POPUP_ESCAPE_SANDBOX\":false,\"DOWNLOADS\":false,\"FORMS\":false}}"
+}

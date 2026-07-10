@@ -383,6 +383,18 @@ type OpConfig = { script: string; args: string[]; republish: boolean; label: str
  * reflecting the user's intent (first run vs update).
  */
 const OP_CONFIG: Record<string, OpConfig> = {
+  'seed-settings': {
+    script: HUB_IMPORT_SCRIPT,
+    args: ['settings'],
+    republish: false,
+    label: 'Seed settings',
+  },
+  'sync-settings': {
+    script: HUB_IMPORT_SCRIPT,
+    args: ['settings'],
+    republish: false,
+    label: 'Sync settings',
+  },
   'seed-schemas': {
     script: HUB_IMPORT_SCRIPT,
     args: ['schemas'],
@@ -406,6 +418,18 @@ const OP_CONFIG: Record<string, OpConfig> = {
     args: ['types'],
     republish: false,
     label: 'Sync content types',
+  },
+  'seed-extensions': {
+    script: HUB_IMPORT_SCRIPT,
+    args: ['extensions'],
+    republish: false,
+    label: 'Seed extensions',
+  },
+  'sync-extensions': {
+    script: HUB_IMPORT_SCRIPT,
+    args: ['extensions'],
+    republish: false,
+    label: 'Sync extensions',
   },
   'seed-items': {
     script: HUB_IMPORT_SCRIPT,
@@ -569,19 +593,23 @@ app.get('/api/environments/:name/stats', async (c) => {
 
   try {
     const token = await getAmplienceToken(env.clientId, env.clientSecret)
-    const [schemas, types, contentItems, slotItems] = await Promise.all([
-      fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/content-type-schemas?status=ACTIVE`),
-      fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/content-types?status=ACTIVE`),
-      fetchCount(
-        token,
-        `${AMPLIENCE_API}/content-repositories/${env.repoContent}/content-items?status=ACTIVE`,
-      ),
-      fetchCount(
-        token,
-        `${AMPLIENCE_API}/content-repositories/${env.repoSlots}/content-items?status=ACTIVE`,
-      ),
-    ])
-    return c.json({ schemas, types, items: contentItems + slotItems })
+    const [schemas, types, contentItems, slotItems, extensions, workflowStates] = await Promise.all(
+      [
+        fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/content-type-schemas?status=ACTIVE`),
+        fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/content-types?status=ACTIVE`),
+        fetchCount(
+          token,
+          `${AMPLIENCE_API}/content-repositories/${env.repoContent}/content-items?status=ACTIVE`,
+        ),
+        fetchCount(
+          token,
+          `${AMPLIENCE_API}/content-repositories/${env.repoSlots}/content-items?status=ACTIVE`,
+        ),
+        fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/extensions`),
+        fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/workflow-states`),
+      ],
+    )
+    return c.json({ schemas, types, items: contentItems + slotItems, extensions, workflowStates })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
     return c.json({ error: `Stats fetch failed: ${message}` }, 500)

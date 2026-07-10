@@ -55,10 +55,14 @@ type ActiveOp = {
 }
 
 const OP_LABELS: Record<OpKey, string> = {
+  'seed-settings': 'Seed settings',
+  'sync-settings': 'Sync settings',
   'seed-schemas': 'Seed schemas',
   'sync-schemas': 'Sync schemas',
   'seed-types': 'Seed content types',
   'sync-types': 'Sync content types',
+  'seed-extensions': 'Seed extensions',
+  'sync-extensions': 'Sync extensions',
   'seed-items': 'Seed content items',
   'sync-items': 'Sync content items',
   'wipe-items': 'Wipe content items',
@@ -446,6 +450,17 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
             </thead>
             <tbody>
               <ResourceRow
+                label="Settings"
+                count={statsError !== null ? -1 : (stats?.workflowStates ?? null)}
+                seedKey="seed-settings"
+                syncKey="sync-settings"
+                isRunning={isRunning}
+                activeOpKey={op?.key ?? null}
+                onRun={(key) => {
+                  void runOp(key)
+                }}
+              />
+              <ResourceRow
                 label="Content type schemas"
                 count={statsError !== null ? -1 : (stats?.schemas ?? null)}
                 seedKey="seed-schemas"
@@ -461,6 +476,17 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                 count={statsError !== null ? -1 : (stats?.types ?? null)}
                 seedKey="seed-types"
                 syncKey="sync-types"
+                isRunning={isRunning}
+                activeOpKey={op?.key ?? null}
+                onRun={(key) => {
+                  void runOp(key)
+                }}
+              />
+              <ResourceRow
+                label="Extensions"
+                count={statsError !== null ? -1 : (stats?.extensions ?? null)}
+                seedKey="seed-extensions"
+                syncKey="sync-extensions"
                 isRunning={isRunning}
                 activeOpKey={op?.key ?? null}
                 onRun={(key) => {

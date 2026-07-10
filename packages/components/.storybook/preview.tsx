@@ -7,6 +7,57 @@ import '@amplience/quadratic-theme/tokens.css'
 // Next.js build-time transform and is a no-op in the Vite/Storybook context).
 import './preview-globals.css'
 
+const customViewports = {
+  smallMobile: {
+    name: 'Small Mobile',
+    styles: {
+      width: '360px',
+      height: '640px',
+    },
+    type: 'mobile',
+  },
+  largeMobile: {
+    name: 'Large Mobile',
+    styles: {
+      width: '414px',
+      height: '896px',
+    },
+    type: 'mobile',
+  },
+  tablet: {
+    name: 'Tablet',
+    styles: {
+      width: '768px',
+      height: '1024px',
+    },
+    type: 'tablet',
+  },
+  smallDesktop: {
+    name: 'Small Desktop / Laptop',
+    styles: {
+      width: '1366px',
+      height: '768px',
+    },
+    type: 'desktop',
+  },
+  desktop: {
+    name: 'Standard Desktop / Laptop',
+    styles: {
+      width: '1920px',
+      height: '1080px',
+    },
+    type: 'desktop',
+  },
+  largeDesktop: {
+    name: 'Large Desktop (QHD)',
+    styles: {
+      width: '2560px',
+      height: '1440px',
+    },
+    type: 'desktop',
+  },
+}
+
 const preview: Preview = {
   parameters: {
     backgrounds: {
@@ -33,6 +84,9 @@ const preview: Preview = {
       storySort: {
         order: ['Intro', 'Atoms', 'Molecules', 'Organisms', 'Templates', 'Pages'],
       },
+    },
+    viewport: {
+      options: customViewports,
     },
   },
 

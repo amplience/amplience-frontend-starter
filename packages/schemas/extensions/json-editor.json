@@ -1,0 +1,12 @@
+{
+  "name": "json-editor",
+  "label": "JSON Editor",
+  "description": "",
+  "url": "https://amp-product.s3.eu-west-1.amazonaws.com/doc-examples/json-viewer/index.html",
+  "height": 200,
+  "enabledForAllContentTypes": true,
+  "category": "CONTENT_EDITOR",
+  "parameters": "{}",
+  "snippets": [],
+  "settings": "{\"API\":{\"READ\":false,\"EDIT\":false},\"SANDBOX\":{\"SAME_ORIGIN\":true,\"MODALS\":false,\"NAVIGATION\":false,\"POPUPS\":false,\"POPUP_ESCAPE_SANDBOX\":false,\"DOWNLOADS\":false,\"FORMS\":false}}"
+}

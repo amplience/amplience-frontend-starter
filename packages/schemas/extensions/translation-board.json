@@ -1,0 +1,12 @@
+{
+  "name": "translation-board",
+  "label": "Translation Board",
+  "description": "test",
+  "url": "https://kanban-board.extensions.content.amplience.net",
+  "height": 200,
+  "enabledForAllContentTypes": true,
+  "category": "DASHBOARD",
+  "parameters": "{\n  \"repositoryId\": \"${repo:content}\",\n  \"statuses\": [\n    { \"id\": \"${status:Ready for Translation}\" },\n    { \"id\": \"${status:Sent for Translation}\" },\n    { \"id\": \"${status:Translation in Progress}\" },\n    { \"id\": \"${status:Translation Complete}\" }\n  ]\n}",
+  "snippets": [],
+  "settings": "{\"API\":{\"READ\":true,\"EDIT\":true},\"SANDBOX\":{\"SAME_ORIGIN\":true,\"MODALS\":true,\"NAVIGATION\":true,\"POPUPS\":true,\"POPUP_ESCAPE_SANDBOX\":true,\"DOWNLOADS\":true,\"FORMS\":true}}"
+}
