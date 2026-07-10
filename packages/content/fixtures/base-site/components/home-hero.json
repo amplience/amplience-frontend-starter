@@ -10,33 +10,13 @@
     "title": "Build composable sites without the boilerplates.",
     "subtitle": "Quadratic Lite is the open-source accelerator for Amplience-backed projects!",
     "media": {
-      "mediaType": "DynamicImage",
+      "mediaType": "ManualImage",
       "image": {
-        "image": {
-          "_meta": {
-            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
-          },
-          "id": "cb7c89ac-632a-49ac-8d9f-6a57cb6289e4",
-          "name": "facial_toner_nature_scene",
-          "endpoint": "quadraticdemo",
-          "defaultHost": "cdn.media.amplience.net",
-          "mimeType": "image/jpeg",
-          "altText": "Dr. Hauschka Facial Toner spray bottle on mossy rocks with petals and flowers."
-        },
-        "crop": [27, 131, 1136, 658],
-        "fliph": false,
-        "flipv": false,
-        "poi": {
-          "x": -1,
-          "y": -1
-        },
-        "query": "crop={2.25%},{14.62%},{94.67%},{73.44%}",
-        "aspectLock": "none",
-        "srcWidth": 1200,
-        "srcHeight": 896,
-        "aspectRatio": 1.7264
-      },
-      "imageAltText": "Dr. Hauschka Facial Toner spray bottle on mossy rocks with petals and flowers."
+        "src": "https://picsum.photos/seed/ql-hero/1200/600",
+        "alt": "Hero — Quadratic Lite accelerator",
+        "width": 1200,
+        "height": 600
+      }
     },
     "contentPositionMobile": "overlay",
     "contentPositionDesktop": "overlay",
