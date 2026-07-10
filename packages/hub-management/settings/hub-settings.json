@@ -1,12 +1,12 @@
 {
   "settings": {
     "devices": [
-      { "name": "Large Desktop (QHD)", "width": 2560, "height": 1440, "orientate": false },
-      { "name": "Standard Desktop / Laptop", "width": 1920, "height": 1080, "orientate": false },
-      { "name": "Small Desktop / Laptop", "width": 1366, "height": 768, "orientate": false },
-      { "name": "Tablet", "width": 768, "height": 1024, "orientate": false },
+      { "name": "Small Mobile", "width": 360, "height": 640, "orientate": false },
       { "name": "Large Mobile", "width": 414, "height": 896, "orientate": false },
-      { "name": "Small Mobile", "width": 360, "height": 640, "orientate": false }
+      { "name": "Tablet", "width": 768, "height": 1024, "orientate": false },
+      { "name": "Small Desktop / Laptop", "width": 1366, "height": 768, "orientate": false },
+      { "name": "Standard Desktop / Laptop", "width": 1920, "height": 1080, "orientate": false },
+      { "name": "Large Desktop (QHD)", "width": 2560, "height": 1440, "orientate": false }
     ],
     "applications": [],
     "localization": {
