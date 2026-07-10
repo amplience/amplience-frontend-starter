@@ -90,17 +90,27 @@ export function contentMediaUrl(
   media: ContentMediaData,
   opts: { readonly width?: number } = {},
 ): string | undefined {
-  if (media.mediaType === 'ManualImage') return media.image.src
+  // Defensive on every access: delivery payloads can predate the media
+  // partial (a legacy flat image shape with no mediaType, or hub items not
+  // yet re-saved). An og:image is never worth crashing a render — or an
+  // entire static build — over, so anything unrecognised resolves to
+  // undefined and the tag is simply omitted.
+  if (media.mediaType === 'ManualImage') return media.image?.src
 
-  const link = media.image.image
-  if (!link?.name || !link?.endpoint || !link?.defaultHost) return undefined
+  if (media.mediaType === 'DynamicImage') {
+    const link = media.image?.image
+    if (!link?.name || !link?.endpoint || !link?.defaultHost) return undefined
 
-  const base = buildDiBaseUrl(link)
-  const query = media.image.query?.replace(/^\?/, '')
-  const params = [query, opts.width !== undefined ? `w=${opts.width}` : undefined]
-    .filter(Boolean)
-    .join('&')
-  return params ? `${base}?${params}` : base
+    const base = buildDiBaseUrl(link)
+    const query = media.image.query?.replace(/^\?/, '')
+    const params = [query, opts.width !== undefined ? `w=${opts.width}` : undefined]
+      .filter(Boolean)
+      .join('&')
+    return params ? `${base}?${params}` : base
+  }
+
+  // Unknown mediaType — legacy or malformed payload.
+  return undefined
 }
 
 export function resolveDiAspectRatio(field: TransformedImageField): string | undefined {

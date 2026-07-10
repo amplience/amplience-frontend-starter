@@ -26,5 +26,17 @@ export function ContentMedia({
   if (mediaData.mediaType === 'DynamicImage') {
     return <DynamicImage image={mediaData} {...optionals} />
   }
-  return <ManualImage {...mediaData} {...optionals} />
+  if (mediaData.mediaType === 'ManualImage' && mediaData.image !== undefined) {
+    return <ManualImage {...mediaData} {...optionals} />
+  }
+  // Unrecognised media shape — a legacy payload (pre-media-partial flat
+  // image) or a hub item not yet re-saved. Render nothing rather than crash
+  // (a ManualImage destructure of a missing `image` would otherwise throw
+  // "Cannot read properties of undefined (reading 'aspectRatio')" and fail
+  // the whole static build). The warning names the shape so stale content
+  // is findable in build logs.
+  console.warn('[ContentMedia] unrecognised media shape — skipping render', {
+    mediaType: (mediaData as { mediaType?: unknown }).mediaType,
+  })
+  return null
 }

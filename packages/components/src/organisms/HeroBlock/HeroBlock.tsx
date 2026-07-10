@@ -239,11 +239,16 @@ export function HeroBlock({
   //                  else the crop-aware ratio the di-transform extension
   //                  wrote into the field at pick time.
   // No guessed default: undefined means no spacer height (content drives it).
+  // Defensive on every access: hub content can predate the media partial
+  // (legacy flat image shape) — degrade to "no ratio" rather than crash SSG.
   function getAspectRatioCss(m: ContentMediaData): string | undefined {
-    if (m.mediaType === 'ManualImage') {
+    if (m.mediaType === 'ManualImage' && m.image !== undefined) {
       return m.image.aspectRatio ?? `${m.image.width} / ${m.image.height}`
     }
-    return resolveDiAspectRatio(m.image)
+    if (m.mediaType === 'DynamicImage' && m.image !== undefined) {
+      return resolveDiAspectRatio(m.image)
+    }
+    return undefined
   }
 
   return (

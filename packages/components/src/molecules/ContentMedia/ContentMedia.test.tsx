@@ -118,4 +118,32 @@ describe('ContentMedia', () => {
       expect(screen.getByAltText('A dynamic image').getAttribute('data-priority')).toBeNull()
     })
   })
+
+  describe('legacy / malformed payloads', () => {
+    // Hub content authored before the media partial has a flat image shape
+    // with no mediaType. It must degrade to an empty render with a warning —
+    // never crash (a build once failed on exactly this: ManualImage
+    // destructuring `image.aspectRatio` from undefined during prerender).
+    it('renders nothing (with a warning) for a legacy flat image payload', () => {
+      const legacyFlat = {
+        src: '/hero.jpg',
+        alt: 'Legacy image',
+        width: 1200,
+        height: 600,
+      } as unknown as ContentMediaData
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+      const { container } = render(<ContentMedia {...legacyFlat} />)
+      expect(container.firstChild).toBeNull()
+      expect(warn).toHaveBeenCalledOnce()
+      warn.mockRestore()
+    })
+
+    it('renders nothing when a ManualImage has no image object', () => {
+      const missingImage = { mediaType: 'ManualImage' } as unknown as ContentMediaData
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+      const { container } = render(<ContentMedia {...missingImage} />)
+      expect(container.firstChild).toBeNull()
+      warn.mockRestore()
+    })
+  })
 })
