@@ -2,12 +2,17 @@
 
 import { describe, expect, it } from 'vitest'
 
-import type { AmplienceImageLink, TransformedImageField } from '@amplience/quadratic-types'
+import type {
+  AmplienceImageLink,
+  ContentMediaData,
+  TransformedImageField,
+} from '@amplience/quadratic-types'
 
 import {
   amplienceDiLoader,
   aspectLockToCss,
   buildDiBaseUrl,
+  contentMediaUrl,
   resolveDiAspectRatio,
 } from './di-utils'
 
@@ -139,5 +144,63 @@ describe('resolveDiAspectRatio', () => {
   it('rejects non-positive values', () => {
     expect(resolveDiAspectRatio({ ...base, aspectRatio: 0 })).toBeUndefined()
     expect(resolveDiAspectRatio({ ...base, srcWidth: 0, srcHeight: 896 })).toBeUndefined()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// contentMediaUrl
+// ---------------------------------------------------------------------------
+
+describe('contentMediaUrl', () => {
+  const dynamic: ContentMediaData = {
+    mediaType: 'DynamicImage',
+    image: { image: sampleLink },
+  }
+
+  it('returns the authored src as-is for a ManualImage', () => {
+    const manual: ContentMediaData = {
+      mediaType: 'ManualImage',
+      image: { src: '/social-card.png', alt: 'Card', width: 1200, height: 630 },
+    }
+    expect(contentMediaUrl(manual)).toBe('/social-card.png')
+    expect(contentMediaUrl(manual, { width: 1200 })).toBe('/social-card.png')
+  })
+
+  it('builds the bare DI URL for a DynamicImage with no query and no width', () => {
+    expect(contentMediaUrl(dynamic)).toBe('https://cdn.media.amplience.net/i/my-store/hero-image')
+  })
+
+  it('appends the width cap for a DynamicImage', () => {
+    expect(contentMediaUrl(dynamic, { width: 1200 })).toBe(
+      'https://cdn.media.amplience.net/i/my-store/hero-image?w=1200',
+    )
+  })
+
+  it('carries the pre-baked transform query and appends width after it', () => {
+    const cropped: ContentMediaData = {
+      mediaType: 'DynamicImage',
+      image: { image: sampleLink, query: 'crop={10%},{20%},{80%},{60%}' },
+    }
+    expect(contentMediaUrl(cropped, { width: 1200 })).toBe(
+      'https://cdn.media.amplience.net/i/my-store/hero-image?crop={10%},{20%},{80%},{60%}&w=1200',
+    )
+  })
+
+  it('normalises a query that already starts with "?"', () => {
+    const prefixed: ContentMediaData = {
+      mediaType: 'DynamicImage',
+      image: { image: sampleLink, query: '?sm=aspect&aspect=16:9' },
+    }
+    expect(contentMediaUrl(prefixed)).toBe(
+      'https://cdn.media.amplience.net/i/my-store/hero-image?sm=aspect&aspect=16:9',
+    )
+  })
+
+  it('returns undefined when the DynamicImage link is incomplete', () => {
+    const broken: ContentMediaData = {
+      mediaType: 'DynamicImage',
+      image: { image: { name: '', endpoint: 'my-store', defaultHost: 'cdn.media.amplience.net' } },
+    }
+    expect(contentMediaUrl(broken)).toBeUndefined()
   })
 })

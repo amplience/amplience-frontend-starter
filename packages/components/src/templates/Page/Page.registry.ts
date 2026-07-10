@@ -1,18 +1,18 @@
-import { isMediaImageLink, mediaImageUrl } from '@amplience/quadratic-content'
-import type { MediaImageLink } from '@amplience/quadratic-content'
-import type { ComponentRegistryEntry } from '@amplience/quadratic-types'
+import type { ComponentRegistryEntry, ContentMediaData } from '@amplience/quadratic-types'
 
+import { contentMediaUrl } from '../../molecules/DynamicImage/di-utils'
 import { Page, type PageProps } from './Page'
 
 /** The schema URI this entry dispatches (ADR-0010 §3 — no aliasing). */
 export const PAGE_SCHEMA = 'https://quadratic.amplience.com/v2/content/page'
 
 /**
- * A social-card image: an Amplience media-link (Dynamic Media URL built at
- * mapping time) or a plain `{ src }` object with a ready-made URL — the
- * shape the rest of the fixtures use for images.
+ * A social-card image: the media partial — ManualImage (ready-made URL) or
+ * DynamicImage (an asset picked from the Amplience DAM, with any authored
+ * crop baked into the delivery query). The og:image URL is built at mapping
+ * time via `contentMediaUrl`.
  */
-export type PageSocialImage = MediaImageLink | { readonly src: string }
+export type PageSocialImage = ContentMediaData
 
 /**
  * The social-card group on a page — feeds og:title / og:description /
@@ -116,12 +116,10 @@ export const pageMetadataFromSchema = (
   const social = schema.social
   const ogTitle = social?.title ?? schema.title
   const ogDescription = social?.description ?? schema.description
+  // og:image renders at fixed card sizes; cap the DI variant at 1200px wide
+  // (the Open Graph recommended width) rather than serving the original.
   const ogImage =
-    social?.image === undefined
-      ? undefined
-      : isMediaImageLink(social.image)
-        ? mediaImageUrl(social.image)
-        : social.image.src
+    social?.image === undefined ? undefined : contentMediaUrl(social.image, { width: 1200 })
   const canonical = schema.canonicalUrl ?? opts.path
 
   return {

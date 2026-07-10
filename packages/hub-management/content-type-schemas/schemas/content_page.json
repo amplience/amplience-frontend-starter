@@ -105,7 +105,7 @@
           "title": "Social image",
           "allOf": [
             {
-              "$ref": "https://quadratic.amplience.com/v2/partials/image"
+              "$ref": "https://quadratic.amplience.com/v2/partials/media"
             }
           ]
         }

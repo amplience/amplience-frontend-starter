@@ -9,13 +9,23 @@ export const LOGO_SCHEMA = 'https://quadratic.amplience.com/v2/content/logo'
 export type LogoSchema = LogoProps & { readonly _meta: unknown }
 
 /**
- * Validator: a Logo must have an image object with at least a `src` field.
- * Fails loudly at the dispatch boundary rather than rendering a broken image.
+ * Validator: a Logo must have a media object with a mediaType discriminator
+ * and the minimum its branch needs to render — ManualImage a `src`,
+ * DynamicImage an image-link. Fails loudly at the dispatch boundary rather
+ * than rendering a broken image.
  */
 export const validateLogoSchema = (schema: unknown): schema is LogoSchema => {
   if (typeof schema !== 'object' || schema === null) return false
-  const image = (schema as { image?: unknown }).image
-  return typeof image === 'object' && image !== null && 'src' in image
+  const media = (schema as { image?: unknown }).image
+  if (typeof media !== 'object' || media === null) return false
+  const { mediaType, image } = media as { mediaType?: unknown; image?: unknown }
+  if (typeof image !== 'object' || image === null) return false
+  if (mediaType === 'ManualImage') return 'src' in image
+  if (mediaType === 'DynamicImage') {
+    const link = (image as { image?: unknown }).image
+    return typeof link === 'object' && link !== null && 'name' in link
+  }
+  return false
 }
 
 /** Registry entry for the logo schema. Not a container — no `getChildren`. */

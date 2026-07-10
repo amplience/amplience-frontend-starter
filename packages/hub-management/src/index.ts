@@ -35,7 +35,6 @@ import contentMenu from '../content-type-schemas/schemas/content_menu.json'
 import contentPage from '../content-type-schemas/schemas/content_page.json'
 import partialsContentBlocks from '../content-type-schemas/schemas/partials_content-blocks.json'
 import partialsCta from '../content-type-schemas/schemas/partials_cta.json'
-import partialsImage from '../content-type-schemas/schemas/partials_image.json'
 import partialsMedia from '../content-type-schemas/schemas/partials_media.json'
 import slotsSlot from '../content-type-schemas/schemas/slots_slot.json'
 
@@ -66,7 +65,6 @@ const entry = (
 
 /** Every schema in the package, partials included. */
 export const schemaManifest: readonly SchemaManifestEntry[] = [
-  entry(partialsImage, 'PARTIAL'),
   entry(partialsMedia, 'PARTIAL'),
   entry(partialsCta, 'PARTIAL'),
   entry(partialsContentBlocks, 'PARTIAL'),

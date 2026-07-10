@@ -1,6 +1,10 @@
 import type { ImageLoaderProps } from 'next/image'
 
-import type { AmplienceImageLink, TransformedImageField } from '@amplience/quadratic-types'
+import type {
+  AmplienceImageLink,
+  ContentMediaData,
+  TransformedImageField,
+} from '@amplience/quadratic-types'
 
 /**
  * QL design system breakpoints — kept here as the canonical reference for
@@ -70,6 +74,35 @@ export function aspectLockToCss(aspectLock: string | undefined): string | undefi
  * Returns undefined when none apply (content authored before the extension
  * wrote dimensions) — callers render without a ratio rather than guessing.
  */
+/**
+ * Resolves a ContentMedia value to a plain image URL — for consumers that
+ * need a URL rather than a rendered component: og:image / social-card tags,
+ * RSS enclosures, JSON-LD.
+ *
+ *  - ManualImage  — the authored src, as-is.
+ *  - DynamicImage — the DI URL with the pre-baked transform query (crop, POI)
+ *    plus an optional width cap. No `fmt` override: DI serves the asset's
+ *    stored format (jpg/png), which social scrapers handle universally.
+ *
+ * Returns undefined when a DynamicImage link is incomplete.
+ */
+export function contentMediaUrl(
+  media: ContentMediaData,
+  opts: { readonly width?: number } = {},
+): string | undefined {
+  if (media.mediaType === 'ManualImage') return media.image.src
+
+  const link = media.image.image
+  if (!link?.name || !link?.endpoint || !link?.defaultHost) return undefined
+
+  const base = buildDiBaseUrl(link)
+  const query = media.image.query?.replace(/^\?/, '')
+  const params = [query, opts.width !== undefined ? `w=${opts.width}` : undefined]
+    .filter(Boolean)
+    .join('&')
+  return params ? `${base}?${params}` : base
+}
+
 export function resolveDiAspectRatio(field: TransformedImageField): string | undefined {
   const locked = aspectLockToCss(field.aspectLock)
   if (locked !== undefined) return locked

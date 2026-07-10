@@ -1,5 +1,6 @@
-import type { ComponentRegistryEntry } from '@amplience/quadratic-types'
+import type { ComponentRegistryEntry, ContentMediaData } from '@amplience/quadratic-types'
 
+import { contentMediaUrl } from '../../molecules/DynamicImage/di-utils'
 import { BlogArticle, type BlogArticleProps } from './BlogArticle'
 
 /** The schema URI this entry dispatches on (ADR-0010 §3 — no aliasing). */
@@ -19,16 +20,13 @@ export type BlogArticleSchema = {
   readonly social?: {
     readonly title?: string
     readonly description?: string
-    readonly image?: { readonly src: string }
+    /** Media partial — og:image URL built at mapping time via contentMediaUrl. */
+    readonly image?: ContentMediaData
   }
   readonly canonicalUrl?: string
   readonly robots?: { readonly noindex?: boolean; readonly nofollow?: boolean }
-  readonly coverImage?: {
-    readonly src: string
-    readonly alt: string
-    readonly width: number
-    readonly height: number
-  }
+  /** Media partial — the article's hero/cover image. */
+  readonly coverImage?: ContentMediaData
   readonly author?: string
   readonly publishDate?: string
   readonly category?: string
@@ -49,7 +47,11 @@ export const blogArticleMetadataFromSchema = (
   const social = schema.social
   const ogTitle = social?.title ?? schema.title
   const ogDescription = social?.description ?? schema.description
-  const ogImage = social?.image?.src ?? schema.coverImage?.src
+  // Social image wins; the cover image is the natural fallback. Cap DI
+  // variants at 1200px (the Open Graph recommended width).
+  const ogImageSource = social?.image ?? schema.coverImage
+  const ogImage =
+    ogImageSource === undefined ? undefined : contentMediaUrl(ogImageSource, { width: 1200 })
   const canonical = schema.canonicalUrl ?? opts.path
 
   return {

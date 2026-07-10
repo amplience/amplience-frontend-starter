@@ -8,10 +8,13 @@
       "deliveryId": "a1b2c3d4-0004-4000-8000-000000000004"
     },
     "image": {
-      "src": "/favicon/icon-192.png",
-      "alt": "Quadratic logo",
-      "width": 40,
-      "height": 40
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "/favicon/icon-192.png",
+        "alt": "Quadratic logo",
+        "width": 40,
+        "height": 40
+      }
     },
     "link": "/"
   }

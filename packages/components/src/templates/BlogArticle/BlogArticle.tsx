@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
 
+import type { ContentMediaData } from '@amplience/quadratic-types'
+
 import { Container } from '../../atoms/Container/Container'
 import { Icon } from '../../atoms/Icon/Icon'
 import { Tags } from '../../molecules/Tags/Tags'
@@ -10,18 +12,14 @@ import styles from './BlogArticle.module.css'
 // Types
 // ---------------------------------------------------------------------------
 
-export type BlogArticleCoverImage = {
-  readonly src: string
-  readonly alt: string
-  readonly width: number
-  readonly height: number
-}
-
 export type BlogArticleProps = {
   /** Article headline. */
   readonly title?: string
-  /** Cover image — shown above the header and on article cards. */
-  readonly coverImage?: BlogArticleCoverImage
+  /**
+   * Cover image — shown above the header and on article cards. The media
+   * partial: ManualImage (direct URL) or DynamicImage (Amplience DAM asset).
+   */
+  readonly coverImage?: ContentMediaData
   /** Author display name. */
   readonly author?: string
   /** ISO 8601 date string, e.g. "2026-06-29". */
@@ -74,8 +72,10 @@ export function BlogArticle({
   return (
     <article data-blog-article>
       <header data-blog-article-header className={styles.header}>
+        {/* media (not `image`) — the previous `image` prop name silently
+            matched nothing on HeroBlock, so cover images never rendered. */}
         <HeroBlock
-          {...(coverImage !== undefined && { image: coverImage })}
+          {...(coverImage !== undefined && { media: coverImage })}
           title={title ?? ''}
           subtitle={category ?? ''}
           heightBehaviour="fitToContent"
