@@ -2,7 +2,8 @@
 
 How a fresh Dynamic Content hub comes to carry the Quadratic Lite content
 model and starter content. Everything the hub needs lives in this repo —
-schemas and content types in `packages/schemas/`, starter content in
+settings, schemas, content types and extensions in `packages/schemas/`,
+starter content in
 `packages/content/fixtures/base-site/` (the same files the mock client
 serves, so the hub and local dev never drift) — and one command pushes it
 all. Running it against a second hub is the same procedure with different
@@ -70,14 +71,17 @@ they aren't credentials.
 pnpm hub:import
 ```
 
-That executes three steps in order; each is also runnable on its own from
-`packages/schemas/` when iterating:
+That executes five steps in order (mirroring dc-cli's own `hub clone`
+pipeline: settings → schema → type → extension → content); each is also
+runnable on its own from `packages/schemas/` when iterating:
 
-| Step | Script                    | What happens                                                                                                                                                                                                                          |
-| ---- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1    | `pnpm hub:import:schemas` | Registers the JSON Schemas (8 types + 2 partials) from `content-type-schemas/`                                                                                                                                                        |
-| 2    | `pnpm hub:import:types`   | Stages `content-types/` with `${hub}` and `${appUrl}` substituted, imports with `--sync` so visualization changes reach already-registered types                                                                                      |
-| 3    | `pnpm hub:import:content` | Stages fixtures with delivery keys re-prefixed from `base-site/` to the site namespace (`SITE_NAME`, default: hub name — ADR-0014), then imports leaf-first — components → slots → pages — each into its repository, with `--publish` |
+| Step | Script                       | What happens                                                                                                                                                                                                                                                                                          |
+| ---- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | `pnpm hub:import:settings`   | Imports `settings/*.json` — preview devices, locales and the workflow states. First because content items and dashboard extensions reference states by id, and dc-cli mints a fresh id per state on each hub, recording the source→target ids in `~/.amplience/imports/quadratic-settings-<hub>.json` |
+| 2    | `pnpm hub:import:schemas`    | Registers the JSON Schemas (8 types + 2 partials) from `content-type-schemas/`                                                                                                                                                                                                                        |
+| 3    | `pnpm hub:import:types`      | Stages `content-types/` with `${hub}` and `${appUrl}` substituted, imports with `--sync` so visualization changes reach already-registered types                                                                                                                                                      |
+| 4    | `pnpm hub:import:extensions` | Stages `extensions/*.json` with hub-independent tokens resolved — `${repo:content}` → the content repo, `${status:Label}` → the workflow-state id the settings step created for that label — then imports. Depends on step 1                                                                          |
+| 5    | `pnpm hub:import:content`    | Stages fixtures with delivery keys re-prefixed from `base-site/` to the site namespace (`SITE_NAME`, default: hub name — ADR-0014), then imports leaf-first — components → slots → pages — each into its repository, with `--publish`                                                                 |
 
 The leaf-first order exists because dc-cli rewrites cross-item links using
 a mapping file: by the time a slot or page arrives, every item it links to

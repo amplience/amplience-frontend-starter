@@ -24,8 +24,10 @@ export type Config = {
 }
 
 export type EnvironmentStats = {
+  workflowStates: number
   schemas: number
   types: number
+  extensions: number
   items: number
 }
 
@@ -56,10 +58,14 @@ export type DiscoverResult = {
 }
 
 export type OpKey =
+  | 'seed-settings'
+  | 'sync-settings'
   | 'seed-schemas'
   | 'sync-schemas'
   | 'seed-types'
   | 'sync-types'
+  | 'seed-extensions'
+  | 'sync-extensions'
   | 'seed-items'
   | 'sync-items'
   | 'wipe-items'

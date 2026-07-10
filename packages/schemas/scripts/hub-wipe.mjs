@@ -34,6 +34,15 @@
  *   5. Archives every content type schema in the hub so the next
  *      hub:import:schemas registers them fresh.
  *
+ * Extensions and workflow states are deliberately left in place. Both are
+ * hub-wide configuration that a hub may share with things other than
+ * Quadratic, so a content wipe is the wrong place to destroy them — and it
+ * isn't necessary: re-seeding updates each extension in place by name, and
+ * updates each workflow state through the settings mapping file (kept at
+ * quadratic-settings-<hub>.json, separate from the content map this script
+ * deletes, precisely so the source→target status ids survive a wipe and the
+ * extensions that reference them keep resolving after a re-seed).
+ *
  * Configuration is read from environment variables (same set as
  * hub-import.mjs). Run via the environment-manager GUI which injects
  * the selected environment's credentials directly, or manually:

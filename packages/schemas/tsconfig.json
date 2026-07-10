@@ -5,5 +5,5 @@
     "resolveJsonModule": true,
     "types": ["vitest/globals"]
   },
-  "include": ["src/**/*.ts", "content-type-schemas/**/*.json"]
+  "include": ["src/**/*.ts", "scripts/**/*.ts", "content-type-schemas/**/*.json"]
 }

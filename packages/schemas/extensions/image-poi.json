@@ -1,0 +1,12 @@
+{
+  "name": "image-poi",
+  "label": "Image POI",
+  "description": "Editing Interface for managing an Image",
+  "url": "https://dc-extension-di-transform.vercel.app",
+  "height": 200,
+  "enabledForAllContentTypes": false,
+  "category": "CONTENT_FIELD",
+  "parameters": "{\n  \"useVSE\": false\n}",
+  "snippets": [],
+  "settings": "{\"API\":{\"READ\":true,\"EDIT\":true},\"SANDBOX\":{\"SAME_ORIGIN\":true,\"MODALS\":true,\"NAVIGATION\":false,\"POPUPS\":true,\"POPUP_ESCAPE_SANDBOX\":false,\"DOWNLOADS\":true,\"FORMS\":false}}"
+}

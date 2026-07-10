@@ -1,0 +1,44 @@
+{
+  "settings": {
+    "devices": [
+      { "name": "Large Desktop (QHD)", "width": 2560, "height": 1440, "orientate": false },
+      { "name": "Standard Desktop / Laptop", "width": 1920, "height": 1080, "orientate": false },
+      { "name": "Small Desktop / Laptop", "width": 1366, "height": 768, "orientate": false },
+      { "name": "Tablet", "width": 768, "height": 1024, "orientate": false },
+      { "name": "Large Mobile", "width": 414, "height": 896, "orientate": false },
+      { "name": "Small Mobile", "width": 360, "height": 640, "orientate": false }
+    ],
+    "applications": [],
+    "localization": {
+      "locales": ["en-US", "de-DE", "fr-FR"]
+    },
+    "contentItems": {
+      "validation": {
+        "ignoreSchemaValidation": false
+      }
+    }
+  },
+  "workflowStates": [
+    { "id": "65df97d97b674a7cf812eab4", "label": "New", "color": "rgb(240,110,170)" },
+    { "id": "65df97e34d6c607a60472830", "label": "In Progress", "color": "rgb(182,216,227)" },
+    { "id": "65df9894924f8d2f35b65bbb", "label": "Ready for Review", "color": "rgb(198,156,84)" },
+    { "id": "65df98a21696c951cf9a5caa", "label": "Approved", "color": "rgb(63,152,134)" },
+    { "id": "65df98abe845ce1e37d7e0c1", "label": "Rejected", "color": "rgb(198,78,103)" },
+    {
+      "id": "65df97f0f0b6aa014ebbcd30",
+      "label": "Ready for Translation",
+      "color": "rgb(201,196,212)"
+    },
+    {
+      "id": "68b86fa595c70c497a1a14d3",
+      "label": "Sent for Translation",
+      "color": "rgb(242,189,87)"
+    },
+    {
+      "id": "65df97feaf58312bb312bf63",
+      "label": "Translation in Progress",
+      "color": "rgb(205,154,195)"
+    },
+    { "id": "65df98254fdf4a7f9534432a", "label": "Translation Complete", "color": "rgb(0,67,115)" }
+  ]
+}

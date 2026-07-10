@@ -5,16 +5,27 @@
  * layout it imports is the layout that CLI will adopt, so retiring this
  * script changes the verb, not the content.
  *
- * Usage:  node scripts/hub-import.mjs [schemas|types|content|all]
+ * Usage:  node scripts/hub-import.mjs [settings|schemas|types|extensions|content|all]
  *
- * Import order matters and the script owns it:
+ * Import order matters and the script owns it — it mirrors dc-cli's own
+ * `hub clone` pipeline (settings → schema → type → extension → content):
  *
- *   1. schemas  — content-type-schemas/ (partials first is not required;
+ *   1. settings — settings/*.json: preview devices, locales and the
+ *                 workflow states. Workflow states come first because both
+ *                 the content items and the dashboard extensions reference
+ *                 them by id, and dc-cli mints a fresh id per state on each
+ *                 new hub — recording the source→target pairing in a
+ *                 mapping file the extensions step then reads.
+ *   2. schemas  — content-type-schemas/ (partials first is not required;
  *                 dc-cli resolves $refs after registration)
- *   2. types    — content-types/, staged with `${hub}` substituted, then
+ *   3. types    — content-types/, staged with `${hub}` substituted, then
  *                 imported with --sync so visualization changes reach
  *                 already-registered types
- *   3. content  — fixtures imported leaf-first (components → slots →
+ *   4. extensions — extensions/*.json, staged with hub-independent tokens
+ *                 resolved: `${repo:content}` → the content repo, and
+ *                 `${status:Label}` → the workflow-state id the settings
+ *                 step just created for that label. Depends on settings.
+ *   5. content  — fixtures imported leaf-first (components → slots →
  *                 pages) so the mapping file already knows every link
  *                 target when the linking item arrives.
  *
@@ -71,6 +82,13 @@ import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import {
+  buildStatusMap,
+  EXTENSION_INSTANCE_FIELDS,
+  resolveTokens,
+  stripFields,
+} from './lib/resolve-placeholders.mjs'
+
 const packageRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 const repoRoot = path.join(packageRoot, '..', '..')
 const fixturesDir = path.join(packageRoot, '..', 'content', 'fixtures', 'base-site')
@@ -96,7 +114,7 @@ function loadWebApps(hubName) {
 }
 
 const step = process.argv[2] ?? 'all'
-const steps = ['schemas', 'types', 'content', 'all']
+const steps = ['settings', 'schemas', 'types', 'extensions', 'content', 'all']
 if (!steps.includes(step)) {
   console.error(`Unknown step "${step}" — expected one of: ${steps.join(', ')}`)
   process.exit(1)
@@ -175,6 +193,81 @@ const dcCli = (...args) =>
       resolve()
     })
   })
+
+/**
+ * Where dc-cli records the workflow-state source→target id mapping. Kept
+ * separate from the content map (quadratic-<hub>.json) so a content wipe
+ * never drops the status mappings the extensions step depends on. Keyed by
+ * hub so parallel hubs don't collide.
+ */
+const settingsMapFile = () => {
+  const key = env('AMPLIENCE_HUB_NAME') ?? env('AMPLIENCE_HUB_ID') ?? 'default'
+  return path.join(os.homedir(), '.amplience', 'imports', `quadratic-settings-${key}.json`)
+}
+
+/** The single settings definition file (settings/*.json). Fail-loud otherwise. */
+const settingsFile = () => {
+  const dir = path.join(packageRoot, 'settings')
+  const files = existsSync(dir) ? readdirSync(dir).filter((f) => f.endsWith('.json')) : []
+  if (files.length !== 1) {
+    console.error(
+      `Expected exactly one settings/*.json file, found ${files.length} — ` +
+        `the settings step imports a single hub-settings definition.`,
+    )
+    process.exit(1)
+  }
+  return path.join(dir, files[0])
+}
+
+const importSettings = async () => {
+  // -f overwrites existing workflow states without prompting (non-interactive).
+  // The mapFile captures each state's source→target id for the extensions step.
+  await dcCli('settings', 'import', settingsFile(), '--mapFile', settingsMapFile(), '-f')
+}
+
+const importExtensions = async () => {
+  const hubName = env('AMPLIENCE_HUB_NAME')
+  const repoContent = env('AMPLIENCE_REPO_CONTENT')
+
+  // Join the settings definition (label → source id) with the map the
+  // settings step wrote (source id → target id) to get label → target id.
+  // Missing pieces are not fatal here: resolveTokens fails loud per-file
+  // only if an extension actually references a status it can't resolve.
+  const mapPath = settingsMapFile()
+  const settingsMap = existsSync(mapPath) ? JSON.parse(readFileSync(mapPath, 'utf8')) : {}
+  const settingsJson = JSON.parse(readFileSync(settingsFile(), 'utf8'))
+  const statusMap = buildStatusMap(settingsJson, settingsMap)
+
+  const source = path.join(packageRoot, 'extensions')
+  const staged = path.join(stagingDir, 'extensions')
+  rmSync(staged, { recursive: true, force: true })
+  mkdirSync(staged, { recursive: true })
+
+  for (const file of readdirSync(source).filter((f) => f.endsWith('.json'))) {
+    // Drop instance fields (hubId, audit stamps, status) so the checked-in
+    // definition is hub-independent, then resolve its ${…} tokens for this hub.
+    const definition = stripFields(
+      JSON.parse(readFileSync(path.join(source, file), 'utf8')),
+      EXTENSION_INSTANCE_FIELDS,
+    )
+    let resolved
+    try {
+      resolved = resolveTokens(JSON.stringify(definition, null, 2), {
+        hub: hubName,
+        repoContent,
+        statusMap,
+        source: file,
+      })
+    } catch (err) {
+      console.error(`\n✗ ${err instanceof Error ? err.message : String(err)}`)
+      process.exit(1)
+    }
+    // Parse-trip so a malformed resolution fails here, not inside dc-cli.
+    writeFileSync(path.join(staged, file), JSON.stringify(JSON.parse(resolved), null, 2) + '\n')
+  }
+
+  await dcCli('extension', 'import', staged)
+}
 
 const importSchemas = async () => {
   await dcCli('content-type-schema', 'import', path.join(packageRoot, 'content-type-schemas'))
@@ -337,8 +430,10 @@ const importContent = async () => {
   }
 }
 
+if (step === 'settings' || step === 'all') await importSettings()
 if (step === 'schemas' || step === 'all') await importSchemas()
 if (step === 'types' || step === 'all') await importTypes()
+if (step === 'extensions' || step === 'all') await importExtensions()
 if (step === 'content' || step === 'all') await importContent()
 
 console.log('\n✓ hub-import complete')
