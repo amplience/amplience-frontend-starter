@@ -13,7 +13,7 @@
     "items": [
       {
         "id": "a1b2c3d4-0001-4000-8000-000000000015",
-        "contentType": "https://quadratic.amplience.com/v2/content/image",
+        "contentType": "https://quadratic.amplience.com/v2/content/media",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }

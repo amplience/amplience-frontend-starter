@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://quadratic.amplience.com/v2/content/image",
-  "title": "Image block",
-  "description": "A standalone image section with optional caption and link.",
+  "$id": "https://quadratic.amplience.com/v2/content/media",
+  "title": "Media block",
+  "description": "A standalone media section with optional caption and link. Supports DAM-backed (DynamicImage) or manually-authored (ManualImage) media.",
   "allOf": [
     {
       "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
@@ -10,11 +10,11 @@
   ],
   "type": "object",
   "properties": {
-    "image": {
-      "title": "Image",
+    "media": {
+      "title": "Media",
       "allOf": [
         {
-          "$ref": "https://quadratic.amplience.com/v2/partials/image"
+          "$ref": "https://quadratic.amplience.com/v2/partials/media"
         }
       ]
     },
@@ -25,12 +25,12 @@
     "href": {
       "type": "string",
       "title": "Link",
-      "description": "Optional URL — wraps the image in a link. External URLs open in a new tab."
+      "description": "Optional URL — wraps the media in a link. External URLs open in a new tab."
     },
     "fullBleed": {
       "type": "boolean",
       "title": "Full bleed",
-      "description": "Extend the image edge-to-edge, ignoring container padding and max-width."
+      "description": "Extend the media edge-to-edge, ignoring container padding and max-width."
     },
     "backgroundColor": {
       "type": "string",
@@ -45,6 +45,6 @@
       "default": "default"
     }
   },
-  "propertyOrder": ["image", "caption", "href", "fullBleed", "backgroundColor", "maxWidth"],
-  "required": ["image"]
+  "propertyOrder": ["media", "caption", "href", "fullBleed", "backgroundColor", "maxWidth"],
+  "required": ["media"]
 }

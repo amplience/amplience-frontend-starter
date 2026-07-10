@@ -9,11 +9,14 @@
     },
     "title": "Headless best practices",
     "description": "Server Components, slot-based routing, and a composable block architecture \u2014 headless done right, ready to show any client.",
-    "image": {
-      "src": "https://picsum.photos/seed/ql-card-headless/800/450",
-      "alt": "Headless CMS architecture patterns",
-      "width": 800,
-      "height": 450
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/ql-card-headless/800/450",
+        "alt": "Headless CMS architecture patterns",
+        "width": 800,
+        "height": 450
+      }
     },
     "links": {
       "cta": {

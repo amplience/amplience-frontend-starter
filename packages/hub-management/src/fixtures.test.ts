@@ -36,6 +36,18 @@ const coreSchemaStub = {
         contentType: { type: 'string' },
       },
     },
+    // Referenced by partials/media (DynamicImage branch, image-poi extension).
+    // Mirrors the fields the renderer requires to build a DI URL.
+    'image-link': {
+      type: 'object',
+      required: ['name', 'endpoint', 'defaultHost'],
+      properties: {
+        id: { type: 'string' },
+        name: { type: 'string' },
+        endpoint: { type: 'string' },
+        defaultHost: { type: 'string' },
+      },
+    },
   },
 } as const
 
@@ -85,7 +97,7 @@ describe('schema manifest', () => {
   it('exposes content types as the non-partial subset', () => {
     expect(contentTypeSchemas).toHaveLength(20)
     expect(contentTypeSchemas.every((e) => e.validationLevel !== 'PARTIAL')).toBe(true)
-    expect(findSchema('https://quadratic.amplience.com/v2/partials/image')?.validationLevel).toBe(
+    expect(findSchema('https://quadratic.amplience.com/v2/partials/media')?.validationLevel).toBe(
       'PARTIAL',
     )
   })

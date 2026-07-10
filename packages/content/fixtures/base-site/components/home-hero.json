@@ -1,29 +1,36 @@
 {
   "id": "a1b2c3d4-0001-4000-8000-000000000003",
-  "label": "Home — hero",
+  "label": "Home \u2014 hero",
   "body": {
     "_meta": {
-      "name": "Home — hero",
+      "name": "Home \u2014 hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000003"
     },
     "title": "Build composable sites without the boilerplates.",
     "subtitle": "Quadratic Lite is the open-source accelerator for Amplience-backed projects!",
-    "image": {
-      "src": "https://picsum.photos/seed/ql-hero/1200/600",
-      "alt": "Hero — Quadratic Lite accelerator",
-      "width": 1200,
-      "height": 600
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/ql-hero/1200/600",
+        "alt": "Hero — Quadratic Lite accelerator",
+        "width": 1200,
+        "height": 600
+      }
     },
-    "contentPositionMobile": "beneath",
+    "contentPositionMobile": "overlay",
     "contentPositionDesktop": "overlay",
-    "heightBehaviour": "fitToContent",
-    "minHeight": 600,
+    "heightBehaviour": "flexible",
     "overlayIntensity": 50,
     "verticalPosition": "center",
     "backgroundColor": "dark",
     "ctas": [
-      { "label": "About", "href": "/about", "variant": "solid", "color": "primary" },
+      {
+        "label": "About",
+        "href": "/about",
+        "variant": "solid",
+        "color": "primary"
+      },
       {
         "label": "Read the docs",
         "href": "/docs",

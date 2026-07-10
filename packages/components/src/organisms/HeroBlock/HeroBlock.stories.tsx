@@ -95,12 +95,15 @@ type Story = StoryObj<typeof HeroBlock>
 // Shared fixtures
 // ---------------------------------------------------------------------------
 
-const landscapeImage = {
-  src: 'https://picsum.photos/seed/ql-hero/1600/900',
-  alt: 'Hero — landscape photo',
-  width: 1600,
-  height: 900,
-} as const
+const landscapeMedia = {
+  mediaType: 'ManualImage' as const,
+  image: {
+    src: 'https://picsum.photos/seed/ql-hero/1600/900',
+    alt: 'Hero — landscape photo',
+    width: 1600,
+    height: 900,
+  },
+}
 
 const baseCopy = {
   title: 'Build composable sites without the boilerplate.',
@@ -121,7 +124,7 @@ const multiCta = [
 export const Playground: Story = {
   parameters: { controls: { disable: false } },
   args: {
-    image: { ...landscapeImage },
+    media: { ...landscapeMedia },
     ...baseCopy,
     ctas: [...singleCta],
     contentPositionMobile: 'overlay',
@@ -171,7 +174,7 @@ export const Beneath: Story = {
   args: {
     ...baseCopy,
     ctas: [...singleCta],
-    image: { ...landscapeImage },
+    media: { ...landscapeMedia },
     contentPositionMobile: 'beneath',
     contentPositionDesktop: 'beneath',
     textColor: 'dark',
@@ -187,7 +190,7 @@ export const OverlayFlexible: Story = {
   args: {
     ...baseCopy,
     ctas: [...multiCta],
-    image: { ...landscapeImage },
+    media: { ...landscapeMedia },
     contentPositionMobile: 'overlay',
     contentPositionDesktop: 'overlay',
     heightBehaviour: 'flexible',
@@ -214,7 +217,7 @@ export const HeightConstraints: Story = {
       <HeroBlock
         {...baseCopy}
         title="maxHeight 280 — tall image capped and clipped"
-        image={{ ...landscapeImage }}
+        media={{ ...landscapeMedia }}
         contentPositionMobile="overlay"
         contentPositionDesktop="overlay"
         heightBehaviour="flexible"
@@ -230,7 +233,7 @@ export const OverlayFitToContent: Story = {
   args: {
     ...baseCopy,
     ctas: [...multiCta],
-    image: { ...landscapeImage },
+    media: { ...landscapeMedia },
     contentPositionMobile: 'overlay',
     contentPositionDesktop: 'overlay',
     heightBehaviour: 'fitToContent',
@@ -242,7 +245,7 @@ export const OverlayFitToImage: Story = {
   args: {
     ...baseCopy,
     ctas: [...multiCta],
-    image: { ...landscapeImage },
+    media: { ...landscapeMedia },
     contentPositionMobile: 'overlay',
     contentPositionDesktop: 'overlay',
     heightBehaviour: 'fitToImage',
@@ -258,7 +261,7 @@ export const BeneathMobileOverlayDesktop: Story = {
   args: {
     ...baseCopy,
     ctas: [...multiCta],
-    image: { ...landscapeImage },
+    media: { ...landscapeMedia },
     contentPositionMobile: 'beneath',
     contentPositionDesktop: 'overlay',
     heightBehaviour: 'flexible',
@@ -275,7 +278,7 @@ export const MultipleCtas: Story = {
   args: {
     ...baseCopy,
     ctas: [...multiCta],
-    image: { ...landscapeImage },
+    media: { ...landscapeMedia },
   },
 }
 

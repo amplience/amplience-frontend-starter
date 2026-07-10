@@ -116,7 +116,7 @@
           "title": "Social image",
           "allOf": [
             {
-              "$ref": "https://quadratic.amplience.com/v2/partials/image"
+              "$ref": "https://quadratic.amplience.com/v2/partials/media"
             }
           ]
         }
@@ -148,7 +148,7 @@
       "description": "Hero image for the article — shown in the article header and article cards on the archive page.",
       "allOf": [
         {
-          "$ref": "https://quadratic.amplience.com/v2/partials/image"
+          "$ref": "https://quadratic.amplience.com/v2/partials/media"
         }
       ]
     },

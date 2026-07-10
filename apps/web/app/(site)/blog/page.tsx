@@ -63,8 +63,10 @@ function BlogArticleCard({ article, slug }: BlogArticleCardProps) {
 
   return (
     <article data-blog-card>
+      {/* media (not `image`) — the previous `image` prop name silently
+          matched nothing on MediaCard, so archive cards rendered imageless. */}
       <MediaCard
-        {...(article.coverImage !== undefined && { image: article.coverImage })}
+        {...(article.coverImage !== undefined && { media: article.coverImage })}
         title={article.title ?? ''}
         {...(cardContent !== '' && { description: cardContent })}
         links={{ href }}

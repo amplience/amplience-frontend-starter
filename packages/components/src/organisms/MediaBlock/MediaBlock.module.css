@@ -1,16 +1,16 @@
 /*
- * ImageBlock molecule styles.
+ * MediaBlock organism styles.
  *
  * LAYOUT:
- *   Default — image constrained by Container max-width, with section padding.
- *   Full-bleed (data-full-bleed="true") — image runs edge-to-edge; the
+ *   Default — media constrained by Container max-width, with section padding.
+ *   Full-bleed (data-full-bleed="true") — media runs edge-to-edge; the
  *   Container's padding and max-width are removed by the component in JSX.
  *   Vertical padding is preserved in both modes.
  *
  * BACKGROUND:
  *   data-background-color — primary / secondary / tertiary / white / light / dark / black
  *
- * BRAND OVERRIDES: redefine --image-block-* variables under [data-brand].
+ * BRAND OVERRIDES: redefine --media-block-* variables under [data-brand].
  */
 
 /* ---------------------------------------------------------------------------
@@ -18,21 +18,21 @@
    --------------------------------------------------------------------------- */
 
 .root {
-  --image-block-padding-y: calc(var(--spacing) * 10);
-  --image-block-caption-gap: calc(var(--spacing) * 3);
-  --image-block-caption-color: var(--color-gray-800);
-  --image-block-caption-background-color: var(--color-gray-100);
+  --media-block-padding-y: calc(var(--spacing) * 10);
+  --media-block-caption-gap: calc(var(--spacing) * 3);
+  --media-block-caption-color: var(--color-gray-800);
+  --media-block-caption-background-color: var(--color-gray-100);
 
-  --image-block-background-color: transparent;
-  --image-block-text-color: inherit;
+  --media-block-background-color: transparent;
+  --media-block-text-color: inherit;
 
   box-sizing: border-box;
-  background-color: var(--image-block-background-color);
-  color: var(--image-block-text-color);
+  background-color: var(--media-block-background-color);
+  color: var(--media-block-text-color);
 }
 
 .container {
-  padding-block: var(--image-block-padding-y);
+  padding-block: var(--media-block-padding-y);
 }
 
 /* Full-bleed: remove vertical padding so the image sits flush with adjacent sections */
@@ -91,9 +91,9 @@
    --------------------------------------------------------------------------- */
 
 .caption {
-  padding: var(--image-block-caption-gap);
-  color: var(--image-block-caption-color);
-  background-color: var(--image-block-caption-background-color);
+  padding: var(--media-block-caption-gap);
+  color: var(--media-block-caption-color);
+  background-color: var(--media-block-caption-background-color);
 }
 
 /* ---------------------------------------------------------------------------
@@ -101,30 +101,30 @@
    --------------------------------------------------------------------------- */
 
 .root[data-background-color='primary'] {
-  --image-block-background-color: var(--color-primary);
-  --image-block-text-color: var(--color-primary-contrast);
+  --media-block-background-color: var(--color-primary);
+  --media-block-text-color: var(--color-primary-contrast);
 }
 .root[data-background-color='secondary'] {
-  --image-block-background-color: var(--color-secondary);
-  --image-block-text-color: var(--color-secondary-contrast);
+  --media-block-background-color: var(--color-secondary);
+  --media-block-text-color: var(--color-secondary-contrast);
 }
 .root[data-background-color='tertiary'] {
-  --image-block-background-color: var(--color-tertiary);
-  --image-block-text-color: var(--color-tertiary-contrast);
+  --media-block-background-color: var(--color-tertiary);
+  --media-block-text-color: var(--color-tertiary-contrast);
 }
 .root[data-background-color='light'] {
-  --image-block-background-color: var(--color-gray-100);
-  --image-block-text-color: var(--color-black);
+  --media-block-background-color: var(--color-gray-100);
+  --media-block-text-color: var(--color-black);
 }
 .root[data-background-color='dark'] {
-  --image-block-background-color: var(--color-gray-800);
-  --image-block-text-color: var(--color-white);
+  --media-block-background-color: var(--color-gray-800);
+  --media-block-text-color: var(--color-white);
 }
 .root[data-background-color='black'] {
-  --image-block-background-color: var(--color-black);
-  --image-block-text-color: var(--color-white);
+  --media-block-background-color: var(--color-black);
+  --media-block-text-color: var(--color-white);
 }
 .root[data-background-color='white'] {
-  --image-block-background-color: var(--color-white);
-  --image-block-text-color: var(--color-black);
+  --media-block-background-color: var(--color-white);
+  --media-block-text-color: var(--color-black);
 }

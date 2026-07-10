@@ -1,17 +1,20 @@
 {
   "id": "a1b2c3d4-0001-4000-8000-000000000022",
-  "label": "Home — columns feature image",
+  "label": "Home \u2014 columns feature image",
   "body": {
     "_meta": {
       "name": "Home — columns feature image",
-      "schema": "https://quadratic.amplience.com/v2/content/image",
+      "schema": "https://quadratic.amplience.com/v2/content/media",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000022"
     },
-    "image": {
-      "src": "https://picsum.photos/seed/qlcols/800/500",
-      "alt": "Quadratic Lite — accelerator for composable Amplience sites",
-      "width": 800,
-      "height": 500
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/qlcols/800/500",
+        "alt": "Quadratic Lite — accelerator for composable Amplience sites",
+        "width": 800,
+        "height": 500
+      }
     },
     "caption": "Built on Amplience. Shipped with mocks."
   }

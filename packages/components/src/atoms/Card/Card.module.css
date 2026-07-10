@@ -30,6 +30,7 @@
    --------------------------------------------------------------------------- */
 
 .root {
+  height: 100%;
   background: var(--card-background, var(--color-white));
   border-radius: var(--card-border-radius, var(--radius));
   border: solid 1px var(--card-border-color, transparent);

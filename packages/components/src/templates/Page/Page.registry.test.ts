@@ -4,7 +4,7 @@
 
 import { describe, expect, it } from 'vitest'
 
-import type { MediaImageLink } from '@amplience/quadratic-content'
+import type { ContentMediaData } from '@amplience/quadratic-types'
 
 import { pageMetadataFromSchema, type PageSchema } from './Page.registry'
 
@@ -13,12 +13,17 @@ const page = (fields: Partial<PageSchema> = {}): PageSchema => ({
   ...fields,
 })
 
-const socialImage: MediaImageLink = {
-  _meta: { schema: 'http://bigcontent.io/cms/schema/v1/core#/definitions/image-link' },
-  id: 'a1b2c3d4-0002-4000-8000-000000000001',
-  name: 'ql-home-social-card',
-  endpoint: 'quadratic',
-  defaultHost: 'cdn.media.amplience.net',
+/** A DAM-picked social image — DynamicImage branch of the media partial. */
+const socialImage: ContentMediaData = {
+  mediaType: 'DynamicImage',
+  image: {
+    image: {
+      id: 'a1b2c3d4-0002-4000-8000-000000000001',
+      name: 'ql-home-social-card',
+      endpoint: 'quadratic',
+      defaultHost: 'cdn.media.amplience.net',
+    },
+  },
 }
 
 describe('pageMetadataFromSchema', () => {
@@ -58,7 +63,7 @@ describe('pageMetadataFromSchema', () => {
 })
 
 describe('pageMetadataFromSchema — social card', () => {
-  it('maps the social group to openGraph, building the media URL', () => {
+  it('maps the social group to openGraph, building the DI URL with the og width cap', () => {
     const metadata = pageMetadataFromSchema(
       page({
         social: { title: 'Social title', description: 'Social blurb', image: socialImage },
@@ -67,13 +72,36 @@ describe('pageMetadataFromSchema — social card', () => {
     expect(metadata.openGraph).toEqual({
       title: 'Social title',
       description: 'Social blurb',
-      images: ['https://cdn.media.amplience.net/i/quadratic/ql-home-social-card'],
+      images: ['https://cdn.media.amplience.net/i/quadratic/ql-home-social-card?w=1200'],
     })
   })
 
-  it('accepts a plain { src } social image and passes the URL through', () => {
+  it('carries the pre-baked transform query (crop/POI) into the og:image URL', () => {
+    const cropped: ContentMediaData = {
+      ...socialImage,
+      image: { ...socialImage.image, query: 'crop={2.25%},{14.62%},{94.67%},{73.44%}' },
+    }
+    const metadata = pageMetadataFromSchema(page({ social: { image: cropped } }))
+    expect(metadata.openGraph?.images).toEqual([
+      'https://cdn.media.amplience.net/i/quadratic/ql-home-social-card?crop={2.25%},{14.62%},{94.67%},{73.44%}&w=1200',
+    ])
+  })
+
+  it('passes a ManualImage social image URL through as-is', () => {
     const metadata = pageMetadataFromSchema(
-      page({ social: { image: { src: 'https://picsum.photos/seed/ql-hero/1200/600' } } }),
+      page({
+        social: {
+          image: {
+            mediaType: 'ManualImage',
+            image: {
+              src: 'https://picsum.photos/seed/ql-hero/1200/600',
+              alt: 'Hero',
+              width: 1200,
+              height: 600,
+            },
+          },
+        },
+      }),
     )
     expect(metadata.openGraph?.images).toEqual(['https://picsum.photos/seed/ql-hero/1200/600'])
   })

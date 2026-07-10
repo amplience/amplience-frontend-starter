@@ -26,16 +26,16 @@ import contentHero from '../content-type-schemas/schemas/content_hero.json'
 import contentHierarchyMenuItem from '../content-type-schemas/schemas/content_hierarchy-menu-item.json'
 import contentHierarchyMenu from '../content-type-schemas/schemas/content_hierarchy-menu.json'
 import contentIconButton from '../content-type-schemas/schemas/content_icon-button.json'
-import contentImage from '../content-type-schemas/schemas/content_image.json'
 import contentLogo from '../content-type-schemas/schemas/content_logo.json'
 import contentMarkdownBlock from '../content-type-schemas/schemas/content_markdown-block.json'
 import contentMediaCard from '../content-type-schemas/schemas/content_media-card.json'
+import contentMedia from '../content-type-schemas/schemas/content_media.json'
 import contentMenuItem from '../content-type-schemas/schemas/content_menu-item.json'
 import contentMenu from '../content-type-schemas/schemas/content_menu.json'
 import contentPage from '../content-type-schemas/schemas/content_page.json'
 import partialsContentBlocks from '../content-type-schemas/schemas/partials_content-blocks.json'
 import partialsCta from '../content-type-schemas/schemas/partials_cta.json'
-import partialsImage from '../content-type-schemas/schemas/partials_image.json'
+import partialsMedia from '../content-type-schemas/schemas/partials_media.json'
 import slotsSlot from '../content-type-schemas/schemas/slots_slot.json'
 
 /**
@@ -65,7 +65,7 @@ const entry = (
 
 /** Every schema in the package, partials included. */
 export const schemaManifest: readonly SchemaManifestEntry[] = [
-  entry(partialsImage, 'PARTIAL'),
+  entry(partialsMedia, 'PARTIAL'),
   entry(partialsCta, 'PARTIAL'),
   entry(partialsContentBlocks, 'PARTIAL'),
   entry(contentPage, 'CONTENT_TYPE'),
@@ -75,7 +75,7 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(contentColumns, 'CONTENT_TYPE'),
   entry(contentGrid, 'CONTENT_TYPE'),
   entry(contentMediaCard, 'CONTENT_TYPE'),
-  entry(contentImage, 'CONTENT_TYPE'),
+  entry(contentMedia, 'CONTENT_TYPE'),
   entry(slotsSlot, 'SLOT'),
   entry(contentHeader, 'CONTENT_TYPE'),
   entry(contentHeaderRow, 'CONTENT_TYPE'),

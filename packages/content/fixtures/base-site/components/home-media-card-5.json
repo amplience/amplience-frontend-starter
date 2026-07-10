@@ -9,11 +9,14 @@
     },
     "title": "Faster time to value",
     "description": "Skip the boilerplate. Quadratic Lite gets new Amplience implementations to a working frontend faster, so teams can focus on what matters.",
-    "image": {
-      "src": "https://picsum.photos/seed/ql-card-ttv/800/450",
-      "alt": "Accelerated implementation timeline",
-      "width": 800,
-      "height": 450
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/ql-card-ttv/800/450",
+        "alt": "Accelerated implementation timeline",
+        "width": 800,
+        "height": 450
+      }
     },
     "links": {
       "cta": {

@@ -1,0 +1,23 @@
+/* DynamicImage.module.css */
+.root {
+  position: relative; /* required for next/image fill mode */
+  overflow: hidden;
+  /*
+   * The image's resolved ratio (aspectLock, or intrinsic/crop dimensions
+   * fetched by DynamicImageServer) arrives as the --di-aspect-ratio custom
+   * property, set inline by the component. Applying it here — rather than as
+   * an inline `aspect-ratio` — keeps it overridable by layout contexts:
+   *   - height-free contexts (MediaBlock) rely on it for the box height
+   *   - contexts that impose a height (MediaCard height:100%) win naturally,
+   *     since a definite height takes precedence over aspect-ratio
+   *   - contexts that size the box externally (HeroBlock 'flexible' grid)
+   *     disable it with `aspect-ratio: auto` on their own selector
+   * When the variable is unset (metadata fetch failed, no aspectLock) this
+   * resolves to `auto` — no guessed ratio.
+   */
+  aspect-ratio: var(--di-aspect-ratio, auto);
+}
+
+.img {
+  object-fit: cover;
+}

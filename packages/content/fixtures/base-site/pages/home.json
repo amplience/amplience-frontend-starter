@@ -16,10 +16,13 @@
       "title": "Quadratic Lite — composable sites without the boilerplate",
       "description": "An open-source Amplience accelerator: recursive renderer, atomic component library, automation CLI.",
       "image": {
-        "src": "https://picsum.photos/seed/ql-hero/1200/600",
-        "alt": "Hero — Quadratic Lite accelerator",
-        "width": 1200,
-        "height": 600
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/seed/ql-hero/1200/600",
+          "alt": "Hero — Quadratic Lite accelerator",
+          "width": 1200,
+          "height": 600
+        }
       }
     },
     "slots": [

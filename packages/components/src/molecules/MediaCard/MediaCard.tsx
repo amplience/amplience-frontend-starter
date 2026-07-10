@@ -1,13 +1,14 @@
 import clsx from 'clsx'
 
+import type { ContentMediaData } from '@amplience/quadratic-types'
+
 import { Button } from '../../atoms/Button/Button'
 import type { ButtonColor, ButtonVariant } from '../../atoms/Button/Button'
 import { Card } from '../../atoms/Card/Card'
 import type { CardColor, CardElevation } from '../../atoms/Card/Card'
-import { Image } from '../../atoms/Image/Image'
-import type { ImageProps } from '../../atoms/Image/Image'
 import { Link } from '../../atoms/Link/Link'
 import { Typography } from '../../atoms/Typography/Typography'
+import { ContentMedia } from '../ContentMedia/ContentMedia'
 import styles from './MediaCard.module.css'
 
 // ---------------------------------------------------------------------------
@@ -55,10 +56,10 @@ export type MediaCardProps = {
   /** Optional body copy below the title. */
   description?: string
   /**
-   * Cover image. Renders flush with the card edge (no Card padding).
-   * All Image atom props are accepted (src, alt, width, height, aspectRatio …).
+   * Cover media. Renders flush with the card edge (no Card padding).
+   * Accepts ManualImage (direct URL) or DynamicImage (Amplience DAM asset).
    */
-  image?: ImageProps
+  media?: ContentMediaData
   /** Card-level link and CTA — see MediaCardLinks. */
   links?: MediaCardLinks
   /**
@@ -107,7 +108,7 @@ export type MediaCardProps = {
 export function MediaCard({
   title,
   description,
-  image,
+  media,
   links,
   layout = 'above',
   headingVariant = 'h3',
@@ -118,9 +119,13 @@ export function MediaCard({
   const { href, cta } = links ?? {}
   const isLinked = href != null
 
-  const mediaEl = image != null && (
+  // No per-image ratio derivation: the card layouts size the media container
+  // themselves (flex-row / overlay / fixed heights in MediaCard.module.css),
+  // and DynamicImage carries its own payload-resolved --di-aspect-ratio for
+  // any layout that leaves the box height free.
+  const mediaEl = media != null && (
     <div className={styles.media}>
-      <Image {...image} className={clsx(styles.image, image.className)} />
+      <ContentMedia {...media} {...(styles.image !== undefined && { className: styles.image })} />
     </div>
   )
 
