@@ -47,7 +47,7 @@
   --spacing-9: calc(var(--spacing) * 9);
   --spacing-10: calc(var(--spacing) * 10);
   --gap: var(--spacing-4);
-  --site-gutter: var(--spacing-10);
+  --site-gutter: var(--spacing-4);
   --site-max-width-narrow: 640px;
   --site-max-width: 1200px;
   --site-max-width-wide: 1600px;
@@ -102,6 +102,10 @@
   --interactive-hover-shadow: none;
   --interactive-hover-transform: none;
   --interactive-hover-opacity: 1;
+
+  @media (min-width: 769px) {
+    --site-gutter: var(--spacing-10);
+  }
 }
 
 [data-brand='anyafinn'] {

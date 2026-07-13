@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/menu-toggle-button",
+  "title": "Menu Toggle Button",
+  "description": "The hamburger button that opens and closes the mobile menu drawer. Place it in the header alongside the menu — it toggles every menu on the page that uses the mobile layout.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "label": {
+      "type": "string",
+      "title": "Accessible label",
+      "description": "Screen reader label for this button.",
+      "default": "Toggle menu"
+    }
+  },
+  "propertyOrder": ["label"]
+}

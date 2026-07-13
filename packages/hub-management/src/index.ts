@@ -31,6 +31,7 @@ import contentMarkdownBlock from '../content-type-schemas/schemas/content_markdo
 import contentMediaCard from '../content-type-schemas/schemas/content_media-card.json'
 import contentMedia from '../content-type-schemas/schemas/content_media.json'
 import contentMenuItem from '../content-type-schemas/schemas/content_menu-item.json'
+import contentMenuToggleButton from '../content-type-schemas/schemas/content_menu-toggle-button.json'
 import contentMenu from '../content-type-schemas/schemas/content_menu.json'
 import contentPage from '../content-type-schemas/schemas/content_page.json'
 import partialsContentBlocks from '../content-type-schemas/schemas/partials_content-blocks.json'
@@ -82,6 +83,7 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(contentHeaderGroup, 'CONTENT_TYPE'),
   entry(contentLogo, 'CONTENT_TYPE'),
   entry(contentIconButton, 'CONTENT_TYPE'),
+  entry(contentMenuToggleButton, 'CONTENT_TYPE'),
   entry(contentMenu, 'CONTENT_TYPE'),
   entry(contentMenuItem, 'CONTENT_TYPE'),
   entry(contentHierarchyMenu, 'CONTENT_TYPE'),

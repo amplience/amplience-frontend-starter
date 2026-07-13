@@ -87,6 +87,7 @@ import siteMenuItemWomensDresses from '../../fixtures/base-site/components/heade
 import siteMenuItemWomensTops from '../../fixtures/base-site/components/header/site-menu-item-womens-tops.json' with { type: 'json' }
 import siteMenuItemWomens from '../../fixtures/base-site/components/header/site-menu-item-womens.json' with { type: 'json' }
 import siteMenuMain from '../../fixtures/base-site/components/header/site-menu-main.json' with { type: 'json' }
+import siteMenuToggleButton from '../../fixtures/base-site/components/header/site-menu-toggle-button.json' with { type: 'json' }
 import homeColumns2 from '../../fixtures/base-site/components/home-columns-2.json' with { type: 'json' }
 import homeColumnsImage from '../../fixtures/base-site/components/home-columns-image.json' with { type: 'json' }
 import homeColumnsMarkdown from '../../fixtures/base-site/components/home-columns-markdown.json' with { type: 'json' }
@@ -133,6 +134,7 @@ const fixtures: readonly EnrichedContentItem[] = [
   siteIconButtonUser,
   siteIconButtonCart,
   siteHeaderGroupIcons,
+  siteMenuToggleButton,
   siteMenuMain,
   siteHierarchyMenuMain,
   siteHierarchyMenuItemMens,

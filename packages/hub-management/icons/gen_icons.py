@@ -143,6 +143,14 @@ icon_button = ('<g transform="translate({tx},{ty})">'
                '</g>')
 ICONS["content_icon-button"] = card_a(shadowed(icon_button))
 
+# menu-toggle-button: app-style rounded button with hamburger lines
+menu_toggle_button = ('<g transform="translate({tx},{ty})">'
+                      f'<rect x="84" y="84" width="88" height="88" rx="22" fill="{{fill}}" stroke="{{stroke}}" stroke-width="{SW}"/>'
+                      '<path d="M106 110 h44 M106 128 h44 M106 146 h44" '
+                      f'fill="none" stroke="{{stroke}}" stroke-width="{SW_MED}"/>'
+                      '</g>')
+ICONS["content_menu-toggle-button"] = card_a(shadowed(menu_toggle_button))
+
 # logo: circular badge with abstract diamond mark
 logo = ('<g transform="translate({tx},{ty})">'
         f'<circle cx="126" cy="128" r="48" fill="{{fill}}" stroke="{{stroke}}" stroke-width="{SW}"/>'

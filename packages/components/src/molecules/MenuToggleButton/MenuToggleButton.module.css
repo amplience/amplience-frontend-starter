@@ -1,0 +1,20 @@
+/*
+ * MenuToggleButton molecule styles.
+ *
+ * The interactive element itself is an IconButton — all tap-target and
+ * focus styling comes from there. This module only handles visibility:
+ * the Menu drawer CSS exists solely below 768px (see Menu.module.css), so
+ * above that breakpoint the button would be a dead control and is hidden.
+ *
+ * The two breakpoints must stay in lockstep: Menu hides its list at
+ * max-width 768px; this button hides itself at min-width 769px.
+ *
+ * Brand override (e.g. a brand whose menu is a drawer at all widths):
+ *   [data-brand="acme"] .MenuToggleButton { display: inline-flex !important; }
+ */
+
+@media (min-width: 769px) {
+  .root {
+    display: none;
+  }
+}
