@@ -13,6 +13,7 @@ import type { ReactNode } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { PAGE_SCHEMA } from '@amplience/quadratic-components/registry'
 import type { ContentClient, ContentClientErrorKind } from '@amplience/quadratic-content'
 
 let failKind: ContentClientErrorKind | undefined
@@ -135,6 +136,13 @@ describe('ContentPage — metadata (QL-76)', () => {
   })
 
   it('emits no robots tag for a page that sets none (site default: indexable)', async () => {
+    // The on-disk `about` fixture now carries an explicit (if permissive)
+    // `robots` group — added so the CMS hub-import UI doesn't flag it as
+    // unsaved — so it no longer represents "a page that sets none". Stub a
+    // page item with no `robots` field at all to keep testing that case.
+    stubClient = makeStubClient({
+      getByKey: () => Promise.resolve({ _meta: { schema: PAGE_SCHEMA } } as never),
+    })
     const { generateMetadata } = await loadRoute()
     const meta = await generateMetadata(routeProps(['about']))
     expect(meta.robots).toBeUndefined()
