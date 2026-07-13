@@ -121,7 +121,7 @@ const hasDeliveryKeys = (body) =>
  * Read-only unless an offender is found, and idempotent — a re-run finds
  * nothing left to strip. Uses dc-cli's own management SDK.
  */
-const freeArchivedDeliveryKeys = async (client, repoId, repoLabel) => {
+const freeArchivedDeliveryKeys = async (client, repoId, repoLabel, ignoreSchemaValidation) => {
   const repo = await client.contentRepositories.get(repoId)
 
   // Collect the full list before mutating — re-archiving while paginating
@@ -140,7 +140,13 @@ const freeArchivedDeliveryKeys = async (client, repoId, repoLabel) => {
     const unarchived = await item.related.unarchive()
     unarchived.body._meta.deliveryKey = null
     unarchived.body._meta.deliveryKeys = null
-    const updated = await unarchived.related.update(unarchived)
+    // ignoreSchemaValidation lets us strip keys from items whose body no
+    // longer conforms to a since-drifted schema. It requires the hub's
+    // "Ignore schema validation" setting to be ON (org/hub admin, DC
+    // Properties) — otherwise the API rejects the param with
+    // IGNORE_SCHEMA_VALIDATION_NOT_ENABLED, so it's opt-in via env.
+    const updateParams = ignoreSchemaValidation ? { ignoreSchemaValidation: true } : {}
+    const updated = await unarchived.related.update(unarchived, updateParams)
     await updated.related.archive()
     freed += 1
   }
@@ -153,6 +159,24 @@ const hubName = require_('AMPLIENCE_HUB_NAME', 'identify the hub mapping file')
 const contentRepo = require_('AMPLIENCE_REPO_CONTENT', 'target the content repository')
 const slotsRepo = require_('AMPLIENCE_REPO_SLOTS', 'target the slots repository')
 require_('AMPLIENCE_HUB_ID', 'archive content type schemas (--hubId is required by dc-cli)')
+
+// Scope: `items` wipes only content items (map + delivery keys + items);
+// `all` (default) also archives content types and content type schemas.
+// Mirrors hub-import.mjs's step argument so the two scripts pair up.
+const scope = process.argv[2] === 'items' ? 'items' : 'all'
+console.log(`\n▶ hub-wipe scope: ${scope}`)
+
+// Whether to pass --ignoreSchemaValidation. dc-cli archives by NULLing
+// delivery keys via a schema-validated update, so an item authored under a
+// since-drifted schema (e.g. `Site — logo`) fails with CONTENT_TYPE_INVALID
+// and aborts the batch. The flag bypasses body validation, but the API only
+// accepts it when the hub's "Ignore schema validation" setting is ON
+// (org/hub admin, DC → hub → Properties). Opt in per environment once that
+// setting is enabled; leave it off and the wipe still completes thanks to
+// --ignoreError below, just skipping any items it can't strip.
+const ignoreSchemaValidation = ['1', 'true', 'yes'].includes(
+  (env('AMPLIENCE_IGNORE_SCHEMA_VALIDATION') ?? '').toLowerCase(),
+)
 
 // 1. Delete mapping file
 const mapFile = path.join(os.homedir(), '.amplience', 'imports', `quadratic-${hubName}.json`)
@@ -169,8 +193,8 @@ const clientSecret = env('AMPLIENCE_CLIENT_SECRET')
 if (clientId !== undefined && clientSecret !== undefined) {
   console.log('\nChecking archived items for stranded delivery keys…')
   const client = new DynamicContent({ client_id: clientId, client_secret: clientSecret })
-  await freeArchivedDeliveryKeys(client, contentRepo, 'content')
-  await freeArchivedDeliveryKeys(client, slotsRepo, 'slots')
+  await freeArchivedDeliveryKeys(client, contentRepo, 'content', ignoreSchemaValidation)
+  await freeArchivedDeliveryKeys(client, slotsRepo, 'slots', ignoreSchemaValidation)
 } else {
   console.warn(
     '\n⚠ AMPLIENCE_CLIENT_ID/SECRET not set — cannot check archived items for ' +
@@ -182,20 +206,34 @@ if (clientId !== undefined && clientSecret !== undefined) {
 // 3. Archive all content items in both repos.
 // Omitting the id positional archives all items in scope (dc-cli behaviour).
 // --repoId scopes to the target repo; -f skips the confirmation prompt.
+// --ignoreError: one item that can't be archived (e.g. a drifted body whose
+// key-strip update fails) must not abort the whole teardown. --ignoreSchemaValidation
+// (opt-in, see above) additionally lets those drifted items be stripped and
+// archived cleanly rather than skipped.
+const archiveFlags = [
+  '-f',
+  '--ignoreError',
+  ...(ignoreSchemaValidation ? ['--ignoreSchemaValidation'] : []),
+]
+
 console.log(`\nArchiving all content in content repo (${contentRepo})…`)
-await dcCli('content-item', 'archive', '--repoId', contentRepo, '-f')
+await dcCli('content-item', 'archive', '--repoId', contentRepo, ...archiveFlags)
 
 console.log(`\nArchiving all content in slots repo (${slotsRepo})…`)
-await dcCli('content-item', 'archive', '--repoId', slotsRepo, '-f')
+await dcCli('content-item', 'archive', '--repoId', slotsRepo, ...archiveFlags)
 
-// 4. Archive all content types in the hub.
-// Omitting the id positional archives all types; --hubId is required and
-// is injected via credentialFlags() when AMPLIENCE_HUB_ID is set.
-console.log('\nArchiving all content types…')
-await dcCli('content-type', 'archive', '-f')
+if (scope === 'all') {
+  // 4. Archive all content types in the hub.
+  // Omitting the id positional archives all types; --hubId is required and
+  // is injected via credentialFlags() when AMPLIENCE_HUB_ID is set.
+  console.log('\nArchiving all content types…')
+  await dcCli('content-type', 'archive', '-f')
 
-// 5. Archive all content type schemas in the hub.
-console.log('\nArchiving all content type schemas…')
-await dcCli('content-type-schema', 'archive', '-f')
+  // 5. Archive all content type schemas in the hub.
+  console.log('\nArchiving all content type schemas…')
+  await dcCli('content-type-schema', 'archive', '-f')
+} else {
+  console.log('\n(scope=items) Leaving content types and schemas in place.')
+}
 
 console.log('\n✓ Hub wipe complete — run Seed to repopulate from fixtures.')

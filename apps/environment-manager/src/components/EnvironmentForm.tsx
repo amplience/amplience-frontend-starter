@@ -13,9 +13,11 @@ type Props = {
 
 // ── Field groups ──────────────────────────────────────────────────────────────
 
-/** Only string-valued keys — excludes boolean fields (republish) and array fields (webApps). */
+/** Only string-valued keys — excludes boolean fields (republish,
+ * ignoreSchemaValidation) and array fields (webApps). The `-?` strips optional
+ * modifiers so optional fields don't leak `undefined` into the key union. */
 type StringEnvKey = {
-  [K in keyof Environment]: Environment[K] extends string ? K : never
+  [K in keyof Environment]-?: Environment[K] extends string ? K : never
 }[keyof Environment]
 
 type FieldMeta = {
@@ -310,6 +312,23 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
                 />
                 Force republish on import (--republish)
               </label>
+            </div>
+
+            <div className="field field--checkbox">
+              <label htmlFor="ignoreSchemaValidation">
+                <input
+                  id="ignoreSchemaValidation"
+                  type="checkbox"
+                  checked={form.ignoreSchemaValidation ?? false}
+                  onChange={(e) => set('ignoreSchemaValidation', e.target.checked)}
+                />
+                Ignore schema validation on wipe/import (--ignoreSchemaValidation)
+              </label>
+              <p className="hint">
+                Requires the hub&rsquo;s &ldquo;Ignore schema validation&rdquo; setting to be
+                enabled (DC &rarr; hub &rarr; Properties). Lets teardown strip keys from items whose
+                body no longer matches a changed schema.
+              </p>
             </div>
           </div>
 
