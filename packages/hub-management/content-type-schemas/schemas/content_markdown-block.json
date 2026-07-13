@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://quadratic.amplience.com/v2/content/markdown-block",
-  "title": "Markdown block",
+  "title": "Rich Text Block",
   "description": "A markdown content section with optional CTAs.",
   "allOf": [
     {

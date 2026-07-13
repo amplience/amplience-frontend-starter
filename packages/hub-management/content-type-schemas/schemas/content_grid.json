@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://quadratic.amplience.com/v2/content/grid",
-  "title": "Grid",
+  "title": "Grid Block",
   "description": "A wrapping grid of content items — fixed columns per breakpoint, or auto-fit by minimum item width.",
   "allOf": [
     {

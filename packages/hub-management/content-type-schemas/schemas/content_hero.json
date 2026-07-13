@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://quadratic.amplience.com/v2/content/hero",
-  "title": "Hero",
+  "title": "Hero Block",
   "description": "A leading banner — title, optional subtitle, image, and CTAs, with overlay and positioning controls.",
   "allOf": [
     {
