@@ -10,6 +10,7 @@
 
 import {
   Cormorant_Garamond,
+  IBM_Plex_Sans,
   Inter,
   Jost,
   Lato,
@@ -17,6 +18,14 @@ import {
   Roboto,
   Roboto_Slab,
 } from 'next/font/google'
+
+// amplience — clean tech/SaaS
+export const ibmPlexSans = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  variable: '--nf-ibm-plex-sans',
+  display: 'swap',
+})
 
 // anyafinn — high-fashion editorial feel
 export const cormorantGaramond = Cormorant_Garamond({
@@ -82,6 +91,7 @@ export const robotoSlab = Roboto_Slab({
 // Convenience array — spread into <html className> in the app layout.
 export const brandFonts = [
   cormorantGaramond,
+  ibmPlexSans,
   inter,
   jetbrainsMono,
   jost,

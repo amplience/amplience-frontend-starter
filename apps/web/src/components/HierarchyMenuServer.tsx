@@ -68,6 +68,14 @@ type HierarchyMenuMeta = {
  */
 type HierarchyMenuStub = {
   readonly _meta: HierarchyMenuMeta
+  /**
+   * Active locale URL prefix (ADR-0015), injected by the deployment registry
+   * entry from the render context. Threaded into the inner `renderContent`
+   * pass so the assembled nav's links stay inside the current locale — the
+   * hierarchy tree is fetched and rendered here, outside the parent render, so
+   * the context has to be handed across the boundary explicitly.
+   */
+  readonly localeBasePath?: string
   readonly [key: string]: unknown
 }
 
@@ -88,5 +96,7 @@ export async function HierarchyMenuServer(props: HierarchyMenuStub) {
     return null
   }
 
-  return renderContent(assembled, hierarchySubRegistry)
+  return renderContent(assembled, hierarchySubRegistry, {
+    localeBasePath: props.localeBasePath ?? '',
+  })
 }

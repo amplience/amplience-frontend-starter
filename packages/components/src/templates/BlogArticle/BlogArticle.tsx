@@ -80,8 +80,9 @@ export function BlogArticle({
           subtitle={category ?? ''}
           heightBehaviour="fitToContent"
           contentPadding={120}
-          overlayColor="black"
-          overlayIntensity={50}
+          backgroundColor="secondary"
+          overlayColor="secondary"
+          overlayIntensity={100}
           verticalPosition="bottom"
         />
         <section data-blog-article-meta className={styles.metaWrapper}>

@@ -40,6 +40,7 @@ import { BLOG_ARTICLE_SCHEMA, PAGE_SCHEMA } from '@amplience/quadratic-component
 import { isContentClientError, resolveContentConfig } from '@amplience/quadratic-content'
 import { makeSdkContentClient } from '@amplience/quadratic-content/sdk'
 
+import { defaultLocale, localeBasePath, localeForSlug } from '../../lib/locales'
 import { registry } from '../../lib/registry'
 import {
   ContentUnavailableCard,
@@ -90,6 +91,7 @@ type RouteProps = {
     vse?: string | string[]
     content?: string | string[]
     isThumbnail?: string | string[]
+    locale?: string | string[]
   }>
 }
 
@@ -106,6 +108,13 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
   const vse = single(params.vse)
   const contentId = single(params.content)
   const isThumbnail = single(params.isThumbnail)
+  // The visualization pane's own locale switcher passes `?locale=<slug>`; it
+  // resolves the same way as the site's `[locale]` segment (ADR-0015), and
+  // falls back to the default locale so localized fields collapse to single
+  // values before the shared renderer sees them. An unknown slug also falls
+  // back rather than failing — the pane is editor tooling, not a public route.
+  const localeSlug = single(params.locale)
+  const locale = (localeSlug !== undefined ? localeForSlug(localeSlug) : undefined) ?? defaultLocale
 
   if (vse === undefined || contentId === undefined) {
     return misconfigured(
@@ -135,7 +144,7 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
 
   let item: unknown
   try {
-    item = await client.getById(contentId, { depth: 'all' })
+    item = await client.getById(contentId, { depth: 'all', locale: locale.delivery })
   } catch (error) {
     if (!isContentClientError(error)) throw error
     emitContentFailure(error, contentId)
@@ -145,6 +154,8 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
   const isTopLevel = [PAGE_SCHEMA, BLOG_ARTICLE_SCHEMA].includes(
     (item as { _meta?: { schema?: string } })?._meta?.schema ?? '',
   )
+
+  const basePath = localeBasePath(locale)
 
   if (isThumbnail) {
     return (
@@ -160,14 +171,14 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
             marginInline: 'auto',
           }}
         >
-          <VisualizationClient initialModel={item} isTopOfPage />
+          <VisualizationClient initialModel={item} isTopOfPage localeBasePath={basePath} />
         </div>
       </div>
     )
   }
 
   if (!isTopLevel) {
-    return <VisualizationClient initialModel={item} isTopOfPage />
+    return <VisualizationClient initialModel={item} isTopOfPage localeBasePath={basePath} />
   }
 
   // For page items, render with site chrome so the visualization matches what
@@ -176,19 +187,19 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
   let header: ReactNode = null
   let footer: ReactNode = null
   const [headerResult, footerResult] = await Promise.allSettled([
-    client.getByKey(`${config.siteName}/site/header`, { depth: 'all' }),
-    client.getByKey(`${config.siteName}/site/footer`, { depth: 'all' }),
+    client.getByKey(`${config.siteName}/site/header`, { depth: 'all', locale: locale.delivery }),
+    client.getByKey(`${config.siteName}/site/footer`, { depth: 'all', locale: locale.delivery }),
   ])
   if (headerResult.status === 'fulfilled') {
     try {
-      header = renderContent(headerResult.value, registry)
+      header = renderContent(headerResult.value, registry, { localeBasePath: basePath })
     } catch {
       // Not fatal — render without header rather than breaking the visualization.
     }
   }
   if (footerResult.status === 'fulfilled') {
     try {
-      footer = renderContent(footerResult.value, registry)
+      footer = renderContent(footerResult.value, registry, { localeBasePath: basePath })
     } catch {
       // Not fatal — render without footer rather than breaking the visualization.
     }
@@ -198,7 +209,7 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
     <>
       {header}
       <main>
-        <VisualizationClient initialModel={item} isTopOfPage />
+        <VisualizationClient initialModel={item} isTopOfPage localeBasePath={basePath} />
       </main>
       {footer}
     </>

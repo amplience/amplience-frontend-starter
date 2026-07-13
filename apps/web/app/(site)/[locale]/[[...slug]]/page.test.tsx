@@ -45,11 +45,17 @@ const loadRoute = async () => {
   return import('./page')
 }
 
-/** Next.js delivers `params` as a promise; the root path has no slug. */
+/**
+ * Next.js delivers `params` as a promise. The `[locale]` segment is always
+ * present (the middleware guarantees it); tests use the zero-config default
+ * locale `en-us`, for which `publicPath` leaves canonicals unprefixed — so
+ * the canonical assertions below read as the plain route path. The root path
+ * still has no slug.
+ */
 const routeProps = (slug?: string[]) => ({
-  // `exactOptionalPropertyTypes`: omit the property entirely at the root,
-  // matching what Next actually delivers for an optional catch-all.
-  params: Promise.resolve(slug === undefined ? {} : { slug }),
+  // `exactOptionalPropertyTypes`: omit `slug` entirely at the root, matching
+  // what Next actually delivers for an optional catch-all.
+  params: Promise.resolve(slug === undefined ? { locale: 'en-us' } : { locale: 'en-us', slug }),
 })
 
 beforeEach(() => {

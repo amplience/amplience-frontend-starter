@@ -62,6 +62,25 @@ describe('MockContentClient', () => {
     expect(byAlias).toEqual(byPrimary)
   })
 
+  it('leaves localized fields raw when no locale is requested (matches the Delivery API)', async () => {
+    const client = makeMockContentClient()
+    const hero = await client.getById<{ title: { values?: unknown } }>(
+      'a1b2c3d4-0001-4000-8000-000000000003',
+    )
+    expect(Array.isArray(hero.title.values)).toBe(true)
+  })
+
+  it('collapses a localized field to a single value when a locale is requested', async () => {
+    // Fixture-independent: with a locale, the localized `{ values }` object is
+    // resolved to a single scalar (the exact text is editable content, covered
+    // by the resolveLocalized unit tests).
+    const client = makeMockContentClient()
+    const hero = await client.getById<{ title: unknown }>('a1b2c3d4-0001-4000-8000-000000000003', {
+      locale: 'en-US,*',
+    })
+    expect(typeof hero.title).toBe('string')
+  })
+
   it('throws ContentClientError(not-found) for an unknown delivery key', async () => {
     const client = makeMockContentClient()
     await expect(client.getByKey('does-not-exist')).rejects.toBeInstanceOf(ContentClientError)

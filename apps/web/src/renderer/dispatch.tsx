@@ -158,6 +158,9 @@ export function renderContent(
     const childCtx: RenderContext = {
       ...(entry.childContext ?? {}),
       ...(ctx.isTopOfPage === true && { isTopOfPage: true }),
+      // Locale is a whole-tree property (ADR-0015), so it always flows to
+      // children — unlike `isTopOfPage`, which only rides the leading edge.
+      ...(ctx.localeBasePath !== undefined && { localeBasePath: ctx.localeBasePath }),
     }
     const children = renderContent(getChildren(content), registry, childCtx)
     return createElement(component, props, children)

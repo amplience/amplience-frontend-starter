@@ -19,7 +19,7 @@
         "label": "View the docs",
         "href": "/docs",
         "variant": "outlined",
-        "color": "primary"
+        "color": "black"
       }
     ],
     "maxWidth": "narrow",

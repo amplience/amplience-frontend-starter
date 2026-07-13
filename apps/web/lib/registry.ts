@@ -46,15 +46,21 @@ import { HierarchyMenuServer } from '../src/components/HierarchyMenuServer'
  * itself, so the fetch happens at the point of render rather than up-front in
  * layout.tsx.
  *
- * `propsFromSchema` is deliberately omitted: the component needs `_meta`
- * (for the delivery key), so the dispatcher passes the full content body
- * through as props rather than stripping the envelope.
+ * `propsFromSchema` keeps the full content body (the component needs `_meta`
+ * for the delivery key) and adds `localeBasePath` from the render context, so
+ * the async subtree fetched by `HierarchyMenuServer` can carry the active
+ * locale into its own `renderContent` pass (ADR-0015) — the one link surface
+ * the parent tree's context can't reach on its own.
  *
  * `getChildren` is deliberately omitted: the stub has no `items`, and
  * `HierarchyMenuServer` handles its own subtree after fetching.
  */
 const hierarchyMenuServerEntry: AnyComponentRegistryEntry = {
   component: HierarchyMenuServer,
+  propsFromSchema: (schema, ctx) => ({
+    ...(schema as Record<string, unknown>),
+    localeBasePath: ctx.localeBasePath ?? '',
+  }),
 }
 
 const registryMap = new Map(defaultRegistry)

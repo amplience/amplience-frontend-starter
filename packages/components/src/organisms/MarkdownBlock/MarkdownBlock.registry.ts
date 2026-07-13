@@ -10,7 +10,9 @@ export const MARKDOWN_BLOCK_SCHEMA = 'https://quadratic.amplience.com/v2/content
  * envelope. `bare` is excluded: it's a layout cue supplied by the render
  * context, not an author-editable field.
  */
-export type MarkdownBlockSchema = Omit<MarkdownBlockProps, 'bare'> & { readonly _meta: unknown }
+export type MarkdownBlockSchema = Omit<MarkdownBlockProps, 'bare' | 'localeBasePath'> & {
+  readonly _meta: unknown
+}
 
 /**
  * Registry entry for the markdown-block schema. The adapter strips the
@@ -25,5 +27,6 @@ export const markdownBlockRegistryEntry: ComponentRegistryEntry<
   propsFromSchema: ({ _meta: _envelope, ...props }, ctx) => ({
     ...props,
     bare: ctx.bare ?? false,
+    localeBasePath: ctx.localeBasePath ?? '',
   }),
 }

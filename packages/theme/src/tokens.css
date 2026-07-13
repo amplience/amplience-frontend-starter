@@ -108,6 +108,20 @@
   }
 }
 
+[data-brand='amplience'] {
+  --font-body: var(--nf-ibm-plex-sans), 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --color-primary: rgb(0, 228, 179);
+  --color-primary-contrast: rgb(0, 44, 66);
+  --color-secondary: rgb(0, 44, 66);
+  --color-secondary-contrast: rgb(255, 255, 255);
+  --color-tertiary: rgb(180, 197, 242);
+  --color-tertiary-contrast: rgb(0, 44, 66);
+
+  body {
+    color: var(--color-secondary);
+  }
+}
+
 [data-brand='anyafinn'] {
   --font-heading: var(--nf-cormorant-garamond), Georgia, 'Times New Roman', serif;
   --font-body: var(--nf-jost), 'Helvetica Neue', Helvetica, Arial, sans-serif;

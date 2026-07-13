@@ -14,7 +14,7 @@ export const HIERARCHY_MENU_ITEM_SCHEMA =
  * field in the schema itself (child relationships are managed by DC's hierarchy
  * system).
  */
-export type HierarchyMenuItemSchema = Omit<MenuItemProps, 'children'> & {
+export type HierarchyMenuItemSchema = Omit<MenuItemProps, 'children' | 'localeBasePath'> & {
   readonly _meta: unknown
   /** Injected by getHierarchy() — not a schema field. */
   readonly children?: readonly unknown[]
@@ -39,7 +39,10 @@ export const hierarchyMenuItemRegistryEntry: ComponentRegistryEntry<
   MenuItemProps
 > = {
   component: MenuItem,
-  propsFromSchema: ({ _meta: _envelope, children: _children, ...props }) => props,
+  propsFromSchema: ({ _meta: _envelope, children: _children, ...props }, ctx) => ({
+    ...props,
+    localeBasePath: ctx.localeBasePath ?? '',
+  }),
   validate: validateHierarchyMenuItemSchema,
   getChildren: (schema) => schema.children ?? [],
   childContext: { bare: true },

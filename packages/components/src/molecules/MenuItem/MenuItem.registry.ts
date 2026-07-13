@@ -10,7 +10,7 @@ export const MENU_ITEM_SCHEMA = 'https://quadratic.amplience.com/v2/content/menu
  * the nested `children` content-links the renderer recurses into. The
  * `children` ReactNode prop is excluded: it arrives from the renderer.
  */
-export type MenuItemSchema = Omit<MenuItemProps, 'children'> & {
+export type MenuItemSchema = Omit<MenuItemProps, 'children' | 'localeBasePath'> & {
   readonly _meta: unknown
   readonly children?: readonly unknown[]
 }
@@ -35,7 +35,10 @@ export const validateMenuItemSchema = (schema: unknown): schema is MenuItemSchem
  */
 export const menuItemRegistryEntry: ComponentRegistryEntry<MenuItemSchema, MenuItemProps> = {
   component: MenuItem,
-  propsFromSchema: ({ _meta: _envelope, children: _children, ...props }) => props,
+  propsFromSchema: ({ _meta: _envelope, children: _children, ...props }, ctx) => ({
+    ...props,
+    localeBasePath: ctx.localeBasePath ?? '',
+  }),
   validate: validateMenuItemSchema,
   getChildren: (schema) => schema.children ?? [],
   childContext: { bare: true },

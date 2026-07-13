@@ -49,16 +49,31 @@
   },
   "type": "object",
   "properties": {
+    "preTitle": {
+      "title": "Pre-title",
+      "allOf": [
+        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+      ]
+    },
     "title": {
-      "type": "string",
       "title": "Title",
       "description": "Drives the <h1> and the section's accessible name.",
-      "minLength": 1
+      "minLength": 1,
+      "allOf": [
+        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+      ]
     },
     "subtitle": {
-      "type": "string",
       "title": "Subtitle",
-      "ui:component": "text-area"
+      "allOf": [
+        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+      ]
+    },
+    "description": {
+      "title": "Description",
+      "allOf": [
+        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+      ]
     },
     "media": {
       "title": "Media",
@@ -119,9 +134,10 @@
     },
     "overlayStyle": {
       "type": "string",
-      "enum": ["gradient", "solid", "hard"],
+      "enum": ["gradient", "hard", "solid"],
       "title": "Overlay style",
-      "description": "Style of the overlay scrim drawn over the image."
+      "description": "Style of the overlay scrim drawn over the image.",
+      "default": "gradient"
     },
     "overlayColor": {
       "type": "string",

@@ -1,15 +1,20 @@
 /**
- * Blog archive route — `/blog` (QL-103).
+ * Blog archive route — `/blog` (QL-103; localized under ADR-0015).
  *
  * Lists all published blog-article items, sorted newest-first by
  * `publishDate`. Fetches via `listBySchema` (DC Filter API in production,
  * in-memory fixture filter in development) so no separate "BlogArchive"
  * content type is needed — the blog article schema *is* the catalogue.
  *
+ * The `[locale]` segment carries the active locale: cards fetch at that
+ * locale so titles and descriptions arrive as single values, and card links
+ * keep the locale in the path (`/fr-fr/blog/<slug>`) so navigation stays
+ * within the reader's language. The default locale is unprefixed.
+ *
  * At POC scope (3 articles) pagination is out of scope; the full article
  * list fits on one page. The `generateStaticParams` call lives in
- * `/blog/[slug]` — this page itself is static by default (no dynamic
- * segments), so Next.js generates it at build time automatically.
+ * `/blog/[slug]` — this page itself has no dynamic segment of its own, so
+ * Next.js generates it per locale automatically.
  *
  * `BlogArticleCard` is a local component: it only ever renders here. If a
  * richer card design lands (image grid, featured article, etc.) it can be
@@ -17,6 +22,7 @@
  */
 
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 
 import { Container } from '@amplience/quadratic-components/container'
 import { GridBlock } from '@amplience/quadratic-components/grid-block'
@@ -25,11 +31,16 @@ import { MediaCard } from '@amplience/quadratic-components/media-card'
 import { BLOG_ARTICLE_SCHEMA } from '@amplience/quadratic-components/registry'
 import type { BlogArticleSchema } from '@amplience/quadratic-components/registry'
 
-import { client, siteName } from '../../../lib/content-client'
+import { client, siteName } from '../../../../lib/content-client'
+import { localeForSlug, publicPath } from '../../../../lib/locales'
 
 export const metadata: Metadata = {
   title: 'Blog',
   description: 'Articles, guides, and updates from the Amplience team.',
+}
+
+type RouteProps = {
+  params: Promise<{ locale: string }>
 }
 
 // ---------------------------------------------------------------------------
@@ -38,12 +49,10 @@ export const metadata: Metadata = {
 
 type BlogArticleCardProps = {
   readonly article: BlogArticleSchema & { readonly _meta: unknown }
-  readonly slug: string
+  readonly href: string
 }
 
-function BlogArticleCard({ article, slug }: BlogArticleCardProps) {
-  const href = `/blog/${slug}`
-
+function BlogArticleCard({ article, href }: BlogArticleCardProps) {
   /* If there's an author, prepend it to the description (separated with a bullet point character) */
   /* Same goes for the publish date, if present. */
   const cardContent = [
@@ -85,8 +94,14 @@ const deliveryKeyFromMeta = (meta: unknown): string | undefined => {
   return m?.deliveryKeys?.values?.[0]?.value
 }
 
-export default async function BlogArchivePage() {
-  const all = await client.listBySchema<BlogArticleSchema>(BLOG_ARTICLE_SCHEMA)
+export default async function BlogArchivePage({ params }: RouteProps) {
+  const { locale: localeSlug } = await params
+  const locale = localeForSlug(localeSlug)
+  if (locale === undefined) notFound()
+
+  const all = await client.listBySchema<BlogArticleSchema>(BLOG_ARTICLE_SCHEMA, {
+    locale: locale.delivery,
+  })
 
   // Keep only items keyed under this site's `<site>/blog/` namespace
   // (ADR-0014) — articles on other sites of the same hub, or non-blog-route
@@ -110,9 +125,9 @@ export default async function BlogArchivePage() {
       <header data-blog-archive-header>
         <HeroBlock
           title="Blog"
-          backgroundColor="dark"
+          description="Articles, guides, and updates from the Amplience team."
+          backgroundColor="secondary"
           contentPadding={30}
-          subtitle="Articles, guides, and updates from the Amplience team."
         />
       </header>
       {articles.length === 0 ? (
@@ -129,7 +144,12 @@ export default async function BlogArchivePage() {
           backgroundColor="light"
         >
           {articles.map(({ article, slug }) => (
-            <BlogArticleCard key={slug} article={article} slug={slug} data-blog-archive-item />
+            <BlogArticleCard
+              key={slug}
+              article={article}
+              href={publicPath(locale, `/blog/${slug}`)}
+              data-blog-archive-item
+            />
           ))}
         </GridBlock>
       )}

@@ -24,17 +24,62 @@
     "minHeight": 600,
     "overlayColor": "black",
     "overlayIntensity": 50,
+    "overlayStyle": "gradient",
     "verticalPosition": "center",
     "backgroundColor": "dark",
     "ctas": [
       {
-        "label": "\u2190 Home",
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "\u2190 Home"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "\u2190 Accueil"
+            },
+            {
+              "locale": "de-DE",
+              "value": "\u2190 Startseite"
+            },
+            {
+              "locale": "en-GB",
+              "value": "\u2190 Home"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
         "href": "/",
         "variant": "outlined",
         "color": "white"
       },
       {
-        "label": "About",
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "About"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "À propos"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Über"
+            },
+            {
+              "locale": "en-GB",
+              "value": "About"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
         "href": "/about",
         "variant": "outlined",
         "color": "white"

@@ -11,7 +11,34 @@
     "maxWidth": "narrow",
     "gutter": true,
     "ctas": [
-      { "label": "Explore the docs", "href": "/docs", "variant": "solid", "color": "primary" }
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Explore the docs"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Explorez la documentation"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Dokumentation erkunden"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Explore the docs"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs",
+        "variant": "solid",
+        "color": "primary"
+      }
     ]
   }
 }

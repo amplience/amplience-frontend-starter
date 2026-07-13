@@ -7,34 +7,135 @@
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000003"
     },
-    "title": "Build composable sites without the boilerplates.",
-    "subtitle": "Quadratic Lite is the open-source accelerator for Amplience-backed projects!",
+    "preTitle": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Introducing..."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Présentation..."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Einführung..."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Introducing..."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Quadratic Lite"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "The open-source accelerator for Amplience-backed projects!"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "L'accélérateur open-source pour les projets soutenus par Amplience !"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Der Open-Source-Beschleuniger für Amplience-gestützte Projekte!"
+        },
+        {
+          "locale": "en-GB",
+          "value": "The open-source accelerator for Amplience-backed projects!"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://picsum.photos/seed/ql-hero/1200/600",
-        "alt": "Hero — Quadratic Lite accelerator",
-        "width": 1200,
-        "height": 600
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/introducing-quadratic",
+        "alt": "The Quadratic Lite logo",
+        "width": 2752,
+        "height": 1536
       }
     },
-    "contentPositionMobile": "overlay",
+    "contentWidth": "40",
+    "contentPositionMobile": "above",
     "contentPositionDesktop": "overlay",
     "heightBehaviour": "flexible",
     "maxWidth": "default",
     "overlayColor": "black",
     "overlayIntensity": 50,
+    "overlayStyle": "gradient",
     "verticalPosition": "center",
-    "backgroundColor": "dark",
+    "backgroundColor": "secondary",
     "ctas": [
       {
-        "label": "About",
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "About"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "À propos"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Über"
+            },
+            {
+              "locale": "en-GB",
+              "value": "About"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
         "href": "/about",
         "variant": "solid",
         "color": "primary"
       },
       {
-        "label": "Read the docs",
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read the docs"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lire la documentation"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Dokumentation lesen"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Read the docs"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
         "href": "/docs",
         "variant": "outlined",
         "color": "white"

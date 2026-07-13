@@ -40,6 +40,14 @@ export type SchemaURI = string
 export type RenderContext = {
   readonly bare?: boolean
   readonly isTopOfPage?: boolean
+  /**
+   * URL prefix for the active locale (ADR-0015) — `''` for the default
+   * (unprefixed) locale, `/fr-fr` otherwise. Threaded through the whole tree
+   * so the `Link` atom can keep internal navigation inside the current locale
+   * without every component re-deriving it. Set once at the render entry;
+   * the dispatcher forwards it to every child context.
+   */
+  readonly localeBasePath?: string
 }
 
 /**

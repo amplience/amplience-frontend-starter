@@ -82,6 +82,20 @@ export type ContentRequestOptions = {
    * delivery API's default.
    */
   readonly depth?: 'root' | 'all'
+  /**
+   * Locale to resolve field-level localization against, passed straight to
+   * the delivery API. When set, localized fields collapse to the single
+   * matching value before the body reaches a consumer — so the renderer and
+   * components only ever see single-value fields (a localized `title` arrives
+   * as a plain string, never a `{ values: [...] }` object).
+   *
+   * This is the per-request seam the routing-level language switcher hands
+   * its resolved locale to; when omitted, the client falls back to its
+   * configured deployment locale. Use a prioritised list with a wildcard
+   * fallback (e.g. `'en-GB,*'`) so a field missing the requested locale still
+   * resolves rather than coming back empty.
+   */
+  readonly locale?: string
 }
 
 /** Discriminator for typed errors emitted by any ContentClient implementation. */
@@ -115,6 +129,32 @@ export const isContentClientError = (value: unknown): value is ContentClientErro
   if (typeof value !== 'object' || value === null) return false
   const v = value as Record<string, unknown>
   return v.name === 'ContentClientError' && typeof v.kind === 'string'
+}
+
+/** The schema URI Amplience uses to mark a field-level localized value. */
+export const LOCALIZED_VALUE_SCHEMA =
+  'http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value'
+
+/**
+ * A field-level localized value as delivered when the request carries no
+ * `locale` (or the API is asked to inline all locales): the per-locale values
+ * plus the localized-value schema marker. When a `locale` *is* supplied, the
+ * Delivery API collapses this to the single matching value before delivery —
+ * the mock reproduces that collapse so its offline behaviour matches.
+ */
+export type LocalizedValue = {
+  readonly values: readonly { readonly locale: string; readonly value: unknown }[]
+  readonly _meta: { readonly schema: typeof LOCALIZED_VALUE_SCHEMA }
+}
+
+/** True if `value` is an unresolved field-level localized value. */
+export const isLocalizedValue = (value: unknown): value is LocalizedValue => {
+  if (typeof value !== 'object' || value === null) return false
+  const v = value as Record<string, unknown>
+  if (!Array.isArray(v.values)) return false
+  const meta = v._meta
+  if (typeof meta !== 'object' || meta === null) return false
+  return (meta as Record<string, unknown>).schema === LOCALIZED_VALUE_SCHEMA
 }
 
 /** True if `value` is a content-link reference stub. */

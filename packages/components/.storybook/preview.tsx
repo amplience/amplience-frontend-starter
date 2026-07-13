@@ -106,6 +106,7 @@ const preview: Preview = {
         icon: 'paintbrush',
         items: [
           { value: 'default', title: 'Default Theme' },
+          { value: 'amplience', title: 'Amplience' },
           { value: 'anyafinn', title: 'Anya Finn' },
           { value: 'arbor-harvest', title: 'Arbor & Harvest' },
           { value: 'azure-harvest', title: 'Azure Harvest' },

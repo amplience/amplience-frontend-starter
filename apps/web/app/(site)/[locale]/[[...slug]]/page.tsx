@@ -1,5 +1,5 @@
 /**
- * The catch-all content route (QL-36, QL-37, QL-76).
+ * The catch-all content route (QL-36, QL-37, QL-76; localized under ADR-0015).
  *
  * One route serves every content-addressed page: the optional catch-all
  * segment maps the URL path to a delivery key (`lib/routing.ts`) — `/` is
@@ -8,6 +8,14 @@
  * and loud failure all live in `src/renderer`; composition lives in
  * `lib/registry.ts`. This file just connects them, which is what lets a
  * page added in the CMS go live with no route code at all.
+ *
+ * The `[locale]` segment (ADR-0015) carries the active locale: the middleware
+ * populates it (unprefixed URLs are rewritten to the default locale), the
+ * route resolves it to a Delivery API locale, and the content client collapses
+ * localized fields to that locale before the renderer sees them — so
+ * components only ever receive single-value fields. The default locale is
+ * unprefixed, so its canonical URL stays clean; other locales carry their
+ * slug (`/fr-fr/about`) in both the URL and the self-referencing canonical.
  *
  * The same v1 idea (`src/pages/[[...slug]].tsx`) rebuilt on App Router
  * conventions: `params` is async, fetching is in-component, and metadata
@@ -37,13 +45,14 @@ import { PAGE_SCHEMA, pageMetadataFromSchema } from '@amplience/quadratic-compon
 import type { PageSchema } from '@amplience/quadratic-components/registry'
 import { isContentClientError } from '@amplience/quadratic-content'
 
-import { client, siteName } from '../../../lib/content-client'
-import { registry } from '../../../lib/registry'
-import { deliveryKeyForSlug, pathForDeliveryKey } from '../../../lib/routing'
-import { ContentUnavailableCard, emitContentFailure, renderContent } from '../../../src/renderer'
+import { client, siteName } from '../../../../lib/content-client'
+import { localeBasePath, localeForSlug, publicPath } from '../../../../lib/locales'
+import { registry } from '../../../../lib/registry'
+import { deliveryKeyForSlug, pathForDeliveryKey } from '../../../../lib/routing'
+import { ContentUnavailableCard, emitContentFailure, renderContent } from '../../../../src/renderer'
 
 type RouteProps = {
-  params: Promise<{ slug?: string[] }>
+  params: Promise<{ locale: string; slug?: string[] }>
 }
 
 /**
@@ -58,16 +67,22 @@ const isPageItem = (item: PageSchema): boolean => {
 }
 
 export async function generateMetadata({ params }: RouteProps): Promise<Metadata> {
-  const { slug } = await params
+  const { locale: localeSlug, slug } = await params
+  const locale = localeForSlug(localeSlug)
+  if (locale === undefined) notFound()
   const key = deliveryKeyForSlug(siteName, slug)
   if (key === null) notFound()
   try {
     // depth: 'root' — metadata lives on the page item itself; no need to
     // resolve the slot tree just for the <head>.
-    const page = await client.getByKey<PageSchema>(key, { depth: 'root' })
+    const page = await client.getByKey<PageSchema>(key, { depth: 'root', locale: locale.delivery })
     // `path` feeds the self-referencing canonical default; it resolves
-    // absolute against the layout's metadataBase (SITE_URL).
-    const metadata = pageMetadataFromSchema(page, { path: pathForDeliveryKey(siteName, key) })
+    // absolute against the layout's metadataBase (SITE_URL). The locale
+    // prefix is folded in here so a localized page canonicalizes to itself
+    // (the default locale stays unprefixed).
+    const metadata = pageMetadataFromSchema(page, {
+      path: publicPath(locale, pathForDeliveryKey(siteName, key)),
+    })
     // Component fragments stay out of the index regardless of what the
     // content sets — they're thin, navless duplicates of page content.
     if (!isPageItem(page)) return { ...metadata, robots: { index: false, follow: false } }
@@ -81,12 +96,14 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
 }
 
 export default async function ContentPage({ params }: RouteProps) {
-  const { slug } = await params
+  const { locale: localeSlug, slug } = await params
+  const locale = localeForSlug(localeSlug)
+  if (locale === undefined) notFound()
   const key = deliveryKeyForSlug(siteName, slug)
   if (key === null) notFound()
   let page: unknown
   try {
-    page = await client.getByKey(key, { depth: 'all' })
+    page = await client.getByKey(key, { depth: 'all', locale: locale.delivery })
   } catch (error) {
     if (!isContentClientError(error)) throw error
     if (error.kind === 'not-found') notFound()
@@ -95,6 +112,10 @@ export default async function ContentPage({ params }: RouteProps) {
   }
   // The root of the tree is, by definition, the top of the page — the
   // dispatcher carries the flag along the leading edge from here so the
-  // first block can load its imagery eagerly.
-  return renderContent(page, registry, { isTopOfPage: true })
+  // first block can load its imagery eagerly. `localeBasePath` rides the whole
+  // tree so internal links stay inside this locale (ADR-0015).
+  return renderContent(page, registry, {
+    isTopOfPage: true,
+    localeBasePath: localeBasePath(locale),
+  })
 }
