@@ -12,6 +12,19 @@
     "title": "Documentation",
     "description": "What Quadratic Lite is, how the recursive component engine works, and when to reach for it.",
     "keywords": ["documentation", "quadratic", "amplience", "getting started"],
+    "social": {
+      "image": {
+        "image": {
+          "fliph": false,
+          "flipv": false
+        },
+        "mediaType": "DynamicImage"
+      }
+    },
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
     "slots": [
       {
         "id": "a1b2c3d4-0003-4000-8000-000000000002",

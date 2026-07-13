@@ -31,7 +31,7 @@
   "properties": {
     "items": {
       "title": "Items",
-      "description": "Ordered list of items in this row (Logo, Menu, or IconButton).",
+      "description": "Ordered list of items in this row (Logo, Menu, IconButton, or Menu Toggle Button).",
       "type": "array",
       "items": {
         "type": "object",
@@ -47,7 +47,8 @@
                   "https://quadratic.amplience.com/v2/content/hierarchy-menu",
                   "https://quadratic.amplience.com/v2/content/icon-button",
                   "https://quadratic.amplience.com/v2/content/logo",
-                  "https://quadratic.amplience.com/v2/content/menu"
+                  "https://quadratic.amplience.com/v2/content/menu",
+                  "https://quadratic.amplience.com/v2/content/menu-toggle-button"
                 ]
               }
             }

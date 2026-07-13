@@ -31,6 +31,16 @@
   margin: 0;
   padding: 0;
   flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    display: block;
+    width: 100%;
+    z-index: var(--z-menu-drawer, 200);
+
+    > li > a {
+      display: block;
+    }
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -209,16 +219,6 @@
   }
 
   .root[data-mobile-layout][data-open] .list {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background-color: inherit;
-    padding: var(--spacing-4);
-    box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
-    z-index: var(--z-menu-drawer, 200);
+    display: block;
   }
 }

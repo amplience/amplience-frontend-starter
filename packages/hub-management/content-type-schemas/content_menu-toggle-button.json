@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/content_menu-toggle-button.json",
+  "schemaId": "https://quadratic.amplience.com/v2/content/menu-toggle-button",
+  "validationLevel": "CONTENT_TYPE"
+}

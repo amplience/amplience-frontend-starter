@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 28.75 256 204.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+<defs>
+  <pattern id="hatchL" patternUnits="userSpaceOnUse" width="5.5" height="5.5" patternTransform="rotate(45)">
+    <rect width="5.5" height="5.5" fill="#ffffff"/>
+    <line x1="0.9" y1="0" x2="0.9" y2="5.5" stroke="#c9d5f6" stroke-width="1.8"/>
+  </pattern>
+  <pattern id="hatchD" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+    <rect width="6" height="6" fill="#ffffff"/>
+    <line x1="0.9" y1="0" x2="0.9" y2="6" stroke="#1f5e8c" stroke-width="1.7"/>
+  </pattern>
+</defs>
+<rect x="22" y="46" width="220" height="176" rx="18" fill="#e3eafc"/><rect x="16" y="40" width="220" height="176" rx="18" fill="url(#hatchL)"/><g transform="translate(4,4)"><path d="M60 174 h132 a7 7 0 0 0 5.6-11.2 L154 116 q-6-8-12 0 l-17 22 -26 -35 q-6-8 -12 0 l-32.6 60 A7 7 0 0 0 60 174 Z" fill="#e3eafc" stroke="none" stroke-width="2.8"/><circle cx="178" cy="94" r="12" fill="#e3eafc" stroke="none" stroke-width="2.8"/></g><g transform="translate(0,0)"><path d="M60 174 h132 a7 7 0 0 0 5.6-11.2 L154 116 q-6-8-12 0 l-17 22 -26 -35 q-6-8 -12 0 l-32.6 60 A7 7 0 0 0 60 174 Z" fill="#ffffff" stroke="#1f5e8c" stroke-width="2.8"/><circle cx="178" cy="94" r="12" fill="#ffffff" stroke="#1f5e8c" stroke-width="2.8"/></g></svg>

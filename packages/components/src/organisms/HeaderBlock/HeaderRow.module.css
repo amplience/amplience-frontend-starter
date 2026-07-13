@@ -106,3 +106,10 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  .inner :global(.Menu) > ul > li > a {
+    margin-inline: calc(var(--site-gutter) * -1);
+    padding-inline: var(--site-gutter);
+  }
+}

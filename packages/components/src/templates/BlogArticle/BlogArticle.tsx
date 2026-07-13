@@ -79,9 +79,10 @@ export function BlogArticle({
           title={title ?? ''}
           subtitle={category ?? ''}
           heightBehaviour="fitToContent"
-          contentPadding={100}
+          contentPadding={120}
           overlayColor="black"
           overlayIntensity={50}
+          verticalPosition="bottom"
         />
         <section data-blog-article-meta className={styles.metaWrapper}>
           <Container gutter className={styles.container ?? ''}>

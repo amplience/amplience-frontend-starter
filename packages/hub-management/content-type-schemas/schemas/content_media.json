@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://quadratic.amplience.com/v2/content/media",
-  "title": "Media block",
+  "title": "Media Block",
   "description": "A standalone media section with optional caption and link. Supports DAM-backed (DynamicImage) or manually-authored (ManualImage) media.",
   "allOf": [
     {

@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://quadratic.amplience.com/v2/content/media-card",
-  "title": "Media card",
+  "title": "Card",
   "description": "A card with an optional cover image, title, body copy, and a CTA.",
   "allOf": [
     {

@@ -12,7 +12,7 @@
   "properties": {
     "items": {
       "title": "Items",
-      "description": "Ordered list of items to group together (Logo, Menu, or IconButton).",
+      "description": "Ordered list of items to group together (Logo, Menu, IconButton, or Menu Toggle Button).",
       "type": "array",
       "items": {
         "type": "object",
@@ -26,7 +26,8 @@
                 "enum": [
                   "https://quadratic.amplience.com/v2/content/logo",
                   "https://quadratic.amplience.com/v2/content/icon-button",
-                  "https://quadratic.amplience.com/v2/content/menu"
+                  "https://quadratic.amplience.com/v2/content/menu",
+                  "https://quadratic.amplience.com/v2/content/menu-toggle-button"
                 ]
               }
             }

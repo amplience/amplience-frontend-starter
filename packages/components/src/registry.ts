@@ -41,6 +41,10 @@ import {
 } from './molecules/MenuItem/HierarchyMenuItem.registry'
 import { MENU_ITEM_SCHEMA, menuItemRegistryEntry } from './molecules/MenuItem/MenuItem.registry'
 import {
+  MENU_TOGGLE_BUTTON_SCHEMA,
+  menuToggleButtonRegistryEntry,
+} from './molecules/MenuToggleButton/MenuToggleButton.registry'
+import {
   COLUMNS_BLOCK_SCHEMA,
   columnsBlockRegistryEntry,
 } from './organisms/ColumnsBlock/ColumnsBlock.registry'
@@ -152,6 +156,7 @@ export const defaultRegistry: Registry = createRegistry([
   [HEADER_GROUP_SCHEMA, headerGroupRegistryEntry],
   [LOGO_SCHEMA, logoRegistryEntry],
   [ICON_BUTTON_SCHEMA, iconButtonRegistryEntry],
+  [MENU_TOGGLE_BUTTON_SCHEMA, menuToggleButtonRegistryEntry],
   [MENU_SCHEMA, menuRegistryEntry],
   [MENU_ITEM_SCHEMA, menuItemRegistryEntry],
   [HIERARCHY_MENU_SCHEMA, hierarchyMenuRegistryEntry],
@@ -193,6 +198,8 @@ export {
   logoRegistryEntry,
   ICON_BUTTON_SCHEMA,
   iconButtonRegistryEntry,
+  MENU_TOGGLE_BUTTON_SCHEMA,
+  menuToggleButtonRegistryEntry,
   MENU_SCHEMA,
   menuRegistryEntry,
   MENU_ITEM_SCHEMA,

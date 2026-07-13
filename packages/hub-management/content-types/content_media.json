@@ -2,11 +2,11 @@
   "contentTypeUri": "https://quadratic.amplience.com/v2/content/media",
   "status": "ACTIVE",
   "settings": {
-    "label": "Media block",
+    "label": "Media Block",
     "icons": [
       {
         "size": 256,
-        "url": "http://bigcontent.io/cms/icons/ca-types-default.png"
+        "url": "https://cdn.media.amplience.net/i/quadraticdemo/content_media"
       }
     ],
     "visualizations": [

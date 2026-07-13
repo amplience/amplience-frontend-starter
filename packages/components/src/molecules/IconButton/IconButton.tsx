@@ -23,6 +23,19 @@ export type IconButtonProps = {
    * JavaScript handlers (which should be wired up by the parent or brand layer).
    */
   link?: string
+  /**
+   * Click handler for the button variant. Only meaningful when `link` is
+   * omitted (a link navigates; it doesn't need a handler) — ignored when
+   * `link` is set. Functions can't cross the server/client boundary, so
+   * this is only passable from a client component (e.g. MenuToggleButton).
+   */
+  onClick?: () => void
+  /**
+   * When the button controls a disclosure (drawer, menu, panel), pass its
+   * open state here — rendered as `aria-expanded` on the button variant so
+   * screen readers announce the state. Omit for plain action buttons.
+   */
+  expanded?: boolean
   className?: string
 }
 
@@ -44,7 +57,7 @@ export type IconButtonProps = {
  * interactive wrapper. The Icon itself is decorative (`aria-hidden="true"`
  * from the Icon atom when no label is forwarded).
  */
-export function IconButton({ icon, label, link, className }: IconButtonProps) {
+export function IconButton({ icon, label, link, onClick, expanded, className }: IconButtonProps) {
   const inner = <Icon name={icon} size={24} />
 
   if (link) {
@@ -56,7 +69,13 @@ export function IconButton({ icon, label, link, className }: IconButtonProps) {
   }
 
   return (
-    <button type="button" className={clsx('IconButton', styles.root, className)} aria-label={label}>
+    <button
+      type="button"
+      className={clsx('IconButton', styles.root, className)}
+      aria-label={label}
+      aria-expanded={expanded}
+      onClick={onClick}
+    >
       {inner}
     </button>
   )
