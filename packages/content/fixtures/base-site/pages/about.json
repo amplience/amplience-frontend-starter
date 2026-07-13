@@ -13,6 +13,19 @@
     "description": "Why Quadratic Lite exists: a demo-ready, composable frontend that gives a headless CMS its head.",
     "keywords": ["amplience", "quadratic", "accelerator", "headless cms"],
     "canonicalUrl": "/about",
+    "social": {
+      "image": {
+        "image": {
+          "fliph": false,
+          "flipv": false
+        },
+        "mediaType": "DynamicImage"
+      }
+    },
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
     "slots": [
       {
         "id": "a1b2c3d4-0002-4000-8000-000000000002",

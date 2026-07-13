@@ -12,6 +12,21 @@
     "title": "Content Modelling Best Practices in Amplience",
     "description": "Five principles for building content models that stay maintainable as your project grows — from separating structure from presentation to designing for the Filter API.",
     "keywords": ["content-modelling", "amplience", "best-practices", "json-schema", "headless-cms"],
+    "social": {
+      "image": {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/seed/blog-content-modelling/1200/630",
+          "alt": "Content Modelling Best Practices — diagram of content types",
+          "width": 1200,
+          "height": 630
+        }
+      }
+    },
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
     "coverImage": {
       "mediaType": "ManualImage",
       "image": {

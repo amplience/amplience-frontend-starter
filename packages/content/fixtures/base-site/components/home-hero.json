@@ -21,6 +21,8 @@
     "contentPositionMobile": "overlay",
     "contentPositionDesktop": "overlay",
     "heightBehaviour": "flexible",
+    "maxWidth": "default",
+    "overlayColor": "black",
     "overlayIntensity": 50,
     "verticalPosition": "center",
     "backgroundColor": "dark",

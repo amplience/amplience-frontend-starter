@@ -12,6 +12,21 @@
     "title": "Getting Started with Amplience",
     "description": "A practical introduction to Amplience Dynamic Content — hubs, schemas, repositories, and the delivery API — to get your first project up and running quickly.",
     "keywords": ["amplience", "cms", "getting-started", "dynamic-content", "headless"],
+    "social": {
+      "image": {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/seed/blog-getting-started/1200/630",
+          "alt": "Getting Started with Amplience — abstract tech illustration",
+          "width": 1200,
+          "height": 630
+        }
+      }
+    },
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
     "coverImage": {
       "mediaType": "ManualImage",
       "image": {

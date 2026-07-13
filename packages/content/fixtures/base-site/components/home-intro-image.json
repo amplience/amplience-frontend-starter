@@ -7,6 +7,8 @@
       "schema": "https://quadratic.amplience.com/v2/content/media",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000022"
     },
+    "fullBleed": false,
+    "maxWidth": "default",
     "media": {
       "mediaType": "ManualImage",
       "image": {
