@@ -14,10 +14,30 @@
       {
         "label": {
           "values": [
-            { "locale": "en-US", "value": "About the project" },
-            { "locale": "fr-FR", "value": "À propos du projet" },
-            { "locale": "de-DE", "value": "Über das Projekt" },
-            { "locale": "en-GB", "value": "About the project" }
+            {
+              "locale": "en-US",
+              "value": "About the project"
+            },
+            {
+              "locale": "en-GB",
+              "value": "About the project"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Acerca del proyecto"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "À propos du projet"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Über das Projekt"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Informazioni sul progetto"
+            }
           ],
           "_meta": {
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
@@ -30,10 +50,30 @@
       {
         "label": {
           "values": [
-            { "locale": "en-US", "value": "View on GitHub" },
-            { "locale": "fr-FR", "value": "Voir sur GitHub" },
-            { "locale": "de-DE", "value": "Auf GitHub ansehen" },
-            { "locale": "en-GB", "value": "View on GitHub" }
+            {
+              "locale": "en-US",
+              "value": "View on GitHub"
+            },
+            {
+              "locale": "en-GB",
+              "value": "View on GitHub"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Ver en GitHub"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Voir sur GitHub"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Auf GitHub ansehen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Visualizza su GitHub"
+            }
           ],
           "_meta": {
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"

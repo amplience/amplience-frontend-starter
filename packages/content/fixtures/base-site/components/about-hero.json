@@ -1,9 +1,9 @@
 {
   "id": "a1b2c3d4-0002-4000-8000-000000000003",
-  "label": "About \u2014 hero",
+  "label": "About — hero",
   "body": {
     "_meta": {
-      "name": "About \u2014 hero",
+      "name": "About — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "a1b2c3d4-0002-4000-8000-000000000003"
     },
@@ -13,7 +13,14 @@
           "locale": "en-US",
           "value": "The head for your headless CMS."
         },
-        { "locale": "es-ES", "value": "La cabeza de su CMS sin cabeza." },
+        {
+          "locale": "en-GB",
+          "value": "The head for your headless CMS."
+        },
+        {
+          "locale": "es-ES",
+          "value": "La cabeza de su CMS sin cabeza."
+        },
         {
           "locale": "fr-FR",
           "value": "La tête de votre CMS headless."
@@ -35,7 +42,11 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Quadratic Lite is a demo-ready frontend that brings Amplience Dynamic Content to life \u2014 publish and go, no deployments."
+          "value": "Quadratic Lite is a demo-ready frontend that brings Amplience Dynamic Content to life — publish and go, no deployments."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Quadratic Lite is a demo-ready frontend that brings Amplience Dynamic Content to life — publish and go, no deployments."
         },
         {
           "locale": "es-ES",
@@ -43,15 +54,15 @@
         },
         {
           "locale": "fr-FR",
-          "value": "Quadratic Lite est un frontend prêt pour démo qui donne vie à Amplience Dynamic Content \u2014 publiez et c'est en ligne, sans aucun déploiement."
+          "value": "Quadratic Lite est un frontend prêt pour démo qui donne vie à Amplience Dynamic Content — publiez et c'est en ligne, sans aucun déploiement."
         },
         {
           "locale": "de-DE",
-          "value": "Quadratic Lite ist ein sofort einsatzbereites Frontend, das Amplience Dynamic Content zum Leben erweckt \u2014 veröffentlichen und loslegen, ganz ohne Deployments."
+          "value": "Quadratic Lite ist ein sofort einsatzbereites Frontend, das Amplience Dynamic Content zum Leben erweckt — veröffentlichen und loslegen, ganz ohne Deployments."
         },
         {
           "locale": "it-IT",
-          "value": "Quadratic Lite è un frontend pronto per la demo che dà vita a Amplience Dynamic Content \u2014 pubblica e vai, senza deployment."
+          "value": "Quadratic Lite è un frontend pronto per la demo che dà vita a Amplience Dynamic Content — pubblica e vai, senza deployment."
         }
       ],
       "_meta": {
@@ -94,19 +105,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "\u2190 Home"
-            },
-            {
-              "locale": "fr-FR",
-              "value": "\u2190 Accueil"
-            },
-            {
-              "locale": "de-DE",
-              "value": "\u2190 Startseite"
+              "value": "← Home"
             },
             {
               "locale": "en-GB",
-              "value": "\u2190 Home"
+              "value": "← Home"
+            },
+            {
+              "locale": "es-ES",
+              "value": "← Inicio"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "← Accueil"
+            },
+            {
+              "locale": "de-DE",
+              "value": "← Startseite"
+            },
+            {
+              "locale": "it-IT",
+              "value": "← Home"
             }
           ],
           "_meta": {
@@ -125,6 +144,14 @@
               "value": "Read the docs"
             },
             {
+              "locale": "en-GB",
+              "value": "Read the docs"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la documentación"
+            },
+            {
               "locale": "fr-FR",
               "value": "Lire la documentation"
             },
@@ -133,8 +160,8 @@
               "value": "Dokumentation lesen"
             },
             {
-              "locale": "en-GB",
-              "value": "Read the docs"
+              "locale": "it-IT",
+              "value": "Leggi la documentazione"
             }
           ],
           "_meta": {

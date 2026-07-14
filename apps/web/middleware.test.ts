@@ -18,6 +18,11 @@ const rewrittenPath = (path: string): string | null => {
   return header === null ? null : new URL(header).pathname
 }
 
+// A request-header override set via `NextResponse.next/rewrite({ request })` is
+// encoded on the response as `x-middleware-request-<name>`.
+const forwardedLocale = (path: string): string | null =>
+  run(path).headers.get('x-middleware-request-x-locale')
+
 describe('locale middleware', () => {
   it('rewrites an unprefixed path to the default locale', () => {
     expect(rewrittenPath('/about')).toBe('/en-us/about')
@@ -53,5 +58,14 @@ describe('locale middleware', () => {
     // `fr-fr` is not configured in the zero-config default, so it is a normal
     // path segment and the whole path rewrites under the default locale.
     expect(rewrittenPath('/fr-fr/about')).toBe('/en-us/fr-fr/about')
+  })
+
+  it('forwards the default locale as x-locale on an unprefixed rewrite', () => {
+    // `not-found.tsx` has no params; this header is its only locale signal.
+    expect(forwardedLocale('/about')).toBe('en-us')
+  })
+
+  it('forwards the resolved locale as x-locale on a passthrough', () => {
+    expect(forwardedLocale('/en-us/about')).toBe('en-us')
   })
 })

@@ -20,6 +20,14 @@
               "value": "Read the docs"
             },
             {
+              "locale": "en-GB",
+              "value": "Read the docs"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la documentación"
+            },
+            {
               "locale": "fr-FR",
               "value": "Lire la documentation"
             },
@@ -28,8 +36,8 @@
               "value": "Dokumentation lesen"
             },
             {
-              "locale": "en-GB",
-              "value": "Read the docs"
+              "locale": "it-IT",
+              "value": "Leggi la documentazione"
             }
           ],
           "_meta": {
@@ -43,10 +51,30 @@
       {
         "label": {
           "values": [
-            { "locale": "en-US", "value": "View on GitHub" },
-            { "locale": "fr-FR", "value": "Voir sur GitHub" },
-            { "locale": "de-DE", "value": "Auf GitHub ansehen" },
-            { "locale": "en-GB", "value": "View on GitHub" }
+            {
+              "locale": "en-US",
+              "value": "View on GitHub"
+            },
+            {
+              "locale": "en-GB",
+              "value": "View on GitHub"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Ver en GitHub"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Voir sur GitHub"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Auf GitHub ansehen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Visualizza su GitHub"
+            }
           ],
           "_meta": {
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"

@@ -1,13 +1,18 @@
 /**
- * Branded 404 (QL-37). Reached when a route calls `notFound()` — including
- * the content-fetch path, where a `ContentClientError` of kind 'not-found'
- * means the page item doesn't exist in the hub — and for any URL with no
- * route. A Server Component: no client JavaScript.
+ * Root 404 (QL-37) — the app-wide fallback boundary.
+ *
+ * In practice users rarely land here: the middleware rewrites every
+ * unprefixed path under `[locale]`, so real traffic 404s inside the localized
+ * site (`(site)/[locale]/not-found.tsx`, which carries the header/footer and
+ * editable, localized content). This boundary catches only what never reaches
+ * that subtree — paths outside the middleware matcher. It renders under the
+ * bare root layout, so it owns its own `<main>` landmark and shows the
+ * hardcoded fallback with no network or locale dependency.
  */
 
 import type { Metadata } from 'next'
 
-import { HeroBlock } from '@amplience/quadratic-components/hero-block'
+import { NotFoundContent } from '../src/components/NotFoundContent'
 
 export const metadata: Metadata = {
   title: 'Page not found',
@@ -16,18 +21,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <main data-page>
-      <HeroBlock
-        title="Page not found 🙈"
-        subtitle="There's no content at this address — the page may have been moved, unpublished, or never existed."
-        ctas={[
-          {
-            href: '/',
-            label: 'Back to the home page',
-          },
-        ]}
-        minHeight={600}
-        verticalPosition="center"
-      />
+      <NotFoundContent />
     </main>
   )
 }

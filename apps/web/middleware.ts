@@ -19,6 +19,11 @@
  *     stays unprefixed (ADR-0015 chose to *also* serve the explicit default
  *     prefix; switching to a redirect later is a single branch here).
  *
+ * Every non-redirect response also carries the resolved locale slug in an
+ * `x-locale` request header. Layouts and pages read the locale from their
+ * `[locale]` param, but `not-found.tsx` gets no params — so the branded 404
+ * reads this header to fetch its content at the right locale (ADR-0015).
+ *
  * The matcher keeps this off everything that isn't a content page: Next
  * internals, the visualization and debug tooling routes (which sit outside
  * `(site)` and manage their own rendering), well-known probes, and any path
@@ -28,6 +33,17 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
 import { canonicalLocaleSlug, defaultLocale } from './lib/locales'
+
+/**
+ * Forward the request downstream with the resolved locale slug attached as an
+ * `x-locale` header — the one signal `not-found.tsx` has for the active locale.
+ */
+const withLocale = (request: NextRequest, slug: string, rewriteTo?: URL): NextResponse => {
+  const headers = new Headers(request.headers)
+  headers.set('x-locale', slug)
+  const init = { request: { headers } }
+  return rewriteTo === undefined ? NextResponse.next(init) : NextResponse.rewrite(rewriteTo, init)
+}
 
 export function middleware(request: NextRequest): NextResponse {
   const { pathname } = request.nextUrl
@@ -39,15 +55,16 @@ export function middleware(request: NextRequest): NextResponse {
   if (firstSegment !== '') {
     const canonical = canonicalLocaleSlug(firstSegment)
     if (canonical !== undefined) {
-      // A configured locale. Redirect any non-canonical casing to lowercase;
-      // otherwise let the `[locale]` route handle it.
+      // A configured locale. Redirect any non-canonical casing to lowercase
+      // (the redirected request re-enters and picks up the header below);
+      // otherwise let the `[locale]` route handle it, locale header attached.
       if (canonical !== firstSegment) {
         segments[1] = canonical
         const url = request.nextUrl.clone()
         url.pathname = segments.join('/')
         return NextResponse.redirect(url, 308)
       }
-      return NextResponse.next()
+      return withLocale(request, canonical)
     }
   }
 
@@ -55,7 +72,7 @@ export function middleware(request: NextRequest): NextResponse {
   // The suffix is the original path (empty at the root, so `/` → `/en-gb`).
   const url = request.nextUrl.clone()
   url.pathname = `/${defaultLocale.slug}${pathname === '/' ? '' : pathname}`
-  return NextResponse.rewrite(url)
+  return withLocale(request, defaultLocale.slug, url)
 }
 
 export const config = {

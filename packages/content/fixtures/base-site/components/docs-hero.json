@@ -1,9 +1,9 @@
 {
   "id": "a1b2c3d4-0002-4000-9000-000000000003",
-  "label": "Docs \u2014 hero",
+  "label": "Docs — hero",
   "body": {
     "_meta": {
-      "name": "Docs \u2014 hero",
+      "name": "Docs — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "a1b2c3d4-0002-4000-9000-000000000003"
     },
@@ -34,19 +34,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "\u2190 Home"
-            },
-            {
-              "locale": "fr-FR",
-              "value": "\u2190 Accueil"
-            },
-            {
-              "locale": "de-DE",
-              "value": "\u2190 Startseite"
+              "value": "← Home"
             },
             {
               "locale": "en-GB",
-              "value": "\u2190 Home"
+              "value": "← Home"
+            },
+            {
+              "locale": "es-ES",
+              "value": "← Inicio"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "← Accueil"
+            },
+            {
+              "locale": "de-DE",
+              "value": "← Startseite"
+            },
+            {
+              "locale": "it-IT",
+              "value": "← Home"
             }
           ],
           "_meta": {
@@ -65,6 +73,14 @@
               "value": "About"
             },
             {
+              "locale": "en-GB",
+              "value": "About"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Acerca de"
+            },
+            {
               "locale": "fr-FR",
               "value": "À propos"
             },
@@ -73,8 +89,8 @@
               "value": "Über"
             },
             {
-              "locale": "en-GB",
-              "value": "About"
+              "locale": "it-IT",
+              "value": "Informazioni"
             }
           ],
           "_meta": {

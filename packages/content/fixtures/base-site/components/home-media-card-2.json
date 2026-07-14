@@ -1,9 +1,9 @@
 {
   "id": "a1b2c3d4-0001-4000-8000-000000000012",
-  "label": "Home \u2014 card: zero-config start",
+  "label": "Home — card: zero-config start",
   "body": {
     "_meta": {
-      "name": "Home \u2014 card: zero-config start",
+      "name": "Home — card: zero-config start",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000012"
     },
@@ -22,10 +22,30 @@
       "cta": {
         "label": {
           "values": [
-            { "locale": "en-US", "value": "Get started" },
-            { "locale": "fr-FR", "value": "Commencer" },
-            { "locale": "de-DE", "value": "Loslegen" },
-            { "locale": "en-GB", "value": "Get started" }
+            {
+              "locale": "en-US",
+              "value": "Get started"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Get started"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Comenzar"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Commencer"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Loslegen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Inizia"
+            }
           ],
           "_meta": {
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
