@@ -9,6 +9,7 @@
     },
     "icon": "user",
     "label": "My account",
-    "link": "/account"
+    "link": "/account",
+    "visibility": "desktopOnly"
   }
 }

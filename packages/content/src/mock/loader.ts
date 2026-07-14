@@ -67,8 +67,11 @@ import siteHierarchyMenuItemWomensDresses from '../../fixtures/base-site/compone
 import siteHierarchyMenuItemWomensTops from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-womens-tops.json' with { type: 'json' }
 import siteHierarchyMenuItemWomens from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-womens.json' with { type: 'json' }
 import siteHierarchyMenuMain from '../../fixtures/base-site/components/header/site-hierarchy-menu-main.json' with { type: 'json' }
+import siteIconButtonCartMobile from '../../fixtures/base-site/components/header/site-icon-button-cart-mobile.json' with { type: 'json' }
 import siteIconButtonCart from '../../fixtures/base-site/components/header/site-icon-button-cart.json' with { type: 'json' }
+import siteIconButtonLocationMobile from '../../fixtures/base-site/components/header/site-icon-button-location-mobile.json' with { type: 'json' }
 import siteIconButtonLocation from '../../fixtures/base-site/components/header/site-icon-button-location.json' with { type: 'json' }
+import siteIconButtonUserMobile from '../../fixtures/base-site/components/header/site-icon-button-user-mobile.json' with { type: 'json' }
 import siteIconButtonUser from '../../fixtures/base-site/components/header/site-icon-button-user.json' with { type: 'json' }
 import siteLocaleSelector from '../../fixtures/base-site/components/header/site-locale-selector.json' with { type: 'json' }
 import siteLogo from '../../fixtures/base-site/components/header/site-logo.json' with { type: 'json' }
@@ -134,6 +137,9 @@ const fixtures: readonly EnrichedContentItem[] = [
   siteIconButtonLocation,
   siteIconButtonUser,
   siteIconButtonCart,
+  siteIconButtonLocationMobile,
+  siteIconButtonUserMobile,
+  siteIconButtonCartMobile,
   siteHeaderGroupIcons,
   siteMenuToggleButton,
   siteLocaleSelector,

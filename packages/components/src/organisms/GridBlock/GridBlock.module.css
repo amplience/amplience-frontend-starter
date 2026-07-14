@@ -59,7 +59,7 @@
   }
 }
 
-@media (min-width: 1025px) {
+@media (min-width: 992px) {
   .root[data-sizing-mode='fixed'] .grid {
     grid-template-columns: repeat(var(--grid-block-columns-desktop), 1fr);
   }

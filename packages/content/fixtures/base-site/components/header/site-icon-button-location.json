@@ -9,6 +9,7 @@
     },
     "icon": "map-pin",
     "label": "Find a store",
-    "link": "/stores"
+    "link": "/stores",
+    "visibility": "desktopOnly"
   }
 }

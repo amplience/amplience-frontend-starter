@@ -12,7 +12,10 @@
     }
   ],
   "trait:hierarchy": {
-    "childContentTypes": ["https://quadratic.amplience.com/v2/content/hierarchy-menu-item"]
+    "childContentTypes": [
+      "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "https://quadratic.amplience.com/v2/content/icon-button"
+    ]
   },
   "trait:sortable": {
     "sortBy": [

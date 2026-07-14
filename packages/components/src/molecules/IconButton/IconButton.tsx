@@ -36,6 +36,7 @@ export type IconButtonProps = {
    * screen readers announce the state. Omit for plain action buttons.
    */
   expanded?: boolean
+  visibility?: 'mobileOnly' | 'desktopOnly'
   className?: string
 }
 
@@ -57,12 +58,21 @@ export type IconButtonProps = {
  * interactive wrapper. The Icon itself is decorative (`aria-hidden="true"`
  * from the Icon atom when no label is forwarded).
  */
-export function IconButton({ icon, label, link, onClick, expanded, className }: IconButtonProps) {
+export function IconButton({
+  icon,
+  label,
+  link,
+  onClick,
+  expanded,
+  visibility,
+  className,
+}: IconButtonProps) {
   const inner = <Icon name={icon} size={24} />
+  const classes = clsx('IconButton', styles.root, visibility && styles[visibility], className)
 
   if (link) {
     return (
-      <a href={link} className={clsx('IconButton', styles.root, className)} aria-label={label}>
+      <a href={link} className={classes} aria-label={label}>
         {inner}
       </a>
     )
@@ -71,7 +81,7 @@ export function IconButton({ icon, label, link, onClick, expanded, className }: 
   return (
     <button
       type="button"
-      className={clsx('IconButton', styles.root, className)}
+      className={classes}
       aria-label={label}
       aria-expanded={expanded}
       onClick={onClick}

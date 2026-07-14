@@ -63,6 +63,15 @@ describe('iconButtonRegistryEntry', () => {
     ).toEqual({ icon: 'cart', label: 'Cart', link: '/cart' })
   })
 
+  it('passes visibility through to props', () => {
+    expect(
+      iconButtonRegistryEntry.propsFromSchema?.(
+        { _meta: {}, icon: 'cart', label: 'Cart', link: '/cart', visibility: 'desktopOnly' },
+        {},
+      ),
+    ).toEqual({ icon: 'cart', label: 'Cart', link: '/cart', visibility: 'desktopOnly' })
+  })
+
   it('validates: icon and label are both required', () => {
     expect(validateIconButtonSchema({ _meta: {}, icon: 'cart', label: 'Cart' })).toBe(true)
     expect(validateIconButtonSchema({ _meta: {}, icon: 'cart' })).toBe(false)
