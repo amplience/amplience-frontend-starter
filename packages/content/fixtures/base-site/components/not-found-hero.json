@@ -1,0 +1,63 @@
+{
+  "id": "a1b2c3d4-0004-4000-8000-0000000000f1",
+  "label": "Site — not-found hero",
+  "body": {
+    "_meta": {
+      "name": "Site — not-found hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "a1b2c3d4-0004-4000-8000-0000000000f1"
+    },
+    "title": {
+      "values": [
+        { "locale": "en-US", "value": "Page not found 🙈" },
+        { "locale": "en-GB", "value": "Page not found 🙈" },
+        { "locale": "fr-FR", "value": "Page introuvable 🙈" },
+        { "locale": "de-DE", "value": "Seite nicht gefunden 🙈" }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "subtitle": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "There's no content at this address — the page may have been moved, unpublished, or never existed."
+        },
+        {
+          "locale": "en-GB",
+          "value": "There's no content at this address — the page may have been moved, unpublished, or never existed."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Aucun contenu à cette adresse — la page a peut-être été déplacée, dépubliée ou n'a jamais existé."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Unter dieser Adresse gibt es keinen Inhalt — die Seite wurde möglicherweise verschoben, depubliziert oder hat nie existiert."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "minHeight": 600,
+    "verticalPosition": "center",
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            { "locale": "en-US", "value": "Back to the home page" },
+            { "locale": "en-GB", "value": "Back to the home page" },
+            { "locale": "fr-FR", "value": "Retour à la page d'accueil" },
+            { "locale": "de-DE", "value": "Zurück zur Startseite" }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/"
+      }
+    ]
+  }
+}

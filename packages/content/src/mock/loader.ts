@@ -106,6 +106,7 @@ import homeMediaCard2 from '../../fixtures/base-site/components/home-media-card-
 import homeMediaCard3 from '../../fixtures/base-site/components/home-media-card-3.json' with { type: 'json' }
 import homeMediaCard4 from '../../fixtures/base-site/components/home-media-card-4.json' with { type: 'json' }
 import homeMediaCard5 from '../../fixtures/base-site/components/home-media-card-5.json' with { type: 'json' }
+import notFoundHero from '../../fixtures/base-site/components/not-found-hero.json' with { type: 'json' }
 import aboutPage from '../../fixtures/base-site/pages/about.json' with { type: 'json' }
 import blogContentModellingPage from '../../fixtures/base-site/pages/blog/content-modelling.json' with { type: 'json' }
 import blogGettingStartedPage from '../../fixtures/base-site/pages/blog/getting-started.json' with { type: 'json' }
@@ -118,6 +119,7 @@ import blogGettingStartedMainSlot from '../../fixtures/base-site/slots/blog-gett
 import blogQuadraticAcceleratorMainSlot from '../../fixtures/base-site/slots/blog-quadratic-accelerator-main.json' with { type: 'json' }
 import docsMainSlot from '../../fixtures/base-site/slots/docs-main.json' with { type: 'json' }
 import homeMainSlot from '../../fixtures/base-site/slots/home-main.json' with { type: 'json' }
+import notFoundMainSlot from '../../fixtures/base-site/slots/not-found-main.json' with { type: 'json' }
 import type { EnrichedContentItem } from '../types'
 
 /**
@@ -204,6 +206,8 @@ const fixtures: readonly EnrichedContentItem[] = [
   siteFooterMenuItemCompanySustainability,
   siteFooterMenuItemCompanyModernSlavery,
   siteFooterMenuItemCompanyFaqs,
+  notFoundMainSlot,
+  notFoundHero,
   homePage,
   homeMainSlot,
   homeHero,
