@@ -22,6 +22,18 @@
 .root {
   position: relative;
   list-style: none;
+
+  @media (max-width: 768px) {
+    &.desktopOnly {
+      display: none;
+    }
+  }
+
+  @media (min-width: 769px) {
+    &.mobileOnly {
+      display: none;
+    }
+  }
 }
 
 /* ---------------------------------------------------------------------------

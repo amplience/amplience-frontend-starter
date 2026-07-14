@@ -35,4 +35,21 @@ describe('MenuItem', () => {
     expect(screen.queryByRole('link')).toBeNull()
     expect(screen.getByText('Products')).toBeDefined()
   })
+
+  it('renders a decorative icon alongside the label, keeping the label as the accessible name', () => {
+    render(<MenuItem label="Shopping cart" link="/cart" icon="cart" />)
+    const link = screen.getByRole('link', { name: 'Shopping cart' })
+    // The icon renders as an (aria-hidden) svg inside the link.
+    expect(link.querySelector('svg')).not.toBeNull()
+  })
+
+  it('renders no icon when the icon prop is omitted', () => {
+    render(<MenuItem label="About" link="/about" />)
+    expect(screen.getByRole('link', { name: 'About' }).querySelector('svg')).toBeNull()
+  })
+
+  it('still renders the item when a visibility restriction is set', () => {
+    render(<MenuItem label="Shopping cart" link="/cart" icon="cart" visibility="mobileOnly" />)
+    expect(screen.getByRole('link', { name: 'Shopping cart' })).toBeDefined()
+  })
 })

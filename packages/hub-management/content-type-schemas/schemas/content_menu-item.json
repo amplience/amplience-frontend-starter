@@ -20,6 +20,19 @@
       "title": "Link",
       "description": "URL this item navigates to. Omit for parent-only items."
     },
+    "icon": {
+      "title": "Icon",
+      "description": "Optional icon from the design system's icon set, shown alongside the label.",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/icon#/definitions/icon-name" }
+      ]
+    },
+    "visibility": {
+      "type": "string",
+      "title": "Visibility",
+      "description": "Restrict this item to a single breakpoint. Leave unset to show it at all breakpoints.",
+      "enum": ["mobileOnly", "desktopOnly"]
+    },
     "children": {
       "title": "Child items",
       "description": "Optional nested menu items.",
@@ -41,6 +54,6 @@
       }
     }
   },
-  "propertyOrder": ["label", "link", "children"],
+  "propertyOrder": ["label", "link", "icon", "visibility", "children"],
   "required": ["label"]
 }

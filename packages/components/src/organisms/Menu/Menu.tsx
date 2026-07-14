@@ -1,21 +1,7 @@
 import clsx from 'clsx'
-import { Children, Fragment, isValidElement, type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
-import { IconButton } from '../../molecules/IconButton/IconButton'
 import styles from './Menu.module.css'
-
-/**
- * True when a rendered child is an IconButton.
- *
- * The dispatcher renders each content child and wraps it in a keyed
- * `<Fragment>`, so we unwrap one Fragment layer before comparing the element
- * type against the `IconButton` component reference.
- */
-const isIconButtonNode = (node: ReactNode): boolean => {
-  if (!isValidElement(node)) return false
-  const inner = node.type === Fragment ? (node.props as { children?: ReactNode }).children : node
-  return isValidElement(inner) && inner.type === IconButton
-}
 
 // ---------------------------------------------------------------------------
 // Types
@@ -56,13 +42,6 @@ export type MenuProps = {
  * Semantic:
  *   `aria-label="Site navigation"` distinguishes this nav from any other
  *   navigation landmarks on the page (e.g. breadcrumbs, footer nav).
- *
- * Icon buttons:
- *   MenuItem children render as `<li>`s in the main `<ul>`. Any IconButton
- *   children (e.g. mobile cart/account links authored on the hierarchy menu)
- *   are grouped after the list in a `.iconGroup` flex row, so they form a
- *   horizontal, wrapping strip of icons at the end of the menu rather than
- *   sitting among the text links.
  */
 export function Menu({
   useMobileLayout = false,
@@ -70,12 +49,6 @@ export function Menu({
   children,
   className,
 }: MenuProps) {
-  const items: ReactNode[] = []
-  const icons: ReactNode[] = []
-  Children.forEach(children, (child) => {
-    ;(isIconButtonNode(child) ? icons : items).push(child)
-  })
-
   return (
     <nav
       className={clsx('Menu', styles.root, className)}
@@ -83,8 +56,7 @@ export function Menu({
       data-display={display}
       aria-label="Site navigation"
     >
-      <ul className={styles.list}>{items}</ul>
-      {icons.length > 0 && <div className={styles.iconGroup}>{icons}</div>}
+      <ul className={styles.list}>{children}</ul>
     </nav>
   )
 }

@@ -48,20 +48,24 @@
       }
     },
     "backgroundColor": {
-      "type": "string",
-      "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"],
-      "title": "Background colour"
+      "title": "Background colour",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+      ]
     },
     "maxWidth": {
-      "type": "string",
-      "enum": ["narrow", "default", "wide", "none"],
       "title": "Max width",
-      "default": "default"
+      "default": "default",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width" }
+      ]
     },
     "gutter": {
-      "type": "boolean",
       "title": "Gutter",
-      "description": "Inset content from the viewport edge with horizontal padding."
+      "description": "Inset content from the viewport edge with horizontal padding.",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/gutter" }
+      ]
     }
   },
   "propertyOrder": ["content", "ctas", "backgroundColor", "maxWidth", "gutter"],

@@ -146,9 +146,10 @@
       "default": "gradient"
     },
     "overlayColor": {
-      "type": "string",
-      "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"],
       "title": "Overlay colour",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+      ],
       "description": "Colour of the overlay scrim, from the design token palette.",
       "default": "black"
     },
@@ -160,14 +161,16 @@
       "maximum": 100
     },
     "textColor": {
-      "type": "string",
-      "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"],
-      "title": "Text colour"
+      "title": "Text colour",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+      ]
     },
     "backgroundColor": {
-      "type": "string",
-      "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"],
-      "title": "Background colour"
+      "title": "Background colour",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+      ]
     },
     "contentWidth": {
       "type": "number",
@@ -181,11 +184,12 @@
       "description": "Padding above and below the foreground content"
     },
     "maxWidth": {
-      "type": "string",
-      "enum": ["narrow", "default", "wide", "none"],
       "title": "Max width",
       "description": "Max-width constraint on the content slot.",
-      "default": "default"
+      "default": "default",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width" }
+      ]
     },
     "minHeight": {
       "type": "number",

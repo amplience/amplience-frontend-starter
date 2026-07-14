@@ -56,11 +56,12 @@
       "default": false
     },
     "maxWidth": {
-      "type": "string",
-      "enum": ["narrow", "default", "wide", "none"],
       "title": "Max width",
       "description": "Max-width constraint passed to child Containers.",
-      "default": "default"
+      "default": "default",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width" }
+      ]
     }
   },
   "propertyOrder": ["rows", "sticky", "maxWidth"]

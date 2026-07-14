@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/partials/colour",
+  "title": "Colour",
+  "description": "The design-token colour choices offered to authors. Maintained in one place so every schema that surfaces a colour draws from the same palette, aligned with the brand tokens the frontend binds to.",
+  "type": "object",
+  "definitions": {
+    "palette": {
+      "type": "string",
+      "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"]
+    },
+    "button-palette": {
+      "type": "string",
+      "enum": ["primary", "secondary", "tertiary", "black", "white"]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/partials/icon",
+  "title": "Icon",
+  "description": "The design system's curated icon set. Maintained in one place so every schema that offers an icon draws from the same list — the set the Icon atom renders (packages/components/src/atoms/Icon). Names and order mirror the component's registry.",
+  "type": "object",
+  "definitions": {
+    "icon-name": {
+      "type": "string",
+      "enum": [
+        "calendar",
+        "clock",
+        "menu",
+        "x",
+        "chevron-up",
+        "chevron-down",
+        "chevron-left",
+        "chevron-right",
+        "arrow-left",
+        "arrow-right",
+        "search",
+        "filter",
+        "sliders",
+        "layout-grid",
+        "list",
+        "eye",
+        "plus",
+        "minus",
+        "user",
+        "log-in",
+        "log-out",
+        "shopping-cart",
+        "cart",
+        "shopping-bag",
+        "heart",
+        "tag",
+        "credit-card",
+        "package",
+        "truck",
+        "map-pin",
+        "trash",
+        "share",
+        "star",
+        "check",
+        "check-circle",
+        "alert-circle",
+        "info"
+      ]
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/partials_container.json",
+  "schemaId": "https://quadratic.amplience.com/v2/partials/container",
+  "validationLevel": "PARTIAL"
+}

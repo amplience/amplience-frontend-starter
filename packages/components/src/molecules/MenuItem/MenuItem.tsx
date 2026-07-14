@@ -2,6 +2,8 @@ import clsx from 'clsx'
 import { Children } from 'react'
 import type { ReactNode } from 'react'
 
+import { Icon } from '../../atoms/Icon/Icon'
+import type { IconName } from '../../atoms/Icon/Icon'
 import { Link } from '../../atoms/Link/Link'
 import styles from './MenuItem.module.css'
 
@@ -17,6 +19,17 @@ export type MenuItemProps = {
    * expand a sub-menu but do not navigate on their own.
    */
   link?: string
+  /**
+   * Optional icon from the design system's icon set, shown before the label.
+   * Decorative — the label remains the accessible name.
+   */
+  icon?: IconName
+  /**
+   * Restrict this item to a single breakpoint (`mobileOnly` / `desktopOnly`).
+   * Omit to show it at all breakpoints. Useful for nav entries that only make
+   * sense on one form factor, e.g. a mobile-only cart or account shortcut.
+   */
+  visibility?: 'mobileOnly' | 'desktopOnly'
   /**
    * Optional nested MenuItem children rendered as a sub-menu dropdown.
    * Provided by the renderer when the content item has `children` content-links.
@@ -52,21 +65,39 @@ export type MenuItemProps = {
  *   as its root element, satisfying the ul > li content model. The renderer
  *   passes `bare: true` context so no additional wrapper is added.
  */
-export function MenuItem({ label, link, children, localeBasePath, className }: MenuItemProps) {
+export function MenuItem({
+  label,
+  link,
+  icon,
+  visibility,
+  children,
+  localeBasePath,
+  className,
+}: MenuItemProps) {
   const hasChildren = Children.count(children) > 0
 
+  const content = (
+    <>
+      {icon && <Icon name={icon} size={18} />}
+      {label}
+    </>
+  )
+
   return (
-    <li className={clsx(styles.root, className)} data-has-children={hasChildren || undefined}>
+    <li
+      className={clsx(styles.root, visibility && styles[visibility], className)}
+      data-has-children={hasChildren || undefined}
+    >
       {link ? (
         <Link
           href={link}
           className={styles.link ?? ''}
           {...(localeBasePath !== undefined && { localeBasePath })}
         >
-          {label}
+          {content}
         </Link>
       ) : (
-        <span className={styles.label}>{label}</span>
+        <span className={styles.label}>{content}</span>
       )}
 
       {hasChildren && <ul className={styles.submenu}>{children}</ul>}

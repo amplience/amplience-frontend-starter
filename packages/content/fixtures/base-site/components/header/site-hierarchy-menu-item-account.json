@@ -1,20 +1,20 @@
 {
   "id": "a1b2c3d4-0004-4000-8000-a00000000006",
-  "label": "Site — icon button: account",
+  "label": "Hierarchy menu item: My account",
   "body": {
     "_meta": {
-      "name": "Site — icon button: account",
-      "schema": "https://quadratic.amplience.com/v2/content/icon-button",
+      "name": "Hierarchy menu item: My account",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
       "deliveryId": "a1b2c3d4-0004-4000-8000-a00000000006",
       "hierarchy": {
         "parentId": "c3d4e5f6-0004-4000-8000-000000000001",
         "root": false,
-        "position": "OOOOOOOOOO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        "position": "gggggggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
       }
     },
-    "icon": "user",
     "label": "My account",
     "link": "/account",
+    "icon": "user",
     "visibility": "mobileOnly"
   }
 }
