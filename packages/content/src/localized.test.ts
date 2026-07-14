@@ -3,9 +3,9 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { LOCALIZED_VALUE_SCHEMA } from '../types'
-import type { ContentBody } from '../types'
 import { resolveLocalized } from './localized'
+import { LOCALIZED_VALUE_SCHEMA } from './types'
+import type { ContentBody } from './types'
 
 const localized = (values: { locale: string; value: unknown }[]) => ({
   values,

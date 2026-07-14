@@ -9,6 +9,7 @@
 
 export { FIXTURE_SITE_NAME, resolveContentConfig } from './config'
 export type { ContentClientSelection } from './config'
+export { resolveLocalized } from './localized'
 export type { ContentClient } from './port'
 export {
   CONTENT_LINK_SCHEMA,

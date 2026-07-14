@@ -23,6 +23,15 @@
   flex: 1;
 }
 
+/*
+ * Icon buttons authored on the menu are grouped here, after the list, as a
+ * horizontal wrapping strip.
+ */
+.iconGroup {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .list {
   display: flex;
   align-items: center;
@@ -214,11 +223,11 @@
    --------------------------------------------------------------------------- */
 
 @media (max-width: 768px) {
-  .root[data-mobile-layout] .list {
+  .root[data-mobile-layout] {
     display: none;
   }
 
-  .root[data-mobile-layout][data-open] .list {
+  .root[data-mobile-layout][data-open] {
     display: block;
   }
 }

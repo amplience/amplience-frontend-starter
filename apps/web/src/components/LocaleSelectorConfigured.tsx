@@ -16,13 +16,19 @@ import { LocaleSelector } from '@amplience/quadratic-components/locale-selector'
 
 import { defaultLocale, localeLabel, locales } from '../../lib/locales'
 
-/** The delivery body — only `label` is authored; `_meta` rides along unused. */
+/**
+ * The delivery body — only `label` is authored; `_meta` rides along unused.
+ * `localeParam` is not authored — it's injected by the visualization route's
+ * registry so the selector switches locale via a query param there (ADR-0015);
+ * on the site it's absent, giving the default path-prefix behaviour.
+ */
 type LocaleSelectorStub = {
   readonly label?: string
+  readonly localeParam?: string
   readonly [key: string]: unknown
 }
 
-export function LocaleSelectorConfigured({ label }: LocaleSelectorStub) {
+export function LocaleSelectorConfigured({ label, localeParam }: LocaleSelectorStub) {
   const selectorLocales = locales.map((locale) => ({
     slug: locale.slug,
     label: localeLabel(locale),
@@ -33,6 +39,7 @@ export function LocaleSelectorConfigured({ label }: LocaleSelectorStub) {
       locales={selectorLocales}
       defaultSlug={defaultLocale.slug}
       {...(typeof label === 'string' && { label })}
+      {...(typeof localeParam === 'string' && { localeParam })}
     />
   )
 }

@@ -9,11 +9,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { LocaleSelector, type SelectorLocale } from './LocaleSelector'
 
-const { nav } = vi.hoisted(() => ({ nav: { path: '/', push: vi.fn() } }))
+const { nav } = vi.hoisted(() => ({ nav: { path: '/', search: '', push: vi.fn() } }))
 
 vi.mock('next/navigation', () => ({
   usePathname: () => nav.path,
   useRouter: () => ({ push: nav.push }),
+  useSearchParams: () => new URLSearchParams(nav.search),
 }))
 
 const LOCALES: SelectorLocale[] = [
@@ -32,6 +33,7 @@ const change = (value: string) => fireEvent.change(select(), { target: { value }
 
 beforeEach(() => {
   nav.push.mockReset()
+  nav.search = ''
 })
 afterEach(cleanup)
 
@@ -95,5 +97,39 @@ describe('LocaleSelector', () => {
     nav.path = '/about'
     render(<LocaleSelector locales={LOCALES} defaultSlug="en-us" label="Choose language" />)
     expect(screen.getByRole('combobox', { name: 'Choose language' })).toBeDefined()
+  })
+})
+
+describe('LocaleSelector — query-param mode (visualizer)', () => {
+  const renderQuery = (path: string, search: string) => {
+    nav.path = path
+    nav.search = search
+    return render(<LocaleSelector locales={LOCALES} defaultSlug="en-us" localeParam="locale" />)
+  }
+
+  it('switches via the locale query param, preserving other params', () => {
+    renderQuery('/visualization', 'vse=abc.staging.bigcontent.io&content=xyz')
+    change('fr-fr')
+    expect(nav.push).toHaveBeenCalledTimes(1)
+    const url = new URL(`http://x${(nav.push.mock.calls[0] as string[])[0]}`)
+    expect(url.pathname).toBe('/visualization')
+    expect(url.searchParams.get('locale')).toBe('fr-fr')
+    expect(url.searchParams.get('vse')).toBe('abc.staging.bigcontent.io')
+    expect(url.searchParams.get('content')).toBe('xyz')
+  })
+
+  it('reflects the current locale from the query param (slug)', () => {
+    renderQuery('/visualization', 'content=xyz&locale=de-de')
+    expect(select().value).toBe('de-de')
+  })
+
+  it('accepts the delivery code (uppercase) in the query param', () => {
+    renderQuery('/visualization', 'content=xyz&locale=de-DE')
+    expect(select().value).toBe('de-de')
+  })
+
+  it('falls back to the default when the query param is absent', () => {
+    renderQuery('/visualization', 'content=xyz')
+    expect(select().value).toBe('en-us')
   })
 })

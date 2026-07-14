@@ -36,12 +36,23 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
-import { BLOG_ARTICLE_SCHEMA, PAGE_SCHEMA } from '@amplience/quadratic-components/registry'
+import {
+  BLOG_ARTICLE_SCHEMA,
+  LOCALE_SELECTOR_SCHEMA,
+  PAGE_SCHEMA,
+} from '@amplience/quadratic-components/registry'
 import { isContentClientError, resolveContentConfig } from '@amplience/quadratic-content'
 import { makeSdkContentClient } from '@amplience/quadratic-content/sdk'
+import type { AnyComponentRegistryEntry } from '@amplience/quadratic-types'
 
-import { defaultLocale, localeBasePath, localeForSlug } from '../../lib/locales'
+import {
+  canonicalLocaleSlug,
+  defaultLocale,
+  localeBasePath,
+  localeForSlug,
+} from '../../lib/locales'
 import { registry } from '../../lib/registry'
+import { LocaleSelectorConfigured } from '../../src/components/LocaleSelectorConfigured'
 import {
   ContentUnavailableCard,
   emitContentFailure,
@@ -51,6 +62,22 @@ import {
 import { VisualizationClient } from './VisualizationClient'
 
 export const dynamic = 'force-dynamic'
+
+/**
+ * The deployment registry, with the locale selector switched to query mode for
+ * the pane: switching it updates `?locale=` (re-rendering this route in the
+ * chosen locale) rather than navigating to a locale-prefixed site URL, which
+ * doesn't exist here. Everything else renders as the site does.
+ */
+const localeSelectorQueryEntry: AnyComponentRegistryEntry = {
+  component: LocaleSelectorConfigured,
+  propsFromSchema: (schema) => {
+    const { _meta: _envelope, ...rest } = schema as Record<string, unknown>
+    return { ...rest, localeParam: 'locale' }
+  },
+}
+const visualizationRegistry = new Map(registry)
+visualizationRegistry.set(LOCALE_SELECTOR_SCHEMA, localeSelectorQueryEntry)
 
 export const metadata: Metadata = {
   title: 'Visualization',
@@ -108,13 +135,17 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
   const vse = single(params.vse)
   const contentId = single(params.content)
   const isThumbnail = single(params.isThumbnail)
-  // The visualization pane's own locale switcher passes `?locale=<slug>`; it
-  // resolves the same way as the site's `[locale]` segment (ADR-0015), and
-  // falls back to the default locale so localized fields collapse to single
-  // values before the shared renderer sees them. An unknown slug also falls
-  // back rather than failing — the pane is editor tooling, not a public route.
-  const localeSlug = single(params.locale)
-  const locale = (localeSlug !== undefined ? localeForSlug(localeSlug) : undefined) ?? defaultLocale
+  // The pane's locale rides a `?locale=` query param (the selector's query
+  // mode, or Amplience's `{{locale}}` template token) rather than a path
+  // segment — unlike the site, the visualizer addresses content by delivery ID
+  // and the locale is a preview toggle. Accept either the URL slug (`de-de`) or
+  // the delivery code Amplience supplies (`de-DE`) via `canonicalLocaleSlug`.
+  // An unknown value falls back to the default — the pane is editor tooling,
+  // not a public route.
+  const localeParam = single(params.locale)
+  const canonicalSlug = localeParam !== undefined ? canonicalLocaleSlug(localeParam) : undefined
+  const locale =
+    (canonicalSlug !== undefined ? localeForSlug(canonicalSlug) : undefined) ?? defaultLocale
 
   if (vse === undefined || contentId === undefined) {
     return misconfigured(
@@ -171,14 +202,26 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
             marginInline: 'auto',
           }}
         >
-          <VisualizationClient initialModel={item} isTopOfPage localeBasePath={basePath} />
+          <VisualizationClient
+            initialModel={item}
+            isTopOfPage
+            localeBasePath={basePath}
+            deliveryLocale={locale.delivery}
+          />
         </div>
       </div>
     )
   }
 
   if (!isTopLevel) {
-    return <VisualizationClient initialModel={item} isTopOfPage localeBasePath={basePath} />
+    return (
+      <VisualizationClient
+        initialModel={item}
+        isTopOfPage
+        localeBasePath={basePath}
+        deliveryLocale={locale.delivery}
+      />
+    )
   }
 
   // For page items, render with site chrome so the visualization matches what
@@ -192,14 +235,18 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
   ])
   if (headerResult.status === 'fulfilled') {
     try {
-      header = renderContent(headerResult.value, registry, { localeBasePath: basePath })
+      header = renderContent(headerResult.value, visualizationRegistry, {
+        localeBasePath: basePath,
+      })
     } catch {
       // Not fatal — render without header rather than breaking the visualization.
     }
   }
   if (footerResult.status === 'fulfilled') {
     try {
-      footer = renderContent(footerResult.value, registry, { localeBasePath: basePath })
+      footer = renderContent(footerResult.value, visualizationRegistry, {
+        localeBasePath: basePath,
+      })
     } catch {
       // Not fatal — render without footer rather than breaking the visualization.
     }
@@ -209,7 +256,12 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
     <>
       {header}
       <main>
-        <VisualizationClient initialModel={item} isTopOfPage localeBasePath={basePath} />
+        <VisualizationClient
+          initialModel={item}
+          isTopOfPage
+          localeBasePath={basePath}
+          deliveryLocale={locale.delivery}
+        />
       </main>
       {footer}
     </>

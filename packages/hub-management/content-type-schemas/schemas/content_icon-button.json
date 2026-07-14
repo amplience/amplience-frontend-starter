@@ -60,8 +60,14 @@
       "type": "string",
       "title": "Link",
       "description": "URL this button navigates to."
+    },
+    "visibility": {
+      "type": "string",
+      "title": "Visibility",
+      "description": "Restrict this button to a single breakpoint. Leave unset to show it at all breakpoints.",
+      "enum": ["mobileOnly", "desktopOnly"]
     }
   },
-  "propertyOrder": ["icon", "label", "link"],
+  "propertyOrder": ["icon", "label", "link", "visibility"],
   "required": ["icon", "label"]
 }

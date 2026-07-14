@@ -26,13 +26,25 @@
   border-radius: var(--radius);
   transition: opacity 0.15s ease;
   flex-shrink: 0;
-}
 
-.root:hover {
-  opacity: 0.75;
-}
+  &:hover {
+    opacity: 0.75;
+  }
 
-.root:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 768px) {
+    &.desktopOnly {
+      display: none;
+    }
+  }
+
+  @media (min-width: 769px) {
+    &.mobileOnly {
+      display: none;
+    }
+  }
 }

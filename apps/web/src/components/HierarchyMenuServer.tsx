@@ -25,6 +25,8 @@ import {
   HIERARCHY_MENU_SCHEMA,
   hierarchyMenuItemRegistryEntry,
   hierarchyMenuRegistryEntry,
+  ICON_BUTTON_SCHEMA,
+  iconButtonRegistryEntry,
 } from '@amplience/quadratic-components/registry'
 
 import { client } from '../../lib/content-client'
@@ -40,6 +42,10 @@ import { renderContent } from '../renderer'
 const hierarchySubRegistry = createRegistry([
   [HIERARCHY_MENU_SCHEMA, hierarchyMenuRegistryEntry],
   [HIERARCHY_MENU_ITEM_SCHEMA, hierarchyMenuItemRegistryEntry],
+  // Icon buttons can be authored as direct children of the hierarchy menu
+  // (e.g. mobile cart/account/store links), so the assembled tree must be
+  // able to dispatch them too.
+  [ICON_BUTTON_SCHEMA, iconButtonRegistryEntry],
 ])
 
 /**
