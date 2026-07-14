@@ -28,9 +28,11 @@
  * in place (ADR-0010 §5B) rather than crashing.
  */
 import { init } from 'dc-visualization-sdk'
-import { useEffect, useState, useTransition } from 'react'
+import { useEffect, useMemo, useState, useTransition } from 'react'
 
 import { defaultRegistry } from '@amplience/quadratic-components/registry'
+import { resolveLocalized } from '@amplience/quadratic-content'
+import type { ContentBody } from '@amplience/quadratic-content'
 import type { RenderContext } from '@amplience/quadratic-types'
 
 import { renderContent } from '../../src/renderer'
@@ -56,15 +58,39 @@ type Props = {
    * (the default locale — links unprefixed).
    */
   localeBasePath?: string
+  /**
+   * Delivery-locale list for the pane's locale (e.g. `de-DE,*`). The server
+   * fetch is already resolved to it, but the live `dc-visualization-sdk` model
+   * arrives with field-level localized values *unresolved* (all locales inline)
+   * — so it's collapsed here, client-side, to the single matching value before
+   * the renderer sees it. Without this the live model fails the component
+   * validators (a localized `title` is an object, not a string). Omitted → no
+   * resolution (single-locale/default deployment).
+   */
+  deliveryLocale?: string
 }
 
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
-export function VisualizationClient({ initialModel, isTopOfPage, localeBasePath = '' }: Props) {
+export function VisualizationClient({
+  initialModel,
+  isTopOfPage,
+  localeBasePath = '',
+  deliveryLocale,
+}: Props) {
   const [model, setModel] = useState(initialModel)
   const [, startTransition] = useTransition()
+
+  // Collapse field-level localized values to the pane's locale. The server
+  // fetch is already resolved, so this is a no-op for `initialModel`; it's the
+  // live SDK model (raw, all locales inline) that needs it. Safe on any shape.
+  const resolvedModel = useMemo(
+    () =>
+      deliveryLocale !== undefined ? resolveLocalized(model as ContentBody, deliveryLocale) : model,
+    [model, deliveryLocale],
+  )
 
   useEffect(() => {
     let unsubscribe: (() => void) | undefined
@@ -97,5 +123,5 @@ export function VisualizationClient({ initialModel, isTopOfPage, localeBasePath 
   }, [])
 
   const ctx: RenderContext = { isTopOfPage: isTopOfPage ?? false, localeBasePath }
-  return <>{renderContent(model, defaultRegistry, ctx)}</>
+  return <>{renderContent(resolvedModel, defaultRegistry, ctx)}</>
 }

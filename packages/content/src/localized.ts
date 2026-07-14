@@ -18,8 +18,8 @@
  * too.
  */
 
-import type { ContentBody } from '../types'
-import { isLocalizedValue } from '../types'
+import type { ContentBody } from './types'
+import { isLocalizedValue } from './types'
 
 const parsePreferences = (locale: string): readonly string[] =>
   locale

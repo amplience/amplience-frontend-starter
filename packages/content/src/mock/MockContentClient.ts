@@ -20,11 +20,11 @@
  */
 
 import hierarchyManifests from '../../fixtures/_hierarchy/manifests.json' with { type: 'json' }
+import { resolveLocalized } from '../localized'
 import type { ContentClient } from '../port'
 import type { ContentItem, ContentRequestOptions, EnrichedContentItem } from '../types'
 import { ContentClientError } from '../types'
 import { allFixtures, findById, findByKey } from './loader'
-import { resolveLocalized } from './localized'
 import { resolveDeep } from './resolver'
 
 /**

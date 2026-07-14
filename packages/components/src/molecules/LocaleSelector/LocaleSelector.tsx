@@ -1,7 +1,7 @@
 'use client'
 
 import clsx from 'clsx'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useId } from 'react'
 
 import styles from './LocaleSelector.module.css'
@@ -30,6 +30,15 @@ export type LocaleSelectorProps = {
   readonly defaultSlug: string
   /** Accessible label for the control. Defaults to "Language". */
   readonly label?: string
+  /**
+   * When set, the selector switches locale by updating this **query parameter**
+   * on the current path (preserving other params) instead of swapping the URL
+   * path prefix. This is for contexts where locale isn't a path segment — the
+   * visualization pane, which addresses content by delivery ID and carries the
+   * locale as `?locale=` (ADR-0015). On the site, leave it unset for the
+   * default path-prefix behaviour.
+   */
+  readonly localeParam?: string
   readonly className?: string
 }
 
@@ -57,27 +66,50 @@ export type LocaleSelectorProps = {
  * no locale data of its own — the list arrives as props, computed once by the
  * deployment.
  */
-export function LocaleSelector({ locales, defaultSlug, label, className }: LocaleSelectorProps) {
+export function LocaleSelector({
+  locales,
+  defaultSlug,
+  label,
+  localeParam,
+  className,
+}: LocaleSelectorProps) {
   const pathname = usePathname()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const selectId = useId()
 
   // Nothing to switch between — don't render a dead control.
   if (locales.length < 2) return null
 
   const slugs = new Set(locales.map((l) => l.slug))
-  const segments = pathname.split('/')
-  const firstSegment = segments[1] ?? ''
-  const hasPrefix = slugs.has(firstSegment)
 
-  // The locale-independent path: drop the current locale prefix if present.
-  const rawClean = hasPrefix ? `/${segments.slice(2).join('/')}` : pathname
-  const cleanPath = rawClean === '' ? '/' : rawClean
-  const currentSlug = hasPrefix ? firstSegment : defaultSlug
+  let currentSlug: string
+  let navigate: (slug: string) => void
 
-  const targetFor = (slug: string): string => {
-    if (slug === defaultSlug) return cleanPath
-    return cleanPath === '/' ? `/${slug}` : `/${slug}${cleanPath}`
+  if (localeParam !== undefined) {
+    // Query-param mode (visualization pane): locale lives in `?<localeParam>=`,
+    // not the path. Accept a slug or a delivery code (`de-DE`) case-insensitively;
+    // write the slug and preserve the other params (vse, content, …).
+    const raw = searchParams.get(localeParam)?.toLowerCase()
+    currentSlug = raw !== undefined && slugs.has(raw) ? raw : defaultSlug
+    navigate = (slug) => {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set(localeParam, slug)
+      router.push(`${pathname}?${params.toString()}`)
+    }
+  } else {
+    // Path-prefix mode (site): swap the `[locale]` segment, keeping the page.
+    const segments = pathname.split('/')
+    const firstSegment = segments[1] ?? ''
+    const hasPrefix = slugs.has(firstSegment)
+    const rawClean = hasPrefix ? `/${segments.slice(2).join('/')}` : pathname
+    const cleanPath = rawClean === '' ? '/' : rawClean
+    currentSlug = hasPrefix ? firstSegment : defaultSlug
+    navigate = (slug) => {
+      const target =
+        slug === defaultSlug ? cleanPath : cleanPath === '/' ? `/${slug}` : `/${slug}${cleanPath}`
+      router.push(target)
+    }
   }
 
   return (
@@ -86,7 +118,7 @@ export function LocaleSelector({ locales, defaultSlug, label, className }: Local
       className={clsx(styles.root, className)}
       aria-label={label ?? 'Language'}
       value={currentSlug}
-      onChange={(event) => router.push(targetFor(event.target.value))}
+      onChange={(event) => navigate(event.target.value)}
     >
       {locales.map(({ slug, label: optionLabel }) => (
         <option key={slug} value={slug}>
