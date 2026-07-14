@@ -7,8 +7,9 @@ import { Button, type ButtonProps } from '../../atoms/Button/Button'
 import { Container } from '../../atoms/Container/Container'
 import type { ContainerProps } from '../../atoms/Container/Container'
 import { Typography } from '../../atoms/Typography/Typography'
+import { ArtDirectedMedia } from '../../molecules/ArtDirectedMedia/ArtDirectedMedia'
 import { ContentMedia } from '../../molecules/ContentMedia/ContentMedia'
-import { resolveDiAspectRatio } from '../../molecules/DynamicImage/di-utils'
+import { resolveContentMediaAspectRatio } from '../../molecules/DynamicImage/di-utils'
 import styles from './HeroBlock.module.css'
 
 // ---------------------------------------------------------------------------
@@ -45,6 +46,20 @@ export type HeroBlockProps = {
    * (Amplience DAM asset). Omit for a text-only hero.
    */
   media?: ContentMediaData
+  /**
+   * When true (and `mobileMedia` is set), the hero art-directs: `mobileMedia`
+   * is shown at ≤768px and `media` above it, rendered as a <picture> so only
+   * the matched image downloads. The two may have different aspect ratios —
+   * each breakpoint reserves its own box, so there is no layout shift.
+   * Ignored unless `media` is also present.
+   */
+  mobileOverride?: boolean
+  /**
+   * The art-directed image shown at ≤768px when `mobileOverride` is true.
+   * Same shape as `media` (ManualImage or DynamicImage). Has no effect on its
+   * own — `mobileOverride` must also be true and `media` must be present.
+   */
+  mobileMedia?: ContentMediaData
   ctas?: HeroBlockCtaProps[]
   /**
    * Where the content sits relative to the image on mobile (≤ 768px).
@@ -212,6 +227,8 @@ export function HeroBlock({
   subtitle,
   description,
   media,
+  mobileOverride,
+  mobileMedia,
   ctas,
   contentPositionMobile = 'overlay',
   contentPositionDesktop = 'overlay',
@@ -234,6 +251,9 @@ export function HeroBlock({
   className,
 }: HeroBlockProps) {
   const hasMedia = media != null
+  // Art-direct only when the author opted in AND supplied a mobile image.
+  // `media` is guaranteed present here (mobileMedia has no effect without it).
+  const hasMobileOverride = hasMedia && mobileOverride === true && mobileMedia != null
   const titleId = useId()
 
   // The ::before spacer in 'flexible' overlay mode needs the media aspect
@@ -243,24 +263,6 @@ export function HeroBlock({
     hasMedia &&
     heightBehaviour === 'flexible' &&
     (contentPositionMobile === 'overlay' || contentPositionDesktop === 'overlay')
-
-  // The media's displayed ratio, resolved from the delivery payload alone:
-  //   ManualImage  — explicit aspectRatio override, else intrinsic width/height
-  //   DynamicImage — the image-poi aspectLock ('none' = author unlocked it),
-  //                  else the crop-aware ratio the di-transform extension
-  //                  wrote into the field at pick time.
-  // No guessed default: undefined means no spacer height (content drives it).
-  // Defensive on every access: hub content can predate the media partial
-  // (legacy flat image shape) — degrade to "no ratio" rather than crash SSG.
-  function getAspectRatioCss(m: ContentMediaData): string | undefined {
-    if (m.mediaType === 'ManualImage' && m.image !== undefined) {
-      return m.image.aspectRatio ?? `${m.image.width} / ${m.image.height}`
-    }
-    if (m.mediaType === 'DynamicImage' && m.image !== undefined) {
-      return resolveDiAspectRatio(m.image)
-    }
-    return undefined
-  }
 
   return (
     <section
@@ -280,8 +282,17 @@ export function HeroBlock({
       style={(() => {
         const vars: Record<string, string | number> = {}
         if (needsAspectRatio) {
-          const ratio = getAspectRatioCss(media)
+          // Resolved from the delivery payload alone (no network, no guessed
+          // default) — see resolveContentMediaAspectRatio. undefined ⇒ no
+          // spacer height, content drives the row.
+          const ratio = resolveContentMediaAspectRatio(media)
           if (ratio !== undefined) vars['--media-aspect-ratio'] = ratio
+          // When art-directing, the mobile image may have a different ratio;
+          // reserve its box separately so the ≤768px spacer avoids CLS.
+          if (hasMobileOverride) {
+            const mobileRatio = resolveContentMediaAspectRatio(mobileMedia)
+            if (mobileRatio !== undefined) vars['--media-aspect-ratio-mobile'] = mobileRatio
+          }
         }
         if (hasMedia) vars['--hero-scrim-opacity'] = overlayIntensity / 100
         vars['--contentWidth'] = `${contentWidth}%`
@@ -305,13 +316,28 @@ export function HeroBlock({
               breakpoint. Declaring it lets next/image preload the correctly
               sized candidate instead of defaulting to the largest 3840px image.
           */}
-          <ContentMedia
-            priority={isTopOfPage}
-            {...(isTopOfPage && { fetchPriority: 'high' })}
-            sizes="100vw"
-            {...media}
-            {...(styles.image !== undefined && { className: styles.image })}
-          />
+          {hasMobileOverride ? (
+            // Art direction: <picture> with a mobile <source> + desktop
+            // fallback <img>, both via next/image's getImageProps so only the
+            // matched image downloads. Per-breakpoint preload replaces the
+            // single ContentMedia preload for the LCP hero.
+            <ArtDirectedMedia
+              desktop={media}
+              mobile={mobileMedia}
+              priority={isTopOfPage}
+              {...(isTopOfPage && { fetchPriority: 'high' })}
+              sizes="100vw"
+              {...(styles.image !== undefined && { className: styles.image })}
+            />
+          ) : (
+            <ContentMedia
+              priority={isTopOfPage}
+              {...(isTopOfPage && { fetchPriority: 'high' })}
+              sizes="100vw"
+              {...media}
+              {...(styles.image !== undefined && { className: styles.image })}
+            />
+          )}
         </div>
       )}
 

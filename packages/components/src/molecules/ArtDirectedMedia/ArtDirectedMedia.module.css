@@ -1,0 +1,9 @@
+/*
+ * The <picture> is a layout-transparent wrapper: `display: contents` removes it
+ * from the box tree so the inner <img> is positioned by the consuming block's
+ * CSS exactly as a plain ContentMedia <img> would be (e.g. HeroBlock's
+ * flexible-grid `.image` rules, object-fit: cover, width/height: 100%).
+ */
+.picture {
+  display: contents;
+}

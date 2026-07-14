@@ -29,6 +29,31 @@ vi.mock('next/image', () => ({
   }: React.ComponentPropsWithoutRef<'img'> & { priority?: boolean }) => (
     <img src={src} alt={alt} data-priority={priority ? 'true' : undefined} {...props} />
   ),
+  // ArtDirectedMedia (mobile override) uses getImageProps to build <source>/<img>.
+  getImageProps: ({
+    src,
+    alt,
+    width,
+    height,
+    sizes,
+    loader,
+  }: {
+    src: string
+    alt: string
+    width: number
+    height: number
+    sizes?: string
+    loader?: (p: { src: string; width: number }) => string
+  }) => ({
+    props: {
+      src: loader ? loader({ src, width }) : src,
+      srcSet: `${loader ? loader({ src, width }) : src} ${width}w`,
+      sizes,
+      width,
+      height,
+      alt,
+    },
+  }),
 }))
 
 afterEach(cleanup)
@@ -137,6 +162,42 @@ describe('HeroBlock', () => {
     it('does not render image element when omitted', () => {
       render(<HeroBlock title="Title" />)
       expect(screen.queryByRole('img')).toBeNull()
+    })
+  })
+
+  describe('mobile override (art direction)', () => {
+    const mobileSample = {
+      mediaType: 'ManualImage' as const,
+      image: { src: '/hero-mobile.jpg', alt: 'Mobile hero', width: 600, height: 1200 },
+    }
+
+    it('renders a <picture> with a mobile <source> when mobileOverride and mobileMedia are set', () => {
+      const { container } = render(
+        <HeroBlock title="Title" media={sampleMedia} mobileOverride mobileMedia={mobileSample} />,
+      )
+      expect(container.querySelector('picture')).not.toBeNull()
+      expect(container.querySelector('source')?.getAttribute('media')).toBe('(max-width: 768px)')
+    })
+
+    it('does not art-direct when mobileOverride is false', () => {
+      const { container } = render(
+        <HeroBlock title="Title" media={sampleMedia} mobileMedia={mobileSample} />,
+      )
+      expect(container.querySelector('picture')).toBeNull()
+    })
+
+    it('does not art-direct when mobileMedia is absent', () => {
+      const { container } = render(<HeroBlock title="Title" media={sampleMedia} mobileOverride />)
+      expect(container.querySelector('picture')).toBeNull()
+    })
+
+    it('reserves a separate mobile aspect ratio in flexible overlay', () => {
+      render(
+        <HeroBlock title="Title" media={sampleMedia} mobileOverride mobileMedia={mobileSample} />,
+      )
+      const style = screen.getByRole('region').getAttribute('style') ?? ''
+      expect(style).toContain('--media-aspect-ratio: 1200 / 600')
+      expect(style).toContain('--media-aspect-ratio-mobile: 600 / 1200')
     })
   })
 

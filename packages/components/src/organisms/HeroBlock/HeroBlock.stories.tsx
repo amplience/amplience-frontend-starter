@@ -253,6 +253,45 @@ export const OverlayFitToImage: Story = {
 }
 
 // ---------------------------------------------------------------------------
+// Mobile override — art-directed <picture>
+// ---------------------------------------------------------------------------
+
+export const MobileOverride: Story = {
+  name: 'Mobile override — art-directed <picture>',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Desktop shows a 16:9 landscape; at ≤768px an art-directed portrait image is used instead. Rendered as a real <picture>, so only the matched image downloads — no CSS-hidden duplicate. The differing ratios each reserve their own box, so there is no layout shift. Switch the Storybook viewport toolbar between desktop and mobile to see the swap.',
+      },
+    },
+  },
+  args: {
+    ...baseCopy,
+    ctas: [...multiCta],
+    media: { ...landscapeMedia },
+    mobileOverride: true,
+    mobileMedia: {
+      mediaType: 'ManualImage',
+      image: {
+        src: 'https://picsum.photos/seed/ql-hero-mobile/900/1600',
+        alt: 'Hero — portrait mobile photo',
+        width: 900,
+        height: 1600,
+      },
+    },
+    contentPositionMobile: 'overlay',
+    contentPositionDesktop: 'overlay',
+    heightBehaviour: 'flexible',
+    verticalPosition: 'center',
+    overlayIntensity: 50,
+    overlayStyle: 'gradient',
+    overlayColor: 'black',
+    backgroundColor: 'dark',
+  },
+}
+
+// ---------------------------------------------------------------------------
 // Cross-device position
 // ---------------------------------------------------------------------------
 
