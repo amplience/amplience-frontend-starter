@@ -44,8 +44,15 @@ export type ContentClient = {
    * Items are returned at `depth: 'root'` — content-link references are left
    * as stubs. Callers that need the full tree for a specific item should
    * follow up with `getByKey` / `getById`.
+   *
+   * `opts.locale` resolves field-level localization the same way as
+   * `getByKey` — a listing route (the `/blog` archive) passes the active
+   * locale so card titles and descriptions arrive as single values.
    */
-  listBySchema<T = unknown>(schemaId: string): Promise<readonly ContentItem<T>[]>
+  listBySchema<T = unknown>(
+    schemaId: string,
+    opts?: Pick<ContentRequestOptions, 'locale'>,
+  ): Promise<readonly ContentItem<T>[]>
 
   /**
    * Fetch a hierarchy content item by its root delivery key and assemble the

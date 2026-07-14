@@ -50,13 +50,19 @@ type Props = {
    * loading for heroes that lead the page).
    */
   isTopOfPage?: boolean
+  /**
+   * Active locale URL prefix (ADR-0015) for the pane's locale, so internal
+   * links in the visualized content stay inside that locale. Defaults to ''
+   * (the default locale — links unprefixed).
+   */
+  localeBasePath?: string
 }
 
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
-export function VisualizationClient({ initialModel, isTopOfPage }: Props) {
+export function VisualizationClient({ initialModel, isTopOfPage, localeBasePath = '' }: Props) {
   const [model, setModel] = useState(initialModel)
   const [, startTransition] = useTransition()
 
@@ -90,6 +96,6 @@ export function VisualizationClient({ initialModel, isTopOfPage }: Props) {
     }
   }, [])
 
-  const ctx: RenderContext = { isTopOfPage: isTopOfPage ?? false }
+  const ctx: RenderContext = { isTopOfPage: isTopOfPage ?? false, localeBasePath }
   return <>{renderContent(model, defaultRegistry, ctx)}</>
 }

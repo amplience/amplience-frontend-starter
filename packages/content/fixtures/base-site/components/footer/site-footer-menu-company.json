@@ -8,6 +8,7 @@
       "deliveryId": "a1b2c3d4-0005-4000-8000-000000000006"
     },
     "display": "megaMenu",
+    "useMobileLayout": false,
     "items": [
       {
         "id": "a1b2c3d4-0005-4000-8000-000000000026",

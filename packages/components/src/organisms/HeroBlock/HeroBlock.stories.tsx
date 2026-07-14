@@ -9,11 +9,11 @@ const meta = {
   argTypes: {
     contentPositionMobile: {
       control: 'radio',
-      options: ['overlay', 'beneath'],
+      options: ['overlay', 'above', 'beneath'],
     },
     contentPositionDesktop: {
       control: 'radio',
-      options: ['overlay', 'beneath'],
+      options: ['overlay', 'above', 'beneath'],
     },
     heightBehaviour: {
       control: 'radio',

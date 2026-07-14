@@ -62,6 +62,42 @@ describe('MockContentClient', () => {
     expect(byAlias).toEqual(byPrimary)
   })
 
+  it('leaves localized fields raw when no locale is requested (matches the Delivery API)', async () => {
+    const client = makeMockContentClient()
+    const hero = await client.getById<{ title: { values?: unknown } }>(
+      'a1b2c3d4-0001-4000-8000-000000000003',
+    )
+    expect(Array.isArray(hero.title.values)).toBe(true)
+  })
+
+  it('collapses a localized field to a single value when a locale is requested', async () => {
+    // Fixture-independent: with a locale, the localized `{ values }` object is
+    // resolved to a single scalar (the exact text is editable content, covered
+    // by the resolveLocalized unit tests).
+    const client = makeMockContentClient()
+    const hero = await client.getById<{ title: unknown }>('a1b2c3d4-0001-4000-8000-000000000003', {
+      locale: 'en-US,*',
+    })
+    expect(typeof hero.title).toBe('string')
+  })
+
+  it('inlines the locale selector placed in the header icon group (depth: all)', async () => {
+    // Guards two things at once: the locale-selector fixture is registered in
+    // the loader manifest, and it's wired into the header group — so its
+    // content-link resolves rather than reaching the renderer as an unresolved
+    // stub.
+    const client = makeMockContentClient()
+    const group = await client.getById<{ items: { _meta: { schema: string } }[] }>(
+      'a1b2c3d4-0004-4000-8000-000000000022',
+      { depth: 'all' },
+    )
+    const schemas = group.items.map((item) => item._meta.schema)
+    expect(schemas).toContain('https://quadratic.amplience.com/v2/content/locale-selector')
+    expect(schemas).not.toContain(
+      'http://bigcontent.io/cms/schema/v1/core#/definitions/content-link',
+    )
+  })
+
   it('throws ContentClientError(not-found) for an unknown delivery key', async () => {
     const client = makeMockContentClient()
     await expect(client.getByKey('does-not-exist')).rejects.toBeInstanceOf(ContentClientError)

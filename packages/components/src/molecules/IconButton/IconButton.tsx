@@ -44,7 +44,7 @@ export type IconButtonProps = {
 // ---------------------------------------------------------------------------
 
 /**
- * IconButton molecule — a pressable icon from the design system's icon set.
+ * IconButton molecule — a clickable, tappable icon from the design system's icon set.
  *
  * When `link` is provided the button renders as `<a>` for navigation. Without
  * `link` it renders as `<button type="button">` — the brand or application

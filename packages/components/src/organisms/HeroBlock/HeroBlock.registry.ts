@@ -10,7 +10,9 @@ export const HERO_BLOCK_SCHEMA = 'https://quadratic.amplience.com/v2/content/her
  * `isTopOfPage` is excluded: it's a position cue supplied by the render
  * context, not an author-editable field.
  */
-export type HeroBlockSchema = Omit<HeroBlockProps, 'isTopOfPage'> & { readonly _meta: unknown }
+export type HeroBlockSchema = Omit<HeroBlockProps, 'isTopOfPage' | 'localeBasePath'> & {
+  readonly _meta: unknown
+}
 
 /**
  * Renderer-edge contract validator (ADR-0009 §10, ADR-0010 §7). The hero is
@@ -36,6 +38,7 @@ export const heroBlockRegistryEntry: ComponentRegistryEntry<HeroBlockSchema, Her
   propsFromSchema: ({ _meta: _envelope, ...props }, ctx) => ({
     ...props,
     isTopOfPage: ctx.isTopOfPage ?? false,
+    localeBasePath: ctx.localeBasePath ?? '',
   }),
   validate: validateHeroBlockSchema,
 }

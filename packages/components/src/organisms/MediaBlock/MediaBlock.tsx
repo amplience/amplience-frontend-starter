@@ -68,6 +68,11 @@ export type MediaBlockProps = {
    * next/image's default lazy loading applies. Defaults to false.
    */
   isTopOfPage?: boolean
+  /**
+   * Active locale URL prefix (ADR-0015), supplied by the renderer. Keeps the
+   * media link inside the current locale. Defaults to '' (default locale).
+   */
+  localeBasePath?: string
   className?: string
 }
 
@@ -98,6 +103,7 @@ export function MediaBlock({
   maxWidth = 'default',
   bare = false,
   isTopOfPage = false,
+  localeBasePath,
   className,
 }: MediaBlockProps) {
   // Defaults before the spread: authored `image` props override. A full-bleed
@@ -117,7 +123,11 @@ export function MediaBlock({
   const figure = (
     <figure className={clsx(styles.figure, bare && className)}>
       {href ? (
-        <Link href={href} className={clsx(styles.link)}>
+        <Link
+          href={href}
+          className={clsx(styles.link)}
+          {...(localeBasePath !== undefined && { localeBasePath })}
+        >
           {mediaEl}
         </Link>
       ) : (

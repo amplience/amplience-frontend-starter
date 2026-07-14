@@ -10,7 +10,7 @@ export const MEDIA_BLOCK_SCHEMA = 'https://quadratic.amplience.com/v2/content/me
  * `bare` and `isTopOfPage` are excluded: they're layout/position cues
  * supplied by the render context, not author-editable fields.
  */
-export type MediaBlockSchema = Omit<MediaBlockProps, 'bare' | 'isTopOfPage'> & {
+export type MediaBlockSchema = Omit<MediaBlockProps, 'bare' | 'isTopOfPage' | 'localeBasePath'> & {
   readonly _meta: unknown
 }
 
@@ -26,5 +26,6 @@ export const mediaBlockRegistryEntry: ComponentRegistryEntry<MediaBlockSchema, M
     ...props,
     bare: ctx.bare ?? false,
     isTopOfPage: ctx.isTopOfPage ?? false,
+    localeBasePath: ctx.localeBasePath ?? '',
   }),
 }

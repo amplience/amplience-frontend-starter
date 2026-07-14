@@ -30,6 +30,13 @@
         }
       },
       {
+        "id": "a1b2c3d4-0004-4000-8000-000000000024",
+        "contentType": "https://quadratic.amplience.com/v2/content/locale-selector",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
         "id": "a1b2c3d4-0004-4000-8000-000000000023",
         "contentType": "https://quadratic.amplience.com/v2/content/menu-toggle-button",
         "_meta": {

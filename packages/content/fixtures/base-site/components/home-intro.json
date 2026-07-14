@@ -10,16 +10,60 @@
     "content": "## What's in the box\n\nA **recursive renderer**, a content-client abstraction with mock and SDK adapters, an atomic-design component library, and an automation CLI for hub provisioning.\n\nClone, point at an Amplience hub, ship.",
     "ctas": [
       {
-        "label": "About",
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "About"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "À propos"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Über"
+            },
+            {
+              "locale": "en-GB",
+              "value": "About"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
         "href": "/about",
         "variant": "solid",
         "color": "primary"
       },
       {
-        "label": "View the docs",
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read the docs"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lire la documentation"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Dokumentation lesen"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Read the docs"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
         "href": "/docs",
         "variant": "outlined",
-        "color": "primary"
+        "color": "white"
       }
     ],
     "maxWidth": "narrow",

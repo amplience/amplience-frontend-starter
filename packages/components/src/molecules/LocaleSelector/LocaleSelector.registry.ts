@@ -1,0 +1,42 @@
+import type { ComponentRegistryEntry } from '@amplience/quadratic-types'
+
+import { LocaleSelector, type LocaleSelectorProps } from './LocaleSelector'
+
+/** The schema URI this entry dispatches (ADR-0010 §3 — no aliasing). */
+export const LOCALE_SELECTOR_SCHEMA = 'https://quadratic.amplience.com/v2/content/locale-selector'
+
+/** The locale-selector delivery body — an optional label plus the envelope. */
+export type LocaleSelectorSchema = {
+  readonly _meta: unknown
+  readonly label?: string
+}
+
+/**
+ * Validator: `label` is the only authorable field and it's optional, so the
+ * only invalid shape is a `label` that exists but isn't a string.
+ */
+export const validateLocaleSelectorSchema = (schema: unknown): schema is LocaleSelectorSchema => {
+  if (typeof schema !== 'object' || schema === null) return false
+  const s = schema as { label?: unknown }
+  return s.label === undefined || typeof s.label === 'string'
+}
+
+/**
+ * Library default registry entry for the locale-selector schema.
+ *
+ * The locale list is deployment config (ADR-0015), which the library can't
+ * know, so this default entry renders the selector with an empty list — it
+ * shows nothing. A deployment that serves multiple locales overrides this
+ * entry with one that supplies the list (see `apps/web/lib/registry.ts`),
+ * exactly as HierarchyMenu is overridden. This keeps the schema dispatchable
+ * everywhere (visualization, Storybook) rather than surfacing as an unknown
+ * type, while staying inert until composed with real config.
+ */
+export const localeSelectorRegistryEntry: ComponentRegistryEntry<
+  LocaleSelectorSchema,
+  LocaleSelectorProps
+> = {
+  component: LocaleSelector,
+  propsFromSchema: ({ _meta: _envelope, ...props }) => ({ locales: [], defaultSlug: '', ...props }),
+  validate: validateLocaleSelectorSchema,
+}

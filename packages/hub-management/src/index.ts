@@ -26,6 +26,7 @@ import contentHero from '../content-type-schemas/schemas/content_hero.json'
 import contentHierarchyMenuItem from '../content-type-schemas/schemas/content_hierarchy-menu-item.json'
 import contentHierarchyMenu from '../content-type-schemas/schemas/content_hierarchy-menu.json'
 import contentIconButton from '../content-type-schemas/schemas/content_icon-button.json'
+import contentLocaleSelector from '../content-type-schemas/schemas/content_locale-selector.json'
 import contentLogo from '../content-type-schemas/schemas/content_logo.json'
 import contentMarkdownBlock from '../content-type-schemas/schemas/content_markdown-block.json'
 import contentMediaCard from '../content-type-schemas/schemas/content_media-card.json'
@@ -84,6 +85,7 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(contentLogo, 'CONTENT_TYPE'),
   entry(contentIconButton, 'CONTENT_TYPE'),
   entry(contentMenuToggleButton, 'CONTENT_TYPE'),
+  entry(contentLocaleSelector, 'CONTENT_TYPE'),
   entry(contentMenu, 'CONTENT_TYPE'),
   entry(contentMenuItem, 'CONTENT_TYPE'),
   entry(contentHierarchyMenu, 'CONTENT_TYPE'),

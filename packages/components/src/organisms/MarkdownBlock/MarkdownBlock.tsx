@@ -57,11 +57,23 @@ export type MarkdownBlockProps = MarkdownProps & {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function CtaRow({ ctas }: { ctas: MarkdownBlockCtaProps[] }) {
+function CtaRow({
+  ctas,
+  localeBasePath,
+}: {
+  ctas: MarkdownBlockCtaProps[]
+  localeBasePath?: string
+}) {
   return (
     <div className={styles.ctas}>
       {ctas.map(({ label, href, variant = 'solid', color = 'primary' }) => (
-        <Button key={href} href={href} variant={variant} color={color}>
+        <Button
+          key={href}
+          href={href}
+          variant={variant}
+          color={color}
+          {...(localeBasePath !== undefined && { localeBasePath })}
+        >
           {label}
         </Button>
       ))}
@@ -95,15 +107,17 @@ export function MarkdownBlock({
   gutter = false,
   bare = false,
   ctas,
+  localeBasePath,
   className,
 }: MarkdownBlockProps) {
   const hasCtas = ctas && ctas.length > 0
+  const localeProps = localeBasePath !== undefined ? { localeBasePath } : {}
 
   if (bare) {
     return (
       <div className={className ? clsx(styles.bareWrapper, className) : styles.bareWrapper}>
-        <Markdown content={content} />
-        {hasCtas && <CtaRow ctas={ctas} />}
+        <Markdown content={content} {...localeProps} />
+        {hasCtas && <CtaRow ctas={ctas} {...localeProps} />}
       </div>
     )
   }
@@ -111,8 +125,8 @@ export function MarkdownBlock({
   return (
     <section className={clsx(styles.root, className)} data-background-color={backgroundColor}>
       <Container className={styles.container ?? ''} maxWidth={maxWidth} gutter={gutter}>
-        <Markdown content={content} />
-        {hasCtas && <CtaRow ctas={ctas} />}
+        <Markdown content={content} {...localeProps} />
+        {hasCtas && <CtaRow ctas={ctas} {...localeProps} />}
       </Container>
     </section>
   )

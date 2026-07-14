@@ -19,6 +19,14 @@ export type MarkdownProps = {
    * links, lists, blockquotes, and code blocks.
    */
   content: string
+  /**
+   * Active locale URL prefix (ADR-0015), supplied by the renderer. Passed to
+   * the Link atom for every inline markdown link, so links written in body
+   * copy stay inside the current locale — the reason link localization lives
+   * in Link rather than at the field boundary (markdown links aren't fields).
+   * Defaults to '' (default locale — links unprefixed).
+   */
+  localeBasePath?: string
   className?: string
 }
 
@@ -27,18 +35,9 @@ export type MarkdownProps = {
 // ---------------------------------------------------------------------------
 
 /**
- * Maps react-markdown's HTML elements to Quadratic Lite atoms where relevant.
- *
- * `a` → Link atom so internal paths use Next.js client navigation and
- *       external URLs open in a new tab with `rel="noopener noreferrer"`.
- *       `node` is excluded to prevent it leaking into the DOM.
+ * Non-link element overrides — locale-independent, so they're built once.
  */
-const components: Components = {
-  a: ({ href, children, node: _node }) => (
-    <Link href={href ?? ''} className={clsx(styles.link)}>
-      {children}
-    </Link>
-  ),
+const baseComponents: Components = {
   h1: ({ children }) => <Typography variant="h1">{children}</Typography>,
   h2: ({ children }) => <Typography variant="h2">{children}</Typography>,
   h3: ({ children }) => <Typography variant="h3">{children}</Typography>,
@@ -50,6 +49,21 @@ const components: Components = {
   ol: ({ children }) => <List as="ol">{children}</List>,
   li: ({ children }) => <ListItem>{children}</ListItem>,
 }
+
+/**
+ * Build the element map for a given locale. `a` → Link atom so internal paths
+ * use Next.js client navigation (localized to `localeBasePath`) and external
+ * URLs open in a new tab with `rel="noopener noreferrer"`. `node` is excluded
+ * to prevent it leaking into the DOM.
+ */
+const makeComponents = (localeBasePath: string): Components => ({
+  ...baseComponents,
+  a: ({ href, children, node: _node }) => (
+    <Link href={href ?? ''} localeBasePath={localeBasePath} className={clsx(styles.link)}>
+      {children}
+    </Link>
+  ),
+})
 
 // ---------------------------------------------------------------------------
 // Component
@@ -68,10 +82,10 @@ const components: Components = {
  * Usage:
  *   <Markdown content="## Hello\n\nSome **bold** text." />
  */
-export function Markdown({ content, className }: MarkdownProps) {
+export function Markdown({ content, localeBasePath = '', className }: MarkdownProps) {
   return (
     <div className={clsx(styles.root, className)}>
-      <ReactMarkdown components={components}>{content}</ReactMarkdown>
+      <ReactMarkdown components={makeComponents(localeBasePath)}>{content}</ReactMarkdown>
     </div>
   )
 }

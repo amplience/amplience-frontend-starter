@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { useId, type CSSProperties } from 'react'
+import { useId } from 'react'
 
 import type { ContentMediaData } from '@amplience/quadratic-types'
 
@@ -15,7 +15,7 @@ import styles from './HeroBlock.module.css'
 // Types
 // ---------------------------------------------------------------------------
 
-export type HeroBlockContentPosition = 'overlay' | 'beneath'
+export type HeroBlockContentPosition = 'overlay' | 'above' | 'beneath'
 export type HeroBlockHeightBehaviour = 'flexible' | 'fitToContent' | 'fitToImage'
 export type HeroBlockVerticalPosition = 'top' | 'center' | 'bottom'
 export type HeroBlockHorizontalPosition = 'left' | 'center' | 'right'
@@ -36,8 +36,10 @@ export type HeroBlockCtaProps = {
 }
 
 export type HeroBlockProps = {
+  preTitle?: string
   title: string
   subtitle?: string
+  description?: string
   /**
    * Optional hero media. Accepts ManualImage (direct URL) or DynamicImage
    * (Amplience DAM asset). Omit for a text-only hero.
@@ -155,6 +157,12 @@ export type HeroBlockProps = {
    * fold, next/image's default lazy loading applies. Defaults to false.
    */
   isTopOfPage?: boolean
+  /**
+   * Active locale URL prefix (ADR-0015), supplied by the renderer. Passed to
+   * the CTA buttons so their links stay inside the current locale. Defaults to
+   * '' (the default locale — links unprefixed).
+   */
+  localeBasePath?: string
   className?: string
 }
 
@@ -199,8 +207,10 @@ export type HeroBlockProps = {
  *   />
  */
 export function HeroBlock({
+  preTitle,
   title,
   subtitle,
+  description,
   media,
   ctas,
   contentPositionMobile = 'overlay',
@@ -220,6 +230,7 @@ export function HeroBlock({
   minHeight,
   maxHeight,
   isTopOfPage = false,
+  localeBasePath,
   className,
 }: HeroBlockProps) {
   const hasMedia = media != null
@@ -273,6 +284,7 @@ export function HeroBlock({
           if (ratio !== undefined) vars['--media-aspect-ratio'] = ratio
         }
         if (hasMedia) vars['--hero-scrim-opacity'] = overlayIntensity / 100
+        vars['--contentWidth'] = `${contentWidth}%`
         if (minHeight != null) vars['--hero-min-height'] = `${minHeight}px`
         if (maxHeight != null) vars['--hero-max-height'] = `${maxHeight}px`
         return Object.keys(vars).length > 0 ? vars : undefined
@@ -306,20 +318,31 @@ export function HeroBlock({
       <Container className={styles.container ?? ''} maxWidth={maxWidth} gutter>
         <div
           className={styles.content}
-          style={
-            {
-              '--contentWidth': `${contentWidth}%`,
-              paddingBlock: contentPadding ?? undefined,
-            } as CSSProperties
-          }
+          style={{
+            paddingBlock: contentPadding ?? undefined,
+          }}
         >
-          <Typography id={titleId} variant="h1" className={styles.title ?? ''}>
-            {title}
-          </Typography>
+          <div>
+            {preTitle && (
+              <Typography variant="p" className={styles.preTitle ?? ''}>
+                {preTitle}
+              </Typography>
+            )}
+
+            <Typography id={titleId} variant="h1" className={styles.title ?? ''}>
+              {title}
+            </Typography>
+          </div>
 
           {subtitle && (
-            <Typography variant="p" className={styles.subtitle ?? ''}>
+            <Typography variant="h2" className={styles.subtitle ?? ''}>
               {subtitle}
+            </Typography>
+          )}
+
+          {description && (
+            <Typography variant="p" className={styles.description ?? ''}>
+              {description}
             </Typography>
           )}
 
@@ -331,6 +354,7 @@ export function HeroBlock({
                   href={href}
                   variant={variant ?? 'solid'}
                   color={color ?? 'primary'}
+                  {...(localeBasePath !== undefined && { localeBasePath })}
                 >
                   {label}
                 </Button>

@@ -76,6 +76,12 @@ export type MediaCardProps = {
   elevation?: CardElevation
   /** Card surface colour. Passed through to the Card atom. Defaults to 'white'. */
   color?: CardColor
+  /**
+   * Active locale URL prefix (ADR-0015), supplied by the renderer. Keeps the
+   * card link and CTA inside the current locale. Defaults to '' (default
+   * locale — links unprefixed).
+   */
+  localeBasePath?: string
   className?: string
 }
 
@@ -114,6 +120,7 @@ export function MediaCard({
   headingVariant = 'h3',
   elevation = 'raised',
   color = 'white',
+  localeBasePath,
   className,
 }: MediaCardProps) {
   const { href, cta } = links ?? {}
@@ -144,7 +151,12 @@ export function MediaCard({
       {/* CTA only renders when the card is not already a full-card link */}
       {!isLinked && cta && (
         <div className={styles.cta}>
-          <Button href={cta.href} variant={cta.variant ?? 'solid'} color={cta.color ?? 'primary'}>
+          <Button
+            href={cta.href}
+            variant={cta.variant ?? 'solid'}
+            color={cta.color ?? 'primary'}
+            {...(localeBasePath !== undefined && { localeBasePath })}
+          >
             {cta.label}
           </Button>
         </div>
@@ -168,7 +180,11 @@ export function MediaCard({
       interactive={isLinked}
     >
       {isLinked ? (
-        <Link href={href} className={clsx(styles.link)}>
+        <Link
+          href={href}
+          className={clsx(styles.link)}
+          {...(localeBasePath !== undefined && { localeBasePath })}
+        >
           {inner}
         </Link>
       ) : (

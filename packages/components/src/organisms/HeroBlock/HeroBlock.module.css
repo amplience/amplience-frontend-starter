@@ -238,7 +238,8 @@
 }
 
 /* Solid: uniform semi-transparent tint across the full image */
-.root[data-overlay-style='solid'] {
+.root[data-overlay-style='solid'],
+.root[data-overlay-style='hard'] {
   --hero-scrim: color-mix(
     in srgb,
     var(--hero-scrim-color) calc(var(--hero-scrim-opacity) * 100%),
@@ -248,12 +249,22 @@
 
 /* Hard: opaque panel on the content side, instant cutoff at 50% */
 .root[data-overlay-style='hard'] {
-  --hero-scrim: linear-gradient(
-    var(--hero-scrim-angle),
-    color-mix(in srgb, var(--hero-scrim-color) calc(var(--hero-scrim-opacity) * 100%), transparent)
-      50%,
-    transparent 50%
-  );
+  @media (min-width: 769px) {
+    --hero-scrim: linear-gradient(
+      var(--hero-scrim-angle),
+      color-mix(
+          in srgb,
+          var(--hero-scrim-color) calc(var(--hero-scrim-opacity) * 100%),
+          transparent
+        )
+        50%,
+      transparent 50%
+    );
+
+    .content {
+      padding-right: var(--hero-padding-x);
+    }
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -366,7 +377,7 @@
    --------------------------------------------------------------------------- */
 
 @media (max-width: 768px) {
-  .root:not([data-content-position-mobile='beneath']) {
+  .root:not([data-content-position-mobile='beneath']):not([data-content-position-mobile='above']) {
     min-height: var(--hero-min-height, auto);
 
     &[data-horizontal-position='left'] .content {
@@ -380,13 +391,19 @@
       margin-inline-end: 0;
     }
   }
+
+  .root[data-content-position-mobile='above'] .container {
+    order: -1; /* content above image in normal block flow */
+  }
 }
 
 @media (min-width: 769px) {
-  .root:not([data-content-position-desktop='beneath']) {
+  .root:not([data-content-position-desktop='beneath']):not(
+      [data-content-position-desktop='above']
+    ) {
     min-height: var(--hero-min-height, auto);
 
-    & .content {
+    .content {
       width: var(--contentWidth);
     }
     &[data-horizontal-position='left'] .content {
@@ -399,6 +416,10 @@
       margin-inline-start: auto;
       margin-inline-end: 0;
     }
+  }
+
+  .root[data-content-position-desktop='above'] .container {
+    order: -1; /* content above image in normal block flow */
   }
 }
 

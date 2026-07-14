@@ -9,8 +9,11 @@
  * What the real SDK adapter (QL-43) will do differently:
  *  - Hit `dc-delivery-sdk-js` instead of the local fixture map.
  *  - Honour `revalidate` / `tags` (Next.js fetch cache pass-through).
- *  - Handle locale resolution per Amplience's locale-group rules.
  *  - Map SDK errors onto `ContentClientError` kinds.
+ *
+ * Locale resolution is one behaviour the mock now shares with the adapter:
+ * given a request `locale`, both collapse field-level localized values to the
+ * single matching value (`./localized` here, the Delivery API there).
  *
  * Same port surface, same return shape — swap-in is one line in
  * `apps/web`'s composition.
@@ -21,6 +24,7 @@ import type { ContentClient } from '../port'
 import type { ContentItem, ContentRequestOptions, EnrichedContentItem } from '../types'
 import { ContentClientError } from '../types'
 import { allFixtures, findById, findByKey } from './loader'
+import { resolveLocalized } from './localized'
 import { resolveDeep } from './resolver'
 
 /**
@@ -37,7 +41,10 @@ const toContentItem = <T>(
   item: EnrichedContentItem,
   opts: ContentRequestOptions | undefined,
 ): ContentItem<T> => {
-  const body = opts?.depth === 'all' ? resolveDeep(item.body, findById) : item.body
+  const resolved = opts?.depth === 'all' ? resolveDeep(item.body, findById) : item.body
+  // Collapse localized fields only when a locale is requested — matching the
+  // Delivery API, which returns the raw `{ values }` object with no locale.
+  const body = opts?.locale !== undefined ? resolveLocalized(resolved, opts.locale) : resolved
   return body as ContentItem<T>
 }
 
@@ -102,16 +109,24 @@ export const makeMockContentClient = (): ContentClient => ({
     return Promise.resolve(toContentItem<T>(item, opts))
   },
 
-  listBySchema: <T = unknown>(schemaId: string): Promise<readonly ContentItem<T>[]> => {
+  listBySchema: <T = unknown>(
+    schemaId: string,
+    opts?: Pick<ContentRequestOptions, 'locale'>,
+  ): Promise<readonly ContentItem<T>[]> => {
     // Filter fixtures whose body schema URI matches. Returns bodies at
     // depth: 'root' (stubs left as-is) — consistent with the SDK adapter
-    // which uses the Filter API's default depth behaviour.
+    // which uses the Filter API's default depth behaviour. Localized fields
+    // collapse only when a locale is requested (as the Delivery API does).
     const matches = allFixtures()
       .filter((f) => {
         const meta = f.body._meta as { schema?: string } | undefined
         return meta?.schema === schemaId
       })
-      .map((f) => f.body as ContentItem<T>)
+      .map((f) =>
+        opts?.locale !== undefined
+          ? (resolveLocalized(f.body, opts.locale) as ContentItem<T>)
+          : (f.body as ContentItem<T>),
+      )
     return Promise.resolve(matches)
   },
 

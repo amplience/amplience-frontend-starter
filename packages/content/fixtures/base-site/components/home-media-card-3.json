@@ -20,7 +20,17 @@
     },
     "links": {
       "cta": {
-        "label": "See how",
+        "label": {
+          "values": [
+            { "locale": "en-US", "value": "See how" },
+            { "locale": "fr-FR", "value": "Voir comment" },
+            { "locale": "de-DE", "value": "Sehen Sie wie" },
+            { "locale": "en-GB", "value": "See how" }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
         "href": "/features/theming",
         "variant": "solid",
         "color": "primary"

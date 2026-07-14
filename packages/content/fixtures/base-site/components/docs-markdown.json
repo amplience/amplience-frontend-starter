@@ -11,9 +11,34 @@
     "maxWidth": "default",
     "gutter": true,
     "ctas": [
-      { "label": "About the project", "href": "/about", "variant": "outlined", "color": "primary" },
       {
-        "label": "View on GitHub",
+        "label": {
+          "values": [
+            { "locale": "en-US", "value": "About the project" },
+            { "locale": "fr-FR", "value": "À propos du projet" },
+            { "locale": "de-DE", "value": "Über das Projekt" },
+            { "locale": "en-GB", "value": "About the project" }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/about",
+        "variant": "outlined",
+        "color": "primary"
+      },
+      {
+        "label": {
+          "values": [
+            { "locale": "en-US", "value": "View on GitHub" },
+            { "locale": "fr-FR", "value": "Voir sur GitHub" },
+            { "locale": "de-DE", "value": "Auf GitHub ansehen" },
+            { "locale": "en-GB", "value": "View on GitHub" }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
         "href": "https://github.com/mattisherwood/quadratic-lite",
         "variant": "solid",
         "color": "primary"

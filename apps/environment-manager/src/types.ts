@@ -16,6 +16,14 @@ export type Environment = {
   defaultSite: string
   webApps: WebApp[]
   republish: boolean
+  /**
+   * Allow wipe/import to pass dc-cli's --ignoreSchemaValidation. Only works
+   * on hubs whose "Ignore schema validation" setting is ON (org/hub admin,
+   * DC → hub → Properties); passing it otherwise fails with
+   * IGNORE_SCHEMA_VALIDATION_NOT_ENABLED, so it's opt-in per environment.
+   * Optional: absent/false means never ignore validation.
+   */
+  ignoreSchemaValidation?: boolean
 }
 
 export type Config = {
@@ -88,4 +96,5 @@ export const EMPTY_ENV: Environment = {
   defaultSite: '',
   webApps: [],
   republish: false,
+  ignoreSchemaValidation: false,
 }

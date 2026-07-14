@@ -92,4 +92,71 @@ describe('Link', () => {
     const el = screen.getByRole<HTMLAnchorElement>('link', { name: 'Same tab' })
     expect(el.target).toBe('_self')
   })
+
+  describe('locale prefixing (ADR-0015)', () => {
+    it('prefixes an internal root-relative href with the locale base', () => {
+      render(
+        <Link href="/about" localeBasePath="/fr-fr">
+          About
+        </Link>,
+      )
+      expect(screen.getByRole('link', { name: 'About' }).getAttribute('href')).toBe('/fr-fr/about')
+    })
+
+    it('maps the bare root to the base with no trailing slash', () => {
+      render(
+        <Link href="/" localeBasePath="/fr-fr">
+          Home
+        </Link>,
+      )
+      expect(screen.getByRole('link', { name: 'Home' }).getAttribute('href')).toBe('/fr-fr')
+    })
+
+    it('leaves the href unchanged for the default locale (empty base)', () => {
+      render(
+        <Link href="/about" localeBasePath="">
+          About
+        </Link>,
+      )
+      expect(screen.getByRole('link', { name: 'About' }).getAttribute('href')).toBe('/about')
+    })
+
+    it('does not double-prefix an href already under the base (idempotent)', () => {
+      render(
+        <Link href="/fr-fr/about" localeBasePath="/fr-fr">
+          About
+        </Link>,
+      )
+      expect(screen.getByRole('link', { name: 'About' }).getAttribute('href')).toBe('/fr-fr/about')
+    })
+
+    it('never localizes external links', () => {
+      render(
+        <Link href="https://example.com" localeBasePath="/fr-fr">
+          External
+        </Link>,
+      )
+      expect(screen.getByRole('link', { name: 'External' }).getAttribute('href')).toBe(
+        'https://example.com',
+      )
+    })
+
+    it('leaves in-page anchors alone', () => {
+      render(
+        <Link href="#section" localeBasePath="/fr-fr">
+          Jump
+        </Link>,
+      )
+      expect(screen.getByRole('link', { name: 'Jump' }).getAttribute('href')).toBe('#section')
+    })
+
+    it('does not leak localeBasePath to the DOM', () => {
+      render(
+        <Link href="/about" localeBasePath="/fr-fr">
+          About
+        </Link>,
+      )
+      expect(screen.getByRole('link', { name: 'About' }).hasAttribute('localebasepath')).toBe(false)
+    })
+  })
 })

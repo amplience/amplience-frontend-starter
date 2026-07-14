@@ -151,6 +151,16 @@ menu_toggle_button = ('<g transform="translate({tx},{ty})">'
                       '</g>')
 ICONS["content_menu-toggle-button"] = card_a(shadowed(menu_toggle_button))
 
+# locale-selector: a globe — meridian ellipse, polar axis, equator + parallels
+locale_selector = ('<g transform="translate({tx},{ty})">'
+                   f'<circle cx="128" cy="128" r="46" fill="{{fill}}" stroke="{{stroke}}" stroke-width="{SW}"/>'
+                   f'<path d="M83 128 h90" fill="none" stroke="{{stroke}}" stroke-width="{SW_THIN}"/>'
+                   f'<path d="M94 108 h68 M94 148 h68" fill="none" stroke="{{stroke}}" stroke-width="{SW_THIN}"/>'
+                   f'<ellipse cx="128" cy="128" rx="19" ry="46" fill="none" stroke="{{stroke}}" stroke-width="{SW_THIN}"/>'
+                   f'<path d="M128 82 v92" fill="none" stroke="{{stroke}}" stroke-width="{SW_THIN}"/>'
+                   '</g>')
+ICONS["content_locale-selector"] = card_a(shadowed(locale_selector))
+
 # logo: circular badge with abstract diamond mark
 logo = ('<g transform="translate({tx},{ty})">'
         f'<circle cx="126" cy="128" r="48" fill="{{fill}}" stroke="{{stroke}}" stroke-width="{SW}"/>'

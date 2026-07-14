@@ -6,7 +6,7 @@ import { Logo, type LogoProps } from './Logo'
 export const LOGO_SCHEMA = 'https://quadratic.amplience.com/v2/content/logo'
 
 /** The logo delivery body — Logo props plus the content envelope. */
-export type LogoSchema = LogoProps & { readonly _meta: unknown }
+export type LogoSchema = Omit<LogoProps, 'localeBasePath'> & { readonly _meta: unknown }
 
 /**
  * Validator: a Logo must have a media object with a mediaType discriminator
@@ -31,6 +31,9 @@ export const validateLogoSchema = (schema: unknown): schema is LogoSchema => {
 /** Registry entry for the logo schema. Not a container — no `getChildren`. */
 export const logoRegistryEntry: ComponentRegistryEntry<LogoSchema, LogoProps> = {
   component: Logo,
-  propsFromSchema: ({ _meta: _envelope, ...props }) => props,
+  propsFromSchema: ({ _meta: _envelope, ...props }, ctx) => ({
+    ...props,
+    localeBasePath: ctx.localeBasePath ?? '',
+  }),
   validate: validateLogoSchema,
 }

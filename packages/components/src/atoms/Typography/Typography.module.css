@@ -25,7 +25,7 @@
 
 .h1 {
   font-size: 2rem; /* 32px @ 16px root */
-  font-weight: 400;
+  font-weight: 700;
   line-height: 1;
   @media (min-width: 374px) {
     font-size: 3rem; /* 48px @ 16px root */

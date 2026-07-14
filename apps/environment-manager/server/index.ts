@@ -304,6 +304,9 @@ function buildEnv(env: Environment, republish = false): NodeJS.ProcessEnv {
     AMPLIENCE_CLIENT_SECRET: env.clientSecret,
     AMPLIENCE_HUB_ID: env.hubId,
     AMPLIENCE_REPUBLISH: republish || env.republish ? '1' : '',
+    // Per-environment opt-in; set explicitly (not inherited from a stray shell
+    // var) so behaviour is deterministic per hub. Read by hub-wipe.mjs.
+    AMPLIENCE_IGNORE_SCHEMA_VALIDATION: env.ignoreSchemaValidation ? '1' : '',
     // Blank = let hub-import apply its own default (the hub name, ADR-0014).
     ...((env.defaultSite ?? '') !== '' && { SITE_NAME: env.defaultSite }),
   }
@@ -447,13 +450,13 @@ const OP_CONFIG: Record<string, OpConfig> = {
   },
   'wipe-items': {
     script: HUB_WIPE_SCRIPT,
-    args: [],
+    args: ['items'],
     republish: false,
     label: 'Wipe content items',
   },
   'seed-all': { script: HUB_IMPORT_SCRIPT, args: ['all'], republish: true, label: 'Seed all' },
   'sync-all': { script: HUB_IMPORT_SCRIPT, args: ['all'], republish: false, label: 'Sync all' },
-  'wipe-all': { script: HUB_WIPE_SCRIPT, args: [], republish: false, label: 'Wipe all' },
+  'wipe-all': { script: HUB_WIPE_SCRIPT, args: ['all'], republish: false, label: 'Wipe all' },
 }
 
 // ── App ───────────────────────────────────────────────────────────────────────

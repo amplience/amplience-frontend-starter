@@ -33,6 +33,10 @@ import {
   ICON_BUTTON_SCHEMA,
   iconButtonRegistryEntry,
 } from './molecules/IconButton/IconButton.registry'
+import {
+  LOCALE_SELECTOR_SCHEMA,
+  localeSelectorRegistryEntry,
+} from './molecules/LocaleSelector/LocaleSelector.registry'
 import { LOGO_SCHEMA, logoRegistryEntry } from './molecules/Logo/Logo.registry'
 import { MEDIA_CARD_SCHEMA, mediaCardRegistryEntry } from './molecules/MediaCard/MediaCard.registry'
 import {
@@ -157,6 +161,7 @@ export const defaultRegistry: Registry = createRegistry([
   [LOGO_SCHEMA, logoRegistryEntry],
   [ICON_BUTTON_SCHEMA, iconButtonRegistryEntry],
   [MENU_TOGGLE_BUTTON_SCHEMA, menuToggleButtonRegistryEntry],
+  [LOCALE_SELECTOR_SCHEMA, localeSelectorRegistryEntry],
   [MENU_SCHEMA, menuRegistryEntry],
   [MENU_ITEM_SCHEMA, menuItemRegistryEntry],
   [HIERARCHY_MENU_SCHEMA, hierarchyMenuRegistryEntry],
@@ -200,6 +205,8 @@ export {
   iconButtonRegistryEntry,
   MENU_TOGGLE_BUTTON_SCHEMA,
   menuToggleButtonRegistryEntry,
+  LOCALE_SELECTOR_SCHEMA,
+  localeSelectorRegistryEntry,
   MENU_SCHEMA,
   menuRegistryEntry,
   MENU_ITEM_SCHEMA,

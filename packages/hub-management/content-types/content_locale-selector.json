@@ -1,0 +1,26 @@
+{
+  "contentTypeUri": "https://quadratic.amplience.com/v2/content/locale-selector",
+  "status": "ACTIVE",
+  "settings": {
+    "label": "Locale Selector",
+    "icons": [
+      {
+        "size": 256,
+        "url": "https://cdn.media.amplience.net/i/quadraticdemo/content_locale-selector?v=3"
+      }
+    ],
+    "visualizations": [
+      {
+        "label": "Web (localhost)",
+        "templatedUri": "${localhostUrl}/visualization?vse={{vse.domain}}&content={{content.sys.id}}",
+        "default": true
+      },
+      {
+        "label": "JSON",
+        "templatedUri": "https://delivery-preview.visualizations.content.amplience.net?id={{content.sys.id}}&vse={{vse.domain}}&hub=${hub}&realtime=true",
+        "default": false
+      }
+    ]
+  },
+  "repositories": ["content"]
+}

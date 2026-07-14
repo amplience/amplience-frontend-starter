@@ -135,9 +135,21 @@ export const makeSdkContentClient = (config: SdkContentClientConfig): ContentCli
       // `depth` per request (the single-item methods always inline) and
       // returns plain JSON bodies (no media helper classes), matching the
       // port's return shape exactly.
+      //
+      // `locale` must ride on the per-request parameters (not just the SDK
+      // constructor) for `content/fetch` to collapse localized fields to a
+      // single value — without it, localized fields come back as the full
+      // `{ values: [...] }` object and every consumer's single-value contract
+      // breaks. Per-request `opts.locale` (the switcher's resolved locale)
+      // wins over the deployment default.
+      const locale = opts?.locale ?? config.locale
       response = await sdk.fetchContentItems({
         requests: [request],
-        parameters: { depth: opts?.depth ?? 'root', format: 'inlined' },
+        parameters: {
+          depth: opts?.depth ?? 'root',
+          format: 'inlined',
+          ...(locale !== undefined && { locale }),
+        },
       })
     } catch (error) {
       throw mapSdkError(error, subject)
@@ -163,7 +175,10 @@ export const makeSdkContentClient = (config: SdkContentClientConfig): ContentCli
     getById: <T = unknown>(id: string, opts?: ContentRequestOptions) =>
       fetchOne<T>({ id }, opts, `getById("${id}")`),
 
-    listBySchema: async <T = unknown>(schemaId: string): Promise<readonly ContentItem<T>[]> => {
+    listBySchema: async <T = unknown>(
+      schemaId: string,
+      opts?: Pick<ContentRequestOptions, 'locale'>,
+    ): Promise<readonly ContentItem<T>[]> => {
       // Collect all pages from the DC Filter API. The Filter API caps page
       // size at 12; `page.next` is present whenever there are more results.
       // We collect everything before returning so callers don't need to think
@@ -177,11 +192,15 @@ export const makeSdkContentClient = (config: SdkContentClientConfig): ContentCli
       // the `typeof` level); we cast results to `ContentItem<T>` below.
       type FilterPage = Awaited<ReturnType<ReturnType<typeof sdk.filterByContentType>['request']>>
 
+      // `locale` collapses localized fields the same way as `content/fetch`;
+      // `page.next` cursors carry these parameters forward, so it's set once
+      // on the first request and applies to every page.
+      const locale = opts?.locale ?? config.locale
       let response: FilterPage
       try {
         response = await sdk
           .filterByContentType<T>(schemaId)
-          .request({ depth: 'root', format: 'inlined' })
+          .request({ depth: 'root', format: 'inlined', ...(locale !== undefined && { locale }) })
       } catch (error) {
         throw mapSdkError(error, `listBySchema("${schemaId}")`)
       }

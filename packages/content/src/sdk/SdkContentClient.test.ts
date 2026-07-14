@@ -117,6 +117,26 @@ describe('request shaping', () => {
     expect(payload.requests).toEqual([{ key: 'base-site/homepage' }])
   })
 
+  it('omits locale when none is configured', async () => {
+    const capture = { configs: [] as AxiosishConfig[] }
+    await makeClient({}, capture).getByKey('base-site/homepage')
+    expect(parsePayload(first(capture.configs)).parameters).not.toHaveProperty('locale')
+  })
+
+  it('forwards the configured deployment locale', async () => {
+    const capture = { configs: [] as AxiosishConfig[] }
+    await makeClient({ locale: 'en-GB,*' }, capture).getByKey('base-site/homepage')
+    expect(parsePayload(first(capture.configs)).parameters?.locale).toBe('en-GB,*')
+  })
+
+  it('lets a per-request locale override the deployment default', async () => {
+    const capture = { configs: [] as AxiosishConfig[] }
+    await makeClient({ locale: 'en-GB,*' }, capture).getByKey('base-site/homepage', {
+      locale: 'fr-FR,*',
+    })
+    expect(parsePayload(first(capture.configs)).parameters?.locale).toBe('fr-FR,*')
+  })
+
   it('targets the hub CDN host by default and the VSE when stagingHost is set', async () => {
     const cdnCapture = { configs: [] as AxiosishConfig[] }
     await makeClient({}, cdnCapture).getByKey('base-site/homepage')

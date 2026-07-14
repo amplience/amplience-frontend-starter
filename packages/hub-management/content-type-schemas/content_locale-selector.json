@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/content_locale-selector.json",
+  "schemaId": "https://quadratic.amplience.com/v2/content/locale-selector",
+  "validationLevel": "CONTENT_TYPE"
+}
