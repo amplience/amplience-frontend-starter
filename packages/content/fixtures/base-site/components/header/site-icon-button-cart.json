@@ -9,7 +9,6 @@
     },
     "icon": "cart",
     "label": "Shopping cart",
-    "link": "/cart",
-    "visibility": "desktopOnly"
+    "link": "/cart"
   }
 }

@@ -54,7 +54,6 @@ import siteHeader from '../../fixtures/base-site/components/header/site-header.j
 import siteHierarchyMenuItemAbout from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-about.json' with { type: 'json' }
 import siteHierarchyMenuItemAccount from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-account.json' with { type: 'json' }
 import siteHierarchyMenuItemBlog from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-blog.json' with { type: 'json' }
-import siteHierarchyMenuItemCart from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-cart.json' with { type: 'json' }
 import siteHierarchyMenuItemDocs from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-docs.json' with { type: 'json' }
 import siteHierarchyMenuItemKidsBaby from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-kids-baby.json' with { type: 'json' }
 import siteHierarchyMenuItemKidsBoys from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-kids-boys.json' with { type: 'json' }
@@ -159,7 +158,6 @@ const fixtures: readonly EnrichedContentItem[] = [
   siteHierarchyMenuItemDocs,
   siteHierarchyMenuItemStores,
   siteHierarchyMenuItemAccount,
-  siteHierarchyMenuItemCart,
   siteMenuItemMens,
   siteMenuItemMensShirts,
   siteMenuItemMensTrousers,
