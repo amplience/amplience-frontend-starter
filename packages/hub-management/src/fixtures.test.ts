@@ -63,6 +63,21 @@ const hierarchySchemaStub = {
   },
 } as const
 
+/**
+ * Minimal stand-in for the platform-hosted localization schema. Field-level
+ * localized fields (ADR-0015) reference `localized-string`; a field arrives
+ * either as a `{ values, _meta }` object (no locale requested) or as a
+ * resolved scalar (locale requested), so the stub accepts anything — the
+ * platform remains the authority on the full localized shape.
+ */
+const localizationSchemaStub = {
+  $id: 'http://bigcontent.io/cms/schema/v1/localization',
+  definitions: {
+    'localized-string': {},
+    'localized-value': {},
+  },
+} as const
+
 const ajv = new Ajv({
   // Schemas carry Amplience vocabulary (`ui:component`, `propertyOrder`)
   // and editor-facing formats (`markdown`) that ajv doesn't know; both are
@@ -73,6 +88,7 @@ const ajv = new Ajv({
 })
 ajv.addSchema(coreSchemaStub)
 ajv.addSchema(hierarchySchemaStub)
+ajv.addSchema(localizationSchemaStub)
 for (const { schema } of schemaManifest) ajv.addSchema(schema)
 
 describe('schema manifest', () => {
@@ -95,7 +111,7 @@ describe('schema manifest', () => {
   })
 
   it('exposes content types as the non-partial subset', () => {
-    expect(contentTypeSchemas).toHaveLength(21)
+    expect(contentTypeSchemas).toHaveLength(22)
     expect(contentTypeSchemas.every((e) => e.validationLevel !== 'PARTIAL')).toBe(true)
     expect(findSchema('https://quadratic.amplience.com/v2/partials/media')?.validationLevel).toBe(
       'PARTIAL',

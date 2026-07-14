@@ -80,8 +80,8 @@ export function BlogArticle({
           subtitle={category ?? ''}
           heightBehaviour="fitToContent"
           contentPadding={120}
-          backgroundColor="secondary"
-          overlayColor="secondary"
+          backgroundColor="black"
+          overlayColor="black"
           overlayIntensity={100}
           verticalPosition="bottom"
         />

@@ -27,6 +27,7 @@
     "./tags": "./src/molecules/Tags/Tags.tsx",
     "./media-card": "./src/molecules/MediaCard/MediaCard.tsx",
     "./markdown": "./src/molecules/Markdown/Markdown.tsx",
+    "./language-selector": "./src/molecules/LanguageSelector/LanguageSelector.tsx",
     "./hero-block": "./src/organisms/HeroBlock/HeroBlock.tsx",
     "./image-block": "./src/organisms/ImageBlock/ImageBlock.tsx",
     "./grid-block": "./src/organisms/GridBlock/GridBlock.tsx",

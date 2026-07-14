@@ -126,7 +126,7 @@ export default async function BlogArchivePage({ params }: RouteProps) {
         <HeroBlock
           title="Blog"
           description="Articles, guides, and updates from the Amplience team."
-          backgroundColor="secondary"
+          backgroundColor="black"
           contentPadding={30}
         />
       </header>

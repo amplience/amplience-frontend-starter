@@ -19,6 +19,7 @@
     },
     "contentPositionMobile": "beneath",
     "contentPositionDesktop": "overlay",
+    "contentWidth": 40,
     "heightBehaviour": "fitToContent",
     "maxWidth": "default",
     "minHeight": 600,

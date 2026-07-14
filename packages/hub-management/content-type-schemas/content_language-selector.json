@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/content_language-selector.json",
+  "schemaId": "https://quadratic.amplience.com/v2/content/language-selector",
+  "validationLevel": "CONTENT_TYPE"
+}

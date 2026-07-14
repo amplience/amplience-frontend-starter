@@ -81,6 +81,23 @@ describe('MockContentClient', () => {
     expect(typeof hero.title).toBe('string')
   })
 
+  it('inlines the language selector placed in the header icon group (depth: all)', async () => {
+    // Guards two things at once: the language-selector fixture is registered in
+    // the loader manifest, and it's wired into the header group — so its
+    // content-link resolves rather than reaching the renderer as an unresolved
+    // stub.
+    const client = makeMockContentClient()
+    const group = await client.getById<{ items: { _meta: { schema: string } }[] }>(
+      'a1b2c3d4-0004-4000-8000-000000000022',
+      { depth: 'all' },
+    )
+    const schemas = group.items.map((item) => item._meta.schema)
+    expect(schemas).toContain('https://quadratic.amplience.com/v2/content/language-selector')
+    expect(schemas).not.toContain(
+      'http://bigcontent.io/cms/schema/v1/core#/definitions/content-link',
+    )
+  })
+
   it('throws ContentClientError(not-found) for an unknown delivery key', async () => {
     const client = makeMockContentClient()
     await expect(client.getByKey('does-not-exist')).rejects.toBeInstanceOf(ContentClientError)

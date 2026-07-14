@@ -97,13 +97,13 @@
     },
     "contentPositionMobile": {
       "type": "string",
-      "enum": ["overlay", "beneath"],
+      "enum": ["overlay", "above", "beneath"],
       "title": "Content position (mobile)",
       "description": "Where content sits relative to the image at ≤768px."
     },
     "contentPositionDesktop": {
       "type": "string",
-      "enum": ["overlay", "beneath"],
+      "enum": ["overlay", "above", "beneath"],
       "title": "Content position (desktop)",
       "description": "Where content sits relative to the image at >768px.",
       "default": "overlay"

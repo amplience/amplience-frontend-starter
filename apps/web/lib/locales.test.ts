@@ -13,7 +13,9 @@ import {
   DEFAULT_LOCALE_CODE,
   defaultLocale,
   isLocaleSlug,
+  localeBasePath,
   localeForSlug,
+  localeLabel,
   publicPath,
   resolveLocales,
 } from './locales'
@@ -101,6 +103,30 @@ describe('slug helpers (module default config = en-US)', () => {
     expect(canonicalLocaleSlug('En-Us')).toBe('en-us')
     expect(canonicalLocaleSlug('fr-fr')).toBeUndefined()
     expect(canonicalLocaleSlug('about')).toBeUndefined()
+  })
+})
+
+describe('localeBasePath', () => {
+  it('is empty for the default locale and a slug prefix otherwise', () => {
+    const { locales } = resolveLocales({ AMPLIENCE_LOCALES: 'en-US,fr-FR' })
+    const [def, fr] = locales
+    // Module default is en-US, so an en-US locale is the default here.
+    expect(localeBasePath(def!)).toBe('')
+    expect(localeBasePath(fr!)).toBe('/fr-fr')
+  })
+})
+
+describe('localeLabel', () => {
+  it('appends the region code to disambiguate regional variants', () => {
+    const [enGb] = resolveLocales({ AMPLIENCE_LOCALES: 'en-GB' }).locales
+    const label = localeLabel(enGb!)
+    expect(label).toMatch(/\(GB\)$/)
+    expect(label.length).toBeGreaterThan(4)
+  })
+
+  it('omits the region for a bare language code', () => {
+    const [en] = resolveLocales({ AMPLIENCE_LOCALES: 'en' }).locales
+    expect(localeLabel(en!)).not.toContain('(')
   })
 })
 

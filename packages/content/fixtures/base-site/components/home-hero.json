@@ -67,13 +67,13 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://cdn.media.amplience.net/i/quadraticdemo/introducing-quadratic",
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/introducing-quadratic-dynamic-hero",
         "alt": "The Quadratic Lite logo",
         "width": 2752,
         "height": 1536
       }
     },
-    "contentWidth": "40",
+    "contentWidth": 40,
     "contentPositionMobile": "above",
     "contentPositionDesktop": "overlay",
     "heightBehaviour": "flexible",
@@ -82,7 +82,7 @@
     "overlayIntensity": 50,
     "overlayStyle": "gradient",
     "verticalPosition": "center",
-    "backgroundColor": "secondary",
+    "backgroundColor": "black",
     "ctas": [
       {
         "label": {

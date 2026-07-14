@@ -56,14 +56,6 @@
      e.g. var(--radius) = 4px; calc(var(--radius) * 2) = 8px. */
   --radius: 0;
 
-  --color-primary: #1553b6;
-  --color-secondary: #ffbe09;
-  --color-tertiary: #4caf50;
-
-  --color-primary-contrast: #ffffff;
-  --color-secondary-contrast: #000000;
-  --color-tertiary-contrast: #000000;
-
   --color-white: #ffffff;
   --color-gray-100: #f5f5f5;
   --color-gray-200: #e0e0e0;
@@ -75,6 +67,13 @@
   --color-gray-800: #333333;
   --color-gray-900: #111111;
   --color-black: #000000;
+
+  --color-primary: #1553b6;
+  --color-primary-contrast: var(--color-white);
+  --color-secondary: #ffbe09;
+  --color-secondary-contrast: var(--color-black);
+  --color-tertiary: #4caf50;
+  --color-tertiary-contrast: var(--color-black);
 
   --color-success: #007a4d;
   --color-info: #1553b6;
@@ -110,27 +109,24 @@
 
 [data-brand='amplience'] {
   --font-body: var(--nf-ibm-plex-sans), 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --color-black: rgb(0, 44, 66);
   --color-primary: rgb(0, 228, 179);
-  --color-primary-contrast: rgb(0, 44, 66);
-  --color-secondary: rgb(0, 44, 66);
-  --color-secondary-contrast: rgb(255, 255, 255);
+  --color-primary-contrast: var(--color-black);
+  --color-secondary: rgb(33, 96, 131);
+  --color-secondary-contrast: var(--color-white);
   --color-tertiary: rgb(180, 197, 242);
-  --color-tertiary-contrast: rgb(0, 44, 66);
-
-  body {
-    color: var(--color-secondary);
-  }
+  --color-tertiary-contrast: var(--color-black);
 }
 
 [data-brand='anyafinn'] {
   --font-heading: var(--nf-cormorant-garamond), Georgia, 'Times New Roman', serif;
   --font-body: var(--nf-jost), 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --color-primary: #ffa900;
-  --color-primary-contrast: #000000;
+  --color-primary-contrast: var(--color-black);
   --color-secondary: #886443;
-  --color-secondary-contrast: #ffffff;
+  --color-secondary-contrast: var(--color-white);
   --color-tertiary: #00e4b3;
-  --color-tertiary-contrast: #000000;
+  --color-tertiary-contrast: var(--color-black);
   /* Soft fade — elegant, minimal. No movement, just a gentle opacity dip.
      Suits a fashion/lifestyle brand where motion feels heavy-handed. */
   --interactive-hover-opacity: 0.8;
@@ -140,11 +136,11 @@
   --font-heading: var(--nf-playfair-display), Georgia, 'Times New Roman', serif;
   --font-body: var(--nf-lato), 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --color-primary: #1b4332;
-  --color-primary-contrast: #ffffff;
+  --color-primary-contrast: var(--color-white);
   --color-secondary: #d4af37;
-  --color-secondary-contrast: #000000;
+  --color-secondary-contrast: var(--color-black);
   --color-tertiary: #5a302f;
-  --color-tertiary-contrast: #ffffff;
+  --color-tertiary-contrast: var(--color-white);
   --color-white: #f8f9fa;
   --radius: var(--spacing);
   --button-border-radius: var(--radius);
@@ -159,11 +155,11 @@
   --font-body: var(--nf-inter), 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-code: var(--nf-jetbrains-mono), 'Courier New', monospace;
   --color-primary: #0066ff;
-  --color-primary-contrast: #ffffff;
+  --color-primary-contrast: var(--color-white);
   --color-secondary: #5b75ba;
-  --color-secondary-contrast: #ffffff;
+  --color-secondary-contrast: var(--color-white);
   --color-tertiary: #4caf50;
-  --color-tertiary-contrast: #000000;
+  --color-tertiary-contrast: var(--color-black);
   --color-white: #f8fafc;
   --radius: var(--spacing);
   --button-border-radius: var(--radius);
@@ -176,11 +172,11 @@
   --font-heading: var(--nf-roboto-slab), Georgia, 'Times New Roman', serif;
   --font-body: var(--nf-roboto), 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --color-primary: #0b305f;
-  --color-primary-contrast: #ffffff;
+  --color-primary-contrast: var(--color-white);
   --color-secondary: #7c9f19;
-  --color-secondary-contrast: #ffffff;
+  --color-secondary-contrast: var(--color-white);
   --color-tertiary: #333333;
-  --color-tertiary-contrast: #ffffff;
+  --color-tertiary-contrast: var(--color-white);
   --color-white: #f3f3f3;
   /* Shadow only — utilitarian B2B feel. No transform, just a deeper shadow
      that signals depth without any animation distraction. */
