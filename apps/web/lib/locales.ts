@@ -201,7 +201,7 @@ export const localeBasePath = (locale: Locale): string =>
  * A human display label for a locale (ADR-0015) — the language name (in its
  * own language, capitalised) plus the region code when present, e.g.
  * `English (US)`, `Français (FR)`. The region keeps regional variants like
- * `en-GB` and `en-US` distinct in the language selector. Computed with
+ * `en-GB` and `en-US` distinct in the locale selector. Computed with
  * `Intl.DisplayNames`, which is deterministic across server and client, so it
  * can be produced server-side and handed to the client selector as a prop.
  * Falls back to the raw code if the runtime can't name the language.

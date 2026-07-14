@@ -81,8 +81,8 @@ describe('MockContentClient', () => {
     expect(typeof hero.title).toBe('string')
   })
 
-  it('inlines the language selector placed in the header icon group (depth: all)', async () => {
-    // Guards two things at once: the language-selector fixture is registered in
+  it('inlines the locale selector placed in the header icon group (depth: all)', async () => {
+    // Guards two things at once: the locale-selector fixture is registered in
     // the loader manifest, and it's wired into the header group — so its
     // content-link resolves rather than reaching the renderer as an unresolved
     // stub.
@@ -92,7 +92,7 @@ describe('MockContentClient', () => {
       { depth: 'all' },
     )
     const schemas = group.items.map((item) => item._meta.schema)
-    expect(schemas).toContain('https://quadratic.amplience.com/v2/content/language-selector')
+    expect(schemas).toContain('https://quadratic.amplience.com/v2/content/locale-selector')
     expect(schemas).not.toContain(
       'http://bigcontent.io/cms/schema/v1/core#/definitions/content-link',
     )

@@ -1,13 +1,12 @@
 import type { ComponentRegistryEntry } from '@amplience/quadratic-types'
 
-import { LanguageSelector, type LanguageSelectorProps } from './LanguageSelector'
+import { LocaleSelector, type LocaleSelectorProps } from './LocaleSelector'
 
 /** The schema URI this entry dispatches (ADR-0010 §3 — no aliasing). */
-export const LANGUAGE_SELECTOR_SCHEMA =
-  'https://quadratic.amplience.com/v2/content/language-selector'
+export const LOCALE_SELECTOR_SCHEMA = 'https://quadratic.amplience.com/v2/content/locale-selector'
 
-/** The language-selector delivery body — an optional label plus the envelope. */
-export type LanguageSelectorSchema = {
+/** The locale-selector delivery body — an optional label plus the envelope. */
+export type LocaleSelectorSchema = {
   readonly _meta: unknown
   readonly label?: string
 }
@@ -16,16 +15,14 @@ export type LanguageSelectorSchema = {
  * Validator: `label` is the only authorable field and it's optional, so the
  * only invalid shape is a `label` that exists but isn't a string.
  */
-export const validateLanguageSelectorSchema = (
-  schema: unknown,
-): schema is LanguageSelectorSchema => {
+export const validateLocaleSelectorSchema = (schema: unknown): schema is LocaleSelectorSchema => {
   if (typeof schema !== 'object' || schema === null) return false
   const s = schema as { label?: unknown }
   return s.label === undefined || typeof s.label === 'string'
 }
 
 /**
- * Library default registry entry for the language-selector schema.
+ * Library default registry entry for the locale-selector schema.
  *
  * The locale list is deployment config (ADR-0015), which the library can't
  * know, so this default entry renders the selector with an empty list — it
@@ -35,11 +32,11 @@ export const validateLanguageSelectorSchema = (
  * everywhere (visualization, Storybook) rather than surfacing as an unknown
  * type, while staying inert until composed with real config.
  */
-export const languageSelectorRegistryEntry: ComponentRegistryEntry<
-  LanguageSelectorSchema,
-  LanguageSelectorProps
+export const localeSelectorRegistryEntry: ComponentRegistryEntry<
+  LocaleSelectorSchema,
+  LocaleSelectorProps
 > = {
-  component: LanguageSelector,
+  component: LocaleSelector,
   propsFromSchema: ({ _meta: _envelope, ...props }) => ({ locales: [], defaultSlug: '', ...props }),
-  validate: validateLanguageSelectorSchema,
+  validate: validateLocaleSelectorSchema,
 }

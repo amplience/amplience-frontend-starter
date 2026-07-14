@@ -20,7 +20,17 @@
     },
     "links": {
       "cta": {
-        "label": "Get started",
+        "label": {
+          "values": [
+            { "locale": "en-US", "value": "Get started" },
+            { "locale": "fr-FR", "value": "Commencer" },
+            { "locale": "de-DE", "value": "Loslegen" },
+            { "locale": "en-GB", "value": "Get started" }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
         "href": "/docs/quickstart",
         "variant": "solid",
         "color": "primary"

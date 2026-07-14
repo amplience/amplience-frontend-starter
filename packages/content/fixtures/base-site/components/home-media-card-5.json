@@ -20,7 +20,17 @@
     },
     "links": {
       "cta": {
-        "label": "Find out more",
+        "label": {
+          "values": [
+            { "locale": "en-US", "value": "Find out more" },
+            { "locale": "fr-FR", "value": "En savoir plus" },
+            { "locale": "de-DE", "value": "Mehr erfahren" },
+            { "locale": "en-GB", "value": "Find out more" }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
         "href": "/features/accelerator",
         "variant": "solid",
         "color": "primary"

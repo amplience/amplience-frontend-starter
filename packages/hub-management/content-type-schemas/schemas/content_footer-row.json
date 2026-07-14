@@ -45,7 +45,7 @@
                 "enum": [
                   "https://quadratic.amplience.com/v2/content/logo",
                   "https://quadratic.amplience.com/v2/content/menu",
-                  "https://quadratic.amplience.com/v2/content/language-selector"
+                  "https://quadratic.amplience.com/v2/content/locale-selector"
                 ]
               }
             }

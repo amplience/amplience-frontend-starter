@@ -70,7 +70,7 @@ import siteHierarchyMenuMain from '../../fixtures/base-site/components/header/si
 import siteIconButtonCart from '../../fixtures/base-site/components/header/site-icon-button-cart.json' with { type: 'json' }
 import siteIconButtonLocation from '../../fixtures/base-site/components/header/site-icon-button-location.json' with { type: 'json' }
 import siteIconButtonUser from '../../fixtures/base-site/components/header/site-icon-button-user.json' with { type: 'json' }
-import siteLanguageSelector from '../../fixtures/base-site/components/header/site-language-selector.json' with { type: 'json' }
+import siteLocaleSelector from '../../fixtures/base-site/components/header/site-locale-selector.json' with { type: 'json' }
 import siteLogo from '../../fixtures/base-site/components/header/site-logo.json' with { type: 'json' }
 import siteMenuItemAbout from '../../fixtures/base-site/components/header/site-menu-item-about.json' with { type: 'json' }
 import siteMenuItemBlog from '../../fixtures/base-site/components/header/site-menu-item-blog.json' with { type: 'json' }
@@ -136,7 +136,7 @@ const fixtures: readonly EnrichedContentItem[] = [
   siteIconButtonCart,
   siteHeaderGroupIcons,
   siteMenuToggleButton,
-  siteLanguageSelector,
+  siteLocaleSelector,
   siteMenuMain,
   siteHierarchyMenuMain,
   siteHierarchyMenuItemMens,

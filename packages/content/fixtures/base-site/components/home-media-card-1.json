@@ -20,7 +20,17 @@
     },
     "links": {
       "cta": {
-        "label": "See the components",
+        "label": {
+          "values": [
+            { "locale": "en-US", "value": "See the components" },
+            { "locale": "fr-FR", "value": "Voir les composants" },
+            { "locale": "de-DE", "value": "Siehe die Komponenten" },
+            { "locale": "en-GB", "value": "See the components" }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
         "href": "/features/content-rendering",
         "variant": "solid",
         "color": "primary"

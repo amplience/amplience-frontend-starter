@@ -33,12 +33,12 @@
 import {
   defaultRegistry,
   HIERARCHY_MENU_SCHEMA,
-  LANGUAGE_SELECTOR_SCHEMA,
+  LOCALE_SELECTOR_SCHEMA,
 } from '@amplience/quadratic-components/registry'
 import type { AnyComponentRegistryEntry, Registry } from '@amplience/quadratic-types'
 
 import { HierarchyMenuServer } from '../src/components/HierarchyMenuServer'
-import { LanguageSelectorConfigured } from '../src/components/LanguageSelectorConfigured'
+import { LocaleSelectorConfigured } from '../src/components/LocaleSelectorConfigured'
 
 /**
  * HierarchyMenu is the one entry the deployment overrides.
@@ -69,19 +69,19 @@ const hierarchyMenuServerEntry: AnyComponentRegistryEntry = {
 }
 
 /**
- * The second deployment override: the language selector (ADR-0015).
+ * The second deployment override: the locale selector (ADR-0015).
  *
  * The library default entry renders nothing (it has no locale list). This
  * entry supplies the deployment's locales from `lib/locales` via
- * `LanguageSelectorConfigured`, so the selector shows in the header/footer
+ * `LocaleSelectorConfigured`, so the selector shows in the header/footer
  * whenever more than one locale is configured — and stays hidden otherwise.
  */
-const languageSelectorEntry: AnyComponentRegistryEntry = {
-  component: LanguageSelectorConfigured,
+const localeSelectorEntry: AnyComponentRegistryEntry = {
+  component: LocaleSelectorConfigured,
 }
 
 const registryMap = new Map(defaultRegistry)
 registryMap.set(HIERARCHY_MENU_SCHEMA, hierarchyMenuServerEntry)
-registryMap.set(LANGUAGE_SELECTOR_SCHEMA, languageSelectorEntry)
+registryMap.set(LOCALE_SELECTOR_SCHEMA, localeSelectorEntry)
 
 export const registry: Registry = registryMap

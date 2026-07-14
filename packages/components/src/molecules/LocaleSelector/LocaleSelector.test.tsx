@@ -1,13 +1,13 @@
 // @vitest-environment jsdom
 //
-// Tests for LanguageSelector (ADR-0015). next/navigation is mocked so we can
+// Tests for LocaleSelector (ADR-0015). next/navigation is mocked so we can
 // drive the current path and observe navigation. The selector's job is to keep
 // the reader on the same page while swapping the locale prefix.
 
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { LanguageSelector, type SelectorLocale } from './LanguageSelector'
+import { LocaleSelector, type SelectorLocale } from './LocaleSelector'
 
 const { nav } = vi.hoisted(() => ({ nav: { path: '/', push: vi.fn() } }))
 
@@ -24,7 +24,7 @@ const LOCALES: SelectorLocale[] = [
 
 const renderSelector = (path: string, locales: SelectorLocale[] = LOCALES) => {
   nav.path = path
-  return render(<LanguageSelector locales={locales} defaultSlug="en-us" />)
+  return render(<LocaleSelector locales={locales} defaultSlug="en-us" />)
 }
 
 const select = () => screen.getByRole<HTMLSelectElement>('combobox')
@@ -35,7 +35,7 @@ beforeEach(() => {
 })
 afterEach(cleanup)
 
-describe('LanguageSelector', () => {
+describe('LocaleSelector', () => {
   it('renders nothing when there is a single locale', () => {
     renderSelector('/about', [{ slug: 'en-us', label: 'English (US)' }])
     expect(screen.queryByRole('combobox')).toBeNull()
@@ -93,7 +93,7 @@ describe('LanguageSelector', () => {
 
   it('uses a custom accessible label when provided', () => {
     nav.path = '/about'
-    render(<LanguageSelector locales={LOCALES} defaultSlug="en-us" label="Choose language" />)
+    render(<LocaleSelector locales={LOCALES} defaultSlug="en-us" label="Choose language" />)
     expect(screen.getByRole('combobox', { name: 'Choose language' })).toBeDefined()
   })
 })

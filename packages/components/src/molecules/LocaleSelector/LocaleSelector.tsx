@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { usePathname, useRouter } from 'next/navigation'
 import { useId } from 'react'
 
-import styles from './LanguageSelector.module.css'
+import styles from './LocaleSelector.module.css'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -18,7 +18,7 @@ export type SelectorLocale = {
   readonly label: string
 }
 
-export type LanguageSelectorProps = {
+export type LocaleSelectorProps = {
   /**
    * The locales this deployment serves, supplied by the deployment (the
    * library's default registry entry passes an empty list, so the selector
@@ -38,7 +38,7 @@ export type LanguageSelectorProps = {
 // ---------------------------------------------------------------------------
 
 /**
- * LanguageSelector molecule (ADR-0015) — swaps the active locale, keeping the
+ * LocaleSelector molecule (ADR-0015) — swaps the active locale, keeping the
  * reader on the same page.
  *
  * A content type placeable in the header or footer, like the menu-toggle
@@ -57,12 +57,7 @@ export type LanguageSelectorProps = {
  * no locale data of its own — the list arrives as props, computed once by the
  * deployment.
  */
-export function LanguageSelector({
-  locales,
-  defaultSlug,
-  label,
-  className,
-}: LanguageSelectorProps) {
+export function LocaleSelector({ locales, defaultSlug, label, className }: LocaleSelectorProps) {
   const pathname = usePathname()
   const router = useRouter()
   const selectId = useId()

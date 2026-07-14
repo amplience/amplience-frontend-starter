@@ -1,8 +1,14 @@
 {
-  "contentTypeUri": "https://quadratic.amplience.com/v2/content/language-selector",
+  "contentTypeUri": "https://quadratic.amplience.com/v2/content/locale-selector",
   "status": "ACTIVE",
   "settings": {
-    "label": "Language Selector",
+    "label": "Locale Selector",
+    "icons": [
+      {
+        "size": 256,
+        "url": "https://cdn.media.amplience.net/i/quadraticdemo/content_locale-selector?v=3"
+      }
+    ],
     "visualizations": [
       {
         "label": "Web (localhost)",

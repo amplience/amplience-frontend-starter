@@ -1,10 +1,10 @@
 {
   "id": "a1b2c3d4-0004-4000-8000-000000000024",
-  "label": "Site — language selector",
+  "label": "Site — locale selector",
   "body": {
     "_meta": {
-      "name": "Site — language selector",
-      "schema": "https://quadratic.amplience.com/v2/content/language-selector",
+      "name": "Site — locale selector",
+      "schema": "https://quadratic.amplience.com/v2/content/locale-selector",
       "deliveryId": "a1b2c3d4-0004-4000-8000-000000000024"
     },
     "label": "Language"

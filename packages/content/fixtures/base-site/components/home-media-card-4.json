@@ -20,7 +20,17 @@
     },
     "links": {
       "cta": {
-        "label": "Explore the architecture",
+        "label": {
+          "values": [
+            { "locale": "en-US", "value": "Explore the architecture" },
+            { "locale": "fr-FR", "value": "Explorer l'architecture" },
+            { "locale": "de-DE", "value": "Architektur erkunden" },
+            { "locale": "en-GB", "value": "Explore the architecture" }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
         "href": "/features/architecture",
         "variant": "solid",
         "color": "primary"

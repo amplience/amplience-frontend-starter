@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://quadratic.amplience.com/v2/content/language-selector",
-  "title": "Language Selector",
+  "$id": "https://quadratic.amplience.com/v2/content/locale-selector",
+  "title": "Locale Selector",
   "description": "A locale switcher for the header or footer. Shows visitors a dropdown of the site's languages and takes them to the current page in the language they choose. Renders nothing when the site serves only one language.",
   "allOf": [
     {
