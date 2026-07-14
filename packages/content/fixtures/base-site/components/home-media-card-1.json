@@ -1,14 +1,14 @@
 {
   "id": "a1b2c3d4-0001-4000-8000-000000000011",
-  "label": "Home \u2014 card: content rendering",
+  "label": "Home — card: content rendering",
   "body": {
     "_meta": {
-      "name": "Home \u2014 card: content rendering",
+      "name": "Home — card: content rendering",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000011"
     },
     "title": "Renders any content",
-    "description": "Every schema you define in Amplience Dynamic Content is rendered automatically \u2014 from hero banners to rich editorial layouts.",
+    "description": "Every schema you define in Amplience Dynamic Content is rendered automatically — from hero banners to rich editorial layouts.",
     "media": {
       "mediaType": "ManualImage",
       "image": {
@@ -22,10 +22,30 @@
       "cta": {
         "label": {
           "values": [
-            { "locale": "en-US", "value": "See the components" },
-            { "locale": "fr-FR", "value": "Voir les composants" },
-            { "locale": "de-DE", "value": "Siehe die Komponenten" },
-            { "locale": "en-GB", "value": "See the components" }
+            {
+              "locale": "en-US",
+              "value": "See the components"
+            },
+            {
+              "locale": "en-GB",
+              "value": "See the components"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Ver los componentes"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Voir les composants"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Siehe die Komponenten"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Guarda i componenti"
+            }
           ],
           "_meta": {
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"

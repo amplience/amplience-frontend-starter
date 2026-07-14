@@ -1,9 +1,9 @@
 {
   "id": "a1b2c3d4-0001-4000-8000-000000000003",
-  "label": "Home \u2014 hero",
+  "label": "Home — hero",
   "body": {
     "_meta": {
-      "name": "Home \u2014 hero",
+      "name": "Home — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000003"
     },
@@ -14,6 +14,14 @@
           "value": "Introducing..."
         },
         {
+          "locale": "en-GB",
+          "value": "Introducing..."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Presentamos..."
+        },
+        {
           "locale": "fr-FR",
           "value": "Présentation..."
         },
@@ -22,8 +30,8 @@
           "value": "Einführung..."
         },
         {
-          "locale": "en-GB",
-          "value": "Introducing..."
+          "locale": "it-IT",
+          "value": "Presentazione..."
         }
       ],
       "_meta": {
@@ -34,6 +42,26 @@
       "values": [
         {
           "locale": "en-US",
+          "value": "Quadratic Lite"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Quadratic Lite"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Quadratic Lite"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Quadratic Lite"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Quadratic Lite"
+        },
+        {
+          "locale": "it-IT",
           "value": "Quadratic Lite"
         }
       ],
@@ -48,6 +76,14 @@
           "value": "The open-source accelerator for Amplience-backed projects!"
         },
         {
+          "locale": "en-GB",
+          "value": "The open-source accelerator for Amplience-backed projects!"
+        },
+        {
+          "locale": "es-ES",
+          "value": "¡El acelerador de código abierto para proyectos respaldados por Amplience!"
+        },
+        {
           "locale": "fr-FR",
           "value": "L'accélérateur open-source pour les projets soutenus par Amplience !"
         },
@@ -56,8 +92,8 @@
           "value": "Der Open-Source-Beschleuniger für Amplience-gestützte Projekte!"
         },
         {
-          "locale": "en-GB",
-          "value": "The open-source accelerator for Amplience-backed projects!"
+          "locale": "it-IT",
+          "value": "L'acceleratore open-source per i progetti basati su Amplience!"
         }
       ],
       "_meta": {
@@ -102,6 +138,14 @@
               "value": "About"
             },
             {
+              "locale": "en-GB",
+              "value": "About"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Acerca de"
+            },
+            {
               "locale": "fr-FR",
               "value": "À propos"
             },
@@ -110,8 +154,8 @@
               "value": "Über"
             },
             {
-              "locale": "en-GB",
-              "value": "About"
+              "locale": "it-IT",
+              "value": "Informazioni"
             }
           ],
           "_meta": {
@@ -130,6 +174,14 @@
               "value": "Read the docs"
             },
             {
+              "locale": "en-GB",
+              "value": "Read the docs"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la documentación"
+            },
+            {
               "locale": "fr-FR",
               "value": "Lire la documentation"
             },
@@ -138,8 +190,8 @@
               "value": "Dokumentation lesen"
             },
             {
-              "locale": "en-GB",
-              "value": "Read the docs"
+              "locale": "it-IT",
+              "value": "Leggi la documentazione"
             }
           ],
           "_meta": {

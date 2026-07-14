@@ -1,14 +1,14 @@
 {
   "id": "a1b2c3d4-0001-4000-8000-000000000018",
-  "label": "Home \u2014 card: headless best practices",
+  "label": "Home — card: headless best practices",
   "body": {
     "_meta": {
-      "name": "Home \u2014 card: headless best practices",
+      "name": "Home — card: headless best practices",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000018"
     },
     "title": "Headless best practices",
-    "description": "Server Components, slot-based routing, and a composable block architecture \u2014 headless done right, ready to show any client.",
+    "description": "Server Components, slot-based routing, and a composable block architecture — headless done right, ready to show any client.",
     "media": {
       "mediaType": "ManualImage",
       "image": {
@@ -22,10 +22,30 @@
       "cta": {
         "label": {
           "values": [
-            { "locale": "en-US", "value": "Explore the architecture" },
-            { "locale": "fr-FR", "value": "Explorer l'architecture" },
-            { "locale": "de-DE", "value": "Architektur erkunden" },
-            { "locale": "en-GB", "value": "Explore the architecture" }
+            {
+              "locale": "en-US",
+              "value": "Explore the architecture"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Explore the architecture"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Explorar la arquitectura"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Explorer l'architecture"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Architektur erkunden"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Esplora l'architettura"
+            }
           ],
           "_meta": {
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"

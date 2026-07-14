@@ -1,14 +1,14 @@
 {
   "id": "a1b2c3d4-0001-4000-8000-000000000013",
-  "label": "Home \u2014 card: brand adaptable",
+  "label": "Home — card: brand adaptable",
   "body": {
     "_meta": {
-      "name": "Home \u2014 card: brand adaptable",
+      "name": "Home — card: brand adaptable",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000013"
     },
     "title": "Adapts to your brand",
-    "description": "CSS custom properties let editors control colour, typography, and spacing through content \u2014 no code changes required.",
+    "description": "CSS custom properties let editors control colour, typography, and spacing through content — no code changes required.",
     "media": {
       "mediaType": "ManualImage",
       "image": {
@@ -22,10 +22,30 @@
       "cta": {
         "label": {
           "values": [
-            { "locale": "en-US", "value": "See how" },
-            { "locale": "fr-FR", "value": "Voir comment" },
-            { "locale": "de-DE", "value": "Sehen Sie wie" },
-            { "locale": "en-GB", "value": "See how" }
+            {
+              "locale": "en-US",
+              "value": "See how"
+            },
+            {
+              "locale": "en-GB",
+              "value": "See how"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Ver cómo"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Voir comment"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Sehen Sie wie"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Scopri come"
+            }
           ],
           "_meta": {
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"

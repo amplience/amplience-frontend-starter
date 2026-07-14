@@ -19,6 +19,14 @@
               "value": "Explore the docs"
             },
             {
+              "locale": "en-GB",
+              "value": "Explore the docs"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Explorar la documentación"
+            },
+            {
               "locale": "fr-FR",
               "value": "Explorez la documentation"
             },
@@ -27,8 +35,8 @@
               "value": "Dokumentation erkunden"
             },
             {
-              "locale": "en-GB",
-              "value": "Explore the docs"
+              "locale": "it-IT",
+              "value": "Esplora la documentazione"
             }
           ],
           "_meta": {
