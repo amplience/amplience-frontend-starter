@@ -136,3 +136,47 @@ export function resolveDiAspectRatio(field: TransformedImageField): string | und
 
   return undefined
 }
+
+/**
+ * Resolves the CSS aspect-ratio for any ContentMedia value, from the delivery
+ * payload alone (no network). The single entry point both HeroBlock (to size
+ * its ::before spacer) and ArtDirectedMedia (to reserve <source>/<img> boxes)
+ * use, so desktop and a mobile override resolve their ratios identically.
+ *
+ *  - ManualImage  — the authored `aspectRatio` override, else intrinsic w/h.
+ *  - DynamicImage — delegates to resolveDiAspectRatio (aspectLock → extension
+ *    aspectRatio → source dimensions).
+ *
+ * Defensive on every access: hub content can predate the media partial (a
+ * legacy flat image shape). Returns undefined rather than throwing so a stale
+ * payload degrades to "no reserved ratio" instead of failing the static build.
+ */
+export function resolveContentMediaAspectRatio(media: ContentMediaData): string | undefined {
+  if (media.mediaType === 'ManualImage' && media.image !== undefined) {
+    return media.image.aspectRatio ?? `${media.image.width} / ${media.image.height}`
+  }
+  if (media.mediaType === 'DynamicImage' && media.image !== undefined) {
+    return resolveDiAspectRatio(media.image)
+  }
+  return undefined
+}
+
+/**
+ * Parses a CSS aspect-ratio string into a numeric width/height ratio.
+ * Accepts both the slash form ("16 / 9", "2752 / 1536") and a bare decimal
+ * ("1.7264"). Returns undefined for anything unparseable or non-positive.
+ *
+ * Used to derive placeholder width/height for getImageProps on a DynamicImage,
+ * which has no intrinsic pixel dimensions of its own — the ratio is enough to
+ * generate a correct srcset and reserve a shift-free box.
+ */
+export function cssRatioToNumber(css: string | undefined): number | undefined {
+  if (!css) return undefined
+  if (css.includes('/')) {
+    const [w, h] = css.split('/').map((p) => Number(p.trim()))
+    if (w !== undefined && h !== undefined && w > 0 && h > 0) return w / h
+    return undefined
+  }
+  const n = Number(css.trim())
+  return Number.isFinite(n) && n > 0 ? n : undefined
+}

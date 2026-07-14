@@ -459,12 +459,15 @@
          --media-aspect-ratio = authored ratio (aspectLock / ManualImage dims)
          or the intrinsic ratio resolved by HeroBlockServer; when unset the
          declaration is invalid, the spacer has no height, and content alone
-         drives the row. */
+         drives the row.
+         When the hero art-directs (mobileOverride), --media-aspect-ratio-mobile
+         reserves the mobile image's own box here so a differing ratio doesn't
+         shift layout; it falls back to --media-aspect-ratio when unset. */
       &::before {
         content: '';
         grid-area: 1 / 1;
         width: 100%;
-        aspect-ratio: var(--media-aspect-ratio);
+        aspect-ratio: var(--media-aspect-ratio-mobile, var(--media-aspect-ratio));
         visibility: hidden;
       }
 

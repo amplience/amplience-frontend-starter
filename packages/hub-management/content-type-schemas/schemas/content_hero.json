@@ -25,7 +25,7 @@
           },
           {
             "label": "🖼️ Background",
-            "pointers": ["/media", "/backgroundColor"]
+            "pointers": ["/media", "/mobileOverride", "/mobileMedia", "/backgroundColor"]
           },
           {
             "label": "⚙️ Layout",
@@ -82,6 +82,12 @@
           "$ref": "https://quadratic.amplience.com/v2/partials/media"
         }
       ]
+    },
+    "mobileOverride": {
+      "type": "boolean",
+      "title": "Mobile override",
+      "description": "Show a different image on mobile (≤768px). When on, set the Mobile media below.",
+      "default": false
     },
     "ctas": {
       "type": "array",
@@ -192,10 +198,30 @@
       "minimum": 0
     }
   },
+  "if": {
+    "properties": { "mobileOverride": { "const": true } },
+    "required": ["mobileOverride"]
+  },
+  "then": {
+    "properties": {
+      "mobileMedia": {
+        "title": "Mobile media",
+        "description": "Shown at ≤768px when Mobile override is on. May use a different aspect ratio to the main media — each breakpoint reserves its own box, so there is no layout shift, and only the matched image downloads.",
+        "allOf": [
+          {
+            "$ref": "https://quadratic.amplience.com/v2/partials/media"
+          }
+        ]
+      }
+    },
+    "required": ["mobileMedia"]
+  },
   "propertyOrder": [
     "title",
     "subtitle",
     "media",
+    "mobileOverride",
+    "mobileMedia",
     "ctas",
     "contentPositionMobile",
     "contentPositionDesktop",
