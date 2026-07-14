@@ -17,7 +17,7 @@
         "items": [
           {
             "label": "📝 Foreground",
-            "pointers": ["/title", "/subtitle", "/ctas", "/textColor"]
+            "pointers": ["/preTitle", "/title", "/subtitle", "/description", "/ctas", "/textColor"]
           },
           {
             "label": "🎨 Overlay",
