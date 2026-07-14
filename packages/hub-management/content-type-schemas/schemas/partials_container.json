@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/partials/container",
+  "title": "Container",
+  "description": "The Container atom's authoring contract — the max-width cap and gutter toggle that map directly to its props (packages/components/src/atoms/Container). Maintained in one place so every block that wraps its content in a Container offers the same controls.",
+  "type": "object",
+  "definitions": {
+    "max-width": {
+      "type": "string",
+      "enum": ["narrow", "default", "wide", "none"]
+    },
+    "gutter": {
+      "type": "boolean"
+    }
+  }
+}

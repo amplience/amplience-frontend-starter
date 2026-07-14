@@ -103,9 +103,10 @@
       "default": "raised"
     },
     "color": {
-      "type": "string",
-      "enum": ["white", "light", "dark", "black", "primary", "secondary", "tertiary"],
       "title": "Card colour",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+      ],
       "default": "white"
     }
   },

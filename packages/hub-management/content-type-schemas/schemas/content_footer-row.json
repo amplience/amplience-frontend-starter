@@ -54,9 +54,10 @@
       }
     },
     "backgroundColor": {
-      "type": "string",
-      "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"],
-      "title": "Background colour"
+      "title": "Background colour",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+      ]
     }
   },
   "propertyOrder": ["items", "backgroundColor", "foregroundColor"]

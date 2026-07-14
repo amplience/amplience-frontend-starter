@@ -35,8 +35,11 @@ import contentMenuItem from '../content-type-schemas/schemas/content_menu-item.j
 import contentMenuToggleButton from '../content-type-schemas/schemas/content_menu-toggle-button.json'
 import contentMenu from '../content-type-schemas/schemas/content_menu.json'
 import contentPage from '../content-type-schemas/schemas/content_page.json'
+import partialsColour from '../content-type-schemas/schemas/partials_colour.json'
+import partialsContainer from '../content-type-schemas/schemas/partials_container.json'
 import partialsContentBlocks from '../content-type-schemas/schemas/partials_content-blocks.json'
 import partialsCta from '../content-type-schemas/schemas/partials_cta.json'
+import partialsIcon from '../content-type-schemas/schemas/partials_icon.json'
 import partialsMedia from '../content-type-schemas/schemas/partials_media.json'
 import slotsSlot from '../content-type-schemas/schemas/slots_slot.json'
 
@@ -70,6 +73,9 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(partialsMedia, 'PARTIAL'),
   entry(partialsCta, 'PARTIAL'),
   entry(partialsContentBlocks, 'PARTIAL'),
+  entry(partialsColour, 'PARTIAL'),
+  entry(partialsContainer, 'PARTIAL'),
+  entry(partialsIcon, 'PARTIAL'),
   entry(contentPage, 'CONTENT_TYPE'),
   entry(contentBlogArticle, 'CONTENT_TYPE'),
   entry(contentHero, 'CONTENT_TYPE'),

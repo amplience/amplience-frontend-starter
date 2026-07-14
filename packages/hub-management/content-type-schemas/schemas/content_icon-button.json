@@ -11,45 +11,10 @@
   "type": "object",
   "properties": {
     "icon": {
-      "type": "string",
-      "enum": [
-        "menu",
-        "x",
-        "chevron-up",
-        "chevron-down",
-        "chevron-left",
-        "chevron-right",
-        "arrow-left",
-        "arrow-right",
-        "search",
-        "filter",
-        "sliders",
-        "layout-grid",
-        "list",
-        "eye",
-        "plus",
-        "minus",
-        "user",
-        "log-in",
-        "log-out",
-        "shopping-cart",
-        "shopping-bag",
-        "heart",
-        "tag",
-        "credit-card",
-        "package",
-        "truck",
-        "map-pin",
-        "trash",
-        "share",
-        "star",
-        "check",
-        "check-circle",
-        "alert-circle",
-        "info",
-        "cart"
-      ],
-      "title": "Icon"
+      "title": "Icon",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/icon#/definitions/icon-name" }
+      ]
     },
     "label": {
       "type": "string",

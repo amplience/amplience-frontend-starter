@@ -43,9 +43,10 @@
       "default": "solid"
     },
     "color": {
-      "type": "string",
-      "enum": ["primary", "secondary", "tertiary", "black", "white"],
-      "title": "Button Colour"
+      "title": "Button Colour",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/button-palette" }
+      ]
     }
   },
   "propertyOrder": ["label", "href", "variant", "color"],

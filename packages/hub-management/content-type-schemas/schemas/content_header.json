@@ -55,11 +55,12 @@
       "description": "When true, the header remains fixed at the top of the viewport on scroll."
     },
     "maxWidth": {
-      "type": "string",
-      "enum": ["narrow", "default", "wide", "none"],
       "title": "Max width",
       "description": "Max-width constraint passed to child Containers.",
-      "default": "default"
+      "default": "default",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width" }
+      ]
     }
   },
   "propertyOrder": ["rows", "sticky", "maxWidth"]

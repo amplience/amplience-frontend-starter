@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/partials_icon.json",
+  "schemaId": "https://quadratic.amplience.com/v2/partials/icon",
+  "validationLevel": "PARTIAL"
+}

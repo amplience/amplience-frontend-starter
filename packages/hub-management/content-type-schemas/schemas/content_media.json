@@ -33,16 +33,18 @@
       "description": "Extend the media edge-to-edge, ignoring container padding and max-width."
     },
     "backgroundColor": {
-      "type": "string",
-      "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"],
-      "title": "Background colour"
+      "title": "Background colour",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+      ]
     },
     "maxWidth": {
-      "type": "string",
-      "enum": ["narrow", "default", "wide", "none"],
       "title": "Max width",
       "description": "Ignored when full bleed is on.",
-      "default": "default"
+      "default": "default",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width" }
+      ]
     }
   },
   "propertyOrder": ["media", "caption", "href", "fullBleed", "backgroundColor", "maxWidth"],
