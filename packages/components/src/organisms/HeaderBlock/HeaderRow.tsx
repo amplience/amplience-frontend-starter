@@ -53,7 +53,7 @@ export function HeaderRow({
   className,
 }: HeaderRowProps) {
   return (
-    <div className={clsx(styles.root, className)} data-color={backgroundColor}>
+    <div className={clsx('HeaderRow', styles.root, className)} data-color={backgroundColor}>
       <Container maxWidth={maxWidth} gutter className={clsx(styles.inner)}>
         {children}
       </Container>

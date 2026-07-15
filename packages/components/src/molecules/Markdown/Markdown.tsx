@@ -84,7 +84,7 @@ const makeComponents = (localeBasePath: string): Components => ({
  */
 export function Markdown({ content, localeBasePath = '', className }: MarkdownProps) {
   return (
-    <div className={clsx(styles.root, className)}>
+    <div className={clsx('Markdown', styles.root, className)}>
       <ReactMarkdown components={makeComponents(localeBasePath)}>{content}</ReactMarkdown>
     </div>
   )

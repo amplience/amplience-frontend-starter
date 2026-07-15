@@ -28,7 +28,7 @@ export type ListItemProps = {
  */
 export function ListItem({ children, className, ...rest }: ListItemProps) {
   return (
-    <li className={clsx(styles.root, className)} {...rest}>
+    <li className={clsx('ListItem', styles.root, className)} {...rest}>
       {children}
     </li>
   )

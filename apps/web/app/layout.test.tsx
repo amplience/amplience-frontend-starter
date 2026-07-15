@@ -21,7 +21,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import RootLayout from './layout'
 
-// The optional CMS custom-CSS layer is exercised in lib/custom-css.test.ts;
+// The optional CMS custom CSS is exercised in lib/custom-css.test.ts;
 // here it is mocked so the shell tests stay hermetic (no content client) and
 // default to "no custom CSS" unless a case opts in.
 const { getCustomCss } = vi.hoisted(() => ({

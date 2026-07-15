@@ -70,7 +70,7 @@ export function List({
 }: ListProps) {
   return (
     <El
-      className={clsx(styles.root, styles[El], className)}
+      className={clsx('List', styles.root, styles[El], className)}
       data-gap={gap}
       data-marker={marker}
       {...rest}

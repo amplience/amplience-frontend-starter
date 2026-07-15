@@ -44,27 +44,10 @@ function neutraliseStyleClose(css: string): string {
 
 async function fetchCustomCssUncached(): Promise<string> {
   try {
-    const item = await client.getByKey<{ css?: string; _meta?: { deliveryId?: string } }>(
-      DELIVERY_KEY,
-    )
-    const css = (item.css ?? '').trim()
-    if (DEV) {
-      console.warn(
-        `[custom-css] fetched "${DELIVERY_KEY}" — deliveryId=${item._meta?.deliveryId ?? '?'}, ` +
-          `css length ${css.length}, has :root rule? ${/:root\s*\{/.test(css)}`,
-      )
-    }
-    return css
-  } catch (err) {
-    // not-found / delivery error → treat as "no custom CSS". Silent in
-    // production (graceful degradation is intended), but noisy in dev so a
-    // mis-keyed or unpublished item is diagnosable rather than mysterious.
-    if (DEV) {
-      console.warn(
-        `[custom-css] delivery fetch for "${DELIVERY_KEY}" failed: ` +
-          (err instanceof Error ? err.message : String(err)),
-      )
-    }
+    const item = await client.getByKey<{ css?: string }>(DELIVERY_KEY)
+    return (item.css ?? '').trim()
+  } catch {
+    // not-found / delivery error → treat as "no custom CSS" (graceful degradation).
     return ''
   }
 }
@@ -83,20 +66,11 @@ const fetchCustomCssCached = unstable_cache(
  * is nothing to inject. Null (not an empty string) so the caller can skip
  * rendering the <style> element entirely.
  *
- * In development the ISR cache is bypassed so edits/publishes show immediately
- * (and the diagnostic log reflects the live fetch); production reads through
- * `unstable_cache` for the revalidate window.
+ * In development the ISR cache is bypassed so edits/publishes show immediately;
+ * production reads through `unstable_cache` for the revalidate window.
  */
 export async function getCustomCss(): Promise<string | null> {
-  if (!ENABLED) {
-    if (DEV) {
-      console.warn(
-        `[custom-css] disabled — AMPLIENCE_CUSTOM_CSS=${JSON.stringify(process.env.AMPLIENCE_CUSTOM_CSS)} ` +
-          `(set it to "TRUE" in this process's env to enable)`,
-      )
-    }
-    return null
-  }
+  if (!ENABLED) return null
   const css = DEV ? await fetchCustomCssUncached() : await fetchCustomCssCached()
   return css === '' ? null : neutraliseStyleClose(css)
 }

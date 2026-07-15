@@ -187,7 +187,7 @@ export function Icon({ name, size = '1em', color, label, className }: IconProps)
 
   return (
     <span
-      className={clsx(styles.root, className)}
+      className={clsx('Icon', styles.root, className)}
       role={isDecorative ? undefined : 'img'}
       aria-label={isDecorative ? undefined : label}
       aria-hidden={isDecorative ? 'true' : undefined}

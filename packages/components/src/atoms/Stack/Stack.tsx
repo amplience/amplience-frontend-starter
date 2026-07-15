@@ -65,7 +65,7 @@ export function Stack({
 }: StackProps) {
   return (
     <div
-      className={clsx(styles.root, className)}
+      className={clsx('Stack', styles.root, className)}
       data-direction={direction}
       data-gap={gap}
       data-wrap={wrap ? 'true' : undefined}

@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://quadratic.amplience.com/v2/sitestructure/custom-css",
   "title": "Custom CSS",
-  "description": "An optional layer of site-wide custom CSS. When the deployment opts in (AMPLIENCE_CUSTOM_CSS=\"TRUE\"), this is injected after the design tokens as an override — letting the team that owns site config add brand overrides without editing or redeploying tokens.css.",
+  "description": "Optional site-wide custom CSS. When the deployment opts in (AMPLIENCE_CUSTOM_CSS=\"TRUE\"), this is injected after the design tokens as an override — letting the team that owns site config add brand overrides without editing or redeploying tokens.css.",
   "allOf": [
     {
       "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"

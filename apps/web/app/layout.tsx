@@ -67,7 +67,6 @@ export const viewport: Viewport = {
  */
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const customCss = await getCustomCss()
-  console.log('[custom-css] injecting', customCss === null ? 'no CSS' : 'custom CSS', customCss)
   return (
     <html
       lang="en"

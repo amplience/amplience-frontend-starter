@@ -84,7 +84,7 @@ export function Card({
 }: CardProps) {
   return (
     <div
-      className={clsx(styles.root, className)}
+      className={clsx('Card', styles.root, className)}
       data-elevation={elevation}
       data-padding={padding}
       data-color={color}

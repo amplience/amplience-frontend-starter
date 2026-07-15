@@ -1,5 +1,5 @@
 /**
- * On-demand revalidation for the CMS custom-CSS layer.
+ * On-demand revalidation for the CMS custom CSS.
  *
  * The custom-CSS read is cached with `unstable_cache` under the
  * `CUSTOM_CSS_TAG` tag (see ../../../lib/custom-css), with a time-based

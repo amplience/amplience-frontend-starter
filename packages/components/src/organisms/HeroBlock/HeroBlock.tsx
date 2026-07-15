@@ -267,7 +267,7 @@ export function HeroBlock({
   return (
     <section
       aria-labelledby={titleId}
-      className={clsx(styles.root, className)}
+      className={clsx('HeroBlock', styles.root, className)}
       data-content-position-mobile={hasMedia ? contentPositionMobile : undefined}
       data-content-position-desktop={hasMedia ? contentPositionDesktop : undefined}
       data-height-behaviour={hasMedia ? heightBehaviour : undefined}

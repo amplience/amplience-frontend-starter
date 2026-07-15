@@ -47,7 +47,7 @@ export function HeaderBlock({
 }: HeaderBlockProps) {
   return (
     <header
-      className={clsx(styles.root, className)}
+      className={clsx('HeaderBlock', styles.root, className)}
       data-sticky={sticky || undefined}
       data-max-width={maxWidth}
     >

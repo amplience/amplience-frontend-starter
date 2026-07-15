@@ -74,5 +74,5 @@ export function Logo({ image, link, localeBasePath, className }: LogoProps) {
     )
   }
 
-  return <div className={clsx(styles.root, className)}>{img}</div>
+  return <div className={clsx('Logo', styles.root, className)}>{img}</div>
 }

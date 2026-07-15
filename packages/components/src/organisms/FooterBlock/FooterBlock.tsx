@@ -47,7 +47,7 @@ export function FooterBlock({
 }: FooterBlockProps) {
   return (
     <footer
-      className={clsx(styles.root, className)}
+      className={clsx('FooterBlock', styles.root, className)}
       data-sticky={sticky || undefined}
       data-max-width={maxWidth}
     >
