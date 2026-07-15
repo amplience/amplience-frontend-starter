@@ -7,7 +7,37 @@
       "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000021"
     },
-    "content": "## What's in the box\n\nA **recursive renderer**, a content-client abstraction with mock and SDK adapters, an atomic-design component library, and an automation CLI for hub provisioning.\n\nClone, point at an Amplience hub, ship.",
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "## What's in the box\n\nA **recursive renderer**, a content-client abstraction with mock and SDK adapters, an atomic-design component library, and an automation CLI for hub provisioning.\n\nClone, point at an Amplience hub, ship."
+        },
+        {
+          "locale": "en-GB",
+          "value": "## What's in the box\n\nA **recursive renderer**, a content-client abstraction with mock and SDK adapters, an atomic-design component library, and an automation CLI for hub provisioning.\n\nClone, point at an Amplience hub, ship."
+        },
+        {
+          "locale": "es-ES",
+          "value": "## Qué incluye\n\nUn **renderizador recursivo**, una abstracción de cliente de contenido con adaptadores mock y SDK, una biblioteca de componentes de diseño atómico y una CLI de automatización para el aprovisionamiento del hub.\n\nClona, apunta a un hub de Amplience y publica."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "## Ce que contient la boîte\n\nUn **moteur de rendu récursif**, une abstraction de client de contenu avec des adaptateurs mock et SDK, une bibliothèque de composants en atomic design et une CLI d'automatisation pour le provisionnement du hub.\n\nClonez, pointez vers un hub Amplience, déployez."
+        },
+        {
+          "locale": "de-DE",
+          "value": "## Was drin ist\n\nEin **rekursiver Renderer**, eine Content-Client-Abstraktion mit Mock- und SDK-Adaptern, eine Komponentenbibliothek im Atomic Design und eine Automatisierungs-CLI für das Hub-Provisioning.\n\nKlonen, auf einen Amplience-Hub zeigen, ausliefern."
+        },
+        {
+          "locale": "it-IT",
+          "value": "## Cosa c'è nella scatola\n\nUn **renderer ricorsivo**, un'astrazione di content client con adattatori mock e SDK, una libreria di componenti in atomic design e una CLI di automazione per il provisioning dell'hub.\n\nClona, punta a un hub Amplience, rilascia."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "ctas": [
       {
         "label": {

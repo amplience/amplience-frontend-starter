@@ -7,8 +7,68 @@
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000011"
     },
-    "title": "Renders any content",
-    "description": "Every schema you define in Amplience Dynamic Content is rendered automatically — from hero banners to rich editorial layouts.",
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Renders any content"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Renders any content"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Renderiza cualquier contenido"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Affiche n'importe quel contenu"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Stellt jeden Inhalt dar"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Visualizza qualsiasi contenuto"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Every schema you define in Amplience Dynamic Content is rendered automatically — from hero banners to rich editorial layouts."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Every schema you define in Amplience Dynamic Content is rendered automatically — from hero banners to rich editorial layouts."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Cada esquema que defines en Amplience Dynamic Content se renderiza automáticamente, desde banners hero hasta ricos diseños editoriales."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Chaque schéma que vous définissez dans Amplience Dynamic Content est affiché automatiquement — des bannières hero aux mises en page éditoriales riches."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Jedes Schema, das Sie in Amplience Dynamic Content definieren, wird automatisch dargestellt — von Hero-Bannern bis hin zu umfangreichen redaktionellen Layouts."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Ogni schema che definisci in Amplience Dynamic Content viene visualizzato automaticamente — dai banner hero ai ricchi layout editoriali."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "media": {
       "mediaType": "ManualImage",
       "image": {

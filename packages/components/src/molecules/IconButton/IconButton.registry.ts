@@ -21,6 +21,9 @@ export const validateIconButtonSchema = (schema: unknown): schema is IconButtonS
 /** Registry entry for the icon-button schema. Not a container — no `getChildren`. */
 export const iconButtonRegistryEntry: ComponentRegistryEntry<IconButtonSchema, IconButtonProps> = {
   component: IconButton,
-  propsFromSchema: ({ _meta: _envelope, ...props }) => props,
+  propsFromSchema: ({ _meta: _envelope, ...props }, ctx) => ({
+    ...props,
+    localeBasePath: ctx.localeBasePath ?? '',
+  }),
   validate: validateIconButtonSchema,
 }

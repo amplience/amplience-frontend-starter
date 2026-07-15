@@ -2,6 +2,7 @@ import clsx from 'clsx'
 
 import { Icon } from '../../atoms/Icon/Icon'
 import type { IconName } from '../../atoms/Icon/Icon'
+import { Link } from '../../atoms/Link/Link'
 import styles from './IconButton.module.css'
 
 // ---------------------------------------------------------------------------
@@ -37,6 +38,11 @@ export type IconButtonProps = {
    */
   expanded?: boolean
   visibility?: 'mobileOnly' | 'desktopOnly'
+  /**
+   * Active locale URL prefix (ADR-0015), supplied by the renderer. Keeps nav
+   * links inside the current locale. Defaults to '' (default locale).
+   */
+  localeBasePath?: string
   className?: string
 }
 
@@ -65,6 +71,7 @@ export function IconButton({
   onClick,
   expanded,
   visibility,
+  localeBasePath,
   className,
 }: IconButtonProps) {
   const inner = <Icon name={icon} size={24} />
@@ -72,9 +79,14 @@ export function IconButton({
 
   if (link) {
     return (
-      <a href={link} className={classes} aria-label={label}>
+      <Link
+        href={link}
+        className={classes}
+        {...(localeBasePath !== undefined && { localeBasePath })}
+        aria-label={label}
+      >
         {inner}
-      </a>
+      </Link>
     )
   }
 

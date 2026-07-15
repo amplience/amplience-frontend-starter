@@ -19,8 +19,10 @@
       ]
     },
     "caption": {
-      "type": "string",
-      "title": "Caption"
+      "title": "Caption",
+      "allOf": [
+        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+      ]
     },
     "href": {
       "type": "string",

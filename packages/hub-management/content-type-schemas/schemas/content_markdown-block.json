@@ -30,10 +30,24 @@
   "type": "object",
   "properties": {
     "content": {
-      "type": "string",
       "title": "Content",
       "description": "Markdown source. Standard CommonMark.",
-      "format": "markdown"
+      "allOf": [{ "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value" }],
+      "properties": {
+        "values": {
+          "items": {
+            "properties": {
+              "value": {
+                "type": "string",
+                "title": "Content",
+                "description": "Markdown source. Standard CommonMark.",
+                "format": "markdown",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
     },
     "ctas": {
       "type": "array",

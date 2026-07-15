@@ -7,8 +7,68 @@
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000013"
     },
-    "title": "Adapts to your brand",
-    "description": "CSS custom properties let editors control colour, typography, and spacing through content — no code changes required.",
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Adapts to your brand"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Adapts to your brand"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Se adapta a tu marca"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "S'adapte à votre marque"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Passt sich Ihrer Marke an"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Si adatta al tuo brand"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "CSS custom properties let editors control colour, typography, and spacing through content — no code changes required."
+        },
+        {
+          "locale": "en-GB",
+          "value": "CSS custom properties let editors control colour, typography, and spacing through content — no code changes required."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Las propiedades personalizadas de CSS permiten a los editores controlar el color, la tipografía y el espaciado a través del contenido, sin necesidad de cambios en el código."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Les propriétés personnalisées CSS permettent aux éditeurs de contrôler la couleur, la typographie et l'espacement via le contenu — sans modification de code."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Mit CSS Custom Properties steuern Redakteure Farbe, Typografie und Abstände über den Inhalt — ganz ohne Codeänderungen."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Le proprietà personalizzate CSS consentono agli editor di controllare colore, tipografia e spaziatura tramite il contenuto — senza modifiche al codice."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "media": {
       "mediaType": "ManualImage",
       "image": {

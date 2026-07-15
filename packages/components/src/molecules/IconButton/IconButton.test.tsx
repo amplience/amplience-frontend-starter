@@ -60,7 +60,7 @@ describe('iconButtonRegistryEntry', () => {
         { _meta: {}, icon: 'cart', label: 'Cart', link: '/cart' },
         {},
       ),
-    ).toEqual({ icon: 'cart', label: 'Cart', link: '/cart' })
+    ).toEqual({ icon: 'cart', label: 'Cart', link: '/cart', localeBasePath: '' })
   })
 
   it('passes visibility through to props', () => {
@@ -69,7 +69,13 @@ describe('iconButtonRegistryEntry', () => {
         { _meta: {}, icon: 'cart', label: 'Cart', link: '/cart', visibility: 'desktopOnly' },
         {},
       ),
-    ).toEqual({ icon: 'cart', label: 'Cart', link: '/cart', visibility: 'desktopOnly' })
+    ).toEqual({
+      icon: 'cart',
+      label: 'Cart',
+      link: '/cart',
+      visibility: 'desktopOnly',
+      localeBasePath: '',
+    })
   })
 
   it('validates: icon and label are both required', () => {
