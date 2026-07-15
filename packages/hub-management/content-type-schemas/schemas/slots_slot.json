@@ -8,8 +8,55 @@
       "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
     }
   ],
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "📝 Content",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "📝 Content",
+            "pointers": ["/components"]
+          },
+          {
+            "label": "⚙️ Delivery Keys",
+            "pointers": ["/_meta/deliveryKeys/values"]
+          }
+        ]
+      }
+    }
+  },
   "type": "object",
   "properties": {
+    "_meta": {
+      "title": "Delivery",
+      "type": "object",
+      "properties": {
+        "deliveryKeys": {
+          "type": "object",
+          "properties": {
+            "values": {
+              "title": "Delivery Key",
+              "description": "This unique key isn't visible to users, but can be used by your site to retrieve this slot content.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "title": "Delivery Key",
+                    "description": "e.g. acme/site/not-found",
+                    "minLength": 1,
+                    "maxLength": 150
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "components": {
       "title": "Components",
       "description": "Ordered components rendered in this slot.",

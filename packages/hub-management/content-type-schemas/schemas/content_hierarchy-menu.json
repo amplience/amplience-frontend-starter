@@ -22,6 +22,25 @@
       }
     ]
   },
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "⚙️ Options",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "⚙️ Options",
+            "pointers": ["/useMobileLayout", "/display"]
+          },
+          {
+            "label": "Misc",
+            "pointers": ["/_meta/deliveryKeys/values"]
+          }
+        ]
+      }
+    }
+  },
   "type": "object",
   "properties": {
     "_meta": {
@@ -29,12 +48,14 @@
       "type": "object",
       "properties": {
         "deliveryKeys": {
-          "title": "Delivery keys",
           "type": "object",
           "properties": {
             "values": {
-              "title": "Delivery Keys",
+              "title": "Delivery Key",
+              "description": "This isn't visible, but the hierarchy menu uses this delivery key for serving its content, so a unique delivery key is essential.",
               "type": "array",
+              "minItems": 1,
+              "maxItems": 1,
               "items": {
                 "type": "object",
                 "properties": {

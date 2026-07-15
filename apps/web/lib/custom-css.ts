@@ -1,0 +1,102 @@
+/**
+ * Optional CMS-managed custom CSS (Site Components repo).
+ *
+ * Off by default: the feature only runs when AMPLIENCE_CUSTOM_CSS is explicitly
+ * "TRUE" (case-insensitive; "1" also accepted). When off, `getCustomCss` returns
+ * null without touching the CMS, so the deployment stays pure-static and pays
+ * nothing — matching the "core config lives in code" default. When on, the CSS
+ * is fetched by delivery key and injected site-wide (see app/layout.tsx).
+ *
+ * The delivery SDK uses axios, which Next's fetch cache does not intercept, so
+ * the read is wrapped in `unstable_cache` to give it ISR semantics (a shared,
+ * time-revalidated cache with a bustable tag) rather than re-fetching per render.
+ * A miss or delivery error degrades to null — an absent/blank item simply
+ * injects nothing, never an error.
+ */
+
+import { unstable_cache } from 'next/cache'
+
+import { client, siteName } from './content-client'
+
+/** Cache tag for on-demand revalidation (e.g. from an Amplience webhook). */
+export const CUSTOM_CSS_TAG = 'amplience-custom-css'
+
+const ENABLED = /^(true|1)$/i.test((process.env.AMPLIENCE_CUSTOM_CSS ?? '').trim())
+
+const DEV = process.env.NODE_ENV === 'development'
+
+/** ISR window in seconds; override with AMPLIENCE_CUSTOM_CSS_REVALIDATE. */
+const REVALIDATE = Number.parseInt(process.env.AMPLIENCE_CUSTOM_CSS_REVALIDATE ?? '', 10) || 300
+
+const DELIVERY_KEY = `${siteName}/site/custom-css`
+
+/**
+ * Neutralise a `</style>` breakout in author-supplied CSS. Inside a <style> raw
+ * text element the parser ends the element at `</style`, so a stray closing tag
+ * could inject arbitrary markup. Escaping the slash keeps it inert; within a CSS
+ * string `\/` still resolves to `/`, so legitimate content is unaffected. CSS
+ * cannot execute script, and the field is gated behind a permissioned repo, so
+ * this is the only escaping the injection needs.
+ */
+function neutraliseStyleClose(css: string): string {
+  return css.replace(/<\/(style)/gi, '<\\/$1')
+}
+
+async function fetchCustomCssUncached(): Promise<string> {
+  try {
+    const item = await client.getByKey<{ css?: string; _meta?: { deliveryId?: string } }>(
+      DELIVERY_KEY,
+    )
+    const css = (item.css ?? '').trim()
+    if (DEV) {
+      console.warn(
+        `[custom-css] fetched "${DELIVERY_KEY}" — deliveryId=${item._meta?.deliveryId ?? '?'}, ` +
+          `css length ${css.length}, has :root rule? ${/:root\s*\{/.test(css)}`,
+      )
+    }
+    return css
+  } catch (err) {
+    // not-found / delivery error → treat as "no custom CSS". Silent in
+    // production (graceful degradation is intended), but noisy in dev so a
+    // mis-keyed or unpublished item is diagnosable rather than mysterious.
+    if (DEV) {
+      console.warn(
+        `[custom-css] delivery fetch for "${DELIVERY_KEY}" failed: ` +
+          (err instanceof Error ? err.message : String(err)),
+      )
+    }
+    return ''
+  }
+}
+
+const fetchCustomCssCached = unstable_cache(
+  fetchCustomCssUncached,
+  ['amplience-custom-css', DELIVERY_KEY],
+  {
+    revalidate: REVALIDATE,
+    tags: [CUSTOM_CSS_TAG],
+  },
+)
+
+/**
+ * The site-wide custom CSS to inject, or null when the feature is off or there
+ * is nothing to inject. Null (not an empty string) so the caller can skip
+ * rendering the <style> element entirely.
+ *
+ * In development the ISR cache is bypassed so edits/publishes show immediately
+ * (and the diagnostic log reflects the live fetch); production reads through
+ * `unstable_cache` for the revalidate window.
+ */
+export async function getCustomCss(): Promise<string | null> {
+  if (!ENABLED) {
+    if (DEV) {
+      console.warn(
+        `[custom-css] disabled — AMPLIENCE_CUSTOM_CSS=${JSON.stringify(process.env.AMPLIENCE_CUSTOM_CSS)} ` +
+          `(set it to "TRUE" in this process's env to enable)`,
+      )
+    }
+    return null
+  }
+  const css = DEV ? await fetchCustomCssUncached() : await fetchCustomCssCached()
+  return css === '' ? null : neutraliseStyleClose(css)
+}

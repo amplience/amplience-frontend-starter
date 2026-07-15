@@ -22,6 +22,10 @@
           {
             "label": "⚙️ Options",
             "pointers": ["/sticky", "/maxWidth"]
+          },
+          {
+            "label": "🌐 Sites",
+            "pointers": ["/_meta/deliveryKeys/values"]
           }
         ]
       }
@@ -29,6 +33,34 @@
   },
   "type": "object",
   "properties": {
+    "_meta": {
+      "title": "Delivery",
+      "type": "object",
+      "properties": {
+        "deliveryKeys": {
+          "type": "object",
+          "properties": {
+            "values": {
+              "title": "Site",
+              "description": "Apply the footer to this site (e.g. acme)",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "title": "Delivery Key",
+                    "description": "Use the format {siteKey}/site/footer\n(e.g. acme/site/footer)",
+                    "minLength": 1,
+                    "maxLength": 150
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "rows": {
       "title": "Footer rows",
       "description": "Ordered list of footer rows.",

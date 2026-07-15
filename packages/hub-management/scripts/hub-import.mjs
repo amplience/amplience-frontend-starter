@@ -228,6 +228,7 @@ const importSettings = async () => {
 const importExtensions = async () => {
   const hubName = env('AMPLIENCE_HUB_NAME')
   const repoContent = env('AMPLIENCE_REPO_CONTENT')
+  const repoSiteComponents = env('AMPLIENCE_REPO_SITE_COMPONENTS')
 
   // Join the settings definition (label → source id) with the map the
   // settings step wrote (source id → target id) to get label → target id.
@@ -255,6 +256,7 @@ const importExtensions = async () => {
       resolved = resolveTokens(JSON.stringify(definition, null, 2), {
         hub: hubName,
         repoContent,
+        repoSiteComponents,
         statusMap,
         source: file,
       })
@@ -392,6 +394,8 @@ const importContent = async () => {
   console.log(`\n→ Seeding delivery keys under the "${siteName}/" site namespace`)
   const contentRepo = require_('AMPLIENCE_REPO_CONTENT', 'target the content repository')
   const slotsRepo = require_('AMPLIENCE_REPO_SLOTS', 'target the slots repository')
+  // Optional — only seeded when the deployment uses CMS-managed site config.
+  const siteComponentsRepo = env('AMPLIENCE_REPO_SITE_COMPONENTS')
 
   // --publish only queues items the run created or changed; when the hub
   // already matches the fixtures (e.g. recovering from a run that imported
@@ -409,6 +413,13 @@ const importContent = async () => {
     { dir: 'slots', repo: slotsRepo },
     { dir: 'pages', repo: contentRepo },
   ]
+  // Site Components is standalone (nothing links to or from it), so its order
+  // in the leaf-first sequence is irrelevant. Seed it only when both the repo
+  // is configured and the deployment actually ships fixtures for it — absent
+  // either, the feature simply isn't in use and the phase is skipped.
+  if (siteComponentsRepo && existsSync(path.join(fixturesDir, 'site-components'))) {
+    phases.push({ dir: 'site-components', repo: siteComponentsRepo })
+  }
   for (const { dir, repo } of phases) {
     const staged = path.join(stagingDir, `items-${dir}`)
     rmSync(staged, { recursive: true, force: true })

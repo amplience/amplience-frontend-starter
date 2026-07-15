@@ -1,0 +1,15 @@
+{
+  "contentTypeUri": "https://quadratic.amplience.com/v2/sitestructure/custom-css",
+  "status": "ACTIVE",
+  "settings": {
+    "label": "Custom CSS",
+    "visualizations": [
+      {
+        "label": "JSON",
+        "templatedUri": "https://delivery-preview.visualizations.content.amplience.net?id={{content.sys.id}}&vse={{vse.domain}}&hub=${hub}&realtime=true",
+        "default": true
+      }
+    ]
+  },
+  "repositories": ["sitestructure"]
+}

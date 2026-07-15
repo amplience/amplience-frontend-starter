@@ -113,6 +113,7 @@ import blogGettingStartedPage from '../../fixtures/base-site/pages/blog/getting-
 import blogQuadraticAcceleratorPage from '../../fixtures/base-site/pages/blog/quadratic-accelerator.json' with { type: 'json' }
 import docsPage from '../../fixtures/base-site/pages/docs.json' with { type: 'json' }
 import homePage from '../../fixtures/base-site/pages/home.json' with { type: 'json' }
+import siteCustomCss from '../../fixtures/base-site/site-components/custom-css.json' with { type: 'json' }
 import aboutMainSlot from '../../fixtures/base-site/slots/about-main.json' with { type: 'json' }
 import blogContentModellingMainSlot from '../../fixtures/base-site/slots/blog-content-modelling-main.json' with { type: 'json' }
 import blogGettingStartedMainSlot from '../../fixtures/base-site/slots/blog-getting-started-main.json' with { type: 'json' }
@@ -206,6 +207,7 @@ const fixtures: readonly EnrichedContentItem[] = [
   siteFooterMenuItemCompanySustainability,
   siteFooterMenuItemCompanyModernSlavery,
   siteFooterMenuItemCompanyFaqs,
+  siteCustomCss,
   notFoundMainSlot,
   notFoundHero,
   homePage,

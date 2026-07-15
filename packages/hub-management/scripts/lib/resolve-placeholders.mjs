@@ -6,9 +6,10 @@
  * tokens that the seed resolves against the target hub at import time — the
  * same convention the types step uses for `${hub}`.
  *
- *   ${hub}            → the target hub name
- *   ${repo:content}   → the target content repository id
- *   ${status:Label}   → the target workflow-state id for that label
+ *   ${hub}                  → the target hub name
+ *   ${repo:content}         → the target content repository id
+ *   ${repo:siteComponents}  → the target Site Components repository id (optional)
+ *   ${status:Label}         → the target workflow-state id for that label
  *
  * Workflow-state ids can't be authored ahead of time because dc-cli's
  * `settings import` mints a fresh id per state on each new hub and records the
@@ -59,7 +60,10 @@ export function buildStatusMap(settingsJson, settingsMap) {
  * Throws on an unknown status label, a token whose value isn't available, or
  * any leftover `${…}` — nothing dangling ever reaches dc-cli.
  */
-export function resolveTokens(text, { hub, repoContent, statusMap = new Map(), source = 'input' }) {
+export function resolveTokens(
+  text,
+  { hub, repoContent, repoSiteComponents, statusMap = new Map(), source = 'input' },
+) {
   let result = text.replace(/\$\{status:([^}]+)\}/g, (_match, rawLabel) => {
     const label = rawLabel.trim()
     const targetId = statusMap.get(label)
@@ -80,6 +84,17 @@ export function resolveTokens(text, { hub, repoContent, statusMap = new Map(), s
       )
     }
     return repoContent
+  })
+
+  result = result.replace(/\$\{repo:siteComponents\}/g, () => {
+    if (repoSiteComponents === undefined || repoSiteComponents === '') {
+      throw new Error(
+        `${source}: references \${repo:siteComponents} but AMPLIENCE_REPO_SITE_COMPONENTS is not set. ` +
+          `Set it (env-manager auto-fills it from the "Site Components" repo, or add it manually) ` +
+          `to seed CMS-managed site config.`,
+      )
+    }
+    return repoSiteComponents
   })
 
   result = result.replace(/\$\{hub\}/g, () => {

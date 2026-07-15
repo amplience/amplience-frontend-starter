@@ -158,6 +158,8 @@ const freeArchivedDeliveryKeys = async (client, repoId, repoLabel, ignoreSchemaV
 const hubName = require_('AMPLIENCE_HUB_NAME', 'identify the hub mapping file')
 const contentRepo = require_('AMPLIENCE_REPO_CONTENT', 'target the content repository')
 const slotsRepo = require_('AMPLIENCE_REPO_SLOTS', 'target the slots repository')
+// Optional — only wiped when the deployment uses CMS-managed site config.
+const siteComponentsRepo = env('AMPLIENCE_REPO_SITE_COMPONENTS')
 require_('AMPLIENCE_HUB_ID', 'archive content type schemas (--hubId is required by dc-cli)')
 
 // Scope: `items` wipes only content items (map + delivery keys + items);
@@ -195,6 +197,14 @@ if (clientId !== undefined && clientSecret !== undefined) {
   const client = new DynamicContent({ client_id: clientId, client_secret: clientSecret })
   await freeArchivedDeliveryKeys(client, contentRepo, 'content', ignoreSchemaValidation)
   await freeArchivedDeliveryKeys(client, slotsRepo, 'slots', ignoreSchemaValidation)
+  if (siteComponentsRepo !== undefined) {
+    await freeArchivedDeliveryKeys(
+      client,
+      siteComponentsRepo,
+      'site-components',
+      ignoreSchemaValidation,
+    )
+  }
 } else {
   console.warn(
     '\n⚠ AMPLIENCE_CLIENT_ID/SECRET not set — cannot check archived items for ' +
@@ -221,6 +231,11 @@ await dcCli('content-item', 'archive', '--repoId', contentRepo, ...archiveFlags)
 
 console.log(`\nArchiving all content in slots repo (${slotsRepo})…`)
 await dcCli('content-item', 'archive', '--repoId', slotsRepo, ...archiveFlags)
+
+if (siteComponentsRepo !== undefined) {
+  console.log(`\nArchiving all content in Site Components repo (${siteComponentsRepo})…`)
+  await dcCli('content-item', 'archive', '--repoId', siteComponentsRepo, ...archiveFlags)
+}
 
 if (scope === 'all') {
   // 4. Archive all content types in the hub.

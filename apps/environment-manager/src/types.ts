@@ -9,6 +9,14 @@ export type Environment = {
   localhostUrl: string
   repoContent: string
   repoSlots: string
+  /**
+   * "Site Components" repository — the authoring/permission boundary for
+   * CMS-managed site config (currently just the custom-CSS content type).
+   * Blank ("") when the deployment keeps all config in code, matching how
+   * repoContent/repoSlots treat an unset value. Used only by the
+   * management/seeding tooling; the delivery runtime never reads repo IDs.
+   */
+  repoSiteComponents: string
   clientId: string
   clientSecret: string
   stagingHost: string
@@ -89,6 +97,7 @@ export const EMPTY_ENV: Environment = {
   localhostUrl: 'http://localhost:3000',
   repoContent: '',
   repoSlots: '',
+  repoSiteComponents: '',
   clientId: '',
   clientSecret: '',
   stagingHost: '',

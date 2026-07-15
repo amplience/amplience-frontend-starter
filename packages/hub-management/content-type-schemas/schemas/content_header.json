@@ -22,6 +22,10 @@
           {
             "label": "⚙️ Options",
             "pointers": ["/sticky", "/maxWidth"]
+          },
+          {
+            "label": "🌐 Sites",
+            "pointers": ["/_meta/deliveryKeys/values"]
           }
         ]
       }
@@ -29,6 +33,34 @@
   },
   "type": "object",
   "properties": {
+    "_meta": {
+      "title": "Delivery",
+      "type": "object",
+      "properties": {
+        "deliveryKeys": {
+          "type": "object",
+          "properties": {
+            "values": {
+              "title": "Site",
+              "description": "Apply the header to this site (e.g. acme)",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "title": "Delivery Key",
+                    "description": "Use the format {siteKey}/site/header\n(e.g. acme/site/header)",
+                    "minLength": 1,
+                    "maxLength": 150
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "rows": {
       "title": "Header rows",
       "description": "Ordered list of header rows (e.g. logo row, nav row).",

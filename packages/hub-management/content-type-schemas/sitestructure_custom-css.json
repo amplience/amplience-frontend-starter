@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/sitestructure_custom-css.json",
+  "schemaId": "https://quadratic.amplience.com/v2/sitestructure/custom-css",
+  "validationLevel": "CONTENT_TYPE"
+}
