@@ -1,6 +1,6 @@
 {
   "id": "a1b2c3d4-0001-4000-8000-000000000022",
-  "label": "Home \u2014 columns feature image",
+  "label": "Home — columns feature image",
   "body": {
     "_meta": {
       "name": "Home — columns feature image",
@@ -18,6 +18,36 @@
         "height": 500
       }
     },
-    "caption": "Built on Amplience. Shipped with mocks."
+    "caption": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Built on Amplience. Shipped with mocks."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Built on Amplience. Shipped with mocks."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Construido sobre Amplience. Entregado con mocks."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Conçu sur Amplience. Livré avec des mocks."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Auf Amplience aufgebaut. Mit Mocks ausgeliefert."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Costruito su Amplience. Rilasciato con i mock."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
   }
 }
