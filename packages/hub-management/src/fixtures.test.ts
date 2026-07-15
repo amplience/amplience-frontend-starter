@@ -48,6 +48,12 @@ const coreSchemaStub = {
         defaultHost: { type: 'string' },
       },
     },
+    // Referenced by fields localized with a custom inner value (e.g.
+    // markdown-block's `content`, which localizes a `format: markdown` string).
+    // A field arrives either as a `{ values, _meta }` object (no locale
+    // requested) or as a resolved scalar (locale requested), so accept
+    // anything — the schema's own inner `value` override does the real check.
+    'localized-value': {},
   },
 } as const
 
@@ -69,12 +75,12 @@ const hierarchySchemaStub = {
  * either as a `{ values, _meta }` object (no locale requested) or as a
  * resolved scalar (locale requested), so the stub accepts anything — the
  * platform remains the authority on the full localized shape.
+ * (`localized-value` lives on the core schema, not here — see coreSchemaStub.)
  */
 const localizationSchemaStub = {
   $id: 'http://bigcontent.io/cms/schema/v1/localization',
   definitions: {
     'localized-string': {},
-    'localized-value': {},
   },
 } as const
 
