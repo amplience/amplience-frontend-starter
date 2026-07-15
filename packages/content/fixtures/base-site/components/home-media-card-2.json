@@ -7,8 +7,68 @@
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000012"
     },
-    "title": "Works out of the box",
-    "description": "Clone, connect your Amplience hub, and you have a fully functional frontend in minutes. Minimal configuration, maximum velocity.",
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Works out of the box"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Works out of the box"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Funciona desde el primer momento"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Fonctionne immédiatement"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Sofort einsatzbereit"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Funziona da subito"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Clone, connect your Amplience hub, and you have a fully functional frontend in minutes. Minimal configuration, maximum velocity."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Clone, connect your Amplience hub, and you have a fully functional frontend in minutes. Minimal configuration, maximum velocity."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Clona, conecta tu hub de Amplience y tendrás un frontend totalmente funcional en minutos. Configuración mínima, máxima velocidad."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Clonez, connectez votre hub Amplience et vous obtenez un frontend entièrement fonctionnel en quelques minutes. Configuration minimale, vitesse maximale."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Klonen, Ihren Amplience-Hub verbinden und Sie haben in wenigen Minuten ein voll funktionsfähiges Frontend. Minimale Konfiguration, maximale Geschwindigkeit."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Clona, collega il tuo hub Amplience e in pochi minuti hai un frontend completamente funzionante. Configurazione minima, massima velocità."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "media": {
       "mediaType": "ManualImage",
       "image": {

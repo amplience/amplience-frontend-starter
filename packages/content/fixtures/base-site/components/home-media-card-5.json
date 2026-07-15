@@ -7,8 +7,68 @@
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000019"
     },
-    "title": "Faster time to value",
-    "description": "Skip the boilerplate. Quadratic Lite gets new Amplience implementations to a working frontend faster, so teams can focus on what matters.",
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Faster time to value"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Faster time to value"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Menor tiempo hasta obtener valor"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Rentabilité plus rapide"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Schnellere Wertschöpfung"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Time to value più rapido"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Skip the boilerplate. Quadratic Lite gets new Amplience implementations to a working frontend faster, so teams can focus on what matters."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Skip the boilerplate. Quadratic Lite gets new Amplience implementations to a working frontend faster, so teams can focus on what matters."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Olvídate del código repetitivo. Quadratic Lite lleva las nuevas implementaciones de Amplience a un frontend funcional más rápido, para que los equipos puedan centrarse en lo que importa."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Fini le code standard. Quadratic Lite amène plus rapidement les nouvelles implémentations Amplience à un frontend fonctionnel, pour que les équipes se concentrent sur l'essentiel."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Sparen Sie sich den Boilerplate-Code. Quadratic Lite bringt neue Amplience-Implementierungen schneller zu einem funktionierenden Frontend, damit sich Teams auf das Wesentliche konzentrieren können."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Salta il boilerplate. Quadratic Lite porta le nuove implementazioni Amplience a un frontend funzionante più velocemente, così i team possono concentrarsi su ciò che conta."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "media": {
       "mediaType": "ManualImage",
       "image": {

@@ -7,8 +7,68 @@
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000018"
     },
-    "title": "Headless best practices",
-    "description": "Server Components, slot-based routing, and a composable block architecture — headless done right, ready to show any client.",
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Headless best practices"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Headless best practices"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Buenas prácticas headless"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Bonnes pratiques headless"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Headless Best Practices"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Best practice headless"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Server Components, slot-based routing, and a composable block architecture — headless done right, ready to show any client."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Server Components, slot-based routing, and a composable block architecture — headless done right, ready to show any client."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Server Components, enrutamiento basado en slots y una arquitectura de bloques componibles: headless bien hecho, listo para mostrar a cualquier cliente."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Server Components, routage basé sur les slots et une architecture de blocs composables — le headless bien fait, prêt à présenter à tout client."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Server Components, slot-basiertes Routing und eine komponierbare Block-Architektur — Headless richtig umgesetzt, bereit für jede Kundenpräsentation."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Server Components, routing basato su slot e un'architettura a blocchi componibili — headless fatto bene, pronto da mostrare a qualsiasi cliente."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "media": {
       "mediaType": "ManualImage",
       "image": {
