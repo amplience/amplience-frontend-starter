@@ -1,7 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { api } from '../api.js'
-import type { Config, Environment, EnvironmentStats, OpKey, WebApp } from '../types.js'
+import type {
+  CapabilityState,
+  Config,
+  Environment,
+  EnvironmentStats,
+  OpKey,
+  PermissionsReport,
+  WebApp,
+} from '../types.js'
 
 type Props = {
   env: Environment
@@ -78,6 +86,24 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
   const [op, setOp] = useState<ActiveOp | null>(null)
   const [logExpanded, setLogExpanded] = useState(false)
   const logRef = useRef<HTMLPreElement>(null)
+
+  // ── Permissions preflight ──────────────────────────────────────────────────
+  const [perms, setPerms] = useState<PermissionsReport | null>(null)
+  const [permsError, setPermsError] = useState<string | null>(null)
+  const [permsLoading, setPermsLoading] = useState(false)
+
+  async function checkPermissions() {
+    setPermsLoading(true)
+    setPermsError(null)
+    try {
+      setPerms(await api.permissions(env.name))
+    } catch (err) {
+      setPerms(null)
+      setPermsError(err instanceof Error ? err.message : 'Permissions check failed')
+    } finally {
+      setPermsLoading(false)
+    }
+  }
 
   // ── Site management ────────────────────────────────────────────────────────
   const [showAddSite, setShowAddSite] = useState(false)
@@ -211,6 +237,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
         setStatsError(null)
       })
       .catch((err: unknown) => {
+        console.error(`Failed to fetch stats for environment "${env.name}":`, err)
         setStatsError(err instanceof Error ? err.message : 'Failed to fetch stats')
       })
   }, [env.name])
@@ -438,6 +465,17 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                   </button>
                   <button
                     className="btn--icon-only"
+                    onClick={() => {
+                      void checkPermissions()
+                    }}
+                    disabled={isRunning || permsLoading}
+                    aria-label="Check permissions"
+                    title="Check what these credentials can read and write"
+                  >
+                    🔑
+                  </button>
+                  <button
+                    className="btn--icon-only"
                     onClick={onEdit}
                     disabled={isRunning}
                     aria-label="Environment settings"
@@ -515,6 +553,77 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                 Retry
               </button>
             </p>
+          )}
+
+          {/* Permissions preflight panel */}
+          {permsLoading && (
+            <p className="perm-panel__loading">
+              <span className="spinner spinner--sm" aria-hidden="true" /> Checking permissions…
+            </p>
+          )}
+          {permsError !== null && (
+            <p className="env-card__stats-error">
+              Permissions check failed: {permsError}{' '}
+              <button
+                className="btn btn--sm btn--ghost"
+                onClick={() => {
+                  void checkPermissions()
+                }}
+              >
+                Retry
+              </button>
+            </p>
+          )}
+          {perms !== null && !permsLoading && (
+            <div className="perm-panel">
+              <div className="perm-panel__header">
+                <span className="perm-panel__title">Credential permissions</span>
+                <button
+                  className="log-close"
+                  onClick={() => setPerms(null)}
+                  aria-label="Dismiss permissions"
+                >
+                  ✕ Dismiss
+                </button>
+              </div>
+              {!perms.hub.readable ? (
+                <p className="env-card__stats-error">{perms.hub.detail}</p>
+              ) : (
+                <>
+                  <table className="env-card__stats perm-panel__table">
+                    <thead>
+                      <tr>
+                        <th className="col-resource">Capability</th>
+                        <th className="col-perm">Read</th>
+                        <th className="col-perm">Write</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {perms.checks.map((check) => (
+                        <tr key={check.key} title={check.detail}>
+                          <td className="col-resource">
+                            {check.label}
+                            {check.detail !== undefined && (
+                              <span className="perm-detail"> — {check.detail}</span>
+                            )}
+                          </td>
+                          <td className="col-perm">
+                            <CapabilityBadge state={check.read} />
+                          </td>
+                          <td className="col-perm">
+                            <CapabilityBadge state={check.write} />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <p className="perm-panel__note">
+                    Read is probed live; write reflects the actions the API advertises to these
+                    credentials via its hypermedia links.
+                  </p>
+                </>
+              )}
+            </div>
           )}
 
           {/* Footer: all-resources operations */}
@@ -1041,6 +1150,25 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
         </>
       )}
     </div>
+  )
+}
+
+// ── CapabilityBadge ───────────────────────────────────────────────────────────
+
+const CAPABILITY_DISPLAY: Record<CapabilityState, { glyph: string; title: string }> = {
+  ok: { glyph: '✓', title: 'Allowed' },
+  denied: { glyph: '✗', title: 'Denied for these credentials' },
+  unknown: { glyph: '?', title: 'Could not be determined' },
+  error: { glyph: '⚠', title: 'Probe failed — see row detail' },
+  skipped: { glyph: '–', title: 'Skipped' },
+}
+
+function CapabilityBadge({ state }: { state: CapabilityState }) {
+  const { glyph, title } = CAPABILITY_DISPLAY[state]
+  return (
+    <span className={`perm-badge perm-badge--${state}`} title={title}>
+      {glyph}
+    </span>
   )
 }
 

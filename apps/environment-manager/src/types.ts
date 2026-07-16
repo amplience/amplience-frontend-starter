@@ -73,6 +73,24 @@ export type DiscoverResult = {
   hubs: DiscoveredHub[]
 }
 
+// ── Permissions preflight (mirrors server/permissions.ts) ─────────────────────
+
+export type CapabilityState = 'ok' | 'denied' | 'unknown' | 'error' | 'skipped'
+
+export type PermissionCheck = {
+  key: string
+  label: string
+  read: CapabilityState
+  write: CapabilityState
+  detail?: string
+}
+
+export type PermissionsReport = {
+  hub: { id: string; readable: boolean; detail?: string }
+  checks: PermissionCheck[]
+  checkedAt: string
+}
+
 export type OpKey =
   | 'seed-settings'
   | 'sync-settings'

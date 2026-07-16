@@ -8,6 +8,8 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { streamText } from 'hono/streaming'
 
+import { buildPermissionsReport, type FetchJson } from './permissions.ts'
+
 // ── Paths ─────────────────────────────────────────────────────────────────────
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -44,6 +46,8 @@ type Environment = {
   defaultSite: string
   webApps: WebApp[]
   republish: boolean
+  /** Opt-in per environment: allow dc-cli's --ignoreSchemaValidation (see src/types.ts). */
+  ignoreSchemaValidation?: boolean
 }
 
 type Config = {
@@ -584,6 +588,41 @@ app.post('/api/amplience/discover', async (c) => {
   }
 })
 
+// ── Permissions ───────────────────────────────────────────────────────────────
+
+// GET /api/environments/:name/permissions — preflight what the credential
+// pair can read (live GET probes) and write (permission-filtered HAL links)
+// across the resource areas the seed/sync/wipe operations touch.
+app.get('/api/environments/:name/permissions', async (c) => {
+  const { name } = c.req.param()
+  const config = await readConfig()
+  const env = config.environments.find((e) => e.name === name)
+  if (!env) return c.json({ error: `Environment "${name}" not found.` }, 404)
+
+  if (!env.clientId || !env.clientSecret || !env.hubId) {
+    return c.json({ error: 'Environment is missing clientId, clientSecret or hubId.' }, 400)
+  }
+
+  try {
+    const token = await getAmplienceToken(env.clientId, env.clientSecret)
+    const fetchJson: FetchJson = async (url) => {
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } })
+      let body: unknown = null
+      try {
+        body = await res.json()
+      } catch {
+        body = null
+      }
+      return { status: res.status, body }
+    }
+    const report = await buildPermissionsReport(env, fetchJson)
+    return c.json(report)
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return c.json({ error: `Permissions check failed: ${message}` }, 500)
+  }
+})
+
 // ── Stats ─────────────────────────────────────────────────────────────────────
 
 // GET /api/environments/:name/stats  — fetch resource counts from Amplience API
@@ -624,6 +663,7 @@ app.get('/api/environments/:name/stats', async (c) => {
     return c.json({ schemas, types, items: contentItems + slotItems, extensions, workflowStates })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
+    console.error(`Failed to fetch stats for environment!! "${env.name}":`, err)
     return c.json({ error: `Stats fetch failed: ${message}` }, 500)
   }
 })

@@ -460,6 +460,74 @@ body {
   margin-bottom: 0.75rem;
 }
 
+/* ── Permissions preflight panel ───────────────────────────────────────────── */
+
+.perm-panel {
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.6rem;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.perm-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+}
+
+.perm-panel__title {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.perm-panel__table {
+  margin-bottom: 0.35rem;
+}
+
+.perm-panel__table .col-perm {
+  width: 3.5rem;
+  text-align: center;
+}
+
+.perm-panel__loading {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.perm-panel__note {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.perm-detail {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.perm-badge {
+  font-weight: 700;
+}
+
+.perm-badge--ok {
+  color: var(--color-active);
+}
+
+.perm-badge--denied {
+  color: var(--color-danger);
+}
+
+.perm-badge--unknown,
+.perm-badge--error,
+.perm-badge--skipped {
+  color: var(--color-text-muted);
+}
+
 /* Footer "All resources" label */
 .env-card__ops-label {
   margin-right: auto;
