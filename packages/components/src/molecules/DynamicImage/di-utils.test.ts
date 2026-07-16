@@ -10,7 +10,6 @@ import type {
 
 import {
   amplienceDiLoader,
-  aspectLockToCss,
   buildDiBaseUrl,
   contentMediaUrl,
   resolveDiAspectRatio,
@@ -61,32 +60,6 @@ describe('amplienceDiLoader', () => {
   })
 })
 
-describe('aspectLockToCss', () => {
-  it('converts "16:9" to "16 / 9"', () => {
-    expect(aspectLockToCss('16:9')).toBe('16 / 9')
-  })
-
-  it('converts "4:3" to "4 / 3"', () => {
-    expect(aspectLockToCss('4:3')).toBe('4 / 3')
-  })
-
-  it('converts "1:1" to "1 / 1"', () => {
-    expect(aspectLockToCss('1:1')).toBe('1 / 1')
-  })
-
-  it('returns undefined for undefined input', () => {
-    expect(aspectLockToCss(undefined)).toBeUndefined()
-  })
-
-  it('returns undefined for malformed input (no colon)', () => {
-    expect(aspectLockToCss('169')).toBeUndefined()
-  })
-
-  it('returns undefined for empty string', () => {
-    expect(aspectLockToCss('')).toBeUndefined()
-  })
-})
-
 // ---------------------------------------------------------------------------
 // resolveDiAspectRatio
 // ---------------------------------------------------------------------------
@@ -94,47 +67,29 @@ describe('aspectLockToCss', () => {
 describe('resolveDiAspectRatio', () => {
   const base: TransformedImageField = { image: sampleLink }
 
-  it('prefers an authored aspectLock over everything else', () => {
-    expect(resolveDiAspectRatio({ ...base, aspectLock: '16:9', aspectRatio: 1.3393 })).toBe(
-      '16 / 9',
-    )
+  it('uses the extension-written decimal aspectRatio (delivered ratio)', () => {
+    expect(resolveDiAspectRatio({ ...base, aspectRatio: 1.3393 })).toBe('1.3393')
   })
 
-  it('treats aspectLock "none" as absent and falls through to the extension ratio', () => {
-    expect(resolveDiAspectRatio({ ...base, aspectLock: 'none', aspectRatio: 1.7264 })).toBe(
+  it('prefers aspectRatio over width / height when both are present', () => {
+    expect(resolveDiAspectRatio({ ...base, aspectRatio: 1.7264, width: 1136, height: 658 })).toBe(
       '1.7264',
     )
   })
 
-  it('uses the extension-written decimal aspectRatio when no aspectLock', () => {
-    expect(resolveDiAspectRatio({ ...base, aspectRatio: 1.3393 })).toBe('1.3393')
+  it('falls back to delivered width / height when aspectRatio is absent', () => {
+    expect(resolveDiAspectRatio({ ...base, width: 1200, height: 896 })).toBe('1200 / 896')
   })
 
-  it('falls back to srcWidth / srcHeight when no ratio and no crop', () => {
-    expect(resolveDiAspectRatio({ ...base, srcWidth: 1200, srcHeight: 896 })).toBe('1200 / 896')
-  })
-
-  it('does NOT use srcWidth / srcHeight when the query carries a crop (original dims describe the uncropped asset)', () => {
+  it('uses width / height regardless of any crop in the query (they describe the DELIVERED image)', () => {
     expect(
       resolveDiAspectRatio({
         ...base,
-        srcWidth: 1200,
-        srcHeight: 896,
+        width: 1136,
+        height: 658,
         query: 'crop={2.25%},{14.62%},{94.67%},{73.44%}',
       }),
-    ).toBeUndefined()
-  })
-
-  it('still uses the extension aspectRatio when a crop is present (it is crop-aware)', () => {
-    expect(
-      resolveDiAspectRatio({
-        ...base,
-        aspectRatio: 1.7264,
-        srcWidth: 1200,
-        srcHeight: 896,
-        query: 'crop={2.25%},{14.62%},{94.67%},{73.44%}',
-      }),
-    ).toBe('1.7264')
+    ).toBe('1136 / 658')
   })
 
   it('returns undefined for legacy payloads with no dimension data (no guessed default)', () => {
@@ -143,7 +98,7 @@ describe('resolveDiAspectRatio', () => {
 
   it('rejects non-positive values', () => {
     expect(resolveDiAspectRatio({ ...base, aspectRatio: 0 })).toBeUndefined()
-    expect(resolveDiAspectRatio({ ...base, srcWidth: 0, srcHeight: 896 })).toBeUndefined()
+    expect(resolveDiAspectRatio({ ...base, width: 0, height: 896 })).toBeUndefined()
   })
 })
 

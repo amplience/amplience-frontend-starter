@@ -63,7 +63,7 @@ const dynamicMobile: ContentMediaData = {
   image: {
     image: { name: 'hero-mobile', endpoint: 'my-store', defaultHost: 'cdn.media.amplience.net' },
     query: 'sm=aspect&aspect=9:16',
-    aspectLock: '9:16',
+    aspectRatio: 0.5625,
   },
   imageAltText: 'Dynamic mobile',
 }

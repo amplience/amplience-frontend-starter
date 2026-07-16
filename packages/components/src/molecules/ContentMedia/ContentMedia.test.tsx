@@ -79,7 +79,7 @@ const dynamicMedia: ContentMediaData = {
       defaultHost: 'cdn.media.amplience.net',
     },
     query: 'sm=aspect&aspect=16:9',
-    aspectLock: '16:9',
+    aspectRatio: 1.7778,
   },
   imageAltText: 'A dynamic image',
 }

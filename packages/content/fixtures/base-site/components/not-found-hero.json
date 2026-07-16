@@ -38,7 +38,7 @@
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
-    "subtitle": {
+    "description": {
       "values": [
         {
           "locale": "en-US",
@@ -106,6 +106,7 @@
         },
         "href": "/"
       }
-    ]
+    ],
+    "textColor": "black"
   }
 }

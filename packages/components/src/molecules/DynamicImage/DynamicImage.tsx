@@ -52,8 +52,9 @@ export function DynamicImage({
       : `${baseUrl}?${query}`
     : baseUrl
 
-  // Resolve aspect ratio from the delivery payload alone: authored aspectLock,
-  // else the crop-aware ratio the di-transform extension wrote at pick time.
+  // Resolve aspect ratio from the delivery payload alone: the delivered-image
+  // ratio (aspectRatio, or width/height) the di-transform extension wrote at
+  // pick time — crop applied when one is drawn, otherwise the original's.
   // No network, no server dependency — renders identically on the site (RSC)
   // and in the /visualization live-edit loop (client). If the payload predates
   // the extension writing dimensions, no ratio is set — contexts that impose

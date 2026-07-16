@@ -265,7 +265,7 @@ describe('HeroBlock', () => {
       expect(style).not.toContain('--media-aspect-ratio')
     })
 
-    it('uses the extension-written aspectRatio for an unlocked DynamicImage in flexible overlay', () => {
+    it('uses the extension-written aspectRatio for a DynamicImage in flexible overlay', () => {
       const dynamicMedia = {
         mediaType: 'DynamicImage' as const,
         image: {
@@ -274,9 +274,8 @@ describe('HeroBlock', () => {
             endpoint: 'my-store',
             defaultHost: 'cdn.media.amplience.net',
           },
-          aspectLock: 'none',
-          srcWidth: 1200,
-          srcHeight: 896,
+          width: 1200,
+          height: 896,
           aspectRatio: 1.3393,
         },
       }
@@ -285,7 +284,7 @@ describe('HeroBlock', () => {
       expect(style).toContain('--media-aspect-ratio: 1.3393')
     })
 
-    it('prefers the authored aspectLock over the extension-written aspectRatio', () => {
+    it('falls back to delivered width / height when aspectRatio is absent', () => {
       const dynamicMedia = {
         mediaType: 'DynamicImage' as const,
         image: {
@@ -294,13 +293,13 @@ describe('HeroBlock', () => {
             endpoint: 'my-store',
             defaultHost: 'cdn.media.amplience.net',
           },
-          aspectLock: '16:9',
-          aspectRatio: 1.3393,
+          width: 1136,
+          height: 658,
         },
       }
       render(<HeroBlock title="Title" media={dynamicMedia} />)
       const style = screen.getByRole('region').getAttribute('style') ?? ''
-      expect(style).toContain('--media-aspect-ratio: 16 / 9')
+      expect(style).toContain('--media-aspect-ratio: 1136 / 658')
     })
 
     it('sets no --media-aspect-ratio when the ratio is unresolvable (no guessed default)', () => {

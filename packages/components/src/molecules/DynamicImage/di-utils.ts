@@ -48,33 +48,6 @@ export function amplienceDiLoader({ src, width }: ImageLoaderProps): string {
 }
 
 /**
- * Converts an aspectLock string ("16:9") to a CSS aspect-ratio value ("16 / 9").
- * Returns undefined if input is absent or not in N:N format.
- */
-export function aspectLockToCss(aspectLock: string | undefined): string | undefined {
-  if (!aspectLock) return undefined
-  const parts = aspectLock.split(':')
-  if (parts.length !== 2) return undefined
-  return `${parts[0]} / ${parts[1]}`
-}
-
-/**
- * Resolves the CSS aspect-ratio for an image-poi field from the delivery
- * payload alone — no network, works identically in server and client renders
- * (the constraint the /visualization live-edit loop imposes).
- *
- * Sources, in order:
- *  1. `aspectLock` — the ratio the author explicitly locked ("16:9").
- *  2. `aspectRatio` — the rendered ratio (crop-aware decimal, e.g. 1.7264)
- *     written into the field by the di-transform extension at pick time.
- *  3. `srcWidth` / `srcHeight` — original asset dimensions, also written by
- *     the extension. Only used when the query carries no crop, since they
- *     describe the uncropped original.
- *
- * Returns undefined when none apply (content authored before the extension
- * wrote dimensions) — callers render without a ratio rather than guessing.
- */
-/**
  * Resolves a ContentMedia value to a plain image URL — for consumers that
  * need a URL rather than a rendered component: og:image / social-card tags,
  * RSS enclosures, JSON-LD.
@@ -113,25 +86,33 @@ export function contentMediaUrl(
   return undefined
 }
 
+/**
+ * Resolves the CSS aspect-ratio for an image-poi field from the delivery
+ * payload alone — no network, works identically in server and client renders
+ * (the constraint the /visualization live-edit loop imposes).
+ *
+ * The di-transform extension writes `width`, `height`, and `aspectRatio`
+ * into the field at pick time, all describing the DELIVERED image — crop
+ * applied when one is drawn, otherwise the original. That makes them
+ * interchangeable sizing sources with no crop-awareness needed here:
+ *
+ *  1. `aspectRatio` — the delivered ratio as a decimal (e.g. 1.7264).
+ *  2. `width` / `height` — delivered pixel dimensions, same ratio in
+ *     fraction form.
+ *
+ * Returns undefined when neither applies (content authored before the
+ * extension wrote dimensions) — callers render without a ratio rather than
+ * guessing.
+ */
 export function resolveDiAspectRatio(field: TransformedImageField): string | undefined {
-  const locked = aspectLockToCss(field.aspectLock)
-  if (locked !== undefined) return locked
-
   if (typeof field.aspectRatio === 'number' && field.aspectRatio > 0) {
     // A single number is a valid CSS aspect-ratio value.
     return String(field.aspectRatio)
   }
 
-  const { srcWidth, srcHeight } = field
-  const hasCrop = field.query?.includes('crop=') ?? false
-  if (
-    !hasCrop &&
-    typeof srcWidth === 'number' &&
-    typeof srcHeight === 'number' &&
-    srcWidth > 0 &&
-    srcHeight > 0
-  ) {
-    return `${srcWidth} / ${srcHeight}`
+  const { width, height } = field
+  if (typeof width === 'number' && typeof height === 'number' && width > 0 && height > 0) {
+    return `${width} / ${height}`
   }
 
   return undefined
@@ -144,8 +125,8 @@ export function resolveDiAspectRatio(field: TransformedImageField): string | und
  * use, so desktop and a mobile override resolve their ratios identically.
  *
  *  - ManualImage  — the authored `aspectRatio` override, else intrinsic w/h.
- *  - DynamicImage — delegates to resolveDiAspectRatio (aspectLock → extension
- *    aspectRatio → source dimensions).
+ *  - DynamicImage — delegates to resolveDiAspectRatio (extension-written
+ *    aspectRatio → delivered width/height).
  *
  * Defensive on every access: hub content can predate the media partial (a
  * legacy flat image shape). Returns undefined rather than throwing so a stale
