@@ -31,4 +31,33 @@ describe('gridBlockRegistryEntry', () => {
   it('renders children bare — nested blocks drop their section wrappers', () => {
     expect(gridBlockRegistryEntry.childContext).toEqual({ bare: true })
   })
+
+  it('derives the cell slot width from the default column counts', () => {
+    expect(gridBlockRegistryEntry.childContextFromSchema?.(withoutItems, {})).toEqual({
+      slotSizes: '(min-width: 992px) 33.34vw, (min-width: 769px) 50vw, 100vw',
+    })
+  })
+
+  it('derives the cell slot width from explicit fixed column counts', () => {
+    const fourUp = {
+      _meta: { schema: 'https://quadratic.amplience.com/v2/content/grid' },
+      columnsMobile: 2,
+      columnsTablet: 3,
+      columnsDesktop: 4,
+    } as GridBlockSchema
+    expect(gridBlockRegistryEntry.childContextFromSchema?.(fourUp, {})).toEqual({
+      slotSizes: '(min-width: 992px) 25vw, (min-width: 769px) 33.34vw, 50vw',
+    })
+  })
+
+  it('derives an auto-mode slot width from the min item width', () => {
+    const auto = {
+      _meta: { schema: 'https://quadratic.amplience.com/v2/content/grid' },
+      sizingMode: 'auto',
+      minItemWidth: 300,
+    } as GridBlockSchema
+    expect(gridBlockRegistryEntry.childContextFromSchema?.(auto, {})).toEqual({
+      slotSizes: '(min-width: 600px) 600px, 100vw',
+    })
+  })
 })

@@ -8,6 +8,7 @@ import { Card } from '../../atoms/Card/Card'
 import type { CardColor, CardElevation } from '../../atoms/Card/Card'
 import { Link } from '../../atoms/Link/Link'
 import { Typography } from '../../atoms/Typography/Typography'
+import { scaleSizes } from '../../utils/imageSizes'
 import { ContentMedia } from '../ContentMedia/ContentMedia'
 import styles from './MediaCard.module.css'
 
@@ -82,7 +83,40 @@ export type MediaCardProps = {
    * locale — links unprefixed).
    */
   localeBasePath?: string
+  /**
+   * next/image `sizes` describing the width the *card* occupies in its layout
+   * (a fraction-of-viewport hint), normally injected by a parent GridBlock or
+   * ColumnsBlock that knows its column geometry. MediaCard scales it by
+   * `layout` to the cover image's actual width before handing it to
+   * next/image — see {@link LAYOUT_IMAGE_FRACTION}.
+   *
+   * Omit when the card's slot width is unknown (e.g. a card dropped straight
+   * into a page slot): the image then keeps next/image's 100vw default rather
+   * than guess a grid that may not exist.
+   */
+  sizes?: string
   className?: string
+}
+
+/**
+ * Fraction of the card's width the cover image occupies, per layout. Used to
+ * scale the card-width `sizes` hint down to the image's real width.
+ *
+ *   above / overlay — image spans the full card → 1.
+ *   beside          — image sits alongside the text at
+ *                     `--media-card-beside-image-width` (default 45%); 0.5 is a
+ *                     safe rounding that never under-declares at the default.
+ *   dynamic         — above (full width) when the card is narrow, beside when
+ *                     wide. The switch is a container query, which a viewport
+ *                     `sizes` string cannot express, so we take the wider
+ *                     (full-width) case — never under-declaring, at the cost of
+ *                     a mild over-fetch once the card goes side-by-side.
+ */
+export const LAYOUT_IMAGE_FRACTION: Record<MediaCardLayout, number> = {
+  above: 1,
+  overlay: 1,
+  beside: 0.5,
+  dynamic: 1,
 }
 
 // ---------------------------------------------------------------------------
@@ -121,10 +155,16 @@ export function MediaCard({
   elevation = 'raised',
   color = 'white',
   localeBasePath,
+  sizes,
   className,
 }: MediaCardProps) {
   const { href, cta } = links ?? {}
   const isLinked = href != null
+
+  // Scale the card-width hint (if any) down to the image's real width for this
+  // layout. Absent a hint, pass none — next/image falls back to 100vw.
+  const imageSizes =
+    sizes !== undefined ? scaleSizes(sizes, LAYOUT_IMAGE_FRACTION[layout]) : undefined
 
   // No per-image ratio derivation: the card layouts size the media container
   // themselves (flex-row / overlay / fixed heights in MediaCard.module.css),
@@ -132,7 +172,11 @@ export function MediaCard({
   // any layout that leaves the box height free.
   const mediaEl = media != null && (
     <div className={styles.media}>
-      <ContentMedia {...media} {...(styles.image !== undefined && { className: styles.image })} />
+      <ContentMedia
+        {...media}
+        {...(imageSizes !== undefined && { sizes: imageSizes })}
+        {...(styles.image !== undefined && { className: styles.image })}
+      />
     </div>
   )
 

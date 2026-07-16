@@ -73,12 +73,42 @@ const edgeEntry: ComponentRegistryEntry<LeafSchema, EdgeProps> = {
   }),
 }
 
+// A container that derives per-instance child context (slotSizes) from its
+// own content, plus a leaf that surfaces the received slotSizes — for the
+// childContextFromSchema tests.
+const SIZED_BOX_SCHEMA = 'https://test.example.com/v1/content/sized-box'
+const SIZED_LEAF_SCHEMA = 'https://test.example.com/v1/content/sized-leaf'
+
+type SizedBoxSchema = { _meta: unknown; name: string; slot: string; items?: readonly unknown[] }
+const sizedBoxEntry: ComponentRegistryEntry<SizedBoxSchema, BoxProps> = {
+  component: Box,
+  propsFromSchema: ({ _meta: _envelope, items: _items, slot: _slot, ...props }) => props,
+  getChildren: (schema) => schema.items ?? [],
+  childContext: { bare: true },
+  childContextFromSchema: (schema) => ({ slotSizes: schema.slot }),
+}
+
+type SizedLeafSchema = { _meta: unknown; label: string }
+type SizedLeafProps = { label: string; slotSizes?: string }
+const SizedLeaf = ({ label, slotSizes }: SizedLeafProps) => (
+  <span data-slot={slotSizes ?? 'none'}>{label}</span>
+)
+const sizedLeafEntry: ComponentRegistryEntry<SizedLeafSchema, SizedLeafProps> = {
+  component: SizedLeaf,
+  propsFromSchema: ({ _meta: _envelope, ...props }, ctx) => ({
+    ...props,
+    ...(ctx.slotSizes !== undefined && { slotSizes: ctx.slotSizes }),
+  }),
+}
+
 const makeRegistry = (): Registry =>
   new Map<SchemaURI, AnyComponentRegistryEntry>([
     [LEAF_SCHEMA, leafEntry],
     [BOX_SCHEMA, boxEntry],
     [IDENTITY_SCHEMA, { component: Identity }],
     [EDGE_SCHEMA, edgeEntry],
+    [SIZED_BOX_SCHEMA, sizedBoxEntry],
+    [SIZED_LEAF_SCHEMA, sizedLeafEntry],
   ])
 
 const node = (schema: string, fields: Record<string, unknown> = {}, deliveryId?: string) => ({
@@ -185,6 +215,36 @@ describe('renderContent — recursion', () => {
 
   it('renders an empty container when getChildren returns no items', () => {
     expect(html(node(BOX_SCHEMA, { name: 'empty' }))).toBe('<div data-box="empty"></div>')
+  })
+})
+
+describe('renderContent — childContextFromSchema', () => {
+  it('merges the derived child context into the children', () => {
+    const tree = node(SIZED_BOX_SCHEMA, {
+      name: 'grid',
+      slot: '50vw',
+      items: [node(SIZED_LEAF_SCHEMA, { label: 'x' }, 'id-1')],
+    })
+    expect(html(tree)).toBe('<div data-box="grid"><span data-slot="50vw">x</span></div>')
+  })
+
+  it('does not leak slotSizes past the immediate children', () => {
+    // sized box → plain box → sized leaf: the leaf is a grandchild, so the
+    // intervening plain box (which declares no slotSizes) resets it.
+    const tree = node(SIZED_BOX_SCHEMA, {
+      name: 'grid',
+      slot: '50vw',
+      items: [
+        node(
+          BOX_SCHEMA,
+          { name: 'inner', items: [node(SIZED_LEAF_SCHEMA, { label: 'x' }, 'id-1')] },
+          'id-2',
+        ),
+      ],
+    })
+    expect(html(tree)).toBe(
+      '<div data-box="grid"><div data-box="inner"><span data-slot="none">x</span></div></div>',
+    )
   })
 })
 

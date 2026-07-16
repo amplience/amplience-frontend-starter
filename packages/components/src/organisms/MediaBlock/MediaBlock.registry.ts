@@ -7,10 +7,14 @@ export const MEDIA_BLOCK_SCHEMA = 'https://quadratic.amplience.com/v2/content/me
 
 /**
  * The media delivery body — MediaBlock props plus the content envelope.
- * `bare` and `isTopOfPage` are excluded: they're layout/position cues
- * supplied by the render context, not author-editable fields.
+ * `bare`, `isTopOfPage`, `localeBasePath` and `sizes` are excluded: they're
+ * layout/position/geometry cues supplied by the render context, not
+ * author-editable fields.
  */
-export type MediaBlockSchema = Omit<MediaBlockProps, 'bare' | 'isTopOfPage' | 'localeBasePath'> & {
+export type MediaBlockSchema = Omit<
+  MediaBlockProps,
+  'bare' | 'isTopOfPage' | 'localeBasePath' | 'sizes'
+> & {
   readonly _meta: unknown
 }
 
@@ -18,7 +22,8 @@ export type MediaBlockSchema = Omit<MediaBlockProps, 'bare' | 'isTopOfPage' | 'l
  * Registry entry for the media schema. The adapter strips the `_meta`
  * envelope and sets `bare` and `isTopOfPage` from the render context — a
  * media block nested in a layout container drops its own section wrapper,
- * and one leading the page loads eagerly.
+ * one leading the page loads eagerly, and it inherits the parent's slot width
+ * (`slotSizes`) so the image sizes its srcset to the column.
  */
 export const mediaBlockRegistryEntry: ComponentRegistryEntry<MediaBlockSchema, MediaBlockProps> = {
   component: MediaBlock,
@@ -27,5 +32,6 @@ export const mediaBlockRegistryEntry: ComponentRegistryEntry<MediaBlockSchema, M
     bare: ctx.bare ?? false,
     isTopOfPage: ctx.isTopOfPage ?? false,
     localeBasePath: ctx.localeBasePath ?? '',
+    ...(ctx.slotSizes !== undefined && { sizes: ctx.slotSizes }),
   }),
 }
