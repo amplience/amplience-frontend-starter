@@ -19,14 +19,17 @@ export function NotFoundContent() {
   return (
     <HeroBlock
       title="Page not found 🙈"
-      subtitle="There's no content at this address — the page may have been moved, unpublished, or never existed."
+      description="There's no content at this address — the page may have been moved, unpublished, or never existed."
       ctas={[
         {
           href: '/',
           label: 'Back to the home page',
         },
       ]}
+      contentPadding={100}
+      contentPositionMobile="beneath"
       minHeight={600}
+      textColor="black"
       verticalPosition="center"
     />
   )
