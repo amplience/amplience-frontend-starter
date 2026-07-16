@@ -173,7 +173,7 @@ export function MediaCard({
 
   return (
     <Card
-      className={clsx(styles.root, className)}
+      className={clsx('MediaCard', styles.root, className)}
       padding="none"
       elevation={elevation}
       color={color}

@@ -144,7 +144,7 @@ export function MediaBlock({
   if (bare)
     return (
       <section
-        className={clsx(styles.root, className)}
+        className={clsx('MediaBlock', styles.root, className)}
         data-full-bleed={fullBleed ? 'true' : undefined}
         data-background-color={backgroundColor}
       >
@@ -155,7 +155,7 @@ export function MediaBlock({
   return (
     <section
       aria-label={caption ? `Image: ${caption}` : 'Image'}
-      className={clsx(styles.root, className)}
+      className={clsx('MediaBlock', styles.root, className)}
       data-full-bleed={fullBleed ? 'true' : undefined}
       data-background-color={backgroundColor}
     >

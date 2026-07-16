@@ -175,7 +175,7 @@ function LocaleSelect({ locales, label, className, currentSlug, onNavigate }: Lo
   return (
     <select
       id={selectId}
-      className={clsx(styles.root, className)}
+      className={clsx('LocaleSelector', styles.root, className)}
       aria-label={label ?? 'Language'}
       value={currentSlug}
       onChange={(event) => onNavigate(event.target.value)}

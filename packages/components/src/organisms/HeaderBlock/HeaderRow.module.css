@@ -76,7 +76,7 @@
    --------------------------------------------------------------------------- */
 
 .inner,
-.inner > :global(.MenuGroup):first-child {
+.inner > :global(.HeaderGroup):first-child {
   > :global(.Menu):first-child > ul > li:first-child > a {
     margin-left: calc(var(--site-gutter) * -1);
     padding-left: var(--site-gutter);
@@ -92,7 +92,7 @@
 }
 
 .inner,
-.inner > :global(.MenuGroup):last-child {
+.inner > :global(.HeaderGroup):last-child {
   > :global(.Menu):last-child > ul > li:last-child > a {
     margin-right: calc(var(--site-gutter) * -1);
     padding-right: var(--site-gutter);

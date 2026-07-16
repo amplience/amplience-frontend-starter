@@ -36,7 +36,7 @@ export type DividerProps = {
 export function Divider({ className, orientation = 'horizontal', ...rest }: DividerProps) {
   return (
     <hr
-      className={clsx(styles.root, className)}
+      className={clsx('Divider', styles.root, className)}
       data-orientation={orientation}
       aria-orientation={orientation}
       {...rest}

@@ -1,0 +1,12 @@
+{
+  "name": "css-editor",
+  "label": "CSS Editor",
+  "description": "INTERIM: CSS field editor hosted on the v1 deployment. Replace the url with a Quadratic Lite-hosted editor before public release (the accelerator should not depend on a private v1 deployment).",
+  "url": "https://quad1.vercel.app/static/editor/index.html",
+  "height": 200,
+  "enabledForAllContentTypes": false,
+  "category": "CONTENT_FIELD",
+  "parameters": "{\n  \"mode\": \"css\"\n}",
+  "snippets": [],
+  "settings": "{\"API\":{\"READ\":true,\"EDIT\":true},\"SANDBOX\":{\"SAME_ORIGIN\":true,\"MODALS\":false,\"NAVIGATION\":false,\"POPUPS\":false,\"POPUP_ESCAPE_SANDBOX\":false,\"DOWNLOADS\":false,\"FORMS\":false}}"
+}

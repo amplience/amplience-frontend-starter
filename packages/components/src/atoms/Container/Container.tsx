@@ -61,7 +61,7 @@ export function Container({
 }: ContainerProps) {
   return (
     <div
-      className={clsx(styles.root, className)}
+      className={clsx('Container', styles.root, className)}
       data-max-width={maxWidth}
       data-gutter={gutter ? 'true' : undefined}
       {...rest}

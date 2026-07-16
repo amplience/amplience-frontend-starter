@@ -41,6 +41,7 @@ import partialsContentBlocks from '../content-type-schemas/schemas/partials_cont
 import partialsCta from '../content-type-schemas/schemas/partials_cta.json'
 import partialsIcon from '../content-type-schemas/schemas/partials_icon.json'
 import partialsMedia from '../content-type-schemas/schemas/partials_media.json'
+import sitestructureCustomCss from '../content-type-schemas/schemas/sitestructure_custom-css.json'
 import slotsSlot from '../content-type-schemas/schemas/slots_slot.json'
 
 /**
@@ -98,6 +99,7 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(contentHierarchyMenuItem, 'CONTENT_TYPE'),
   entry(contentFooter, 'CONTENT_TYPE'),
   entry(contentFooterRow, 'CONTENT_TYPE'),
+  entry(sitestructureCustomCss, 'CONTENT_TYPE'),
 ]
 
 /** Manifest entries that register as content types (CONTENT_TYPE + SLOT). */

@@ -85,7 +85,7 @@ export function MenuItem({
 
   return (
     <li
-      className={clsx(styles.root, visibility && styles[visibility], className)}
+      className={clsx('MenuItem', styles.root, visibility && styles[visibility], className)}
       data-has-children={hasChildren || undefined}
     >
       {link ? (

@@ -66,7 +66,7 @@ export function Button(props: ButtonProps) {
 
     return (
       <Link
-        className={clsx(styles.root, className)}
+        className={clsx('Button', styles.root, className)}
         {...linkProps}
         data-variant={variant}
         data-color={color}
@@ -80,7 +80,7 @@ export function Button(props: ButtonProps) {
 
   return (
     <button
-      className={clsx(styles.root, className)}
+      className={clsx('Button', styles.root, className)}
       {...buttonProps}
       data-variant={variant}
       data-color={color}

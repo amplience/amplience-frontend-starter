@@ -27,5 +27,5 @@ export type HeaderGroupProps = {
  * Items (Logo, IconButton, Menu) are passed in as `children` by the renderer.
  */
 export function HeaderGroup({ children, className }: HeaderGroupProps) {
-  return <div className={clsx('MenuGroup', styles.root, className)}>{children}</div>
+  return <div className={clsx('HeaderGroup', styles.root, className)}>{children}</div>
 }

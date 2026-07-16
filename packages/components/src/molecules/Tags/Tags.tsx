@@ -34,7 +34,7 @@ export type TagsProps = {
 export function Tags({ tags, className, color, ...rest }: TagsProps) {
   if (tags.length === 0) return null
   return (
-    <ul className={clsx(styles.root, className)} {...rest}>
+    <ul className={clsx('Tags', styles.root, className)} {...rest}>
       {tags.map((tag) => (
         <li key={tag} className={styles.item}>
           <Tag {...(color !== undefined && { color })}>{tag}</Tag>

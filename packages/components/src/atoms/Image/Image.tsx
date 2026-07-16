@@ -57,7 +57,7 @@ export function Image({ src, alt, width, height, aspectRatio, className, ...rest
       alt={alt}
       width={width}
       height={height}
-      className={clsx(styles.root, className)}
+      className={clsx('Image', styles.root, className)}
       // aspectRatio is a runtime value from CMS — inline style is the
       // documented exception per ADR-0002 §9.
       style={

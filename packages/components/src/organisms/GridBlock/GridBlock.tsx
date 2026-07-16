@@ -127,7 +127,7 @@ export function GridBlock({
 
   return (
     <section
-      className={clsx(styles.root, className)}
+      className={clsx('GridBlock', styles.root, className)}
       data-sizing-mode={sizingMode}
       data-background-color={backgroundColor}
       style={cssVars}

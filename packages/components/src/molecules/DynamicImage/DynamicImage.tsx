@@ -70,7 +70,7 @@ export function DynamicImage({
   const containerStyle = (cssAspect ? { '--di-aspect-ratio': cssAspect } : {}) as CSSProperties
 
   return (
-    <div className={clsx(styles.root, className)} style={containerStyle}>
+    <div className={clsx('DynamicImage', styles.root, className)} style={containerStyle}>
       {/*
         fill mode: next/image renders position:absolute; width:100%; height:100%.
         The container's aspect-ratio (above) defines the box shape and prevents

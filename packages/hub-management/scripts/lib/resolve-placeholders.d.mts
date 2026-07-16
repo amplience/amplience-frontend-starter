@@ -20,6 +20,7 @@ export type SettingsMap = {
 export type ResolveOptions = {
   hub?: string
   repoContent?: string
+  repoSiteComponents?: string
   statusMap?: Map<string, string>
   source?: string
 }

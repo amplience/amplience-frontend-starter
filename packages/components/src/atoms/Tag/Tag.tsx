@@ -35,7 +35,7 @@ export type TagProps = {
  */
 export function Tag({ children, className, color = 'default', ...rest }: TagProps) {
   return (
-    <span className={clsx(styles.root, className)} data-color={color} {...rest}>
+    <span className={clsx('Tag', styles.root, className)} data-color={color} {...rest}>
       {children}
     </span>
   )

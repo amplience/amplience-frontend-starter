@@ -66,7 +66,7 @@ function withLocaleBase(href: string, base: string): string {
  *   <Link href="https://example.com" title="Visit Example">Example</Link>
  */
 export function Link({ href, children, className, localeBasePath = '', ...rest }: LinkProps) {
-  const classes = clsx(styles.root, className)
+  const classes = clsx('Link', styles.root, className)
 
   // External links are never localized. `localeBasePath` is destructured out
   // above so it never reaches the DOM.

@@ -34,6 +34,8 @@ type Environment = {
   localhostUrl: string
   repoContent: string
   repoSlots: string
+  /** "Site Components" repo (authoring/permission boundary for CMS site config); "" = unset. */
+  repoSiteComponents: string
   clientId: string
   clientSecret: string
   stagingHost: string
@@ -117,6 +119,8 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
   const localhostUrl = env !== null && env.localhostUrl !== '' ? env.localhostUrl : undefined
   const repoContent = env !== null && env.repoContent !== '' ? env.repoContent : undefined
   const repoSlots = env !== null && env.repoSlots !== '' ? env.repoSlots : undefined
+  const repoSiteComponents =
+    env !== null && (env.repoSiteComponents ?? '') !== '' ? env.repoSiteComponents : undefined
   const defaultBrand = env !== null && env.defaultBrand !== '' ? env.defaultBrand : undefined
   // Blank default site means "use the runtime default" (the hub name, ADR-0014)
   // — comment the var out rather than writing an empty value.
@@ -147,6 +151,7 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
       LOCALHOST_URL: localhostUrl,
       AMPLIENCE_REPO_CONTENT: repoContent,
       AMPLIENCE_REPO_SLOTS: repoSlots,
+      AMPLIENCE_REPO_SITE_COMPONENTS: repoSiteComponents,
       AMPLIENCE_CLIENT_ID: clientId,
       AMPLIENCE_CLIENT_SECRET: clientSecret,
       AMPLIENCE_STAGING_HOST: stagingHost,
@@ -300,6 +305,8 @@ function buildEnv(env: Environment, republish = false): NodeJS.ProcessEnv {
     LOCALHOST_URL: env.localhostUrl,
     AMPLIENCE_REPO_CONTENT: env.repoContent,
     AMPLIENCE_REPO_SLOTS: env.repoSlots,
+    // Blank when the deployment has no Site Components repo (feature not in use).
+    AMPLIENCE_REPO_SITE_COMPONENTS: env.repoSiteComponents ?? '',
     AMPLIENCE_CLIENT_ID: env.clientId,
     AMPLIENCE_CLIENT_SECRET: env.clientSecret,
     AMPLIENCE_HUB_ID: env.hubId,

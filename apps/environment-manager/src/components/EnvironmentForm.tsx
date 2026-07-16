@@ -48,6 +48,11 @@ const HUB_FIELDS: FieldMeta[] = [
   { key: 'repoContent', label: 'Content repo ID', required: true, placeholder: 'DC repository ID' },
   { key: 'repoSlots', label: 'Slots repo ID', required: true, placeholder: 'DC repository ID' },
   {
+    key: 'repoSiteComponents',
+    label: 'Site Components repo ID',
+    placeholder: 'Optional — enables CMS-managed site config',
+  },
+  {
     key: 'stagingHost',
     label: 'Staging host (VSE)',
     placeholder: 'Optional — enables staging preview',
@@ -115,8 +120,16 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
   // ── Discovery ──────────────────────────────────────────────────────────────
 
   function applyHub(hub: DiscoveredHub) {
+    // Site Components has no distinctive feature flag, so it's matched by its
+    // repository label. Identify it first and exclude it from the content match
+    // (content is otherwise "the non-slots repo", which a third repo confuses).
+    const siteComponentsRepo = hub.repos.find(
+      (r) => (r.label ?? '').trim().toLowerCase() === 'site components',
+    )
     const slotsRepo = hub.repos.find((r) => r.features.includes('slots'))
-    const contentRepo = hub.repos.find((r) => !r.features.includes('slots'))
+    const contentRepo = hub.repos.find(
+      (r) => !r.features.includes('slots') && r !== siteComponentsRepo,
+    )
     const filled = new Set<string>(['hubName', 'hubId'])
     const updates: Partial<Environment> = { hubName: hub.name, hubId: hub.id }
     if (contentRepo !== undefined) {
@@ -126,6 +139,12 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
     if (slotsRepo !== undefined) {
       updates.repoSlots = slotsRepo.id
       filled.add('repoSlots')
+    }
+    // Optional — only prefilled when a repo labelled "Site Components" exists;
+    // otherwise the field stays blank for manual entry.
+    if (siteComponentsRepo !== undefined) {
+      updates.repoSiteComponents = siteComponentsRepo.id
+      filled.add('repoSiteComponents')
     }
     if (hub.stagingHost !== undefined) {
       updates.stagingHost = hub.stagingHost

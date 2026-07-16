@@ -63,6 +63,21 @@ describe('resolveTokens', () => {
     expect(out).toBe('{"hub":"demo","repo":"repo-123","s":"tgt-new"}')
   })
 
+  it('substitutes the optional siteComponents repo token', () => {
+    const out = resolveTokens('${repo:siteComponents}', { repoSiteComponents: 'sc-456' })
+    expect(out).toBe('sc-456')
+  })
+
+  it('fails loud when siteComponents token is used but the repo is unset', () => {
+    expect(() => resolveTokens('${repo:siteComponents}', { statusMap })).toThrow(
+      /AMPLIENCE_REPO_SITE_COMPONENTS is not set/,
+    )
+    // An empty string counts as unset, matching how the env plumbing treats "".
+    expect(() =>
+      resolveTokens('${repo:siteComponents}', { repoSiteComponents: '', statusMap }),
+    ).toThrow(/AMPLIENCE_REPO_SITE_COMPONENTS is not set/)
+  })
+
   it('handles whitespace inside a status token', () => {
     const out = resolveTokens('${status: Ready for Review }', { statusMap })
     expect(out).toBe('tgt-review')

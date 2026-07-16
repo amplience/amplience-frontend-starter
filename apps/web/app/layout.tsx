@@ -6,6 +6,8 @@ import { brandFonts } from '@amplience/quadratic-theme/fonts'
 import './globals.css'
 import '@amplience/quadratic-theme/tokens.css'
 
+import { getCustomCss } from '../lib/custom-css'
+import { CUSTOM_CSS_STYLE_ID } from '../lib/custom-css-schema'
 import { faviconBase, siteDescription, siteTitle, siteUrl, themeColor } from '../lib/site'
 
 const fontVariables = brandFonts.map((f) => f.variable).join(' ')
@@ -49,15 +51,40 @@ export const viewport: Viewport = {
  * Header and footer live in `(site)/[locale]/layout.tsx` so they apply only to
  * the main site routes, not to the visualization tool or any other isolated
  * route that needs to control its own chrome.
+ *
+ * Optional CMS-managed custom CSS is injected here, at the root, so it applies
+ * everywhere the tokens do — the site *and* the visualization tool — mirroring
+ * the `tokens.css` import above. The feature is off unless
+ * AMPLIENCE_CUSTOM_CSS="TRUE"; when off `getCustomCss` returns null and does no
+ * CMS I/O, keeping default deployments pure-static.
+ *
+ * The <style> carries `href` + `precedence`: React 19 only reliably emits a
+ * `dangerouslySetInnerHTML` style rendered in <body> during streaming SSR when
+ * it is a managed style resource (a plain one is dropped), so it is hoisted
+ * into <head> and deduped by href. Because the token stylesheets are imported
+ * at the top of this module, React encounters their precedence group first and
+ * orders this style *after* them — so it still overrides the token defaults at
+ * equal specificity without !important.
  */
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const customCss = await getCustomCss()
   return (
     <html
       lang="en"
       className={fontVariables}
       data-brand={process.env.NEXT_PUBLIC_BRAND ?? 'default'}
     >
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* Gated, permissioned, </style>-escaped CSS (see getCustomCss). */}
+        {customCss !== null && (
+          <style
+            href={CUSTOM_CSS_STYLE_ID}
+            precedence={CUSTOM_CSS_STYLE_ID}
+            dangerouslySetInnerHTML={{ __html: customCss }}
+          />
+        )}
+      </body>
     </html>
   )
 }

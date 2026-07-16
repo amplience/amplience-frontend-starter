@@ -20,7 +20,7 @@
             "pointers": ["/slots"]
           },
           {
-            "label": "🔗 URL",
+            "label": "🔗 URL(s)",
             "pointers": ["/_meta/deliveryKeys/values"]
           },
           {
@@ -51,13 +51,15 @@
           "properties": {
             "values": {
               "title": "URL",
+              "description": "Serve the page at this URL",
               "type": "array",
               "items": {
                 "type": "object",
                 "properties": {
                   "value": {
                     "type": "string",
-                    "title": "URL",
+                    "description": "Use the format {siteKey}/slug\n(e.g. acme site would have acme/about/team)",
+                    "title": "Delivery Key",
                     "minLength": 1,
                     "maxLength": 150
                   }

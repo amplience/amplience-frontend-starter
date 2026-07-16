@@ -80,7 +80,7 @@ export function ColumnsBlock({
 
   return (
     <section
-      className={clsx(styles.root, className)}
+      className={clsx('ColumnsBlock', styles.root, className)}
       data-background-color={backgroundColor}
       style={Object.keys(cssVars).length > 0 ? cssVars : undefined}
     >

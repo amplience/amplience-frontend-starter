@@ -123,7 +123,10 @@ export function MarkdownBlock({
   }
 
   return (
-    <section className={clsx(styles.root, className)} data-background-color={backgroundColor}>
+    <section
+      className={clsx('MarkdownBlock', styles.root, className)}
+      data-background-color={backgroundColor}
+    >
       <Container className={styles.container ?? ''} maxWidth={maxWidth} gutter={gutter}>
         <Markdown content={content} {...localeProps} />
         {hasCtas && <CtaRow ctas={ctas} {...localeProps} />}
