@@ -188,6 +188,19 @@ media_card = ('<g transform="translate({tx},{ty})">'
               '</g>')
 ICONS["content_media-card"] = card_a(shadowed(media_card))
 
+# custom-css (site config): a CSS rule block — a stylesheet card with curly
+# braces around a property colon, reading as `{ : }`
+custom_css = ('<g transform="translate({tx},{ty})">'
+              f'<rect x="64" y="82" width="128" height="92" rx="13" fill="{{fill}}" stroke="{{stroke}}" stroke-width="{SW}"/>'
+              '<path d="M112 106 q-10 0 -10 11 v5 q0 6 -6 6 q6 0 6 6 v5 q0 11 10 11" '
+              'fill="none" stroke="{stroke}" stroke-width="3.6"/>'
+              '<path d="M144 106 q10 0 10 11 v5 q0 6 6 6 q-6 0 -6 6 v5 q0 11 -10 11" '
+              'fill="none" stroke="{stroke}" stroke-width="3.6"/>'
+              '<circle cx="128" cy="121" r="2.8" fill="{stroke}"/>'
+              '<circle cx="128" cy="135" r="2.8" fill="{stroke}"/>'
+              '</g>')
+ICONS["sitestructure_custom-css"] = card_a(shadowed(custom_css))
+
 # ---------- Treatment B ----------
 
 # page: browser chrome + hatched hero + text lines
