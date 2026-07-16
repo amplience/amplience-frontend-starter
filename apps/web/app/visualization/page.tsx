@@ -45,6 +45,7 @@ import { isContentClientError, resolveContentConfig } from '@amplience/quadratic
 import { makeSdkContentClient } from '@amplience/quadratic-content/sdk'
 import type { AnyComponentRegistryEntry } from '@amplience/quadratic-types'
 
+import { CUSTOM_CSS_SCHEMA, sanitizeCustomCss } from '../../lib/custom-css-schema'
 import {
   canonicalLocaleSlug,
   defaultLocale,
@@ -52,6 +53,7 @@ import {
   localeForSlug,
 } from '../../lib/locales'
 import { registry } from '../../lib/registry'
+import { HOMEPAGE_DELIVERY_KEY } from '../../lib/routing'
 import { LocaleSelectorConfigured } from '../../src/components/LocaleSelectorConfigured'
 import {
   ContentUnavailableCard,
@@ -59,6 +61,7 @@ import {
   FailureCard,
   renderContent,
 } from '../../src/renderer'
+import { CustomCssVisualization } from './CustomCssVisualization'
 import { VisualizationClient } from './VisualizationClient'
 
 export const dynamic = 'force-dynamic'
@@ -187,6 +190,43 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
   )
 
   const basePath = localeBasePath(locale)
+
+  // The custom-CSS type has no component to render — its whole effect is the
+  // CSS it applies to the site. So rather than a SchemaUnknown card, preview it
+  // against the real homepage (server-rendered here, with chrome) and inject
+  // the item's CSS on top, updated live client-side as the editor types.
+  const itemSchema = (item as { _meta?: { schema?: string } })?._meta?.schema ?? ''
+  if (itemSchema === CUSTOM_CSS_SCHEMA) {
+    const initialCss = sanitizeCustomCss(((item as { css?: string }).css ?? '').trim())
+    const [homeResult, headerResult, footerResult] = await Promise.allSettled([
+      client.getByKey(`${config.siteName}/${HOMEPAGE_DELIVERY_KEY}`, {
+        depth: 'all',
+        locale: locale.delivery,
+      }),
+      client.getByKey(`${config.siteName}/site/header`, { depth: 'all', locale: locale.delivery }),
+      client.getByKey(`${config.siteName}/site/footer`, { depth: 'all', locale: locale.delivery }),
+    ])
+    // Render each fetched item, degrading to nothing rather than breaking the
+    // preview — the point is to see the CSS applied, not to fail on chrome.
+    const renderSettled = (result: PromiseSettledResult<unknown>, topOfPage = false): ReactNode => {
+      if (result.status !== 'fulfilled') return null
+      try {
+        return renderContent(result.value, visualizationRegistry, {
+          localeBasePath: basePath,
+          isTopOfPage: topOfPage,
+        })
+      } catch {
+        return null
+      }
+    }
+    return (
+      <CustomCssVisualization initialCss={initialCss}>
+        {renderSettled(headerResult)}
+        <main>{renderSettled(homeResult, true)}</main>
+        {renderSettled(footerResult)}
+      </CustomCssVisualization>
+    )
+  }
 
   if (isThumbnail) {
     return (

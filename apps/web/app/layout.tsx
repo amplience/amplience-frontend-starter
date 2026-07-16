@@ -7,6 +7,7 @@ import './globals.css'
 import '@amplience/quadratic-theme/tokens.css'
 
 import { getCustomCss } from '../lib/custom-css'
+import { CUSTOM_CSS_STYLE_ID } from '../lib/custom-css-schema'
 import { faviconBase, siteDescription, siteTitle, siteUrl, themeColor } from '../lib/site'
 
 const fontVariables = brandFonts.map((f) => f.variable).join(' ')
@@ -78,8 +79,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         {/* Gated, permissioned, </style>-escaped CSS (see getCustomCss). */}
         {customCss !== null && (
           <style
-            href="amplience-custom-css"
-            precedence="amplience-custom-css"
+            href={CUSTOM_CSS_STYLE_ID}
+            precedence={CUSTOM_CSS_STYLE_ID}
             dangerouslySetInnerHTML={{ __html: customCss }}
           />
         )}

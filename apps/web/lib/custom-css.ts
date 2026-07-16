@@ -17,6 +17,7 @@
 import { unstable_cache } from 'next/cache'
 
 import { client, siteName } from './content-client'
+import { sanitizeCustomCss } from './custom-css-schema'
 
 /** Cache tag for on-demand revalidation (e.g. from an Amplience webhook). */
 export const CUSTOM_CSS_TAG = 'amplience-custom-css'
@@ -29,18 +30,6 @@ const DEV = process.env.NODE_ENV === 'development'
 const REVALIDATE = Number.parseInt(process.env.AMPLIENCE_CUSTOM_CSS_REVALIDATE ?? '', 10) || 300
 
 const DELIVERY_KEY = `${siteName}/site/custom-css`
-
-/**
- * Neutralise a `</style>` breakout in author-supplied CSS. Inside a <style> raw
- * text element the parser ends the element at `</style`, so a stray closing tag
- * could inject arbitrary markup. Escaping the slash keeps it inert; within a CSS
- * string `\/` still resolves to `/`, so legitimate content is unaffected. CSS
- * cannot execute script, and the field is gated behind a permissioned repo, so
- * this is the only escaping the injection needs.
- */
-function neutraliseStyleClose(css: string): string {
-  return css.replace(/<\/(style)/gi, '<\\/$1')
-}
 
 async function fetchCustomCssUncached(): Promise<string> {
   try {
@@ -72,5 +61,5 @@ const fetchCustomCssCached = unstable_cache(
 export async function getCustomCss(): Promise<string | null> {
   if (!ENABLED) return null
   const css = DEV ? await fetchCustomCssUncached() : await fetchCustomCssCached()
-  return css === '' ? null : neutraliseStyleClose(css)
+  return css === '' ? null : sanitizeCustomCss(css)
 }

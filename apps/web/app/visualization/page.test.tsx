@@ -43,6 +43,8 @@ const routeProps = (params: Record<string, string | string[]>) => ({
 const VSE = 'g8tgyy0etx3f1hv243pqc24ci.staging.bigcontent.io'
 /** The home hero fixture's id — a real, resolvable delivery ID. */
 const HERO_ID = 'a1b2c3d4-0001-4000-8000-000000000003'
+/** The custom-CSS fixture's id — resolves to the Site — custom CSS item. */
+const CUSTOM_CSS_ID = 'a1b2c3d4-00c5-4000-8000-000000000001'
 
 const render = async (params: Record<string, string | string[]>) => {
   const route = await loadRoute()
@@ -78,6 +80,28 @@ describe('Visualization — happy path', () => {
     const route = await loadRoute()
     expect(route.dynamic).toBe('force-dynamic')
     expect(route.metadata.robots).toEqual({ index: false, follow: false })
+  })
+})
+
+describe('Visualization — custom CSS', () => {
+  // The returned tree is inspected rather than rendered to markup: the homepage
+  // preview includes the header, whose HierarchyMenu renders via an async RSC
+  // (HierarchyMenuServer) that renderToStaticMarkup can't resolve — the same
+  // reason the top-level page path isn't markup-tested here. The live render is
+  // covered by CustomCssVisualization.test.tsx.
+  it('previews the item via CustomCssVisualization seeded with its CSS', async () => {
+    const route = await loadRoute()
+    const el = (await route.default(routeProps({ vse: VSE, content: CUSTOM_CSS_ID }))) as {
+      type: { name?: string }
+      props: { initialCss?: string }
+    }
+    // Branch taken: previewed via CustomCssVisualization, not a SchemaUnknown card.
+    expect(el.type?.name).toBe('CustomCssVisualization')
+    // Seeded with the item's CSS (the fixture ships a non-empty comment).
+    expect(typeof el.props.initialCss).toBe('string')
+    expect((el.props.initialCss ?? '').length).toBeGreaterThan(0)
+    // Still pinned to the requested VSE.
+    expect(sdkConfigs[0]).toMatchObject({ stagingHost: VSE })
   })
 })
 
