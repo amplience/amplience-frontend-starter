@@ -78,8 +78,8 @@ export type HeroBlockProps = {
    *   'flexible'     — height = max(image's natural ratio, content). Default.
    *                    Uses a CSS grid stacking trick with a ::before spacer
    *                    sized by --media-aspect-ratio, resolved entirely from
-   *                    the delivery payload (aspectLock, extension-written
-   *                    ratio, or ManualImage dimensions).
+   *                    the delivery payload (extension-written delivered
+   *                    ratio/dimensions, or ManualImage dimensions).
    *   'fitToContent' — content drives height; image crops to fill.
    *   'fitToImage'   — image drives height; content sits absolutely on top.
    *                    Warning: content may clip at narrow viewports if it

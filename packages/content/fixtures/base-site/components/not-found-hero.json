@@ -38,7 +38,7 @@
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
-    "subtitle": {
+    "description": {
       "values": [
         {
           "locale": "en-US",
@@ -69,8 +69,6 @@
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
-    "minHeight": 600,
-    "verticalPosition": "center",
     "ctas": [
       {
         "label": {
@@ -106,6 +104,11 @@
         },
         "href": "/"
       }
-    ]
+    ],
+    "contentPadding": 100,
+    "contentPositionMobile": "beneath",
+    "minHeight": 600,
+    "verticalPosition": "center",
+    "textColor": "black"
   }
 }

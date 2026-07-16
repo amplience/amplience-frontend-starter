@@ -29,7 +29,7 @@ const heroImage: DynamicImageData = {
       defaultHost: 'cdn.media.amplience.net',
     },
     query: 'sm=aspect&aspect=16:9',
-    aspectLock: '16:9',
+    aspectRatio: 1.7778,
   },
   imageAltText: 'A hero banner image from Amplience DAM',
 }
@@ -43,7 +43,7 @@ const squareImage: DynamicImageData = {
       defaultHost: 'cdn.media.amplience.net',
     },
     query: 'sm=aspect&aspect=1:1',
-    aspectLock: '1:1',
+    aspectRatio: 1,
   },
   imageAltText: 'A product image from Amplience DAM',
 }

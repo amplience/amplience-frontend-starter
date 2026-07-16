@@ -169,27 +169,27 @@ export type AmplienceImageLink = {
  * and writes the asset's dimensions alongside them, so the payload is fully
  * self-describing — renderers never fetch the DI metadata endpoint.
  * The renderer only needs image (for base URL), query (for transforms), and
- * aspectLock/aspectRatio (for CSS box sizing).
+ * width/height/aspectRatio (for CSS box sizing — all describing the
+ * DELIVERED image, crop applied when one is drawn).
  * Other fields the extension stores (crop coordinates, poi coordinates, rot,
- * hue, etc.) are present in the delivery payload but are already encoded into
- * `query` and do not need to be read by the renderer.
+ * hue, aspectLock, etc.) are present in the delivery payload but are already
+ * encoded into `query` or reflected in the delivered dimensions, and do not
+ * need to be read by the renderer.
  */
 export type TransformedImageField = {
   readonly image: AmplienceImageLink
   /** Pre-baked DI query string — everything except `w=`. E.g. "?sm=aspect&aspect=16:9" */
   readonly query?: string
-  /** Authored crop aspect ratio e.g. "16:9". Used at render time for CSS aspect-ratio. */
-  readonly aspectLock?: string
-  /** Original asset width in px, written by the extension at authoring time. */
-  readonly srcWidth?: number
-  /** Original asset height in px, written by the extension at authoring time. */
-  readonly srcHeight?: number
+  /** DELIVERED image width in px (crop applied when drawn), written by the extension at authoring time. */
+  readonly width?: number
+  /** DELIVERED image height in px (crop applied when drawn), written by the extension at authoring time. */
+  readonly height?: number
   /**
-   * The RENDERED aspect ratio as a decimal (e.g. 1.7264), written by the
-   * extension at authoring time. Crop-aware: the crop region's w/h when a
-   * crop is drawn, otherwise the original asset's. Preferred sizing source
-   * when no aspectLock is authored. Optional: content authored before the
-   * extension change carries none of the dimension fields.
+   * The DELIVERED image's aspect ratio as a decimal (e.g. 1.7264), written
+   * by the extension at authoring time — always consistent with `width` /
+   * `height` above. Preferred sizing source for renderers. Optional: content
+   * authored before the extension change carries none of the dimension
+   * fields.
    */
   readonly aspectRatio?: number
 }
@@ -202,9 +202,9 @@ export type ManualImageData = {
   readonly mediaType: 'ManualImage'
   readonly image: {
     readonly src: string
+    readonly alt: string
     readonly width: number
     readonly height: number
-    readonly alt: string
     /** Optional CSS aspect-ratio override e.g. "16 / 9" (CSS slash format). */
     readonly aspectRatio?: string
   }
@@ -216,7 +216,7 @@ export type ManualImageData = {
  *
  * `image` is the full image-poi field delivered by DC: base image-link plus
  * pre-baked DI transforms (crop, POI, smart scaling) in `query`, and the
- * authored crop aspect ratio in `aspectLock`.
+ * DELIVERED image's dimensions/ratio written by the extension.
  * The renderer appends fmt=webp&w={width} via the DI loader for responsive srcset.
  */
 export type DynamicImageData = {

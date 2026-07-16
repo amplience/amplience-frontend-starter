@@ -47,7 +47,7 @@ const sampleImage: DynamicImageData = {
       defaultHost: 'cdn.media.amplience.net',
     },
     query: 'sm=aspect&aspect=16:9',
-    aspectLock: '16:9',
+    aspectRatio: 1.7778,
   },
   imageAltText: 'A hero image',
 }
@@ -150,14 +150,14 @@ describe('DynamicImage', () => {
   })
 
   describe('aspect ratio (payload-resolved)', () => {
-    // The ratio comes from the delivery payload alone (aspectLock, or the
-    // crop-aware ratio the di-transform extension wrote at pick time) and is
-    // exposed as the --di-aspect-ratio custom property (consumed by .root's
-    // `aspect-ratio: var(--di-aspect-ratio, auto)`) so that layout contexts
-    // like HeroBlock's flexible grid can override it in CSS — impossible
-    // against an inline `aspect-ratio` declaration.
-    it('sets --di-aspect-ratio from the extension-written aspectRatio when no aspectLock', () => {
-      const noLock: DynamicImageData = {
+    // The ratio comes from the delivery payload alone (the delivered-image
+    // aspectRatio / width / height the di-transform extension wrote at pick
+    // time) and is exposed as the --di-aspect-ratio custom property (consumed
+    // by .root's `aspect-ratio: var(--di-aspect-ratio, auto)`) so that layout
+    // contexts like HeroBlock's flexible grid can override it in CSS —
+    // impossible against an inline `aspect-ratio` declaration.
+    it('sets --di-aspect-ratio from the extension-written aspectRatio', () => {
+      const withRatio: DynamicImageData = {
         mediaType: 'DynamicImage',
         image: {
           image: {
@@ -165,19 +165,19 @@ describe('DynamicImage', () => {
             endpoint: 'my-store',
             defaultHost: 'cdn.media.amplience.net',
           },
-          srcWidth: 1200,
-          srcHeight: 896,
+          width: 1200,
+          height: 896,
           aspectRatio: 1.3393,
         },
       }
-      const { container } = render(<DynamicImage image={noLock} />)
+      const { container } = render(<DynamicImage image={withRatio} />)
       expect(
         (container.firstChild as HTMLElement).style.getPropertyValue('--di-aspect-ratio'),
       ).toBe('1.3393')
     })
 
-    it('prefers aspectLock over the extension-written aspectRatio', () => {
-      const both: DynamicImageData = {
+    it('falls back to delivered width / height when aspectRatio is absent', () => {
+      const dimsOnly: DynamicImageData = {
         mediaType: 'DynamicImage',
         image: {
           image: {
@@ -185,14 +185,14 @@ describe('DynamicImage', () => {
             endpoint: 'my-store',
             defaultHost: 'cdn.media.amplience.net',
           },
-          aspectLock: '16:9',
-          aspectRatio: 1.3393,
+          width: 1136,
+          height: 658,
         },
       }
-      const { container } = render(<DynamicImage image={both} />)
+      const { container } = render(<DynamicImage image={dimsOnly} />)
       expect(
         (container.firstChild as HTMLElement).style.getPropertyValue('--di-aspect-ratio'),
-      ).toBe('16 / 9')
+      ).toBe('1136 / 658')
     })
 
     it('sets no --di-aspect-ratio for legacy payloads with no dimension data (no guessed default)', () => {

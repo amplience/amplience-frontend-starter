@@ -63,14 +63,14 @@
             "description": "Pre-baked DI transform params (crop, POI, smart scaling). Appended to the base URL by the renderer.",
             "type": "string"
           },
-          "srcWidth": {
-            "title": "Source Width",
-            "description": "Intrinsic width of the source image in pixels (from DI metadata). Written by the extension so consumers can reserve layout space without a second call.",
+          "width": {
+            "title": "Width",
+            "description": "Width of the DELIVERED image in pixels (crop applied when drawn). Written by the extension so consumers can reserve layout space without a second call.",
             "type": "number"
           },
-          "srcHeight": {
-            "title": "Source Height",
-            "description": "Intrinsic height of the source image in pixels (from DI metadata). Written by the extension so consumers can reserve layout space without a second call.",
+          "height": {
+            "title": "Height",
+            "description": "Height of the DELIVERED image in pixels (crop applied when drawn). Written by the extension so consumers can reserve layout space without a second call.",
             "type": "number"
           },
           "aspectRatio": {
