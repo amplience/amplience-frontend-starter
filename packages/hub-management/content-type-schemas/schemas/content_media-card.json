@@ -17,7 +17,7 @@
         "items": [
           {
             "label": "📝 Content",
-            "pointers": ["/image", "/title", "/description", "/links"]
+            "pointers": ["/media", "/title", "/description", "/links"]
           },
           {
             "label": "⚙️ Options",
