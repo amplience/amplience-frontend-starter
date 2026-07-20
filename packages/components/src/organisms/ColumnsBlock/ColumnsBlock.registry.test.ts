@@ -31,4 +31,20 @@ describe('columnsBlockRegistryEntry', () => {
   it('renders children bare — nested blocks drop their section wrappers', () => {
     expect(columnsBlockRegistryEntry.childContext).toEqual({ bare: true })
   })
+
+  it('tells children the column slot width from the item count (stacked on mobile)', () => {
+    const twoUp = {
+      _meta: { schema: 'https://quadratic.amplience.com/v2/content/columns' },
+      items: [{ kind: 'a' }, { kind: 'b' }],
+    } as ColumnsBlockSchema
+    expect(columnsBlockRegistryEntry.childContextFromSchema?.(twoUp, {})).toEqual({
+      slotSizes: '(min-width: 769px) 50vw, 100vw',
+    })
+  })
+
+  it('falls back to a full-width slot when there are no items', () => {
+    expect(columnsBlockRegistryEntry.childContextFromSchema?.(withoutItems, {})).toEqual({
+      slotSizes: '100vw',
+    })
+  })
 })

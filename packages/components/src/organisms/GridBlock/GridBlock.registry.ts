@@ -1,5 +1,6 @@
 import type { ComponentRegistryEntry } from '@amplience/quadratic-types'
 
+import { gridBlockSlotSizes } from '../../utils/imageSizes'
 import { GridBlock, type GridBlockProps } from './GridBlock'
 
 /** The schema URI this entry dispatches (ADR-0010 §3 — no aliasing). */
@@ -26,4 +27,15 @@ export const gridBlockRegistryEntry: ComponentRegistryEntry<GridBlockSchema, Gri
   propsFromSchema: ({ _meta: _envelope, items: _items, ...props }) => props,
   getChildren: (schema) => schema.items ?? [],
   childContext: { bare: true },
+  // Tell each cell how wide it renders (defaults mirror GridBlock's own) so
+  // media inside it sizes its srcset to the column, not the viewport.
+  childContextFromSchema: (schema) => ({
+    slotSizes: gridBlockSlotSizes({
+      sizingMode: schema.sizingMode ?? 'fixed',
+      columnsMobile: schema.columnsMobile ?? 1,
+      columnsTablet: schema.columnsTablet ?? 2,
+      columnsDesktop: schema.columnsDesktop ?? 3,
+      minItemWidth: schema.minItemWidth ?? 250,
+    }),
+  }),
 }

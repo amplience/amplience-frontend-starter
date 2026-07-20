@@ -73,6 +73,16 @@ export type MediaBlockProps = {
    * media link inside the current locale. Defaults to '' (default locale).
    */
   localeBasePath?: string
+  /**
+   * next/image `sizes` for the media, normally injected by a parent
+   * GridBlock/ColumnsBlock from its column geometry (RenderContext.slotSizes).
+   * A MediaBlock fills the full width of its slot, so the hint is used as-is
+   * (no layout scaling). `fullBleed` overrides it to `100vw`. Defaults to
+   * `100vw` — a standalone MediaBlock is a full-width section — which also
+   * keeps next/image on width-based srcset rather than 1x/2x density
+   * descriptors.
+   */
+  sizes?: string
   className?: string
 }
 
@@ -104,17 +114,19 @@ export function MediaBlock({
   bare = false,
   isTopOfPage = false,
   localeBasePath,
+  sizes,
   className,
 }: MediaBlockProps) {
-  // Defaults before the spread: authored `image` props override. A full-bleed
-  // image spans the viewport, so declaring sizes="100vw" lets next/image
-  // preload the right candidate (with fetchpriority when priority is set)
-  // rather than defaulting to the largest 3840px image.
+  // A MediaBlock fills the width of its slot, so the parent's slot hint is used
+  // directly. Full-bleed spans the viewport (100vw); absent any hint the block
+  // is a full-width section, so 100vw is both correct and enough to keep
+  // next/image on width-based srcset instead of 1x/2x density descriptors.
+  const resolvedSizes = fullBleed ? '100vw' : (sizes ?? '100vw')
   const mediaEl = (
     <ContentMedia
       priority={isTopOfPage}
       {...(isTopOfPage && { fetchPriority: 'high' })}
-      {...(fullBleed && { sizes: '100vw' })}
+      sizes={resolvedSizes}
       {...media}
       {...(styles.image !== undefined && { className: styles.image })}
     />

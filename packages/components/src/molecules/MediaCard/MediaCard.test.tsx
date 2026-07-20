@@ -34,6 +34,37 @@ const sampleMedia = {
 }
 
 describe('MediaCard', () => {
+  describe('media sizes hint', () => {
+    const slot = '(min-width: 992px) 33.34vw, 100vw'
+
+    it('sets no sizes when no slot-width hint is given (next/image 100vw default)', () => {
+      render(<MediaCard title="Title" media={sampleMedia} />)
+      expect(screen.getByAltText('A product photo').getAttribute('sizes')).toBeNull()
+    })
+
+    it('passes the slot-width hint through unchanged for a full-width (above) layout', () => {
+      render(<MediaCard title="Title" media={sampleMedia} sizes={slot} />)
+      expect(screen.getByAltText('A product photo').getAttribute('sizes')).toBe(slot)
+    })
+
+    it('passes the slot-width hint through unchanged for an overlay layout', () => {
+      render(<MediaCard title="Title" media={sampleMedia} sizes={slot} layout="overlay" />)
+      expect(screen.getByAltText('A product photo').getAttribute('sizes')).toBe(slot)
+    })
+
+    it('halves the hint for a beside layout (image is half the card)', () => {
+      render(<MediaCard title="Title" media={sampleMedia} sizes={slot} layout="beside" />)
+      expect(screen.getByAltText('A product photo').getAttribute('sizes')).toBe(
+        '(min-width: 992px) 16.67vw, 50vw',
+      )
+    })
+
+    it('keeps the full-width hint for a dynamic layout (container query, safe upper bound)', () => {
+      render(<MediaCard title="Title" media={sampleMedia} sizes={slot} layout="dynamic" />)
+      expect(screen.getByAltText('A product photo').getAttribute('sizes')).toBe(slot)
+    })
+  })
+
   describe('structure', () => {
     it('renders the title', () => {
       render(<MediaCard title="Spring collection" />)

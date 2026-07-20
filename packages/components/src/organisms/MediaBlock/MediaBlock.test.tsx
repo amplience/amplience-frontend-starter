@@ -128,4 +128,23 @@ describe('MediaBlock', () => {
       expect(screen.getByAltText('A test photo').getAttribute('data-priority')).toBe('true')
     })
   })
+
+  describe('sizes hint', () => {
+    it('defaults to 100vw so a standalone block uses width-based srcset', () => {
+      render(<MediaBlock media={sampleMedia} />)
+      expect(screen.getByAltText('A test photo').getAttribute('sizes')).toBe('100vw')
+    })
+
+    it('uses the parent slot width when supplied', () => {
+      render(<MediaBlock media={sampleMedia} sizes="(min-width: 769px) 50vw, 100vw" />)
+      expect(screen.getByAltText('A test photo').getAttribute('sizes')).toBe(
+        '(min-width: 769px) 50vw, 100vw',
+      )
+    })
+
+    it('forces 100vw when full-bleed, ignoring any slot hint', () => {
+      render(<MediaBlock media={sampleMedia} fullBleed sizes="(min-width: 769px) 50vw, 100vw" />)
+      expect(screen.getByAltText('A test photo').getAttribute('sizes')).toBe('100vw')
+    })
+  })
 })

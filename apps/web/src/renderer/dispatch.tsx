@@ -134,6 +134,8 @@ export function renderContent(
     ((schema: unknown, ctx: RenderContext) => unknown) | undefined
   const validate = entry.validate as ((schema: unknown) => boolean) | undefined
   const getChildren = entry.getChildren as ((schema: unknown) => readonly unknown[]) | undefined
+  const childContextFromSchema = entry.childContextFromSchema as
+    ((schema: unknown, ctx: RenderContext) => RenderContext) | undefined
 
   if (component == null) {
     return fail({ failureClass: 'ComponentUnregistered', schemaUri }, content)
@@ -154,9 +156,12 @@ export function renderContent(
 
     // A container on the page's leading edge passes `isTopOfPage` down into
     // its children (the array branch above then narrows it to the first);
-    // the entry's own childContext supplies everything else (e.g. `bare`).
+    // the entry's own childContext supplies constant cues (e.g. `bare`), and
+    // childContextFromSchema layers on any derived from this node's content
+    // (e.g. `slotSizes` from the column geometry).
     const childCtx: RenderContext = {
       ...(entry.childContext ?? {}),
+      ...(childContextFromSchema?.(content, ctx) ?? {}),
       ...(ctx.isTopOfPage === true && { isTopOfPage: true }),
       // Locale is a whole-tree property (ADR-0015), so it always flows to
       // children — unlike `isTopOfPage`, which only rides the leading edge.

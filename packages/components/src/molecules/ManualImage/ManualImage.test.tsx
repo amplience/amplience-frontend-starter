@@ -65,6 +65,18 @@ describe('ManualImage', () => {
     expect(screen.getByAltText('Hero image').className).toContain('custom-class')
   })
 
+  it('forwards sizes when provided', () => {
+    render(<ManualImage {...sampleMedia} sizes="(min-width: 992px) 33vw, 100vw" />)
+    expect(screen.getByAltText('Hero image').getAttribute('sizes')).toBe(
+      '(min-width: 992px) 33vw, 100vw',
+    )
+  })
+
+  it('does not set sizes when not provided', () => {
+    render(<ManualImage {...sampleMedia} />)
+    expect(screen.getByAltText('Hero image').getAttribute('sizes')).toBeNull()
+  })
+
   it('forwards aspectRatio as a CSS variable on the image', () => {
     render(<ManualImage {...sampleMedia} image={{ ...sampleMedia.image, aspectRatio: '16 / 9' }} />)
     const img = screen.getByAltText('Hero image')

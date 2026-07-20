@@ -39,4 +39,14 @@ describe('mediaBlockRegistryEntry.propsFromSchema', () => {
     expect(adapt?.(validMedia, {})?.isTopOfPage).toBe(false)
     expect(adapt?.(validMedia, { isTopOfPage: true })?.isTopOfPage).toBe(true)
   })
+
+  it('forwards the parent slot width as sizes when present', () => {
+    expect(adapt?.(validMedia, { slotSizes: '(min-width: 769px) 50vw, 100vw' })?.sizes).toBe(
+      '(min-width: 769px) 50vw, 100vw',
+    )
+  })
+
+  it('leaves sizes unset when the context supplies no slot width', () => {
+    expect(adapt?.(validMedia, {})).not.toHaveProperty('sizes')
+  })
 })

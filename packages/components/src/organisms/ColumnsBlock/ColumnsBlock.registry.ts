@@ -1,5 +1,6 @@
 import type { ComponentRegistryEntry } from '@amplience/quadratic-types'
 
+import { columnsBlockSlotSizes } from '../../utils/imageSizes'
 import { ColumnsBlock, type ColumnsBlockProps } from './ColumnsBlock'
 
 /** The schema URI this entry dispatches (ADR-0010 §3 — no aliasing). */
@@ -29,4 +30,9 @@ export const columnsBlockRegistryEntry: ComponentRegistryEntry<
   propsFromSchema: ({ _meta: _envelope, items: _items, ...props }) => props,
   getChildren: (schema) => schema.items ?? [],
   childContext: { bare: true },
+  // Columns are equal-width and never wrap, so each column is 1 / N of the
+  // viewport — tell the children so media inside them sizes to the column.
+  childContextFromSchema: (schema) => ({
+    slotSizes: columnsBlockSlotSizes((schema.items ?? []).length),
+  }),
 }

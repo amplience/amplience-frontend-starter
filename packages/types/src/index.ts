@@ -48,6 +48,22 @@ export type RenderContext = {
    * the dispatcher forwards it to every child context.
    */
   readonly localeBasePath?: string
+  /**
+   * next/image `sizes` description of the width a child occupies within its
+   * parent's layout, expressed as a fraction of the viewport (e.g.
+   * `(min-width: 992px) 33.34vw, 100vw`). Layout containers that know their
+   * column geometry (GridBlock, ColumnsBlock) set this for their direct
+   * children so media inside a child can size its srcset to the real slot
+   * instead of next/image's 100vw default.
+   *
+   * It describes the *slot*, not the image: a child that renders an image
+   * narrower than its slot (e.g. MediaCard's `beside` layout) scales this
+   * down further before handing it to next/image. Unlike `localeBasePath`
+   * it is not forwarded past the immediate children — each container sets it
+   * afresh from its own geometry, and it simply falls away under a container
+   * that declares none.
+   */
+  readonly slotSizes?: string
 }
 
 /**
@@ -91,6 +107,16 @@ export type ComponentRegistryEntry<TSchema = unknown, TProps = unknown> = {
    * section wrappers.
    */
   readonly childContext?: RenderContext
+
+  /**
+   * Per-instance child context derived from this node's own content — merged
+   * over the static `childContext` before children render. Use when the cue
+   * depends on the node's props rather than being constant: e.g. GridBlock
+   * computes `slotSizes` from its column counts, which `childContext` (a fixed
+   * value) cannot express. Runs inside the dispatcher's adapter try/catch, so
+   * a throw surfaces the standard failure card.
+   */
+  readonly childContextFromSchema?: (schema: TSchema, ctx: RenderContext) => RenderContext
 }
 
 /**
