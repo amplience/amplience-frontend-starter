@@ -9,6 +9,7 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { streamText } from 'hono/streaming'
 
+import { buildDamCheck, liveGqlFetch } from './dam-permissions.ts'
 import { buildPermissionsReport, type FetchJson } from './permissions.ts'
 import {
   cliAuthTokenPaths,
@@ -771,6 +772,25 @@ app.post('/api/amplience/permissions', async (c) => {
       },
       fetchJson,
     )
+
+    // DAM AssetStore read + write live in Content Hub (a separate GraphQL API)
+    // but use the same token, so they're probed independently of DC hub
+    // readability and appended to the same report. A failure here shouldn't
+    // sink the whole preflight — record it as a check-level error instead.
+    try {
+      const damCheck = await buildDamCheck(liveGqlFetch(token))
+      report.checks.push(damCheck)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      report.checks.push({
+        key: 'dam',
+        label: 'DAM AssetStore (media library)',
+        read: 'error',
+        write: 'error',
+        detail: `probe failed: ${message}`,
+      })
+    }
+
     return c.json(report)
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'

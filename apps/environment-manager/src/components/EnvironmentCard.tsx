@@ -956,24 +956,26 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                     </label>
                     <div className="site-row__actions">
                       <button
-                        type="button"
-                        className="site-action site-action--cancel"
-                        aria-label="Cancel"
-                        onClick={cancelSiteEdit}
-                        disabled={sitesBusy}
-                      >
-                        ✕
-                      </button>
-                      <button
-                        type="button"
-                        className="site-action site-action--save"
-                        aria-label="Save"
+                        className="btn btn--sm btn--primary"
                         onClick={() => {
                           void handleSaveWebApp()
                         }}
                         disabled={sitesBusy || !editWebAppForm.url}
+                        title={
+                          (preflight?.authenticated ?? false)
+                            ? 'Create the project, push env vars, and deploy'
+                            : 'Vercel CLI must be installed and logged in first'
+                        }
                       >
-                        ✓
+                        {sitesBusy ? 'Saving...' : 'Save'}
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn--sm btn--ghost"
+                        onClick={cancelSiteEdit}
+                        disabled={sitesBusy}
+                      >
+                        Cancel
                       </button>
                       <button
                         type="button"
