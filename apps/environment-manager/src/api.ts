@@ -4,6 +4,7 @@ import type {
   Environment,
   EnvironmentStats,
   PermissionsReport,
+  VercelPreflight,
 } from './types.js'
 
 const BASE = '/api'
@@ -60,4 +61,6 @@ export const api = {
     request<{ ok: boolean }>(`/environments/${encodeURIComponent(name)}/cancel`, {
       method: 'DELETE',
     }),
+  vercelPreflight: () =>
+    request<VercelPreflight>('/vercel/preflight', { method: 'POST', body: '{}' }),
 }

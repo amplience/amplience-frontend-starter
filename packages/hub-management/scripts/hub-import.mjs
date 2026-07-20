@@ -154,7 +154,14 @@ const dcCli = (...args) =>
     // Credential flags are appended after this log line, so secrets never echo.
     console.log(`\n→ dc-cli ${args.join(' ')}`)
     const child = spawn('dc-cli', [...args, ...credentialFlags()], {
-      stdio: ['inherit', 'pipe', 'pipe'],
+      // Inherit stdin only under a real TTY (interactive `pnpm hub:import`), so
+      // any dc-cli prompt can be answered. When spawned without a TTY (e.g. by
+      // the environment-manager), stdin is a pipe that never closes, so an
+      // inherited prompt would block forever — give dc-cli no stdin instead so
+      // a prompt reads EOF and falls through to its default. (Note: this is a
+      // general safeguard; the known content-type-import stall is a schema
+      // dependency, not a prompt — see the ordering note on the sync steps.)
+      stdio: [process.stdin.isTTY ? 'inherit' : 'ignore', 'pipe', 'pipe'],
       shell: false,
     })
     let sawError = false

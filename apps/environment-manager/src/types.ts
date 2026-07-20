@@ -107,6 +107,23 @@ export type OpKey =
   | 'sync-all'
   | 'wipe-all'
 
+// ── Vercel provisioning (ADR-0017) ─────────────────────────────────────────────
+
+export type VercelPreflight = {
+  cliInstalled: boolean
+  authenticated: boolean
+  version?: string
+  user?: string
+  detail?: string
+}
+
+export type CreateVercelSiteInput = {
+  brand: string
+  sitename: string
+  label: string
+  projectName?: string
+}
+
 export const EMPTY_ENV: Environment = {
   name: '',
   label: '',

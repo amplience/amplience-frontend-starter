@@ -92,7 +92,14 @@ Everything else is optional, with sensible accelerator defaults:
 
 See [`apps/web/.env.example`](apps/web/.env.example) for the full list, defaults, and notes.
 
-To register a deployed site against a hub, open that hub's card in `env-manager` and click **+ Add site**, giving it a URL, brand, and site name. This doesn't do anything to Vercel itself yet (that link-up is planned) — it's for reference only, but once set, the site gets added as a visualization option in the CMS whenever you next seed or sync that hub's content types.
+To register a deployed site against a hub, open that hub's card in `env-manager`. There are two paths (see [ADR-0017](docs/04-architecture/adr/0017-vercel-site-provisioning.md)):
+
+- **+ Add existing site** — records a site you've already deployed (any host): give it a URL, brand, and site name. Reference only; nothing is created.
+- **+ Create Vercel site** — provisions a new Vercel project from the values this hub already holds: it creates the project, pushes the runtime env vars, deploys `apps/web`, and records the resulting URL for you. Needs the [Vercel CLI](https://vercel.com/docs/cli) installed and logged in (`vercel login`); a preflight check guides you if not. Only non-secret runtime variables are pushed — the Amplience OAuth credentials are management-only and never leave your machine.
+
+Either way, once a site is recorded it's added as a visualization option in the CMS whenever you next seed or sync that hub's content types.
+
+> **Vercel project settings:** the provisioned project uses Vercel's default Build, Output, Install, and Development commands, with **Root Directory set to `apps/web`** and the **framework preset set to Next.js** (both applied via one Vercel API call, since neither is settable from the CLI). The pnpm workspace resolves automatically (Vercel includes files outside the root directory by default), so no custom `vercel.json` is needed.
 
 ## Contributing
 

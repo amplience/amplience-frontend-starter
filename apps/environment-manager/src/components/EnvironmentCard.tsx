@@ -1,7 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { api } from '../api.js'
-import type { Config, Environment, EnvironmentStats, OpKey, WebApp } from '../types.js'
+import type {
+  Config,
+  CreateVercelSiteInput,
+  Environment,
+  EnvironmentStats,
+  OpKey,
+  VercelPreflight,
+  WebApp,
+} from '../types.js'
 
 type Props = {
   env: Environment
@@ -19,8 +27,8 @@ const GlobeIcon = () => (
   <svg
     aria-hidden="true"
     className="site-row__icon"
-    width="12"
-    height="12"
+    width="11"
+    height="11"
     viewBox="0 0 16 16"
     fill="currentColor"
   >
@@ -35,10 +43,45 @@ const PencilIcon = () => (
 )
 
 const TrashIcon = () => (
-  <svg aria-hidden="true" width="11" height="12" viewBox="0 0 10 12" fill="currentColor">
+  <svg aria-hidden="true" width="11" height="11" viewBox="0 0 10 12" fill="currentColor">
     <path d="M3.5 0h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1z" />
     <path d="M0 2h10v1H0z" />
     <path d="M1.5 3.5l.7 8h5.6l.7-8H1.5z" />
+  </svg>
+)
+
+/** Droplet — used for 'brand' fields/badges. */
+const ThemeIcon = () => (
+  <svg
+    aria-hidden="true"
+    width="11"
+    height="11"
+    viewBox="0 0 8 10"
+    fill="currentColor"
+    style={{
+      display: 'inline-block',
+      verticalAlign: 'middle',
+      marginTop: '-1px',
+    }}
+  >
+    <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
+  </svg>
+)
+
+/** Tag — used for 'label' fields. */
+const LabelIcon = () => (
+  <svg
+    aria-hidden="true"
+    width="11"
+    height="11"
+    viewBox="0 0 14 14"
+    fill="currentColor"
+    style={{ display: 'inline-block', verticalAlign: 'middle', marginTop: '-1px' }}
+  >
+    <path
+      fillRule="evenodd"
+      d="M2.8 2.8 L7.7 2 L12.7 7 L7 12.7 L2 7.7 Z M6.2 4.9 A1.3 1.3 0 1 1 3.6 4.9 A1.3 1.3 0 1 1 6.2 4.9 Z"
+    />
   </svg>
 )
 
@@ -95,9 +138,117 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
   const editLocalhostUrlRef = useRef<HTMLInputElement>(null)
   const editWebAppFirstRef = useRef<HTMLInputElement>(null)
 
+  // ── Create Vercel site (ADR-0017) ────────────────────────────────────────────
+  const [showCreateVercel, setShowCreateVercel] = useState(false)
+  const [vercelForm, setVercelForm] = useState<CreateVercelSiteInput>({
+    brand: env.defaultBrand,
+    sitename: env.defaultSite ?? '',
+    label: '',
+    projectName: '',
+  })
+  const [preflight, setPreflight] = useState<VercelPreflight | null>(null)
+  const [preflightLoading, setPreflightLoading] = useState(false)
+  const [vercelOp, setVercelOp] = useState<{
+    log: string
+    status: 'running' | 'done' | 'error'
+  } | null>(null)
+  const vercelLogRef = useRef<HTMLPreElement>(null)
+  const createVercelFirstRef = useRef<HTMLInputElement>(null)
+
   useEffect(() => {
     if (showAddSite) addSiteLabelRef.current?.focus()
   }, [showAddSite])
+
+  useEffect(() => {
+    if (showCreateVercel) createVercelFirstRef.current?.focus()
+  }, [showCreateVercel])
+
+  // Keep the Vercel log scrolled to the newest output.
+  useEffect(() => {
+    if (vercelLogRef.current) vercelLogRef.current.scrollTop = vercelLogRef.current.scrollHeight
+  }, [vercelOp?.log])
+
+  function openCreateVercel() {
+    setShowAddSite(false)
+    setEditingLocalhost(false)
+    setEditingWebAppIdx(null)
+    setVercelForm({
+      brand: env.defaultBrand,
+      sitename: env.defaultSite ?? '',
+      label: '',
+      projectName: '',
+    })
+    setShowCreateVercel(true)
+    // Preflight the CLI + login state so we can guide rather than fail late.
+    setPreflight(null)
+    setPreflightLoading(true)
+    void api
+      .vercelPreflight()
+      .then(setPreflight)
+      .catch(() =>
+        setPreflight({
+          cliInstalled: false,
+          authenticated: false,
+          detail: 'Could not run the Vercel preflight — is the API server running?',
+        }),
+      )
+      .finally(() => setPreflightLoading(false))
+  }
+
+  function cancelCreateVercel() {
+    setShowCreateVercel(false)
+    setVercelForm({
+      brand: env.defaultBrand,
+      sitename: env.defaultSite ?? '',
+      label: '',
+      projectName: '',
+    })
+  }
+
+  async function handleCreateVercelSite(e: React.FormEvent) {
+    e.preventDefault()
+    setVercelOp({ log: '', status: 'running' })
+    setSitesBusy(true)
+    try {
+      const res = await fetch(
+        `/api/environments/${encodeURIComponent(env.name)}/vercel/create-site`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(vercelForm),
+        },
+      )
+      if (!res.ok || !res.body) {
+        throw new Error(res.ok ? 'No response body' : `HTTP ${res.status}`)
+      }
+
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let full = ''
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        const text = decoder.decode(value, { stream: true })
+        full += text
+        setVercelOp((prev) => (prev ? { ...prev, log: prev.log + text } : null))
+      }
+
+      const hadError = full.includes('✗')
+      setVercelOp((prev) => (prev ? { ...prev, status: hadError ? 'error' : 'done' } : null))
+
+      // Refresh config either way — a successful run has appended the site
+      // server-side; a failed one leaves webApps[] untouched.
+      onUpdate(await api.list())
+      if (!hadError) setShowCreateVercel(false)
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unknown error'
+      setVercelOp((prev) =>
+        prev ? { ...prev, status: 'error', log: `${prev.log}\n✗ ${msg}` } : null,
+      )
+    } finally {
+      setSitesBusy(false)
+    }
+  }
 
   useEffect(() => {
     if (editingLocalhost) editLocalhostUrlRef.current?.focus()
@@ -368,21 +519,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
           <span className="env-card__label">{env.label || env.name}</span>
           {env.defaultBrand !== '' && (
             <span className="badge badge--brand">
-              <svg
-                aria-hidden="true"
-                width="8"
-                height="10"
-                viewBox="0 0 8 10"
-                fill="currentColor"
-                style={{
-                  display: 'inline-block',
-                  verticalAlign: 'middle',
-                  marginRight: '0.25em',
-                  marginTop: '-1px',
-                }}
-              >
-                <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
-              </svg>
+              <ThemeIcon />
               {env.defaultBrand}
             </span>
           )}
@@ -653,37 +790,26 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
               {/* Localhost — always present */}
               {editingLocalhost ? (
                 <li className="site-row site-row--localhost site-row--editing">
-                  <GlobeIcon />
+                  <LabelIcon />
                   <span className="site-row__label--fixed">Web (localhost)</span>
-                  <input
-                    ref={editLocalhostUrlRef}
-                    className="site-row__input site-row__input--url"
-                    placeholder="http://localhost:3000"
-                    value={editLocalhostForm.localhostUrl}
-                    onChange={(e) =>
-                      setEditLocalhostForm((p) => ({ ...p, localhostUrl: e.target.value }))
-                    }
-                    onKeyDown={siteEditKeyDown(() => {
-                      void handleSaveLocalhost()
-                    })}
-                    disabled={sitesBusy}
-                  />
-                  <label>
-                    <svg
-                      aria-hidden="true"
-                      width="8"
-                      height="10"
-                      viewBox="0 0 8 10"
-                      fill="currentColor"
-                      style={{
-                        display: 'inline-block',
-                        verticalAlign: 'middle',
-                        marginRight: '0.25em',
-                        marginTop: '-1px',
-                      }}
-                    >
-                      <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
-                    </svg>
+                  <label title="localhost URL (e.g. http://localhost:3000)">
+                    <GlobeIcon />
+                    <input
+                      ref={editLocalhostUrlRef}
+                      className="site-row__input site-row__input--url"
+                      placeholder="http://localhost:3000"
+                      value={editLocalhostForm.localhostUrl}
+                      onChange={(e) =>
+                        setEditLocalhostForm((p) => ({ ...p, localhostUrl: e.target.value }))
+                      }
+                      onKeyDown={siteEditKeyDown(() => {
+                        void handleSaveLocalhost()
+                      })}
+                      disabled={sitesBusy}
+                    />
+                  </label>
+                  <label title="Brand (e.g. acme)">
+                    <ThemeIcon />
                     <span className="visually-hidden">Brand</span>
                     <input
                       className="site-row__input"
@@ -698,7 +824,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                       disabled={sitesBusy}
                     />
                   </label>
-                  <label>
+                  <label title="Site name (blank = hub name)">
                     #
                     <input
                       className="site-row__input"
@@ -743,21 +869,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                   <span className="site-row__url">{env.localhostUrl}</span>
                   {env.defaultBrand !== '' && (
                     <span className="badge badge--brand badge--sm" title="Brand">
-                      <svg
-                        aria-hidden="true"
-                        width="8"
-                        height="10"
-                        viewBox="0 0 8 10"
-                        fill="currentColor"
-                        style={{
-                          display: 'inline-block',
-                          verticalAlign: 'middle',
-                          marginRight: '0.25em',
-                          marginTop: '-1px',
-                        }}
-                      >
-                        <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
-                      </svg>
+                      <ThemeIcon />
                       {env.defaultBrand}
                     </span>
                   )}
@@ -784,44 +896,37 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
               {env.webApps.map((site, i) =>
                 editingWebAppIdx === i ? (
                   <li key={i} className="site-row site-row--editing">
-                    <GlobeIcon />
-                    <input
-                      ref={editWebAppFirstRef}
-                      className="site-row__input"
-                      placeholder="Label (blank = 'Web')"
-                      value={editWebAppForm.label}
-                      onChange={(e) => setEditWebAppForm((p) => ({ ...p, label: e.target.value }))}
-                      onKeyDown={siteEditKeyDown(() => {
-                        void handleSaveWebApp()
-                      })}
-                      disabled={sitesBusy}
-                    />
-                    <input
-                      className="site-row__input site-row__input--url"
-                      placeholder="URL (e.g. https://acme.vercel.app)"
-                      value={editWebAppForm.url}
-                      onChange={(e) => setEditWebAppForm((p) => ({ ...p, url: e.target.value }))}
-                      onKeyDown={siteEditKeyDown(() => {
-                        void handleSaveWebApp()
-                      })}
-                      disabled={sitesBusy}
-                    />
-                    <label>
-                      <svg
-                        aria-hidden="true"
-                        width="8"
-                        height="10"
-                        viewBox="0 0 8 10"
-                        fill="currentColor"
-                        style={{
-                          display: 'inline-block',
-                          verticalAlign: 'middle',
-                          marginRight: '0.25em',
-                          marginTop: '-1px',
-                        }}
-                      >
-                        <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
-                      </svg>
+                    <label title="Label (blank = 'Web')" className="add-site-form__label--label">
+                      <LabelIcon />
+                      <input
+                        ref={editWebAppFirstRef}
+                        className="site-row__input"
+                        placeholder="Optional Label"
+                        value={editWebAppForm.label}
+                        onChange={(e) =>
+                          setEditWebAppForm((p) => ({ ...p, label: e.target.value }))
+                        }
+                        onKeyDown={siteEditKeyDown(() => {
+                          void handleSaveWebApp()
+                        })}
+                        disabled={sitesBusy}
+                      />
+                    </label>
+                    <label title="URL (e.g. https://acme.vercel.app)">
+                      <GlobeIcon />
+                      <input
+                        className="site-row__input site-row__input--url"
+                        placeholder="URL (e.g. https://acme.vercel.app)"
+                        value={editWebAppForm.url}
+                        onChange={(e) => setEditWebAppForm((p) => ({ ...p, url: e.target.value }))}
+                        onKeyDown={siteEditKeyDown(() => {
+                          void handleSaveWebApp()
+                        })}
+                        disabled={sitesBusy}
+                      />
+                    </label>
+                    <label title="Brand (e.g. acme)">
+                      <ThemeIcon />
                       <span className="visually-hidden">Brand</span>
                       <input
                         className="site-row__input"
@@ -836,7 +941,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                         disabled={sitesBusy}
                       />
                     </label>
-                    <label>
+                    <label title="Site name (e.g. acme-store)">
                       #
                       <input
                         className="site-row__input"
@@ -890,21 +995,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                     <span className="site-row__url">{site.url}</span>
                     {site.brand !== '' && (
                       <span className="badge badge--brand badge--sm" title="Brand">
-                        <svg
-                          aria-hidden="true"
-                          width="8"
-                          height="10"
-                          viewBox="0 0 8 10"
-                          fill="currentColor"
-                          style={{
-                            display: 'inline-block',
-                            verticalAlign: 'middle',
-                            marginRight: '0.25em',
-                            marginTop: '-1px',
-                          }}
-                        >
-                          <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
-                        </svg>
+                        <ThemeIcon />
                         {site.brand}
                       </span>
                     )}
@@ -934,53 +1025,45 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
               editingWebAppIdx === null &&
               (showAddSite ? (
                 <form
-                  className="add-site-form"
+                  className="add-site-form add-site-form--open"
                   onSubmit={(e) => {
                     void handleAddSite(e)
                   }}
                 >
-                  <input
-                    ref={addSiteLabelRef}
-                    className="add-site-form__input"
-                    placeholder="Label (blank = 'Web')"
-                    value={siteForm.label}
-                    onChange={(e) => setSiteForm((p) => ({ ...p, label: e.target.value }))}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Escape') {
-                        setShowAddSite(false)
-                        setSiteForm(EMPTY_SITE)
-                      }
-                    }}
-                  />
-                  <input
-                    className="add-site-form__input add-site-form__input--url"
-                    placeholder="URL (e.g. https://acme.vercel.app)"
-                    value={siteForm.url}
-                    onChange={(e) => setSiteForm((p) => ({ ...p, url: e.target.value }))}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Escape') {
-                        setShowAddSite(false)
-                        setSiteForm(EMPTY_SITE)
-                      }
-                    }}
-                    required
-                  />
-                  <label>
-                    <svg
-                      aria-hidden="true"
-                      width="8"
-                      height="10"
-                      viewBox="0 0 8 10"
-                      fill="currentColor"
-                      style={{
-                        display: 'inline-block',
-                        verticalAlign: 'middle',
-                        marginRight: '0.25em',
-                        marginTop: '-1px',
+                  <label title="Label (blank = 'Web')" className="add-site-form__label--label">
+                    <LabelIcon />
+                    <input
+                      ref={addSiteLabelRef}
+                      className="add-site-form__input"
+                      placeholder="Optional Label"
+                      value={siteForm.label}
+                      onChange={(e) => setSiteForm((p) => ({ ...p, label: e.target.value }))}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Escape') {
+                          setShowAddSite(false)
+                          setSiteForm(EMPTY_SITE)
+                        }
                       }}
-                    >
-                      <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
-                    </svg>
+                    />
+                  </label>
+                  <label title="URL (e.g. https://acme.vercel.app)">
+                    <GlobeIcon />
+                    <input
+                      className="add-site-form__input add-site-form__input--url"
+                      placeholder="URL (e.g. https://acme.vercel.app)"
+                      value={siteForm.url}
+                      onChange={(e) => setSiteForm((p) => ({ ...p, url: e.target.value }))}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Escape') {
+                          setShowAddSite(false)
+                          setSiteForm(EMPTY_SITE)
+                        }
+                      }}
+                      required
+                    />
+                  </label>
+                  <label title="Brand (blank = env default)">
+                    <ThemeIcon />
                     <span className="visually-hidden">Brand</span>
                     <input
                       className="add-site-form__input"
@@ -995,7 +1078,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                       }}
                     />
                   </label>
-                  <label>
+                  <label title="Site name (e.g. acme-store)">
                     #
                     <input
                       className="add-site-form__input"
@@ -1027,17 +1110,158 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                     </button>
                   </div>
                 </form>
+              ) : showCreateVercel ? (
+                <form
+                  className="add-site-form add-site-form--open"
+                  onSubmit={(e) => {
+                    void handleCreateVercelSite(e)
+                  }}
+                >
+                  {/* Preflight status — guides rather than fails late (ADR-0017 §2) */}
+                  <p className="add-site-form__preflight">
+                    {preflightLoading ? (
+                      <>
+                        <span className="spinner spinner--sm" aria-hidden="true" /> Checking Vercel
+                        CLI…
+                      </>
+                    ) : preflight === null ? null : !preflight.cliInstalled ? (
+                      <span className="add-site-form__preflight--warn">⚠ {preflight.detail}</span>
+                    ) : !preflight.authenticated ? (
+                      <span className="add-site-form__preflight--warn">⚠ {preflight.detail}</span>
+                    ) : (
+                      <span className="add-site-form__preflight--ok">
+                        ✓ Vercel CLI ready{preflight.user ? ` — ${preflight.user}` : ''}
+                      </span>
+                    )}
+                  </p>
+                  <label title="Label (blank = 'Web')" className="add-site-form__label--label">
+                    <LabelIcon />
+                    <span className="visually-hidden">Label</span>
+                    <input
+                      ref={createVercelFirstRef}
+                      className="add-site-form__input"
+                      placeholder="Optional Label"
+                      value={vercelForm.label}
+                      onChange={(e) => setVercelForm((p) => ({ ...p, label: e.target.value }))}
+                      disabled={sitesBusy}
+                    />
+                  </label>
+                  <label title="Brand (blank = env default)">
+                    <ThemeIcon />
+                    <span className="visually-hidden">Brand</span>
+                    <input
+                      className="add-site-form__input"
+                      placeholder="Brand (blank = env default)"
+                      value={vercelForm.brand}
+                      onChange={(e) => setVercelForm((p) => ({ ...p, brand: e.target.value }))}
+                      disabled={sitesBusy}
+                    />
+                  </label>
+                  <label title="Site name (blank = hub default)">
+                    #
+                    <input
+                      className="add-site-form__input"
+                      placeholder="Site name (blank = hub default)"
+                      value={vercelForm.sitename}
+                      onChange={(e) => setVercelForm((p) => ({ ...p, sitename: e.target.value }))}
+                      disabled={sitesBusy}
+                    />
+                  </label>
+                  <label title="Vercel project name (blank = auto)">
+                    ▲
+                    <input
+                      className="add-site-form__input"
+                      placeholder="Vercel project name (blank = auto)"
+                      value={vercelForm.projectName ?? ''}
+                      onChange={(e) =>
+                        setVercelForm((p) => ({ ...p, projectName: e.target.value }))
+                      }
+                      disabled={sitesBusy}
+                    />
+                  </label>
+                  <div className="add-site-form__actions">
+                    <button
+                      type="submit"
+                      className="btn btn--sm btn--primary"
+                      disabled={
+                        sitesBusy || preflightLoading || !(preflight?.authenticated ?? false)
+                      }
+                      title={
+                        (preflight?.authenticated ?? false)
+                          ? 'Create the project, push env vars, and deploy'
+                          : 'Vercel CLI must be installed and logged in first'
+                      }
+                    >
+                      {sitesBusy ? 'Creating…' : 'Create & deploy'}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn--sm btn--ghost"
+                      onClick={cancelCreateVercel}
+                      disabled={sitesBusy}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
               ) : (
-                <div className="add-site-form">
+                <div className="add-site-form add-site-form--triggers">
                   <button
                     className="btn btn--sm btn--ghost"
                     onClick={() => setShowAddSite(true)}
                     disabled={isRunning}
                   >
-                    + Add site
+                    + Add existing site
+                  </button>
+                  <button
+                    className="btn btn--sm btn--ghost"
+                    onClick={openCreateVercel}
+                    disabled={isRunning}
+                    title="Create a new Vercel project, set its env vars, and deploy"
+                  >
+                    + Create Vercel site
                   </button>
                 </div>
               ))}
+
+            {/* Vercel provisioning log — persists after the form closes so the
+                result (and the deployed URL) stays visible. */}
+            {vercelOp && (
+              <div className={`env-card__log log--${vercelOp.status} log--expanded`}>
+                <div className="log-header">
+                  <span className="log-header__left">
+                    <span className="log-title">Create Vercel site</span>
+                    {vercelOp.status === 'running' && (
+                      <span className="log-status">
+                        <span className="spinner spinner--sm" aria-hidden="true" /> running…
+                      </span>
+                    )}
+                    {vercelOp.status === 'done' && (
+                      <span className="log-status log-status--ok">✓ done</span>
+                    )}
+                    {vercelOp.status === 'error' && (
+                      <span className="log-status log-status--err">⚠ errored</span>
+                    )}
+                  </span>
+                  {vercelOp.status !== 'running' && (
+                    <button
+                      className="log-close"
+                      onClick={() => setVercelOp(null)}
+                      aria-label="Dismiss log"
+                    >
+                      ✕ Dismiss
+                    </button>
+                  )}
+                </div>
+                <div className="log-body-wrapper">
+                  <div className="log-body-inner">
+                    <pre ref={vercelLogRef} className="log-body">
+                      {vercelOp.log || '…'}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </>
       )}
