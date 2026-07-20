@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process'
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
+import { homedir } from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { serve } from '@hono/node-server'
@@ -9,6 +10,18 @@ import { cors } from 'hono/cors'
 import { streamText } from 'hono/streaming'
 
 import { buildPermissionsReport, type FetchJson } from './permissions.ts'
+import {
+  cliAuthTokenPaths,
+  deployArgs,
+  deriveProjectName,
+  envAddArgs,
+  envRmArgs,
+  extractToken,
+  linkArgs,
+  parseDeploymentUrl,
+  runtimeEnvVars,
+  type VercelSiteInput,
+} from './vercel.ts'
 
 // ── Paths ─────────────────────────────────────────────────────────────────────
 
@@ -17,7 +30,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const REPO_ROOT = path.resolve(__dirname, '..', '..', '..')
 const HUB_MANAGEMENT_ROOT = path.join(REPO_ROOT, 'packages', 'hub-management')
 const CONFIG_PATH = path.join(REPO_ROOT, 'quadratic.config.json')
-const WEB_ENV_LOCAL = path.join(REPO_ROOT, 'apps', 'web', '.env.local')
+const WEB_APP_ROOT = path.join(REPO_ROOT, 'apps', 'web')
+const WEB_ENV_LOCAL = path.join(WEB_APP_ROOT, '.env.local')
 const HUB_MANAGEMENT_ENV = path.join(HUB_MANAGEMENT_ROOT, '.env')
 const PORT = 3099
 
@@ -26,7 +40,9 @@ const FIXTURES_NAME = 'fixtures'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type WebApp = { label: string; url: string; brand: string; sitename: string }
+// `name` is the delivery-key namespace (SITE_NAME, ADR-0014); matches the
+// field the UI reads/writes and what's stored in quadratic.config.json.
+type WebApp = { label: string; url: string; brand: string; name: string }
 
 type Environment = {
   name: string
@@ -332,30 +348,40 @@ type StreamWriter = { write: (text: string) => Promise<unknown> }
 const runningOps = new Map<string, ReturnType<typeof spawn>>()
 
 /**
- * Spawn a Node script, piping stdout + stderr into the Hono stream.
+ * Spawn an arbitrary command, piping stdout + stderr into the Hono stream.
  * Resolves on clean exit, rejects on non-zero exit or signal kill.
- * The optional `envName` is used to register the child in `runningOps`
- * so the cancel endpoint can kill it.
+ *
+ * - `cwd` defaults to the hub-management root (where the seed/sync scripts run);
+ *   Vercel commands pass the web-app root.
+ * - `envName`, when set, registers the child in `runningOps` so the existing
+ *   cancel endpoint can kill it.
+ * - `input`, when set, is written to the child's stdin and the stream closed —
+ *   used to feed `vercel env add` its value without exposing it in argv.
  */
-function runScript(
+function runCommand(
   stream: StreamWriter,
-  scriptPath: string,
+  command: string,
   args: string[],
   env: NodeJS.ProcessEnv,
-  envName?: string,
+  opts: { cwd?: string; envName?: string; input?: string } = {},
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     // detached: true puts the child in its own process group so that a
-    // cancel can send SIGKILL to the whole group (node + any dc-cli grandchild).
-    const child = spawn('node', [scriptPath, ...args], {
-      cwd: HUB_MANAGEMENT_ROOT,
+    // cancel can send SIGKILL to the whole group (node/vercel + grandchildren).
+    const child = spawn(command, args, {
+      cwd: opts.cwd ?? HUB_MANAGEMENT_ROOT,
       env,
       detached: true,
     })
 
-    if (envName !== undefined) {
-      runningOps.set(envName, child)
-      console.log(`[runScript] registered pid=${String(child.pid)} for env="${envName}"`)
+    if (opts.envName !== undefined) {
+      runningOps.set(opts.envName, child)
+      console.log(`[runCommand] registered pid=${String(child.pid)} for env="${opts.envName}"`)
+    }
+
+    if (opts.input !== undefined) {
+      child.stdin.write(opts.input)
+      child.stdin.end()
     }
 
     child.stdout.on('data', (chunk: Buffer) => {
@@ -365,21 +391,136 @@ function runScript(
       void stream.write(chunk.toString())
     })
     child.on('error', (err: Error) => {
-      if (envName !== undefined) runningOps.delete(envName)
-      void stream.write(`\n✗ Failed to start process: ${err.message}\n`)
+      if (opts.envName !== undefined) runningOps.delete(opts.envName)
+      void stream.write(`\n✗ Failed to start ${command}: ${err.message}\n`)
       reject(err)
     })
     child.on('close', (code: number | null, signal: string | null) => {
-      if (envName !== undefined) runningOps.delete(envName)
+      if (opts.envName !== undefined) runningOps.delete(opts.envName)
       if (signal !== null) {
         reject(new Error('Aborted'))
       } else if (code === 0) {
         resolve()
       } else {
-        reject(new Error(`Process exited with code ${code ?? 'unknown'}`))
+        reject(new Error(`${command} exited with code ${code ?? 'unknown'}`))
       }
     })
   })
+}
+
+/** Spawn a Node script (seed/sync/wipe) via the shared command runner. */
+function runScript(
+  stream: StreamWriter,
+  scriptPath: string,
+  args: string[],
+  env: NodeJS.ProcessEnv,
+  envName?: string,
+): Promise<void> {
+  return runCommand(stream, 'node', [scriptPath, ...args], env, {
+    ...(envName !== undefined ? { envName } : {}),
+  })
+}
+
+/**
+ * Run a command to completion and capture its output, without streaming.
+ * Used by the Vercel preflight (version/whoami checks). Never rejects — a
+ * missing binary resolves with code null so the caller can report cleanly.
+ */
+function execCapture(
+  command: string,
+  args: string[],
+): Promise<{ code: number | null; stdout: string; stderr: string }> {
+  return new Promise((resolve) => {
+    const child = spawn(command, args, { env: vercelEnv() })
+    let stdout = ''
+    let stderr = ''
+    child.stdout.on('data', (c: Buffer) => (stdout += c.toString()))
+    child.stderr.on('data', (c: Buffer) => (stderr += c.toString()))
+    child.on('error', (err: Error) => resolve({ code: null, stdout, stderr: stderr + err.message }))
+    child.on('close', (code: number | null) => resolve({ code, stdout, stderr }))
+  })
+}
+
+/**
+ * Environment for spawned Vercel commands: inherit the operator's shell env
+ * (so an ambient `vercel login` session and a globally-installed CLI are found)
+ * and prepend the repo's node_modules/.bin in case vercel is a local dep.
+ */
+function vercelEnv(): NodeJS.ProcessEnv {
+  const rootBin = path.join(REPO_ROOT, 'node_modules', '.bin')
+  return { ...process.env, PATH: `${rootBin}:${process.env.PATH ?? ''}` }
+}
+
+/**
+ * Resolve a Vercel bearer token without asking the operator for one:
+ * explicit (form) → VERCEL_TOKEN env → the token the CLI stored at
+ * `vercel login`. Returns null if none is found (caller fails loud).
+ */
+function resolveVercelToken(explicit?: string): string | null {
+  if (explicit !== undefined && explicit.trim() !== '') return explicit.trim()
+  if (process.env.VERCEL_TOKEN !== undefined && process.env.VERCEL_TOKEN !== '') {
+    return process.env.VERCEL_TOKEN
+  }
+  const paths = cliAuthTokenPaths({
+    home: homedir(),
+    platform: process.platform,
+    ...(process.env.XDG_DATA_HOME !== undefined ? { xdgDataHome: process.env.XDG_DATA_HOME } : {}),
+    ...(process.env.XDG_CONFIG_HOME !== undefined
+      ? { xdgConfigHome: process.env.XDG_CONFIG_HOME }
+      : {}),
+    ...(process.env.LOCALAPPDATA !== undefined ? { localAppData: process.env.LOCALAPPDATA } : {}),
+  })
+  for (const p of paths) {
+    if (!existsSync(p)) continue
+    try {
+      const token = extractToken(readFileSync(p, 'utf-8'))
+      if (token !== null) return token
+    } catch {
+      // Unreadable/!JSON — try the next candidate.
+    }
+  }
+  return null
+}
+
+/**
+ * Read the project id + team (org) id that `vercel link` wrote to
+ * .vercel/project.json at the repo root, so the API call can target the
+ * just-linked project.
+ */
+function readLinkedProject(): { projectId: string; orgId?: string } {
+  const p = path.join(REPO_ROOT, '.vercel', 'project.json')
+  const data = JSON.parse(readFileSync(p, 'utf-8')) as { projectId?: string; orgId?: string }
+  if (data.projectId === undefined || data.projectId === '') {
+    throw new Error('Linked project id not found in .vercel/project.json.')
+  }
+  return { projectId: data.projectId, ...(data.orgId ? { orgId: data.orgId } : {}) }
+}
+
+/**
+ * Configure the freshly-linked project via the Vercel REST API — the settings
+ * the CLI can't set. Sets the Root Directory (no CLI equivalent) and pins the
+ * framework preset to Next.js: a `vercel link` leaves the preset as "Other",
+ * and Vercel doesn't re-detect it on an existing project, so it must be set
+ * explicitly for Vercel to wire up Next.js SSR/ISR/routing rather than treat
+ * the output as static. Build/Output/Install/Dev commands stay unset (default).
+ */
+async function configureVercelProject(
+  token: string,
+  projectId: string,
+  orgId: string | undefined,
+  rootDirectory: string,
+): Promise<void> {
+  const url = new URL(`https://api.vercel.com/v9/projects/${projectId}`)
+  if (orgId !== undefined) url.searchParams.set('teamId', orgId)
+  const res = await fetch(url, {
+    method: 'PATCH',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ rootDirectory, framework: 'nextjs' }),
+  })
+  if (!res.ok) {
+    const detail = await res.text().catch(() => '')
+    throw new Error(`Vercel API could not configure project: HTTP ${res.status} ${detail}`.trim())
+  }
 }
 
 // ── Operation config ─────────────────────────────────────────────────────────
@@ -635,6 +776,178 @@ app.post('/api/amplience/permissions', async (c) => {
     const message = err instanceof Error ? err.message : 'Unknown error'
     return c.json({ error: `Permissions check failed: ${message}` }, 500)
   }
+})
+
+// ── Vercel provisioning (ADR-0017) ─────────────────────────────────────────────
+
+// POST /api/vercel/preflight — is the Vercel CLI installed and logged in?
+// Env-independent; drives whether the "Create Vercel site" action is offered
+// and what guidance to show (install / `vercel login`).
+app.post('/api/vercel/preflight', async (c) => {
+  const version = await execCapture('vercel', ['--version'])
+  if (version.code !== 0) {
+    return c.json({
+      cliInstalled: false,
+      authenticated: false,
+      detail: 'Vercel CLI not found. Install it with `npm i -g vercel`.',
+    })
+  }
+  const who = await execCapture('vercel', ['whoami'])
+  const authenticated = who.code === 0
+  const user = authenticated ? who.stdout.trim() : ''
+  return c.json({
+    cliInstalled: true,
+    authenticated,
+    version: version.stdout.trim(),
+    ...(user !== '' ? { user } : {}),
+    ...(authenticated ? {} : { detail: 'Not logged in. Run `vercel login`.' }),
+  })
+})
+
+// POST /api/environments/:name/vercel/create-site — provision a new Vercel
+// project for this environment, push its runtime env vars, deploy, and record
+// the resulting URL in webApps[]. Streams progress like the seed/sync ops and
+// is cancellable via the existing DELETE …/cancel endpoint (registered under
+// `name` in runningOps).
+app.post('/api/environments/:name/vercel/create-site', async (c) => {
+  const { name } = c.req.param()
+  const body = await c.req.json<{
+    brand?: string
+    sitename?: string
+    projectName?: string
+    label?: string
+    token?: string
+    scope?: string
+  }>()
+
+  const config = await readConfig()
+  const env = config.environments.find((e) => e.name === name)
+  if (!env) return c.json({ error: `Environment "${name}" not found.` }, 404)
+  if (env.hubName.trim() === '') {
+    return c.json({ error: 'Environment has no hub name — set one before provisioning.' }, 400)
+  }
+
+  const site: VercelSiteInput = {
+    brand: body.brand ?? '',
+    sitename: body.sitename ?? '',
+    ...(body.projectName !== undefined ? { projectName: body.projectName } : {}),
+  }
+  const projectName = deriveProjectName(env.name, site)
+  const cliOpts = {
+    ...(body.token ? { token: body.token } : {}),
+    ...(body.scope ? { scope: body.scope } : {}),
+  }
+  const envVars = runtimeEnvVars(env, site)
+  const cmdEnv = vercelEnv()
+
+  return streamText(c, async (stream) => {
+    await stream.writeln(`▶ Create Vercel site "${projectName}" — "${env.label || env.name}"…\n`)
+    try {
+      // 1. Preflight — fail loud before we create anything.
+      const who = await execCapture('vercel', [
+        'whoami',
+        ...(cliOpts.token ? ['--token', cliOpts.token] : []),
+      ])
+      if (who.code !== 0) {
+        throw new Error('Vercel CLI not authenticated — run `vercel login` (or pass a token).')
+      }
+      await stream.writeln(`• Authenticated as ${who.stdout.trim()}`)
+
+      // 2. Link/create the project under the operator's scope. The CLI handles
+      // auth + team resolution and writes .vercel/project.json. Run from the
+      // repo root so the deploy below uploads the whole workspace.
+      await stream.writeln(`\n• Linking project "${projectName}"…`)
+      await runCommand(stream, 'vercel', linkArgs(projectName, cliOpts), cmdEnv, {
+        cwd: REPO_ROOT,
+        envName: name,
+      })
+
+      // 3. Configure the project via the API — the settings the CLI can't set:
+      // Root Directory = apps/web (a CLI link records "./", breaking Next.js
+      // detection) and framework = Next.js (a link leaves it "Other"). Reuses
+      // the CLI's own login token, so nothing extra is asked for.
+      const token = resolveVercelToken(body.token)
+      if (token === null) {
+        throw new Error(
+          'No Vercel token found — run `vercel login` (or set VERCEL_TOKEN) so the root directory can be set.',
+        )
+      }
+      const { projectId, orgId } = readLinkedProject()
+      await stream.writeln('• Setting Root Directory to "apps/web" and framework to Next.js…')
+      await configureVercelProject(token, projectId, orgId, 'apps/web')
+
+      // 4. Push the runtime env vars (values via stdin, not argv). Remove first
+      // so a re-run overwrites cleanly rather than erroring on an existing var.
+      await stream.writeln(`\n• Pushing ${String(envVars.length)} runtime variable(s)…`)
+      const discard: StreamWriter = { write: () => Promise.resolve(undefined) }
+      for (const v of envVars) {
+        for (const target of v.targets) {
+          await stream.writeln(`  – ${v.key} → ${target}`)
+          await runCommand(discard, 'vercel', envRmArgs(v.key, target, cliOpts), cmdEnv, {
+            cwd: REPO_ROOT,
+          }).catch(() => {
+            // No existing value to remove — expected on a first run.
+          })
+          // Value via stdin with NO trailing newline — `vercel env add` stores
+          // stdin verbatim, so a newline would be baked into the value (and
+          // e.g. fail SITE_NAME validation). Close stdin (in runCommand) is
+          // what signals end-of-value.
+          await runCommand(stream, 'vercel', envAddArgs(v.key, target, cliOpts), cmdEnv, {
+            cwd: REPO_ROOT,
+            envName: name,
+            input: v.value,
+          })
+        }
+      }
+
+      // 5. Deploy to production from the repo root (so the pnpm workspace is
+      // present); Vercel builds apps/web via the Root Directory set in step 3.
+      await stream.writeln('\n• Deploying to production…')
+      let deployOut = ''
+      const capture: StreamWriter = {
+        write: (t: string) => {
+          deployOut += t
+          return stream.write(t)
+        },
+      }
+      await runCommand(capture, 'vercel', deployArgs(cliOpts), cmdEnv, {
+        cwd: REPO_ROOT,
+        envName: name,
+      })
+
+      // 6. Record the deployed site in webApps[] — same shape the manual
+      //    "Add existing site" form writes, so the two paths converge.
+      const url = parseDeploymentUrl(deployOut)
+      if (url === null) {
+        await stream.writeln(
+          '\n⚠ Deploy finished but no URL was found in the output — add the site manually once you have its URL.',
+        )
+      } else {
+        const fresh = await readConfig()
+        const target = fresh.environments.find((e) => e.name === name)
+        if (target !== undefined) {
+          target.webApps.push({
+            label: (body.label ?? '').trim(),
+            url,
+            brand: site.brand.trim() || env.defaultBrand,
+            name: site.sitename.trim() || env.defaultSite,
+          })
+          await writeConfig(fresh)
+          await stream.writeln(`\n✓ Recorded site: ${url}`)
+        }
+      }
+
+      await stream.writeln('\n✓ Done.')
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message === 'Aborted'
+          ? 'Aborted by user.'
+          : err instanceof Error
+            ? err.message
+            : String(err)
+      await stream.writeln(`\n✗ ${msg}`)
+    }
+  })
 })
 
 // ── Stats ─────────────────────────────────────────────────────────────────────
