@@ -45,9 +45,11 @@ export function PermissionsPanel({ report, onDismiss }: Props) {
           ✕
         </button>
       </div>
-      {!report.hub.readable ? (
-        <p className="env-card__stats-error">{report.hub.detail}</p>
-      ) : (
+      {!report.hub.readable && <p className="env-card__stats-error">{report.hub.detail}</p>}
+      {/* The DC hub row can be unreadable (bad hub id / creds) while the DAM
+          check — a separate API on the same token — still has something to
+          report, so render the table whenever there are any checks. */}
+      {report.checks.length > 0 && (
         <>
           <table className="env-card__stats perm-panel__table">
             <thead>
@@ -78,7 +80,8 @@ export function PermissionsPanel({ report, onDismiss }: Props) {
           </table>
           <p className="perm-panel__note">
             Read is probed live; write reflects the actions the API advertises to these credentials
-            via its hypermedia links.
+            via its hypermedia links. DAM AssetStore write is verified directly by creating and
+            immediately deleting a tiny test asset.
           </p>
         </>
       )}
