@@ -5,7 +5,7 @@
   "description": "Local GUI for managing Quadratic Lite hub environments.",
   "type": "module",
   "scripts": {
-    "dev": "concurrently --names \"ui,api\" --prefix-colors \"cyan,yellow\" \"vite --open\" \"node --experimental-strip-types server/index.ts\"",
+    "dev": "concurrently --names \"ui,api\" --prefix-colors \"cyan,yellow\" \"vite --open\" \"node --experimental-strip-types --watch server/index.ts\"",
     "build": "vite build",
     "typecheck": "tsc --noEmit"
   },

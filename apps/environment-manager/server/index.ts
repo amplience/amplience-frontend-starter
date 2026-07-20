@@ -590,32 +590,46 @@ app.post('/api/amplience/discover', async (c) => {
 
 // ── Permissions ───────────────────────────────────────────────────────────────
 
-// GET /api/environments/:name/permissions — preflight what the credential
-// pair can read (live GET probes) and write (permission-filtered HAL links)
-// across the resource areas the seed/sync/wipe operations touch.
-app.get('/api/environments/:name/permissions', async (c) => {
-  const { name } = c.req.param()
-  const config = await readConfig()
-  const env = config.environments.find((e) => e.name === name)
-  if (!env) return c.json({ error: `Environment "${name}" not found.` }, 404)
-
-  if (!env.clientId || !env.clientSecret || !env.hubId) {
-    return c.json({ error: 'Environment is missing clientId, clientSecret or hubId.' }, 400)
+// POST /api/amplience/permissions — preflight what a credential pair can read
+// (live GET probes) and write (permission-filtered HAL links) across the
+// resource areas the seed/sync/wipe operations touch. Takes credentials in
+// the body (like /api/amplience/discover) so the settings modal can check
+// form values that haven't been saved yet.
+app.post('/api/amplience/permissions', async (c) => {
+  const body = await c.req.json<{
+    clientId?: string
+    clientSecret?: string
+    hubId?: string
+    repoContent?: string
+    repoSlots?: string
+    repoSiteComponents?: string
+  }>()
+  const { clientId, clientSecret, hubId } = body
+  if (!clientId || !clientSecret || !hubId) {
+    return c.json({ error: 'clientId, clientSecret and hubId are required' }, 400)
   }
 
   try {
-    const token = await getAmplienceToken(env.clientId, env.clientSecret)
+    const token = await getAmplienceToken(clientId, clientSecret)
     const fetchJson: FetchJson = async (url) => {
       const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } })
-      let body: unknown = null
+      let resBody: unknown = null
       try {
-        body = await res.json()
+        resBody = await res.json()
       } catch {
-        body = null
+        resBody = null
       }
-      return { status: res.status, body }
+      return { status: res.status, body: resBody }
     }
-    const report = await buildPermissionsReport(env, fetchJson)
+    const report = await buildPermissionsReport(
+      {
+        hubId,
+        repoContent: body.repoContent ?? '',
+        repoSlots: body.repoSlots ?? '',
+        repoSiteComponents: body.repoSiteComponents ?? '',
+      },
+      fetchJson,
+    )
     return c.json(report)
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'

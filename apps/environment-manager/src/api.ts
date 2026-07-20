@@ -39,8 +39,18 @@ export const api = {
     request<Config>(`/environments/${encodeURIComponent(name)}`, { method: 'DELETE' }),
   stats: (name: string) =>
     request<EnvironmentStats>(`/environments/${encodeURIComponent(name)}/stats`),
-  permissions: (name: string) =>
-    request<PermissionsReport>(`/environments/${encodeURIComponent(name)}/permissions`),
+  permissions: (env: {
+    clientId: string
+    clientSecret: string
+    hubId: string
+    repoContent?: string
+    repoSlots?: string
+    repoSiteComponents?: string
+  }) =>
+    request<PermissionsReport>('/amplience/permissions', {
+      method: 'POST',
+      body: JSON.stringify(env),
+    }),
   discover: (clientId: string, clientSecret: string) =>
     request<DiscoverResult>('/amplience/discover', {
       method: 'POST',
