@@ -8,6 +8,8 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { streamText } from 'hono/streaming'
 
+import { buildPermissionsReport, type FetchJson } from './permissions.ts'
+
 // ── Paths ─────────────────────────────────────────────────────────────────────
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -44,6 +46,8 @@ type Environment = {
   defaultSite: string
   webApps: WebApp[]
   republish: boolean
+  /** Opt-in per environment: allow dc-cli's --ignoreSchemaValidation (see src/types.ts). */
+  ignoreSchemaValidation?: boolean
 }
 
 type Config = {
@@ -584,6 +588,55 @@ app.post('/api/amplience/discover', async (c) => {
   }
 })
 
+// ── Permissions ───────────────────────────────────────────────────────────────
+
+// POST /api/amplience/permissions — preflight what a credential pair can read
+// (live GET probes) and write (permission-filtered HAL links) across the
+// resource areas the seed/sync/wipe operations touch. Takes credentials in
+// the body (like /api/amplience/discover) so the settings modal can check
+// form values that haven't been saved yet.
+app.post('/api/amplience/permissions', async (c) => {
+  const body = await c.req.json<{
+    clientId?: string
+    clientSecret?: string
+    hubId?: string
+    repoContent?: string
+    repoSlots?: string
+    repoSiteComponents?: string
+  }>()
+  const { clientId, clientSecret, hubId } = body
+  if (!clientId || !clientSecret || !hubId) {
+    return c.json({ error: 'clientId, clientSecret and hubId are required' }, 400)
+  }
+
+  try {
+    const token = await getAmplienceToken(clientId, clientSecret)
+    const fetchJson: FetchJson = async (url) => {
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } })
+      let resBody: unknown = null
+      try {
+        resBody = await res.json()
+      } catch {
+        resBody = null
+      }
+      return { status: res.status, body: resBody }
+    }
+    const report = await buildPermissionsReport(
+      {
+        hubId,
+        repoContent: body.repoContent ?? '',
+        repoSlots: body.repoSlots ?? '',
+        repoSiteComponents: body.repoSiteComponents ?? '',
+      },
+      fetchJson,
+    )
+    return c.json(report)
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    return c.json({ error: `Permissions check failed: ${message}` }, 500)
+  }
+})
+
 // ── Stats ─────────────────────────────────────────────────────────────────────
 
 // GET /api/environments/:name/stats  — fetch resource counts from Amplience API
@@ -624,6 +677,7 @@ app.get('/api/environments/:name/stats', async (c) => {
     return c.json({ schemas, types, items: contentItems + slotItems, extensions, workflowStates })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
+    console.error(`Failed to fetch stats for environment!! "${env.name}":`, err)
     return c.json({ error: `Stats fetch failed: ${message}` }, 500)
   }
 })

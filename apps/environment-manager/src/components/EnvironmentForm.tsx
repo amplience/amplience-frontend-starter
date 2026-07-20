@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { api } from '../api.js'
-import type { DiscoveredHub, Environment } from '../types.js'
+import type { DiscoveredHub, Environment, PermissionsReport } from '../types.js'
 import { EMPTY_ENV } from '../types.js'
+import { PermissionsPanel } from './PermissionsPanel.js'
 
 type Props = {
   initial?: Environment
@@ -93,6 +94,11 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
   const [discoveredHubs, setDiscoveredHubs] = useState<DiscoveredHub[] | null>(null)
   const [autoFilled, setAutoFilled] = useState<Set<string>>(new Set())
 
+  // Permissions preflight state
+  const [perms, setPerms] = useState<PermissionsReport | null>(null)
+  const [permsError, setPermsError] = useState<string | null>(null)
+  const [permsLoading, setPermsLoading] = useState(false)
+
   useEffect(() => {
     firstFieldRef.current?.focus()
   }, [])
@@ -178,6 +184,34 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
       setDiscoverError(err instanceof Error ? err.message : 'Discovery failed')
     } finally {
       setDiscovering(false)
+    }
+  }
+
+  // ── Permissions preflight ──────────────────────────────────────────────────
+
+  // Checks the form's current (possibly unsaved) values, so a credential pair
+  // can be verified before the environment is ever saved. Needs a hub ID —
+  // run "Fetch hub details" (or fill it in) first.
+  async function handleCheckPermissions() {
+    if (!form.clientId || !form.clientSecret || !form.hubId) return
+    setPermsLoading(true)
+    setPermsError(null)
+    try {
+      setPerms(
+        await api.permissions({
+          clientId: form.clientId,
+          clientSecret: form.clientSecret,
+          hubId: form.hubId,
+          repoContent: form.repoContent,
+          repoSlots: form.repoSlots,
+          repoSiteComponents: form.repoSiteComponents,
+        }),
+      )
+    } catch (err) {
+      setPerms(null)
+      setPermsError(err instanceof Error ? err.message : 'Permissions check failed')
+    } finally {
+      setPermsLoading(false)
     }
   }
 
@@ -282,11 +316,40 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
                     <span className="spinner spinner--sm" aria-hidden="true" /> Fetching…
                   </>
                 ) : (
-                  '↓ Fetch hub details'
+                  '⬇️ Fetch hub details'
+                )}
+              </button>
+              <button
+                type="button"
+                className="btn btn--sm btn--ghost form-discover__btn"
+                onClick={() => {
+                  void handleCheckPermissions()
+                }}
+                disabled={
+                  permsLoading || saving || !form.clientId || !form.clientSecret || !form.hubId
+                }
+                title={
+                  !form.hubId
+                    ? 'Needs a hub ID — fetch hub details first'
+                    : 'Check what these credentials can read and write'
+                }
+              >
+                {permsLoading ? (
+                  <>
+                    <span className="spinner spinner--sm" aria-hidden="true" /> Checking…
+                  </>
+                ) : (
+                  '🔑 Check credentials'
                 )}
               </button>
               {discoverError !== null && <p className="form-discover__error">{discoverError}</p>}
+              {permsError !== null && <p className="form-discover__error">{permsError}</p>}
             </div>
+
+            {/* Credential permissions child-card */}
+            {perms !== null && !permsLoading && (
+              <PermissionsPanel report={perms} onDismiss={() => setPerms(null)} />
+            )}
 
             {/* Hub picker — only shown when credentials resolve to multiple hubs */}
             {discoveredHubs !== null && discoveredHubs.length > 1 && (

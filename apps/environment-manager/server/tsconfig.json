@@ -6,6 +6,10 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "types": ["node"],
+    /* The server runs via `node --experimental-strip-types`, which requires
+       explicit .ts extensions on relative imports; nothing here is emitted. */
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },

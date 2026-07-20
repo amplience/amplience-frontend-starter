@@ -211,6 +211,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
         setStatsError(null)
       })
       .catch((err: unknown) => {
+        console.error(`Failed to fetch stats for environment "${env.name}":`, err)
         setStatsError(err instanceof Error ? err.message : 'Failed to fetch stats')
       })
   }, [env.name])
