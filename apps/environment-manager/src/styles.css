@@ -798,6 +798,12 @@ body {
   font-size: 0.8rem;
 }
 
+.site-row label {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
 .site-row__icon {
   color: var(--color-text-muted);
   flex-shrink: 0;
@@ -958,6 +964,7 @@ body {
   padding-top: 0.5rem;
   border-top: 1px dashed var(--color-border);
   align-items: center;
+  font-size: 0.8rem;
 }
 
 .add-site-form__input {
@@ -993,19 +1000,40 @@ body {
 
 /* Create-Vercel form stacks its fields so the preflight line + inputs read
    top-to-bottom rather than wrapping mid-row. */
-.add-site-form--vercel {
+.add-site-form--open {
   flex-direction: column;
   align-items: stretch;
 }
 
-.add-site-form--vercel label {
+.add-site-form--open label {
   display: flex;
   align-items: center;
   gap: 0.3em;
 }
 
-.add-site-form--vercel .add-site-form__input {
-  width: 100%;
+.add-site-form__label--label {
+  position: relative;
+
+  &::before,
+  &::after {
+    position: absolute;
+    line-height: 1;
+  }
+
+  &::before {
+    content: 'Web (';
+    left: 1.8em;
+  }
+
+  &::after {
+    content: ')';
+    right: 0.5em;
+  }
+
+  input {
+    padding-left: 3.5em;
+    padding-right: 1em;
+  }
 }
 
 .add-site-form__preflight {

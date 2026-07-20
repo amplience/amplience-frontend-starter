@@ -27,8 +27,8 @@ const GlobeIcon = () => (
   <svg
     aria-hidden="true"
     className="site-row__icon"
-    width="12"
-    height="12"
+    width="11"
+    height="11"
     viewBox="0 0 16 16"
     fill="currentColor"
   >
@@ -43,10 +43,45 @@ const PencilIcon = () => (
 )
 
 const TrashIcon = () => (
-  <svg aria-hidden="true" width="11" height="12" viewBox="0 0 10 12" fill="currentColor">
+  <svg aria-hidden="true" width="11" height="11" viewBox="0 0 10 12" fill="currentColor">
     <path d="M3.5 0h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1z" />
     <path d="M0 2h10v1H0z" />
     <path d="M1.5 3.5l.7 8h5.6l.7-8H1.5z" />
+  </svg>
+)
+
+/** Droplet — used for 'brand' fields/badges. */
+const ThemeIcon = () => (
+  <svg
+    aria-hidden="true"
+    width="11"
+    height="11"
+    viewBox="0 0 8 10"
+    fill="currentColor"
+    style={{
+      display: 'inline-block',
+      verticalAlign: 'middle',
+      marginTop: '-1px',
+    }}
+  >
+    <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
+  </svg>
+)
+
+/** Tag — used for 'label' fields. */
+const LabelIcon = () => (
+  <svg
+    aria-hidden="true"
+    width="11"
+    height="11"
+    viewBox="0 0 14 14"
+    fill="currentColor"
+    style={{ display: 'inline-block', verticalAlign: 'middle', marginTop: '-1px' }}
+  >
+    <path
+      fillRule="evenodd"
+      d="M2.8 2.8 L7.7 2 L12.7 7 L7 12.7 L2 7.7 Z M6.2 4.9 A1.3 1.3 0 1 1 3.6 4.9 A1.3 1.3 0 1 1 6.2 4.9 Z"
+    />
   </svg>
 )
 
@@ -484,21 +519,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
           <span className="env-card__label">{env.label || env.name}</span>
           {env.defaultBrand !== '' && (
             <span className="badge badge--brand">
-              <svg
-                aria-hidden="true"
-                width="8"
-                height="10"
-                viewBox="0 0 8 10"
-                fill="currentColor"
-                style={{
-                  display: 'inline-block',
-                  verticalAlign: 'middle',
-                  marginRight: '0.25em',
-                  marginTop: '-1px',
-                }}
-              >
-                <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
-              </svg>
+              <ThemeIcon />
               {env.defaultBrand}
             </span>
           )}
@@ -769,37 +790,26 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
               {/* Localhost — always present */}
               {editingLocalhost ? (
                 <li className="site-row site-row--localhost site-row--editing">
-                  <GlobeIcon />
+                  <LabelIcon />
                   <span className="site-row__label--fixed">Web (localhost)</span>
-                  <input
-                    ref={editLocalhostUrlRef}
-                    className="site-row__input site-row__input--url"
-                    placeholder="http://localhost:3000"
-                    value={editLocalhostForm.localhostUrl}
-                    onChange={(e) =>
-                      setEditLocalhostForm((p) => ({ ...p, localhostUrl: e.target.value }))
-                    }
-                    onKeyDown={siteEditKeyDown(() => {
-                      void handleSaveLocalhost()
-                    })}
-                    disabled={sitesBusy}
-                  />
-                  <label>
-                    <svg
-                      aria-hidden="true"
-                      width="8"
-                      height="10"
-                      viewBox="0 0 8 10"
-                      fill="currentColor"
-                      style={{
-                        display: 'inline-block',
-                        verticalAlign: 'middle',
-                        marginRight: '0.25em',
-                        marginTop: '-1px',
-                      }}
-                    >
-                      <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
-                    </svg>
+                  <label title="localhost URL (e.g. http://localhost:3000)">
+                    <GlobeIcon />
+                    <input
+                      ref={editLocalhostUrlRef}
+                      className="site-row__input site-row__input--url"
+                      placeholder="http://localhost:3000"
+                      value={editLocalhostForm.localhostUrl}
+                      onChange={(e) =>
+                        setEditLocalhostForm((p) => ({ ...p, localhostUrl: e.target.value }))
+                      }
+                      onKeyDown={siteEditKeyDown(() => {
+                        void handleSaveLocalhost()
+                      })}
+                      disabled={sitesBusy}
+                    />
+                  </label>
+                  <label title="Brand (e.g. acme)">
+                    <ThemeIcon />
                     <span className="visually-hidden">Brand</span>
                     <input
                       className="site-row__input"
@@ -814,7 +824,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                       disabled={sitesBusy}
                     />
                   </label>
-                  <label>
+                  <label title="Site name (blank = hub name)">
                     #
                     <input
                       className="site-row__input"
@@ -859,21 +869,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                   <span className="site-row__url">{env.localhostUrl}</span>
                   {env.defaultBrand !== '' && (
                     <span className="badge badge--brand badge--sm" title="Brand">
-                      <svg
-                        aria-hidden="true"
-                        width="8"
-                        height="10"
-                        viewBox="0 0 8 10"
-                        fill="currentColor"
-                        style={{
-                          display: 'inline-block',
-                          verticalAlign: 'middle',
-                          marginRight: '0.25em',
-                          marginTop: '-1px',
-                        }}
-                      >
-                        <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
-                      </svg>
+                      <ThemeIcon />
                       {env.defaultBrand}
                     </span>
                   )}
@@ -900,44 +896,37 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
               {env.webApps.map((site, i) =>
                 editingWebAppIdx === i ? (
                   <li key={i} className="site-row site-row--editing">
-                    <GlobeIcon />
-                    <input
-                      ref={editWebAppFirstRef}
-                      className="site-row__input"
-                      placeholder="Label (blank = 'Web')"
-                      value={editWebAppForm.label}
-                      onChange={(e) => setEditWebAppForm((p) => ({ ...p, label: e.target.value }))}
-                      onKeyDown={siteEditKeyDown(() => {
-                        void handleSaveWebApp()
-                      })}
-                      disabled={sitesBusy}
-                    />
-                    <input
-                      className="site-row__input site-row__input--url"
-                      placeholder="URL (e.g. https://acme.vercel.app)"
-                      value={editWebAppForm.url}
-                      onChange={(e) => setEditWebAppForm((p) => ({ ...p, url: e.target.value }))}
-                      onKeyDown={siteEditKeyDown(() => {
-                        void handleSaveWebApp()
-                      })}
-                      disabled={sitesBusy}
-                    />
-                    <label>
-                      <svg
-                        aria-hidden="true"
-                        width="8"
-                        height="10"
-                        viewBox="0 0 8 10"
-                        fill="currentColor"
-                        style={{
-                          display: 'inline-block',
-                          verticalAlign: 'middle',
-                          marginRight: '0.25em',
-                          marginTop: '-1px',
-                        }}
-                      >
-                        <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
-                      </svg>
+                    <label title="Label (blank = 'Web')" className="add-site-form__label--label">
+                      <LabelIcon />
+                      <input
+                        ref={editWebAppFirstRef}
+                        className="site-row__input"
+                        placeholder="Optional Label"
+                        value={editWebAppForm.label}
+                        onChange={(e) =>
+                          setEditWebAppForm((p) => ({ ...p, label: e.target.value }))
+                        }
+                        onKeyDown={siteEditKeyDown(() => {
+                          void handleSaveWebApp()
+                        })}
+                        disabled={sitesBusy}
+                      />
+                    </label>
+                    <label title="URL (e.g. https://acme.vercel.app)">
+                      <GlobeIcon />
+                      <input
+                        className="site-row__input site-row__input--url"
+                        placeholder="URL (e.g. https://acme.vercel.app)"
+                        value={editWebAppForm.url}
+                        onChange={(e) => setEditWebAppForm((p) => ({ ...p, url: e.target.value }))}
+                        onKeyDown={siteEditKeyDown(() => {
+                          void handleSaveWebApp()
+                        })}
+                        disabled={sitesBusy}
+                      />
+                    </label>
+                    <label title="Brand (e.g. acme)">
+                      <ThemeIcon />
                       <span className="visually-hidden">Brand</span>
                       <input
                         className="site-row__input"
@@ -952,7 +941,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                         disabled={sitesBusy}
                       />
                     </label>
-                    <label>
+                    <label title="Site name (e.g. acme-store)">
                       #
                       <input
                         className="site-row__input"
@@ -1006,21 +995,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                     <span className="site-row__url">{site.url}</span>
                     {site.brand !== '' && (
                       <span className="badge badge--brand badge--sm" title="Brand">
-                        <svg
-                          aria-hidden="true"
-                          width="8"
-                          height="10"
-                          viewBox="0 0 8 10"
-                          fill="currentColor"
-                          style={{
-                            display: 'inline-block',
-                            verticalAlign: 'middle',
-                            marginRight: '0.25em',
-                            marginTop: '-1px',
-                          }}
-                        >
-                          <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
-                        </svg>
+                        <ThemeIcon />
                         {site.brand}
                       </span>
                     )}
@@ -1050,53 +1025,45 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
               editingWebAppIdx === null &&
               (showAddSite ? (
                 <form
-                  className="add-site-form"
+                  className="add-site-form add-site-form--open"
                   onSubmit={(e) => {
                     void handleAddSite(e)
                   }}
                 >
-                  <input
-                    ref={addSiteLabelRef}
-                    className="add-site-form__input"
-                    placeholder="Label (blank = 'Web')"
-                    value={siteForm.label}
-                    onChange={(e) => setSiteForm((p) => ({ ...p, label: e.target.value }))}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Escape') {
-                        setShowAddSite(false)
-                        setSiteForm(EMPTY_SITE)
-                      }
-                    }}
-                  />
-                  <input
-                    className="add-site-form__input add-site-form__input--url"
-                    placeholder="URL (e.g. https://acme.vercel.app)"
-                    value={siteForm.url}
-                    onChange={(e) => setSiteForm((p) => ({ ...p, url: e.target.value }))}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Escape') {
-                        setShowAddSite(false)
-                        setSiteForm(EMPTY_SITE)
-                      }
-                    }}
-                    required
-                  />
-                  <label>
-                    <svg
-                      aria-hidden="true"
-                      width="8"
-                      height="10"
-                      viewBox="0 0 8 10"
-                      fill="currentColor"
-                      style={{
-                        display: 'inline-block',
-                        verticalAlign: 'middle',
-                        marginRight: '0.25em',
-                        marginTop: '-1px',
+                  <label title="Label (blank = 'Web')" className="add-site-form__label--label">
+                    <LabelIcon />
+                    <input
+                      ref={addSiteLabelRef}
+                      className="add-site-form__input"
+                      placeholder="Optional Label"
+                      value={siteForm.label}
+                      onChange={(e) => setSiteForm((p) => ({ ...p, label: e.target.value }))}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Escape') {
+                          setShowAddSite(false)
+                          setSiteForm(EMPTY_SITE)
+                        }
                       }}
-                    >
-                      <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
-                    </svg>
+                    />
+                  </label>
+                  <label title="URL (e.g. https://acme.vercel.app)">
+                    <GlobeIcon />
+                    <input
+                      className="add-site-form__input add-site-form__input--url"
+                      placeholder="URL (e.g. https://acme.vercel.app)"
+                      value={siteForm.url}
+                      onChange={(e) => setSiteForm((p) => ({ ...p, url: e.target.value }))}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Escape') {
+                          setShowAddSite(false)
+                          setSiteForm(EMPTY_SITE)
+                        }
+                      }}
+                      required
+                    />
+                  </label>
+                  <label title="Brand (blank = env default)">
+                    <ThemeIcon />
                     <span className="visually-hidden">Brand</span>
                     <input
                       className="add-site-form__input"
@@ -1111,7 +1078,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                       }}
                     />
                   </label>
-                  <label>
+                  <label title="Site name (e.g. acme-store)">
                     #
                     <input
                       className="add-site-form__input"
@@ -1145,7 +1112,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                 </form>
               ) : showCreateVercel ? (
                 <form
-                  className="add-site-form add-site-form--vercel"
+                  className="add-site-form add-site-form--open"
                   onSubmit={(e) => {
                     void handleCreateVercelSite(e)
                   }}
@@ -1167,47 +1134,20 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                       </span>
                     )}
                   </p>
-                  <label>
-                    <svg
-                      aria-hidden="true"
-                      width="8"
-                      height="10"
-                      viewBox="0 0 8 10"
-                      fill="currentColor"
-                      style={{
-                        display: 'inline-block',
-                        verticalAlign: 'middle',
-                        marginTop: '-1px',
-                      }}
-                    >
-                      {/* Tag silhouette */}
-                      <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
-                    </svg>
+                  <label title="Label (blank = 'Web')" className="add-site-form__label--label">
+                    <LabelIcon />
                     <span className="visually-hidden">Label</span>
                     <input
                       ref={createVercelFirstRef}
                       className="add-site-form__input"
-                      placeholder="Label (blank = 'Web')"
+                      placeholder="Optional Label"
                       value={vercelForm.label}
                       onChange={(e) => setVercelForm((p) => ({ ...p, label: e.target.value }))}
                       disabled={sitesBusy}
                     />
                   </label>
-                  <label>
-                    <svg
-                      aria-hidden="true"
-                      width="8"
-                      height="10"
-                      viewBox="0 0 8 10"
-                      fill="currentColor"
-                      style={{
-                        display: 'inline-block',
-                        verticalAlign: 'middle',
-                        marginTop: '-1px',
-                      }}
-                    >
-                      <path d="M4 0C1.5 2 0 4 0 6A4 4 0 0 0 8 6C8 4 6.5 2 4 0Z" />
-                    </svg>
+                  <label title="Brand (blank = env default)">
+                    <ThemeIcon />
                     <span className="visually-hidden">Brand</span>
                     <input
                       className="add-site-form__input"
@@ -1217,7 +1157,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                       disabled={sitesBusy}
                     />
                   </label>
-                  <label>
+                  <label title="Site name (blank = hub default)">
                     #
                     <input
                       className="add-site-form__input"
@@ -1227,13 +1167,18 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                       disabled={sitesBusy}
                     />
                   </label>
-                  <input
-                    className="add-site-form__input"
-                    placeholder="Vercel project name (blank = auto)"
-                    value={vercelForm.projectName ?? ''}
-                    onChange={(e) => setVercelForm((p) => ({ ...p, projectName: e.target.value }))}
-                    disabled={sitesBusy}
-                  />
+                  <label title="Vercel project name (blank = auto)">
+                    ▲
+                    <input
+                      className="add-site-form__input"
+                      placeholder="Vercel project name (blank = auto)"
+                      value={vercelForm.projectName ?? ''}
+                      onChange={(e) =>
+                        setVercelForm((p) => ({ ...p, projectName: e.target.value }))
+                      }
+                      disabled={sitesBusy}
+                    />
+                  </label>
                   <div className="add-site-form__actions">
                     <button
                       type="submit"
