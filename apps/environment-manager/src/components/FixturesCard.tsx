@@ -57,10 +57,12 @@ export function FixturesCard({ isActive, onActivate }: Props) {
       </div>
 
       {!collapsed && (
-        <p className="env-card__description">
-          Serves content from bundled fixture files — no hub connection or credentials needed. The
-          default for local development.
-        </p>
+        <div className="env-card__body">
+          <p className="env-card__description">
+            Serves content from bundled fixture files — no hub connection or credentials needed. The
+            default for local development.
+          </p>
+        </div>
       )}
     </div>
   )

@@ -43,7 +43,17 @@ const FIXTURES_NAME = 'fixtures'
 
 // `name` is the delivery-key namespace (SITE_NAME, ADR-0014); matches the
 // field the UI reads/writes and what's stored in quadratic.config.json.
-type WebApp = { label: string; url: string; brand: string; name: string }
+// vercelProjectName/vercelScope are set only for sites provisioned via
+// "Create Vercel site" — they're what let the destroy-site endpoint find and
+// remove the right Vercel project later.
+type WebApp = {
+  label: string
+  url: string
+  brand: string
+  name: string
+  vercelProjectName?: string
+  vercelScope?: string
+}
 
 type Environment = {
   name: string
@@ -951,6 +961,8 @@ app.post('/api/environments/:name/vercel/create-site', async (c) => {
             url,
             brand: site.brand.trim() || env.defaultBrand,
             name: site.sitename.trim() || env.defaultSite,
+            vercelProjectName: projectName,
+            ...(cliOpts.scope ? { vercelScope: cliOpts.scope } : {}),
           })
           await writeConfig(fresh)
           await stream.writeln(`\n✓ Recorded site: ${url}`)
@@ -965,6 +977,79 @@ app.post('/api/environments/:name/vercel/create-site', async (c) => {
           : err instanceof Error
             ? err.message
             : String(err)
+      await stream.writeln(`\n✗ ${msg}`)
+    }
+  })
+})
+
+// POST /api/environments/:name/vercel/destroy-site — delete the Vercel project
+// behind a webApps[] entry, then drop it from the config. Only sites created
+// via "Create Vercel site" carry a vercelProjectName; sites added manually via
+// "Add existing site" were never ours to provision, so this route refuses
+// them (400) rather than guessing at a project to delete — the caller should
+// remove those from the config directly instead (PUT /environments/:name).
+app.post('/api/environments/:name/vercel/destroy-site', async (c) => {
+  const { name } = c.req.param()
+  const body = await c.req.json<{ index?: number; token?: string; scope?: string }>()
+  const index = body.index
+  if (index === undefined) return c.json({ error: 'Missing site index.' }, 400)
+
+  const config = await readConfig()
+  const env = config.environments.find((e) => e.name === name)
+  if (!env) return c.json({ error: `Environment "${name}" not found.` }, 404)
+  const site = env.webApps[index]
+  if (!site) return c.json({ error: 'Site not found at that index.' }, 404)
+  if (site.vercelProjectName === undefined || site.vercelProjectName === '') {
+    return c.json(
+      {
+        error:
+          'This site has no tracked Vercel project — it was added manually, not provisioned by Quadratic Lite. Remove it from the config instead.',
+      },
+      400,
+    )
+  }
+
+  const projectName = site.vercelProjectName
+  const scope = body.scope ?? site.vercelScope
+
+  return streamText(c, async (stream) => {
+    try {
+      await stream.writeln(`▶ Destroying Vercel project "${projectName}"…`)
+      const token = resolveVercelToken(body.token)
+      if (token === null) {
+        throw new Error(
+          'No Vercel token found — run `vercel login` (or set VERCEL_TOKEN) so the project can be deleted.',
+        )
+      }
+
+      const url = new URL(`https://api.vercel.com/v9/projects/${projectName}`)
+      if (scope !== undefined && scope !== '') url.searchParams.set('teamId', scope)
+      const res = await fetch(url, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (res.ok) {
+        await stream.writeln('✓ Vercel project deleted.')
+      } else if (res.status === 404) {
+        // Already gone (e.g. deleted manually in the Vercel dashboard) —
+        // treat as success so the config entry can still be cleaned up.
+        await stream.writeln('• Project already gone on Vercel — continuing.')
+      } else {
+        const detail = await res.text().catch(() => '')
+        throw new Error(`Vercel API could not delete project: HTTP ${res.status} ${detail}`.trim())
+      }
+
+      // Re-read in case the config changed since the request started, then
+      // drop this site by index.
+      const fresh = await readConfig()
+      const target = fresh.environments.find((e) => e.name === name)
+      if (target !== undefined) {
+        target.webApps = target.webApps.filter((_, i) => i !== index)
+        await writeConfig(fresh)
+      }
+      await stream.writeln('\n✓ Removed from config.')
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err)
       await stream.writeln(`\n✗ ${msg}`)
     }
   })

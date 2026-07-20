@@ -155,6 +155,29 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
   const vercelLogRef = useRef<HTMLPreElement>(null)
   const createVercelFirstRef = useRef<HTMLInputElement>(null)
 
+  // ── Remove/destroy site confirm modal ────────────────────────────────────────
+  // Shared by both the "Remove" and "Destroy" triggers on an editing webApp row
+  // (see the TODO this replaced): a plain "Remove" silently orphans a live
+  // Vercel deployment, and "Destroy" is irreversible, so both now go through
+  // one confirmation with explicit "Remove" vs "Remove & destroy" choices.
+  // `projectName` is present only for sites this app provisioned itself
+  // (via "Create Vercel site") — manually-added sites can only be removed from
+  // the config, since there's no tracked Vercel project to destroy.
+  const [removeModal, setRemoveModal] = useState<{
+    index: number
+    label: string
+    projectName?: string
+  } | null>(null)
+  const [destroyOp, setDestroyOp] = useState<{
+    log: string
+    status: 'running' | 'done' | 'error'
+  } | null>(null)
+  const destroyLogRef = useRef<HTMLPreElement>(null)
+
+  useEffect(() => {
+    if (destroyLogRef.current) destroyLogRef.current.scrollTop = destroyLogRef.current.scrollHeight
+  }, [destroyOp?.log])
+
   useEffect(() => {
     if (showAddSite) addSiteLabelRef.current?.focus()
   }, [showAddSite])
@@ -309,6 +332,9 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
     }
   }
 
+  // Removes the site from the config only — a live Vercel deployment (if any)
+  // is left running. Always invoked via the removeModal confirmation below,
+  // since this silently orphans a project otherwise.
   async function handleRemoveWebApp() {
     if (editingWebAppIdx === null) return
     setSitesBusy(true)
@@ -321,6 +347,61 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
       setEditingWebAppIdx(null)
     } finally {
       setSitesBusy(false)
+      setRemoveModal(null)
+    }
+  }
+
+  // Deletes the underlying Vercel project (via the streaming destroy-site
+  // endpoint) and, on success, drops the site from the config too. Only
+  // reachable from removeModal when the site carries a vercelProjectName —
+  // the endpoint itself also refuses sites without one (400).
+  async function handleDestroyWebApp() {
+    if (removeModal === null) return
+    const { index } = removeModal
+    setDestroyOp({ log: '', status: 'running' })
+    try {
+      const res = await fetch(
+        `/api/environments/${encodeURIComponent(env.name)}/vercel/destroy-site`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ index }),
+        },
+      )
+      if (!res.ok || !res.body) {
+        const errBody: unknown = await res.json().catch(() => null)
+        const msg =
+          errBody !== null && typeof errBody === 'object' && 'error' in errBody
+            ? String(errBody.error)
+            : `HTTP ${res.status}`
+        throw new Error(msg)
+      }
+
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let full = ''
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        const text = decoder.decode(value, { stream: true })
+        full += text
+        setDestroyOp((prev) => (prev ? { ...prev, log: prev.log + text } : null))
+      }
+
+      const hadError = full.includes('✗')
+      setDestroyOp((prev) => (prev ? { ...prev, status: hadError ? 'error' : 'done' } : null))
+
+      if (!hadError) {
+        onUpdate(await api.list())
+        setEditingWebAppIdx(null)
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unknown error'
+      setDestroyOp((prev) =>
+        prev
+          ? { ...prev, status: 'error', log: `${prev.log}\n✗ ${msg}` }
+          : { log: `✗ ${msg}`, status: 'error' },
+      )
     }
   }
 
@@ -557,7 +638,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
 
       {/* Collapsible body */}
       {!collapsed && (
-        <>
+        <div className="env-card__body">
           {/* Resource stats table */}
           <table className="env-card__stats">
             <thead>
@@ -790,8 +871,10 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
               {/* Localhost — always present */}
               {editingLocalhost ? (
                 <li className="site-row site-row--localhost site-row--editing">
-                  <LabelIcon />
-                  <span className="site-row__label--fixed">Web (localhost)</span>
+                  <label>
+                    <LabelIcon />
+                    <input className="site-row__input" value="Web (localhost)" disabled />
+                  </label>
                   <label title="localhost URL (e.g. http://localhost:3000)">
                     <GlobeIcon />
                     <input
@@ -841,24 +924,21 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                   </label>
                   <div className="site-row__actions">
                     <button
-                      type="button"
-                      className="site-action site-action--cancel"
-                      aria-label="Cancel"
-                      onClick={cancelSiteEdit}
-                      disabled={sitesBusy}
-                    >
-                      ✕
-                    </button>
-                    <button
-                      type="button"
-                      className="site-action site-action--save"
-                      aria-label="Save"
+                      className="btn btn--sm btn--primary"
                       onClick={() => {
                         void handleSaveLocalhost()
                       }}
+                      disabled={sitesBusy || !editLocalhostForm.defaultSite}
+                    >
+                      {sitesBusy ? 'Saving...' : 'Save'}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn--sm btn--ghost"
+                      onClick={cancelSiteEdit}
                       disabled={sitesBusy}
                     >
-                      ✓
+                      Cancel
                     </button>
                   </div>
                 </li>
@@ -979,14 +1059,25 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                       </button>
                       <button
                         type="button"
-                        className="site-action site-action--remove"
+                        className="btn btn--sm btn--danger site-action--remove"
                         aria-label="Remove"
-                        onClick={() => {
-                          void handleRemoveWebApp()
-                        }}
+                        onClick={() =>
+                          setRemoveModal({
+                            index: i,
+                            label: siteDisplayLabel(site),
+                            ...(site.vercelProjectName
+                              ? { projectName: site.vercelProjectName }
+                              : {}),
+                          })
+                        }
                         disabled={sitesBusy}
+                        title={
+                          site.vercelProjectName
+                            ? 'Remove this site from the config, or destroy its Vercel project too'
+                            : 'Remove this site from the config'
+                        }
                       >
-                        <TrashIcon />
+                        <TrashIcon /> Remove…
                       </button>
                     </div>
                   </li>
@@ -1265,7 +1356,141 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
               </div>
             )}
           </div>
-        </>
+        </div>
+      )}
+
+      {/* Remove/destroy confirm modal — shared by the "Remove…" trigger on any
+          editing webApp row. Destroy is only offered when the site carries a
+          vercelProjectName (i.e. it was provisioned by "Create Vercel site");
+          manually-added sites only ever get the "Remove from config" choice. */}
+      {removeModal && (
+        <div
+          className="modal-backdrop"
+          role="presentation"
+          onClick={(e) => {
+            if (e.target === e.currentTarget && destroyOp?.status !== 'running') {
+              setRemoveModal(null)
+              setDestroyOp(null)
+            }
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape' && destroyOp?.status !== 'running') {
+              setRemoveModal(null)
+              setDestroyOp(null)
+            }
+          }}
+        >
+          <div className="modal" role="dialog" aria-modal="true">
+            <div className="modal__header">
+              <h2>Remove {removeModal.label}?</h2>
+              {destroyOp?.status !== 'running' && (
+                <button
+                  type="button"
+                  className="modal__close"
+                  onClick={() => {
+                    setRemoveModal(null)
+                    setDestroyOp(null)
+                  }}
+                  aria-label="Close"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            <div className="modal__body">
+              <p>This can&rsquo;t be undone.</p>
+              {removeModal.projectName ? (
+                <p>
+                  Do you want to also destroy the Vercel project (
+                  <strong>{removeModal.projectName}</strong>), or just remove {removeModal.label}{' '}
+                  from your config?
+                </p>
+              ) : (
+                <p>
+                  This site was added manually, so there&rsquo;s no tracked Vercel project to
+                  destroy — this only removes it from your config.
+                </p>
+              )}
+
+              {destroyOp ? (
+                <div className={`env-card__log log--${destroyOp.status} log--expanded`}>
+                  <div className="log-header">
+                    <span className="log-header__left">
+                      <span className="log-title">Destroy Vercel project</span>
+                      {destroyOp.status === 'running' && (
+                        <span className="log-status">
+                          <span className="spinner spinner--sm" aria-hidden="true" /> running…
+                        </span>
+                      )}
+                      {destroyOp.status === 'done' && (
+                        <span className="log-status log-status--ok">✓ done</span>
+                      )}
+                      {destroyOp.status === 'error' && (
+                        <span className="log-status log-status--err">⚠ errored</span>
+                      )}
+                    </span>
+                  </div>
+                  <div className="log-body-wrapper">
+                    <div className="log-body-inner">
+                      <pre ref={destroyLogRef} className="log-body">
+                        {destroyOp.log || '…'}
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="form-actions">
+                  <button
+                    type="button"
+                    className="btn btn--ghost"
+                    onClick={() => setRemoveModal(null)}
+                    disabled={sitesBusy}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn--danger"
+                    onClick={() => {
+                      void handleRemoveWebApp()
+                    }}
+                    disabled={sitesBusy}
+                  >
+                    {sitesBusy ? 'Removing…' : 'Remove'}
+                  </button>
+                  {removeModal.projectName && (
+                    <button
+                      type="button"
+                      className="btn btn--danger"
+                      onClick={() => {
+                        void handleDestroyWebApp()
+                      }}
+                      disabled={sitesBusy}
+                    >
+                      Remove &amp; destroy
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {destroyOp && destroyOp.status !== 'running' && (
+                <div className="form-actions">
+                  <button
+                    type="button"
+                    className="btn btn--ghost"
+                    onClick={() => {
+                      setRemoveModal(null)
+                      setDestroyOp(null)
+                    }}
+                  >
+                    Close
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )
