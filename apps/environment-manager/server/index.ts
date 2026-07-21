@@ -19,8 +19,13 @@ import {
   envRmArgs,
   extractToken,
   linkArgs,
+  nextAvailableName,
   parseDeploymentUrl,
+  parseNextCursor,
+  parseProjectNames,
+  projectListArgs,
   runtimeEnvVars,
+  stripAnsi,
   type VercelSiteInput,
 } from './vercel.ts'
 
@@ -888,16 +893,67 @@ app.post('/api/environments/:name/vercel/create-site', async (c) => {
       }
       await stream.writeln(`• Authenticated as ${who.stdout.trim()}`)
 
-      // 2. Link/create the project under the operator's scope. The CLI handles
+      // 2. Ensure the project name is unique in this scope, so we create a fresh
+      // project rather than silently adopting (and then overwriting) an existing
+      // one. `vercel project ls` runs in the same scope the link will use, so no
+      // separate team resolution is needed. On any failure we proceed with the
+      // requested name (no worse than before).
+      let targetName = projectName
+      await stream.writeln('\n• Checking project-name availability…')
+      let lastOut = ''
+      try {
+        // `vercel project ls` has no name filter, so page through all projects
+        // in the scope (the same scope link uses) via the --next cursor.
+        const taken: string[] = []
+        let cursor: string | undefined
+        for (let page = 0; page < 50; page++) {
+          let pageOut = ''
+          const listCapture: StreamWriter = {
+            write: (t: string) => {
+              pageOut += t
+              return Promise.resolve(undefined)
+            },
+          }
+          await runCommand(listCapture, 'vercel', projectListArgs(cliOpts, cursor), cmdEnv, {
+            cwd: REPO_ROOT,
+          })
+          lastOut = pageOut
+          taken.push(...parseProjectNames(pageOut))
+          const next = parseNextCursor(pageOut)
+          if (next === null) break
+          cursor = next
+        }
+        targetName = nextAvailableName(projectName, taken)
+        await stream.writeln(
+          targetName === projectName
+            ? `  "${projectName}" is available.`
+            : `  "${projectName}" already exists — using "${targetName}".`,
+        )
+      } catch (err) {
+        // Surface WHY the list failed (bad flag, auth, scope…) so it's
+        // debuggable rather than silently degrading to a possible overwrite.
+        const msg = err instanceof Error ? err.message : String(err)
+        const detail = stripAnsi(lastOut)
+          .trim()
+          .split('\n')
+          .filter(Boolean)
+          .slice(-4)
+          .join('\n    ')
+        await stream.writeln(`  ⚠ Could not list existing projects (${msg}).`)
+        if (detail !== '') await stream.writeln(`    ${detail}`)
+        await stream.writeln('    Proceeding with the requested name.')
+      }
+
+      // 3. Link/create the project under the operator's scope. The CLI handles
       // auth + team resolution and writes .vercel/project.json. Run from the
       // repo root so the deploy below uploads the whole workspace.
-      await stream.writeln(`\n• Linking project "${projectName}"…`)
-      await runCommand(stream, 'vercel', linkArgs(projectName, cliOpts), cmdEnv, {
+      await stream.writeln(`\n• Linking project "${targetName}"…`)
+      await runCommand(stream, 'vercel', linkArgs(targetName, cliOpts), cmdEnv, {
         cwd: REPO_ROOT,
         envName: name,
       })
 
-      // 3. Configure the project via the API — the settings the CLI can't set:
+      // 4. Configure the project via the API — the settings the CLI can't set:
       // Root Directory = apps/web (a CLI link records "./", breaking Next.js
       // detection) and framework = Next.js (a link leaves it "Other"). Reuses
       // the CLI's own login token, so nothing extra is asked for.
@@ -911,7 +967,7 @@ app.post('/api/environments/:name/vercel/create-site', async (c) => {
       await stream.writeln('• Setting Root Directory to "apps/web" and framework to Next.js…')
       await configureVercelProject(token, projectId, orgId, 'apps/web')
 
-      // 4. Push the runtime env vars (values via stdin, not argv). Remove first
+      // 5. Push the runtime env vars (values via stdin, not argv). Remove first
       // so a re-run overwrites cleanly rather than erroring on an existing var.
       await stream.writeln(`\n• Pushing ${String(envVars.length)} runtime variable(s)…`)
       const discard: StreamWriter = { write: () => Promise.resolve(undefined) }
@@ -935,8 +991,8 @@ app.post('/api/environments/:name/vercel/create-site', async (c) => {
         }
       }
 
-      // 5. Deploy to production from the repo root (so the pnpm workspace is
-      // present); Vercel builds apps/web via the Root Directory set in step 3.
+      // 6. Deploy to production from the repo root (so the pnpm workspace is
+      // present); Vercel builds apps/web via the Root Directory set in step 4.
       await stream.writeln('\n• Deploying to production…')
       let deployOut = ''
       const capture: StreamWriter = {
@@ -950,7 +1006,7 @@ app.post('/api/environments/:name/vercel/create-site', async (c) => {
         envName: name,
       })
 
-      // 6. Record the deployed site in webApps[] — same shape the manual
+      // 7. Record the deployed site in webApps[] — same shape the manual
       //    "Add existing site" form writes, so the two paths converge.
       const url = parseDeploymentUrl(deployOut)
       if (url === null) {
@@ -966,7 +1022,7 @@ app.post('/api/environments/:name/vercel/create-site', async (c) => {
             url,
             brand: site.brand.trim() || env.defaultBrand,
             name: site.sitename.trim() || env.defaultSite,
-            vercelProjectName: projectName,
+            vercelProjectName: targetName,
             ...(cliOpts.scope ? { vercelScope: cliOpts.scope } : {}),
           })
           await writeConfig(fresh)

@@ -8,7 +8,11 @@ import {
   envRmArgs,
   extractToken,
   linkArgs,
+  nextAvailableName,
   parseDeploymentUrl,
+  parseNextCursor,
+  parseProjectNames,
+  projectListArgs,
   runtimeEnvVars,
   stripAnsi,
   type SiteEnvSource,
@@ -171,6 +175,63 @@ describe('CLI argv builders', () => {
       'production',
       '--yes',
     ])
+  })
+})
+
+describe('parseProjectNames', () => {
+  it('reads names from a top-level array', () => {
+    expect(parseProjectNames('[{"name":"acme"},{"name":"acme-2"}]')).toEqual(['acme', 'acme-2'])
+  })
+
+  it('reads names from a { projects: [...] } object, ignoring log preamble', () => {
+    const out = 'Vercel CLI 56.2.0\n{"projects":[{"name":"foo"},{"id":"prj_x"}],"pagination":{}}'
+    expect(parseProjectNames(out)).toEqual(['foo'])
+  })
+
+  it('returns [] when there is no parseable JSON', () => {
+    expect(parseProjectNames('no projects found')).toEqual([])
+  })
+})
+
+describe('nextAvailableName', () => {
+  it('returns the base name when it is free', () => {
+    expect(nextAvailableName('acme', ['other'])).toBe('acme')
+  })
+
+  it('bumps to -2, then -3, skipping taken names', () => {
+    expect(nextAvailableName('acme', ['acme'])).toBe('acme-2')
+    expect(nextAvailableName('acme', ['acme', 'acme-2', 'acme-3'])).toBe('acme-4')
+  })
+})
+
+describe('projectListArgs', () => {
+  it('requests JSON and has no unsupported --filter', () => {
+    expect(projectListArgs()).toEqual(['project', 'ls', '--format', 'json'])
+  })
+
+  it('adds the --next cursor when paging', () => {
+    expect(projectListArgs({}, '1584722256178')).toEqual([
+      'project',
+      'ls',
+      '--format',
+      'json',
+      '--next',
+      '1584722256178',
+    ])
+  })
+})
+
+describe('parseNextCursor', () => {
+  it('returns the pagination cursor as a string', () => {
+    expect(parseNextCursor('{"projects":[],"pagination":{"next":1584722256178}}')).toBe(
+      '1584722256178',
+    )
+  })
+
+  it('returns null when there are no more pages or no pagination', () => {
+    expect(parseNextCursor('{"projects":[],"pagination":{"next":null}}')).toBeNull()
+    expect(parseNextCursor('[{"name":"acme"}]')).toBeNull()
+    expect(parseNextCursor('not json')).toBeNull()
   })
 })
 
