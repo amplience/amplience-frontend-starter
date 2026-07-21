@@ -4,15 +4,27 @@ import { api } from './api.js'
 import { EnvironmentCard } from './components/EnvironmentCard.js'
 import { EnvironmentForm } from './components/EnvironmentForm.js'
 import { FixturesCard } from './components/FixturesCard.js'
+import { SiteCard } from './components/SiteCard.js'
 import type { Config, Environment } from './types.js'
 import { FIXTURES_NAME } from './types.js'
 
 type Modal = { mode: 'add' } | { mode: 'edit'; env: Environment } | null
 
+type Tab = 'sources' | 'sites'
+
+/**
+ * Localhost web apps are surfaced per-hub in the Content Sources tab (the
+ * "Web (localhost)" pseudo-row driven by env.localhostUrl), so they're
+ * deliberately excluded from the flat Sites list. localhost isn't stored in
+ * webApps[], but a manually-added one would be — this filters those too.
+ */
+const isLocalhostUrl = (url: string) => /(?:localhost|127\.0\.0\.1|\[::1\])/i.test(url)
+
 export function App() {
   const [config, setConfig] = useState<Config | null>(null)
   const [modal, setModal] = useState<Modal>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
+  const [tab, setTab] = useState<Tab>('sources')
 
   // useCallback keeps the reference stable so the effect dep array is honest.
   // setState setters are guaranteed stable by React, so no extra deps needed.
@@ -59,9 +71,6 @@ export function App() {
               Manage <code>quadratic.config.json</code> — credentials never leave your machine.
             </p>
           </div>
-          <button className="btn btn--primary btn--add" onClick={() => setModal({ mode: 'add' })}>
-            + Add hub
-          </button>
         </div>
       </header>
 
@@ -83,38 +92,62 @@ export function App() {
 
         {config !== null && (
           <>
-            {/* TAB BUTTONS GO HERE */}
-            {/* CONTENT SOURCES | SITES */}
-            {/* Content Source List (visible when CONTENT SOURCES tab is active) */}
-            <div className="env-list">
-              <h3 className="env-list__title">Fixtures</h3>
-              <FixturesCard
-                isActive={config.active === FIXTURES_NAME}
-                onActivate={() => {
-                  void handleActivate(FIXTURES_NAME)
-                }}
-              />
-              <h3 className="env-list__title">Hubs</h3>
-              {config.environments.map((env) => (
-                <EnvironmentCard
-                  key={env.name}
-                  env={env}
-                  isActive={env.name === config.active}
+            <div className="tabs" role="tablist" aria-label="View">
+              <button
+                className={`tab${tab === 'sources' ? ' tab--active' : ''}`}
+                role="tab"
+                aria-selected={tab === 'sources'}
+                onClick={() => setTab('sources')}
+              >
+                Content Sources
+              </button>
+              <button
+                className={`tab${tab === 'sites' ? ' tab--active' : ''}`}
+                role="tab"
+                aria-selected={tab === 'sites'}
+                onClick={() => setTab('sites')}
+              >
+                Sites
+              </button>
+            </div>
+
+            {/* Content Sources — hubs + fixtures */}
+            {tab === 'sources' && (
+              <div className="env-list">
+                <h3 className="env-list__title">Fixtures</h3>
+                <FixturesCard
+                  isActive={config.active === FIXTURES_NAME}
                   onActivate={() => {
-                    void handleActivate(env.name)
+                    void handleActivate(FIXTURES_NAME)
                   }}
-                  onEdit={() => setModal({ mode: 'edit', env })}
-                  onUpdate={setConfig}
                 />
-              ))}
-            </div>
-            {/* Site list goes here (visible when SITES tab is active) */}
-            <div className="env-list">
-              {/* This gets data from the same JSON configuration but focusses on listing all the "sites" (WebApps) as a top-level flat list */}
-              {/* Each site has a card which shows the site details and the hub it's drawing content from. The card has a button to "View hub" which switches the view back to the hub list and opens the hub's card. */}
-              {/* You can edit the site's config (ie the brand, site URL and site name) and it will update the values in the JSON config */}
-              {/* If the user wants to switch which hub the site points to then that will move the site from being a child of one hub to a child of a different hub in the JSON data. */}
-            </div>
+                <h3 className="env-list__title">Hubs</h3>
+                {config.environments.map((env) => (
+                  <EnvironmentCard
+                    key={env.name}
+                    env={env}
+                    isActive={env.name === config.active}
+                    onActivate={() => {
+                      void handleActivate(env.name)
+                    }}
+                    onEdit={() => setModal({ mode: 'edit', env })}
+                    onUpdate={setConfig}
+                  />
+                ))}
+
+                <button
+                  className="btn btn--primary btn--add"
+                  onClick={() => setModal({ mode: 'add' })}
+                >
+                  + Add hub
+                </button>
+              </div>
+            )}
+
+            {/* Sites — every webApp across all hubs as one flat list. Draws
+                from the same config; each card links back to the hub it takes
+                content from, and can be re-pointed to a different hub. */}
+            {tab === 'sites' && <SitesTab config={config} onUpdate={setConfig} />}
           </>
         )}
       </main>
@@ -133,6 +166,48 @@ export function App() {
             : {})}
         />
       )}
+    </div>
+  )
+}
+
+// ── Sites tab ─────────────────────────────────────────────────────────────────
+
+/**
+ * Flattens every hub's webApps into a single list and renders one SiteCard per
+ * site. Localhost entries are filtered out (see isLocalhostUrl). The `key`
+ * combines hub name + index so it stays stable across a hub's own edits, and a
+ * cross-hub move naturally re-keys the card under its new hub.
+ */
+function SitesTab({ config, onUpdate }: { config: Config; onUpdate: (c: Config) => void }) {
+  const sites = config.environments.flatMap((env) =>
+    env.webApps
+      .map((site, index) => ({ env, site, index }))
+      .filter(({ site }) => !isLocalhostUrl(site.url)),
+  )
+
+  if (sites.length === 0) {
+    return (
+      <div className="env-list">
+        <p className="empty-state">
+          No sites yet. Add a site to a hub from the <strong>Content Sources</strong> tab and it
+          will appear here.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="env-list">
+      {sites.map(({ env, site, index }) => (
+        <SiteCard
+          key={`${env.name}:${index}`}
+          env={env}
+          site={site}
+          index={index}
+          environments={config.environments}
+          onUpdate={onUpdate}
+        />
+      ))}
     </div>
   )
 }

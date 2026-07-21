@@ -390,10 +390,15 @@ function runCommand(
       console.log(`[runCommand] registered pid=${String(child.pid)} for env="${opts.envName}"`)
     }
 
+    // Feed stdin (if any) and always close it. Closing is essential even with
+    // no input: these commands run without a TTY, so if one puts up a prompt
+    // (e.g. `vercel env rm` confirming a removal) an open stdin would hang the
+    // child forever. EOF makes it abort/skip instead. `vercel env add` reads
+    // its value from stdin, so the write must precede the end().
     if (opts.input !== undefined) {
       child.stdin.write(opts.input)
-      child.stdin.end()
     }
+    child.stdin.end()
 
     child.stdout.on('data', (chunk: Buffer) => {
       void stream.write(chunk.toString())
@@ -969,6 +974,201 @@ app.post('/api/environments/:name/vercel/create-site', async (c) => {
         }
       }
 
+      await stream.writeln('\n✓ Done.')
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message === 'Aborted'
+          ? 'Aborted by user.'
+          : err instanceof Error
+            ? err.message
+            : String(err)
+      await stream.writeln(`\n✗ ${msg}`)
+    }
+  })
+})
+
+// POST /api/environments/:name/vercel/redeploy-site — re-point a provisioned
+// site to a different hub ("content source") and redeploy it. A deployment's
+// hub is fixed at build time by its env vars (AMPLIENCE_HUB_NAME etc.), so
+// switching hubs means: rewrite those vars to the target hub's values, then run
+// a fresh prod deploy. On success the site row is moved from the source hub's
+// webApps[] to the target's (carrying any edited label/brand/name and the new
+// deployment URL). Only sites with a tracked vercelProjectName can be
+// redeployed — manual sites have no project to build, so this refuses them.
+// Streams progress like create-site and is cancellable via …/cancel (keyed on
+// the source `name`).
+app.post('/api/environments/:name/vercel/redeploy-site', async (c) => {
+  const { name } = c.req.param()
+  const body = await c.req.json<{
+    index?: number
+    targetName?: string
+    label?: string
+    brand?: string
+    sitename?: string
+    token?: string
+    scope?: string
+  }>()
+
+  const index = body.index
+  if (index === undefined) return c.json({ error: 'Missing site index.' }, 400)
+  const targetName = body.targetName
+  if (targetName === undefined || targetName === '') {
+    return c.json({ error: 'Missing target hub name.' }, 400)
+  }
+
+  const config = await readConfig()
+  const sourceEnv = config.environments.find((e) => e.name === name)
+  if (!sourceEnv) return c.json({ error: `Environment "${name}" not found.` }, 404)
+  const site = sourceEnv.webApps[index]
+  if (!site) return c.json({ error: 'Site not found at that index.' }, 404)
+  if (site.vercelProjectName === undefined || site.vercelProjectName === '') {
+    return c.json(
+      {
+        error:
+          'This site has no tracked Vercel project — it was added manually, not provisioned by Quadratic Lite. Move it without a redeploy instead.',
+      },
+      400,
+    )
+  }
+  const targetEnv = config.environments.find((e) => e.name === targetName)
+  if (!targetEnv) return c.json({ error: `Target hub "${targetName}" not found.` }, 404)
+  if (targetEnv.hubName.trim() === '') {
+    return c.json({ error: 'Target hub has no hub name — set one before redeploying.' }, 400)
+  }
+
+  const projectName = site.vercelProjectName
+  const cliOpts = {
+    ...(body.token ? { token: body.token } : {}),
+    ...((body.scope ?? site.vercelScope) ? { scope: body.scope ?? site.vercelScope } : {}),
+  }
+  const siteInput: VercelSiteInput = {
+    brand: body.brand ?? site.brand,
+    sitename: body.sitename ?? site.name,
+  }
+  // Env vars computed against the TARGET hub — this is what re-points the build.
+  const envVars = runtimeEnvVars(targetEnv, siteInput)
+  // Reset every hub-determining key first (both runtime targets), so a var that
+  // no longer applies after the move (e.g. a SITE_NAME that now equals the hub
+  // name, or a brand that reverted to default) doesn't linger from the old hub.
+  const KNOWN_KEYS = [
+    'AMPLIENCE_HUB_NAME',
+    'SITE_NAME',
+    'NEXT_PUBLIC_BRAND',
+    'AMPLIENCE_CUSTOM_CSS',
+  ]
+  const RESET_TARGETS = ['production', 'preview'] as const
+  const cmdEnv = vercelEnv()
+
+  return streamText(c, async (stream) => {
+    const siteName = site.label || projectName
+    await stream.writeln(
+      name === targetName
+        ? `▶ Updating "${siteName}" and redeploying…\n`
+        : `▶ Re-pointing "${siteName}" to "${targetEnv.label || targetEnv.name}" and redeploying…\n`,
+    )
+    try {
+      // 1. Preflight.
+      const who = await execCapture('vercel', [
+        'whoami',
+        ...(cliOpts.token ? ['--token', cliOpts.token] : []),
+      ])
+      if (who.code !== 0) {
+        throw new Error('Vercel CLI not authenticated — run `vercel login` (or pass a token).')
+      }
+      await stream.writeln(`• Authenticated as ${who.stdout.trim()}`)
+
+      // 2. Link the existing project so env/deploy target it (writes
+      //    .vercel/project.json). The project already exists, so this just
+      //    associates the working dir — root dir/framework stay as configured.
+      await stream.writeln(`\n• Linking project "${projectName}"…`)
+      await runCommand(stream, 'vercel', linkArgs(projectName, cliOpts), cmdEnv, {
+        cwd: REPO_ROOT,
+        envName: name,
+      })
+
+      // 3. Reset the known hub env vars, then push the target hub's values.
+      //    Removing a key that no longer applies (e.g. a now-blank brand) is how
+      //    a field is "cleared" — the app falls back to its own default rather
+      //    than reading an empty value. rm output is discarded (a "not found" is
+      //    expected and noisy), but each key is announced so the step isn't a
+      //    silent gap.
+      await stream.writeln('\n• Resetting hub environment variables…')
+      const discard: StreamWriter = { write: () => Promise.resolve(undefined) }
+      for (const key of KNOWN_KEYS) {
+        await stream.writeln(`  – clearing ${key}`)
+        for (const target of RESET_TARGETS) {
+          await runCommand(discard, 'vercel', envRmArgs(key, target, cliOpts), cmdEnv, {
+            cwd: REPO_ROOT,
+          }).catch(() => {
+            // Nothing to remove — expected for keys the old hub didn't set.
+          })
+        }
+      }
+      await stream.writeln(`• Pushing ${String(envVars.length)} runtime variable(s)…`)
+      for (const v of envVars) {
+        for (const target of v.targets) {
+          await stream.writeln(`  – ${v.key} → ${target}`)
+          // Value via stdin (no trailing newline) so it never lands in argv.
+          await runCommand(stream, 'vercel', envAddArgs(v.key, target, cliOpts), cmdEnv, {
+            cwd: REPO_ROOT,
+            envName: name,
+            input: v.value,
+          })
+        }
+      }
+
+      // 4. Deploy to production from the repo root.
+      await stream.writeln('\n• Deploying to production…')
+      let deployOut = ''
+      const capture: StreamWriter = {
+        write: (t: string) => {
+          deployOut += t
+          return stream.write(t)
+        },
+      }
+      await runCommand(capture, 'vercel', deployArgs(cliOpts), cmdEnv, {
+        cwd: REPO_ROOT,
+        envName: name,
+      })
+      const url = parseDeploymentUrl(deployOut)
+
+      // 5. Write the updated site back to the config, carrying the edited
+      //    fields and the (possibly new) deployment URL. Re-read first so a
+      //    concurrent edit isn't clobbered; guard the index. A same-hub edit
+      //    (brand/site-name change, no move) replaces in place; a hub change
+      //    removes from the source and appends to the target.
+      const fresh = await readConfig()
+      const freshSource = fresh.environments.find((e) => e.name === name)
+      const freshTarget = fresh.environments.find((e) => e.name === targetName)
+      if (freshSource === undefined || freshTarget === undefined) {
+        throw new Error('Config changed during redeploy — source or target hub is gone.')
+      }
+      const moved: WebApp = {
+        label: (body.label ?? site.label).trim(),
+        url: url ?? site.url,
+        brand: siteInput.brand.trim() || targetEnv.defaultBrand,
+        name: siteInput.sitename.trim() || targetEnv.defaultSite,
+        vercelProjectName: projectName,
+        ...(site.vercelScope ? { vercelScope: site.vercelScope } : {}),
+      }
+      if (name === targetName) {
+        if (freshSource.webApps[index] === undefined) {
+          throw new Error('Config changed during redeploy — site index no longer exists.')
+        }
+        freshSource.webApps[index] = moved
+      } else {
+        freshSource.webApps = freshSource.webApps.filter((_, i) => i !== index)
+        freshTarget.webApps.push(moved)
+      }
+      await writeConfig(fresh)
+
+      if (url === null) {
+        await stream.writeln(
+          '\n⚠ Deploy finished but no URL was found in the output — the site was moved; verify its URL in the config.',
+        )
+      } else {
+        await stream.writeln(`\n✓ Redeployed and re-pointed: ${url}`)
+      }
       await stream.writeln('\n✓ Done.')
     } catch (err) {
       const msg =

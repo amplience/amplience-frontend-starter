@@ -319,6 +319,18 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
 
   async function handleSaveWebApp() {
     if (editingWebAppIdx === null) return
+    const original = env.webApps[editingWebAppIdx]
+    // Brand and site name become build-time env vars (NEXT_PUBLIC_BRAND,
+    // SITE_NAME), so changing either on a provisioned site only takes effect on
+    // a redeploy. Label/URL are config-only and save without one.
+    const isVercelSite =
+      original?.vercelProjectName !== undefined && original.vercelProjectName !== ''
+    const brandChanged = (editWebAppForm.brand ?? '').trim() !== (original?.brand ?? '').trim()
+    const nameChanged = (editWebAppForm.name ?? '').trim() !== (original?.name ?? '').trim()
+    if (isVercelSite && (brandChanged || nameChanged)) {
+      await handleRedeployWebApp(editingWebAppIdx, editWebAppForm)
+      return
+    }
     setSitesBusy(true)
     try {
       const newWebApps = env.webApps.map((app, i) =>
@@ -327,6 +339,59 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
       const updated = await api.update(env.name, { ...env, webApps: newWebApps })
       onUpdate(updated)
       setEditingWebAppIdx(null)
+    } finally {
+      setSitesBusy(false)
+    }
+  }
+
+  // Applies a brand/site-name edit to a provisioned site by rewriting the
+  // project's env vars and redeploying (same-hub, so targetName === env.name).
+  // Streams into the shared Vercel log panel; on success refreshes the config
+  // and closes the edit row.
+  async function handleRedeployWebApp(index: number, form: WebApp) {
+    setVercelOp({ log: '', status: 'running' })
+    setSitesBusy(true)
+    try {
+      const res = await fetch(
+        `/api/environments/${encodeURIComponent(env.name)}/vercel/redeploy-site`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            index,
+            targetName: env.name,
+            label: form.label,
+            brand: form.brand,
+            sitename: form.name ?? '',
+          }),
+        },
+      )
+      if (!res.ok || !res.body) {
+        throw new Error(res.ok ? 'No response body' : `HTTP ${res.status}`)
+      }
+
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+      let full = ''
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        const text = decoder.decode(value, { stream: true })
+        full += text
+        setVercelOp((prev) => (prev ? { ...prev, log: prev.log + text } : null))
+      }
+
+      const hadError = full.includes('✗')
+      setVercelOp((prev) => (prev ? { ...prev, status: hadError ? 'error' : 'done' } : null))
+      onUpdate(await api.list())
+      if (!hadError) setEditingWebAppIdx(null)
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Unknown error'
+      setVercelOp((prev) =>
+        prev
+          ? { ...prev, status: 'error', log: `${prev.log}\n✗ ${msg}` }
+          : { log: `✗ ${msg}`, status: 'error' },
+      )
     } finally {
       setSitesBusy(false)
     }
@@ -580,6 +645,16 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
   }
 
   const allEmpty = stats !== null && stats.schemas === 0 && stats.types === 0 && stats.items === 0
+
+  // The site currently being edited (if any), and whether saving it will force
+  // a redeploy — i.e. a provisioned site whose brand or site name changed
+  // (both are build-time env vars). Drives the edit row's warning + button.
+  const editingSite = editingWebAppIdx !== null ? env.webApps[editingWebAppIdx] : undefined
+  const editRowWillRedeploy =
+    editingSite?.vercelProjectName !== undefined &&
+    editingSite.vercelProjectName !== '' &&
+    ((editWebAppForm.brand ?? '').trim() !== (editingSite.brand ?? '').trim() ||
+      (editWebAppForm.name ?? '').trim() !== (editingSite.name ?? '').trim())
 
   return (
     <div
@@ -1035,6 +1110,18 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                         disabled={sitesBusy}
                       />
                     </label>
+                    {editRowWillRedeploy && (
+                      <p className="site-row__redeploy-note">
+                        Saving will re-deploy this site to apply the new{' '}
+                        {(editWebAppForm.brand ?? '').trim() !== (site.brand ?? '').trim() &&
+                        (editWebAppForm.name ?? '').trim() !== (site.name ?? '').trim()
+                          ? 'brand and site name'
+                          : (editWebAppForm.brand ?? '').trim() !== (site.brand ?? '').trim()
+                            ? 'brand'
+                            : 'site name'}
+                        . Deployments can typically take a few minutes.
+                      </p>
+                    )}
                     <div className="site-row__actions">
                       <button
                         className="btn btn--sm btn--primary"
@@ -1043,12 +1130,12 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                         }}
                         disabled={sitesBusy || !editWebAppForm.url}
                         title={
-                          (preflight?.authenticated ?? false)
-                            ? 'Create the project, push env vars, and deploy'
-                            : 'Vercel CLI must be installed and logged in first'
+                          editRowWillRedeploy
+                            ? 'Rewrite the project env vars and redeploy'
+                            : 'Save changes to the config'
                         }
                       >
-                        {sitesBusy ? 'Saving...' : 'Save'}
+                        {sitesBusy ? 'Saving...' : editRowWillRedeploy ? 'Save & redeploy' : 'Save'}
                       </button>
                       <button
                         type="button"
