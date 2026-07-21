@@ -266,34 +266,31 @@ body {
 
 .badge {
   display: inline-block;
-  padding: 0.15em 0.6em;
+  padding: 0.5em 0.7em;
+  background: color-mix(in srgb, var(--color-text-muted) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-text-muted) 20%, transparent);
   border-radius: 999px;
+  color: var(--color-text-muted);
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.03em;
+  line-height: 1;
   text-transform: uppercase;
   vertical-align: middle;
 }
 
 .badge--active {
+  margin-left: auto;
+  padding-inline: 1.3em;
   background: color-mix(in srgb, var(--color-active) 18%, transparent);
+  border-color: color-mix(in srgb, var(--color-active) 40%, transparent);
   color: var(--color-active);
-  border: 1px solid color-mix(in srgb, var(--color-active) 40%, transparent);
-}
-
-.badge--builtin {
-  background: color-mix(in srgb, var(--color-text-muted) 15%, transparent);
-  color: var(--color-text-muted);
-  border: 1px solid color-mix(in srgb, var(--color-text-muted) 30%, transparent);
 }
 
 .badge--brand {
   display: inline-flex;
   gap: 2px;
   align-items: center;
-  background: color-mix(in srgb, var(--color-text-muted) 10%, transparent);
-  color: color-mix(in srgb, var(--color-text-muted) 80%, var(--color-text));
-  border: 1px solid color-mix(in srgb, var(--color-text-muted) 20%, transparent);
   font-weight: 500;
   letter-spacing: 0.01em;
   text-transform: none;

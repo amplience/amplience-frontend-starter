@@ -24,11 +24,12 @@ export function FixturesCard({ isActive, onActivate }: Props) {
       >
         <div className="env-card__header-labels">
           <span className="env-card__label">Local Fixtures</span>
-          <span className="badge badge--builtin">Built-in</span>
-          {isActive && <span className="badge badge--active">Active</span>}
+          <span className="badge">Built-in</span>
         </div>
         <div className="env-card__header-actions">
-          {!isActive && (
+          {isActive ? (
+            <span className="badge badge--active">Active</span>
+          ) : (
             <button
               className="btn btn--sm btn--primary"
               onClick={(e) => {

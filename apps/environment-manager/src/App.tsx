@@ -19,7 +19,10 @@ export function App() {
   const load = useCallback(() => {
     void api
       .list()
-      .then(setConfig)
+      .then((nextConfig) => {
+        setConfig(nextConfig)
+        setLoadError(null)
+      })
       .catch(() => setLoadError('Could not reach the API server. Is it running?'))
   }, [])
 
@@ -79,27 +82,40 @@ export function App() {
         {config === null && !loadError && <p className="loading">Loading…</p>}
 
         {config !== null && (
-          <div className="env-list">
-            <h2 className="env-list__title">Content Sources</h2>
-            <FixturesCard
-              isActive={config.active === FIXTURES_NAME}
-              onActivate={() => {
-                void handleActivate(FIXTURES_NAME)
-              }}
-            />
-            {config.environments.map((env) => (
-              <EnvironmentCard
-                key={env.name}
-                env={env}
-                isActive={env.name === config.active}
+          <>
+            {/* TAB BUTTONS GO HERE */}
+            {/* CONTENT SOURCES | SITES */}
+            {/* Content Source List (visible when CONTENT SOURCES tab is active) */}
+            <div className="env-list">
+              <h3 className="env-list__title">Fixtures</h3>
+              <FixturesCard
+                isActive={config.active === FIXTURES_NAME}
                 onActivate={() => {
-                  void handleActivate(env.name)
+                  void handleActivate(FIXTURES_NAME)
                 }}
-                onEdit={() => setModal({ mode: 'edit', env })}
-                onUpdate={setConfig}
               />
-            ))}
-          </div>
+              <h3 className="env-list__title">Hubs</h3>
+              {config.environments.map((env) => (
+                <EnvironmentCard
+                  key={env.name}
+                  env={env}
+                  isActive={env.name === config.active}
+                  onActivate={() => {
+                    void handleActivate(env.name)
+                  }}
+                  onEdit={() => setModal({ mode: 'edit', env })}
+                  onUpdate={setConfig}
+                />
+              ))}
+            </div>
+            {/* Site list goes here (visible when SITES tab is active) */}
+            <div className="env-list">
+              {/* This gets data from the same JSON configuration but focusses on listing all the "sites" (WebApps) as a top-level flat list */}
+              {/* Each site has a card which shows the site details and the hub it's drawing content from. The card has a button to "View hub" which switches the view back to the hub list and opens the hub's card. */}
+              {/* You can edit the site's config (ie the brand, site URL and site name) and it will update the values in the JSON config */}
+              {/* If the user wants to switch which hub the site points to then that will move the site from being a child of one hub to a child of a different hub in the JSON data. */}
+            </div>
+          </>
         )}
       </main>
 
