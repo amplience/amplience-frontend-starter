@@ -189,6 +189,99 @@ export function linkArgs(
 }
 
 /**
+ * Build the `vercel project ls --format json` argv used to check name
+ * availability. Runs in the same scope the link will use, so no separate team
+ * resolution is needed. `vercel project ls` has no substring filter (CLI v56),
+ * so the caller pages through results with the `--next` cursor from
+ * parseNextCursor to be sure a colliding name isn't hidden on a later page.
+ */
+export function projectListArgs(
+  opts: { token?: string; scope?: string } = {},
+  cursor?: string,
+): string[] {
+  return [
+    'project',
+    'ls',
+    '--format',
+    'json',
+    ...(cursor !== undefined && cursor !== '' ? ['--next', cursor] : []),
+    ...(opts.scope ? ['--scope', opts.scope] : []),
+    ...(opts.token ? ['--token', opts.token] : []),
+  ]
+}
+
+/**
+ * Read the pagination cursor from `vercel project ls --format json` output,
+ * or null when there are no more pages (flat array, or no/empty
+ * `pagination.next`). The value feeds the next call's `--next` cursor.
+ */
+export function parseNextCursor(output: string): string | null {
+  const clean = stripAnsi(output)
+  const start = clean.search(/[[{]/)
+  if (start === -1) return null
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(clean.slice(start))
+  } catch {
+    return null
+  }
+  // One guarded cast to the only shape we read; optional chaining keeps it safe
+  // for arrays or objects with no pagination.
+  const next = (parsed as { pagination?: { next?: unknown } }).pagination?.next
+  if (typeof next === 'string') return next
+  if (typeof next === 'number') return String(next)
+  return null
+}
+
+/**
+ * Parse project names out of `vercel project ls --format json` output. Tolerant
+ * of a top-level array or a `{ projects: [...] }` object, and of any log lines
+ * printed before the JSON. Returns [] if nothing parseable is found (the caller
+ * then proceeds with the requested name rather than blocking).
+ */
+export function parseProjectNames(output: string): string[] {
+  const clean = stripAnsi(output)
+  const start = clean.search(/[[{]/)
+  if (start === -1) return []
+  let data: unknown
+  try {
+    data = JSON.parse(clean.slice(start))
+  } catch {
+    return []
+  }
+  const list: unknown = Array.isArray(data)
+    ? data
+    : typeof data === 'object' && data !== null && 'projects' in data
+      ? data.projects
+      : []
+  if (!Array.isArray(list)) return []
+  const names: string[] = []
+  for (const item of list) {
+    if (typeof item === 'object' && item !== null && 'name' in item) {
+      const n = (item as { name: unknown }).name
+      if (typeof n === 'string' && n !== '') names.push(n)
+    }
+  }
+  return names
+}
+
+/**
+ * Return the first free name in the `base`, `base-2`, `base-3`, … sequence
+ * given the set of taken names — so provisioning creates a fresh project
+ * instead of adopting (and overwriting) an existing one.
+ */
+export function nextAvailableName(base: string, taken: Iterable<string>): string {
+  const set = new Set(taken)
+  if (!set.has(base)) return base
+  for (let i = 2; i <= 1000; i++) {
+    const candidate = `${base}-${i}`
+    if (!set.has(candidate)) return candidate
+  }
+  // Pathological fallback — 999 same-named projects. Keep it unique, fail-safe.
+  return `${base}-${Date.now()}`
+}
+
+/**
  * Build the `vercel env rm <key> <target> --yes` argv.
  * Run before `env add` so re-provisioning is idempotent — `vercel env add`
  * errors if the variable already exists, so we remove-then-add. A remove that

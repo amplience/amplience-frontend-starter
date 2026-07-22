@@ -52,6 +52,14 @@ export type WebApp = {
   url: string
   brand: string
   name: string
+  /**
+   * The Vercel project this site was provisioned into via "Create Vercel
+   * site" (ADR-0017). Absent for sites added via "Add existing site" — those
+   * weren't created by Quadratic Lite, so there's nothing safe to destroy.
+   */
+  vercelProjectName?: string
+  /** Vercel team (scope) the project lives under, if not the personal scope. */
+  vercelScope?: string
 }
 
 export type DiscoveredRepo = {

@@ -24,11 +24,12 @@ export function FixturesCard({ isActive, onActivate }: Props) {
       >
         <div className="env-card__header-labels">
           <span className="env-card__label">Local Fixtures</span>
-          <span className="badge badge--builtin">Built-in</span>
-          {isActive && <span className="badge badge--active">Active</span>}
+          <span className="badge">Built-in</span>
         </div>
         <div className="env-card__header-actions">
-          {!isActive && (
+          {isActive ? (
+            <span className="badge badge--active">Active</span>
+          ) : (
             <button
               className="btn btn--sm btn--primary"
               onClick={(e) => {
@@ -57,10 +58,12 @@ export function FixturesCard({ isActive, onActivate }: Props) {
       </div>
 
       {!collapsed && (
-        <p className="env-card__description">
-          Serves content from bundled fixture files — no hub connection or credentials needed. The
-          default for local development.
-        </p>
+        <div className="env-card__body">
+          <p className="env-card__description">
+            Serves content from bundled fixture files — no hub connection or credentials needed. The
+            default for local development.
+          </p>
+        </div>
       )}
     </div>
   )
