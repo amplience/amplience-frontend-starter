@@ -146,6 +146,50 @@
     border: none;
     border-block-start: 1px solid var(--color-gray-200);
   }
+
+  /* ---------------------------------------------------------------------------
+     Tables (GFM) — brands override via --color-* tokens under [data-brand]
+     --------------------------------------------------------------------------- */
+
+  & table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  & th,
+  & td {
+    padding: var(--spacing-2) var(--spacing-3);
+    border: 1px solid var(--color-gray-200);
+    text-align: start;
+  }
+
+  & th {
+    font-weight: 600;
+    background-color: var(--color-gray-100);
+  }
+
+  /* ---------------------------------------------------------------------------
+     Task lists (GFM) — remove the list marker, align the checkbox
+     --------------------------------------------------------------------------- */
+
+  & li:has(> input[type='checkbox']) {
+    list-style-type: none;
+  }
+
+  & input[type='checkbox'] {
+    margin-inline-end: var(--spacing-2);
+  }
+
+  /* ---------------------------------------------------------------------------
+     Strikethrough (GFM)
+     --------------------------------------------------------------------------- */
+
+  & del {
+    text-decoration: line-through;
+    opacity: 0.75;
+  }
 }
 
 /* ---------------------------------------------------------------------------

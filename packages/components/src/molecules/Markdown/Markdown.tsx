@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import ReactMarkdown from 'react-markdown'
 import type { Components } from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 import { Link } from '../../atoms/Link/Link'
 import { List } from '../../atoms/List/List'
@@ -15,8 +16,9 @@ import styles from './Markdown.module.css'
 export type MarkdownProps = {
   /**
    * Markdown source string — typically from a CMS `content` field.
-   * Standard CommonMark syntax is supported: headings, bold, italic,
-   * links, lists, blockquotes, and code blocks.
+   * CommonMark plus GitHub Flavored Markdown (GFM) is supported: headings,
+   * bold, italic, links, lists, blockquotes, code blocks, and the GFM
+   * extensions — tables, task lists, strikethrough, and bare-URL autolinks.
    */
   content: string
   /**
@@ -70,7 +72,7 @@ const makeComponents = (localeBasePath: string): Components => ({
 // ---------------------------------------------------------------------------
 
 /**
- * Markdown molecule — renders a CommonMark string as typeset HTML.
+ * Markdown molecule — renders a CommonMark + GFM string as typeset HTML.
  *
  * Anchor elements are routed through the Link atom so internal/external
  * navigation behaviour is consistent across the design system.
@@ -85,7 +87,9 @@ const makeComponents = (localeBasePath: string): Components => ({
 export function Markdown({ content, localeBasePath = '', className }: MarkdownProps) {
   return (
     <div className={clsx('Markdown', styles.root, className)}>
-      <ReactMarkdown components={makeComponents(localeBasePath)}>{content}</ReactMarkdown>
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={makeComponents(localeBasePath)}>
+        {content}
+      </ReactMarkdown>
     </div>
   )
 }
