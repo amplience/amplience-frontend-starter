@@ -100,10 +100,12 @@
      --------------------------------------------------------------------------- */
 
   & blockquote {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
     border-inline-start: 3px solid var(--color-gray-300);
     padding-inline-start: var(--spacing-4);
     opacity: 0.75;
-    font-style: italic;
   }
 
   /* ---------------------------------------------------------------------------
@@ -124,8 +126,8 @@
      --------------------------------------------------------------------------- */
 
   & pre {
-    background-color: var(--color-gray-900);
-    color: var(--color-gray-100);
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-900);
     padding: var(--spacing-4);
     border-radius: var(--radius);
     overflow-x: auto;

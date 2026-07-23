@@ -1,21 +1,21 @@
 {
-  "id": "fe48e94e-a309-5be5-a351-70974eca7e27",
-  "label": "Documentation — main slot",
+  "id": "9c1b08f8-f295-5f8f-8628-cfcc28f1466d",
+  "label": "Editor setup — main slot",
   "body": {
     "_meta": {
-      "name": "Documentation — main slot",
+      "name": "Editor setup — main slot",
       "schema": "https://quadratic.amplience.com/v2/slots/slot"
     },
     "components": [
       {
-        "id": "70a844b1-8e61-5456-a46e-7a578d0560ae",
+        "id": "b18e7492-0657-50ea-adca-658394871c64",
         "contentType": "https://quadratic.amplience.com/v2/content/hero",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "2dc32819-c5d9-5c2f-afa1-aefeff436b15",
+        "id": "e97727e6-1a91-5e99-b68e-92aa205089a9",
         "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

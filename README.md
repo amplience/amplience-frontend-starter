@@ -2,15 +2,40 @@
 
 An open-source accelerator for the Amplience Quadratic demo platform.
 
-> Status: Proof of Concept (POC) — not production ready.
-
-## Supported Node versions
-
-Quadratic Lite requires Node.js 22 or newer (see [`engines.node`](package.json) in `package.json`). Node 20 reached end-of-life in April 2026; Node 22 is the current Active LTS. Editor / lint / test tooling is verified against the same range that CI uses.
-
-pnpm is the package manager (see [`packageManager`](package.json)). If it's not already installed, `corepack enable` picks up the pinned version automatically.
+> [!NOTE] Status: Lightweight MVP
+> This is a lightweight performant accelerator to get you started. Please fork and build upon this.
+>
+> NB: If you are internal staff and want to demo more advanced features, they might be available on [Quadratic](https://github.com/amplience/quadratic), our older private (but more feature-rich) demo frontend.
+>
+> Eventually Quadratic Lite will expand to reach feature parity with the older Quadratic codebase, but in the meantime you can still run the original for the features not yet migrated.
 
 ## Getting started
+
+### Prerequisites
+
+#### Node.js v22+
+
+Quadratic Lite requires Node.js v22 or newer, although we currently recommend v24.
+
+- ~~v**20**~~ (Iron) reached end-of-life in April 2026
+- v**22** (Jod) is in **Maintenance LTS** (critical fixes only; EOL ~April 2027) — this is our supported floor
+- v**24** (Krypton) is the current **Active LTS** and the recommended version for local development
+- v**26** is the current _Current_ release — fine to experiment with, but not for production
+
+It's standard practice that production and CI should target an _Active_ or _Maintenance_ LTS release.\
+Editor / lint / test tooling is verified against the same range CI uses.
+
+> [!TIP]Node Version Manager (nvm)
+> If you need to install node, we'd recommend doing so via [nvm](https://www.nvmnode.com/) so you can easily install & switch between versions using commands like `nvm list`, `nvm install 24` and `nvm use 24`.
+>
+> - [How to install nvm on Windows](https://www.nvmnode.com/guide/download.html#nvm-for-windows-nvm-windows)
+> - [How to install nvm on Mac/Linux/Ubuntu](https://www.nvmnode.com/guide/download.html#nvm-for-linux-ubuntu-mac-nvm-sh)
+
+#### PNPM
+
+As a monorepo, we use [pnpm (performant node package manager)](https://pnpm.io/) as the package manager. If it's not already installed, just run `corepack enable` which will pick up the pinned version automatically.
+
+### Steps
 
 Local setup takes about 40 seconds, and needs no Amplience hub:
 
@@ -23,35 +48,61 @@ Local setup takes about 40 seconds, and needs no Amplience hub:
 3. Install the packages\
    `pnpm i` or `pnpm install`
 
-4. Start the development server\
+### Running locally
+
+1. Start the development server\
    `pnpm dev`
 
-That starts the Next.js app at `http://localhost:3000`. By default it serves content from the bundled fixture data (`packages/content/fixtures/`), so it runs fully offline.
+2. See the results in a browser at\
+   [http://localhost:3000](http://localhost:3000)
 
-## Component library
+By default it serves content from the bundled fixture data (`packages/content/fixtures/`), so it runs fully offline.
 
-The shared component library has its own Storybook, for browsing or building components in isolation from the app.
+NB: If you wish to build a _static_ site: run `pnpm build` to build the site, then `pnpm start` to run the server. But this won't live update to your code changes, so `pnpm dev` is most often preferred for local development.
 
-You can start this by running `pnpm sb` or `pnpm storybook`
+### Component library
+
+The shared component library has its own Storybook for browsing or building components in isolation from the app.
+
+1. Start storybook\
+   `pnpm sb` or `pnpm storybook`
+
+2. View the results in a browser at\
+   [http://localhost:6006](http://localhost:6006)
 
 ## Connecting to a hub
 
 The local dev server can also be pointed at a real Amplience hub instead of the fixtures. Adding one takes about 50 seconds via the environment manager GUI:
 
-1. Run `pnpm env-manager` to start the GUI
+### Prerequisites
+
+- A Client ID & secret with full DC+DAM permissions for your hub
+
+### Steps
+
+1. Start the Environment Manager GUI\
+   `pnpm env-manager`
+
 2. Click **+ Add hub**
+
 3. Give it a label and identifier (free text, just for your own reference)
+
 4. Enter the Client ID and Client Secret you received from Amplience support
+
 5. Click **Fetch hub details**
+
 6. Review the details, then click **Add hub**
 
-_Under the hood this fetches and stores the relevant details in an untracked `quadratic.config.json` file and some `.env` variables, but you should be able to do everything you need through the GUI._
+_Under the hood this fetches and stores the relevant details in an untracked `quadratic.config.json` file and some `.env` variables, but these are not committed to the repo and you should be able to do everything you need through the GUI._
 
-You can then switch the local dev server between the fixtures (default) and any hub you've added, to source its content instead. See [`docs/runbooks/hub-setup.md`](docs/runbooks/hub-setup.md) for the prerequisites (API client, repository IDs) and what each field maps to.
+> [!TIP] Checking Permissions
+> If you are running into permission errors or just want to check the permissions before you start, you can use the **Check credentials** button.
+
+You can then, by clicking the **Set active** buttons, switch the local dev server between pointing at the fixtures (default) and any hub you've added, to source its content instead. See [`docs/runbooks/hub-setup.md`](docs/runbooks/hub-setup.md) for more details.
 
 ## Seeding and syncing a hub
 
-Once a hub is added, you can push the Quadratic Lite content model and starter content to it. (Takes typically 1min 45sec)
+Once a hub is added, you can push the Quadratic Lite content model and starter content to it. (Takes typically 1min 45sec for a full set of starter content)
 
 You can either do it via the environment-manager GUI as mentioned above, or you could use the terminal if you prefer.
 
@@ -106,5 +157,7 @@ Either way, once a site is recorded it's added as a visualization option in the 
 See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the workflow, and [`docs/editor-setup.md`](docs/editor-setup.md) for recommended (optional) editor settings.
 
 ## Troubleshooting
+
+### Minor pnpm noise
 
 If you see a `[DEP0169] DeprecationWarning: url.parse()` line, that's coming from inside pnpm's own bundled code (not this project) — see [pnpm#9492](https://github.com/pnpm/pnpm/issues/9492). It's cosmetic; silence it by adding `export NODE_OPTIONS="--disable-warning=DEP0169"` to your shell profile.

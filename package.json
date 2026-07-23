@@ -42,6 +42,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
+    "docs:generate": "node packages/content/scripts/generate-docs.mjs",
     "storybook": "pnpm --filter @amplience/quadratic-components storybook",
     "sb": "pnpm storybook",
     "hub:import": "pnpm --filter @amplience/quadratic-hub-management hub:import",
