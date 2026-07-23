@@ -15,11 +15,13 @@
     "canonicalUrl": "/about",
     "social": {
       "image": {
+        "mediaType": "ManualImage",
         "image": {
-          "fliph": false,
-          "flipv": false
-        },
-        "mediaType": "DynamicImage"
+          "src": "https://cdn.media.amplience.net/i/quadraticdemo/about-a-head-for-the-headless-hero",
+          "alt": "The top-half of a man's head looking up in amazement at some floating website graphics.",
+          "width": 2752,
+          "height": 1536
+        }
       }
     },
     "robots": {
