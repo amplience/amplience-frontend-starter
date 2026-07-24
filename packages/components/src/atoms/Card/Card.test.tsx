@@ -20,9 +20,9 @@ describe('Card', () => {
     expect(screen.getByText('hello')).toBeTruthy()
   })
 
-  it('defaults to elevation="raised"', () => {
+  it('defaults to elevation="flat"', () => {
     render(<Card data-testid="c">x</Card>)
-    expect(screen.getByTestId('c').getAttribute('data-elevation')).toBe('raised')
+    expect(screen.getByTestId('c').getAttribute('data-elevation')).toBe('flat')
   })
 
   it('defaults to padding="md"', () => {
