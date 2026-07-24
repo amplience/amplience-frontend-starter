@@ -17,7 +17,7 @@
         "items": [
           {
             "label": "📝 Content",
-            "pointers": ["/title", "/subtitle", "/description", "/items"]
+            "pointers": ["/sectionHeader", "/items"]
           },
           {
             "label": "⚙️ Options",
@@ -40,29 +40,15 @@
   },
   "type": "object",
   "properties": {
-    "title": {
-      "title": "Title",
-      "description": "Optional section heading",
+    "sectionHeader": {
       "allOf": [
-        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
-      ]
-    },
-    "subtitle": {
-      "title": "Subtitle",
-      "description": "Optional section subheading",
-      "allOf": [
-        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
-      ]
-    },
-    "description": {
-      "title": "Description",
-      "description": "Optional section introduction",
-      "allOf": [
-        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/section-header#/definitions/section-header"
+        }
       ]
     },
     "items": {
-      "title": "Items",
+      "title": "Grid Items",
       "description": "Content items laid out in the grid.",
       "type": "array",
       "items": {
@@ -145,9 +131,7 @@
     }
   },
   "propertyOrder": [
-    "title",
-    "subtitle",
-    "description",
+    "sectionHeader",
     "items",
     "sizingMode",
     "columnsMobile",

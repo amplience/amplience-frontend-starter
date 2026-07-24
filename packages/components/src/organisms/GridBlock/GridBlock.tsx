@@ -59,10 +59,12 @@ export type GridBlockProps = {
    * Defaults to the --gap token (16px at the base scale).
    */
   gap?: number
-  /** Optional heading rendered above the grid. See SectionHeader. */
-  title?: SectionHeaderProps['title']
-  subtitle?: SectionHeaderProps['subtitle']
-  description?: SectionHeaderProps['description']
+  /**
+   * Optional heading group rendered above the grid — title, subtitle and
+   * description spread straight into SectionHeader. See the `section-header`
+   * CMS partial, which delivers this same grouped shape.
+   */
+  sectionHeader?: Omit<SectionHeaderProps, 'className'>
   /**
    * Background colour of the section, drawn from the design token palette.
    */
@@ -119,9 +121,7 @@ export function GridBlock({
   minItemWidth = 250,
   gap,
   backgroundColor,
-  title,
-  subtitle,
-  description,
+  sectionHeader,
   maxWidth = 'default',
   gutter = false,
   className,
@@ -142,7 +142,7 @@ export function GridBlock({
       style={cssVars}
     >
       <Container className={styles.container ?? ''} maxWidth={maxWidth} gutter={gutter}>
-        <SectionHeader title={title} subtitle={subtitle} description={description} />
+        <SectionHeader {...(sectionHeader ?? {})} />
         <div className={styles.grid}>{children}</div>
       </Container>
     </section>

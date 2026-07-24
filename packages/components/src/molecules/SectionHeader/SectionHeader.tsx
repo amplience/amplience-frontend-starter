@@ -11,20 +11,21 @@ import styles from './SectionHeader.module.css'
  * Props for the SectionHeader molecule.
  *
  * Exported so blocks that render a section heading (ColumnsBlock, GridBlock,
- * …) can pick the fields they expose rather than re-declaring them — the shape
- * stays in one place, and blocks that grow a header stay consistent for free.
+ * …) hold a single grouped `sectionHeader` object (mirroring the CMS
+ * `section-header` partial) and spread it straight in — the field shape stays
+ * in one place, and blocks that grow a header stay consistent for free.
  *
- * Only `title` exists today. The molecule is shaped to grow: a future
- * `align` (mapping to Typography's `left | center | right`), a `description`
- * paragraph, and an array of CTA links all sit naturally alongside `title`
- * without changing the call sites that pass only a title.
+ * Every field is optional: the whole header is optional, and the component
+ * renders nothing until at least one field is set. The molecule is shaped to
+ * grow — a future `align` (mapping to Typography's `left | center | right`)
+ * and an array of CTA links sit naturally alongside these without changing
+ * existing call sites.
  */
 export type SectionHeaderProps = {
-  /** Heading text. When absent, the header renders nothing. */
-  title: string | undefined
+  title?: string | undefined
   subtitle?: string | undefined
   description?: string | undefined
-  className?: string
+  className?: string | undefined
 }
 
 // ---------------------------------------------------------------------------

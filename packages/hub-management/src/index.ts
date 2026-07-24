@@ -41,6 +41,7 @@ import partialsContentBlocks from '../content-type-schemas/schemas/partials_cont
 import partialsCta from '../content-type-schemas/schemas/partials_cta.json'
 import partialsIcon from '../content-type-schemas/schemas/partials_icon.json'
 import partialsMedia from '../content-type-schemas/schemas/partials_media.json'
+import partialsSectionHeader from '../content-type-schemas/schemas/partials_section-header.json'
 import sitestructureCustomCss from '../content-type-schemas/schemas/sitestructure_custom-css.json'
 import slotsSlot from '../content-type-schemas/schemas/slots_slot.json'
 
@@ -76,6 +77,7 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(partialsContentBlocks, 'PARTIAL'),
   entry(partialsColour, 'PARTIAL'),
   entry(partialsContainer, 'PARTIAL'),
+  entry(partialsSectionHeader, 'PARTIAL'),
   entry(partialsIcon, 'PARTIAL'),
   entry(contentPage, 'CONTENT_TYPE'),
   entry(contentBlogArticle, 'CONTENT_TYPE'),

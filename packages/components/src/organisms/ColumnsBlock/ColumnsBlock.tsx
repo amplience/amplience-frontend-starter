@@ -29,10 +29,12 @@ export type ColumnsBlockProps = {
    */
   alignItems?: 'top' | 'center' | 'bottom'
   backgroundColor?: ColumnsBlockBackgroundColor
-  /** Optional heading rendered above the columns. See SectionHeader. */
-  title?: SectionHeaderProps['title']
-  subtitle?: SectionHeaderProps['subtitle']
-  description?: SectionHeaderProps['description']
+  /**
+   * Optional heading group rendered above the columns — title, subtitle and
+   * description spread straight into SectionHeader. See the `section-header`
+   * CMS partial, which delivers this same grouped shape.
+   */
+  sectionHeader?: Omit<SectionHeaderProps, 'className'>
   /**
    * Max-width constraint passed through to the inner Container atom.
    * Defaults to 'default'.
@@ -75,9 +77,7 @@ export function ColumnsBlock({
   gap,
   alignItems,
   backgroundColor,
-  title,
-  subtitle,
-  description,
+  sectionHeader,
   maxWidth = 'default',
   gutter = false,
   className,
@@ -94,7 +94,7 @@ export function ColumnsBlock({
       style={Object.keys(cssVars).length > 0 ? cssVars : undefined}
     >
       <Container className={styles.container ?? ''} maxWidth={maxWidth} gutter={gutter}>
-        <SectionHeader title={title} subtitle={subtitle} description={description} />
+        <SectionHeader {...(sectionHeader ?? {})} />
         <div className={styles.columns}>{children}</div>
       </Container>
     </section>
