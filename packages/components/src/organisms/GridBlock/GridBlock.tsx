@@ -3,6 +3,8 @@ import type { ReactNode } from 'react'
 
 import { Container } from '../../atoms/Container/Container'
 import type { ContainerProps } from '../../atoms/Container/Container'
+import { SectionHeader } from '../../molecules/SectionHeader/SectionHeader'
+import type { SectionHeaderProps } from '../../molecules/SectionHeader/SectionHeader'
 import styles from './GridBlock.module.css'
 
 // ---------------------------------------------------------------------------
@@ -57,6 +59,10 @@ export type GridBlockProps = {
    * Defaults to the --gap token (16px at the base scale).
    */
   gap?: number
+  /** Optional heading rendered above the grid. See SectionHeader. */
+  title?: SectionHeaderProps['title']
+  subtitle?: SectionHeaderProps['subtitle']
+  description?: SectionHeaderProps['description']
   /**
    * Background colour of the section, drawn from the design token palette.
    */
@@ -72,7 +78,7 @@ export type GridBlockProps = {
    * edge-to-edge grids (e.g. inside a full-bleed colour band).
    * Defaults to false.
    */
-  gutter?: boolean
+  gutter?: ContainerProps['gutter']
   className?: string
 }
 
@@ -113,6 +119,9 @@ export function GridBlock({
   minItemWidth = 250,
   gap,
   backgroundColor,
+  title,
+  subtitle,
+  description,
   maxWidth = 'default',
   gutter = false,
   className,
@@ -133,6 +142,7 @@ export function GridBlock({
       style={cssVars}
     >
       <Container className={styles.container ?? ''} maxWidth={maxWidth} gutter={gutter}>
+        <SectionHeader title={title} subtitle={subtitle} description={description} />
         <div className={styles.grid}>{children}</div>
       </Container>
     </section>

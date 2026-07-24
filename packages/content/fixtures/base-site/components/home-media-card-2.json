@@ -112,8 +112,8 @@
           }
         },
         "href": "/docs/quickstart",
-        "variant": "solid",
-        "color": "primary"
+        "variant": "text",
+        "color": "black"
       }
     }
   }

@@ -112,8 +112,8 @@
           }
         },
         "href": "/features/theming",
-        "variant": "solid",
-        "color": "primary"
+        "variant": "text",
+        "color": "black"
       }
     }
   }

@@ -17,7 +17,7 @@
         "items": [
           {
             "label": "📝 Content",
-            "pointers": ["/items"]
+            "pointers": ["/title", "/subtitle", "/description", "/items"]
           },
           {
             "label": "⚙️ Options",
@@ -29,6 +29,27 @@
   },
   "type": "object",
   "properties": {
+    "title": {
+      "title": "Title",
+      "description": "Optional section heading",
+      "allOf": [
+        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+      ]
+    },
+    "subtitle": {
+      "title": "Subtitle",
+      "description": "Optional section subheading",
+      "allOf": [
+        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+      ]
+    },
+    "description": {
+      "title": "Description",
+      "description": "Optional section introduction",
+      "allOf": [
+        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+      ]
+    },
     "items": {
       "title": "Items",
       "description": "One content item per column.",
@@ -70,5 +91,15 @@
       ]
     }
   },
-  "propertyOrder": ["items", "gap", "alignItems", "backgroundColor", "maxWidth", "gutter"]
+  "propertyOrder": [
+    "title",
+    "subtitle",
+    "description",
+    "items",
+    "gap",
+    "alignItems",
+    "backgroundColor",
+    "maxWidth",
+    "gutter"
+  ]
 }

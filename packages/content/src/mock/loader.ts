@@ -99,7 +99,6 @@ import homeColumnsMarkdown from '../../fixtures/base-site/components/home-column
 import homeColumns from '../../fixtures/base-site/components/home-columns.json' with { type: 'json' }
 import homeGrid from '../../fixtures/base-site/components/home-grid.json' with { type: 'json' }
 import homeHero from '../../fixtures/base-site/components/home-hero.json' with { type: 'json' }
-import homeImage from '../../fixtures/base-site/components/home-image.json' with { type: 'json' }
 import homeIntroImage from '../../fixtures/base-site/components/home-intro-image.json' with { type: 'json' }
 import homeIntro from '../../fixtures/base-site/components/home-intro.json' with { type: 'json' }
 import homeMarkdown from '../../fixtures/base-site/components/home-markdown.json' with { type: 'json' }
@@ -218,7 +217,6 @@ const fixtures: readonly EnrichedContentItem[] = [
   homePage,
   homeMainSlot,
   homeHero,
-  homeImage,
   homeGrid,
   homeIntro,
   homeIntroImage,
