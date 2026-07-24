@@ -1,14 +1,14 @@
 {
-  "id": "b18e7492-0657-50ea-adca-658394871c64",
-  "label": "Editor setup — hero",
+  "id": "542f2e99-0630-53ac-b533-95a486dd8aed",
+  "label": "Storybook — hero",
   "body": {
     "_meta": {
-      "name": "Editor setup — hero",
+      "name": "Storybook — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "b18e7492-0657-50ea-adca-658394871c64"
+      "deliveryId": "542f2e99-0630-53ac-b533-95a486dd8aed"
     },
-    "title": "Editor setup",
-    "description": "Quadratic Lite is editor-agnostic. The repo enforces output (formatting, lint rules) but never the editor — `.vscode/` is gitignored, and there is no mandated IDE. Anyone cloning the repo gets the same outcome on macOS, Linux, or Windows because of three repo-level mechanisms:",
+    "title": "Storybook",
+    "description": "The shared component library has its own Storybook for browsing or building components in isolation from the app.",
     "backgroundColor": "dark",
     "textColor": "white",
     "contentPositionMobile": "beneath",

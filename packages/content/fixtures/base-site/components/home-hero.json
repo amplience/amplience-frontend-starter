@@ -124,6 +124,7 @@
     "contentPositionDesktop": "overlay",
     "heightBehaviour": "flexible",
     "maxWidth": "default",
+    "maxHeight": 600,
     "overlayColor": "black",
     "overlayIntensity": 50,
     "overlayStyle": "gradient",

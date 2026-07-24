@@ -109,7 +109,7 @@
         },
         "href": "/docs",
         "variant": "outlined",
-        "color": "white"
+        "color": "black"
       }
     ],
     "maxWidth": "narrow",

@@ -31,28 +31,6 @@
   margin: 0;
   padding: 0;
   flex-wrap: wrap;
-
-  @media (max-width: 768px) {
-    display: block;
-    width: 100%;
-    z-index: var(--z-menu-drawer, 200);
-
-    > li > a {
-      width: calc(100% + var(--site-gutter) * 2);
-      position: relative;
-
-      &::after {
-        content: '';
-        display: block;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        border-bottom: solid 1px currentColor;
-        opacity: 0.2;
-      }
-    }
-  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -228,6 +206,37 @@
 @media (max-width: 768px) {
   .root[data-mobile-layout] {
     display: none;
+
+    .list {
+      display: block;
+      width: 100%;
+      z-index: var(--z-menu-drawer, 200);
+
+      > li {
+        > a {
+          width: calc(100% + var(--site-gutter) * 2);
+          position: relative;
+
+          &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-bottom: solid 1px currentColor;
+            opacity: 0.2;
+          }
+        }
+
+        /* Currently disable submenus on mobile menus */
+        /* Support for this to be added at a later date */
+        &:hover > ul,
+        &:focus-within > ul {
+          display: none;
+        }
+      }
+    }
   }
 
   .root[data-mobile-layout][data-open] {

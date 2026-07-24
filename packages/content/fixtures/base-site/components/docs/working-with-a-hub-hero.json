@@ -1,14 +1,14 @@
 {
-  "id": "b18e7492-0657-50ea-adca-658394871c64",
-  "label": "Editor setup — hero",
+  "id": "1f2d38d1-938c-5e63-b0e7-9d7a9dfb8fee",
+  "label": "Working with a hub — hero",
   "body": {
     "_meta": {
-      "name": "Editor setup — hero",
+      "name": "Working with a hub — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "b18e7492-0657-50ea-adca-658394871c64"
+      "deliveryId": "1f2d38d1-938c-5e63-b0e7-9d7a9dfb8fee"
     },
-    "title": "Editor setup",
-    "description": "Quadratic Lite is editor-agnostic. The repo enforces output (formatting, lint rules) but never the editor — `.vscode/` is gitignored, and there is no mandated IDE. Anyone cloning the repo gets the same outcome on macOS, Linux, or Windows because of three repo-level mechanisms:",
+    "title": "Working with a hub",
+    "description": "By default Quadratic Lite serves the bundled fixtures offline. When you're ready to use real content, you can point local dev at an Amplience hub and push the Quadratic Lite content model and starter content to it.",
     "backgroundColor": "dark",
     "textColor": "white",
     "contentPositionMobile": "beneath",

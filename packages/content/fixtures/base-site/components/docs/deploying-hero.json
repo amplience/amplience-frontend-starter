@@ -1,14 +1,14 @@
 {
-  "id": "b18e7492-0657-50ea-adca-658394871c64",
-  "label": "Editor setup — hero",
+  "id": "afc8ed04-53be-599f-a228-96bcb2908f45",
+  "label": "Deploying a site — hero",
   "body": {
     "_meta": {
-      "name": "Editor setup — hero",
+      "name": "Deploying a site — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "b18e7492-0657-50ea-adca-658394871c64"
+      "deliveryId": "afc8ed04-53be-599f-a228-96bcb2908f45"
     },
-    "title": "Editor setup",
-    "description": "Quadratic Lite is editor-agnostic. The repo enforces output (formatting, lint rules) but never the editor — `.vscode/` is gitignored, and there is no mandated IDE. Anyone cloning the repo gets the same outcome on macOS, Linux, or Windows because of three repo-level mechanisms:",
+    "title": "Deploying a site",
+    "description": "`apps/web` is a standard Next.js app — host it anywhere. (e.g. Vercel)",
     "backgroundColor": "dark",
     "textColor": "white",
     "contentPositionMobile": "beneath",

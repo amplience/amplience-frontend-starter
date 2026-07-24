@@ -1,0 +1,59 @@
+{
+  "id": "022cd9b8-6408-57e8-8db5-af7fa31874e2",
+  "label": "Contributing Guide — hero",
+  "body": {
+    "_meta": {
+      "name": "Contributing Guide — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "022cd9b8-6408-57e8-8db5-af7fa31874e2"
+    },
+    "title": "Contributing Guide",
+    "description": "Thank you for your interest in contributing to this project.",
+    "backgroundColor": "dark",
+    "textColor": "white",
+    "contentPositionMobile": "beneath",
+    "verticalPosition": "center",
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "← Home"
+            },
+            {
+              "locale": "en-GB",
+              "value": "← Home"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/",
+        "variant": "outlined",
+        "color": "white"
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "GitHub Repo →"
+            },
+            {
+              "locale": "en-GB",
+              "value": "GitHub Repo →"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "https://github.com/mattisherwood/quadratic-lite",
+        "variant": "solid",
+        "color": "primary"
+      }
+    ]
+  }
+}

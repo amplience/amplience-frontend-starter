@@ -115,11 +115,18 @@ const findMarkdown = (dir) => {
   return out
 }
 
-/** Slug for a repo-relative md path. index.md / README.md collapse to the folder. */
+/**
+ * Slug for a repo-relative md path. Two top-level pages are remapped: the repo
+ * README is the `/docs` landing, and `docs/index.md` is the `/about` overview.
+ * Both page generation and link rewriting run through here, so a link to either
+ * file resolves to the right site path automatically (README → /docs,
+ * docs/index.md → /about). Otherwise index.md / README.md collapse to the folder.
+ */
+const SLUG_OVERRIDES = { README: 'docs', CONTRIBUTING: 'contributing', 'docs/index': 'about' }
 const slugForPath = (relPath) => {
-  let s = relPath.replace(/\.md$/i, '')
-  s = s.replace(/\/(index|README)$/i, '')
-  return s
+  const noExt = relPath.replace(/\.md$/i, '')
+  if (noExt in SLUG_OVERRIDES) return SLUG_OVERRIDES[noExt]
+  return noExt.replace(/\/(index|README)$/i, '')
 }
 
 /**
@@ -202,6 +209,15 @@ const swapGitHubAlerts = (md) =>
     (_whole, prefix, type) => `${prefix}${ALERT_EMOJI[type.toUpperCase()]}`,
   )
 
+/**
+ * Strip a leading `[← Back](..)` navigation link from the top of a doc. That
+ * link is a repo-only convenience (GitHub has no site chrome); on the generated
+ * site the hero's parent/child CTAs already provide back-navigation, so it must
+ * never reach a fixture. Keyed on the `←` in the label so it only ever removes
+ * an actual back-link, and only at the very top of the file.
+ */
+const stripBackLink = (md) => md.replace(/^[ \t]*\[\u2190[^\]]*\]\([^)]*\)[ \t]*\r?\n\s*/, '')
+
 // ---------------------------------------------------------------------------
 // Build the doc model
 // ---------------------------------------------------------------------------
@@ -211,32 +227,50 @@ if (!existsSync(docsDir)) {
   process.exit(1)
 }
 
-const relPaths = findMarkdown(docsDir).sort()
+// Every docs/*.md plus the repo-root pages: README → /docs, CONTRIBUTING → /contributing.
+const relPaths = [...findMarkdown(docsDir), 'README.md', 'CONTRIBUTING.md'].sort()
 
 // First pass: parse every doc so we know the full slug set (for link rewriting
 // and parent/child CTA wiring).
 const docs = relPaths.map((relPath) => {
   const slug = slugForPath(relPath)
   const fallback = humanize(slug.split('/').pop() || slug)
-  const parsed = parseDoc(readFileSync(path.join(repoRoot, relPath), 'utf8'), fallback)
+  const parsed = parseDoc(
+    stripBackLink(readFileSync(path.join(repoRoot, relPath), 'utf8')),
+    fallback,
+  )
   return { relPath, slug, ...parsed }
 })
 
 const slugSet = new Set(docs.map((d) => d.slug))
 const bySlug = new Map(docs.map((d) => [d.slug, d]))
 
-// The root /docs page is composed (design decision B): the soft, purpose-driven
-// intro from docs/index.md, then the repo README appended beneath it with its
-// own title + strapline stripped. parseDoc() removes the first H1 and the intro
-// paragraph, which is exactly the README title + strapline — so getting-started
-// / technical detail lives in exactly one place (README) and is never
-// duplicated. README sits outside docs/, so this is the one deliberate
-// cross-file compose.
-const ROOT_SLUG = 'docs'
-const readmePath = path.join(repoRoot, 'README.md')
-const readmeBody = existsSync(readmePath)
-  ? parseDoc(readFileSync(readmePath, 'utf8'), 'README').body
-  : ''
+// Two top-level pages are curated fixtures, not fully generated: /docs (from the
+// repo README) and /about (from docs/index.md). For these the generator only
+// refreshes the *text* — page + hero title/description and the markdown-block
+// body — from the source file, leaving hero design, media, colours, CTAs, SEO,
+// slot wiring and IDs exactly as authored. Everything else under docs/ is fully
+// generated (plain hero + programmatic parent/child CTAs).
+const UPDATE_ONLY = {
+  docs: {
+    // /docs pins its own title/description; only its body comes from the README.
+    title: 'Documentation',
+    description: 'Helpful information for installing & using Quadratic Lite',
+    page: 'pages/docs.json',
+    hero: 'components/docs-hero.json',
+    markdown: 'components/docs-markdown.json',
+  },
+  about: {
+    page: 'pages/about.json',
+    hero: 'components/about-hero.json',
+    markdown: 'components/about-markdown.json',
+  },
+  contributing: {
+    page: 'pages/contributing.json',
+    hero: 'components/contributing-hero.json',
+    markdown: 'components/contributing-markdown.json',
+  },
+}
 
 /** Immediate children of a slug (one path segment deeper). */
 const childrenOf = (slug) =>
@@ -249,12 +283,16 @@ const childrenOf = (slug) =>
  * is itself a doc (so a page nested under a folder with no index.md still gets a
  * way back), falling back to home. Every page therefore has a back-link.
  */
+// A page's effective title — its UPDATE_ONLY override if it pins one, else the
+// title parsed from its source file.
+const effectiveTitle = (slug) => UPDATE_ONLY[slug]?.title ?? bySlug.get(slug)?.title
+
 const parentCtaFor = (slug) => {
   const segs = slug.split('/')
   for (let i = segs.length - 1; i > 0; i--) {
     const ancestor = segs.slice(0, i).join('/')
     if (slugSet.has(ancestor)) {
-      return { label: `← ${bySlug.get(ancestor).title}`, href: `/${ancestor}` }
+      return { label: `← ${effectiveTitle(ancestor)}`, href: `/${ancestor}` }
     }
   }
   return { label: '← Home', href: '/' }
@@ -278,34 +316,63 @@ const writeFixture = (relFromBase, obj, varName) => {
   fileCount++
 }
 
+/** Set a field when the value is truthy, otherwise remove it. */
+const patchText = (obj, key, value) => {
+  if (value) obj[key] = value
+  else delete obj[key]
+}
+
+/**
+ * Refresh only the text of a curated top-level page (see UPDATE_ONLY): the page
+ * and hero title/description, and the markdown-block body. Everything else in
+ * those fixtures — IDs, hero design, CTAs, SEO, slot wiring — is left untouched.
+ * These files are loaded by the mock loader directly (not via the generated
+ * manifest), so they're written here but never added to `generated`.
+ */
+const updateTopLevel = ({ page, hero, markdown }, title, description, body) => {
+  const patch = (rel, mutate) => {
+    const abs = path.join(fixturesBase, rel)
+    const json = JSON.parse(readFileSync(abs, 'utf8'))
+    mutate(json)
+    writeFileSync(abs, `${JSON.stringify(json, null, 2)}\n`)
+  }
+  patch(page, (j) => {
+    j.body.title = title
+    patchText(j.body, 'description', description)
+  })
+  patch(hero, (j) => {
+    j.body.title = title
+    patchText(j.body, 'description', description)
+  })
+  patch(markdown, (j) => {
+    j.body.content = localized(body)
+  })
+}
+
 for (const doc of docs) {
   const { slug, relPath, title, description } = doc
-  const isIndex = slug === ROOT_SLUG
-
-  // Reuse the legacy flat filenames for the /docs index (overwrite in place);
-  // nest everything else under a docs/ subtree the generator owns.
-  const stem = isIndex ? 'docs' : slug // e.g. 'docs/runbooks/hub-setup'
-  const pageFile = isIndex ? 'pages/docs.json' : `pages/${slug}.json`
-  const slotFile = isIndex ? 'slots/docs-main.json' : `slots/${slug}-main.json`
-  const heroFile = isIndex ? 'components/docs-hero.json' : `components/${slug}-hero.json`
-  const mdFile = isIndex ? 'components/docs-markdown.json' : `components/${slug}-markdown.json`
-
-  const pageId = uuidFrom(`${stem}#page`)
-  const slotId = uuidFrom(`${stem}#slot`)
-  const heroId = uuidFrom(`${stem}#hero`)
-  const mdId = uuidFrom(`${stem}#markdown`)
 
   let body = rewriteLinks(doc.body, relPath, slugSet)
-  if (isIndex && readmeBody) {
-    // README links resolve relative to the repo root, not docs/, so rewrite its
-    // half with README.md as the base before appending.
-    body += `\n\n${rewriteLinks(readmeBody, 'README.md', slugSet)}`
-  }
   body = swapGitHubAlerts(body)
 
+  // Curated top-level pages (/docs, /about): refresh text only, keep the rest.
+  // A page may pin its own title/description (e.g. /docs); otherwise they come
+  // from the source file's H1 + intro paragraph (e.g. /about).
+  if (UPDATE_ONLY[slug]) {
+    const cfg = UPDATE_ONLY[slug]
+    updateTopLevel(cfg, cfg.title ?? title, cfg.description ?? description, body)
+    continue
+  }
+
+  // Fully-generated subpage: plain hero + programmatic parent/child CTAs.
+  const pageId = uuidFrom(`${slug}#page`)
+  const slotId = uuidFrom(`${slug}#slot`)
+  const heroId = uuidFrom(`${slug}#hero`)
+  const mdId = uuidFrom(`${slug}#markdown`)
+
   // Hero CTAs: parent (outlined/white) then each child (solid/primary).
-  const parentCta = parentCtaFor(slug)
   const ctas = []
+  const parentCta = parentCtaFor(slug)
   if (parentCta) {
     ctas.push({
       label: localized(parentCta.label),
@@ -323,7 +390,6 @@ for (const doc of docs) {
     })
   }
 
-  // --- markdown-block ---
   const markdown = {
     id: mdId,
     label: `${title} — markdown`,
@@ -335,7 +401,6 @@ for (const doc of docs) {
     },
   }
 
-  // --- hero (dark, no media) ---
   const heroBody = {
     _meta: { name: `${title} — hero`, schema: SCHEMA.hero, deliveryId: heroId },
     title,
@@ -348,7 +413,6 @@ for (const doc of docs) {
   }
   const hero = { id: heroId, label: `${title} — hero`, body: heroBody }
 
-  // --- slot (hero + markdown) ---
   const slot = {
     id: slotId,
     label: `${title} — main slot`,
@@ -358,7 +422,6 @@ for (const doc of docs) {
     },
   }
 
-  // --- page ---
   const page = {
     id: pageId,
     label: `${title} page`,
@@ -374,10 +437,10 @@ for (const doc of docs) {
     },
   }
 
-  writeFixture(heroFile, hero, identFrom(stem, 'hero'))
-  writeFixture(mdFile, markdown, identFrom(stem, 'markdown'))
-  writeFixture(slotFile, slot, identFrom(stem, 'slot'))
-  writeFixture(pageFile, page, identFrom(stem, 'page'))
+  writeFixture(`components/${slug}-hero.json`, hero, identFrom(slug, 'hero'))
+  writeFixture(`components/${slug}-markdown.json`, markdown, identFrom(slug, 'markdown'))
+  writeFixture(`slots/${slug}-main.json`, slot, identFrom(slug, 'slot'))
+  writeFixture(`pages/${slug}.json`, page, identFrom(slug, 'page'))
 }
 
 // ---------------------------------------------------------------------------
@@ -416,10 +479,14 @@ writeFileSync(generatedTsPath, manifest)
 
 const prettierBin = path.join(repoRoot, 'node_modules/.bin/prettier')
 if (existsSync(prettierBin)) {
+  const updateOnlyFiles = Object.values(UPDATE_ONLY)
+    .flatMap((x) => [x.page, x.hero, x.markdown])
+    .map((rel) => path.join(fixturesBase, rel))
   const targets = [
     ...generated.map((g) =>
       path.join(fixturesBase, `${g.importPath.replace('../../fixtures/base-site/', '')}.json`),
     ),
+    ...updateOnlyFiles,
     generatedTsPath,
   ]
   const res = spawnSync(prettierBin, ['--write', '--log-level', 'warn', ...targets], {

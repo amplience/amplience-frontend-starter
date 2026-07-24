@@ -81,14 +81,14 @@ describe('ContentPage — path → delivery key routing (QL-76)', () => {
     const { default: ContentPage } = await loadRoute()
     const out = renderToStaticMarkup((await ContentPage(routeProps(['about']))) as ReactNode)
     expect(out).toContain('data-page')
-    expect(out).toContain('The head for your headless CMS.')
+    expect(out).toContain('The head for your headless CMS')
     expect(out).not.toContain('data-renderer-failure')
   })
 
   it('renders the same content for an alias delivery key (about-us)', async () => {
     const { default: ContentPage } = await loadRoute()
     const out = renderToStaticMarkup((await ContentPage(routeProps(['about-us']))) as ReactNode)
-    expect(out).toContain('The head for your headless CMS.')
+    expect(out).toContain('The head for your headless CMS')
   })
 
   it('throws to the 404 boundary for a reserved key (site furniture)', async () => {

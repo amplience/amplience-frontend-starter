@@ -1,18 +1,33 @@
 {
-  "id": "70a844b1-8e61-5456-a46e-7a578d0560ae",
-  "label": "Documentation — hero",
+  "id": "a1b2c3d4-0002-4000-9000-000000000003",
+  "label": "Docs — hero",
   "body": {
     "_meta": {
-      "name": "Documentation — hero",
+      "name": "Docs — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "70a844b1-8e61-5456-a46e-7a578d0560ae"
+      "deliveryId": "a1b2c3d4-0002-4000-9000-000000000003"
     },
     "title": "Documentation",
-    "description": "What Quadratic Lite is, how the recursive component engine works, and when to reach for it.",
-    "backgroundColor": "dark",
-    "textColor": "white",
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/ql-docs/1200/600",
+        "alt": "Docs Quadratic Lite",
+        "width": 1200,
+        "height": 600
+      }
+    },
     "contentPositionMobile": "beneath",
+    "contentPositionDesktop": "overlay",
+    "contentWidth": 40,
+    "heightBehaviour": "fitToContent",
+    "maxWidth": "default",
+    "minHeight": 600,
+    "overlayColor": "black",
+    "overlayIntensity": 50,
+    "overlayStyle": "gradient",
     "verticalPosition": "center",
+    "backgroundColor": "dark",
     "ctas": [
       {
         "label": {
@@ -23,6 +38,22 @@
             },
             {
               "locale": "en-GB",
+              "value": "← Home"
+            },
+            {
+              "locale": "es-ES",
+              "value": "← Inicio"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "← Accueil"
+            },
+            {
+              "locale": "de-DE",
+              "value": "← Startseite"
+            },
+            {
+              "locale": "it-IT",
               "value": "← Home"
             }
           ],
@@ -39,21 +70,38 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Editor setup"
+              "value": "About"
             },
             {
               "locale": "en-GB",
-              "value": "Editor setup"
+              "value": "About"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Acerca de"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "À propos"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Über"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Informazioni"
             }
           ],
           "_meta": {
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/docs/editor-setup",
+        "href": "/about",
         "variant": "solid",
         "color": "primary"
       }
-    ]
+    ],
+    "description": "Helpful information for installing & using Quadratic Lite"
   }
 }

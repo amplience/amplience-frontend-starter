@@ -30,7 +30,7 @@ For the smoothest day-to-day experience, enable format-on-save with Prettier as 
 
 ### Unused imports and vars: block, but never auto-remove
 
-Per [ADR-0011 §4](04-architecture/adr/0011-typescript-and-lint.md), unused imports and unused variables are wrapped by `eslint-plugin-no-autofix` — they surface as warnings (yellow squiggles) in your editor, and `--max-warnings=0` makes them block the commit and CI. They are deliberately **not** auto-removed by editor on-save autofix, so a save mid-refactor never silently deletes an import you were about to wire up.
+Unused imports and unused variables are wrapped by `eslint-plugin-no-autofix` — they surface as warnings (yellow squiggles) in your editor, and `--max-warnings=0` makes them block the commit and CI. They are deliberately **not** auto-removed by editor on-save autofix, so a save mid-refactor never silently deletes an import you were about to wire up.
 
 When you need to do a deliberate bulk cleanup, you have three options:
 

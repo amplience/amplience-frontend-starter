@@ -1,21 +1,21 @@
 {
-  "id": "a1b2c3d4-0003-4000-8000-000000000002",
-  "label": "Docs — main slot",
+  "id": "9f93dafe-3f5a-57c8-b66f-e097e8d52a83",
+  "label": "Deploying a site — main slot",
   "body": {
     "_meta": {
-      "name": "Docs — main slot",
+      "name": "Deploying a site — main slot",
       "schema": "https://quadratic.amplience.com/v2/slots/slot"
     },
     "components": [
       {
-        "id": "a1b2c3d4-0002-4000-9000-000000000003",
+        "id": "afc8ed04-53be-599f-a228-96bcb2908f45",
         "contentType": "https://quadratic.amplience.com/v2/content/hero",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "a1b2c3d4-0003-4000-8000-000000000003",
+        "id": "074728b4-8587-5a1e-8992-dee35ae105c4",
         "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

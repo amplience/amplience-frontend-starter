@@ -1,9 +1,9 @@
 {
-  "id": "f62e848d-3679-5eef-80e6-769aec962ed7",
-  "label": "Documentation page",
+  "id": "a1b2c3d4-0003-4000-8000-000000000001",
+  "label": "Docs page",
   "body": {
     "_meta": {
-      "name": "Documentation page",
+      "name": "Docs page",
       "schema": "https://quadratic.amplience.com/v2/content/page",
       "deliveryKeys": {
         "values": [
@@ -14,10 +14,24 @@
       }
     },
     "title": "Documentation",
-    "description": "What Quadratic Lite is, how the recursive component engine works, and when to reach for it.",
+    "description": "Helpful information for installing & using Quadratic Lite",
+    "keywords": ["documentation", "quadratic", "amplience", "getting started"],
+    "social": {
+      "image": {
+        "image": {
+          "fliph": false,
+          "flipv": false
+        },
+        "mediaType": "DynamicImage"
+      }
+    },
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
     "slots": [
       {
-        "id": "fe48e94e-a309-5be5-a351-70974eca7e27",
+        "id": "a1b2c3d4-0003-4000-8000-000000000002",
         "contentType": "https://quadratic.amplience.com/v2/slots/slot",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
