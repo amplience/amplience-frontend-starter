@@ -1,0 +1,28 @@
+{
+  "id": "bcb3464f-08f4-5a62-8505-9dbcf2a52617",
+  "label": "Troubleshooting page",
+  "body": {
+    "_meta": {
+      "name": "Troubleshooting page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "base-site/docs/troubleshooting"
+          }
+        ]
+      }
+    },
+    "title": "Troubleshooting",
+    "description": "Common gotchas and how to resolve them. This page grows as issues surface.",
+    "slots": [
+      {
+        "id": "28b295a1-6055-5e41-bdc8-4c7d2c03f620",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

@@ -124,6 +124,59 @@
   --color-secondary-contrast: var(--color-white);
   --color-tertiary: rgb(180, 197, 242);
   --color-tertiary-contrast: var(--color-black);
+
+  --radius: 10px;
+  --button-border-radius: 100px;
+
+  .Typography {
+    h1& {
+      font-size: 38px;
+      font-weight: 700;
+      line-height: 1.16;
+      @media (min-width: 992px) {
+        font-size: 60px;
+        line-height: 1.1;
+      }
+    }
+    h2& {
+      font-size: 28px;
+      line-height: 34px;
+      font-weight: 500;
+      @media (min-width: 992px) {
+        font-size: 38px;
+        line-height: 1.16;
+      }
+    }
+    h3& {
+      font-size: 26px;
+      font-weight: 500;
+      line-height: 1.23;
+    }
+  }
+  .Button {
+    border-width: 2px;
+    padding: 16px 24px;
+    font-size: 16px;
+    line-height: 1;
+    font-weight: 600;
+  }
+  .Button-module__GSVOYq__root {
+    &[data-variant='outlined'] {
+      &[data-color='black'] {
+        --button-hover-background: rgba(0, 0, 0, 0.08);
+        --button-hover-color: var(--color-black);
+      }
+      &[data-color='white'] {
+        --button-hover-background: rgba(239, 247, 251, 0.08);
+        --button-hover-color: var(--color-white);
+      }
+    }
+    &[data-variant='solid'] {
+      &[data-color='primary'] {
+        --button-primary-hover-background: rgb(0, 201, 158);
+      }
+    }
+  }
 }
 
 [data-brand='anyafinn'] {

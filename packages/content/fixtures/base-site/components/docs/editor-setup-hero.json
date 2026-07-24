@@ -1,0 +1,39 @@
+{
+  "id": "b18e7492-0657-50ea-adca-658394871c64",
+  "label": "Editor setup — hero",
+  "body": {
+    "_meta": {
+      "name": "Editor setup — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "b18e7492-0657-50ea-adca-658394871c64"
+    },
+    "title": "Editor setup",
+    "description": "Quadratic Lite is editor-agnostic. The repo enforces output (formatting, lint rules) but never the editor — `.vscode/` is gitignored, and there is no mandated IDE. Anyone cloning the repo gets the same outcome on macOS, Linux, or Windows because of three repo-level mechanisms:",
+    "backgroundColor": "dark",
+    "textColor": "white",
+    "contentPositionMobile": "beneath",
+    "verticalPosition": "center",
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "← Documentation"
+            },
+            {
+              "locale": "en-GB",
+              "value": "← Documentation"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs",
+        "variant": "outlined",
+        "color": "white"
+      }
+    ]
+  }
+}

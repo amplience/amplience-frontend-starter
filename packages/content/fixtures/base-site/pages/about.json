@@ -6,20 +6,29 @@
       "name": "About page",
       "schema": "https://quadratic.amplience.com/v2/content/page",
       "deliveryKeys": {
-        "values": [{ "value": "base-site/about" }, { "value": "base-site/about-us" }]
+        "values": [
+          {
+            "value": "base-site/about"
+          },
+          {
+            "value": "base-site/about-us"
+          }
+        ]
       }
     },
-    "title": "About Quadratic Lite",
-    "description": "Why Quadratic Lite exists: a demo-ready, composable frontend that gives a headless CMS its head.",
+    "title": "The head for your headless CMS",
+    "description": "Quadratic Lite is a demo-ready frontend that brings Amplience Dynamic Content to life — publish and go, no deployments.",
     "keywords": ["amplience", "quadratic", "accelerator", "headless cms"],
     "canonicalUrl": "/about",
     "social": {
       "image": {
+        "mediaType": "ManualImage",
         "image": {
-          "fliph": false,
-          "flipv": false
-        },
-        "mediaType": "DynamicImage"
+          "src": "https://cdn.media.amplience.net/i/quadraticdemo/about-a-head-for-the-headless-hero",
+          "alt": "The top-half of a man's head looking up in amazement at some floating website graphics.",
+          "width": 2752,
+          "height": 1536
+        }
       }
     },
     "robots": {

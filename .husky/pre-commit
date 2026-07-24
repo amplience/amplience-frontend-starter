@@ -1,1 +1,22 @@
+# Regenerate the /docs site fixtures when their Markdown source is part of this
+# commit, and stage the result — so the generated fixtures never fall behind
+# docs/*.md (or the README the root page composes). CI's docs-sync job is the
+# hard guarantee; this hook just keeps local commits tidy so CI stays green.
+staged_docs=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '^(docs/.*\.md|README\.md)$' || true)
+if [ -n "$staged_docs" ]; then
+  echo "docs source changed — regenerating docs fixtures…"
+  pnpm docs:generate || exit 1
+  git add \
+    packages/content/src/mock/docs.generated.ts \
+    packages/content/fixtures/base-site/pages/docs.json \
+    packages/content/fixtures/base-site/slots/docs-main.json \
+    packages/content/fixtures/base-site/components/docs-hero.json \
+    packages/content/fixtures/base-site/components/docs-markdown.json
+  # Sub-page trees only exist when docs/ has nested pages.
+  for d in components pages slots; do
+    dir="packages/content/fixtures/base-site/$d/docs"
+    [ -d "$dir" ] && git add "$dir"
+  done
+fi
+
 pnpm exec lint-staged

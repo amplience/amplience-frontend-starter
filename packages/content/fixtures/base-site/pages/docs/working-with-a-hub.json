@@ -1,0 +1,28 @@
+{
+  "id": "fec08b2f-9315-5bf5-b75a-fcd5b6b2c2c0",
+  "label": "Working with a hub page",
+  "body": {
+    "_meta": {
+      "name": "Working with a hub page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "base-site/docs/working-with-a-hub"
+          }
+        ]
+      }
+    },
+    "title": "Working with a hub",
+    "description": "By default Quadratic Lite serves the bundled fixtures offline. When you're ready to use real content, you can point local dev at an Amplience hub and push the Quadratic Lite content model and starter content to it.",
+    "slots": [
+      {
+        "id": "e73bf755-57e0-50a7-8594-9229f8330a42",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

@@ -98,9 +98,10 @@
           }
         },
         "href": "/about",
-        "variant": "outlined",
-        "color": "white"
+        "variant": "solid",
+        "color": "primary"
       }
-    ]
+    ],
+    "description": "Helpful information for installing & using Quadratic Lite"
   }
 }

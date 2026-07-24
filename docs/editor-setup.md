@@ -1,6 +1,8 @@
+[← Back](..)
+
 # Editor setup
 
-Quadratic Lite is editor-agnostic. The repo enforces output (formatting, lint rules) but never the editor — `.vscode/` is gitignored, and there is no mandated IDE. Anyone cloning the repo gets the same outcome on macOS, Linux, or Windows because of three repo-level mechanisms (per [ADR-0011](../04-architecture/adr/0011-typescript-and-lint.md)):
+Quadratic Lite is editor-agnostic. The repo enforces output (formatting, lint rules) but never the editor — `.vscode/` is gitignored, and there is no mandated IDE. Anyone cloning the repo gets the same outcome on macOS, Linux, or Windows because of three repo-level mechanisms:
 
 - `.editorconfig` covers indentation, line endings, charset, trailing whitespace, final-newline behaviour.
 - `.gitattributes` pins LF line endings at the source-control layer.
@@ -68,11 +70,13 @@ Zed reads `.editorconfig`, `.prettierrc`, and flat ESLint configs natively. In y
 
 ## One thing that may surprise you on first read
 
-We use `semi: false` (no end-of-line semicolons). Prettier handles the [ASI edge cases](https://prettier.io/docs/en/rationale.html#semicolons) automatically — lines that would misparse under ASI (those starting with `[`, `(`, `` ` ``, `+`, `-`, `/`) get a Prettier-inserted leading `;`. So if you see a stray-looking leading semicolon, that's why. Don't remove it.
+We use `semi: false` (no end-of-line semicolons) for cleaner files.
+
+Prettier handles the [ASI edge cases](https://prettier.io/docs/en/rationale.html#semicolons) automatically — lines that would misparse under ASI (those starting with `[`, `(`, `` ` ``, `+`, `-`, `/`) get a Prettier-inserted leading `;`. So if you see a stray-looking leading semicolon, that's why. Don't remove it.
 
 ## What gets blocked on commit (and why)
 
-Per [ADR-0011 §4](../04-architecture/adr/0011-typescript-and-lint.md), the pre-commit hook runs `prettier --write` followed by `eslint --fix --max-warnings=0` over staged files. The "block but never auto-remove" policy lives at the rule level: ESLint's `unused-imports/*` rules are wrapped by `eslint-plugin-no-autofix` so they report as warnings rather than auto-deleting code mid-refactor.
+The pre-commit hook runs `prettier --write` followed by `eslint --fix --max-warnings=0` over staged files. The "block but never auto-remove" policy lives at the rule level: ESLint's `unused-imports/*` rules are wrapped by `eslint-plugin-no-autofix` so they report as warnings rather than auto-deleting code mid-refactor.
 
 In practice that means:
 

@@ -46,6 +46,8 @@
 
 .figure {
   margin: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 /* ---------------------------------------------------------------------------

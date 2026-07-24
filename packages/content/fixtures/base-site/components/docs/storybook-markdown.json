@@ -1,0 +1,28 @@
+{
+  "id": "47fe2ae6-badf-5d42-bcfe-9a67c08aca81",
+  "label": "Storybook — markdown",
+  "body": {
+    "_meta": {
+      "name": "Storybook — markdown",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "47fe2ae6-badf-5d42-bcfe-9a67c08aca81"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "1. Start Storybook\\\n   `pnpm sb` or `pnpm storybook`\n\n2. View the results in a browser at\\\n   [http://localhost:6006](http://localhost:6006)"
+        },
+        {
+          "locale": "en-GB",
+          "value": "1. Start Storybook\\\n   `pnpm sb` or `pnpm storybook`\n\n2. View the results in a browser at\\\n   [http://localhost:6006](http://localhost:6006)"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "maxWidth": "default",
+    "gutter": true
+  }
+}

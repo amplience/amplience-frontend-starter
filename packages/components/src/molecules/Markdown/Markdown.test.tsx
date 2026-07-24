@@ -86,6 +86,39 @@ describe('Markdown', () => {
     })
   })
 
+  describe('GitHub Flavored Markdown (remark-gfm)', () => {
+    it('renders a table with header and body cells', () => {
+      const table = ['| Variable | Purpose |', '| --- | --- |', '| SITE_NAME | Namespace |'].join(
+        '\n',
+      )
+      const { container } = render(<Markdown content={table} />)
+      expect(container.querySelector('table')).toBeTruthy()
+      expect(container.querySelector('th')?.textContent).toBe('Variable')
+      const cells = container.querySelectorAll('td')
+      expect(cells[0]?.textContent).toBe('SITE_NAME')
+      expect(cells[1]?.textContent).toBe('Namespace')
+    })
+
+    it('renders strikethrough text', () => {
+      render(<Markdown content="This is ~~struck~~ text." />)
+      expect(document.querySelector('del')?.textContent).toBe('struck')
+    })
+
+    it('renders a task list with checkboxes', () => {
+      const { container } = render(<Markdown content={'- [x] Done\n- [ ] Todo'} />)
+      const boxes = container.querySelectorAll('input[type="checkbox"]')
+      expect(boxes).toHaveLength(2)
+      expect((boxes[0] as HTMLInputElement).checked).toBe(true)
+      expect((boxes[1] as HTMLInputElement).checked).toBe(false)
+    })
+
+    it('autolinks a bare URL', () => {
+      render(<Markdown content="See https://amplience.com for details." />)
+      const link = screen.getByRole('link', { name: 'https://amplience.com' })
+      expect(link.getAttribute('href')).toBe('https://amplience.com')
+    })
+  })
+
   describe('className', () => {
     it('forwards className to the root div', () => {
       const { container } = render(<Markdown content="Test" className="custom" />)

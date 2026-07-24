@@ -1,9 +1,9 @@
 // Loader unit tests — the fixture manifest and its lookup maps.
 //
 // The interesting structural cases live in the fixture set itself: items
-// with one key, several keys (about), and none at all (the docs markdown
-// block, resolved only by ID through its slot) — the same mix a real hub
-// produces, where nested components are rarely keyed.
+// with one key, several keys (about), and none at all (component blocks like
+// heroes and markdown, resolved only by ID through their slot) — the same mix a
+// real hub produces, where nested components are rarely keyed.
 
 import { describe, expect, it } from 'vitest'
 
@@ -33,12 +33,15 @@ describe('loader', () => {
   })
 
   it('indexes a keyless fixture by id only', () => {
-    // The docs markdown block carries no delivery key — reachable through
-    // its slot's content-link (by ID), absent from the key map.
-    const keyless = findById('a1b2c3d4-0003-4000-8000-000000000003')
+    // Component blocks (heroes, markdown) carry no delivery key — reachable
+    // through their slot's content-link (by ID), absent from the key map. Pick
+    // one from the set rather than hard-coding an ID (docs fixtures are
+    // generated, so their IDs aren't stable to reference here).
+    const keyless = allFixtures().find((f) => f.body._meta.deliveryKeys === undefined)
     expect(keyless).toBeDefined()
-    expect(keyless?.body._meta.deliveryKeys).toBeUndefined()
-    expect(findByKey('base-site/docs/markdown')).toBeUndefined()
+    if (!keyless) return
+    expect(findById(keyless.id)).toBe(keyless)
+    expect(findByKey(keyless.id)).toBeUndefined()
   })
 
   it('returns undefined for unknown ids and keys', () => {

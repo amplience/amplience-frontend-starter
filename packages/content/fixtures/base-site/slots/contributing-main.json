@@ -1,0 +1,26 @@
+{
+  "id": "fc547d90-a08d-53b4-977e-0dcb08d4d6c6",
+  "label": "Contributing Guide — main slot",
+  "body": {
+    "_meta": {
+      "name": "Contributing Guide — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot"
+    },
+    "components": [
+      {
+        "id": "022cd9b8-6408-57e8-8db5-af7fa31874e2",
+        "contentType": "https://quadratic.amplience.com/v2/content/hero",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "6da8543e-dc72-5173-96ed-c060c3d0e651",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

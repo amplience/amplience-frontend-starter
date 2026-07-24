@@ -1,0 +1,39 @@
+{
+  "id": "76ced506-d710-50bc-b3c5-0d4b172f0e14",
+  "label": "Getting started — hero",
+  "body": {
+    "_meta": {
+      "name": "Getting started — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "76ced506-d710-50bc-b3c5-0d4b172f0e14"
+    },
+    "title": "Getting started",
+    "description": "Everything you need to clone Quadratic Lite and get it running locally on the bundled fixture data — no Amplience hub required.",
+    "backgroundColor": "dark",
+    "textColor": "white",
+    "contentPositionMobile": "beneath",
+    "verticalPosition": "center",
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "← Documentation"
+            },
+            {
+              "locale": "en-GB",
+              "value": "← Documentation"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs",
+        "variant": "outlined",
+        "color": "white"
+      }
+    ]
+  }
+}

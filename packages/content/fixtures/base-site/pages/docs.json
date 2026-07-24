@@ -6,11 +6,15 @@
       "name": "Docs page",
       "schema": "https://quadratic.amplience.com/v2/content/page",
       "deliveryKeys": {
-        "values": [{ "value": "base-site/docs" }]
+        "values": [
+          {
+            "value": "base-site/docs"
+          }
+        ]
       }
     },
     "title": "Documentation",
-    "description": "What Quadratic Lite is, how the recursive component engine works, and when to reach for it.",
+    "description": "Helpful information for installing & using Quadratic Lite",
     "keywords": ["documentation", "quadratic", "amplience", "getting started"],
     "social": {
       "image": {

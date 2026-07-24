@@ -1,0 +1,39 @@
+{
+  "id": "afc8ed04-53be-599f-a228-96bcb2908f45",
+  "label": "Deploying a site — hero",
+  "body": {
+    "_meta": {
+      "name": "Deploying a site — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "afc8ed04-53be-599f-a228-96bcb2908f45"
+    },
+    "title": "Deploying a site",
+    "description": "`apps/web` is a standard Next.js app — host it anywhere. (e.g. Vercel)",
+    "backgroundColor": "dark",
+    "textColor": "white",
+    "contentPositionMobile": "beneath",
+    "verticalPosition": "center",
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "← Documentation"
+            },
+            {
+              "locale": "en-GB",
+              "value": "← Documentation"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs",
+        "variant": "outlined",
+        "color": "white"
+      }
+    ]
+  }
+}

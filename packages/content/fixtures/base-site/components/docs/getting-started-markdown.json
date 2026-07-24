@@ -1,0 +1,28 @@
+{
+  "id": "0074a1b5-e4fb-56ee-a5b0-54d78cbd43c2",
+  "label": "Getting started — markdown",
+  "body": {
+    "_meta": {
+      "name": "Getting started — markdown",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "0074a1b5-e4fb-56ee-a5b0-54d78cbd43c2"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "## Prerequisites\n\n### Node.js v22+\n\nQuadratic Lite requires Node.js v22 or newer, although we currently recommend v24.\n\n- ~~v**20**~~ (Iron) reached end-of-life in April 2026\n- v**22** (Jod) is in **Maintenance LTS** (critical fixes only; EOL ~April 2027) — this is our supported floor\n- v**24** (Krypton) is the current **Active LTS** and the recommended version for local development\n- v**26** is the current _Current_ release — fine to experiment with, but not for production\n\nIt's standard practice that production and CI should target an _Active_ or _Maintenance_ LTS release.\\\nEditor / lint / test tooling is verified against the same range CI uses.\n\n> 💡 Node Version Manager (nvm)\n> If you need to install node, we'd recommend doing so via [nvm](https://www.nvmnode.com/) so you can easily install & switch between versions using commands like `nvm list`, `nvm install 24` and `nvm use 24`.\n>\n> - [How to install nvm on Windows](https://www.nvmnode.com/guide/download.html#nvm-for-windows-nvm-windows)\n> - [How to install nvm on Mac/Linux/Ubuntu](https://www.nvmnode.com/guide/download.html#nvm-for-linux-ubuntu-mac-nvm-sh)\n\n### pnpm\n\nAs a monorepo, we use [pnpm (performant node package manager)](https://pnpm.io/) as the package manager. If it's not already installed, just run `corepack enable`, which picks up the pinned version automatically.\n\n## Installation\n\nLocal setup takes about 40 seconds, and needs no Amplience hub:\n\n1. Clone the repo\\\n   `git clone https://github.com/amplience/quadratic-lite.git`\n\n2. Navigate into the directory\\\n   `cd quadratic-lite`\n\n3. Install the packages\\\n   `pnpm i` or `pnpm install`\n\n## Running locally\n\n1. Start the development server\\\n   `pnpm dev`\n\n2. See the results in a browser at\\\n   [http://localhost:3000](http://localhost:3000)\n\nBy default it serves content from the bundled fixture data (`packages/content/fixtures/`), so it runs fully offline.\n\n> ℹ️ Building a static site\n> To build a _static_ site, run `pnpm build` to build, then `pnpm start` to serve it. This won't live-update as you change code, so `pnpm dev` is usually preferred for local development.\n\n## Next steps\n\n- Browse the component library in Storybook — see [Storybook](/docs/storybook).\n- Point local dev at a real Amplience hub and seed it — see [Working with a hub](/docs/working-with-a-hub).\n- Deploy the frontend — see [Deploying a site](/docs/deploying)."
+        },
+        {
+          "locale": "en-GB",
+          "value": "## Prerequisites\n\n### Node.js v22+\n\nQuadratic Lite requires Node.js v22 or newer, although we currently recommend v24.\n\n- ~~v**20**~~ (Iron) reached end-of-life in April 2026\n- v**22** (Jod) is in **Maintenance LTS** (critical fixes only; EOL ~April 2027) — this is our supported floor\n- v**24** (Krypton) is the current **Active LTS** and the recommended version for local development\n- v**26** is the current _Current_ release — fine to experiment with, but not for production\n\nIt's standard practice that production and CI should target an _Active_ or _Maintenance_ LTS release.\\\nEditor / lint / test tooling is verified against the same range CI uses.\n\n> 💡 Node Version Manager (nvm)\n> If you need to install node, we'd recommend doing so via [nvm](https://www.nvmnode.com/) so you can easily install & switch between versions using commands like `nvm list`, `nvm install 24` and `nvm use 24`.\n>\n> - [How to install nvm on Windows](https://www.nvmnode.com/guide/download.html#nvm-for-windows-nvm-windows)\n> - [How to install nvm on Mac/Linux/Ubuntu](https://www.nvmnode.com/guide/download.html#nvm-for-linux-ubuntu-mac-nvm-sh)\n\n### pnpm\n\nAs a monorepo, we use [pnpm (performant node package manager)](https://pnpm.io/) as the package manager. If it's not already installed, just run `corepack enable`, which picks up the pinned version automatically.\n\n## Installation\n\nLocal setup takes about 40 seconds, and needs no Amplience hub:\n\n1. Clone the repo\\\n   `git clone https://github.com/amplience/quadratic-lite.git`\n\n2. Navigate into the directory\\\n   `cd quadratic-lite`\n\n3. Install the packages\\\n   `pnpm i` or `pnpm install`\n\n## Running locally\n\n1. Start the development server\\\n   `pnpm dev`\n\n2. See the results in a browser at\\\n   [http://localhost:3000](http://localhost:3000)\n\nBy default it serves content from the bundled fixture data (`packages/content/fixtures/`), so it runs fully offline.\n\n> ℹ️ Building a static site\n> To build a _static_ site, run `pnpm build` to build, then `pnpm start` to serve it. This won't live-update as you change code, so `pnpm dev` is usually preferred for local development.\n\n## Next steps\n\n- Browse the component library in Storybook — see [Storybook](/docs/storybook).\n- Point local dev at a real Amplience hub and seed it — see [Working with a hub](/docs/working-with-a-hub).\n- Deploy the frontend — see [Deploying a site](/docs/deploying)."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "maxWidth": "default",
+    "gutter": true
+  }
+}

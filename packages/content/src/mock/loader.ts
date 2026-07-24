@@ -14,6 +14,8 @@ import aboutMarkdown from '../../fixtures/base-site/components/about-markdown.js
 import blogContentModellingBody from '../../fixtures/base-site/components/blog/content-modelling-body.json' with { type: 'json' }
 import blogGettingStartedBody from '../../fixtures/base-site/components/blog/getting-started-body.json' with { type: 'json' }
 import blogQuadraticAcceleratorBody from '../../fixtures/base-site/components/blog/quadratic-accelerator-body.json' with { type: 'json' }
+import contributingHero from '../../fixtures/base-site/components/contributing-hero.json' with { type: 'json' }
+import contributingMarkdown from '../../fixtures/base-site/components/contributing-markdown.json' with { type: 'json' }
 import docsHero from '../../fixtures/base-site/components/docs-hero.json' with { type: 'json' }
 import docsMarkdown from '../../fixtures/base-site/components/docs-markdown.json' with { type: 'json' }
 import siteFooterMenuCompany from '../../fixtures/base-site/components/footer/site-footer-menu-company.json' with { type: 'json' }
@@ -111,6 +113,7 @@ import aboutPage from '../../fixtures/base-site/pages/about.json' with { type: '
 import blogContentModellingPage from '../../fixtures/base-site/pages/blog/content-modelling.json' with { type: 'json' }
 import blogGettingStartedPage from '../../fixtures/base-site/pages/blog/getting-started.json' with { type: 'json' }
 import blogQuadraticAcceleratorPage from '../../fixtures/base-site/pages/blog/quadratic-accelerator.json' with { type: 'json' }
+import contributingPage from '../../fixtures/base-site/pages/contributing.json' with { type: 'json' }
 import docsPage from '../../fixtures/base-site/pages/docs.json' with { type: 'json' }
 import homePage from '../../fixtures/base-site/pages/home.json' with { type: 'json' }
 import siteCustomCss from '../../fixtures/base-site/site-components/custom-css.json' with { type: 'json' }
@@ -118,10 +121,12 @@ import aboutMainSlot from '../../fixtures/base-site/slots/about-main.json' with 
 import blogContentModellingMainSlot from '../../fixtures/base-site/slots/blog-content-modelling-main.json' with { type: 'json' }
 import blogGettingStartedMainSlot from '../../fixtures/base-site/slots/blog-getting-started-main.json' with { type: 'json' }
 import blogQuadraticAcceleratorMainSlot from '../../fixtures/base-site/slots/blog-quadratic-accelerator-main.json' with { type: 'json' }
+import contributingMainSlot from '../../fixtures/base-site/slots/contributing-main.json' with { type: 'json' }
 import docsMainSlot from '../../fixtures/base-site/slots/docs-main.json' with { type: 'json' }
 import homeMainSlot from '../../fixtures/base-site/slots/home-main.json' with { type: 'json' }
 import notFoundMainSlot from '../../fixtures/base-site/slots/not-found-main.json' with { type: 'json' }
 import type { EnrichedContentItem } from '../types'
+import { docsFixtures } from './docs.generated'
 
 /**
  * The full set of fixtures the mock can return. Order is not significant.
@@ -231,10 +236,15 @@ const fixtures: readonly EnrichedContentItem[] = [
   aboutMainSlot,
   aboutHero,
   aboutMarkdown,
+  contributingPage,
+  contributingMainSlot,
+  contributingHero,
+  contributingMarkdown,
   docsPage,
-  docsHero,
   docsMainSlot,
+  docsHero,
   docsMarkdown,
+  ...docsFixtures,
   blogGettingStartedPage,
   blogGettingStartedMainSlot,
   blogGettingStartedBody,

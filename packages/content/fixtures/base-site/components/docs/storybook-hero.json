@@ -1,0 +1,39 @@
+{
+  "id": "542f2e99-0630-53ac-b533-95a486dd8aed",
+  "label": "Storybook — hero",
+  "body": {
+    "_meta": {
+      "name": "Storybook — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "542f2e99-0630-53ac-b533-95a486dd8aed"
+    },
+    "title": "Storybook",
+    "description": "The shared component library has its own Storybook for browsing or building components in isolation from the app.",
+    "backgroundColor": "dark",
+    "textColor": "white",
+    "contentPositionMobile": "beneath",
+    "verticalPosition": "center",
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "← Documentation"
+            },
+            {
+              "locale": "en-GB",
+              "value": "← Documentation"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs",
+        "variant": "outlined",
+        "color": "white"
+      }
+    ]
+  }
+}

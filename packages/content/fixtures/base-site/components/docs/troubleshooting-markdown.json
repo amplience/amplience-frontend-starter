@@ -1,0 +1,28 @@
+{
+  "id": "b937b1aa-701a-5ea6-a338-a4fdeecc7a9d",
+  "label": "Troubleshooting — markdown",
+  "body": {
+    "_meta": {
+      "name": "Troubleshooting — markdown",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "b937b1aa-701a-5ea6-a338-a4fdeecc7a9d"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "## Minor pnpm noise\n\nIf you see a `[DEP0169] DeprecationWarning: url.parse()` line, that's coming from inside pnpm's own bundled code (not this project) — see [pnpm#9492](https://github.com/pnpm/pnpm/issues/9492). It's cosmetic; silence it by adding `export NODE_OPTIONS=\"--disable-warning=DEP0169\"` to your shell profile."
+        },
+        {
+          "locale": "en-GB",
+          "value": "## Minor pnpm noise\n\nIf you see a `[DEP0169] DeprecationWarning: url.parse()` line, that's coming from inside pnpm's own bundled code (not this project) — see [pnpm#9492](https://github.com/pnpm/pnpm/issues/9492). It's cosmetic; silence it by adding `export NODE_OPTIONS=\"--disable-warning=DEP0169\"` to your shell profile."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "maxWidth": "default",
+    "gutter": true
+  }
+}
