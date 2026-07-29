@@ -26,6 +26,7 @@
     "./tag": "./src/atoms/Tag/Tag.tsx",
     "./tags": "./src/molecules/Tags/Tags.tsx",
     "./media-card": "./src/molecules/MediaCard/MediaCard.tsx",
+    "./section-header": "./src/molecules/SectionHeader/SectionHeader.tsx",
     "./markdown": "./src/molecules/Markdown/Markdown.tsx",
     "./locale-selector": "./src/molecules/LocaleSelector/LocaleSelector.tsx",
     "./hero-block": "./src/organisms/HeroBlock/HeroBlock.tsx",

@@ -1,0 +1,18 @@
+/*
+ * SectionHeader molecule styles.
+ *
+ * An optional heading rendered above a block's content. Text styling comes
+ * from the Typography atom; this file owns only the header's own spacing.
+ *
+ * SPACING:
+ *   --section-header-margin-block-end — gap between the header and the content
+ *     that follows it. Override under [data-brand] to retune vertical rhythm.
+ */
+
+.root {
+  --section-header-gap: calc(var(--spacing) * 2);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-header-gap);
+}

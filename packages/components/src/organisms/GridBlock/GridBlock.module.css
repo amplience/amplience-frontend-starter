@@ -39,6 +39,9 @@
 }
 
 .container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
   padding-block: var(--grid-block-padding-y);
 }
 

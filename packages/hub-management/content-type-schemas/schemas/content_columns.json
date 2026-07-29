@@ -17,7 +17,7 @@
         "items": [
           {
             "label": "📝 Content",
-            "pointers": ["/items"]
+            "pointers": ["/sectionHeader", "/items"]
           },
           {
             "label": "⚙️ Options",
@@ -29,8 +29,15 @@
   },
   "type": "object",
   "properties": {
+    "sectionHeader": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/section-header#/definitions/section-header"
+        }
+      ]
+    },
     "items": {
-      "title": "Items",
+      "title": "Column Content",
       "description": "One content item per column.",
       "type": "array",
       "items": {
@@ -70,5 +77,13 @@
       ]
     }
   },
-  "propertyOrder": ["items", "gap", "alignItems", "backgroundColor", "maxWidth", "gutter"]
+  "propertyOrder": [
+    "sectionHeader",
+    "items",
+    "gap",
+    "alignItems",
+    "backgroundColor",
+    "maxWidth",
+    "gutter"
+  ]
 }

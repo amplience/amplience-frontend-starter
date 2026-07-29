@@ -76,7 +76,7 @@ export type CardProps = {
 export function Card({
   children,
   className,
-  elevation = 'raised',
+  elevation = 'flat',
   padding = 'md',
   color = 'white',
   interactive = false,

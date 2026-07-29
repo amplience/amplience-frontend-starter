@@ -3,6 +3,8 @@ import type { ReactNode } from 'react'
 
 import { Container } from '../../atoms/Container/Container'
 import type { ContainerProps } from '../../atoms/Container/Container'
+import { SectionHeader } from '../../molecules/SectionHeader/SectionHeader'
+import type { SectionHeaderProps } from '../../molecules/SectionHeader/SectionHeader'
 import styles from './ColumnsBlock.module.css'
 
 // ---------------------------------------------------------------------------
@@ -28,6 +30,12 @@ export type ColumnsBlockProps = {
   alignItems?: 'top' | 'center' | 'bottom'
   backgroundColor?: ColumnsBlockBackgroundColor
   /**
+   * Optional heading group rendered above the columns — title, subtitle and
+   * description spread straight into SectionHeader. See the `section-header`
+   * CMS partial, which delivers this same grouped shape.
+   */
+  sectionHeader?: Omit<SectionHeaderProps, 'className'>
+  /**
    * Max-width constraint passed through to the inner Container atom.
    * Defaults to 'default'.
    */
@@ -38,7 +46,7 @@ export type ColumnsBlockProps = {
    * edge-to-edge layouts.
    * Defaults to false.
    */
-  gutter?: boolean
+  gutter?: ContainerProps['gutter']
   className?: string
 }
 
@@ -69,6 +77,7 @@ export function ColumnsBlock({
   gap,
   alignItems,
   backgroundColor,
+  sectionHeader,
   maxWidth = 'default',
   gutter = false,
   className,
@@ -85,6 +94,7 @@ export function ColumnsBlock({
       style={Object.keys(cssVars).length > 0 ? cssVars : undefined}
     >
       <Container className={styles.container ?? ''} maxWidth={maxWidth} gutter={gutter}>
+        <SectionHeader {...(sectionHeader ?? {})} />
         <div className={styles.columns}>{children}</div>
       </Container>
     </section>

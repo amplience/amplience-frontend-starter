@@ -152,7 +152,7 @@ export function MediaCard({
   links,
   layout = 'above',
   headingVariant = 'h3',
-  elevation = 'raised',
+  elevation = 'flat',
   color = 'white',
   localeBasePath,
   sizes,

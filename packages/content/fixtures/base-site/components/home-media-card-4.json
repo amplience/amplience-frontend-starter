@@ -112,8 +112,8 @@
           }
         },
         "href": "/features/architecture",
-        "variant": "solid",
-        "color": "primary"
+        "variant": "text",
+        "color": "black"
       }
     }
   }

@@ -159,8 +159,7 @@
     font-size: 16px;
     line-height: 1;
     font-weight: 600;
-  }
-  .Button-module__GSVOYq__root {
+
     &[data-variant='outlined'] {
       &[data-color='black'] {
         --button-hover-background: rgba(0, 0, 0, 0.08);
@@ -175,6 +174,16 @@
       &[data-color='primary'] {
         --button-primary-hover-background: rgb(0, 201, 158);
       }
+    }
+  }
+  .Card .Link[data-variant='text'] {
+    &::after {
+      content: '>';
+      margin-left: var(--spacing-1);
+      transition: margin-left 0.15s ease;
+    }
+    &:hover::after {
+      margin-left: var(--spacing-2);
     }
   }
 }

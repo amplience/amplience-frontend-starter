@@ -112,8 +112,8 @@
           }
         },
         "href": "/features/accelerator",
-        "variant": "solid",
-        "color": "primary"
+        "variant": "text",
+        "color": "black"
       }
     }
   }

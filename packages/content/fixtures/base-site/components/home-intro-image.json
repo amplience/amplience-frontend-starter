@@ -12,10 +12,10 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://picsum.photos/seed/qlcols/800/500",
+        "src": "https://picsum.photos/id/6/1200/800",
         "alt": "Quadratic Lite — accelerator for composable Amplience sites",
-        "width": 800,
-        "height": 500
+        "width": 1200,
+        "height": 800
       }
     },
     "caption": {

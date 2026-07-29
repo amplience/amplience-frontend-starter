@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/partials/section-header",
+  "title": "Section Header",
+  "description": "The SectionHeader molecule's authoring contract — the optional title, subtitle and description rendered above a block's content (packages/components/src/molecules/SectionHeader). Exposed as one grouped object definition so every block that renders a section header references it once, the fields stay grouped in the editor, and the delivered object spreads straight into the shared frontend component.",
+  "type": "object",
+  "definitions": {
+    "section-header": {
+      "title": "Section Header",
+      "description": "Optional heading, subheading and introductory copy rendered above the block's content.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "title": "Title",
+          "description": "Optional heading rendered above the content.",
+          "allOf": [
+            {
+              "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+            }
+          ]
+        },
+        "subtitle": {
+          "title": "Subtitle",
+          "description": "Optional subheading shown beneath the title.",
+          "allOf": [
+            {
+              "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+            }
+          ]
+        },
+        "description": {
+          "title": "Description",
+          "description": "Optional introductory copy shown beneath the subtitle.",
+          "allOf": [
+            {
+              "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+            }
+          ]
+        }
+      },
+      "propertyOrder": ["title", "subtitle", "description"]
+    }
+  }
+}

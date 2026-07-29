@@ -119,6 +119,12 @@
   --card-color: var(--color-tertiary-contrast);
 }
 
+.root {
+  :global(.Link[data-variant='text']) {
+    margin: calc(var(--button-padding-y) * -1) calc(var(--button-padding-x) * -1);
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Interactive — hover and focus states for clickable cards.
    Applies only when data-interactive="true" is present.

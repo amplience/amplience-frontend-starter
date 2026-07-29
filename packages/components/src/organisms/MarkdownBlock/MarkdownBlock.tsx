@@ -37,7 +37,7 @@ export type MarkdownBlockProps = MarkdownProps & {
    * so content is inset from the section edge.
    * Defaults to false.
    */
-  gutter?: boolean
+  gutter?: ContainerProps['gutter']
   /**
    * When true, strips the outer `<section>` and `<Container>` wrapper —
    * renders only the Markdown molecule. Use when MarkdownBlock is nested
