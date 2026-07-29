@@ -9,30 +9,45 @@
  *      Without the mapping the next hub:import creates new items rather
  *      than updating existing ones, which is what "start fresh" means.
  *
- *   2. Frees delivery keys held by *already-archived* items. Delivery keys
- *      are unique hub-wide and archived items keep theirs reserved, so an
- *      item archived without its keys being stripped (the DC UI archives
- *      this way, as did older dc-cli versions that predate multi-value
- *      `deliveryKeys`) leaves the next seed hitting 409
- *      CONTENT_ITEM_DELIVERY_KEYS_DUPLICATE — the map is gone, dc-cli
- *      creates fresh items, and the old archived item still owns the key.
- *      dc-cli itself can't reach these: `content-item archive` (and the
- *      `hub clean` content step, which is the same handler) only
- *      enumerates ACTIVE items. Each offender is unarchived, stripped,
- *      and re-archived via dc-cli's own management SDK. Read-only when
- *      there are no offenders. Needs AMPLIENCE_CLIENT_ID /
- *      AMPLIENCE_CLIENT_SECRET — when only a dc-cli active configuration
- *      is available it is skipped with a warning.
+ *   2. Retracts every item still live in Delivery, and frees delivery keys
+ *      held by *already-archived* items. Both are management-SDK passes over
+ *      the active and archived populations of each repository; see below.
  *
- *   3. Archives every content item in the content and slots repositories
- *      so previously-published items stop being served by Delivery.
+ *   3. Archives every content item in the content and slots repositories.
  *      dc-cli strips delivery keys (legacy and multi-value) from each
- *      item before archiving it, so active items need no separate pass.
+ *      item before archiving it, so active items need no separate key pass.
  *
  *   4. Archives every content type in the hub.
  *
  *   5. Archives every content type schema in the hub so the next
  *      hub:import:schemas registers them fresh.
+ *
+ * Step 2 covers two failures that both come from archive being a
+ * management-side lifecycle change rather than a Delivery operation:
+ *
+ *   Published snapshots survive archive. Archiving does not retract anything
+ *   from `<hub>.cdn.content.amplience.net`; only `unpublish` does. A wipe that
+ *   only archived therefore left every previous generation of seeded content
+ *   live, and schema-wide reads (the Filter API, so `listBySchema`) kept
+ *   returning all of them — a blog archive of three articles rendered 27 cards
+ *   after nine wipe/seed cycles, each generation still answering under the
+ *   delivery key it held when it was published. Local development hid it: the
+ *   staging VSE serves current repository state, so only production
+ *   accumulated. Items are unpublished before being archived, and archived
+ *   items found still live are unarchived, unpublished and re-archived.
+ *
+ *   Delivery keys stay reserved on archived items. Keys are unique hub-wide,
+ *   so an item archived without its keys being stripped (the DC UI archives
+ *   this way, as did older dc-cli versions that predate multi-value
+ *   `deliveryKeys`) leaves the next seed hitting 409
+ *   CONTENT_ITEM_DELIVERY_KEYS_DUPLICATE — the map is gone, dc-cli creates
+ *   fresh items, and the old archived item still owns the key. dc-cli itself
+ *   can't reach these: `content-item archive` (and the `hub clean` content
+ *   step, which is the same handler) only enumerates ACTIVE items.
+ *
+ * Both passes are read-only when there is nothing to do, and need
+ * AMPLIENCE_CLIENT_ID / AMPLIENCE_CLIENT_SECRET — when only a dc-cli active
+ * configuration is available they are skipped with a warning.
  *
  * Extensions and workflow states are deliberately left in place. Both are
  * hub-wide configuration that a hub may share with things other than
@@ -58,6 +73,8 @@ import { existsSync, rmSync } from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { DynamicContent } from 'dc-management-sdk-js'
+
+import { canUnpublish, isEnvironmentalFailure, mayBePublished } from './lib/publishing.mjs'
 
 const env = (name) => {
   const value = process.env[name]
@@ -109,48 +126,132 @@ const dcCli = (...args) =>
     })
   })
 
-// ── Stranded delivery-key freeing ─────────────────────────────────────────────
+// ── Delivery retraction and stranded delivery-key freeing ────────────────────
 
 /** Whether an item body still holds any delivery key (legacy or multi-value). */
 const hasDeliveryKeys = (body) =>
   Boolean(body?._meta?.deliveryKey) || (body?._meta?.deliveryKeys?.values?.length ?? 0) > 0
 
-/**
- * Free delivery keys held by *archived* items: unarchive, strip (the same
- * body mutation dc-cli's archive applies to active items), re-archive.
- * Read-only unless an offender is found, and idempotent — a re-run finds
- * nothing left to strip. Uses dc-cli's own management SDK.
- */
-const freeArchivedDeliveryKeys = async (client, repoId, repoLabel, ignoreSchemaValidation) => {
-  const repo = await client.contentRepositories.get(repoId)
-
-  // Collect the full list before mutating — re-archiving while paginating
-  // would shift the pages underneath the walk.
-  const archived = []
+/** List every item in a repository at the given lifecycle status. */
+const listAll = async (repo, status) => {
+  // Collect the full list before mutating — archiving or unpublishing while
+  // paginating would shift the pages underneath the walk.
+  const items = []
   for (let page = 0; ; page++) {
-    const result = await repo.related.contentItems.list({ status: 'ARCHIVED', size: 100, page })
-    archived.push(...result.getItems())
+    const result = await repo.related.contentItems.list({ status, size: 100, page })
+    items.push(...result.getItems())
     if (page >= (result.page?.totalPages ?? 1) - 1) break
   }
+  return items
+}
+
+/**
+ * Tracks whether unpublishing is possible at all in this run.
+ *
+ * The first environmental failure (credentials without the permission, or a
+ * hub without unpublish enabled) will repeat for every remaining item, so it
+ * disables further attempts and is reported once, with the consequence spelled
+ * out — a wipe that cannot unpublish leaves the old generation live, which is
+ * the bug this pass exists to prevent, and the operator needs to know.
+ */
+const unpublishing = { enabled: true, blockedBy: undefined }
+
+/**
+ * Retract one item from Delivery. Returns true when a snapshot was withdrawn.
+ *
+ * A per-item failure (an edition assignment, a transient 5xx, a rate limit) is
+ * warned about and swallowed: the teardown must not abort half-done, matching
+ * the `--ignoreError` posture of the dc-cli passes below.
+ */
+const unpublishItem = async (item) => {
+  if (!unpublishing.enabled) return false
+  if (!mayBePublished(item) || !canUnpublish(item)) return false
+  try {
+    await item.related.unpublish()
+    return true
+  } catch (error) {
+    if (isEnvironmentalFailure(error)) {
+      unpublishing.enabled = false
+      unpublishing.blockedBy = error
+      return false
+    }
+    console.warn(`  ⚠ Could not unpublish "${item.label ?? item.id}": ${error}`)
+    return false
+  }
+}
+
+/**
+ * Unpublish every active item in a repository, before dc-cli archives them.
+ * Once archived the API no longer offers the action, so the order matters.
+ */
+const unpublishActiveItems = async (client, repoId, repoLabel) => {
+  const repo = await client.contentRepositories.get(repoId)
+  let unpublished = 0
+  for (const item of await listAll(repo, 'ACTIVE')) {
+    if (await unpublishItem(item)) unpublished += 1
+  }
+  console.log(`✓ Unpublished ${unpublished} active item(s) in ${repoLabel} repo`)
+}
+
+/**
+ * Reclaim *archived* items: unarchive, retract any live snapshot, strip
+ * delivery keys (the same body mutation dc-cli's archive applies to active
+ * items), re-archive.
+ *
+ * The unarchive is what makes both fixes reachable — an archived item offers
+ * neither `unpublish` nor an update — so it happens whenever either job might
+ * apply. Read-only unless an offender is found. Idempotent as long as the API
+ * reports `publishingStatus`; where it doesn't, `mayBePublished` stays
+ * pessimistic and each run re-checks (the HAL gate keeps that to one list call
+ * per item, not one POST).
+ */
+const reclaimArchivedItems = async (client, repoId, repoLabel, ignoreSchemaValidation) => {
+  const repo = await client.contentRepositories.get(repoId)
+  const archived = await listAll(repo, 'ARCHIVED')
 
   let freed = 0
+  let unpublished = 0
   for (const item of archived) {
     // Belt and braces: trust the item's own status over the list filter.
-    if (item.status !== 'ARCHIVED' || !hasDeliveryKeys(item.body)) continue
-    const unarchived = await item.related.unarchive()
-    unarchived.body._meta.deliveryKey = null
-    unarchived.body._meta.deliveryKeys = null
-    // ignoreSchemaValidation lets us strip keys from items whose body no
-    // longer conforms to a since-drifted schema. It requires the hub's
-    // "Ignore schema validation" setting to be ON (org/hub admin, DC
-    // Properties) — otherwise the API rejects the param with
-    // IGNORE_SCHEMA_VALIDATION_NOT_ENABLED, so it's opt-in via env.
-    const updateParams = ignoreSchemaValidation ? { ignoreSchemaValidation: true } : {}
-    const updated = await unarchived.related.update(unarchived, updateParams)
-    await updated.related.archive()
-    freed += 1
+    if (item.status !== 'ARCHIVED') continue
+    const needsKeyStrip = hasDeliveryKeys(item.body)
+    const mightBeLive = unpublishing.enabled && mayBePublished(item)
+    if (!needsKeyStrip && !mightBeLive) continue
+
+    let current = await item.related.unarchive()
+
+    if (needsKeyStrip) {
+      current.body._meta.deliveryKey = null
+      current.body._meta.deliveryKeys = null
+      // ignoreSchemaValidation lets us strip keys from items whose body no
+      // longer conforms to a since-drifted schema. It requires the hub's
+      // "Ignore schema validation" setting to be ON (org/hub admin, DC
+      // Properties) — otherwise the API rejects the param with
+      // IGNORE_SCHEMA_VALIDATION_NOT_ENABLED, so it's opt-in via env.
+      const updateParams = ignoreSchemaValidation ? { ignoreSchemaValidation: true } : {}
+      current = await current.related.update(current, updateParams)
+      freed += 1
+    }
+
+    // Unpublish last of the two, on whichever resource is freshest: the update
+    // above is the version-checked call, so it goes first and hands back the
+    // version the archive below needs. Stripping the key doesn't affect the
+    // retraction — unpublish addresses the item, and the published snapshot
+    // still holds the key it was published with until it's withdrawn.
+    if (mightBeLive && (await unpublishItem(current))) unpublished += 1
+
+    await current.related.archive()
   }
-  console.log(`✓ Freed delivery keys on ${freed} archived item(s) in ${repoLabel} repo`)
+  console.log(
+    `✓ Reclaimed archived items in ${repoLabel} repo — ` +
+      `unpublished ${unpublished}, freed delivery keys on ${freed}`,
+  )
+}
+
+/** Run both management-SDK passes over one repository. */
+const reclaimRepo = async (client, repoId, repoLabel, ignoreSchemaValidation) => {
+  await unpublishActiveItems(client, repoId, repoLabel)
+  await reclaimArchivedItems(client, repoId, repoLabel, ignoreSchemaValidation)
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────────
@@ -189,27 +290,35 @@ if (existsSync(mapFile)) {
   console.log(`  Mapping file not present (already clean): ${mapFile}`)
 }
 
-// 2. Free delivery keys stranded on archived items (see module doc).
+// 2. Retract live snapshots from Delivery and free stranded delivery keys
+// (see module doc). Both run before the dc-cli archive passes below, because
+// archived items offer neither action.
 const clientId = env('AMPLIENCE_CLIENT_ID')
 const clientSecret = env('AMPLIENCE_CLIENT_SECRET')
 if (clientId !== undefined && clientSecret !== undefined) {
-  console.log('\nChecking archived items for stranded delivery keys…')
+  console.log('\nRetracting published content and checking for stranded delivery keys…')
   const client = new DynamicContent({ client_id: clientId, client_secret: clientSecret })
-  await freeArchivedDeliveryKeys(client, contentRepo, 'content', ignoreSchemaValidation)
-  await freeArchivedDeliveryKeys(client, slotsRepo, 'slots', ignoreSchemaValidation)
+  await reclaimRepo(client, contentRepo, 'content', ignoreSchemaValidation)
+  await reclaimRepo(client, slotsRepo, 'slots', ignoreSchemaValidation)
   if (siteComponentsRepo !== undefined) {
-    await freeArchivedDeliveryKeys(
-      client,
-      siteComponentsRepo,
-      'site-components',
-      ignoreSchemaValidation,
+    await reclaimRepo(client, siteComponentsRepo, 'site-components', ignoreSchemaValidation)
+  }
+  if (!unpublishing.enabled) {
+    console.warn(
+      `\n⚠ Unpublishing stopped after: ${unpublishing.blockedBy}\n` +
+        '  Either the credentials lack the permission or the hub does not have\n' +
+        '  unpublish enabled (ask Amplience support). Archiving alone does NOT\n' +
+        '  remove content from Delivery, so the seeded generation this wipe is\n' +
+        '  tearing down will stay live on the CDN and the next seed will add\n' +
+        '  another alongside it — schema-wide reads will return both.',
     )
   }
 } else {
   console.warn(
-    '\n⚠ AMPLIENCE_CLIENT_ID/SECRET not set — cannot check archived items for ' +
-      'stranded delivery keys. If a previous archive kept keys (DC UI, older ' +
-      'dc-cli), the next seed may fail with CONTENT_ITEM_DELIVERY_KEYS_DUPLICATE.',
+    '\n⚠ AMPLIENCE_CLIENT_ID/SECRET not set — cannot retract published content ' +
+      'or check archived items for stranded delivery keys. Archived-but-published ' +
+      'items stay live in Delivery, and if a previous archive kept keys (DC UI, ' +
+      'older dc-cli) the next seed may fail with CONTENT_ITEM_DELIVERY_KEYS_DUPLICATE.',
   )
 }
 
