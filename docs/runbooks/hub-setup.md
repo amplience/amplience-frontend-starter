@@ -19,9 +19,15 @@ environment values.
 ## Prerequisites (once per hub)
 
 1. **A hub on an org you can administer**, with Content Delivery v2 enabled
-   (delivery keys depend on it).
+   (delivery keys depend on it) and **unpublish enabled** (ask Amplience
+   support). Archiving a content item does not retract its published
+   snapshot, so a hub that can't unpublish accumulates one live copy of the
+   seed per `hub:wipe`/`hub:import` cycle — invisible against a staging VSE,
+   but schema-wide reads in production return every copy. `hub:wipe` warns
+   loudly when it can't unpublish; see its module doc.
 2. **An API client** (client ID + secret) for the hub — from Amplience
-   support or your org admin.
+   support or your org admin. The wipe's retraction pass needs it: without
+   `AMPLIENCE_CLIENT_ID`/`AMPLIENCE_CLIENT_SECRET` it can only archive.
 3. **Repository IDs** for the `content` and `slots` repositories. In the DC
    UI these are in each repository's settings; the seeding for the reference
    hub (`quadraticlite`) used:

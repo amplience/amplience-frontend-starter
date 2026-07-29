@@ -1,10 +1,13 @@
 /**
  * Blog archive route — `/blog` (QL-103; localized under ADR-0015).
  *
- * Lists all published blog-article items, sorted newest-first by
- * `publishDate`. Fetches via `listBySchema` (DC Filter API in production,
- * in-memory fixture filter in development) so no separate "BlogArchive"
- * content type is needed — the blog article schema *is* the catalogue.
+ * Lists this site's published blog-article items, sorted newest-first by
+ * `publishDate`, one card per slug. Fetches via `listBySchema` (DC Filter API
+ * in production, in-memory fixture filter in development) so no separate
+ * "BlogArchive" content type is needed — the blog article schema *is* the
+ * catalogue. Turning that read into the archive is `lib/blog-archive`, shared
+ * with `/blog/[slug]` so the links here and the prerendered routes there are
+ * derived from one function.
  *
  * The `[locale]` segment carries the active locale: cards fetch at that
  * locale so titles and descriptions arrive as single values, and card links
@@ -31,6 +34,7 @@ import { MediaCard } from '@amplience/quadratic-components/media-card'
 import { BLOG_ARTICLE_SCHEMA } from '@amplience/quadratic-components/registry'
 import type { BlogArticleSchema } from '@amplience/quadratic-components/registry'
 
+import { blogArchiveFromItems, warnOnDuplicateSlugs } from '../../../../lib/blog-archive'
 import { client, siteName } from '../../../../lib/content-client'
 import { localeForSlug, publicPath } from '../../../../lib/locales'
 
@@ -88,12 +92,6 @@ function BlogArticleCard({ article, href }: BlogArticleCardProps) {
 // Archive page
 // ---------------------------------------------------------------------------
 
-/** Extract the first delivery key value from the standard `_meta` shape. */
-const deliveryKeyFromMeta = (meta: unknown): string | undefined => {
-  const m = meta as { deliveryKeys?: { values?: { value: string }[] } } | undefined
-  return m?.deliveryKeys?.values?.[0]?.value
-}
-
 export default async function BlogArchivePage({ params }: RouteProps) {
   const { locale: localeSlug } = await params
   const locale = localeForSlug(localeSlug)
@@ -103,22 +101,10 @@ export default async function BlogArchivePage({ params }: RouteProps) {
     locale: locale.delivery,
   })
 
-  // Keep only items keyed under this site's `<site>/blog/` namespace
-  // (ADR-0014) — articles on other sites of the same hub, or non-blog-route
-  // articles sharing the schema, stay out of this archive.
-  const blogPrefix = `${siteName}/blog/`
-  const articles = all
-    .flatMap((article) => {
-      const key = deliveryKeyFromMeta((article as { _meta?: unknown })._meta)
-      if (!key?.startsWith(blogPrefix)) return []
-      return [{ article: article, slug: key.slice(blogPrefix.length) }]
-    })
-    .sort((a, b) => {
-      // Newest first; fall back to stable lexicographic order for ties.
-      const dateA = a.article.publishDate ?? ''
-      const dateB = b.article.publishDate ?? ''
-      return dateB.localeCompare(dateA)
-    })
+  // Site scoping (ADR-0014), newest-first ordering and one-entry-per-slug all
+  // live in `blogArchiveFromItems`, shared with `/blog/[slug]`.
+  const { entries: articles, duplicateSlugs } = blogArchiveFromItems(all, siteName)
+  warnOnDuplicateSlugs(duplicateSlugs)
 
   return (
     <main data-blog-archive>

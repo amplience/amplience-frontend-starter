@@ -29,6 +29,7 @@ import {
 import type { BlogArticleSchema } from '@amplience/quadratic-components/registry'
 import { isContentClientError } from '@amplience/quadratic-content'
 
+import { blogArchiveFromItems } from '../../../../../lib/blog-archive'
 import { client, siteName } from '../../../../../lib/content-client'
 import { localeBasePath, localeForSlug, locales, publicPath } from '../../../../../lib/locales'
 import { registry } from '../../../../../lib/registry'
@@ -42,25 +43,17 @@ type RouteProps = {
   params: Promise<{ locale: string; slug: string }>
 }
 
-/** Extract the first delivery key value from the standard `_meta` shape. */
-const deliveryKeyFromMeta = (meta: unknown): string | undefined => {
-  const m = meta as { deliveryKeys?: { values?: { value: string }[] } } | undefined
-  return m?.deliveryKeys?.values?.[0]?.value
-}
-
 export async function generateStaticParams() {
   // Enumerate only this site's articles (ADR-0014) — the schema is shared
-  // hub-wide, the `<site>/blog/` namespace is not. Delivery keys aren't
-  // localized, so one fetch yields the slugs; the cross-product with the
+  // hub-wide, the `<site>/blog/` namespace is not. `blogArchiveFromItems` does
+  // that scoping, and yields one entry per slug: a slug is a route, so a
+  // duplicate published claim on one must not become a duplicate param. The
+  // archive page derives its links from the same call. Delivery keys aren't
+  // localized, so one fetch yields the slug set; the cross-product with the
   // supported locales prerenders every article in every language.
-  const blogPrefix = `${siteName}/blog/`
   const articles = await client.listBySchema(BLOG_ARTICLE_SCHEMA)
-  const slugs = articles.flatMap((article) => {
-    const key = deliveryKeyFromMeta((article as { _meta?: unknown })._meta)
-    if (!key?.startsWith(blogPrefix)) return []
-    return [key.slice(blogPrefix.length)]
-  })
-  return locales.flatMap((locale) => slugs.map((slug) => ({ locale: locale.slug, slug })))
+  const { entries } = blogArchiveFromItems(articles, siteName)
+  return locales.flatMap((locale) => entries.map(({ slug }) => ({ locale: locale.slug, slug })))
 }
 
 export async function generateMetadata({ params }: RouteProps): Promise<Metadata> {
