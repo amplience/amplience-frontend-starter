@@ -34,23 +34,17 @@ describe('MockContentClient', () => {
     expect(isContentLink(slot)).toBe(false)
     expect(slot?._meta.schema).toBe('https://quadratic.amplience.com/v2/slots/slot')
 
-    // Components inside the slot are also inlined.
-    expect(slot?.components).toHaveLength(5)
-    expect(slot?.components[0]?._meta.schema).toBe(
+    // Components inside the slot are also inlined, in the order the homepage
+    // composes them.
+    expect(slot?.components).toHaveLength(6)
+    expect(slot?.components.map((c) => c._meta.schema)).toEqual([
       'https://quadratic.amplience.com/v2/content/hero',
-    )
-    expect(slot?.components[1]?._meta.schema).toBe(
       'https://quadratic.amplience.com/v2/content/columns',
-    )
-    expect(slot?.components[2]?._meta.schema).toBe(
-      'https://quadratic.amplience.com/v2/content/markdown-block',
-    )
-    expect(slot?.components[3]?._meta.schema).toBe(
       'https://quadratic.amplience.com/v2/content/grid',
-    )
-    expect(slot?.components[4]?._meta.schema).toBe(
+      'https://quadratic.amplience.com/v2/content/carousel',
+      'https://quadratic.amplience.com/v2/content/markdown-block',
       'https://quadratic.amplience.com/v2/content/columns',
-    )
+    ])
   })
 
   it('resolves every delivery key on an item to the same content (QL-76)', async () => {

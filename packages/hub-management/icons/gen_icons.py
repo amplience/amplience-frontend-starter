@@ -264,6 +264,35 @@ grid = (tile(40, 70) + tile(100, 70) + tile(160, 70)
         + tile(40, 134) + tile(100, 134) + tile(160, 134))
 ICONS["content_grid"] = card_b(grid)
 
+# carousel: a row of slides running off both card edges, plus pagination dots.
+# Distinguished from columns (three equal columns, fully contained) and grid
+# (a contained 2x3) by the clipping: the slides are wider than the card, which
+# is the whole point of a carousel and reads at small sizes without arrows.
+# Two full slides, symmetric 24px slivers either side, 12px gaps throughout.
+_c = CARD
+CARD_CLIP = (f'<defs><clipPath id="cardClip">'
+             f'<rect x="{_c["x"]}" y="{_c["y"]}" width="{_c["w"]}" height="{_c["h"]}" rx="{_c["rx"]}"/>'
+             f'</clipPath></defs>')
+
+
+def cslide(x):
+    return (f'<rect x="{x}" y="70" width="68" height="100" rx="9" '
+            f'fill="url(#hatchL)" stroke="{DARK}" stroke-width="{SW_BLOCK}"/>')
+
+
+def cdot(cx, active=False):
+    if active:
+        return f'<circle cx="{cx}" cy="192" r="5" fill="{DARK}"/>'
+    return f'<circle cx="{cx}" cy="192" r="4" fill="{HATCH}"/>'
+
+
+carousel = (CARD_CLIP
+            + f'<g clip-path="url(#cardClip)">'
+            + cslide(-28) + cslide(52) + cslide(132) + cslide(212)
+            + '</g>'
+            + cdot(107, active=True) + cdot(121) + cdot(135) + cdot(149))
+ICONS["content_carousel"] = card_b(carousel)
+
 # ---------- Aliases ----------
 # Types that deliberately share an icon. Files are still written out under
 # each name so every content type has an explicit png/svg pair.

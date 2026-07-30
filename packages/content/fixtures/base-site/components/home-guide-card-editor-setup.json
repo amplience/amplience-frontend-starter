@@ -1,0 +1,120 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000026",
+  "label": "Home — guide card: editor-setup",
+  "body": {
+    "_meta": {
+      "name": "Home — guide card: editor-setup",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000026"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Editor setup"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Editor setup"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Configurar el editor"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Configurer l'éditeur"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Editor einrichten"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Configurare l'editor"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Get types, linting and formatting working the way the repo expects."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Get types, linting and formatting working the way the repo expects."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Configura tipos, linting y formato como espera el repositorio."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Configurez types, linting et formatage comme le dépôt l'attend."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Richten Sie Typen, Linting und Formatierung wie vorgesehen ein."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Configura tipi, linting e formattazione come previsto dal repository."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/ql-guide-editor/800/450",
+        "alt": "A code editor showing inline type hints",
+        "width": 800,
+        "height": 450
+      }
+    },
+    "links": {
+      "cta": {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la guía"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lire le guide"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zum Leitfaden"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Leggi la guida"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs/editor-setup",
+        "variant": "text",
+        "color": "black"
+      }
+    }
+  }
+}

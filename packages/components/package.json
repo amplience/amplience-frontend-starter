@@ -33,6 +33,7 @@
     "./hero-block": "./src/organisms/HeroBlock/HeroBlock.tsx",
     "./image-block": "./src/organisms/ImageBlock/ImageBlock.tsx",
     "./grid-block": "./src/organisms/GridBlock/GridBlock.tsx",
+    "./carousel-block": "./src/organisms/CarouselBlock/CarouselBlock.tsx",
     "./columns-block": "./src/organisms/ColumnsBlock/ColumnsBlock.tsx",
     "./markdown-block": "./src/organisms/MarkdownBlock/MarkdownBlock.tsx",
     "./slot": "./src/organisms/Slot/Slot.tsx",

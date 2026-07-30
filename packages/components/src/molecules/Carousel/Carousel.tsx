@@ -537,6 +537,12 @@ export function Carousel({
   useEffect(() => {
     const track = trackRef.current
     if (!track || !measures) return
+    // The arrows and dots are an enhancement over a track that already scrolls,
+    // so a runtime with no ResizeObserver gets the CSS-only carousel rather than
+    // a crash. In practice that means test environments — jsdom has no layout to
+    // observe anyway — and it saves every consumer that renders a carousel in a
+    // test from having to know to stub it.
+    if (typeof ResizeObserver === 'undefined') return
 
     // ResizeObserver fires once on observe, which covers the initial
     // measurement, and again on any size change — so there's no window resize

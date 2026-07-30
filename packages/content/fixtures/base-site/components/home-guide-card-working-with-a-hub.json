@@ -1,0 +1,120 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000025",
+  "label": "Home — guide card: working-with-a-hub",
+  "body": {
+    "_meta": {
+      "name": "Home — guide card: working-with-a-hub",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000025"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Working with a hub"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Working with a hub"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Trabajar con un hub"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Travailler avec un hub"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Mit einem Hub arbeiten"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Lavorare con un hub"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Seed content types, schemas and example content into your own hub."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Seed content types, schemas and example content into your own hub."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Carga tipos de contenido, esquemas y contenido de ejemplo en tu propio hub."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Importez types de contenu, schémas et contenus d'exemple dans votre propre hub."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Übertragen Sie Inhaltstypen, Schemas und Beispielinhalte in Ihren eigenen Hub."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Importa tipi di contenuto, schemi e contenuti di esempio nel tuo hub."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/ql-guide-hub/800/450",
+        "alt": "Content types listed in a Dynamic Content hub",
+        "width": 800,
+        "height": 450
+      }
+    },
+    "links": {
+      "cta": {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la guía"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lire le guide"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zum Leitfaden"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Leggi la guida"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs/working-with-a-hub",
+        "variant": "text",
+        "color": "black"
+      }
+    }
+  }
+}

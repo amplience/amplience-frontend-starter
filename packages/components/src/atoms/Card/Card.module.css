@@ -33,7 +33,6 @@
   height: 100%;
   background: var(--card-background, var(--color-white));
   border-radius: var(--card-border-radius, var(--radius));
-  border: solid 1px var(--card-border-color, transparent);
   box-shadow: var(--card-shadow, none);
   color: var(--card-color, inherit);
   overflow: hidden;
@@ -57,6 +56,7 @@
 .root[data-elevation='bordered'] {
   --card-border-color: var(--color-gray-200);
   --card-shadow: none;
+  border: solid 1px var(--card-border-color, transparent);
 }
 
 /* ---------------------------------------------------------------------------

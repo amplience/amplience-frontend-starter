@@ -22,15 +22,22 @@
         }
       },
       {
-        "id": "a1b2c3d4-0001-4000-8000-000000000016",
-        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "id": "a1b2c3d4-0001-4000-8000-000000000010",
+        "contentType": "https://quadratic.amplience.com/v2/content/grid",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "a1b2c3d4-0001-4000-8000-000000000010",
-        "contentType": "https://quadratic.amplience.com/v2/content/grid",
+        "id": "a1b2c3d4-0001-4000-8000-000000000023",
+        "contentType": "https://quadratic.amplience.com/v2/content/carousel",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000016",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }

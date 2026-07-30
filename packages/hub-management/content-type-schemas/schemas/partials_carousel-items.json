@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/partials/carousel-items",
+  "title": "Carousel Item",
+  "description": "A content-link to a block that makes sense as a carousel slide (ADR-0020). Deliberately narrower than partials/content-blocks, which answers a different question — 'what can the renderer render here' — and now includes the carousel itself, so reusing it would make a carousel a legal slide of itself. Two nested horizontal scroll containers contend for the same drag and the same touch pan, so the exclusion below is a correctness constraint rather than a matter of taste. Grid and columns are excluded for the plainer reason that neither means anything as a slide.",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+    },
+    {
+      "properties": {
+        "contentType": {
+          "enum": [
+            "https://quadratic.amplience.com/v2/content/media-card",
+            "https://quadratic.amplience.com/v2/content/media",
+            "https://quadratic.amplience.com/v2/content/markdown-block",
+            "https://quadratic.amplience.com/v2/content/hero"
+          ]
+        }
+      }
+    }
+  ]
+}

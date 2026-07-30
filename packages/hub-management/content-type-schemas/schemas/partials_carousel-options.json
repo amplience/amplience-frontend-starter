@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/partials/carousel-options",
+  "title": "Carousel Options",
+  "description": "The Carousel molecule's presentation contract — slides per breakpoint and the four scroll affordances (packages/components/src/molecules/Carousel). Held here rather than inline because two content types render through the same molecule: the editorial carousel and, from v1.1, the product carousel (ADR-0020). One definition means the ninth option is one edit rather than two, and the two carousels cannot end up offering different controls.",
+  "type": "object",
+  "definitions": {
+    "slides-per-view": {
+      "title": "Slides per view",
+      "description": "How many slides are visible at once. Fractional values above 1 leave part of the next slide in view — a 'peek' that tells a touch user the track scrolls. Never below 1, which would make a slide wider than the track so no whole slide was ever visible.",
+      "type": "number",
+      "minimum": 1,
+      "maximum": 6
+    },
+    "gap": {
+      "title": "Gap (px)",
+      "description": "Space between slides. Defaults to the theme's --gap token when left empty.",
+      "type": "number",
+      "minimum": 0
+    },
+    "show-arrows": {
+      "title": "Show arrows",
+      "description": "Previous/next buttons overlaid on the track. Hidden automatically when everything already fits.",
+      "type": "boolean"
+    },
+    "show-dots": {
+      "title": "Show dots",
+      "description": "Pagination dots beneath the track, one per scroll position. Hidden automatically when there is nowhere to scroll.",
+      "type": "boolean"
+    },
+    "show-scrollbar": {
+      "title": "Show scrollbar",
+      "description": "A styled scrollbar beneath the track. Worth turning on for a dense track with no arrows, where it becomes the visible sign that there is more to see.",
+      "type": "boolean"
+    },
+    "drag-to-scroll": {
+      "title": "Drag to scroll",
+      "description": "Let a mouse drag the slides. Links inside slides still work — a drag is told apart from a click by distance. Touch is unaffected either way, since it already scrolls natively. Turn off for slides whose content wants the drag for itself, such as a map.",
+      "type": "boolean"
+    },
+    "scroll-step": {
+      "title": "Arrow step",
+      "description": "How far one arrow press moves the track: one slide at a time, or a full page of slides.",
+      "type": "string",
+      "enum": ["slide", "page"]
+    }
+  }
+}

@@ -117,7 +117,10 @@ describe('schema manifest', () => {
   })
 
   it('exposes content types as the non-partial subset', () => {
-    expect(contentTypeSchemas).toHaveLength(23)
+    // A deliberate tripwire: bump this when a content type is added, so the
+    // count is a decision rather than something derived from the thing it
+    // checks. 24 as of the carousel (ADR-0020).
+    expect(contentTypeSchemas).toHaveLength(24)
     expect(contentTypeSchemas.every((e) => e.validationLevel !== 'PARTIAL')).toBe(true)
     expect(findSchema('https://quadratic.amplience.com/v2/partials/media')?.validationLevel).toBe(
       'PARTIAL',

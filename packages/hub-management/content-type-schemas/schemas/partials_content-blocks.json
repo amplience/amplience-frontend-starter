@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://quadratic.amplience.com/v2/partials/content-blocks",
   "title": "Content Block",
-  "description": "A content-link to a renderable block — the union of block types the slot renderer accepts. Referenced by slots, columns, grid, and blog articles so the allowed set is maintained in one place.",
+  "description": "A content-link to a renderable block — the union of block types the slot renderer accepts. Referenced by slots, columns, grid, and blog articles so the allowed set is maintained in one place. Note that the carousel does NOT draw its slides from here: it has its own, narrower partials/carousel-items, because this union contains the carousel itself and a carousel nested inside a carousel puts two horizontal scroll containers in contention (ADR-0020).",
   "type": "object",
   "allOf": [
     {
@@ -12,6 +12,7 @@
       "properties": {
         "contentType": {
           "enum": [
+            "https://quadratic.amplience.com/v2/content/carousel",
             "https://quadratic.amplience.com/v2/content/columns",
             "https://quadratic.amplience.com/v2/content/grid",
             "https://quadratic.amplience.com/v2/content/hero",

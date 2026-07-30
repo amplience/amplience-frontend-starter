@@ -49,6 +49,10 @@ import {
   menuToggleButtonRegistryEntry,
 } from './molecules/MenuToggleButton/MenuToggleButton.registry'
 import {
+  CAROUSEL_BLOCK_SCHEMA,
+  carouselBlockRegistryEntry,
+} from './organisms/CarouselBlock/CarouselBlock.registry'
+import {
   COLUMNS_BLOCK_SCHEMA,
   columnsBlockRegistryEntry,
 } from './organisms/ColumnsBlock/ColumnsBlock.registry'
@@ -154,6 +158,7 @@ export const defaultRegistry: Registry = createRegistry([
   [MARKDOWN_BLOCK_SCHEMA, markdownBlockRegistryEntry],
   [COLUMNS_BLOCK_SCHEMA, columnsBlockRegistryEntry],
   [GRID_BLOCK_SCHEMA, gridBlockRegistryEntry],
+  [CAROUSEL_BLOCK_SCHEMA, carouselBlockRegistryEntry],
   [MEDIA_CARD_SCHEMA, mediaCardRegistryEntry],
   [HEADER_BLOCK_SCHEMA, headerBlockRegistryEntry],
   [HEADER_ROW_SCHEMA, headerRowRegistryEntry],
@@ -173,6 +178,8 @@ export const defaultRegistry: Registry = createRegistry([
 // Re-export the schema URIs and entries so deployments composing bespoke
 // registries import everything from one place.
 export {
+  CAROUSEL_BLOCK_SCHEMA,
+  carouselBlockRegistryEntry,
   COLUMNS_BLOCK_SCHEMA,
   columnsBlockRegistryEntry,
   GRID_BLOCK_SCHEMA,

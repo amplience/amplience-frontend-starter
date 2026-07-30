@@ -1,0 +1,120 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000029",
+  "label": "Home — guide card: troubleshooting",
+  "body": {
+    "_meta": {
+      "name": "Home — guide card: troubleshooting",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000029"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Troubleshooting"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Troubleshooting"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Resolución de problemas"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Dépannage"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Fehlerbehebung"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Risoluzione dei problemi"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "The failures we hit most often, and what each one is telling you."
+        },
+        {
+          "locale": "en-GB",
+          "value": "The failures we hit most often, and what each one is telling you."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Los fallos más habituales y qué indica cada uno."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Les erreurs les plus fréquentes et ce qu'elles signifient."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Die häufigsten Fehler und was sie bedeuten."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Gli errori più comuni e cosa indicano."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/ql-guide-troubleshoot/800/450",
+        "alt": "A checklist of resolved issues",
+        "width": 800,
+        "height": 450
+      }
+    },
+    "links": {
+      "cta": {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la guía"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lire le guide"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zum Leitfaden"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Leggi la guida"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs/troubleshooting",
+        "variant": "text",
+        "color": "black"
+      }
+    }
+  }
+}

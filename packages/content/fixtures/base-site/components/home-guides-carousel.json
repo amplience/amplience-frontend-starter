@@ -1,0 +1,128 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000023",
+  "label": "Home — guides carousel",
+  "body": {
+    "_meta": {
+      "name": "Home — guides carousel",
+      "schema": "https://quadratic.amplience.com/v2/content/carousel",
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000023"
+    },
+    "sectionHeader": {
+      "title": {
+        "values": [
+          {
+            "locale": "en-US",
+            "value": "Guides"
+          },
+          {
+            "locale": "en-GB",
+            "value": "Guides"
+          },
+          {
+            "locale": "es-ES",
+            "value": "Guías"
+          },
+          {
+            "locale": "fr-FR",
+            "value": "Guides"
+          },
+          {
+            "locale": "de-DE",
+            "value": "Leitfäden"
+          },
+          {
+            "locale": "it-IT",
+            "value": "Guide"
+          }
+        ],
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      },
+      "description": {
+        "values": [
+          {
+            "locale": "en-US",
+            "value": "Everything you need to get from clone to published."
+          },
+          {
+            "locale": "en-GB",
+            "value": "Everything you need to get from clone to published."
+          },
+          {
+            "locale": "es-ES",
+            "value": "Todo lo necesario para pasar de la clonación a la publicación."
+          },
+          {
+            "locale": "fr-FR",
+            "value": "Tout ce qu'il faut pour passer du clone à la publication."
+          },
+          {
+            "locale": "de-DE",
+            "value": "Alles, was Sie vom Klonen bis zur Veröffentlichung brauchen."
+          },
+          {
+            "locale": "it-IT",
+            "value": "Tutto ciò che serve, dal clone alla pubblicazione."
+          }
+        ],
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      }
+    },
+    "items": [
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000024",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000025",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000026",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000027",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000028",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000029",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ],
+    "slidesMobile": 1.2,
+    "slidesTablet": 2,
+    "slidesDesktop": 3,
+    "showArrows": true,
+    "showDots": true,
+    "dragToScroll": true,
+    "backgroundColor": "black",
+    "maxWidth": "default",
+    "gutter": true
+  }
+}

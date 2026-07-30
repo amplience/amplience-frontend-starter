@@ -15,6 +15,7 @@
  */
 
 import contentBlogArticle from '../content-type-schemas/schemas/content_blog-article.json'
+import contentCarousel from '../content-type-schemas/schemas/content_carousel.json'
 import contentColumns from '../content-type-schemas/schemas/content_columns.json'
 import contentFooterRow from '../content-type-schemas/schemas/content_footer-row.json'
 import contentFooter from '../content-type-schemas/schemas/content_footer.json'
@@ -35,6 +36,8 @@ import contentMenuItem from '../content-type-schemas/schemas/content_menu-item.j
 import contentMenuToggleButton from '../content-type-schemas/schemas/content_menu-toggle-button.json'
 import contentMenu from '../content-type-schemas/schemas/content_menu.json'
 import contentPage from '../content-type-schemas/schemas/content_page.json'
+import partialsCarouselItems from '../content-type-schemas/schemas/partials_carousel-items.json'
+import partialsCarouselOptions from '../content-type-schemas/schemas/partials_carousel-options.json'
 import partialsColour from '../content-type-schemas/schemas/partials_colour.json'
 import partialsContainer from '../content-type-schemas/schemas/partials_container.json'
 import partialsContentBlocks from '../content-type-schemas/schemas/partials_content-blocks.json'
@@ -75,6 +78,8 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(partialsMedia, 'PARTIAL'),
   entry(partialsCta, 'PARTIAL'),
   entry(partialsContentBlocks, 'PARTIAL'),
+  entry(partialsCarouselItems, 'PARTIAL'),
+  entry(partialsCarouselOptions, 'PARTIAL'),
   entry(partialsColour, 'PARTIAL'),
   entry(partialsContainer, 'PARTIAL'),
   entry(partialsSectionHeader, 'PARTIAL'),
@@ -85,6 +90,7 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(contentMarkdownBlock, 'CONTENT_TYPE'),
   entry(contentColumns, 'CONTENT_TYPE'),
   entry(contentGrid, 'CONTENT_TYPE'),
+  entry(contentCarousel, 'CONTENT_TYPE'),
   entry(contentMediaCard, 'CONTENT_TYPE'),
   entry(contentMedia, 'CONTENT_TYPE'),
   entry(slotsSlot, 'SLOT'),

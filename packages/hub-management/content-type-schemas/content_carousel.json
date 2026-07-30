@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/content_carousel.json",
+  "schemaId": "https://quadratic.amplience.com/v2/content/carousel",
+  "validationLevel": "CONTENT_TYPE"
+}
