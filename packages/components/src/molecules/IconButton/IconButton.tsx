@@ -37,6 +37,25 @@ export type IconButtonProps = {
    * screen readers announce the state. Omit for plain action buttons.
    */
   expanded?: boolean
+  /**
+   * Disables the button variant — rendered as the native `disabled` attribute,
+   * so the browser handles the click suppression and the removal from the tab
+   * order. Ignored for the link variant, where there is no such concept (a
+   * link that shouldn't be followed shouldn't be rendered).
+   *
+   * Native `disabled` takes focus off the element, so a user who holds a
+   * disabled-at-the-end control (e.g. a carousel's next arrow) loses their
+   * place in the tab order. That's the accepted trade for correct semantics;
+   * an `aria-disabled` treatment that stays focusable can be layered on later
+   * without changing this prop.
+   */
+  disabled?: boolean
+  /**
+   * ID of the element this button operates on — rendered as `aria-controls` so
+   * assistive technology can associate the two. Used by controls that sit
+   * outside the region they drive, such as a carousel's arrows.
+   */
+  controls?: string
   visibility?: 'mobileOnly' | 'desktopOnly'
   /**
    * Active locale URL prefix (ADR-0015), supplied by the renderer. Keeps nav
@@ -57,6 +76,11 @@ export type IconButtonProps = {
  * `link` it renders as `<button type="button">` — the brand or application
  * layer attaches the click handler (e.g. to open a cart drawer).
  *
+ * The button variant additionally supports `disabled` and `controls`
+ * (aria-controls), for controls that drive a region elsewhere on the page and
+ * have unavailable states — a carousel's prev/next arrows being the case that
+ * introduced them.
+ *
  * The icon inherits `color: currentColor` so the HeaderRow's foreground
  * colour token applies automatically without any extra props.
  *
@@ -70,6 +94,8 @@ export function IconButton({
   link,
   onClick,
   expanded,
+  disabled,
+  controls,
   visibility,
   localeBasePath,
   className,
@@ -96,6 +122,8 @@ export function IconButton({
       className={classes}
       aria-label={label}
       aria-expanded={expanded}
+      aria-controls={controls}
+      disabled={disabled}
       onClick={onClick}
     >
       {inner}

@@ -25,6 +25,7 @@
     "./card": "./src/atoms/Card/Card.tsx",
     "./tag": "./src/atoms/Tag/Tag.tsx",
     "./tags": "./src/molecules/Tags/Tags.tsx",
+    "./carousel": "./src/molecules/Carousel/Carousel.tsx",
     "./media-card": "./src/molecules/MediaCard/MediaCard.tsx",
     "./section-header": "./src/molecules/SectionHeader/SectionHeader.tsx",
     "./markdown": "./src/molecules/Markdown/Markdown.tsx",
