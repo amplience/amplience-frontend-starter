@@ -72,13 +72,14 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://picsum.photos/seed/ql-card-render/800/450",
-        "alt": "Content rendered from Amplience Dynamic Content",
+        "src": "/benefit-covers/renders-any-content.png",
+        "alt": "Schema definitions feeding blocks into a rendered page",
         "width": 800,
         "height": 450
       }
     },
     "links": {
+      "href": "https://quadratic-lite-components.vercel.app/",
       "cta": {
         "label": {
           "values": [
@@ -111,7 +112,7 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/features/content-rendering",
+        "href": "https://quadratic-lite-components.vercel.app/",
         "variant": "text",
         "color": "black"
       }

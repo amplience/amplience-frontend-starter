@@ -72,13 +72,14 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://picsum.photos/seed/ql-guide-troubleshoot/800/450",
-        "alt": "A checklist of resolved issues",
+        "src": "/docs-covers/troubleshooting.png",
+        "alt": "A content list with one row flagged for attention",
         "width": 800,
         "height": 450
       }
     },
     "links": {
+      "href": "/docs/troubleshooting",
       "cta": {
         "label": {
           "values": [

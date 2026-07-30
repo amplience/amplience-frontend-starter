@@ -81,6 +81,46 @@ describe('Button', () => {
     })
   })
 
+  describe('inert variant (asSpan)', () => {
+    it('renders a <span> element', () => {
+      render(<Button asSpan>Shop now</Button>)
+      expect(screen.getByText('Shop now').tagName).toBe('SPAN')
+    })
+
+    it('is not exposed as a button or link to assistive tech', () => {
+      render(<Button asSpan>Shop now</Button>)
+      expect(screen.queryByRole('button')).toBeNull()
+      expect(screen.queryByRole('link')).toBeNull()
+    })
+
+    it('does not leak asSpan or localeBasePath to the DOM', () => {
+      render(
+        <Button asSpan localeBasePath="/fr-fr">
+          Shop now
+        </Button>,
+      )
+      const el = screen.getByText('Shop now')
+      expect(el.hasAttribute('localebasepath')).toBe(false)
+      expect(el.hasAttribute('asspan')).toBe(false)
+    })
+
+    it('still applies variant and colour styling hooks', () => {
+      render(
+        <Button asSpan variant="outlined" color="primary">
+          Shop now
+        </Button>,
+      )
+      const el = screen.getByText('Shop now')
+      expect(el.getAttribute('data-variant')).toBe('outlined')
+      expect(el.getAttribute('data-color')).toBe('primary')
+    })
+
+    it('a Button without href or onClick is still a real <button>', () => {
+      render(<Button>Save</Button>)
+      expect(screen.getByText('Save').tagName).toBe('BUTTON')
+    })
+  })
+
   describe('shared', () => {
     it('forwards additional class names (button)', () => {
       render(<Button className="custom">Save</Button>)

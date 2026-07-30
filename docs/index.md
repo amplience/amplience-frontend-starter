@@ -2,7 +2,7 @@
 
 # The head for your headless CMS
 
-Quadratic Lite is a demo-ready frontend that brings Amplience Dynamic Content to life — publish and go, no deployments.
+Quadratic Lite is a demo-ready frontend that brings Amplience Dynamic Content to life — publish and go!
 
 ## Why Quadratic exists
 

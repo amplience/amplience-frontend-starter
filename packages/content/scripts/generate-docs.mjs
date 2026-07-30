@@ -18,6 +18,11 @@
  *     body        ← the rest of the document                 (markdown-block)
  *     hero CTAs   ← ← parent doc (outlined/white) + each child doc (solid/primary)
  *
+ *   The curated top-level pages (see UPDATE_ONLY) are the exception: their heroes
+ *   are hand-authored and localized across every hub locale, so the generator
+ *   never writes hero text for them — only the page's SEO fields and the
+ *   markdown-block body, both of which are single-locale by nature (Markdown).
+ *
  *   It emits the standard page → slot → [hero, markdown-block] fixture quartet
  *   per doc, with deterministic IDs (stable across runs, so diffs stay clean),
  *   then writes `src/mock/docs.generated.ts` — the static-import manifest the
@@ -245,11 +250,18 @@ const docs = relPaths.map((relPath) => {
 const slugSet = new Set(docs.map((d) => d.slug))
 const bySlug = new Map(docs.map((d) => [d.slug, d]))
 
-// Two top-level pages are curated fixtures, not fully generated: /docs (from the
-// repo README) and /about (from docs/index.md). For these the generator only
-// refreshes the *text* — page + hero title/description and the markdown-block
-// body — from the source file, leaving hero design, media, colours, CTAs, SEO,
-// slot wiring and IDs exactly as authored. Everything else under docs/ is fully
+// A few top-level pages are curated fixtures, not fully generated: /docs (from
+// the repo README), /about (from docs/index.md) and /contributing. For these the
+// generator refreshes the page's SEO title/description and the markdown-block
+// body from the source file, and touches nothing else — the hero fixture is
+// hand-authored in full (text, design, media, colours, CTAs), as are the slot
+// wiring and IDs.
+//
+// Hero text is deliberately outside the generator's remit here: those heroes
+// carry localized-value title/description spanning every hub locale, while a
+// Markdown file can only ever supply one. Leaving them alone is what lets the
+// curated copy be translated, and lets it diverge from the doc's H1 where the
+// page wants a different voice. Everything else under docs/ stays fully
 // generated (plain hero + programmatic parent/child CTAs).
 const UPDATE_ONLY = {
   docs: {
@@ -257,17 +269,14 @@ const UPDATE_ONLY = {
     title: 'Documentation',
     description: 'Helpful information for installing & using Quadratic Lite',
     page: 'pages/docs.json',
-    hero: 'components/docs-hero.json',
     markdown: 'components/docs-markdown.json',
   },
   about: {
     page: 'pages/about.json',
-    hero: 'components/about-hero.json',
     markdown: 'components/about-markdown.json',
   },
   contributing: {
     page: 'pages/contributing.json',
-    hero: 'components/contributing-hero.json',
     markdown: 'components/contributing-markdown.json',
   },
 }
@@ -323,13 +332,14 @@ const patchText = (obj, key, value) => {
 }
 
 /**
- * Refresh only the text of a curated top-level page (see UPDATE_ONLY): the page
- * and hero title/description, and the markdown-block body. Everything else in
- * those fixtures — IDs, hero design, CTAs, SEO, slot wiring — is left untouched.
- * These files are loaded by the mock loader directly (not via the generated
- * manifest), so they're written here but never added to `generated`.
+ * Refresh only the generator-owned text of a curated top-level page (see
+ * UPDATE_ONLY): the page's SEO title/description, and the markdown-block body.
+ * The hero fixture is not touched at all — its localized copy is hand-authored —
+ * and neither are IDs or slot wiring. These files are loaded by the mock loader
+ * directly (not via the generated manifest), so they're written here but never
+ * added to `generated`.
  */
-const updateTopLevel = ({ page, hero, markdown }, title, description, body) => {
+const updateTopLevel = ({ page, markdown }, title, description, body) => {
   const patch = (rel, mutate) => {
     const abs = path.join(fixturesBase, rel)
     const json = JSON.parse(readFileSync(abs, 'utf8'))
@@ -337,10 +347,6 @@ const updateTopLevel = ({ page, hero, markdown }, title, description, body) => {
     writeFileSync(abs, `${JSON.stringify(json, null, 2)}\n`)
   }
   patch(page, (j) => {
-    j.body.title = title
-    patchText(j.body, 'description', description)
-  })
-  patch(hero, (j) => {
     j.body.title = title
     patchText(j.body, 'description', description)
   })
@@ -480,7 +486,7 @@ writeFileSync(generatedTsPath, manifest)
 const prettierBin = path.join(repoRoot, 'node_modules/.bin/prettier')
 if (existsSync(prettierBin)) {
   const updateOnlyFiles = Object.values(UPDATE_ONLY)
-    .flatMap((x) => [x.page, x.hero, x.markdown])
+    .flatMap((x) => [x.page, x.markdown])
     .map((rel) => path.join(fixturesBase, rel))
   const targets = [
     ...generated.map((g) =>

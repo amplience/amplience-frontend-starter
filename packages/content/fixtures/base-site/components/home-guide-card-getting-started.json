@@ -72,13 +72,14 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://picsum.photos/seed/ql-guide-start/800/450",
-        "alt": "A terminal beside a rendered page",
+        "src": "/docs-covers/getting-started.png",
+        "alt": "A terminal beside the page it just rendered",
         "width": 800,
         "height": 450
       }
     },
     "links": {
+      "href": "/docs/getting-started",
       "cta": {
         "label": {
           "values": [

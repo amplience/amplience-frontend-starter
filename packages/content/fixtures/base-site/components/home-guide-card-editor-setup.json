@@ -42,27 +42,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Get types, linting and formatting working the way the repo expects."
+          "value": "Help your IDE work seamlessly to keep types, linting and formatting in sync."
         },
         {
           "locale": "en-GB",
-          "value": "Get types, linting and formatting working the way the repo expects."
+          "value": "Help your IDE work seamlessly to keep types, linting and formatting in sync."
         },
         {
           "locale": "es-ES",
-          "value": "Configura tipos, linting y formato como espera el repositorio."
+          "value": "Ayuda a tu IDE a trabajar sin problemas para mantener los tipos, el linting y el formateo sincronizados."
         },
         {
           "locale": "fr-FR",
-          "value": "Configurez types, linting et formatage comme le dépôt l'attend."
+          "value": "Aidez votre IDE à fonctionner de manière transparente pour garder les types, le linting et le formatage synchronisés."
         },
         {
           "locale": "de-DE",
-          "value": "Richten Sie Typen, Linting und Formatierung wie vorgesehen ein."
+          "value": "Helfen Sie Ihrer IDE, nahtlos zu arbeiten, um Typen, Linting und Formatierung synchron zu halten."
         },
         {
           "locale": "it-IT",
-          "value": "Configura tipi, linting e formattazione come previsto dal repository."
+          "value": "Aiuta il tuo IDE a funzionare senza problemi per mantenere tipi, linting e formattazione sincronizzati."
         }
       ],
       "_meta": {
@@ -72,13 +72,14 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://picsum.photos/seed/ql-guide-editor/800/450",
-        "alt": "A code editor showing inline type hints",
+        "src": "/docs-covers/editor-setup.png",
+        "alt": "A code editor with formatting applied on save",
         "width": 800,
         "height": 450
       }
     },
     "links": {
+      "href": "/docs/editor-setup",
       "cta": {
         "label": {
           "values": [

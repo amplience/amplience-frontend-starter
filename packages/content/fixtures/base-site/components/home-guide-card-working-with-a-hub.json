@@ -72,13 +72,14 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://picsum.photos/seed/ql-guide-hub/800/450",
-        "alt": "Content types listed in a Dynamic Content hub",
+        "src": "/docs-covers/working-with-a-hub.png",
+        "alt": "A content hub feeding items into a site",
         "width": 800,
         "height": 450
       }
     },
     "links": {
+      "href": "/docs/working-with-a-hub",
       "cta": {
         "label": {
           "values": [

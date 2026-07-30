@@ -87,7 +87,7 @@
         }
       },
       {
-        "id": "a1b2c3d4-0001-4000-8000-000000000026",
+        "id": "a1b2c3d4-0001-4000-8000-000000000028",
         "contentType": "https://quadratic.amplience.com/v2/content/media-card",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
@@ -101,7 +101,14 @@
         }
       },
       {
-        "id": "a1b2c3d4-0001-4000-8000-000000000028",
+        "id": "a1b2c3d4-0001-4000-8000-000000000030",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000026",
         "contentType": "https://quadratic.amplience.com/v2/content/media-card",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
@@ -113,11 +120,18 @@
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
+      },
+      {
+        "id": "a1b2c3d4-0001-4000-8000-000000000031",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
       }
     ],
     "sizingMode": "auto",
     "minItemWidth": 280,
-    "backgroundColor": "black",
+    "backgroundColor": "light",
     "maxWidth": "default",
     "gutter": true
   }

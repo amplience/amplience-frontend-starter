@@ -86,7 +86,7 @@
   justify-content: var(--hero-v-justify);
 }
 
-.root[data-max-height='true'] {
+.root[data-max-height='true'] .media {
   max-height: var(--hero-max-height);
 }
 

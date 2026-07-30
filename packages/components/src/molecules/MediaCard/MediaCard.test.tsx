@@ -170,6 +170,17 @@ describe('MediaCard', () => {
       expect(screen.queryByRole('link', { name: 'Shop now' })).toBeNull()
     })
 
+    it('does not leak localeBasePath to the DOM when the CTA is inert', () => {
+      render(
+        <MediaCard
+          title="Title"
+          localeBasePath="/fr-fr"
+          links={{ href: '/products', cta: { label: 'Shop now', href: '/shop' } }}
+        />,
+      )
+      expect(screen.getByText('Shop now').hasAttribute('localebasepath')).toBe(false)
+    })
+
     it('does not render a CTA when cta is omitted', () => {
       render(<MediaCard title="Title" />)
       expect(screen.queryByRole('link')).toBeNull()

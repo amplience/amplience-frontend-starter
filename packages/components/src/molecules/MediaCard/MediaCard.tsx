@@ -192,17 +192,25 @@ export function MediaCard({
         </Typography>
       )}
 
-      {/* CTA only renders when the card is not already a full-card link */}
-      {!isLinked && cta && (
+      {cta && (
         <div className={styles.cta}>
-          <Button
-            href={cta.href}
-            variant={cta.variant ?? 'solid'}
-            color={cta.color ?? 'primary'}
-            {...(localeBasePath !== undefined && { localeBasePath })}
-          >
-            {cta.label}
-          </Button>
+          {isLinked ? (
+            // The whole card is already the link, so the CTA is decoration:
+            // an inert <span> (nesting an <a> inside an <a> is invalid), and
+            // `localeBasePath` stays behind with the card-level link.
+            <Button asSpan variant={cta.variant ?? 'solid'} color={cta.color ?? 'primary'}>
+              {cta.label}
+            </Button>
+          ) : (
+            <Button
+              href={cta.href}
+              variant={cta.variant ?? 'solid'}
+              color={cta.color ?? 'primary'}
+              {...(localeBasePath !== undefined && { localeBasePath })}
+            >
+              {cta.label}
+            </Button>
+          )}
         </div>
       )}
     </div>

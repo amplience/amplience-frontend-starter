@@ -7,27 +7,88 @@
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "a1b2c3d4-0002-4000-9000-000000000003"
     },
-    "title": "Documentation",
+    "preTitle": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Help & Support"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Help & Support"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Ayuda y soporte"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Aide et support"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Hilfe & Support"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Aiuto e supporto"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Documentation"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Documentation"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Documentación"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Documentation"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Dokumentation"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Documentazione"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://picsum.photos/seed/ql-docs/1200/600",
-        "alt": "Docs Quadratic Lite",
-        "width": 1200,
-        "height": 600
+        "src": "/placeholders/docs-hero.jpg",
+        "alt": "A fanned stack of document sheets, neon-framed on a glowing gradient disc",
+        "width": 2752,
+        "height": 1536
       }
     },
-    "contentPositionMobile": "beneath",
+    "contentPositionMobile": "above",
     "contentPositionDesktop": "overlay",
     "contentWidth": 40,
-    "heightBehaviour": "fitToContent",
+    "heightBehaviour": "flexible",
     "maxWidth": "default",
-    "minHeight": 600,
+    "maxHeight": 600,
     "overlayColor": "black",
     "overlayIntensity": 50,
     "overlayStyle": "gradient",
     "verticalPosition": "center",
-    "backgroundColor": "dark",
+    "backgroundColor": "black",
     "ctas": [
       {
         "label": {
@@ -102,6 +163,16 @@
         "color": "primary"
       }
     ],
-    "description": "Helpful information for installing & using Quadratic Lite"
+    "description": "Helpful information for installing & using Quadratic Lite",
+    "mobileOverride": true,
+    "mobileMedia": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "/placeholders/docs-hero-mobile.jpg",
+        "alt": "A fanned stack of document sheets, neon-framed on a glowing gradient disc",
+        "width": 2752,
+        "height": 1275
+      }
+    }
   }
 }

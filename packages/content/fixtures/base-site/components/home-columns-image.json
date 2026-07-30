@@ -12,10 +12,10 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://picsum.photos/seed/ql-cols/600/800",
+        "src": "/placeholders/cheetah.png",
         "alt": "Quadratic Lite \u2014 accelerator for composable Amplience sites",
-        "width": 600,
-        "height": 800
+        "width": 1080,
+        "height": 1080
       }
     }
   }

@@ -55,6 +55,26 @@ describe('CarouselBlock', () => {
     })
   })
 
+  describe('gutter', () => {
+    // The gutter bleed is pure CSS — CarouselBlock.module.css rebinds
+    // --carousel-bleed-inline on `.container[data-gutter]` so the track shows
+    // through into the gutter rather than being clipped at the content edge.
+    // jsdom can't evaluate that, but it can hold the seam the rule hangs off:
+    // if Container ever stopped emitting `data-gutter`, or CarouselBlock
+    // stopped passing `gutter` through, the bleed would silently disappear with
+    // nothing else failing.
+
+    it('marks the Container as guttered so the track can bleed into it', () => {
+      const { container } = render(<CarouselBlock gutter>{slides(4)}</CarouselBlock>)
+      expect(container.querySelector('.Container')?.hasAttribute('data-gutter')).toBe(true)
+    })
+
+    it('leaves the attribute off without a gutter, so there is no bleed', () => {
+      const { container } = render(<CarouselBlock>{slides(4)}</CarouselBlock>)
+      expect(container.querySelector('.Container')?.hasAttribute('data-gutter')).toBe(false)
+    })
+  })
+
   describe('section header', () => {
     it('renders nothing when omitted', () => {
       render(<CarouselBlock>{slides(2)}</CarouselBlock>)

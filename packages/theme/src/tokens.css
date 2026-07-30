@@ -176,14 +176,24 @@
       }
     }
   }
-  .Card .Link[data-variant='text'] {
-    &::after {
+  .Card {
+    .Button[data-variant='text']::after {
       content: '>';
       margin-left: var(--spacing-1);
       transition: margin-left 0.15s ease;
     }
-    &:hover::after {
+
+    .Button[data-variant='text']:hover::after,
+    .Link:hover .Button[data-variant='text']::after {
       margin-left: var(--spacing-2);
+    }
+    .Image {
+      transition: transform 0.15s ease;
+    }
+    .Link:hover {
+      .Image {
+        transform: scale(1.02);
+      }
     }
   }
 }

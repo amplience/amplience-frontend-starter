@@ -72,13 +72,14 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://picsum.photos/seed/ql-card-brand/800/450",
-        "alt": "Brand theming via content-controlled CSS variables",
+        "src": "/benefit-covers/adapts-to-your-brand.png",
+        "alt": "A palette of design tokens painting a page",
         "width": 800,
         "height": 450
       }
     },
     "links": {
+      "href": "/docs/theming",
       "cta": {
         "label": {
           "values": [

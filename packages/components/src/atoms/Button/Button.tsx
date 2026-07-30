@@ -16,6 +16,18 @@ type ButtonAsButton = Omit<ComponentPropsWithoutRef<'button'>, 'children' | 'cla
 
 type ButtonAsLink = Omit<LinkProps, 'children' | 'className' | 'type'>
 
+/**
+ * Opt-in inert rendering: a `<span>` styled as a button, with no href and no
+ * interactive semantics. Used where a CTA is decoration because an ancestor is
+ * already the link (a MediaCard whose whole surface links) — nesting an `<a>`
+ * or `<button>` inside an `<a>` is invalid.
+ *
+ * `asSpan` is required rather than inferred: "no href and no onClick" is
+ * indistinguishable from an ordinary submit button, so inferring it would
+ * silently downgrade real buttons to spans.
+ */
+type ButtonAsSpan = Omit<ButtonAsLink, 'href'> & { asSpan: true }
+
 type OwnProps = {
   children: ReactNode
   className?: string
@@ -45,14 +57,21 @@ type OwnProps = {
  * Link:     <Button href="/checkout" variant="solid" color="primary">Continue</Button>
  * Outlined: <Button variant="outlined" color="secondary">Learn more</Button>
  * Text:     <Button variant="text" color="primary">Cancel</Button>
+ * Inert:    <Button asSpan variant="solid">Shop now</Button>
  */
-export type ButtonProps = OwnProps & (ButtonAsLink | ButtonAsButton)
+export type ButtonProps = OwnProps & (ButtonAsLink | ButtonAsButton | ButtonAsSpan)
+
+type ButtonVariantProps = ButtonAsLink | ButtonAsButton | ButtonAsSpan
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-function isLinkProps(props: ButtonAsLink | ButtonAsButton): props is ButtonAsLink {
+function isSpanProps(props: ButtonVariantProps): props is ButtonAsSpan {
+  return 'asSpan' in props && props.asSpan === true
+}
+
+function isLinkProps(props: ButtonVariantProps): props is ButtonAsLink {
   return 'href' in props
 }
 
@@ -61,6 +80,33 @@ function isLinkProps(props: ButtonAsLink | ButtonAsButton): props is ButtonAsLin
 // ---------------------------------------------------------------------------
 
 export function Button(props: ButtonProps) {
+  // Inert first: `asSpan` overrides the href/onClick shape so a decorative CTA
+  // can keep carrying link-ish props without becoming interactive.
+  // `asSpan` and `localeBasePath` are Button/Link concerns with no DOM meaning
+  // here, so both are destructured out rather than spread onto the node.
+  if (isSpanProps(props)) {
+    const {
+      children,
+      className,
+      variant = 'solid',
+      color = 'black',
+      asSpan: _asSpan,
+      localeBasePath: _localeBasePath,
+      ...spanProps
+    } = props
+
+    return (
+      <span
+        className={clsx('Button', styles.root, className)}
+        {...spanProps}
+        data-variant={variant}
+        data-color={color}
+      >
+        {children}
+      </span>
+    )
+  }
+
   if (isLinkProps(props)) {
     const { children, className, variant = 'solid', color = 'black', ...linkProps } = props
 

@@ -10,7 +10,13 @@
  * BACKGROUND:
  *   data-background-color — primary / secondary / tertiary / white / light / dark / black
  *
+ * GUTTER BLEED:
+ *   With a gutter, this rebinds the molecule's --carousel-bleed-inline so the
+ *   track shows through into it instead of being clipped at the content edge.
+ *
  * BRAND OVERRIDES: redefine --carousel-block-* variables under [data-brand].
+ *   A brand that wants the track clipped flush can set
+ *   --carousel-bleed-inline: 0 on .CarouselBlock.
  */
 
 /* ---------------------------------------------------------------------------
@@ -41,6 +47,24 @@
   gap: var(--spacing-6);
   padding-block: var(--carousel-block-padding-y);
   min-width: 0;
+}
+
+/*
+ * Let the track bleed into the gutter.
+ *
+ * Without this the slides are cut dead on the container's content edge, so the
+ * previous and next slides vanish at exactly the moment a reader is looking for
+ * evidence there's more to scroll to. The gutter is the one place there is
+ * guaranteed empty space either side, so it's the one place worth bleeding
+ * into — hence keying off the gutter rather than always bleeding.
+ *
+ * `data-gutter` is set by the Container atom, and matching its own selector
+ * (attribute presence, not a value) keeps the two in step. Custom properties
+ * inherit, so setting it here is enough to reach the track several levels
+ * down — see --carousel-bleed-inline in Carousel.module.css for what it does.
+ */
+.container[data-gutter] {
+  --carousel-bleed-inline: var(--site-gutter);
 }
 
 /* ---------------------------------------------------------------------------
