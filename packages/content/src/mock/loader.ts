@@ -93,18 +93,18 @@ import siteMenuItemWomensTops from '../../fixtures/base-site/components/header/s
 import siteMenuItemWomens from '../../fixtures/base-site/components/header/site-menu-item-womens.json' with { type: 'json' }
 import siteMenuMain from '../../fixtures/base-site/components/header/site-menu-main.json' with { type: 'json' }
 import siteMenuToggleButton from '../../fixtures/base-site/components/header/site-menu-toggle-button.json' with { type: 'json' }
+import homeBenefits from '../../fixtures/base-site/components/home-benefits.json' with { type: 'json' }
 import homeColumns2 from '../../fixtures/base-site/components/home-columns-2.json' with { type: 'json' }
 import homeColumnsImage from '../../fixtures/base-site/components/home-columns-image.json' with { type: 'json' }
 import homeColumnsMarkdown from '../../fixtures/base-site/components/home-columns-markdown.json' with { type: 'json' }
 import homeColumns from '../../fixtures/base-site/components/home-columns.json' with { type: 'json' }
-import homeGrid from '../../fixtures/base-site/components/home-grid.json' with { type: 'json' }
 import homeGuideCardDeploying from '../../fixtures/base-site/components/home-guide-card-deploying.json' with { type: 'json' }
 import homeGuideCardEditorSetup from '../../fixtures/base-site/components/home-guide-card-editor-setup.json' with { type: 'json' }
 import homeGuideCardGettingStarted from '../../fixtures/base-site/components/home-guide-card-getting-started.json' with { type: 'json' }
 import homeGuideCardStorybook from '../../fixtures/base-site/components/home-guide-card-storybook.json' with { type: 'json' }
 import homeGuideCardTroubleshooting from '../../fixtures/base-site/components/home-guide-card-troubleshooting.json' with { type: 'json' }
 import homeGuideCardWorkingWithAHub from '../../fixtures/base-site/components/home-guide-card-working-with-a-hub.json' with { type: 'json' }
-import homeGuidesCarousel from '../../fixtures/base-site/components/home-guides-carousel.json' with { type: 'json' }
+import homeGuides from '../../fixtures/base-site/components/home-guides.json' with { type: 'json' }
 import homeHero from '../../fixtures/base-site/components/home-hero.json' with { type: 'json' }
 import homeIntroImage from '../../fixtures/base-site/components/home-intro-image.json' with { type: 'json' }
 import homeIntro from '../../fixtures/base-site/components/home-intro.json' with { type: 'json' }
@@ -224,7 +224,7 @@ const fixtures: readonly EnrichedContentItem[] = [
   homePage,
   homeMainSlot,
   homeHero,
-  homeGrid,
+  homeBenefits,
   homeIntro,
   homeIntroImage,
   homeColumns,
@@ -237,7 +237,7 @@ const fixtures: readonly EnrichedContentItem[] = [
   homeMediaCard3,
   homeMediaCard4,
   homeMediaCard5,
-  homeGuidesCarousel,
+  homeGuides,
   homeGuideCardGettingStarted,
   homeGuideCardWorkingWithAHub,
   homeGuideCardEditorSetup,

@@ -1,11 +1,11 @@
 {
-  "id": "a1b2c3d4-0001-4000-8000-000000000023",
-  "label": "Home — guides carousel",
+  "id": "a1b2c3d4-0001-4000-8000-000000000010",
+  "label": "Home — guides",
   "body": {
     "_meta": {
-      "name": "Home — guides carousel",
-      "schema": "https://quadratic.amplience.com/v2/content/carousel",
-      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000023"
+      "name": "Home — guides",
+      "schema": "https://quadratic.amplience.com/v2/content/grid",
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000010"
     },
     "sectionHeader": {
       "title": {
@@ -115,12 +115,8 @@
         }
       }
     ],
-    "slidesMobile": 1.2,
-    "slidesTablet": 2,
-    "slidesDesktop": 3,
-    "showArrows": true,
-    "showDots": true,
-    "dragToScroll": true,
+    "sizingMode": "auto",
+    "minItemWidth": 280,
     "backgroundColor": "black",
     "maxWidth": "default",
     "gutter": true

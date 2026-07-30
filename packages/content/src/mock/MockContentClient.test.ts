@@ -40,8 +40,8 @@ describe('MockContentClient', () => {
     expect(slot?.components.map((c) => c._meta.schema)).toEqual([
       'https://quadratic.amplience.com/v2/content/hero',
       'https://quadratic.amplience.com/v2/content/columns',
-      'https://quadratic.amplience.com/v2/content/grid',
       'https://quadratic.amplience.com/v2/content/carousel',
+      'https://quadratic.amplience.com/v2/content/grid',
       'https://quadratic.amplience.com/v2/content/markdown-block',
       'https://quadratic.amplience.com/v2/content/columns',
     ])

@@ -1,19 +1,20 @@
 {
-  "id": "a1b2c3d4-0001-4000-8000-000000000010",
-  "label": "Home — Quadratic attributes grid",
+  "id": "a1b2c3d4-0001-4000-8000-000000000023",
+  "label": "Home — Quadratic attributes carousel",
   "body": {
     "_meta": {
-      "name": "Home — Quadratic attributes grid",
-      "schema": "https://quadratic.amplience.com/v2/content/grid",
-      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000010"
+      "name": "Home — Quadratic attributes carousel",
+      "schema": "https://quadratic.amplience.com/v2/content/carousel",
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000023"
     },
-    "sizingMode": "auto",
-    "minItemWidth": 280,
-    "backgroundColor": "light",
-    "gutter": true,
     "sectionHeader": {
       "title": {
-        "values": [{ "locale": "en-US", "value": "Benefits" }],
+        "values": [
+          {
+            "locale": "en-US",
+            "value": "Benefits"
+          }
+        ],
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
         }
@@ -66,6 +67,15 @@
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       }
-    ]
+    ],
+    "slidesMobile": 1.2,
+    "slidesTablet": 2,
+    "slidesDesktop": 3,
+    "showArrows": true,
+    "showDots": true,
+    "dragToScroll": true,
+    "backgroundColor": "light",
+    "maxWidth": "default",
+    "gutter": true
   }
 }
