@@ -1,0 +1,120 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000028",
+  "label": "Home — guide card: deploying",
+  "body": {
+    "_meta": {
+      "name": "Home — guide card: deploying",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000028"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Deploying"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Deploying"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Despliegue"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Déploiement"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Deployment"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Deploy"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Ship a site to Vercel with the environment it needs."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Ship a site to Vercel with the environment it needs."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Publica un sitio en Vercel con el entorno que necesita."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Déployez un site sur Vercel avec l'environnement nécessaire."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Veröffentlichen Sie eine Site auf Vercel mit der nötigen Umgebung."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Pubblica un sito su Vercel con l'ambiente necessario."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/ql-guide-deploy/800/450",
+        "alt": "A deployment pipeline completing successfully",
+        "width": 800,
+        "height": 450
+      }
+    },
+    "links": {
+      "cta": {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la guía"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lire le guide"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zum Leitfaden"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Leggi la guida"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs/deploying",
+        "variant": "text",
+        "color": "black"
+      }
+    }
+  }
+}

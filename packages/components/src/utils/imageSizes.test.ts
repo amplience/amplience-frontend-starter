@@ -2,7 +2,12 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { columnsBlockSlotSizes, gridBlockSlotSizes, scaleSizes } from './imageSizes'
+import {
+  carouselSlotSizes,
+  columnsBlockSlotSizes,
+  gridBlockSlotSizes,
+  scaleSizes,
+} from './imageSizes'
 
 describe('gridBlockSlotSizes — fixed mode', () => {
   it('maps the default 1/2/3 column counts to the CSS breakpoints', () => {
@@ -69,6 +74,49 @@ describe('columnsBlockSlotSizes', () => {
 
   it('treats zero columns as one (avoids divide-by-zero)', () => {
     expect(columnsBlockSlotSizes(0)).toBe('100vw')
+  })
+})
+
+describe('carouselSlotSizes', () => {
+  it('divides the viewport by the slide count at each breakpoint', () => {
+    expect(carouselSlotSizes({ slidesMobile: 1, slidesTablet: 2, slidesDesktop: 4 })).toBe(
+      '(min-width: 992px) 25vw, (min-width: 769px) 50vw, 100vw',
+    )
+  })
+
+  it('uses the same breakpoints as the grid', () => {
+    // Carousel.module.css resolves --carousel-slides at 769px and 992px, the
+    // same steps GridBlock uses — so a card sized for a grid cell and the same
+    // card in a slide agree.
+    const sizes = carouselSlotSizes({ slidesMobile: 1, slidesTablet: 2, slidesDesktop: 3 })
+    expect(sizes).toContain('(min-width: 769px)')
+    expect(sizes).toContain('(min-width: 992px)')
+  })
+
+  it('handles fractional slide counts', () => {
+    // A 1.2-slide peek makes each slide 1/1.2 of the track — 83.34vw, rounded up.
+    expect(carouselSlotSizes({ slidesMobile: 1.2, slidesTablet: 2.4, slidesDesktop: 3.4 })).toBe(
+      '(min-width: 992px) 29.42vw, (min-width: 769px) 41.67vw, 83.34vw',
+    )
+  })
+
+  it('caps a slide at the full width of the track', () => {
+    // A slide count below 1 would mean no whole slide is ever visible, so the
+    // schema floors it at 1 and this floors it again — a slide is never wider
+    // than the track it scrolls in.
+    expect(carouselSlotSizes({ slidesMobile: 1, slidesTablet: 1, slidesDesktop: 1 })).toBe(
+      '(min-width: 992px) 100vw, (min-width: 769px) 100vw, 100vw',
+    )
+    expect(carouselSlotSizes({ slidesMobile: 0.5, slidesTablet: 0, slidesDesktop: 1 })).toBe(
+      '(min-width: 992px) 100vw, (min-width: 769px) 100vw, 100vw',
+    )
+  })
+
+  it('rounds up so a derived length never under-declares', () => {
+    // 100 / 3 = 33.333… → 33.34
+    expect(carouselSlotSizes({ slidesMobile: 3, slidesTablet: 3, slidesDesktop: 3 })).toBe(
+      '(min-width: 992px) 33.34vw, (min-width: 769px) 33.34vw, 33.34vw',
+    )
   })
 })
 

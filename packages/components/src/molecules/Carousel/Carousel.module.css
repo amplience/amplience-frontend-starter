@@ -72,7 +72,7 @@
 
   --carousel-dot-size: var(--spacing-2);
   --carousel-dot-color: var(--color-gray-300);
-  --carousel-dot-active-color: var(--color-gray-800);
+  --carousel-dot-active-color: currentColor;
   /*
    * The dot is small; its hit area is not. Not a spacing token — 24px is the
    * WCAG 2.5.8 minimum target size, so it shouldn't scale with a brand's

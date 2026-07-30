@@ -1,0 +1,120 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000027",
+  "label": "Home — guide card: storybook",
+  "body": {
+    "_meta": {
+      "name": "Home — guide card: storybook",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000027"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Storybook"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Storybook"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Storybook"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Storybook"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Storybook"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Storybook"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Browse every component, its variants and its authoring options."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Browse every component, its variants and its authoring options."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Explora cada componente, sus variantes y sus opciones de edición."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Parcourez chaque composant, ses variantes et ses options d'édition."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Durchsuchen Sie jede Komponente, ihre Varianten und ihre Optionen."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Sfoglia ogni componente, le sue varianti e le sue opzioni."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/ql-guide-storybook/800/450",
+        "alt": "A component gallery with variant controls",
+        "width": 800,
+        "height": 450
+      }
+    },
+    "links": {
+      "cta": {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la guía"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lire le guide"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zum Leitfaden"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Leggi la guida"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs/storybook",
+        "variant": "text",
+        "color": "black"
+      }
+    }
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000024",
+  "label": "Home — guide card: getting-started",
+  "body": {
+    "_meta": {
+      "name": "Home — guide card: getting-started",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000024"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Getting started"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Getting started"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Primeros pasos"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Premiers pas"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Erste Schritte"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Per iniziare"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Clone the repo and render some fixture content."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Clone the repo and render some fixture content."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Clona el repositorio y renderiza algo de contenido de ejemplo."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Clonez le dépôt et affichez du contenu factice."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Klonen Sie das Repository und rendern Sie einige Beispieldaten."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Clona il repository e renderizza dei contenuti di esempio."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/ql-guide-start/800/450",
+        "alt": "A terminal beside a rendered page",
+        "width": 800,
+        "height": 450
+      }
+    },
+    "links": {
+      "cta": {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la guía"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lire le guide"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zum Leitfaden"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Leggi la guida"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs/getting-started",
+        "variant": "text",
+        "color": "black"
+      }
+    }
+  }
+}

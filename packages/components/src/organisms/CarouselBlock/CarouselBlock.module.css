@@ -1,0 +1,77 @@
+/*
+ * CarouselBlock organism styles.
+ *
+ * Section chrome only. Everything about the track — slide widths, scroll-snap,
+ * arrows, dots, the drag treatment — lives in Carousel.module.css and is
+ * themed through its own --carousel-* contract. This file is the background
+ * band, the vertical rhythm and the header spacing, and is deliberately the
+ * same shape as GridBlock.module.css and ColumnsBlock.module.css.
+ *
+ * BACKGROUND:
+ *   data-background-color — primary / secondary / tertiary / white / light / dark / black
+ *
+ * BRAND OVERRIDES: redefine --carousel-block-* variables under [data-brand].
+ */
+
+/* ---------------------------------------------------------------------------
+   Variables + base container
+   --------------------------------------------------------------------------- */
+
+.root {
+  --carousel-block-padding-y: calc(var(--spacing) * 10);
+
+  --carousel-block-background-color: transparent;
+  --carousel-block-text-color: inherit;
+
+  box-sizing: border-box;
+  background-color: var(--carousel-block-background-color);
+  color: var(--carousel-block-text-color);
+  /*
+   * The track can only scroll if it is allowed to be narrower than its content.
+   * The molecule declares this on its own root too, but a grid or flex parent
+   * resolves its minimum from *this* element, so the allowance has to reach the
+   * outer edge of the block to be any use.
+   */
+  min-width: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  padding-block: var(--carousel-block-padding-y);
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Background colour
+   --------------------------------------------------------------------------- */
+
+.root[data-background-color='primary'] {
+  --carousel-block-background-color: var(--color-primary);
+  --carousel-block-text-color: var(--color-primary-contrast);
+}
+.root[data-background-color='secondary'] {
+  --carousel-block-background-color: var(--color-secondary);
+  --carousel-block-text-color: var(--color-secondary-contrast);
+}
+.root[data-background-color='tertiary'] {
+  --carousel-block-background-color: var(--color-tertiary);
+  --carousel-block-text-color: var(--color-tertiary-contrast);
+}
+.root[data-background-color='light'] {
+  --carousel-block-background-color: var(--color-gray-100);
+  --carousel-block-text-color: var(--color-black);
+}
+.root[data-background-color='dark'] {
+  --carousel-block-background-color: var(--color-gray-800);
+  --carousel-block-text-color: var(--color-white);
+}
+.root[data-background-color='black'] {
+  --carousel-block-background-color: var(--color-black);
+  --carousel-block-text-color: var(--color-white);
+}
+.root[data-background-color='white'] {
+  --carousel-block-background-color: var(--color-white);
+  --carousel-block-text-color: var(--color-black);
+}

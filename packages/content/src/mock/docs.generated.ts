@@ -17,6 +17,8 @@ import docsRunbooksHubSetupHero from '../../fixtures/base-site/components/docs/r
 import docsRunbooksHubSetupMarkdown from '../../fixtures/base-site/components/docs/runbooks/hub-setup-markdown.json' with { type: 'json' }
 import docsStorybookHero from '../../fixtures/base-site/components/docs/storybook-hero.json' with { type: 'json' }
 import docsStorybookMarkdown from '../../fixtures/base-site/components/docs/storybook-markdown.json' with { type: 'json' }
+import docsThemingHero from '../../fixtures/base-site/components/docs/theming-hero.json' with { type: 'json' }
+import docsThemingMarkdown from '../../fixtures/base-site/components/docs/theming-markdown.json' with { type: 'json' }
 import docsTroubleshootingHero from '../../fixtures/base-site/components/docs/troubleshooting-hero.json' with { type: 'json' }
 import docsTroubleshootingMarkdown from '../../fixtures/base-site/components/docs/troubleshooting-markdown.json' with { type: 'json' }
 import docsWorkingWithAHubHero from '../../fixtures/base-site/components/docs/working-with-a-hub-hero.json' with { type: 'json' }
@@ -26,6 +28,7 @@ import docsEditorSetupPage from '../../fixtures/base-site/pages/docs/editor-setu
 import docsGettingStartedPage from '../../fixtures/base-site/pages/docs/getting-started.json' with { type: 'json' }
 import docsRunbooksHubSetupPage from '../../fixtures/base-site/pages/docs/runbooks/hub-setup.json' with { type: 'json' }
 import docsStorybookPage from '../../fixtures/base-site/pages/docs/storybook.json' with { type: 'json' }
+import docsThemingPage from '../../fixtures/base-site/pages/docs/theming.json' with { type: 'json' }
 import docsTroubleshootingPage from '../../fixtures/base-site/pages/docs/troubleshooting.json' with { type: 'json' }
 import docsWorkingWithAHubPage from '../../fixtures/base-site/pages/docs/working-with-a-hub.json' with { type: 'json' }
 import docsDeployingSlot from '../../fixtures/base-site/slots/docs/deploying-main.json' with { type: 'json' }
@@ -33,6 +36,7 @@ import docsEditorSetupSlot from '../../fixtures/base-site/slots/docs/editor-setu
 import docsGettingStartedSlot from '../../fixtures/base-site/slots/docs/getting-started-main.json' with { type: 'json' }
 import docsRunbooksHubSetupSlot from '../../fixtures/base-site/slots/docs/runbooks/hub-setup-main.json' with { type: 'json' }
 import docsStorybookSlot from '../../fixtures/base-site/slots/docs/storybook-main.json' with { type: 'json' }
+import docsThemingSlot from '../../fixtures/base-site/slots/docs/theming-main.json' with { type: 'json' }
 import docsTroubleshootingSlot from '../../fixtures/base-site/slots/docs/troubleshooting-main.json' with { type: 'json' }
 import docsWorkingWithAHubSlot from '../../fixtures/base-site/slots/docs/working-with-a-hub-main.json' with { type: 'json' }
 import type { EnrichedContentItem } from '../types'
@@ -58,6 +62,10 @@ export const docsFixtures = [
   docsStorybookMarkdown,
   docsStorybookSlot,
   docsStorybookPage,
+  docsThemingHero,
+  docsThemingMarkdown,
+  docsThemingSlot,
+  docsThemingPage,
   docsTroubleshootingHero,
   docsTroubleshootingMarkdown,
   docsTroubleshootingSlot,

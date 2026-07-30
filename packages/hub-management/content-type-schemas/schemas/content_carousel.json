@@ -1,0 +1,171 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/carousel",
+  "title": "Carousel Block",
+  "description": "A horizontally scrolling track of content items — cards, media, rich text or heroes, in any combination.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "📝 Content",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "📝 Content",
+            "pointers": ["/sectionHeader", "/items"]
+          },
+          {
+            "label": "⚙️ Options",
+            "pointers": [
+              "/slidesMobile",
+              "/slidesTablet",
+              "/slidesDesktop",
+              "/gap",
+              "/scrollStep",
+              "/showArrows",
+              "/showDots",
+              "/showScrollbar",
+              "/dragToScroll",
+              "/backgroundColor",
+              "/maxWidth",
+              "/gutter"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "sectionHeader": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/section-header#/definitions/section-header"
+        }
+      ]
+    },
+    "items": {
+      "title": "Carousel Items",
+      "description": "One content item per slide, in the order they scroll. Mix types freely — the carousel doesn't care what a slide contains.",
+      "type": "array",
+      "items": {
+        "$ref": "https://quadratic.amplience.com/v2/partials/carousel-items"
+      }
+    },
+    "slidesMobile": {
+      "title": "Slides visible (mobile)",
+      "description": "Below 769px. Try 1.2 to leave a sliver of the next slide showing.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/slides-per-view"
+        }
+      ]
+    },
+    "slidesTablet": {
+      "title": "Slides visible (tablet)",
+      "description": "From 769px.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/slides-per-view"
+        }
+      ]
+    },
+    "slidesDesktop": {
+      "title": "Slides visible (desktop)",
+      "description": "From 992px.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/slides-per-view"
+        }
+      ]
+    },
+    "gap": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/gap"
+        }
+      ]
+    },
+    "scrollStep": {
+      "default": "slide",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/scroll-step"
+        }
+      ]
+    },
+    "showArrows": {
+      "default": true,
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/show-arrows"
+        }
+      ]
+    },
+    "showDots": {
+      "default": true,
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/show-dots"
+        }
+      ]
+    },
+    "showScrollbar": {
+      "default": false,
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/show-scrollbar"
+        }
+      ]
+    },
+    "dragToScroll": {
+      "default": true,
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/drag-to-scroll"
+        }
+      ]
+    },
+    "backgroundColor": {
+      "title": "Background colour",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+      ]
+    },
+    "maxWidth": {
+      "title": "Max width",
+      "default": "default",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width" }
+      ]
+    },
+    "gutter": {
+      "title": "Gutter",
+      "description": "Inset the track from the viewport edge with horizontal padding. Leave off for an edge-to-edge carousel, where slides run to the screen edge and the peek reads most clearly.",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/gutter" }
+      ]
+    }
+  },
+  "propertyOrder": [
+    "sectionHeader",
+    "items",
+    "slidesMobile",
+    "slidesTablet",
+    "slidesDesktop",
+    "gap",
+    "scrollStep",
+    "showArrows",
+    "showDots",
+    "showScrollbar",
+    "dragToScroll",
+    "backgroundColor",
+    "maxWidth",
+    "gutter"
+  ]
+}

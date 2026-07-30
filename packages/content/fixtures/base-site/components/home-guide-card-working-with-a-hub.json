@@ -1,0 +1,120 @@
+{
+  "id": "a1b2c3d4-0001-4000-8000-000000000025",
+  "label": "Home — guide card: working-with-a-hub",
+  "body": {
+    "_meta": {
+      "name": "Home — guide card: working-with-a-hub",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000025"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Working with a hub"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Working with a hub"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Trabajar con un hub"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Travailler avec un hub"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Mit einem Hub arbeiten"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Lavorare con un hub"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Connect to your hub and seed some content types, schemas and example content."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Connect to your hub and seed some content types, schemas and example content."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Conéctate a tu hub e importa tipos de contenido, esquemas y contenido de ejemplo."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Connectez-vous à votre hub et importez des types de contenu, des schémas et du contenu d'exemple."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Stellen Sie eine Verbindung zu Ihrem Hub her und importieren Sie einige Inhaltstypen, Schemas und Beispielinhalte."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Collegati al tuo hub e importa tipi di contenuto, schemi e contenuti di esempio."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/ql-guide-hub/800/450",
+        "alt": "Content types listed in a Dynamic Content hub",
+        "width": 800,
+        "height": 450
+      }
+    },
+    "links": {
+      "cta": {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la guía"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lire le guide"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zum Leitfaden"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Leggi la guida"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs/working-with-a-hub",
+        "variant": "text",
+        "color": "black"
+      }
+    }
+  }
+}

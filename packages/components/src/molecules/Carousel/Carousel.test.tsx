@@ -470,6 +470,16 @@ describe('Carousel', () => {
       expect(observers).toHaveLength(0)
     })
 
+    it('renders the plain track where ResizeObserver does not exist', () => {
+      // The controls are an enhancement over a track that already scrolls, so
+      // their absence is the correct degradation — and it keeps every consumer
+      // that renders a carousel in a test from needing this stub.
+      vi.unstubAllGlobals()
+      expect(() => renderCarousel()).not.toThrow()
+      expect(screen.getByRole('group', { name: 'Slides' })).toBeTruthy()
+      expect(screen.queryByRole('button', { name: 'Next slide' })).toBeNull()
+    })
+
     it('still measures for the drag alone, so the grab cursor stays honest', () => {
       renderCarousel({ showArrows: false, showDots: false })
       expect(observers).toHaveLength(1)

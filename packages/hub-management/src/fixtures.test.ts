@@ -117,7 +117,10 @@ describe('schema manifest', () => {
   })
 
   it('exposes content types as the non-partial subset', () => {
-    expect(contentTypeSchemas).toHaveLength(23)
+    // A deliberate tripwire: bump this when a content type is added, so the
+    // count is a decision rather than something derived from the thing it
+    // checks. 24 as of the carousel (ADR-0020).
+    expect(contentTypeSchemas).toHaveLength(24)
     expect(contentTypeSchemas.every((e) => e.validationLevel !== 'PARTIAL')).toBe(true)
     expect(findSchema('https://quadratic.amplience.com/v2/partials/media')?.validationLevel).toBe(
       'PARTIAL',
@@ -135,6 +138,69 @@ describe('every fixture body validates against its schema', () => {
       expect(validate, `no schema registered for ${schemaId}`).toBeDefined()
       const valid = validate?.(body)
       expect(valid, JSON.stringify(validate?.errors ?? [], null, 2)).toBe(true)
+    })
+  }
+})
+
+const CONTENT_LINK_SCHEMA = 'http://bigcontent.io/cms/schema/v1/core#/definitions/content-link'
+
+type ContentLink = { id: string; contentType: string }
+
+/** Every content-link anywhere in a fixture body, however deeply nested. */
+function contentLinksIn(node: unknown, found: ContentLink[] = []): ContentLink[] {
+  if (Array.isArray(node)) {
+    for (const child of node) contentLinksIn(child, found)
+    return found
+  }
+  if (typeof node !== 'object' || node === null) return found
+  const { _meta, id, contentType, ...rest } = node as {
+    _meta?: { schema?: string }
+    id?: unknown
+    contentType?: unknown
+  } & Record<string, unknown>
+  if (
+    _meta?.schema === CONTENT_LINK_SCHEMA &&
+    typeof id === 'string' &&
+    typeof contentType === 'string'
+  ) {
+    found.push({ id, contentType })
+  }
+  for (const value of Object.values(rest)) contentLinksIn(value, found)
+  return found
+}
+
+/**
+ * A content-link carries the target's schema URI alongside its id, and the two
+ * have to agree — the platform validates the link against the allowed-type enum
+ * on that field, so a link claiming `grid` while pointing at a carousel is
+ * invalid content even though the mock resolver (which goes by id) renders it
+ * happily. That divergence is invisible until a hub import rejects it, and it is
+ * exactly what happens when a fixture's container type is changed without
+ * revisiting the links into it.
+ *
+ * Links whose target isn't in the fixture set are skipped rather than failed:
+ * an unresolvable link is a deliberate case elsewhere (the mock client has a
+ * test for leaving one unresolved), and this guard is about agreement, not
+ * completeness.
+ */
+describe('every content-link names its target’s actual content type', () => {
+  const schemaById = new Map(
+    allFixtures().map((f) => [f.id, (f.body as { _meta: { schema: string } })._meta.schema]),
+  )
+
+  for (const fixture of allFixtures()) {
+    const links = contentLinksIn(fixture.body)
+    if (links.length === 0) continue
+
+    it(`${fixture.label} (${links.length} link${links.length === 1 ? '' : 's'})`, () => {
+      for (const link of links) {
+        const actual = schemaById.get(link.id)
+        if (actual === undefined) continue
+        expect(
+          link.contentType,
+          `link to ${link.id} says "${link.contentType}" but that item is "${actual}"`,
+        ).toBe(actual)
+      }
     })
   }
 })

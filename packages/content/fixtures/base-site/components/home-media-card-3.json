@@ -111,7 +111,7 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/features/theming",
+        "href": "/docs/theming",
         "variant": "text",
         "color": "black"
       }
