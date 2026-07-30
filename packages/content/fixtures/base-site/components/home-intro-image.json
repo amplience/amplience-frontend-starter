@@ -12,10 +12,10 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://picsum.photos/id/6/1200/800",
+        "src": "/placeholders/whats-in-the-box.png",
         "alt": "Quadratic Lite — accelerator for composable Amplience sites",
-        "width": 1200,
-        "height": 800
+        "width": 1080,
+        "height": 1080
       }
     },
     "caption": {

@@ -98,10 +98,12 @@ import homeColumns2 from '../../fixtures/base-site/components/home-columns-2.jso
 import homeColumnsImage from '../../fixtures/base-site/components/home-columns-image.json' with { type: 'json' }
 import homeColumnsMarkdown from '../../fixtures/base-site/components/home-columns-markdown.json' with { type: 'json' }
 import homeColumns from '../../fixtures/base-site/components/home-columns.json' with { type: 'json' }
+import homeGuideCardContributing from '../../fixtures/base-site/components/home-guide-card-contributing.json' with { type: 'json' }
 import homeGuideCardDeploying from '../../fixtures/base-site/components/home-guide-card-deploying.json' with { type: 'json' }
 import homeGuideCardEditorSetup from '../../fixtures/base-site/components/home-guide-card-editor-setup.json' with { type: 'json' }
 import homeGuideCardGettingStarted from '../../fixtures/base-site/components/home-guide-card-getting-started.json' with { type: 'json' }
 import homeGuideCardStorybook from '../../fixtures/base-site/components/home-guide-card-storybook.json' with { type: 'json' }
+import homeGuideCardTheming from '../../fixtures/base-site/components/home-guide-card-theming.json' with { type: 'json' }
 import homeGuideCardTroubleshooting from '../../fixtures/base-site/components/home-guide-card-troubleshooting.json' with { type: 'json' }
 import homeGuideCardWorkingWithAHub from '../../fixtures/base-site/components/home-guide-card-working-with-a-hub.json' with { type: 'json' }
 import homeGuides from '../../fixtures/base-site/components/home-guides.json' with { type: 'json' }
@@ -242,8 +244,10 @@ const fixtures: readonly EnrichedContentItem[] = [
   homeGuideCardWorkingWithAHub,
   homeGuideCardEditorSetup,
   homeGuideCardStorybook,
+  homeGuideCardTheming,
   homeGuideCardDeploying,
   homeGuideCardTroubleshooting,
+  homeGuideCardContributing,
   aboutPage,
   aboutMainSlot,
   aboutHero,

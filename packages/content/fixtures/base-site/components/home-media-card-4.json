@@ -72,13 +72,14 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://picsum.photos/seed/ql-card-headless/800/450",
-        "alt": "Headless CMS architecture patterns",
+        "src": "/benefit-covers/headless-best-practices.png",
+        "alt": "A page composed of nested slots and blocks",
         "width": 800,
         "height": 450
       }
     },
     "links": {
+      "href": "/about",
       "cta": {
         "label": {
           "values": [
@@ -111,7 +112,7 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/features/architecture",
+        "href": "/about",
         "variant": "text",
         "color": "black"
       }

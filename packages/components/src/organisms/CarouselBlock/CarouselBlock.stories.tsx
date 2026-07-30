@@ -127,6 +127,34 @@ export const CardRail: Story = {
   ),
 }
 
+export const GutterBleed: Story = {
+  name: 'Gutter — track bleeds into it',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Scroll this one. Slide one still lines up with the section header, but the previous ' +
+          'and next slides show through into the gutter instead of being cut dead on the content ' +
+          'edge — which is where a reader looks for evidence there is more to scroll to. ' +
+          'Automatic whenever the block has a gutter; nothing to configure. Compare with the ' +
+          'card rail above, which is the same layout.',
+      },
+    },
+  },
+  render: () => (
+    <CarouselBlock
+      sectionHeader={{ title: 'Benefits', description: 'The bleed is the width of the gutter.' }}
+      slidesMobile={1.2}
+      slidesTablet={2}
+      slidesDesktop={3}
+      backgroundColor="dark"
+      gutter
+    >
+      {cards(10)}
+    </CarouselBlock>
+  ),
+}
+
 export const EdgeToEdgePeek: Story = {
   name: 'Edge to edge with a peek',
   parameters: {

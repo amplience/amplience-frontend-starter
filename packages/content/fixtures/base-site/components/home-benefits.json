@@ -13,6 +13,26 @@
           {
             "locale": "en-US",
             "value": "Benefits"
+          },
+          {
+            "locale": "en-GB",
+            "value": "Benefits"
+          },
+          {
+            "locale": "es-ES",
+            "value": "Beneficios"
+          },
+          {
+            "locale": "fr-FR",
+            "value": "Avantages"
+          },
+          {
+            "locale": "de-DE",
+            "value": "Vorteile"
+          },
+          {
+            "locale": "it-IT",
+            "value": "Vantaggi"
           }
         ],
         "_meta": {
@@ -24,6 +44,26 @@
           {
             "locale": "en-US",
             "value": "A demo-ready frontend accelerator that brings Amplience Dynamic Content to life."
+          },
+          {
+            "locale": "en-GB",
+            "value": "A demo-ready frontend accelerator that brings Amplience Dynamic Content to life."
+          },
+          {
+            "locale": "es-ES",
+            "value": "Un acelerador de frontend listo para demostraciones que da vida al contenido dinámico de Amplience."
+          },
+          {
+            "locale": "fr-FR",
+            "value": "Un accélérateur de frontend prêt pour la démonstration qui donne vie au contenu dynamique d'Amplience."
+          },
+          {
+            "locale": "de-DE",
+            "value": "Ein demo-bereiter Frontend-Beschleuniger, der Amplience Dynamic Content zum Leben erweckt."
+          },
+          {
+            "locale": "it-IT",
+            "value": "Un acceleratore frontend pronto per la demo che dà vita ai contenuti dinamici di Amplience."
           }
         ],
         "_meta": {
@@ -74,7 +114,7 @@
     "showArrows": true,
     "showDots": true,
     "dragToScroll": true,
-    "backgroundColor": "light",
+    "backgroundColor": "black",
     "maxWidth": "default",
     "gutter": true
   }

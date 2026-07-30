@@ -1,37 +1,37 @@
 {
-  "id": "a1b2c3d4-0001-4000-8000-000000000027",
-  "label": "Home — guide card: storybook",
+  "id": "a1b2c3d4-0001-4000-8000-000000000031",
+  "label": "Home — guide card: contributing",
   "body": {
     "_meta": {
-      "name": "Home — guide card: storybook",
+      "name": "Home — guide card: contributing",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
-      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000027"
+      "deliveryId": "a1b2c3d4-0001-4000-8000-000000000031"
     },
     "title": {
       "values": [
         {
           "locale": "en-US",
-          "value": "Storybook"
+          "value": "Contributing"
         },
         {
           "locale": "en-GB",
-          "value": "Storybook"
+          "value": "Contributing"
         },
         {
           "locale": "es-ES",
-          "value": "Storybook"
+          "value": "Contribuir"
         },
         {
           "locale": "fr-FR",
-          "value": "Storybook"
+          "value": "Contribuer"
         },
         {
           "locale": "de-DE",
-          "value": "Storybook"
+          "value": "Mitwirken"
         },
         {
           "locale": "it-IT",
-          "value": "Storybook"
+          "value": "Contribuire"
         }
       ],
       "_meta": {
@@ -42,27 +42,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Browse every component, its variants and its authoring options."
+          "value": "Workflow, conventions, and how to open a pull request."
         },
         {
           "locale": "en-GB",
-          "value": "Browse every component, its variants and its authoring options."
+          "value": "Workflow, conventions, and how to open a pull request."
         },
         {
           "locale": "es-ES",
-          "value": "Explora cada componente, sus variantes y sus opciones de edición."
+          "value": "Flujo de trabajo, convenciones y cómo abrir una pull request."
         },
         {
           "locale": "fr-FR",
-          "value": "Parcourez chaque composant, ses variantes et ses options d'édition."
+          "value": "Workflow, conventions et comment ouvrir une pull request."
         },
         {
           "locale": "de-DE",
-          "value": "Durchsuchen Sie jede Komponente, ihre Varianten und ihre Optionen."
+          "value": "Workflow, Konventionen und wie Sie einen Pull Request eröffnen."
         },
         {
           "locale": "it-IT",
-          "value": "Sfoglia ogni componente, le sue varianti e le sue opzioni."
+          "value": "Workflow, convenzioni e come aprire una pull request."
         }
       ],
       "_meta": {
@@ -72,14 +72,14 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "/docs-covers/storybook.png",
-        "alt": "A component library beside a canvas of components",
+        "src": "/docs-covers/contributing.png",
+        "alt": "A branch merging back, beside the diff under review",
         "width": 800,
         "height": 450
       }
     },
     "links": {
-      "href": "/docs/storybook",
+      "href": "/docs/getting-started",
       "cta": {
         "label": {
           "values": [
@@ -112,7 +112,7 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/docs/storybook",
+        "href": "/contributing",
         "variant": "text",
         "color": "black"
       }

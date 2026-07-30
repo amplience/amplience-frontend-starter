@@ -72,13 +72,14 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://picsum.photos/seed/ql-card-ttv/800/450",
-        "alt": "Accelerated implementation timeline",
+        "src": "/benefit-covers/faster-time-to-value.png",
+        "alt": "A short route reaching a working site while a longer one runs on",
         "width": 800,
         "height": 450
       }
     },
     "links": {
+      "href": "/docs/getting-started",
       "cta": {
         "label": {
           "values": [

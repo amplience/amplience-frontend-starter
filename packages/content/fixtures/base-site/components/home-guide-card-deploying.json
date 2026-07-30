@@ -42,27 +42,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Ship a site to Vercel with the environment it needs."
+          "value": "Ship and configure a hosted frontend e.g. on Vercel."
         },
         {
           "locale": "en-GB",
-          "value": "Ship a site to Vercel with the environment it needs."
+          "value": "Ship and configure a hosted frontend e.g. on Vercel."
         },
         {
           "locale": "es-ES",
-          "value": "Publica un sitio en Vercel con el entorno que necesita."
+          "value": "Publica y configura un frontend alojado, por ejemplo en Vercel."
         },
         {
           "locale": "fr-FR",
-          "value": "Déployez un site sur Vercel avec l'environnement nécessaire."
+          "value": "Déployez et configurez un frontend hébergé, par exemple sur Vercel."
         },
         {
           "locale": "de-DE",
-          "value": "Veröffentlichen Sie eine Site auf Vercel mit der nötigen Umgebung."
+          "value": "Veröffentlichen und konfigurieren Sie ein gehostetes Frontend, z. B. auf Vercel."
         },
         {
           "locale": "it-IT",
-          "value": "Pubblica un sito su Vercel con l'ambiente necessario."
+          "value": "Pubblica e configura un frontend ospitato, ad esempio su Vercel."
         }
       ],
       "_meta": {
@@ -72,13 +72,14 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://picsum.photos/seed/ql-guide-deploy/800/450",
-        "alt": "A deployment pipeline completing successfully",
+        "src": "/docs-covers/deploying.png",
+        "alt": "A freshly deployed site in a browser window",
         "width": 800,
         "height": 450
       }
     },
     "links": {
+      "href": "/docs/deploying",
       "cta": {
         "label": {
           "values": [

@@ -72,13 +72,14 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://picsum.photos/seed/ql-card-config/800/450",
-        "alt": "Quick setup with minimal configuration",
+        "src": "/benefit-covers/works-out-of-the-box.png",
+        "alt": "Three completed setup steps beside a running site",
         "width": 800,
         "height": 450
       }
     },
     "links": {
+      "href": "/docs/getting-started",
       "cta": {
         "label": {
           "values": [

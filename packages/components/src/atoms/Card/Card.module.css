@@ -120,7 +120,7 @@
 }
 
 .root {
-  :global(.Link[data-variant='text']) {
+  :global(.Button[data-variant='text']) {
     margin: calc(var(--button-padding-y) * -1) calc(var(--button-padding-x) * -1);
   }
 }

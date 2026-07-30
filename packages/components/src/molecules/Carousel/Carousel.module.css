@@ -19,7 +19,12 @@
  *
  * LAYOUT:
  *   --carousel-gap               gap between slides (defaults to --gap)
- *   --carousel-bleed             vertical room inside the scrollport for focus rings
+ *   --carousel-bleed-block       vertical room inside the scrollport for focus rings
+ *   --carousel-bleed-inline      how far the track shows past the content edge.
+ *                                Deliberately NOT declared below — an ancestor
+ *                                sets it to opt in (CarouselBlock does, when it
+ *                                has a gutter) and the 0 default lives in the
+ *                                var() fallbacks on .track
  *   --carousel-slide-width       derived; do not set
  *
  * CONTROLS:
@@ -91,7 +96,7 @@
    * auto), so anything drawn outside a slide's box — most importantly the
    * focus ring on a link or card inside it — would otherwise be clipped.
    */
-  --carousel-bleed: var(--spacing-1);
+  --carousel-bleed-block: var(--spacing-1);
 
   box-sizing: border-box;
   /*
@@ -135,8 +140,35 @@
   align-items: stretch;
   gap: var(--carousel-gap);
   min-width: 0;
-  padding-block: var(--carousel-bleed);
-  margin-block: calc(var(--carousel-bleed) * -1);
+  padding-block: var(--carousel-bleed-block);
+  margin-block: calc(var(--carousel-bleed-block) * -1);
+  /*
+   * The inline bleed, in three parts that only work together:
+   *
+   *   margin  — widens the scrollport past the content edge by the bleed, so
+   *             the adjacent slides are visible there rather than clipped.
+   *   padding — puts the resting position back at the content edge, so slide
+   *             one still lines up with the section header above it.
+   *   scroll-padding — shrinks the *snapport* to match. Without it, snapping
+   *             aligns slides to the scrollport edge rather than the padding
+   *             edge, so every snap would land a slide a gutter's width too far
+   *             left. This is the part that's easy to miss, because the layout
+   *             looks right until you actually scroll.
+   *
+   * Note this is width-neutral: the negative margin adds 2× bleed to the border
+   * box and the padding takes the same amount back off the content box, so the
+   * flex content box — and therefore --carousel-slide-width, which resolves
+   * against it — is exactly what it was. The bleed changes what's visible, not
+   * how anything is sized.
+   *
+   * The zero default lives in these var() fallbacks rather than as a
+   * declaration on .root, and that placement is load-bearing: custom properties
+   * inherit, so declaring it on .root would shadow the value an ancestor sets
+   * and the opt-in could never reach here.
+   */
+  margin-inline: calc(var(--carousel-bleed-inline, 0px) * -1);
+  padding-inline: var(--carousel-bleed-inline, 0px);
+  scroll-padding-inline: var(--carousel-bleed-inline, 0px);
   overflow-x: auto;
   overflow-y: hidden;
   /* Don't chain a horizontal overscroll into the page's own scroll. */
@@ -211,7 +243,9 @@
 }
 
 .root[data-scrollbar='true'] .track {
-  padding-bottom: var(--spacing-2);
+  /* Room for the scrollbar, on top of the focus-ring bleed rather than
+     replacing it — this rule outranks .track on specificity. */
+  padding-bottom: calc(var(--carousel-bleed-block) + var(--spacing-2));
   scrollbar-width: thin;
   scrollbar-color: var(--carousel-scrollbar-thumb-color) var(--carousel-scrollbar-track-color);
 }
