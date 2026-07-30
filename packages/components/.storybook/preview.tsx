@@ -1,5 +1,6 @@
 import type { Preview } from '@storybook/nextjs-vite'
 
+import '@storybook/addon-docs/blocks'
 // Design tokens — the CSS variable contract per ADR-0002
 import '@amplience/quadratic-theme/tokens.css'
 // Global reset + brand font loading — mirrors apps/web/app/globals.css.

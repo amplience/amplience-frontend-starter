@@ -1,0 +1,408 @@
+/*
+ * Carousel molecule styles.
+ *
+ * The scrolling is entirely CSS: a flex track with `overflow-x: auto` and
+ * `scroll-snap-type: x mandatory`. Every slide is a snap point, so touch,
+ * trackpad, scrollbar drag and keyboard arrow keys all work with no
+ * JavaScript involved. The component's small client island only reads the
+ * scroll position to light up controls — it never owns the position.
+ *
+ * SLIDES PER VIEW (one value per breakpoint, mirroring GridBlock's columns):
+ *   --carousel-slides-mobile    (default 1)   below 769px
+ *   --carousel-slides-tablet    (default 2)   769px and up
+ *   --carousel-slides-desktop   (default 3)   992px and up
+ *   --carousel-slides                         the resolved value; do not set
+ *
+ * Fractional values are supported and give the "peek" affordance — 1.2 shows
+ * one full slide plus a sliver of the next, which is how a touch user learns
+ * the track scrolls at all.
+ *
+ * LAYOUT:
+ *   --carousel-gap               gap between slides (defaults to --gap)
+ *   --carousel-bleed             vertical room inside the scrollport for focus rings
+ *   --carousel-slide-width       derived; do not set
+ *
+ * CONTROLS:
+ *   --carousel-arrow-background / -color / -inset / -radius / -shadow
+ *   --carousel-dot-size / -color / -active-color / -target-size
+ *
+ * SCROLLBAR (only rendered when data-scrollbar="true"):
+ *   --carousel-scrollbar-thumb-color
+ *   --carousel-scrollbar-track-color
+ *   --carousel-scrollbar-thickness
+ *
+ * STATE ATTRIBUTES on the root:
+ *   data-scrollbar   "true" | "false" — show the styled scrollbar
+ *   data-draggable   present when a mouse drag would move the track
+ *   data-dragging    present for the duration of a drag gesture
+ *
+ * BRAND OVERRIDES: redefine any --carousel-* variable under [data-brand].
+ */
+
+/* ---------------------------------------------------------------------------
+   Variables + root
+   --------------------------------------------------------------------------- */
+
+.root {
+  --carousel-slides-mobile: 1;
+  --carousel-slides-tablet: 2;
+  --carousel-slides-desktop: 3;
+  --carousel-slides: var(--carousel-slides-mobile);
+
+  --carousel-gap: var(--gap);
+  /*
+   * n slides plus the gaps between them fill the track exactly.
+   *
+   * The gap count is ceil(n) - 1, not n - 1: showing 1.2 slides puts one whole
+   * gap in view, not 0.2 of one, so a naive (n - 1) leaves every fractional
+   * track roughly 0.8 of a gap too wide and the requested peek comes out short.
+   * round(up, …) is CSS's ceil; it needs Chrome 125 / Safari 15.4 / Firefox 118,
+   * and for integer n it collapses to the familiar (n - 1).
+   */
+  --carousel-slide-width: calc(
+    (100% - var(--carousel-gap) * (round(up, var(--carousel-slides), 1) - 1)) /
+      var(--carousel-slides)
+  );
+
+  --carousel-arrow-background: var(--color-white);
+  --carousel-arrow-color: var(--color-black);
+  --carousel-arrow-inset: var(--spacing-1);
+  --carousel-arrow-radius: 100%;
+  --carousel-arrow-shadow: 0 1px 4px 0 rgb(0 0 0 / 0.24);
+
+  --carousel-dot-size: var(--spacing-2);
+  --carousel-dot-color: var(--color-gray-300);
+  --carousel-dot-active-color: var(--color-gray-800);
+  /*
+   * The dot is small; its hit area is not. Not a spacing token — 24px is the
+   * WCAG 2.5.8 minimum target size, so it shouldn't scale with a brand's
+   * spacing scale.
+   */
+  --carousel-dot-target-size: 24px;
+
+  --carousel-scrollbar-thumb-color: var(--color-gray-400);
+  --carousel-scrollbar-track-color: var(--color-gray-200);
+  --carousel-scrollbar-thickness: var(--spacing-2);
+
+  /*
+   * Breathing room inside the scrollport, cancelled by a matching negative
+   * margin so the carousel occupies the same vertical space it would without
+   * it. A scroll container can't have `overflow-y: visible` (it computes to
+   * auto), so anything drawn outside a slide's box — most importantly the
+   * focus ring on a link or card inside it — would otherwise be clipped.
+   */
+  --carousel-bleed: var(--spacing-1);
+
+  box-sizing: border-box;
+  /*
+   * Belt and braces against the classic "carousel inside a grid blows the
+   * layout out" bug, where a `1fr` cell resolves its auto minimum from the
+   * track's full content width. A scroll container's content-based minimum size
+   * is already zero per CSS Sizing 3, so this shouldn't be load-bearing — but
+   * it costs nothing and makes the intent explicit for anyone who adds a
+   * wrapper between the root and the track.
+   */
+  min-width: 0;
+}
+
+@media (min-width: 769px) {
+  .root {
+    --carousel-slides: var(--carousel-slides-tablet);
+  }
+}
+
+@media (min-width: 992px) {
+  .root {
+    --carousel-slides: var(--carousel-slides-desktop);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Viewport — positioning context for the overlaid arrows
+   --------------------------------------------------------------------------- */
+
+.viewport {
+  position: relative;
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Track — the scroll container
+   --------------------------------------------------------------------------- */
+
+.track {
+  display: flex;
+  align-items: stretch;
+  gap: var(--carousel-gap);
+  min-width: 0;
+  padding-block: var(--carousel-bleed);
+  margin-block: calc(var(--carousel-bleed) * -1);
+  overflow-x: auto;
+  overflow-y: hidden;
+  /* Don't chain a horizontal overscroll into the page's own scroll. */
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  /*
+   * Programmatic scrolls from the arrows and dots deliberately omit their
+   * `behavior` option, which means they inherit this value. That's how the
+   * prefers-reduced-motion block at the bottom of this file switches both
+   * user and programmatic scrolling to instant in one place.
+   */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/*
+ * The track carries tabindex="0" so keyboard users can focus it and scroll
+ * with the arrow keys. Chromium and Firefox make overflow containers
+ * implicitly focusable; Safari does not, so the explicit tabindex is what
+ * makes this keyboard-operable there.
+ */
+.track:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+   Slides
+
+   Carousel.tsx wraps every child in a .slide, so the track's children are
+   uniform whatever the CMS composed — which is what lets these rules carry the
+   width and snap alignment rather than reaching into arbitrary content.
+
+   The wrapper is a column flex container whose child grows, so a card in a
+   short slide still fills the height of the tallest one, matching the stretch
+   behaviour of GridBlock's cells.
+   --------------------------------------------------------------------------- */
+
+.slide {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 var(--carousel-slide-width);
+  max-width: var(--carousel-slide-width);
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.slide > * {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Scrollbar
+
+   Hidden by default: a visible scrollbar reads as a browser affordance rather
+   than a designed one, and the arrows and dots already communicate position.
+   Opt in with the showScrollbar prop when the scrollbar *is* the intended
+   affordance (e.g. a dense, arrow-free track).
+
+   Note on `scrollbar-color`: it takes thumb then track, in that order, and
+   both values must resolve. A typo in either colour invalidates the whole
+   declaration and the scrollbar falls back to the browser default.
+   --------------------------------------------------------------------------- */
+
+.root[data-scrollbar='false'] .track {
+  scrollbar-width: none;
+}
+
+.root[data-scrollbar='false'] .track::-webkit-scrollbar {
+  display: none;
+}
+
+.root[data-scrollbar='true'] .track {
+  padding-bottom: var(--spacing-2);
+  scrollbar-width: thin;
+  scrollbar-color: var(--carousel-scrollbar-thumb-color) var(--carousel-scrollbar-track-color);
+}
+
+.root[data-scrollbar='true'] .track::-webkit-scrollbar {
+  height: var(--carousel-scrollbar-thickness);
+}
+
+.root[data-scrollbar='true'] .track::-webkit-scrollbar-thumb {
+  background-color: var(--carousel-scrollbar-thumb-color);
+  border-radius: 99px;
+}
+
+.root[data-scrollbar='true'] .track::-webkit-scrollbar-thumb:active {
+  cursor: grabbing;
+}
+
+.root[data-scrollbar='true'] .track::-webkit-scrollbar-track {
+  background-color: var(--carousel-scrollbar-track-color);
+  border-radius: 99px;
+}
+
+/* ---------------------------------------------------------------------------
+   Drag to scroll
+
+   Driven by two attributes on the root: data-draggable when a drag would move
+   something (rendered by React), and data-dragging for the duration of a gesture
+   (written straight to the DOM by usePointerDragScroll).
+
+   The cursor is the affordance. The two suspensions are what make the gesture
+   work at all — see the comment inside.
+   --------------------------------------------------------------------------- */
+
+.root[data-draggable] .track {
+  cursor: grab;
+}
+
+.root[data-dragging] .track {
+  /*
+   * Mandatory snap re-snaps after every scroll position the drag writes, and
+   * smooth behaviour animates each one — either one leaves the track fighting
+   * the pointer. Both are suspended for the gesture and restored on release,
+   * which is the moment the track settles onto a snap position.
+   */
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+  cursor: grabbing;
+  /* Stop the gesture painting a text selection across the slides. */
+  user-select: none;
+}
+
+/*
+ * A link or button inside a slide keeps `cursor: pointer` from the UA
+ * stylesheet while idle, which is correct — a declared value beats an inherited
+ * one, so the track's grab doesn't leak into it. Mid-drag the whole track should
+ * read as being dragged, so this author rule overrides those descendants.
+ */
+.root[data-dragging] .track * {
+  cursor: grabbing;
+}
+
+/* ---------------------------------------------------------------------------
+   Arrows
+
+   These are IconButtons, so tap target, focus ring and hover come from
+   IconButton.module.css. The rules below only add placement and the raised
+   surface that lets them sit over slide content.
+
+   Every selector is descended from .root so it beats IconButton's own
+   single-class rules on specificity rather than on stylesheet order, which
+   CSS Modules does not guarantee between files.
+   --------------------------------------------------------------------------- */
+
+.root .arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  transform: translateY(-50%);
+  background: var(--carousel-arrow-background);
+  color: var(--carousel-arrow-color);
+  border-radius: var(--carousel-arrow-radius);
+  box-shadow: var(--carousel-arrow-shadow);
+  transition:
+    opacity 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/*
+ * Logical insets, matching the rest of the library — so the placement is
+ * already correct if and when the measurement logic learns about RTL.
+ */
+.root .arrowPrev {
+  inset-inline-start: var(--carousel-arrow-inset);
+}
+
+.root .arrowNext {
+  inset-inline-end: var(--carousel-arrow-inset);
+}
+
+/*
+ * Dimmed rather than hidden at the ends. PR124's approach of opacity: 0 makes
+ * the control vanish, which reads as a rendering bug the first time you hit
+ * the end of a track.
+ */
+.root .arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* Cancel IconButton's hover dim on a disabled arrow. */
+.root .arrow:disabled:hover {
+  opacity: 0.35;
+}
+
+/* ---------------------------------------------------------------------------
+   Dots
+
+   One dot per reachable snap position, measured at runtime — see Carousel.tsx
+   for why that isn't the same as one dot per slide.
+   --------------------------------------------------------------------------- */
+
+.dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  /*
+   * The row is rendered (empty) before the first measurement and populated
+   * after it, so its height is reserved up front and the dots appearing
+   * doesn't shift the slides above them.
+   */
+  min-height: var(--carousel-dot-target-size);
+  margin-top: var(--spacing-2);
+}
+
+.dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--carousel-dot-target-size);
+  height: var(--carousel-dot-target-size);
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  color: inherit;
+}
+
+.dot::before {
+  content: '';
+  display: block;
+  width: var(--carousel-dot-size);
+  height: var(--carousel-dot-size);
+  background-color: var(--carousel-dot-color);
+  border-radius: 50%;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.dot[aria-current='true']::before {
+  background-color: var(--carousel-dot-active-color);
+  transform: scale(1.35);
+}
+
+.dot:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}
+
+/* ---------------------------------------------------------------------------
+   Reduced motion
+
+   One place to switch off every animation in this component. Because the
+   arrow and dot handlers let CSS decide the scroll behaviour, overriding
+   scroll-behavior here covers programmatic scrolling too.
+   --------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    scroll-behavior: auto;
+  }
+
+  .root .arrow,
+  .dot::before {
+    transition: none;
+  }
+
+  .dot[aria-current='true']::before {
+    transform: none;
+  }
+}

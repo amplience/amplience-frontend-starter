@@ -50,6 +50,34 @@ describe('IconButton', () => {
         false,
       )
     })
+
+    it('renders disabled as the native disabled attribute', () => {
+      render(<IconButton icon="chevron-left" label="Previous" disabled />)
+      expect(screen.getByRole<HTMLButtonElement>('button', { name: 'Previous' }).disabled).toBe(
+        true,
+      )
+    })
+
+    it('is enabled and free of aria-controls by default', () => {
+      render(<IconButton icon="chevron-left" label="Previous" />)
+      const el = screen.getByRole<HTMLButtonElement>('button', { name: 'Previous' })
+      expect(el.disabled).toBe(false)
+      expect(el.hasAttribute('aria-controls')).toBe(false)
+    })
+
+    it('renders controls as aria-controls', () => {
+      render(<IconButton icon="chevron-right" label="Next" controls="track-1" />)
+      expect(screen.getByRole('button', { name: 'Next' }).getAttribute('aria-controls')).toBe(
+        'track-1',
+      )
+    })
+
+    it('does not fire onClick when disabled', () => {
+      const onClick = vi.fn()
+      render(<IconButton icon="chevron-right" label="Next" onClick={onClick} disabled />)
+      fireEvent.click(screen.getByRole('button', { name: 'Next' }))
+      expect(onClick).not.toHaveBeenCalled()
+    })
   })
 })
 
