@@ -42,27 +42,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Clone the repo, point it at a hub, and watch your content render."
+          "value": "Clone the repo and render some fixture content."
         },
         {
           "locale": "en-GB",
-          "value": "Clone the repo, point it at a hub, and watch your content render."
+          "value": "Clone the repo and render some fixture content."
         },
         {
           "locale": "es-ES",
-          "value": "Clona el repositorio, conéctalo a un hub y observa cómo se renderiza tu contenido."
+          "value": "Clona el repositorio y renderiza algo de contenido de ejemplo."
         },
         {
           "locale": "fr-FR",
-          "value": "Clonez le dépôt, connectez-le à un hub et voyez votre contenu s'afficher."
+          "value": "Clonez le dépôt et affichez du contenu factice."
         },
         {
           "locale": "de-DE",
-          "value": "Klonen Sie das Repository, verbinden Sie es mit einem Hub und sehen Sie Ihre Inhalte."
+          "value": "Klonen Sie das Repository und rendern Sie einige Beispieldaten."
         },
         {
           "locale": "it-IT",
-          "value": "Clona il repository, collegalo a un hub e guarda i tuoi contenuti."
+          "value": "Clona il repository e renderizza dei contenuti di esempio."
         }
       ],
       "_meta": {

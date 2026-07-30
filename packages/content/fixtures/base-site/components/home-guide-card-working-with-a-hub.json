@@ -42,27 +42,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Seed content types, schemas and example content into your own hub."
+          "value": "Connect to your hub and seed some content types, schemas and example content."
         },
         {
           "locale": "en-GB",
-          "value": "Seed content types, schemas and example content into your own hub."
+          "value": "Connect to your hub and seed some content types, schemas and example content."
         },
         {
           "locale": "es-ES",
-          "value": "Carga tipos de contenido, esquemas y contenido de ejemplo en tu propio hub."
+          "value": "Conéctate a tu hub e importa tipos de contenido, esquemas y contenido de ejemplo."
         },
         {
           "locale": "fr-FR",
-          "value": "Importez types de contenu, schémas et contenus d'exemple dans votre propre hub."
+          "value": "Connectez-vous à votre hub et importez des types de contenu, des schémas et du contenu d'exemple."
         },
         {
           "locale": "de-DE",
-          "value": "Übertragen Sie Inhaltstypen, Schemas und Beispielinhalte in Ihren eigenen Hub."
+          "value": "Stellen Sie eine Verbindung zu Ihrem Hub her und importieren Sie einige Inhaltstypen, Schemas und Beispielinhalte."
         },
         {
           "locale": "it-IT",
-          "value": "Importa tipi di contenuto, schemi e contenuti di esempio nel tuo hub."
+          "value": "Collegati al tuo hub e importa tipi di contenuto, schemi e contenuti di esempio."
         }
       ],
       "_meta": {

@@ -1,0 +1,28 @@
+{
+  "id": "553b243a-074a-5acb-9eaf-f049f49b36db",
+  "label": "Theming page",
+  "body": {
+    "_meta": {
+      "name": "Theming page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "base-site/docs/theming"
+          }
+        ]
+      }
+    },
+    "title": "Theming",
+    "description": "Every visual decision in Quadratic Lite resolves through a CSS custom property. Brands redefine those properties — in code, in the CMS, or both — and no component file changes.",
+    "slots": [
+      {
+        "id": "925341c1-4770-58e0-bc29-318a698454be",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}
