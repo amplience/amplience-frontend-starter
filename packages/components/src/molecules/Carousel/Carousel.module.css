@@ -31,6 +31,11 @@
  *   --carousel-scrollbar-track-color
  *   --carousel-scrollbar-thickness
  *
+ * STATE ATTRIBUTES on the root:
+ *   data-scrollbar   "true" | "false" — show the styled scrollbar
+ *   data-draggable   present when a mouse drag would move the track
+ *   data-dragging    present for the duration of a drag gesture
+ *
  * BRAND OVERRIDES: redefine any --carousel-* variable under [data-brand].
  */
 
@@ -227,6 +232,45 @@
 .root[data-scrollbar='true'] .track::-webkit-scrollbar-track {
   background-color: var(--carousel-scrollbar-track-color);
   border-radius: 99px;
+}
+
+/* ---------------------------------------------------------------------------
+   Drag to scroll
+
+   Driven by two attributes on the root: data-draggable when a drag would move
+   something (rendered by React), and data-dragging for the duration of a gesture
+   (written straight to the DOM by usePointerDragScroll).
+
+   The cursor is the affordance. The two suspensions are what make the gesture
+   work at all — see the comment inside.
+   --------------------------------------------------------------------------- */
+
+.root[data-draggable] .track {
+  cursor: grab;
+}
+
+.root[data-dragging] .track {
+  /*
+   * Mandatory snap re-snaps after every scroll position the drag writes, and
+   * smooth behaviour animates each one — either one leaves the track fighting
+   * the pointer. Both are suspended for the gesture and restored on release,
+   * which is the moment the track settles onto a snap position.
+   */
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+  cursor: grabbing;
+  /* Stop the gesture painting a text selection across the slides. */
+  user-select: none;
+}
+
+/*
+ * A link or button inside a slide keeps `cursor: pointer` from the UA
+ * stylesheet while idle, which is correct — a declared value beats an inherited
+ * one, so the track's grab doesn't leak into it. Mid-drag the whole track should
+ * read as being dragged, so this author rule overrides those descendants.
+ */
+.root[data-dragging] .track * {
+  cursor: grabbing;
 }
 
 /* ---------------------------------------------------------------------------

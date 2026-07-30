@@ -1,7 +1,20 @@
 'use client'
 
 import clsx from 'clsx'
-import { Children, useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react'
+import {
+  Children,
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type DOMAttributes,
+  type DragEvent as ReactDragEvent,
+  type MouseEvent as ReactMouseEvent,
+  type ReactNode,
+  type PointerEvent as ReactPointerEvent,
+  type RefObject,
+} from 'react'
 
 import { IconButton } from '../IconButton/IconButton'
 import styles from './Carousel.module.css'
@@ -60,6 +73,21 @@ export type CarouselProps = {
    *   'page'  — advance by a full track width, as a paged listing would.
    */
   scrollStep?: CarouselScrollStep
+  /**
+   * Let a mouse drag the slides to scroll. Defaults to true.
+   *
+   * Touch and pen keep their native panning — see usePointerDragScroll. Clicks
+   * on links inside slides still work; a drag is distinguished from a click by
+   * distance. Selecting text inside a slide by dragging across it does not
+   * survive, which is the inherent cost of the gesture.
+   *
+   * Turn this off for slides whose content wants the drag for itself (a map, a
+   * range input, a colour picker), or where text selection matters more.
+   *
+   * Note for WCAG 2.5.7 (Dragging Movements): the arrows and dots are the
+   * single-pointer alternative to the drag, so leave at least one of them on.
+   */
+  dragToScroll?: boolean
   /**
    * Accessible name for the carousel, announced alongside the "carousel" role
    * description. Defaults to 'Carousel' — supply something specific
@@ -140,6 +168,252 @@ function snapPositions(track: HTMLElement): number[] {
   return positions
 }
 
+/** Index of the snap position closest to `scrollLeft`. Ties go to the earlier one. */
+function nearestIndex(positions: readonly number[], scrollLeft: number): number {
+  let index = 0
+  let closestDelta = Number.POSITIVE_INFINITY
+  positions.forEach((position, candidate) => {
+    const delta = Math.abs(position - scrollLeft)
+    if (delta < closestDelta) {
+      closestDelta = delta
+      index = candidate
+    }
+  })
+  return index
+}
+
+// ---------------------------------------------------------------------------
+// Drag to scroll
+// ---------------------------------------------------------------------------
+
+/**
+ * How far the pointer must travel, in px, before a press counts as a drag
+ * rather than a click. Browsers use a similar figure to decide when a mousedown
+ * becomes a native drag, and it comfortably absorbs the shake of a normal click.
+ */
+const DRAG_THRESHOLD = 6
+
+type DragSession = {
+  readonly pointerId: number
+  /**
+   * Pointer x the movement is measured from. Nudged by DRAG_THRESHOLD when the
+   * drag is recognised, so the content never jumps by the threshold distance.
+   */
+  startX: number
+  readonly startScroll: number
+  /** Whether the pointer has passed DRAG_THRESHOLD and this is now a drag. */
+  active: boolean
+}
+
+/** The handlers the hook contributes to the track, or nothing when disabled. */
+type DragHandlers = Pick<
+  DOMAttributes<HTMLDivElement>,
+  | 'onPointerDown'
+  | 'onPointerMove'
+  | 'onPointerUp'
+  | 'onPointerCancel'
+  | 'onClickCapture'
+  | 'onDragStart'
+>
+
+/**
+ * Click-and-drag scrolling for a mouse, layered over the native scrolling the
+ * track already has.
+ *
+ * Three properties make it safe to add to a track full of links:
+ *
+ *   1. **Mouse only.** Touch already gets native, momentum, GPU-composited
+ *      scrolling, and pen gets the same native panning in Chromium; replacing
+ *      either with JavaScript is strictly worse, and the two would fight. So the
+ *      gesture is gated on `pointerType === 'mouse'` and `touch-action` is left
+ *      alone. A trackpad click-drag reports as a mouse, and a finger on a
+ *      touchscreen laptop reports as touch, so hybrid devices get the right one
+ *      of the two per gesture.
+ *   2. **Nothing happens below the threshold.** No `preventDefault` on
+ *      pointerdown (which would break focus), and no scrolling until the pointer
+ *      has travelled DRAG_THRESHOLD px. Short of that the gesture is an ordinary
+ *      click, so links and buttons inside slides behave exactly as they would
+ *      without this hook. No session starts at all on a track with nothing to
+ *      scroll, so a click there can never be mistaken for a drag.
+ *   3. **A real drag swallows its own click.** Releasing after a drag still
+ *      produces a click event, which would follow whatever link happens to be
+ *      under the pointer. It's cancelled in the capture phase instead — before
+ *      the native event can descend to the link, so both navigation and any
+ *      descendant onClick are covered. The flag is cleared on the next press, so
+ *      a drag that ends outside the track (and therefore produces no click)
+ *      can't eat a later one; keyboard-synthesised clicks are exempt outright.
+ *
+ * The `data-dragging` attribute the hook sets on the root is not cosmetic: it's
+ * what suspends `scroll-snap-type` and `scroll-behavior` in the CSS module.
+ * Mandatory snap would re-snap after every scroll position we write, and smooth
+ * behaviour would animate each one — either makes the track fight the pointer.
+ * The attribute is written directly to the DOM rather than held in state so it
+ * lands before the first scroll write, without waiting on a render.
+ *
+ * On release the track is scrolled to the nearest snap position explicitly,
+ * using the same code path as the arrows and dots, rather than relying on the
+ * browser to re-snap when `scroll-snap-type` returns.
+ *
+ * A pointer press can end without a pointerup the track ever hears about — a
+ * sub-threshold release off the track, or a release outside the window. Because
+ * a mouse keeps the same pointerId across gestures, a session that outlived its
+ * press would resume on the next hover and scroll the track with no button held,
+ * so every move re-checks that a button is still down.
+ *
+ * WCAG 2.5.7 (Dragging Movements) asks for a single-pointer alternative to any
+ * drag gesture. The arrows and dots are that alternative — a reason to leave at
+ * least one of them enabled.
+ */
+function usePointerDragScroll(
+  rootRef: RefObject<HTMLDivElement | null>,
+  trackRef: RefObject<HTMLDivElement | null>,
+  enabled: boolean,
+): DragHandlers {
+  const session = useRef<DragSession | null>(null)
+  const swallowNextClick = useRef(false)
+
+  const setDragging = useCallback(
+    (dragging: boolean) => {
+      const root = rootRef.current
+      if (!root) return
+      if (dragging) root.setAttribute('data-dragging', '')
+      else root.removeAttribute('data-dragging')
+    },
+    [rootRef],
+  )
+
+  /**
+   * Tear a session down, restoring everything an active drag had suspended.
+   * Safe to call for a session that never crossed the threshold.
+   */
+  const releaseSession = useCallback(
+    (current: DragSession) => {
+      session.current = null
+      if (!current.active) return
+      const track = trackRef.current
+      if (track?.hasPointerCapture(current.pointerId)) {
+        track.releasePointerCapture(current.pointerId)
+      }
+      setDragging(false)
+    },
+    [trackRef, setDragging],
+  )
+
+  const onPointerDown = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      // Any new press means the previous gesture is over, whether or not its
+      // click ever arrived.
+      swallowNextClick.current = false
+      // A second press while one is live would orphan the first, leaving snap
+      // suspended with nothing able to restore it. Recover rather than refuse.
+      const stale = session.current
+      if (stale) releaseSession(stale)
+
+      // Mouse only (see the hook docstring), primary button, primary pointer.
+      if (event.pointerType !== 'mouse' || event.button !== 0 || !event.isPrimary) return
+
+      const track = trackRef.current
+      if (!track) return
+      // Nothing to scroll means nothing to drag. Starting a session anyway would
+      // suspend snap and swallow the click for a gesture that moves nothing —
+      // and on a track of linked cards that reads as a broken link.
+      if (track.scrollWidth - track.clientWidth <= EPSILON) return
+
+      session.current = {
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startScroll: track.scrollLeft,
+        active: false,
+      }
+    },
+    [trackRef, releaseSession],
+  )
+
+  const onPointerMove = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      const current = session.current
+      const track = trackRef.current
+      if (current?.pointerId !== event.pointerId || !track) return
+
+      // The button came up somewhere we never heard about. See the hook
+      // docstring — a stale session would resume on the next hover.
+      if (event.buttons === 0) {
+        releaseSession(current)
+        return
+      }
+
+      if (!current.active) {
+        const travelled = event.clientX - current.startX
+        if (Math.abs(travelled) < DRAG_THRESHOLD) return
+        current.active = true
+        // Absorb the threshold distance instead of jumping by it: from here the
+        // content tracks the pointer 1:1, measured from where the drag was
+        // recognised rather than from where the button went down.
+        current.startX += Math.sign(travelled) * DRAG_THRESHOLD
+        // Selection begins within the first pixel or two, well before
+        // `user-select: none` arrives with the attribute below, and lifting it
+        // later won't clear what's already highlighted.
+        window.getSelection()?.removeAllRanges()
+        // Capture so the drag survives the pointer leaving the track — moving
+        // vertically out of a short carousel mid-gesture is easy to do.
+        track.setPointerCapture(current.pointerId)
+        setDragging(true)
+      }
+
+      track.scrollLeft = current.startScroll - (event.clientX - current.startX)
+    },
+    [trackRef, setDragging, releaseSession],
+  )
+
+  const onPointerEnd = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      const current = session.current
+      if (current?.pointerId !== event.pointerId) return
+      const wasDragging = current.active
+      // Restores snap and smooth scrolling before the settle below.
+      releaseSession(current)
+      if (!wasDragging) return
+
+      swallowNextClick.current = true
+      const track = trackRef.current
+      if (!track) return
+      const positions = snapPositions(track)
+      const target = positions[nearestIndex(positions, track.scrollLeft)]
+      if (target !== undefined) track.scrollTo({ left: target })
+    },
+    [trackRef, releaseSession],
+  )
+
+  const onClickCapture = useCallback((event: ReactMouseEvent<HTMLDivElement>) => {
+    if (!swallowNextClick.current) return
+    // A click with no pointer behind it (Enter on a focused link) can't be the
+    // tail of a drag, and must never be swallowed by a flag left over from one.
+    if (event.detail === 0) return
+    swallowNextClick.current = false
+    event.preventDefault()
+    event.stopPropagation()
+  }, [])
+
+  const onDragStart = useCallback((event: ReactDragEvent<HTMLDivElement>) => {
+    // Links and images start a native HTML5 drag on their own, which would
+    // hijack the gesture and show a drag ghost. Suppressed for the whole press,
+    // not just past the threshold, because browsers begin the native drag at a
+    // smaller distance than DRAG_THRESHOLD.
+    if (session.current) event.preventDefault()
+  }, [])
+
+  if (!enabled) return {}
+
+  return {
+    onPointerDown,
+    onPointerMove,
+    onPointerUp: onPointerEnd,
+    onPointerCancel: onPointerEnd,
+    onClickCapture,
+    onDragStart,
+  }
+}
+
 /** Everything the client island derives from the scroll position. */
 type ScrollState = {
   /** Index into the snap positions, not into the slides. */
@@ -217,16 +491,22 @@ export function Carousel({
   showDots = true,
   showScrollbar = false,
   scrollStep = 'slide',
+  dragToScroll = true,
   label = 'Carousel',
   className,
 }: CarouselProps) {
+  const rootRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const trackId = `carousel-track-${useId()}`
   const [state, setState] = useState<ScrollState>(INITIAL_STATE)
 
-  // Controls are the only reason to measure anything. With both off, the
-  // component is an inert wrapper around a CSS scroll container.
-  const hasControls = showArrows || showDots
+  const dragHandlers = usePointerDragScroll(rootRef, trackRef, dragToScroll)
+
+  // Measuring is what tells us whether there is anywhere to scroll, which every
+  // affordance depends on — the arrows and dots for whether to render at all,
+  // the drag for whether to offer a grab cursor. With all three off nothing
+  // needs the answer, so nothing is measured.
+  const measures = showArrows || showDots || dragToScroll
 
   // Children are flattened to an array so each one can be wrapped in a labelled
   // slide. toArray also drops the null/false entries a conditional
@@ -241,17 +521,7 @@ export function Carousel({
     if (!track) return
 
     const positions = snapPositions(track)
-    const scrollLeft = track.scrollLeft
-
-    let activeIndex = 0
-    let closestDelta = Number.POSITIVE_INFINITY
-    positions.forEach((position, index) => {
-      const delta = Math.abs(position - scrollLeft)
-      if (delta < closestDelta) {
-        closestDelta = delta
-        activeIndex = index
-      }
-    })
+    const activeIndex = nearestIndex(positions, track.scrollLeft)
 
     // Scrolling fires continuously and most events change nothing we render.
     // Bailing out on an unchanged result avoids a re-render per scroll event.
@@ -264,7 +534,7 @@ export function Carousel({
 
   useEffect(() => {
     const track = trackRef.current
-    if (!track || !hasControls) return
+    if (!track || !measures) return
 
     // ResizeObserver fires once on observe, which covers the initial
     // measurement, and again on any size change — so there's no window resize
@@ -277,7 +547,7 @@ export function Carousel({
     for (const slide of Array.from(track.children)) observer.observe(slide)
 
     return () => observer.disconnect()
-  }, [measure, hasControls, slides.length])
+  }, [measure, measures, slides.length])
 
   /**
    * Scroll to a snap position by index.
@@ -336,6 +606,7 @@ export function Carousel({
 
   return (
     <div
+      ref={rootRef}
       className={clsx('Carousel', styles.root, className)}
       // role="group" rather than a region landmark: a carousel is a widget
       // within a page section, not a section of the page (WAI-ARIA APG).
@@ -343,6 +614,10 @@ export function Carousel({
       aria-roledescription="carousel"
       aria-label={label}
       data-scrollbar={showScrollbar ? 'true' : 'false'}
+      // Present only when a drag would actually move something, so the grab
+      // cursor never promises a gesture that does nothing. usePointerDragScroll
+      // sets data-dragging alongside it, straight to the DOM.
+      data-draggable={dragToScroll && scrollable ? 'true' : undefined}
       style={cssVars}
     >
       <div className={styles.viewport}>
@@ -359,7 +634,8 @@ export function Carousel({
           tabIndex={0}
           role="group"
           aria-label="Slides"
-          onScroll={hasControls ? measure : undefined}
+          onScroll={measures ? measure : undefined}
+          {...dragHandlers}
         >
           {slides.map((slide, index) => (
             // Each slide is wrapped rather than annotated in place: children

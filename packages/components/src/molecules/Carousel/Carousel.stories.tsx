@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { Placeholder } from '../../atoms/Placeholder/Placeholder'
+import { MediaCard } from '../MediaCard/MediaCard'
 import { Carousel } from './Carousel'
 
 const meta = {
@@ -30,6 +30,7 @@ const meta = {
     showArrows: { control: 'boolean' },
     showDots: { control: 'boolean' },
     showScrollbar: { control: 'boolean' },
+    dragToScroll: { control: 'boolean' },
     children: { control: false },
   },
   parameters: {
@@ -43,11 +44,21 @@ type Story = StoryObj<typeof Carousel>
 
 // ---------------------------------------------------------------------------
 // Slide helper
+//
+// Every slide is a fully-linked MediaCard on purpose. A carousel of inert boxes
+// proves nothing about the drag gesture — the thing worth checking is that a
+// click still follows the link while a drag does not.
 // ---------------------------------------------------------------------------
 
 function slides(count: number) {
   return Array.from({ length: count }, (_, index) => (
-    <Placeholder key={index} height={220} text={`Slide ${index + 1}`} />
+    <MediaCard
+      key={index}
+      title={`Slide ${index + 1}`}
+      description="You can click+drag on the card, but also still interact with the CTA links inside it. The drag gesture is only recognised after the pointer has moved 6px, so a click on a link still follows its href."
+      links={{ cta: { label: 'Click Me', href: `https://www.bbc.co.uk` } }}
+      elevation="bordered"
+    />
   ))
 }
 
@@ -64,10 +75,57 @@ export const Playground: Story = {
     showArrows: true,
     showDots: true,
     showScrollbar: false,
+    dragToScroll: true,
     scrollStep: 'slide',
     label: 'Featured products',
   },
   render: (args) => <Carousel {...args}>{slides(8)}</Carousel>,
+}
+
+// ---------------------------------------------------------------------------
+// Drag to scroll
+// ---------------------------------------------------------------------------
+
+export const DragToScroll: Story = {
+  name: 'Drag to scroll (mouse)',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Press anywhere on the track and drag. The cursor is `grab`, except over a link, ' +
+          'which keeps its own `pointer` — and `grabbing` everywhere for the duration of the ' +
+          'gesture. Nothing moves until the pointer has travelled 6px, so a click on a card ' +
+          'still follows its link; past that the drag scrolls, snap is suspended so the track ' +
+          'tracks the pointer, and the click the release produces is swallowed. On touch this ' +
+          "is all inert — the browser's own momentum scrolling is better than anything we " +
+          'would write.',
+      },
+    },
+  },
+  render: () => (
+    <Carousel slidesMobile={1.2} slidesTablet={2.4} slidesDesktop={3.4} label="Shop the look">
+      {slides(10)}
+    </Carousel>
+  ),
+}
+
+export const DragDisabled: Story = {
+  name: 'Drag turned off',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'For slides whose content wants the drag gesture for itself — a map, a range input, ' +
+          'a colour picker. Native scrolling, the arrows and the dots are all unaffected, and ' +
+          'the grab cursor is gone.',
+      },
+    },
+  },
+  render: () => (
+    <Carousel dragToScroll={false} label="Browse by category">
+      {slides(8)}
+    </Carousel>
+  ),
 }
 
 // ---------------------------------------------------------------------------
@@ -139,8 +197,10 @@ export const ScrollbarAffordance: Story = {
     docs: {
       description: {
         story:
-          'With both sets of controls off and the scrollbar on, the component ships no ' +
-          'interactive JavaScript at all — the track is a plain CSS scroll-snap container.',
+          'Arrows and dots off, scrollbar on — the scrollbar is then the only visible sign the ' +
+          'track scrolls. Worth pairing with dragToScroll, since a scrollbar is a small target. ' +
+          'Note that turning every affordance off leaves no single-pointer alternative to ' +
+          'dragging (WCAG 2.5.7), which is a reason to keep at least one of them.',
       },
     },
   },
@@ -171,7 +231,8 @@ export const NotEnoughToScroll: Story = {
       description: {
         story:
           'The controls are measured, not assumed: when everything already fits, the arrows and ' +
-          'dots are omitted rather than rendered inert.',
+          'dots are omitted rather than rendered inert, and the grab cursor is withheld because ' +
+          'a drag would move nothing.',
       },
     },
   },
