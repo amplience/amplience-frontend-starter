@@ -51,4 +51,11 @@ describe('heroBlockRegistryEntry.propsFromSchema', () => {
     expect(adapt?.(validHero, {})?.isTopOfPage).toBe(false)
     expect(adapt?.(validHero, { isTopOfPage: true })?.isTopOfPage).toBe(true)
   })
+
+  it('sets bare from the render context, defaulting to false', () => {
+    // Layout containers set { bare: true } on their child context, which is how
+    // a hero nested in a carousel slide or a grid cell drops its own gutter.
+    expect(adapt?.(validHero, {})?.bare).toBe(false)
+    expect(adapt?.(validHero, { bare: true })?.bare).toBe(true)
+  })
 })

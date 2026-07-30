@@ -331,3 +331,36 @@ export const TitleOnly: Story = {
     title: 'Welcome.',
   },
 }
+
+// ---------------------------------------------------------------------------
+// Bare — nested in a layout container
+// ---------------------------------------------------------------------------
+
+export const Bare: Story = {
+  name: 'Bare (nested in a slide or cell)',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Supplied by the renderer, not authored: layout containers set `bare` on their child ' +
+          'context, and a hero reads it to drop its inner `Container`. The section and every ' +
+          'layout attribute stay, because the overlay mode, scrim and content positioning are ' +
+          'all expressed there — what goes is the `--site-gutter` a parent has already applied, ' +
+          'replaced by a hero-local `--hero-bare-padding-x` so content is not flush to the slot ' +
+          'edge. Compare against `Overlay — flexible` to see the difference in the content inset.',
+      },
+    },
+  },
+  args: {
+    ...baseCopy,
+    bare: true,
+    media: { ...landscapeMedia },
+  },
+  render: (args) => (
+    // A stand-in for a carousel slide or a grid cell: something narrower than
+    // the viewport that has already done its own insetting.
+    <div style={{ width: '480px', outline: '2px dashed var(--color-gray-400)' }}>
+      <HeroBlock {...args} />
+    </div>
+  ),
+}

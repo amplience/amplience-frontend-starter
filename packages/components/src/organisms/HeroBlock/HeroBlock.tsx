@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { useId } from 'react'
+import { useId, type ReactNode } from 'react'
 
 import type { ContentMediaData } from '@amplience/quadratic-types'
 
@@ -177,6 +177,23 @@ export type HeroBlockProps = {
    * the CTA buttons so their links stay inside the current locale. Defaults to
    * '' (the default locale — links unprefixed).
    */
+  /**
+   * When true, drops the inner `<Container>` so the hero doesn't add a second
+   * `--site-gutter` on top of one a parent has already applied. Use when the
+   * hero is nested inside a layout component that owns its own container
+   * semantics — a CarouselBlock slide, a GridBlock cell, a ColumnsBlock column.
+   *
+   * The `<section>` and its data attributes are kept, because the hero's entire
+   * layout — overlay mode, scrim, content positioning — is expressed on them.
+   * What goes is the horizontal gutter and the max-width cap, neither of which
+   * means anything inside a slot the parent has already sized. A hero-local
+   * inset (`--hero-bare-padding-x`) replaces the gutter, so content isn't flush
+   * to the slot edge.
+   *
+   * Supplied by the renderer from `RenderContext.bare`, not authored.
+   * Defaults to false.
+   */
+  bare?: boolean
   localeBasePath?: string
   className?: string
 }
@@ -247,6 +264,7 @@ export function HeroBlock({
   minHeight,
   maxHeight,
   isTopOfPage = false,
+  bare = false,
   localeBasePath,
   className,
 }: HeroBlockProps) {
@@ -341,7 +359,7 @@ export function HeroBlock({
         </div>
       )}
 
-      <Container className={styles.container ?? ''} maxWidth={maxWidth} gutter>
+      <ContentWrapper bare={bare} maxWidth={maxWidth}>
         <div
           className={styles.content}
           style={{
@@ -388,7 +406,34 @@ export function HeroBlock({
             </div>
           )}
         </div>
-      </Container>
+      </ContentWrapper>
     </section>
+  )
+}
+
+/**
+ * The hero's content column: a `Container` normally, a plain padded div when
+ * bare. Split out so the branch reads as one decision rather than duplicating
+ * the whole content tree — see the `bare` prop for why the two differ.
+ */
+function ContentWrapper({
+  bare,
+  maxWidth,
+  children,
+}: {
+  bare: boolean
+  // Non-optional: HeroBlock defaults it, and Container's own prop excludes
+  // undefined under exactOptionalPropertyTypes.
+  maxWidth: NonNullable<ContainerProps['maxWidth']>
+  children: ReactNode
+}) {
+  if (bare) {
+    return <div className={clsx(styles.container, styles.bareContainer)}>{children}</div>
+  }
+
+  return (
+    <Container className={styles.container ?? ''} maxWidth={maxWidth} gutter>
+      {children}
+    </Container>
   )
 }

@@ -7,10 +7,10 @@ export const HERO_BLOCK_SCHEMA = 'https://quadratic.amplience.com/v2/content/her
 
 /**
  * The hero delivery body — HeroBlock props plus the content envelope.
- * `isTopOfPage` is excluded: it's a position cue supplied by the render
- * context, not an author-editable field.
+ * `isTopOfPage` and `bare` are excluded: both are layout cues supplied by the
+ * render context, not author-editable fields.
  */
-export type HeroBlockSchema = Omit<HeroBlockProps, 'isTopOfPage' | 'localeBasePath'> & {
+export type HeroBlockSchema = Omit<HeroBlockProps, 'isTopOfPage' | 'bare' | 'localeBasePath'> & {
   readonly _meta: unknown
 }
 
@@ -29,15 +29,18 @@ export const validateHeroBlockSchema = (schema: unknown): schema is HeroBlockSch
 
 /**
  * Registry entry for the hero schema. The adapter strips the `_meta`
- * envelope and sets `isTopOfPage` from the render context so a hero that
- * leads the page loads its image eagerly; the remaining fields are the
- * component's props one-for-one.
+ * envelope and sets two cues from the render context: `isTopOfPage`, so a hero
+ * that leads the page loads its image eagerly, and `bare`, so a hero nested in
+ * a carousel slide, grid cell or column drops its own gutter instead of
+ * compounding the parent's. The remaining fields are the component's props
+ * one-for-one.
  */
 export const heroBlockRegistryEntry: ComponentRegistryEntry<HeroBlockSchema, HeroBlockProps> = {
   component: HeroBlock,
   propsFromSchema: ({ _meta: _envelope, ...props }, ctx) => ({
     ...props,
     isTopOfPage: ctx.isTopOfPage ?? false,
+    bare: ctx.bare ?? false,
     localeBasePath: ctx.localeBasePath ?? '',
   }),
   validate: validateHeroBlockSchema,

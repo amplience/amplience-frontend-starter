@@ -9,15 +9,15 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     slidesMobile: {
-      control: { type: 'number', min: 0.5, max: 6, step: 0.1 },
+      control: { type: 'number', min: 1, max: 6, step: 0.1 },
       description: 'Slides visible below 769px. Fractional values give a peek affordance.',
     },
     slidesTablet: {
-      control: { type: 'number', min: 0.5, max: 6, step: 0.1 },
+      control: { type: 'number', min: 1, max: 6, step: 0.1 },
       description: 'Slides visible from 769px.',
     },
     slidesDesktop: {
-      control: { type: 'number', min: 0.5, max: 6, step: 0.1 },
+      control: { type: 'number', min: 1, max: 6, step: 0.1 },
       description: 'Slides visible from 992px.',
     },
     gap: {

@@ -19,7 +19,12 @@
  */
 const roundUpTwo = (n: number): number => Math.ceil(n * 100 - 1e-9) / 100
 
-/** A slot occupying `1 / columns` of the viewport, as a `vw` length. */
+/**
+ * A slot occupying `1 / columns` of the viewport, as a `vw` length.
+ *
+ * The floor of 1 is a real constraint, not just a divide-by-zero guard: a grid
+ * column and a carousel slide are both at most the full width of their track.
+ */
 const columnVw = (columns: number): string => `${roundUpTwo(100 / Math.max(1, columns))}vw`
 
 // Layout breakpoints — must match GridBlock.module.css and
@@ -59,6 +64,40 @@ export function gridBlockSlotSizes(input: GridSlotSizesInput): string {
     `(min-width: ${DESKTOP_MIN_PX}px) ${columnVw(input.columnsDesktop)}`,
     `(min-width: ${TABLET_MIN_PX}px) ${columnVw(input.columnsTablet)}`,
     columnVw(input.columnsMobile),
+  ].join(', ')
+}
+
+export type CarouselSlotSizesInput = {
+  /** Slides visible below 769px. Fractional, but never below 1. */
+  slidesMobile: number
+  /** Slides visible from 769px. Fractional, but never below 1. */
+  slidesTablet: number
+  /** Slides visible from 992px. Fractional, but never below 1. */
+  slidesDesktop: number
+}
+
+/**
+ * The `sizes` a CarouselBlock slide occupies.
+ *
+ * A slide is `100 / slides` of the viewport at each breakpoint, on the same
+ * 769px / 992px steps the grid uses — Carousel.module.css resolves
+ * `--carousel-slides` from the three per-breakpoint values at exactly those
+ * widths, so a card sized for a grid cell and the same card in a slide agree.
+ *
+ * Slide counts are fractional, which is what separates this from
+ * `gridBlockSlotSizes` — but only ever 1 or more, since a count below 1 would
+ * mean no whole slide is ever visible. Showing 1.2 slides makes each one
+ * narrower than the track by a factor of 1.2, so the same division holds and
+ * simply yields a fractional result: `83.34vw`.
+ *
+ * Like the other helpers here, the container max-width and the inter-slide gap
+ * are both ignored, so the result only ever over-declares.
+ */
+export function carouselSlotSizes(input: CarouselSlotSizesInput): string {
+  return [
+    `(min-width: ${DESKTOP_MIN_PX}px) ${columnVw(input.slidesDesktop)}`,
+    `(min-width: ${TABLET_MIN_PX}px) ${columnVw(input.slidesTablet)}`,
+    columnVw(input.slidesMobile),
   ].join(', ')
 }
 

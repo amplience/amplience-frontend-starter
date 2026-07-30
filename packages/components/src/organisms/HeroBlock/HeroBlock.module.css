@@ -41,6 +41,8 @@
 .root {
   --hero-padding-y: calc(var(--spacing) * 12); /* 48px @ 4px base */
   --hero-padding-x: var(--site-gutter);
+  /* Horizontal inset when nested (bare) — see .bareContainer. */
+  --hero-bare-padding-x: var(--spacing-6);
   --hero-content-gap: calc(var(--spacing) * 5); /* 20px */
   --hero-overlay-color: var(--color-white);
   --hero-v-justify: flex-start;
@@ -101,6 +103,19 @@
 
 .container {
   z-index: 2;
+}
+
+/*
+ * Bare treatment — the hero is a slide or a cell, so a parent has already inset
+ * the content from the viewport and the `<Container>` is gone (see the `bare`
+ * prop). Repeating --site-gutter here would compound that inset, but content
+ * flush to the slot edge reads as a bug, so the inset becomes hero-local.
+ *
+ * Brands retune it through --hero-bare-padding-x, declared on .root alongside
+ * the other hero tokens.
+ */
+.bareContainer {
+  padding-inline: var(--hero-bare-padding-x);
 }
 
 .content {

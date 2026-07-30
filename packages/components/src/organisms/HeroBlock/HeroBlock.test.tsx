@@ -98,6 +98,47 @@ describe('HeroBlock', () => {
     })
   })
 
+  describe('bare (nested in a layout container)', () => {
+    // CSS module class names are empty strings in the test environment, so the
+    // assertions here are about which *element* wraps the content, not styling.
+    // `Container` is identifiable by its own literal class hook.
+
+    it('wraps content in a Container by default', () => {
+      const { container } = render(<HeroBlock title="Title" />)
+      expect(container.querySelector('.Container')).toBeTruthy()
+    })
+
+    it('drops the Container when bare, so the parent gutter is not compounded', () => {
+      const { container } = render(<HeroBlock title="Title" bare />)
+      expect(container.querySelector('.Container')).toBeNull()
+    })
+
+    it('keeps the section and its layout attributes when bare', () => {
+      // The hero's whole layout — overlay mode, scrim, content positioning —
+      // is expressed on the section, so bare strips the container and nothing
+      // else.
+      render(<HeroBlock title="Title" bare media={sampleMedia} />)
+      const section = screen.getByRole('region')
+      expect(section.tagName).toBe('SECTION')
+      expect(section.getAttribute('data-content-position-desktop')).toBe('overlay')
+      expect(section.className).toContain('HeroBlock')
+    })
+
+    it('still renders the title, CTAs and image when bare', () => {
+      render(
+        <HeroBlock title="Title" bare media={sampleMedia} ctas={[{ label: 'Go', href: '/go' }]} />,
+      )
+      expect(screen.getByRole('heading', { level: 1, name: 'Title' })).toBeTruthy()
+      expect(screen.getByRole('link', { name: 'Go' })).toBeTruthy()
+      expect(screen.getByRole('img')).toBeTruthy()
+    })
+
+    it('forwards additional class names when bare', () => {
+      render(<HeroBlock title="Title" bare className="custom" />)
+      expect(screen.getByRole('region').className).toContain('custom')
+    })
+  })
+
   describe('height constraints', () => {
     it('sets --hero-min-height when minHeight is provided', () => {
       render(<HeroBlock title="Title" minHeight={320} />)

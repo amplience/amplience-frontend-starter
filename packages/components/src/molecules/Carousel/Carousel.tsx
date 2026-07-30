@@ -33,6 +33,8 @@ export type CarouselProps = {
    *
    * Fractional values are supported and are the idiomatic way to hint that
    * the track scrolls: 1.2 shows one full slide plus a sliver of the next.
+   * Values below 1 make the slide wider than the track, so no whole slide is
+   * ever in view — the content schema floors these at 1.
    */
   slidesMobile?: number
   /** Slides visible from 769px. Defaults to 2. */
