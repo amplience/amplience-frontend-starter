@@ -213,7 +213,7 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
       try {
         return renderContent(result.value, visualizationRegistry, {
           localeBasePath: basePath,
-          isTopOfPage: topOfPage,
+          loadPriority: topOfPage ? 'lcp' : 'lazy',
         })
       } catch {
         return null
@@ -244,7 +244,7 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
         >
           <VisualizationClient
             initialModel={item}
-            isTopOfPage
+            loadPriority="lcp"
             localeBasePath={basePath}
             deliveryLocale={locale.delivery}
           />
@@ -257,7 +257,7 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
     return (
       <VisualizationClient
         initialModel={item}
-        isTopOfPage
+        loadPriority="lcp"
         localeBasePath={basePath}
         deliveryLocale={locale.delivery}
       />
@@ -298,7 +298,7 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
       <main>
         <VisualizationClient
           initialModel={item}
-          isTopOfPage
+          loadPriority="lcp"
           localeBasePath={basePath}
           deliveryLocale={locale.delivery}
         />

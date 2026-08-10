@@ -37,6 +37,9 @@ vi.mock('next/image', () => ({
     height,
     sizes,
     loader,
+    priority,
+    fetchPriority,
+    loading,
   }: {
     src: string
     alt: string
@@ -44,7 +47,12 @@ vi.mock('next/image', () => ({
     height: number
     sizes?: string
     loader?: (p: { src: string; width: number }) => string
+    priority?: boolean
+    fetchPriority?: 'auto' | 'high' | 'low'
+    loading?: 'eager' | 'lazy'
   }) => ({
+    // Real getImageProps returns the loading props on `props` — mirror that so
+    // the art-directed path's tier handling is assertable (ADR-0021).
     props: {
       src: loader ? loader({ src, width }) : src,
       srcSet: `${loader ? loader({ src, width }) : src} ${width}w`,
@@ -52,6 +60,9 @@ vi.mock('next/image', () => ({
       width,
       height,
       alt,
+      ...(priority !== undefined && { 'data-priority': priority ? 'true' : undefined }),
+      ...(fetchPriority !== undefined && { fetchPriority }),
+      ...(loading !== undefined && { loading }),
     },
   }),
 }))
@@ -242,15 +253,57 @@ describe('HeroBlock', () => {
     })
   })
 
-  describe('image loading priority', () => {
-    it('does not prioritise the image by default (next/image lazy-loads)', () => {
+  describe('image loading priority (ADR-0021)', () => {
+    const img = () => screen.getByAltText('Hero image')
+
+    it('leaves the image lazy by default (next/image lazy-loads)', () => {
       render(<HeroBlock title="Title" media={sampleMedia} />)
-      expect(screen.getByAltText('Hero image').getAttribute('data-priority')).toBeNull()
+      expect(img().getAttribute('data-priority')).toBeNull()
+      expect(img().getAttribute('loading')).toBeNull()
     })
 
-    it('prioritises the image at the top of the page', () => {
-      render(<HeroBlock title="Title" media={sampleMedia} isTopOfPage />)
-      expect(screen.getByAltText('Hero image').getAttribute('data-priority')).toBe('true')
+    it('prioritises the image when the hero is the LCP candidate', () => {
+      render(<HeroBlock title="Title" media={sampleMedia} loadPriority="lcp" />)
+      expect(img().getAttribute('data-priority')).toBe('true')
+      expect(img().getAttribute('fetchpriority')).toBe('high')
+    })
+
+    // The middle tier: eager so an above-the-fold hero isn't discovered late,
+    // but no preload or priority bump competing with the real LCP element.
+    it('loads the image eagerly, without prioritising it, one step down', () => {
+      render(<HeroBlock title="Title" media={sampleMedia} loadPriority="eager" />)
+      expect(img().getAttribute('loading')).toBe('eager')
+      expect(img().getAttribute('data-priority')).toBeNull()
+      expect(img().getAttribute('fetchpriority')).toBeNull()
+    })
+
+    it('carries the tier through the art-directed path too', () => {
+      const mobile = {
+        mediaType: 'ManualImage' as const,
+        image: { src: '/hero-mobile.jpg', alt: 'Mobile hero', width: 600, height: 1200 },
+      }
+      const { rerender } = render(
+        <HeroBlock
+          title="Title"
+          media={sampleMedia}
+          mobileOverride
+          mobileMedia={mobile}
+          loadPriority="lcp"
+        />,
+      )
+      expect(img().getAttribute('data-priority')).toBe('true')
+
+      rerender(
+        <HeroBlock
+          title="Title"
+          media={sampleMedia}
+          mobileOverride
+          mobileMedia={mobile}
+          loadPriority="eager"
+        />,
+      )
+      expect(img().getAttribute('loading')).toBe('eager')
+      expect(img().getAttribute('data-priority')).toBeNull()
     })
   })
 

@@ -7,10 +7,10 @@ export const HERO_BLOCK_SCHEMA = 'https://quadratic.amplience.com/v2/content/her
 
 /**
  * The hero delivery body — HeroBlock props plus the content envelope.
- * `isTopOfPage` and `bare` are excluded: both are layout cues supplied by the
- * render context, not author-editable fields.
+ * `loadPriority` and `bare` are excluded: both are cues supplied by the render
+ * context, not author-editable fields.
  */
-export type HeroBlockSchema = Omit<HeroBlockProps, 'isTopOfPage' | 'bare' | 'localeBasePath'> & {
+export type HeroBlockSchema = Omit<HeroBlockProps, 'loadPriority' | 'bare' | 'localeBasePath'> & {
   readonly _meta: unknown
 }
 
@@ -29,17 +29,17 @@ export const validateHeroBlockSchema = (schema: unknown): schema is HeroBlockSch
 
 /**
  * Registry entry for the hero schema. The adapter strips the `_meta`
- * envelope and sets two cues from the render context: `isTopOfPage`, so a hero
- * that leads the page loads its image eagerly, and `bare`, so a hero nested in
- * a carousel slide, grid cell or column drops its own gutter instead of
- * compounding the parent's. The remaining fields are the component's props
- * one-for-one.
+ * envelope and sets two cues from the render context: `loadPriority`, so a hero
+ * near the top of the page loads its image more urgently than one further down
+ * (ADR-0021), and `bare`, so a hero nested in a carousel slide, grid cell or
+ * column drops its own gutter instead of compounding the parent's. The
+ * remaining fields are the component's props one-for-one.
  */
 export const heroBlockRegistryEntry: ComponentRegistryEntry<HeroBlockSchema, HeroBlockProps> = {
   component: HeroBlock,
   propsFromSchema: ({ _meta: _envelope, ...props }, ctx) => ({
     ...props,
-    isTopOfPage: ctx.isTopOfPage ?? false,
+    loadPriority: ctx.loadPriority ?? 'lazy',
     bare: ctx.bare ?? false,
     localeBasePath: ctx.localeBasePath ?? '',
   }),

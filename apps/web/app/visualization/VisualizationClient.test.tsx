@@ -135,8 +135,8 @@ describe('VisualizationClient — initial render', () => {
     expect(heading.textContent).toContain('Build composable sites.')
   })
 
-  it('does not crash with isTopOfPage set', () => {
-    render(<VisualizationClient initialModel={HERO_MODEL} isTopOfPage />)
+  it('does not crash with a loadPriority tier set', () => {
+    render(<VisualizationClient initialModel={HERO_MODEL} loadPriority="lcp" />)
     expect(screen.getByRole('heading', { level: 1 })).not.toBeNull()
   })
 

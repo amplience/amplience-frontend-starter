@@ -35,9 +35,10 @@ describe('mediaBlockRegistryEntry.propsFromSchema', () => {
     expect(adapt?.(validMedia, { bare: true })?.bare).toBe(true)
   })
 
-  it('sets isTopOfPage from the render context, defaulting to false', () => {
-    expect(adapt?.(validMedia, {})?.isTopOfPage).toBe(false)
-    expect(adapt?.(validMedia, { isTopOfPage: true })?.isTopOfPage).toBe(true)
+  it('sets loadPriority from the render context, defaulting to lazy', () => {
+    expect(adapt?.(validMedia, {})?.loadPriority).toBe('lazy')
+    expect(adapt?.(validMedia, { loadPriority: 'lcp' })?.loadPriority).toBe('lcp')
+    expect(adapt?.(validMedia, { loadPriority: 'eager' })?.loadPriority).toBe('eager')
   })
 
   it('forwards the parent slot width as sizes when present', () => {

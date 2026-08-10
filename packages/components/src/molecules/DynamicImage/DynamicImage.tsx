@@ -14,6 +14,11 @@ export type DynamicImageProps = {
   priority?: boolean
   fetchPriority?: 'auto' | 'high' | 'low'
   /**
+   * `eager` loads the image immediately without the preload hint `priority`
+   * adds — an above-the-fold image that isn't the LCP candidate (ADR-0021).
+   */
+  loading?: 'eager' | 'lazy'
+  /**
    * Hint to the browser about the rendered width of this image at various
    * viewport widths — passed directly to next/image's `sizes` prop.
    *
@@ -33,6 +38,7 @@ export function DynamicImage({
   image,
   priority,
   fetchPriority,
+  loading,
   sizes = '100vw',
   className,
 }: DynamicImageProps) {
@@ -86,6 +92,7 @@ export function DynamicImage({
         sizes={sizes}
         {...(priority !== undefined && { priority })}
         {...(fetchPriority !== undefined && { fetchPriority })}
+        {...(loading !== undefined && { loading })}
         className={styles.img}
       />
     </div>

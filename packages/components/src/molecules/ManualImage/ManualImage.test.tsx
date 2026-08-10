@@ -60,6 +60,20 @@ describe('ManualImage', () => {
     expect(screen.getByAltText('Hero image').getAttribute('data-priority')).toBeNull()
   })
 
+  it('forwards loading when provided', () => {
+    render(<ManualImage {...sampleMedia} loading="eager" />)
+    expect(screen.getByAltText('Hero image').getAttribute('loading')).toBe('eager')
+  })
+
+  // Regression: ManualImage destructures its props explicitly, and used to
+  // accept `fetchPriority` implicitly through ContentMedia and then drop it —
+  // so an LCP ManualImage silently rendered at default fetch priority, the one
+  // thing next/image v16 no longer derives from `priority` (ADR-0021).
+  it('forwards fetchPriority when provided', () => {
+    render(<ManualImage {...sampleMedia} fetchPriority="high" />)
+    expect(screen.getByAltText('Hero image').getAttribute('fetchpriority')).toBe('high')
+  })
+
   it('forwards className when provided', () => {
     render(<ManualImage {...sampleMedia} className="custom-class" />)
     expect(screen.getByAltText('Hero image').className).toContain('custom-class')

@@ -28,6 +28,13 @@ export type ArtDirectedMediaProps = {
    */
   priority?: boolean
   fetchPriority?: 'auto' | 'high' | 'low'
+  /**
+   * `eager` loads the fallback `<img>` immediately but emits no preload hints —
+   * an art-directed image above the fold that isn't the LCP candidate
+   * (ADR-0021). Preloads stay exclusive to `priority`, so two art-directed
+   * blocks near the top of a page can't fill the preload queue between them.
+   */
+  loading?: 'eager' | 'lazy'
   /** next/image `sizes` hint. Full-bleed hero defaults to 100vw. */
   sizes?: string
   className?: string
@@ -49,7 +56,12 @@ type ImageArgs = Parameters<typeof getImageProps>[0]
  */
 function toImageArgs(
   media: ContentMediaData,
-  common: { sizes: string; priority?: boolean; fetchPriority?: 'auto' | 'high' | 'low' },
+  common: {
+    sizes: string
+    priority?: boolean
+    fetchPriority?: 'auto' | 'high' | 'low'
+    loading?: 'eager' | 'lazy'
+  },
 ): (ImageArgs & { alt: string }) | null {
   if (media.mediaType === 'ManualImage' && media.image !== undefined) {
     const { src, alt, width, height } = media.image
@@ -110,6 +122,7 @@ export function ArtDirectedMedia({
   mobileMaxWidth = 768,
   priority,
   fetchPriority,
+  loading,
   sizes = '100vw',
   className,
 }: ArtDirectedMediaProps) {
@@ -117,6 +130,7 @@ export function ArtDirectedMedia({
     sizes,
     ...(priority !== undefined && { priority }),
     ...(fetchPriority !== undefined && { fetchPriority }),
+    ...(loading !== undefined && { loading }),
   }
 
   const desktopArgs = toImageArgs(desktop, common)

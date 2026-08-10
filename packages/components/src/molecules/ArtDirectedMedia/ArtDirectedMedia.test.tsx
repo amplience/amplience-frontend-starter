@@ -24,6 +24,7 @@ vi.mock('next/image', () => ({
     height,
     sizes,
     priority,
+    loading,
     loader,
   }: {
     src: string
@@ -32,6 +33,7 @@ vi.mock('next/image', () => ({
     height: number
     sizes?: string
     priority?: boolean
+    loading?: 'eager' | 'lazy'
     loader?: (p: { src: string; width: number }) => string
   }) => ({
     props: {
@@ -42,6 +44,9 @@ vi.mock('next/image', () => ({
       height,
       alt,
       ...(priority ? { loading: 'eager', fetchPriority: 'high' } : {}),
+      // An explicit `loading` (the middle tier) reaches the <img> without the
+      // fetch-priority bump that `priority` brings.
+      ...(loading !== undefined && !priority ? { loading } : {}),
     },
   }),
 }))
@@ -120,6 +125,18 @@ describe('ArtDirectedMedia', () => {
     const medias = Array.from(links).map((l) => l.getAttribute('media'))
     expect(medias).toContain('(max-width: 768px)')
     expect(medias).toContain('(min-width: 769px)')
+  })
+
+  // ADR-0021: preloads stay exclusive to the LCP tier. An eager art-directed
+  // image loads immediately but must not add two more entries to the preload
+  // queue — that is the difference between the two above-the-fold tiers.
+  it('loads eagerly without preloading when given loading="eager"', () => {
+    const { container } = render(
+      <ArtDirectedMedia desktop={manualDesktop} mobile={manualMobile} loading="eager" />,
+    )
+    expect(container.querySelectorAll('link[rel="preload"]')).toHaveLength(0)
+    expect(container.querySelector('img')?.getAttribute('loading')).toBe('eager')
+    expect(container.querySelector('img')?.getAttribute('fetchpriority')).toBeNull()
   })
 
   it('renders nothing when the desktop payload is unresolvable', () => {

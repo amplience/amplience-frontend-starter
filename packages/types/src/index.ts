@@ -24,22 +24,43 @@ import type { ComponentType } from 'react'
 export type SchemaURI = string
 
 /**
+ * How urgently a block's media should load, graded by position (ADR-0021).
+ *
+ *  - `'lcp'`   — the page's likely Largest Contentful Paint element. Loads
+ *                eagerly, with a head preload hint and `fetchpriority="high"`.
+ *                At most one node per page carries this.
+ *  - `'eager'` — above the fold, but not the LCP candidate. Loads eagerly so
+ *                the browser doesn't discover it late, without a preload that
+ *                would compete with the LCP for early bandwidth.
+ *  - `'lazy'`  — below the fold. next/image's default deferred loading.
+ *
+ * The tiers are renderer-supplied and never authored: which of them is right
+ * for a given block depends on the visitor's viewport, so there is no value an
+ * author could set that would be correct for all of them.
+ *
+ * `mediaLoadingProps` in `@amplience/quadratic-components` is the single place
+ * a tier becomes next/image props — components pass the tier along rather than
+ * constructing `priority`, `loading` or `fetchPriority` themselves, which is
+ * what keeps the combinations next/image rejects unrepresentable.
+ */
+export type MediaLoadPriority = 'lcp' | 'eager' | 'lazy'
+
+/**
  * Per-node rendering context, threaded through recursion by the dispatcher.
  *
  * `bare` — true when the node renders inside a layout container (ColumnsBlock,
  * GridBlock) that already provides section/Container semantics. Adapters for
  * blocks with a `bare` prop read this to avoid double-wrapping.
  *
- * `isTopOfPage` — true while rendering the page's leading edge: the root
- * node and, within each container along that edge, its first child. The
- * flag therefore reaches exactly the first block on a page (or the first
- * block in the first slot, when slots are present). Adapters for blocks
- * that render images read this so above-the-fold imagery loads eagerly
- * while everything below the fold keeps lazy loading.
+ * `loadPriority` — how urgently media in this node should load, graded by
+ * how near the page's leading edge the node sits (ADR-0021). Set on the
+ * render entry and demoted by position as the dispatcher recurses. Adapters
+ * for blocks that render images read it and hand it to `mediaLoadingProps`,
+ * which is the only thing that turns a tier into next/image props.
  */
 export type RenderContext = {
   readonly bare?: boolean
-  readonly isTopOfPage?: boolean
+  readonly loadPriority?: MediaLoadPriority
   /**
    * URL prefix for the active locale (ADR-0015) — `''` for the default
    * (unprefixed) locale, `/fr-fr` otherwise. Threaded through the whole tree
@@ -107,6 +128,20 @@ export type ComponentRegistryEntry<TSchema = unknown, TProps = unknown> = {
    * section wrappers.
    */
   readonly childContext?: RenderContext
+
+  /**
+   * True when this entry's component renders media of its own *and* has
+   * children — a template with a cover image above its body slots. The
+   * dispatcher then demotes `loadPriority` by one step before forwarding it, so
+   * this node's own image keeps the tier it was given while its children start
+   * a step below it. That is what keeps "at most one `'lcp'` per page" true for
+   * a node that is both a container and a media consumer (ADR-0021).
+   *
+   * Structural containers (Page, Slot, GridBlock, ColumnsBlock) leave this
+   * unset: they render no media of their own, so spending a step there would
+   * starve the page's first real block of the tier meant for it.
+   */
+  readonly consumesLoadPriority?: boolean
 
   /**
    * Per-instance child context derived from this node's own content — merged
