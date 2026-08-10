@@ -12,16 +12,10 @@
   "packageManager": "pnpm@9.15.4",
   "pnpm": {
     "overrides": {
-      "adm-zip": ">=0.6.0",
+      "@amplience/dc-cli>ajv": "^6.14.0",
       "axios": ">=1.18.0",
-      "esbuild": ">=0.28.1",
       "lodash": ">=4.18.0",
-      "postcss": ">=8.5.10",
-      "sharp": ">=0.35.0",
-      "shell-quote": ">=1.9.0",
-      "tmp": ">=0.2.7",
-      "uuid": ">=11.1.1",
-      "@amplience/dc-cli>ajv": "^6.14.0"
+      "valibot": ">=1.4.2"
     }
   },
   "engines": {
