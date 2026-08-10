@@ -6,6 +6,12 @@ import { ManualImage } from '../ManualImage/ManualImage'
 export type ContentMediaProps = ContentMediaData & {
   priority?: boolean
   fetchPriority?: 'auto' | 'high' | 'low'
+  /**
+   * `eager` opts the image out of lazy loading without the preload hint
+   * `priority` adds — the above-the-fold-but-not-LCP case (ADR-0021). Callers
+   * should get this from `mediaLoadingProps` rather than setting it directly.
+   */
+  loading?: 'eager' | 'lazy'
   sizes?: string
   className?: string
 }
@@ -13,6 +19,7 @@ export type ContentMediaProps = ContentMediaData & {
 export function ContentMedia({
   priority,
   fetchPriority,
+  loading,
   sizes,
   className,
   ...mediaData
@@ -20,6 +27,7 @@ export function ContentMedia({
   const optionals = {
     ...(priority !== undefined && { priority }),
     ...(fetchPriority !== undefined && { fetchPriority }),
+    ...(loading !== undefined && { loading }),
     ...(sizes !== undefined && { sizes }),
     ...(className !== undefined && { className }),
   }

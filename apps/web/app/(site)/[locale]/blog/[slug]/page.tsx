@@ -91,7 +91,7 @@ export default async function BlogArticlePage({ params }: RouteProps) {
     return <ContentUnavailableCard error={error} resource={key} />
   }
   return renderContent(article, registry, {
-    isTopOfPage: true,
+    loadPriority: 'lcp',
     localeBasePath: localeBasePath(locale),
   })
 }

@@ -16,8 +16,15 @@ vi.mock('next/link', () => ({
 }))
 
 vi.mock('next/image', () => ({
-  default: ({ src, alt, ...props }: React.ComponentPropsWithoutRef<'img'>) => (
-    <img src={src} alt={alt} {...props} />
+  // `priority` is a next/image prop, not a DOM attribute — surface it as
+  // data-priority rather than letting React complain about it on the <img>.
+  default: ({
+    src,
+    alt,
+    priority,
+    ...props
+  }: React.ComponentPropsWithoutRef<'img'> & { priority?: boolean }) => (
+    <img src={src} alt={alt} data-priority={priority ? 'true' : undefined} {...props} />
   ),
 }))
 
@@ -108,6 +115,30 @@ describe('MediaCard', () => {
     it('does not render an image element when omitted', () => {
       render(<MediaCard title="Title" />)
       expect(screen.queryByRole('img')).toBeNull()
+    })
+  })
+
+  // ADR-0021. Cards are usually below the fold, so lazy is the right default —
+  // but a card grid used as a page's first or second block was previously
+  // unable to say otherwise, because MediaCard took no loading props at all.
+  describe('image loading priority', () => {
+    const img = () => screen.getByAltText('A product photo')
+
+    it('lazy-loads the cover image by default', () => {
+      render(<MediaCard title="Title" media={sampleMedia} />)
+      expect(img().getAttribute('loading')).toBeNull()
+      expect(img().getAttribute('fetchpriority')).toBeNull()
+    })
+
+    it('loads the cover image eagerly when the card is above the fold', () => {
+      render(<MediaCard title="Title" media={sampleMedia} loadPriority="eager" />)
+      expect(img().getAttribute('loading')).toBe('eager')
+      expect(img().getAttribute('fetchpriority')).toBeNull()
+    })
+
+    it('prioritises the cover image when the card is the LCP candidate', () => {
+      render(<MediaCard title="Title" media={sampleMedia} loadPriority="lcp" />)
+      expect(img().getAttribute('fetchpriority')).toBe('high')
     })
   })
 

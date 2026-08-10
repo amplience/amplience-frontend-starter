@@ -82,11 +82,19 @@ export const blogArticleMetadataFromSchema = (
  * Registry entry for the blog-article schema. A container entry: `getChildren`
  * hands the article's `slots` back to the renderer, which renders them
  * recursively and passes the result in as `children`.
+ *
+ * It is also a media consumer — the cover image is the first thing on the page
+ * and its LCP element in practice — so it takes `loadPriority` for that image
+ * and declares `consumesLoadPriority`, which demotes what the body slots
+ * inherit. Without that, an article page would carry two `'lcp'` nodes and
+ * preload its cover image and its first body block against each other.
  */
 export const blogArticleRegistryEntry: ComponentRegistryEntry<BlogArticleSchema, BlogArticleProps> =
   {
     component: BlogArticle,
-    propsFromSchema: (schema) => ({
+    consumesLoadPriority: true,
+    propsFromSchema: (schema, ctx) => ({
+      loadPriority: ctx.loadPriority ?? 'lazy',
       ...(schema.title !== undefined && { title: schema.title }),
       ...(schema.coverImage !== undefined && { coverImage: schema.coverImage }),
       ...(schema.author !== undefined && { author: schema.author }),

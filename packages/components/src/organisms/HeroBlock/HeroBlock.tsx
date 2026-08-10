@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { useId, type ReactNode } from 'react'
 
-import type { ContentMediaData } from '@amplience/quadratic-types'
+import type { ContentMediaData, MediaLoadPriority } from '@amplience/quadratic-types'
 
 import { Button, type ButtonProps } from '../../atoms/Button/Button'
 import { Container } from '../../atoms/Container/Container'
@@ -9,6 +9,7 @@ import type { ContainerProps } from '../../atoms/Container/Container'
 import { Typography } from '../../atoms/Typography/Typography'
 import { ArtDirectedMedia } from '../../molecules/ArtDirectedMedia/ArtDirectedMedia'
 import { ContentMedia } from '../../molecules/ContentMedia/ContentMedia'
+import { mediaLoadingProps } from '../../molecules/ContentMedia/mediaLoadingProps'
 import { resolveContentMediaAspectRatio } from '../../molecules/DynamicImage/di-utils'
 import styles from './HeroBlock.module.css'
 
@@ -165,13 +166,13 @@ export type HeroBlockProps = {
   minHeight?: number
   maxHeight?: number
   /**
-   * True when this hero is the first block on the page (supplied by the
-   * renderer via RenderContext, not authored). A top-of-page hero image is
-   * the likely LCP element, so it renders with next/image `priority` —
-   * eager load, `fetchpriority="high"`, and a head preload hint. Below the
-   * fold, next/image's default lazy loading applies. Defaults to false.
+   * How urgently this hero's media should load, graded by how near the top of
+   * the page it sits (supplied by the renderer via RenderContext, not
+   * authored). A hero on the page's leading edge is the likely LCP element and
+   * arrives as `'lcp'`; one just below it as `'eager'`. Defaults to `'lazy'`.
+   * See ADR-0021 and `mediaLoadingProps`.
    */
-  isTopOfPage?: boolean
+  loadPriority?: MediaLoadPriority
   /**
    * Active locale URL prefix (ADR-0015), supplied by the renderer. Passed to
    * the CTA buttons so their links stay inside the current locale. Defaults to
@@ -263,7 +264,7 @@ export function HeroBlock({
   contentPadding,
   minHeight,
   maxHeight,
-  isTopOfPage = false,
+  loadPriority = 'lazy',
   bare = false,
   localeBasePath,
   className,
@@ -323,12 +324,9 @@ export function HeroBlock({
         <div className={styles.media}>
           {/*
             Defaults sit before the spread so authored `image` props win.
-            - priority: top-of-page hero is the likely LCP element. Triggers
-              the head preload and eager loading.
-            - fetchPriority: next/image (v16) no longer derives fetchpriority
-              from `priority`, so we set it explicitly for the LCP hero. This
-              lands `fetchpriority="high"` on both the <img> and the preload
-              link — the "LCP request discovery" audit fix.
+            - loading props: derived from the tier by `mediaLoadingProps`, which
+              is the only place in the repo that decides what `'lcp'` and
+              `'eager'` mean to next/image (ADR-0021).
             - sizes: the media image is full-bleed (width:100% of the section,
               which spans the viewport), so it renders at ~100vw at every
               breakpoint. Declaring it lets next/image preload the correctly
@@ -342,15 +340,13 @@ export function HeroBlock({
             <ArtDirectedMedia
               desktop={media}
               mobile={mobileMedia}
-              priority={isTopOfPage}
-              {...(isTopOfPage && { fetchPriority: 'high' })}
+              {...mediaLoadingProps(loadPriority)}
               sizes="100vw"
               {...(styles.image !== undefined && { className: styles.image })}
             />
           ) : (
             <ContentMedia
-              priority={isTopOfPage}
-              {...(isTopOfPage && { fetchPriority: 'high' })}
+              {...mediaLoadingProps(loadPriority)}
               sizes="100vw"
               {...media}
               {...(styles.image !== undefined && { className: styles.image })}

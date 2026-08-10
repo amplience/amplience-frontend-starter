@@ -1,12 +1,13 @@
 import clsx from 'clsx'
 
-import type { ContentMediaData } from '@amplience/quadratic-types'
+import type { ContentMediaData, MediaLoadPriority } from '@amplience/quadratic-types'
 
 import { Container } from '../../atoms/Container/Container'
 import type { ContainerProps } from '../../atoms/Container/Container'
 import { Link } from '../../atoms/Link/Link'
 import { Typography } from '../../atoms/Typography/Typography'
 import { ContentMedia } from '../../molecules/ContentMedia/ContentMedia'
+import { mediaLoadingProps } from '../../molecules/ContentMedia/mediaLoadingProps'
 import styles from './MediaBlock.module.css'
 
 // ---------------------------------------------------------------------------
@@ -61,13 +62,13 @@ export type MediaBlockProps = {
    */
   bare?: boolean
   /**
-   * True when this block is the first block on the page (supplied by the
-   * renderer via RenderContext, not authored). A top-of-page image is the
-   * likely LCP element, so it renders with next/image `priority` — eager
-   * load, `fetchpriority="high"`, and a head preload hint. Below the fold,
-   * next/image's default lazy loading applies. Defaults to false.
+   * How urgently this block's image should load, graded by how near the top of
+   * the page it sits (supplied by the renderer via RenderContext, not
+   * authored). A block on the page's leading edge is the likely LCP element and
+   * arrives as `'lcp'`; one just below it as `'eager'`. Defaults to `'lazy'`.
+   * See ADR-0021 and `mediaLoadingProps`.
    */
-  isTopOfPage?: boolean
+  loadPriority?: MediaLoadPriority
   /**
    * Active locale URL prefix (ADR-0015), supplied by the renderer. Keeps the
    * media link inside the current locale. Defaults to '' (default locale).
@@ -112,7 +113,7 @@ export function MediaBlock({
   backgroundColor,
   maxWidth = 'default',
   bare = false,
-  isTopOfPage = false,
+  loadPriority = 'lazy',
   localeBasePath,
   sizes,
   className,
@@ -124,8 +125,7 @@ export function MediaBlock({
   const resolvedSizes = fullBleed ? '100vw' : (sizes ?? '100vw')
   const mediaEl = (
     <ContentMedia
-      priority={isTopOfPage}
-      {...(isTopOfPage && { fetchPriority: 'high' })}
+      {...mediaLoadingProps(loadPriority)}
       sizes={resolvedSizes}
       {...media}
       {...(styles.image !== undefined && { className: styles.image })}

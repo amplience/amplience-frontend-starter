@@ -47,9 +47,10 @@ describe('heroBlockRegistryEntry.propsFromSchema', () => {
     expect(adapt?.(validHero, {})).not.toHaveProperty('_meta')
   })
 
-  it('sets isTopOfPage from the render context, defaulting to false', () => {
-    expect(adapt?.(validHero, {})?.isTopOfPage).toBe(false)
-    expect(adapt?.(validHero, { isTopOfPage: true })?.isTopOfPage).toBe(true)
+  it('sets loadPriority from the render context, defaulting to lazy', () => {
+    expect(adapt?.(validHero, {})?.loadPriority).toBe('lazy')
+    expect(adapt?.(validHero, { loadPriority: 'lcp' })?.loadPriority).toBe('lcp')
+    expect(adapt?.(validHero, { loadPriority: 'eager' })?.loadPriority).toBe('eager')
   })
 
   it('sets bare from the render context, defaulting to false', () => {

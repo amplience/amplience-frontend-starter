@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-import type { ContentMediaData } from '@amplience/quadratic-types'
+import type { ContentMediaData, MediaLoadPriority } from '@amplience/quadratic-types'
 
 import { Button } from '../../atoms/Button/Button'
 import type { ButtonColor, ButtonVariant } from '../../atoms/Button/Button'
@@ -10,6 +10,7 @@ import { Link } from '../../atoms/Link/Link'
 import { Typography } from '../../atoms/Typography/Typography'
 import { scaleSizes } from '../../utils/imageSizes'
 import { ContentMedia } from '../ContentMedia/ContentMedia'
+import { mediaLoadingProps } from '../ContentMedia/mediaLoadingProps'
 import styles from './MediaCard.module.css'
 
 // ---------------------------------------------------------------------------
@@ -95,6 +96,14 @@ export type MediaCardProps = {
    * than guess a grid that may not exist.
    */
   sizes?: string
+  /**
+   * How urgently the cover image should load, graded by how near the top of the
+   * page the card sits (supplied by the renderer via RenderContext, not
+   * authored). Cards are usually below the fold, so `'lazy'` — the default —
+   * is normally right; a card grid used as a page's first or second block gets
+   * something more urgent. See ADR-0021 and `mediaLoadingProps`.
+   */
+  loadPriority?: MediaLoadPriority
   className?: string
 }
 
@@ -156,6 +165,7 @@ export function MediaCard({
   color = 'white',
   localeBasePath,
   sizes,
+  loadPriority = 'lazy',
   className,
 }: MediaCardProps) {
   const { href, cta } = links ?? {}
@@ -174,6 +184,7 @@ export function MediaCard({
     <div className={styles.media}>
       <ContentMedia
         {...media}
+        {...mediaLoadingProps(loadPriority)}
         {...(imageSizes !== undefined && { sizes: imageSizes })}
         {...(styles.image !== undefined && { className: styles.image })}
       />

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import type { ContentMediaData } from '@amplience/quadratic-types'
+import type { ContentMediaData, MediaLoadPriority } from '@amplience/quadratic-types'
 
 import { Container } from '../../atoms/Container/Container'
 import { Icon } from '../../atoms/Icon/Icon'
@@ -30,6 +30,14 @@ export type BlogArticleProps = {
   readonly tags?: readonly string[]
   /** Estimated reading time in minutes. */
   readonly readTime?: number
+  /**
+   * How urgently the cover image should load (supplied by the renderer via
+   * RenderContext, not authored). An article's cover image is the first thing
+   * on the page and so its LCP element in practice, which is why this template
+   * forwards the cue to its HeroBlock rather than letting it default.
+   * See ADR-0021.
+   */
+  readonly loadPriority?: MediaLoadPriority
   /** The article's rendered slots, in content order. */
   readonly children?: ReactNode
 }
@@ -67,6 +75,7 @@ export function BlogArticle({
   category,
   tags,
   readTime,
+  loadPriority = 'lazy',
   children,
 }: BlogArticleProps) {
   return (
@@ -76,6 +85,7 @@ export function BlogArticle({
             matched nothing on HeroBlock, so cover images never rendered. */}
         <HeroBlock
           {...(coverImage !== undefined && { media: coverImage })}
+          loadPriority={loadPriority}
           title={title ?? ''}
           subtitle={category ?? ''}
           heightBehaviour="fitToContent"

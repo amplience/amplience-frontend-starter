@@ -20,16 +20,19 @@ vi.mock('../DynamicImage/DynamicImage', () => ({
   DynamicImage: ({
     image,
     priority,
+    loading,
     className,
   }: {
     image: DynamicImageData
     priority?: boolean
+    loading?: 'eager' | 'lazy'
     className?: string
   }) => (
     <img
       src={`https://${image.image?.image?.defaultHost ?? ''}/i/${image.image?.image?.endpoint ?? ''}/${image.image?.image?.name ?? ''}`}
       alt={image.imageAltText ?? ''}
       data-priority={priority ? 'true' : undefined}
+      {...(loading !== undefined && { loading })}
       {...(className !== undefined && { className })}
     />
   ),
@@ -116,6 +119,24 @@ describe('ContentMedia', () => {
     it('does not set data-priority when priority is not provided (DynamicImage)', () => {
       render(<ContentMedia {...dynamicMedia} />)
       expect(screen.getByAltText('A dynamic image').getAttribute('data-priority')).toBeNull()
+    })
+
+    // The middle tier of ADR-0021 travels as `loading="eager"`, so it has to
+    // reach the <img> through both modes — a tier that stopped at the molecule
+    // boundary would be invisible in the DOM and useless in an audit.
+    it('forwards loading to ManualImage', () => {
+      render(<ContentMedia {...manualMedia} loading="eager" />)
+      expect(screen.getByAltText('A manual image').getAttribute('loading')).toBe('eager')
+    })
+
+    it('forwards loading to DynamicImage', () => {
+      render(<ContentMedia {...dynamicMedia} loading="eager" />)
+      expect(screen.getByAltText('A dynamic image').getAttribute('loading')).toBe('eager')
+    })
+
+    it('forwards fetchPriority to ManualImage', () => {
+      render(<ContentMedia {...manualMedia} fetchPriority="high" />)
+      expect(screen.getByAltText('A manual image').getAttribute('fetchpriority')).toBe('high')
     })
   })
 

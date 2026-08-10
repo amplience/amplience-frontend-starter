@@ -117,15 +117,29 @@ describe('MediaBlock', () => {
     })
   })
 
-  describe('image loading priority', () => {
-    it('does not prioritise the image by default', () => {
+  describe('image loading priority (ADR-0021)', () => {
+    const img = () => screen.getByAltText('A test photo')
+
+    it('leaves the image lazy by default', () => {
       render(<MediaBlock media={sampleMedia} />)
-      expect(screen.getByAltText('A test photo').getAttribute('data-priority')).toBeNull()
+      expect(img().getAttribute('data-priority')).toBeNull()
+      expect(img().getAttribute('loading')).toBeNull()
     })
 
-    it('prioritises the image at the top of the page', () => {
-      render(<MediaBlock media={sampleMedia} isTopOfPage />)
-      expect(screen.getByAltText('A test photo').getAttribute('data-priority')).toBe('true')
+    it('prioritises the image when it is the LCP candidate', () => {
+      render(<MediaBlock media={sampleMedia} loadPriority="lcp" />)
+      expect(img().getAttribute('data-priority')).toBe('true')
+      expect(img().getAttribute('fetchpriority')).toBe('high')
+    })
+
+    // The middle tier is the point of the graded cue: eager so an
+    // above-the-fold image isn't discovered late, but no preload and no
+    // priority bump to compete with the real LCP element.
+    it('loads the image eagerly, without prioritising it, one step down', () => {
+      render(<MediaBlock media={sampleMedia} loadPriority="eager" />)
+      expect(img().getAttribute('loading')).toBe('eager')
+      expect(img().getAttribute('data-priority')).toBeNull()
+      expect(img().getAttribute('fetchpriority')).toBeNull()
     })
   })
 

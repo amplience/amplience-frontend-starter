@@ -110,12 +110,14 @@ export default async function ContentPage({ params }: RouteProps) {
     emitContentFailure(error, key)
     return <ContentUnavailableCard error={error} resource={key} />
   }
-  // The root of the tree is, by definition, the top of the page — the
-  // dispatcher carries the flag along the leading edge from here so the
-  // first block can load its imagery eagerly. `localeBasePath` rides the whole
-  // tree so internal links stay inside this locale (ADR-0015).
+  // The root of the tree is, by definition, the top of the page, so it starts at
+  // the most urgent tier and the dispatcher demotes it with distance from here:
+  // the first block is treated as the LCP candidate, the second as
+  // above-the-fold-but-not-LCP, everything after as lazy (ADR-0021).
+  // `localeBasePath` rides the whole tree so internal links stay inside this
+  // locale (ADR-0015).
   return renderContent(page, registry, {
-    isTopOfPage: true,
+    loadPriority: 'lcp',
     localeBasePath: localeBasePath(locale),
   })
 }

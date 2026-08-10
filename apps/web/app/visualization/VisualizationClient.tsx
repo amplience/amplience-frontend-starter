@@ -33,7 +33,7 @@ import { useEffect, useMemo, useState, useTransition } from 'react'
 import { defaultRegistry } from '@amplience/quadratic-components/registry'
 import { resolveLocalized } from '@amplience/quadratic-content'
 import type { ContentBody } from '@amplience/quadratic-content'
-import type { RenderContext } from '@amplience/quadratic-types'
+import type { MediaLoadPriority, RenderContext } from '@amplience/quadratic-types'
 
 import { renderContent } from '../../src/renderer'
 
@@ -48,10 +48,11 @@ type Props = {
    */
   initialModel: unknown
   /**
-   * Whether to pass isTopOfPage into the renderer (triggers eager image
-   * loading for heroes that lead the page).
+   * The `loadPriority` tier the renderer starts from (ADR-0021). A visualized
+   * item is shown on its own, so it stands at the top of its own page —
+   * `'lcp'`. Omitted → `'lazy'`.
    */
-  isTopOfPage?: boolean
+  loadPriority?: MediaLoadPriority
   /**
    * Active locale URL prefix (ADR-0015) for the pane's locale, so internal
    * links in the visualized content stay inside that locale. Defaults to ''
@@ -76,7 +77,7 @@ type Props = {
 
 export function VisualizationClient({
   initialModel,
-  isTopOfPage,
+  loadPriority,
   localeBasePath = '',
   deliveryLocale,
 }: Props) {
@@ -122,6 +123,6 @@ export function VisualizationClient({
     }
   }, [])
 
-  const ctx: RenderContext = { isTopOfPage: isTopOfPage ?? false, localeBasePath }
+  const ctx: RenderContext = { loadPriority: loadPriority ?? 'lazy', localeBasePath }
   return <>{renderContent(resolvedModel, defaultRegistry, ctx)}</>
 }

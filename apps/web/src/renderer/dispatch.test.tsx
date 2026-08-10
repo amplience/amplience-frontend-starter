@@ -18,6 +18,7 @@ import { CONTENT_LINK_SCHEMA } from '@amplience/quadratic-content'
 import type {
   AnyComponentRegistryEntry,
   ComponentRegistryEntry,
+  MediaLoadPriority,
   Registry,
   SchemaURI,
 } from '@amplience/quadratic-types'
@@ -55,11 +56,11 @@ const boxEntry: ComponentRegistryEntry<BoxSchema, BoxProps> = {
 type IdentityProps = { _meta?: unknown; label?: string }
 const Identity = ({ label }: IdentityProps) => <em>{label}</em>
 
-// A leaf that surfaces both render-context cues, for the isTopOfPage tests.
+// A leaf that surfaces both render-context cues, for the loadPriority tests.
 const EDGE_SCHEMA = 'https://test.example.com/v1/content/edge'
-type EdgeProps = { label: string; bare?: boolean; isTopOfPage?: boolean }
-const Edge = ({ label, bare, isTopOfPage }: EdgeProps) => (
-  <span data-bare={bare ?? false} data-top={isTopOfPage ?? false}>
+type EdgeProps = { label: string; bare?: boolean; loadPriority?: MediaLoadPriority }
+const Edge = ({ label, bare, loadPriority }: EdgeProps) => (
+  <span data-bare={bare ?? false} data-tier={loadPriority ?? 'lazy'}>
     {label}
   </span>
 )
@@ -69,8 +70,27 @@ const edgeEntry: ComponentRegistryEntry<LeafSchema, EdgeProps> = {
   propsFromSchema: ({ _meta: _envelope, ...props }, ctx) => ({
     ...props,
     bare: ctx.bare ?? false,
-    isTopOfPage: ctx.isTopOfPage ?? false,
+    loadPriority: ctx.loadPriority ?? 'lazy',
   }),
+}
+
+// A container that consumes the tier for media of its own before passing what's
+// left to its children — the BlogArticle shape (cover image above body slots).
+const COVER_BOX_SCHEMA = 'https://test.example.com/v1/content/cover-box'
+type CoverBoxProps = { name: string; loadPriority?: MediaLoadPriority; children?: ReactNode }
+const CoverBox = ({ name, loadPriority, children }: CoverBoxProps) => (
+  <div data-box={name} data-tier={loadPriority ?? 'lazy'}>
+    {children}
+  </div>
+)
+const coverBoxEntry: ComponentRegistryEntry<BoxSchema, CoverBoxProps> = {
+  component: CoverBox,
+  consumesLoadPriority: true,
+  propsFromSchema: ({ _meta: _envelope, items: _items, ...props }, ctx) => ({
+    ...props,
+    loadPriority: ctx.loadPriority ?? 'lazy',
+  }),
+  getChildren: (schema) => schema.items ?? [],
 }
 
 // A container that derives per-instance child context (slotSizes) from its
@@ -107,6 +127,7 @@ const makeRegistry = (): Registry =>
     [BOX_SCHEMA, boxEntry],
     [IDENTITY_SCHEMA, { component: Identity }],
     [EDGE_SCHEMA, edgeEntry],
+    [COVER_BOX_SCHEMA, coverBoxEntry],
     [SIZED_BOX_SCHEMA, sizedBoxEntry],
     [SIZED_LEAF_SCHEMA, sizedLeafEntry],
   ])
@@ -121,7 +142,7 @@ const html = (content: unknown, registry: Registry = makeRegistry()): string =>
 
 /** As `html`, but seeded with a root context — how the route renders pages. */
 const htmlTop = (content: unknown): string =>
-  renderToStaticMarkup(<>{renderContent(content, makeRegistry(), { isTopOfPage: true })}</>)
+  renderToStaticMarkup(<>{renderContent(content, makeRegistry(), { loadPriority: 'lcp' })}</>)
 
 // The dispatcher emits a structured console signal on every failure exit —
 // silence it (and assert on it) via a spy.
@@ -248,27 +269,39 @@ describe('renderContent — childContextFromSchema', () => {
   })
 })
 
-describe('renderContent — isTopOfPage', () => {
+describe('renderContent — loadPriority (ADR-0021)', () => {
   const edge = (label: string, id: string) => node(EDGE_SCHEMA, { label }, id)
+  const span = (label: string, tier: string, bare = false) =>
+    `<span data-bare="${bare}" data-tier="${tier}">${label}</span>`
 
-  it('is false everywhere when no root context is seeded', () => {
-    expect(html(edge('solo', 'id-1'))).toBe('<span data-bare="false" data-top="false">solo</span>')
+  it('is lazy everywhere when no root context is seeded', () => {
+    expect(html(edge('solo', 'id-1'))).toBe(span('solo', 'lazy'))
   })
 
-  it('reaches the root node when seeded', () => {
-    expect(htmlTop(edge('solo', 'id-1'))).toBe(
-      '<span data-bare="false" data-top="true">solo</span>',
+  it('reaches the root node at the tier it was seeded with', () => {
+    expect(htmlTop(edge('solo', 'id-1'))).toBe(span('solo', 'lcp'))
+  })
+
+  it('demotes by one step across the first two siblings, then goes lazy', () => {
+    // The ladder that motivates the whole cue: one LCP candidate, one
+    // above-the-fold-but-not-LCP neighbour, lazy from there down.
+    expect(htmlTop([edge('first', 'id-1'), edge('second', 'id-2'), edge('third', 'id-3')])).toBe(
+      span('first', 'lcp') + span('second', 'eager') + span('third', 'lazy'),
     )
   })
 
-  it('survives into the first array element only', () => {
-    expect(htmlTop([edge('first', 'id-1'), edge('second', 'id-2')])).toBe(
-      '<span data-bare="false" data-top="true">first</span>' +
-        '<span data-bare="false" data-top="false">second</span>',
+  it('demotes an eager group to lazy at the second sibling (no second eager step)', () => {
+    const out = renderToStaticMarkup(
+      <>
+        {renderContent([edge('first', 'id-1'), edge('second', 'id-2')], makeRegistry(), {
+          loadPriority: 'eager',
+        })}
+      </>,
     )
+    expect(out).toBe(span('first', 'eager') + span('second', 'lazy'))
   })
 
-  it('flows along the leading edge of nested containers (page → first slot → first block)', () => {
+  it('flows through structural containers, demoting per sibling at each level', () => {
     const tree = node(BOX_SCHEMA, {
       name: 'page',
       items: [
@@ -276,19 +309,53 @@ describe('renderContent — isTopOfPage', () => {
         node(BOX_SCHEMA, { name: 'slot-2', items: [edge('c', 'id-c')] }, 'id-2'),
       ],
     })
-    // Only the first block of the first slot is top-of-page; the container's
-    // own childContext (bare) is preserved alongside the inherited flag.
+    // Structural containers render no media of their own, so they forward the
+    // tier untouched — otherwise nothing would ever reach the first real block.
+    // The container's own childContext (bare) survives alongside it.
     expect(htmlTop(tree)).toBe(
       '<div data-box="page">' +
         '<div data-box="slot-1">' +
-        '<span data-bare="true" data-top="true">a</span>' +
-        '<span data-bare="true" data-top="false">b</span>' +
+        span('a', 'lcp', true) +
+        span('b', 'eager', true) +
         '</div>' +
         '<div data-box="slot-2">' +
-        '<span data-bare="true" data-top="false">c</span>' +
+        // slot-2 is sibling 1 of the page, so it arrives eager and its only
+        // child keeps that; sibling 2 onwards would be lazy.
+        span('c', 'eager', true) +
         '</div>' +
         '</div>',
     )
+  })
+
+  it('spends a step on a container that consumes the tier for its own media', () => {
+    // The BlogArticle case: the cover image takes 'lcp', so the body slots
+    // start one step below it — never two 'lcp' nodes (and two preloads) on a
+    // page.
+    const tree = node(COVER_BOX_SCHEMA, {
+      name: 'article',
+      items: [edge('body-1', 'id-1'), edge('body-2', 'id-2')],
+    })
+    expect(htmlTop(tree)).toBe(
+      '<div data-box="article" data-tier="lcp">' +
+        span('body-1', 'eager') +
+        span('body-2', 'lazy') +
+        '</div>',
+    )
+  })
+
+  it('lets a container derive its own child tier, overriding what it inherited', () => {
+    // childContextFromSchema runs last, so a container that knows its own
+    // geometry can override an inherited cue rather than have it reapplied.
+    const registry: Registry = new Map<SchemaURI, AnyComponentRegistryEntry>([
+      [EDGE_SCHEMA, edgeEntry],
+      [
+        BOX_SCHEMA,
+        { ...boxEntry, childContextFromSchema: () => ({ bare: true, loadPriority: 'lazy' }) },
+      ],
+    ])
+    const tree = node(BOX_SCHEMA, { name: 'quiet', items: [edge('a', 'id-a')] })
+    const out = renderToStaticMarkup(<>{renderContent(tree, registry, { loadPriority: 'lcp' })}</>)
+    expect(out).toBe('<div data-box="quiet">' + span('a', 'lazy', true) + '</div>')
   })
 })
 
