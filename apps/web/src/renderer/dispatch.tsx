@@ -84,22 +84,39 @@ const demote = (tier: MediaLoadPriority | undefined, index: number): MediaLoadPr
   return 'lazy'
 }
 
+/**
+ * The card each failure class renders, keyed by the discriminant.
+ *
+ * A keyed table rather than a `switch` with a `never` guard: the mapped type
+ * makes a new failure class a compile error at the table itself, so
+ * exhaustiveness is checked where the cards are declared instead of at an
+ * unreachable `default` branch. The guard form costs a permanently uncovered
+ * line and branch — `mediaLoadingProps` in ContentMedia names this function as
+ * the counter-example; it no longer is one.
+ *
+ * Each entry keeps its narrowed prop type, so a card wired to the wrong
+ * failure class is still a compile error.
+ */
+const CARD_BY_FAILURE_CLASS: {
+  [K in RendererFailure['failureClass']]: ComponentType<{
+    failure: Extract<RendererFailure, { failureClass: K }>
+  }>
+} = {
+  SchemaUnknown: SchemaUnknownCard,
+  ComponentUnregistered: ComponentUnregisteredCard,
+  PropsValidationFailure: PropsValidationFailureCard,
+}
+
 /** Emit the console signal and render the matching failure card. */
 const fail = (failure: RendererFailure, content: unknown): ReactNode => {
   emitRendererFailure(failure, content)
-  switch (failure.failureClass) {
-    case 'SchemaUnknown':
-      return <SchemaUnknownCard failure={failure} />
-    case 'ComponentUnregistered':
-      return <ComponentUnregisteredCard failure={failure} />
-    case 'PropsValidationFailure':
-      return <PropsValidationFailureCard failure={failure} />
-    default: {
-      // Exhaustiveness guard — a new failure class is a compile error here.
-      const exhaustive: never = failure
-      return exhaustive
-    }
-  }
+  // The table is keyed by the same discriminant being read, so the looked-up
+  // card always matches this failure. TypeScript can't correlate the two
+  // through a union-typed index, hence the assertion.
+  const Card = CARD_BY_FAILURE_CLASS[failure.failureClass] as ComponentType<{
+    failure: RendererFailure
+  }>
+  return <Card failure={failure} />
 }
 
 // ---------------------------------------------------------------------------

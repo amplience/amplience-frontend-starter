@@ -125,6 +125,17 @@ describe('parseDeploymentUrl', () => {
     const out = `Production: ${ESC}[1mhttps://matts-sandbox-6.vercel.app${ESC}[22m`
     expect(parseDeploymentUrl(out)).toBe('https://matts-sandbox-6.vercel.app')
   })
+
+  it('falls back to the last URL printed when the site is on a custom domain', () => {
+    // A project with a production domain attached prints that domain rather
+    // than a *.vercel.app host. The vercel-host preference must not strand the
+    // result on the dashboard link that precedes it.
+    const out = [
+      'Inspect: https://vercel.com/acme/proj/abc [2s]',
+      'Production: https://shop.acme.com [30s]',
+    ].join('\n')
+    expect(parseDeploymentUrl(out)).toBe('https://shop.acme.com')
+  })
 })
 
 describe('stripAnsi', () => {
@@ -176,6 +187,38 @@ describe('CLI argv builders', () => {
       '--yes',
     ])
   })
+
+  it('threads token and scope through env-rm too', () => {
+    // env rm runs immediately before env add (remove-then-add for idempotency),
+    // so it has to reach the same project — dropping either flag here would
+    // silently target a different scope than the add that follows it.
+    expect(envRmArgs('K', 'preview', { token: 't', scope: 'team' })).toEqual([
+      'env',
+      'rm',
+      'K',
+      'preview',
+      '--yes',
+      '--scope',
+      'team',
+      '--token',
+      't',
+    ])
+  })
+
+  it('omits each flag independently when only the other is supplied', () => {
+    // scope and token are set from separate sources (team selection vs stored
+    // CLI auth), so every combination is reachable in practice.
+    expect(deployArgs()).toEqual(['deploy', '--prod', '--yes'])
+    expect(deployArgs({ token: 't' })).toEqual(['deploy', '--prod', '--yes', '--token', 't'])
+    expect(linkArgs('proj', { scope: 'team' })).toEqual([
+      'link',
+      '--yes',
+      '--project',
+      'proj',
+      '--scope',
+      'team',
+    ])
+  })
 })
 
 describe('parseProjectNames', () => {
@@ -190,6 +233,19 @@ describe('parseProjectNames', () => {
 
   it('returns [] when there is no parseable JSON', () => {
     expect(parseProjectNames('no projects found')).toEqual([])
+  })
+
+  it('returns [] for JSON that carries no project list', () => {
+    // A CLI that changes its envelope, or an error object, must not throw here
+    // — the caller treats [] as "nothing known to be taken" and carries on.
+    expect(parseProjectNames('{"pagination":{"next":null}}')).toEqual([])
+    expect(parseProjectNames('{"projects":"none"}')).toEqual([])
+  })
+
+  it('skips entries whose name is empty or not a string', () => {
+    // A blank name would make nextAvailableName treat "" as taken; a numeric
+    // one would land in a Set of strings and never match.
+    expect(parseProjectNames('[{"name":""},{"name":42},{"name":"acme"}]')).toEqual(['acme'])
   })
 })
 
@@ -219,12 +275,36 @@ describe('projectListArgs', () => {
       '1584722256178',
     ])
   })
+
+  it('lists in the same scope the link will use', () => {
+    // Availability is checked so the flow creates a fresh project rather than
+    // adopting one. Listing in a different scope than the subsequent link would
+    // check the wrong account's projects and silently overwrite.
+    expect(projectListArgs({ token: 't', scope: 'team' })).toEqual([
+      'project',
+      'ls',
+      '--format',
+      'json',
+      '--scope',
+      'team',
+      '--token',
+      't',
+    ])
+  })
 })
 
 describe('parseNextCursor', () => {
   it('returns the pagination cursor as a string', () => {
     expect(parseNextCursor('{"projects":[],"pagination":{"next":1584722256178}}')).toBe(
       '1584722256178',
+    )
+  })
+
+  it('passes a string cursor through unchanged', () => {
+    // The CLI has printed `next` as both a number and an opaque string across
+    // versions; only the number form needs coercing.
+    expect(parseNextCursor('{"pagination":{"next":"eyJvZmZzZXQiOjIwfQ"}}')).toBe(
+      'eyJvZmZzZXQiOjIwfQ',
     )
   })
 
@@ -249,6 +329,29 @@ describe('cliAuthTokenPaths', () => {
       xdgDataHome: '/custom/data',
     })
     expect(paths).toContain('/custom/data/com.vercel.cli/auth.json')
+  })
+
+  it('puts the LOCALAPPDATA path first on Windows', () => {
+    const paths = cliAuthTokenPaths({
+      home: 'C:/Users/matt',
+      platform: 'win32',
+      localAppData: 'C:/Users/matt/AppData/Local',
+    })
+    expect(paths[0]).toBe('C:/Users/matt/AppData/Local/com.vercel.cli/auth.json')
+    expect(paths).not.toContain(
+      'C:/Users/matt/Library/Application Support/com.vercel.cli/auth.json',
+    )
+  })
+
+  it('falls back to the XDG paths on Windows when LOCALAPPDATA is unset or blank', () => {
+    // Node only guarantees LOCALAPPDATA on a normal desktop session; a service
+    // account or stripped environment can leave it absent or empty, and an
+    // empty one would build the bare path "/com.vercel.cli/auth.json".
+    for (const localAppData of [undefined, '']) {
+      const paths = cliAuthTokenPaths({ home: 'C:/Users/matt', platform: 'win32', localAppData })
+      expect(paths[0]).toBe('C:/Users/matt/.local/share/com.vercel.cli/auth.json')
+      expect(paths.some((p) => p.startsWith('/com.vercel.cli'))).toBe(false)
+    }
   })
 })
 
