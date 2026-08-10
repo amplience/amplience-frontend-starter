@@ -6,7 +6,7 @@
 //   3. eslint-plugin-react + react-hooks for *.{jsx,tsx}
 //   4. @next/eslint-plugin-next + core-web-vitals for apps/web
 //   5. eslint-plugin-jsx-a11y for *.{jsx,tsx}
-//   6. unused-imports wrapped by no-autofix (block but never auto-remove)
+//   6. unused-imports wrapped by a local no-autofix fork (block but never auto-remove)
 //   7. eslint-config-prettier last (turns off stylistic rules that fight Prettier)
 //
 // Each workspace re-exports this from its own eslint.config.js. Per-package
@@ -19,12 +19,13 @@ import js from '@eslint/js'
 import nextPlugin from '@next/eslint-plugin-next'
 import prettierConfig from 'eslint-config-prettier'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
-import noAutofix from 'eslint-plugin-no-autofix'
 import reactPlugin from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import * as regexpPlugin from 'eslint-plugin-regexp'
 import unusedImports from 'eslint-plugin-unused-imports'
 import tseslint from 'typescript-eslint'
+
+import { noAutofixPlugin } from './no-autofix-local.js'
 
 // Resolve the repo root from this file's own location: packages/config/ → ../..
 // We can't trust process.cwd() because lint-staged v15+ chdir's into the
@@ -159,7 +160,8 @@ export default tseslint.config(
     : {
         plugins: {
           'unused-imports': unusedImports,
-          'no-autofix': noAutofix,
+          // Local fork of eslint-plugin-no-autofix — see no-autofix-local.js.
+          'no-autofix': noAutofixPlugin(unusedImports, 'unused-imports'),
         },
         rules: {
           '@typescript-eslint/no-unused-vars': 'off',

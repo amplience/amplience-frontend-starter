@@ -26,6 +26,7 @@ const config: StorybookConfig = {
     '@storybook/addon-vitest',
     '@storybook/addon-a11y',
     '@storybook/addon-mcp',
+    '@storybook/addon-links',
   ],
   framework: {
     name: '@storybook/nextjs-vite',
