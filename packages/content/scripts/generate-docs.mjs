@@ -207,11 +207,39 @@ const ALERT_EMOJI = {
   CAUTION: '🛑',
 }
 
-/** Replace `> [!TYPE]` alert markers with an emoji-prefixed blockquote. */
+/**
+ * Replace `> [!TYPE]` alert markers with an emoji-prefixed blockquote.
+ *
+ * Two authoring forms exist in the docs, and they need different treatment:
+ *
+ *   > [!NOTE]                 bare marker — the emoji just prefixes the body
+ *   > Body text…
+ *
+ *   > [!NOTE] A title         titled — GitHub renders the title as a heading
+ *   > Body text…              above the body, so the site must break the line
+ *
+ * For the titled form a plain swap isn't enough: consecutive blockquote lines
+ * are one paragraph in Markdown, and the renderer (react-markdown + remark-gfm,
+ * no remark-breaks) folds the newline to a space — so the title ran into the
+ * body as `ℹ️ A title Body text…`. The title is emphasised and terminated with a
+ * backslash, CommonMark's hard line break, which keeps it tight to the body
+ * rather than opening a paragraph gap the way a blank `>` line would.
+ *
+ * The backslash is only added when a non-empty quote line actually follows: on
+ * the last line of a blockquote CommonMark renders a trailing backslash
+ * literally instead of as a break.
+ */
 const swapGitHubAlerts = (md) =>
   md.replace(
-    /^([ \t]*>[ \t]*)\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]/gim,
-    (_whole, prefix, type) => `${prefix}${ALERT_EMOJI[type.toUpperCase()]}`,
+    /^([ \t]*>[ \t]*)\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\][ \t]*([^\r\n]*)/gim,
+    (whole, prefix, type, title, offset, full) => {
+      const emoji = ALERT_EMOJI[type.toUpperCase()]
+      const heading = title.trim()
+      if (heading === '') return `${prefix}${emoji}`
+      const next = /^\r?\n([ \t]*>[^\r\n]*)/.exec(full.slice(offset + whole.length))
+      const bodyFollows = next !== null && next[1].replace(/^[ \t]*>[ \t]*/, '').trim() !== ''
+      return `${prefix}**${emoji} ${heading}**${bodyFollows ? '\\' : ''}`
+    },
   )
 
 /**

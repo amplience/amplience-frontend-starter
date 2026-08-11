@@ -39,6 +39,8 @@ To register a deployed site against a hub, open that hub's card in `env-manager`
 
 Either way, once a site is recorded it's added as a visualization option in the CMS whenever you next seed or sync that hub's content types.
 
+A newly recorded site is also what webhooks need in order to exist — they're created one per registered site, so seed them (**Webhooks → Seed**, or `pnpm hub:import:webhooks`) after adding one. See [Webhooks](working-with-a-hub.md#webhooks).
+
 > [!TIP] Manual Vercel setup
 > To host on Vercel by hand instead:
 >

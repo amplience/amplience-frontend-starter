@@ -51,8 +51,10 @@ Local setup takes about 40 seconds, and needs no Amplience hub:
 
 By default it serves content from the bundled fixture data (`packages/content/fixtures/`), so it runs fully offline.
 
-> [!NOTE] Building a static site
-> To build a _static_ site, run `pnpm build` to build, then `pnpm start` to serve it. This won't live-update as you change code, so `pnpm dev` is usually preferred for local development.
+> [!NOTE] Building a production build
+> To build a _production_ build, run `pnpm build` to build, then `pnpm start` to serve it. This won't live-update as you change code, so `pnpm dev` is usually preferred for local development.
+
+See [Commands](commands.md) for a full list of terminal commands and what they each do.
 
 ## Next steps
 

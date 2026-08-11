@@ -17,8 +17,10 @@
     "hub:import:schemas": "node --env-file-if-exists=.env scripts/hub-import.mjs schemas",
     "hub:import:types": "node --env-file-if-exists=.env scripts/hub-import.mjs types",
     "hub:import:extensions": "node --env-file-if-exists=.env scripts/hub-import.mjs extensions",
+    "hub:import:webhooks": "node --env-file-if-exists=.env scripts/hub-import.mjs webhooks",
     "hub:import:content": "node --env-file-if-exists=.env scripts/hub-import.mjs content",
-    "hub:wipe": "node --env-file-if-exists=.env scripts/hub-wipe.mjs"
+    "hub:wipe": "node --env-file-if-exists=.env scripts/hub-wipe.mjs",
+    "hub:wipe:webhooks": "node --env-file-if-exists=.env scripts/hub-wipe.mjs webhooks"
   },
   "dependencies": {
     "@amplience/quadratic-content": "workspace:*"

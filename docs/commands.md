@@ -62,6 +62,11 @@ deployment-related:
 - Per-resource **Seed** / **Sync** / **Wipe** with live counts and a streaming log
 - Create, redeploy and destroy Vercel sites (ADR-0017)
 
+The **Webhooks** row is the one resource that depends on something outside the
+hub: a webhook needs a deployment to call, so one is seeded per registered site
+and the row does nothing until you've added one. See
+[Working with a hub](working-with-a-hub.md#webhooks).
+
 Configuration it writes lands in a gitignored `quadratic.config.json` plus
 `.env` files. Credentials never reach version control.
 
@@ -79,27 +84,40 @@ pnpm hub:import:settings      # preview devices, locales, workflow states
 pnpm hub:import:schemas       # JSON Schemas
 pnpm hub:import:types         # content-type registrations (+ visualizations)
 pnpm hub:import:extensions    # UI and dashboard extensions
+pnpm hub:import:webhooks      # publish → cache-invalidation webhooks, one per registered site
 pnpm hub:import:content       # fixture content items
 
-pnpm hub:wipe                 # reset the hub to empty (~45s)
+pnpm hub:wipe                 # reset the hub to empty, webhooks included (~45s)
 pnpm hub:wipe items           # content items only, leaving the model in place
+pnpm hub:wipe webhooks        # just the seeded webhooks
 ```
 
-Three things about `hub:import` that aren't obvious from the name:
+Four things about `hub:import` that aren't obvious from the name:
 
 - **It is also the "push my changes" command.** Re-running updates items in place
   rather than duplicating them, because every phase shares one dc-cli mapping
   file. There is no separate `push`.
 - **The order matters and is not alphabetical.** Settings first (extensions and
   content reference workflow-state IDs that the settings step mints), then
-  schemas → types → extensions → content. `pnpm hub:import` handles this for you;
-  the individual steps are for iterating on one layer.
+  schemas → types → extensions → webhooks → content. `pnpm hub:import` handles
+  this for you; the individual steps are for iterating on one layer.
+- **The webhooks step doesn't use dc-cli.** `dc-cli webhook import` discards the
+  top-level `secret` and every header marked `"secret": true`, so a webhook
+  seeded through it arrives unauthenticated and fails on every delivery. That
+  step calls the Management API directly instead (via `dc-management-sdk-js`,
+  already a dependency), which also means it needs `AMPLIENCE_CLIENT_ID`,
+  `_SECRET` and `AMPLIENCE_HUB_ID` explicitly — it has no dc-cli configuration
+  to fall back on. See `packages/hub-management/webhooks/README.md`.
 - **A failed step is safe to re-run.** It exits non-zero with dc-cli's own
   output; the mapping file makes repeats idempotent.
 
 `hub:wipe` is destructive and has no confirmation prompt in the terminal — the
 GUI equivalent does prompt. It frees delivery keys, retracts published content
-where the hub allows unpublish, then archives content, types and schemas.
+where the hub allows unpublish, then archives content, types and schemas. A full
+wipe also deletes the webhooks the seed created; `pnpm hub:wipe webhooks` does
+only that. Only webhooks labelled `Quadratic — …` are ever touched, so anything
+hand-made or belonging to another integration survives both a wipe and a
+re-seed.
 
 ### Configuration
 
@@ -107,17 +125,18 @@ The `hub:*` scripts read the environment, usually from
 `packages/hub-management/.env` (copy `.env.example`). Shell variables take
 precedence.
 
-| Variable                                               | Purpose                                                                                    |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| `AMPLIENCE_HUB_NAME`                                   | Visualization URIs, and the default site name                                              |
-| `AMPLIENCE_APP_URL`                                    | Production visualization origin                                                            |
-| `AMPLIENCE_REPO_CONTENT`                               | Content repository ID                                                                      |
-| `AMPLIENCE_REPO_SLOTS`                                 | Slots repository ID                                                                        |
-| `AMPLIENCE_REPO_SITE_COMPONENTS`                       | Site Components repository ID (custom CSS — ADR-0016)                                      |
-| `AMPLIENCE_CLIENT_ID` / `_SECRET` / `AMPLIENCE_HUB_ID` | Credentials. All three together, or omit all three to use your active dc-cli configuration |
-| `SITE_NAME`                                            | Delivery-key namespace override (ADR-0014); defaults to the hub name                       |
-| `AMPLIENCE_REPUBLISH=1`                                | Force-publish every item, not just changed ones                                            |
-| `AMPLIENCE_IGNORE_SCHEMA_VALIDATION=1`                 | Skip the pre-import fixture/schema validation. Diagnostic only                             |
+| Variable                                               | Purpose                                                                                                                                                                                                               |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `AMPLIENCE_HUB_NAME`                                   | Visualization URIs, and the default site name                                                                                                                                                                         |
+| `AMPLIENCE_APP_URL`                                    | Production visualization origin                                                                                                                                                                                       |
+| `AMPLIENCE_REPO_CONTENT`                               | Content repository ID                                                                                                                                                                                                 |
+| `AMPLIENCE_REPO_SLOTS`                                 | Slots repository ID                                                                                                                                                                                                   |
+| `AMPLIENCE_REPO_SITE_COMPONENTS`                       | Site Components repository ID (custom CSS — ADR-0016)                                                                                                                                                                 |
+| `AMPLIENCE_CLIENT_ID` / `_SECRET` / `AMPLIENCE_HUB_ID` | Credentials. All three together, or omit all three to use your active dc-cli configuration                                                                                                                            |
+| `SITE_NAME`                                            | Delivery-key namespace override (ADR-0014); defaults to the hub name                                                                                                                                                  |
+| `AMPLIENCE_REVALIDATE_SECRET`                          | Shared secret seeded into webhook headers, and checked by the deployment's `/api/revalidate-*` routes. Must match the value set on the deployment; unset means those webhooks are skipped, not seeded unauthenticated |
+| `AMPLIENCE_REPUBLISH=1`                                | Force-publish every item, not just changed ones                                                                                                                                                                       |
+| `AMPLIENCE_IGNORE_SCHEMA_VALIDATION=1`                 | Skip the pre-import fixture/schema validation. Diagnostic only                                                                                                                                                        |
 
 ## Deploying a site
 
@@ -166,6 +185,8 @@ Deliberately deferred, so you don't go looking for them:
 | Content type schemas row → **Seed** / **Sync**    | `pnpm hub:import:schemas`                       |
 | Content types row → **Seed** / **Sync**           | `pnpm hub:import:types`                         |
 | Extensions row → **Seed** / **Sync**              | `pnpm hub:import:extensions`                    |
+| Webhooks row → **Seed** / **Sync**                | `pnpm hub:import:webhooks`                      |
+| Webhooks row → **Wipe**                           | `pnpm hub:wipe webhooks`                        |
 | Content items row → **Seed**                      | `AMPLIENCE_REPUBLISH=1 pnpm hub:import:content` |
 | Content items row → **Sync**                      | `pnpm hub:import:content`                       |
 | Content items row → **Wipe**                      | `pnpm hub:wipe items`                           |
@@ -176,8 +197,8 @@ Deliberately deferred, so you don't go looking for them:
 
 Seed and Sync differ only for content items, where Seed force-republishes
 everything and Sync publishes new and changed items only. For settings, schemas,
-types and extensions the two buttons run the identical command — the naming
-reflects intent (first run vs update), not different behaviour.
+types, extensions and webhooks the two buttons run the identical command — the
+naming reflects intent (first run vs update), not different behaviour.
 
 ## Where these are defined
 

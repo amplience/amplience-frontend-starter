@@ -58,6 +58,11 @@ const HUB_FIELDS: FieldMeta[] = [
     label: 'Staging host (VSE)',
     placeholder: 'Optional — enables staging preview',
   },
+  {
+    key: 'revalidateSecret',
+    label: 'Revalidate secret',
+    placeholder: "Optional — must match the deployment's AMPLIENCE_REVALIDATE_SECRET",
+  },
 ]
 
 const CONFIG_FIELDS: FieldMeta[] = [
@@ -244,7 +249,7 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
         <input
           ref={idx === 0 ? firstFieldRef : undefined}
           id={key}
-          type={key === 'clientSecret' ? 'password' : 'text'}
+          type={key === 'clientSecret' || key === 'revalidateSecret' ? 'password' : 'text'}
           value={String(form[key] ?? '')}
           placeholder={placeholder}
           required={required}

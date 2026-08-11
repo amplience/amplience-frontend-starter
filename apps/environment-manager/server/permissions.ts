@@ -181,21 +181,30 @@ export async function buildPermissionsReport(
     return { state: readState(res.status), status: res.status }
   }
 
-  const [workflowStates, schemas, types, extensions, itemsContent, itemsSlots, itemsSite] =
-    await Promise.all([
-      probe('workflow-states'),
-      probe('content-type-schemas'),
-      probe('content-types'),
-      probe('extensions'),
-      repoCheck(fetchJson, 'items-content', 'Content items (content repo)', env.repoContent),
-      repoCheck(fetchJson, 'items-slots', 'Content items (slots repo)', env.repoSlots),
-      repoCheck(
-        fetchJson,
-        'items-site-components',
-        'Content items (site components repo)',
-        env.repoSiteComponents ?? '',
-      ),
-    ])
+  const [
+    workflowStates,
+    schemas,
+    types,
+    extensions,
+    webhooks,
+    itemsContent,
+    itemsSlots,
+    itemsSite,
+  ] = await Promise.all([
+    probe('workflow-states'),
+    probe('content-type-schemas'),
+    probe('content-types'),
+    probe('extensions'),
+    probe('webhooks'),
+    repoCheck(fetchJson, 'items-content', 'Content items (content repo)', env.repoContent),
+    repoCheck(fetchJson, 'items-slots', 'Content items (slots repo)', env.repoSlots),
+    repoCheck(
+      fetchJson,
+      'items-site-components',
+      'Content items (site components repo)',
+      env.repoSiteComponents ?? '',
+    ),
+  ])
 
   const checks: PermissionCheck[] = [
     hubCheck(
@@ -215,6 +224,7 @@ export async function buildPermissionsReport(
     hubCheck('extensions', 'Extensions', extensions.state, extensions.status, hubLinks, [
       'create-extension',
     ]),
+    hubCheck('webhooks', 'Webhooks', webhooks.state, webhooks.status, hubLinks, ['create-webhook']),
     itemsContent,
     itemsSlots,
     itemsSite,

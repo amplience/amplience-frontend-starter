@@ -5,7 +5,7 @@
  * layout it imports is the layout that CLI will adopt, so retiring this
  * script changes the verb, not the content.
  *
- * Usage:  node scripts/hub-import.mjs [settings|schemas|types|extensions|content|all]
+ * Usage:  node scripts/hub-import.mjs [settings|schemas|types|extensions|content|webhooks|all]
  *
  * Import order matters and the script owns it — it mirrors dc-cli's own
  * `hub clone` pipeline (settings → schema → type → extension → content):
@@ -25,9 +25,30 @@
  *                 resolved: `${repo:content}` → the content repo, and
  *                 `${status:Label}` → the workflow-state id the settings
  *                 step just created for that label. Depends on settings.
- *   5. content  — fixtures imported leaf-first (components → slots →
+ *   5. webhooks — webhooks/*.json, expanded once per configured web app and
+ *                 pushed through the Management API (NOT dc-cli — see below).
+ *                 Nothing on the hub depends on a webhook (it points outward,
+ *                 at a deployment), so its position is free; it sits here to
+ *                 match the order the Environment Manager lists resources in.
+ *                 One consequence of being before content: the content step
+ *                 publishes, so a seed fires the webhooks it just created —
+ *                 harmless (a revalidate is idempotent and cheap) and useful,
+ *                 since a wrong secret shows up in the hub's delivery log
+ *                 during the seed rather than the next time an editor
+ *                 publishes.
+ *   6. content  — fixtures imported leaf-first (components → slots →
  *                 pages) so the mapping file already knows every link
  *                 target when the linking item arrives.
+ *
+ * The webhooks step is the one step that doesn't wrap dc-cli.
+ * `dc-cli webhook import` discards the top-level `secret` (the HMAC signing
+ * key) and filters out every header marked `"secret": true` before creating
+ * the webhook — which is exactly the credential a protected endpoint needs,
+ * so a webhook seeded through dc-cli arrives unauthenticated and 401s on
+ * every delivery. `dc-management-sdk-js` is already a direct dependency here,
+ * so the step uses the API directly: secrets survive, `active: false` becomes
+ * expressible, and identity is the webhook's label rather than a mapping
+ * file. See webhooks/README.md.
  *
  * All three content phases share one explicit --mapFile
  * (~/.amplience/imports/quadratic-<hubName>.json). dc-cli's default would
@@ -62,7 +83,15 @@
  *   AMPLIENCE_REPO_SLOTS     repository id for slots (content step)
  *   AMPLIENCE_CLIENT_ID      ┐ optional — when all three are set they're
  *   AMPLIENCE_CLIENT_SECRET  │ passed to dc-cli; otherwise dc-cli's own
- *   AMPLIENCE_HUB_ID         ┘ active configuration is used
+ *   AMPLIENCE_HUB_ID         ┘ active configuration is used. The webhooks
+ *                            step is the exception: it calls the Management
+ *                            API directly, so it needs all three explicitly
+ *                            and says so rather than falling back silently.
+ *   AMPLIENCE_REVALIDATE_SECRET  fills ${secret:revalidate} in webhook
+ *                            definitions — the shared secret the deployment's
+ *                            /api/revalidate-* routes check. Unset means the
+ *                            webhooks needing it are skipped with a warning,
+ *                            never seeded unauthenticated.
  *
  * Items are imported with --publish (QL-92 decision): the production
  * delivery path serves them immediately, so QL-44/45 never meet
@@ -81,6 +110,7 @@ import {
 import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { DynamicContent, Webhook } from 'dc-management-sdk-js'
 
 import {
   buildStatusMap,
@@ -88,6 +118,14 @@ import {
   resolveTokens,
   stripFields,
 } from './lib/resolve-placeholders.mjs'
+import {
+  diffWebhooks,
+  expandDefinition,
+  MANAGED_LABEL_PREFIX,
+  redact,
+  requiredSecrets,
+  WEBHOOK_INSTANCE_FIELDS,
+} from './lib/webhooks.mjs'
 
 const packageRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 const repoRoot = path.join(packageRoot, '..', '..')
@@ -114,7 +152,7 @@ function loadWebApps(hubName) {
 }
 
 const step = process.argv[2] ?? 'all'
-const steps = ['settings', 'schemas', 'types', 'extensions', 'content', 'all']
+const steps = ['settings', 'schemas', 'types', 'extensions', 'webhooks', 'content', 'all']
 if (!steps.includes(step)) {
   console.error(`Unknown step "${step}" — expected one of: ${steps.join(', ')}`)
   process.exit(1)
@@ -448,10 +486,152 @@ const importContent = async () => {
   }
 }
 
+/**
+ * Named secrets available to webhook definitions, by token name.
+ * A token whose value is absent skips the definition using it (see below),
+ * so this map is the whole vocabulary of `${secret:…}`.
+ */
+const webhookSecrets = () => {
+  const map = new Map()
+  const revalidate = env('AMPLIENCE_REVALIDATE_SECRET')
+  if (revalidate !== undefined) map.set('revalidate', revalidate)
+  return map
+}
+
+/** Env var behind each secret token, for messages that tell you what to set. */
+const SECRET_ENV = { revalidate: 'AMPLIENCE_REVALIDATE_SECRET' }
+
+/** Every webhook on the hub, collected before mutating (pages would shift). */
+const listAllWebhooks = async (hub) => {
+  const all = []
+  for (let page = 0; ; page++) {
+    const result = await hub.related.webhooks.list({ size: 100, page })
+    all.push(...result.getItems())
+    if (page >= (result.page?.totalPages ?? 1) - 1) break
+  }
+  return all
+}
+
+const importWebhooks = async () => {
+  const hubName = require_('AMPLIENCE_HUB_NAME', "resolve ${hub} and find this hub's web apps")
+  // Unlike the dc-cli steps, this one has no "active configuration" to fall
+  // back on — it authenticates itself, so it asks for credentials plainly.
+  const clientId = require_('AMPLIENCE_CLIENT_ID', 'call the Management API for webhooks')
+  const clientSecret = require_('AMPLIENCE_CLIENT_SECRET', 'call the Management API for webhooks')
+  const hubId = require_('AMPLIENCE_HUB_ID', 'identify the hub to attach webhooks to')
+
+  const source = path.join(packageRoot, 'webhooks')
+  const files = existsSync(source) ? readdirSync(source).filter((f) => f.endsWith('.json')) : []
+  if (files.length === 0) {
+    console.log('\n→ No webhook definitions in webhooks/ — nothing to seed.')
+    return
+  }
+
+  // A webhook points at a deployment. With none registered against this hub
+  // there is no URL to send anything to, so this is a skip, not a failure.
+  const webApps = loadWebApps(hubName).map((site) => ({
+    ...site,
+    url: site.url.replace(/\/+$/, ''),
+  }))
+  if (webApps.length === 0) {
+    console.log(
+      `\n→ Hub "${hubName}" has no web apps registered in quadratic.config.json — ` +
+        `skipping webhooks (a webhook needs a deployment to call). Add a site in the ` +
+        `Environment Manager, then re-run this step.`,
+    )
+    return
+  }
+  console.log(
+    `\n→ Expanding ${files.length} webhook definition(s) across ${webApps.length} web app(s)`,
+  )
+
+  const secrets = webhookSecrets()
+  const desired = []
+  for (const file of files) {
+    const definition = stripFields(
+      JSON.parse(readFileSync(path.join(source, file), 'utf8')),
+      WEBHOOK_INSTANCE_FIELDS,
+    )
+    // Skip rather than fail: a deployment that doesn't use the feature behind
+    // this webhook shouldn't be unable to run `pnpm hub:import`. Seeding it
+    // without its secret would be worse than skipping — it would 401 on every
+    // delivery and look like a broken integration.
+    const missing = [...requiredSecrets(definition)].filter((name) => !secrets.has(name))
+    if (missing.length > 0) {
+      console.log(
+        `  ⚠ ${file}: skipped — ${missing
+          .map((n) => SECRET_ENV[n] ?? `\${secret:${n}}`)
+          .join(', ')} not set. Set it to seed this webhook (it authenticates the call).`,
+      )
+      continue
+    }
+    try {
+      desired.push(
+        ...expandDefinition(definition, { webApps, hub: hubName, secrets, source: file }),
+      )
+    } catch (err) {
+      console.error(`\n✗ ${err instanceof Error ? err.message : String(err)}`)
+      process.exit(1)
+    }
+  }
+  if (desired.length === 0) {
+    console.log('  Nothing to seed.')
+    return
+  }
+
+  const client = new DynamicContent({ client_id: clientId, client_secret: clientSecret })
+  let hub
+  try {
+    hub = await client.hubs.get(hubId)
+  } catch (err) {
+    console.error(
+      `\n✗ Could not read hub ${hubId}: ${err instanceof Error ? err.message : String(err)}`,
+    )
+    process.exit(1)
+  }
+
+  const existing = await listAllWebhooks(hub)
+  const { create, update, prune } = diffWebhooks(desired, existing)
+  const unmanaged = existing.length - (update.length + prune.length)
+  console.log(
+    `  ${create.length} to create, ${update.length} to update, ${prune.length} to remove` +
+      (unmanaged > 0 ? `, ${unmanaged} left alone (not "${MANAGED_LABEL_PREFIX}…")` : ''),
+  )
+
+  try {
+    for (const webhook of create) {
+      await hub.related.webhooks.create(new Webhook(webhook))
+      console.log(`  + ${webhook.label} → ${(webhook.handlers ?? []).join(', ')}`)
+    }
+    for (const webhook of update) {
+      const { id, ...body } = webhook
+      const target = existing.find((w) => w.id === id)
+      await target.related.update(new Webhook(body))
+      console.log(`  ~ ${webhook.label} → ${(body.handlers ?? []).join(', ')}`)
+    }
+    // A webhook outliving its deployment fires on every publish and fails
+    // every time, so a site that's been renamed or destroyed takes its
+    // webhook with it.
+    for (const webhook of prune) {
+      await webhook.related.delete()
+      console.log(`  - ${webhook.label} (no web app claims it any more)`)
+    }
+  } catch (err) {
+    console.error(`\n✗ Webhook write failed: ${err instanceof Error ? err.message : String(err)}`)
+    process.exit(1)
+  }
+
+  if (env('AMPLIENCE_WEBHOOK_DEBUG') !== undefined) {
+    console.log('\n  Resolved definitions (secrets masked):')
+    for (const webhook of desired) console.log(`  ${JSON.stringify(redact(webhook))}`)
+  }
+}
+
 if (step === 'settings' || step === 'all') await importSettings()
 if (step === 'schemas' || step === 'all') await importSchemas()
 if (step === 'types' || step === 'all') await importTypes()
 if (step === 'extensions' || step === 'all') await importExtensions()
+if (step === 'webhooks' || step === 'all') await importWebhooks()
 if (step === 'content' || step === 'all') await importContent()
 
 console.log('\n✓ hub-import complete')
