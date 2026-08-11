@@ -79,17 +79,33 @@ they aren't credentials.
 pnpm hub:import
 ```
 
-That executes five steps in order (mirroring dc-cli's own `hub clone`
-pipeline: settings → schema → type → extension → content); each is also
-runnable on its own from `packages/hub-management/` when iterating:
+That executes six steps in order — five of them mirror dc-cli's own `hub clone`
+pipeline (settings → schema → type → extension → … → content), with the
+webhooks step slotted in before content so the sequence matches the order the
+Environment Manager lists resources in; each is also runnable on its own from
+`packages/hub-management/` when iterating:
 
-| Step | Script                       | What happens                                                                                                                                                                                                                                                                                          |
-| ---- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1    | `pnpm hub:import:settings`   | Imports `settings/*.json` — preview devices, locales and the workflow states. First because content items and dashboard extensions reference states by id, and dc-cli mints a fresh id per state on each hub, recording the source→target ids in `~/.amplience/imports/quadratic-settings-<hub>.json` |
-| 2    | `pnpm hub:import:schemas`    | Registers the JSON Schemas (8 types + 2 partials) from `content-type-schemas/`                                                                                                                                                                                                                        |
-| 3    | `pnpm hub:import:types`      | Stages `content-types/` with `${hub}` and `${appUrl}` substituted, imports with `--sync` so visualization changes reach already-registered types                                                                                                                                                      |
-| 4    | `pnpm hub:import:extensions` | Stages `extensions/*.json` with hub-independent tokens resolved — `${repo:content}` → the content repo, `${status:Label}` → the workflow-state id the settings step created for that label — then imports. Depends on step 1                                                                          |
-| 5    | `pnpm hub:import:content`    | Stages fixtures with delivery keys re-prefixed from `base-site/` to the site namespace (`SITE_NAME`, default: hub name — ADR-0014), then imports leaf-first — components → slots → pages — each into its repository, with `--publish`                                                                 |
+| Step | Script                       | What happens                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ---- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | `pnpm hub:import:settings`   | Imports `settings/*.json` — preview devices, locales and the workflow states. First because content items and dashboard extensions reference states by id, and dc-cli mints a fresh id per state on each hub, recording the source→target ids in `~/.amplience/imports/quadratic-settings-<hub>.json`                                                                                                                                                                                                           |
+| 2    | `pnpm hub:import:schemas`    | Registers the JSON Schemas (8 types + 2 partials) from `content-type-schemas/`                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| 3    | `pnpm hub:import:types`      | Stages `content-types/` with `${hub}` and `${appUrl}` substituted, imports with `--sync` so visualization changes reach already-registered types                                                                                                                                                                                                                                                                                                                                                                |
+| 4    | `pnpm hub:import:extensions` | Stages `extensions/*.json` with hub-independent tokens resolved — `${repo:content}` → the content repo, `${status:Label}` → the workflow-state id the settings step created for that label — then imports. Depends on step 1                                                                                                                                                                                                                                                                                    |
+| 5    | `pnpm hub:import:webhooks`   | Creates one webhook per web app registered against this hub, from `webhooks/*.json`, with `${site:url}` / `${site:label}` / `${secret:…}` resolved per deployment. Skipped when the hub has no web apps, or when a definition's secret isn't set — never seeded unauthenticated. Needs `AMPLIENCE_CLIENT_ID` / `_SECRET` / `AMPLIENCE_HUB_ID` explicitly. Before content, so the seed's own publishes exercise the webhooks it just created — a wrong secret shows up in the hub's delivery log during the seed |
+| 6    | `pnpm hub:import:content`    | Stages fixtures with delivery keys re-prefixed from `base-site/` to the site namespace (`SITE_NAME`, default: hub name — ADR-0014), then imports leaf-first — components → slots → pages — each into its repository, with `--publish`                                                                                                                                                                                                                                                                           |
+
+Step 5 is the one step that doesn't wrap dc-cli. `dc-cli webhook import`
+discards the top-level `secret` and filters out every header marked
+`"secret": true` before creating the webhook — the credential is exactly what
+makes the call work, so a webhook seeded that way 401s on every delivery. It
+uses the Management API through `dc-management-sdk-js` instead (already a
+dependency of this package), which keeps secret headers intact, makes
+`active: false` expressible, and uses the webhook's label as its identity
+rather than a mapping file. Every webhook it creates is labelled
+`Quadratic — …`, and it only ever creates, updates or deletes webhooks with
+that prefix — a hand-made webhook on a shared hub is never touched. Resolved
+definitions are never written to disk, so no staged file holds a secret. See
+`packages/hub-management/webhooks/README.md`.
 
 The leaf-first order exists because dc-cli rewrites cross-item links using
 a mapping file: by the time a slot or page arrives, every item it links to

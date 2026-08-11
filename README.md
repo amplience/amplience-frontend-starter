@@ -9,9 +9,16 @@ An open-source frontend accelerator for Amplience.
 >
 > Eventually Quadratic Lite will expand to reach feature parity with the older Quadratic codebase, but in the meantime you can still run the original for the features not yet migrated.
 
+## Prerequisites
+
+- Node v22+
+- pnpm
+
+_See [Getting started](docs/getting-started.md) for fuller details._
+
 ## Quickstart
 
-_New to the stack, or need Node / pnpm set up first? See [Getting started](docs/getting-started.md) for fuller details._
+_New to the stack, or need Node / pnpm set up first? See [Getting started](docs/getting-started.md) for a more complete run-through._
 
 Local setup takes about 40 seconds and needs no Amplience hub:
 

@@ -106,6 +106,9 @@ const OP_LABELS: Record<OpKey, string> = {
   'sync-types': 'Sync content types',
   'seed-extensions': 'Seed extensions',
   'sync-extensions': 'Sync extensions',
+  'seed-webhooks': 'Seed webhooks',
+  'sync-webhooks': 'Sync webhooks',
+  'wipe-webhooks': 'Remove webhooks',
   'seed-items': 'Seed content items',
   'sync-items': 'Sync content items',
   'wipe-items': 'Wipe content items',
@@ -581,6 +584,17 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
   }
 
   async function runOp(key: OpKey) {
+    if (key === 'wipe-webhooks') {
+      if (
+        !confirm(
+          `Remove seeded webhooks from "${env.label || env.name}"?\n\n` +
+            'Only webhooks labelled "Quadratic — …" are deleted; anything else on the hub ' +
+            "is left alone. Publishes will stop busting this deployment's caches until " +
+            'you seed them again.',
+        )
+      )
+        return
+    }
     if (key === 'wipe-items' || key === 'wipe-all') {
       const label = env.label || env.name
       const what = key === 'wipe-all' ? 'all content items' : 'content items'
@@ -782,6 +796,18 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                 count={statsError !== null ? -1 : (stats?.extensions ?? null)}
                 seedKey="seed-extensions"
                 syncKey="sync-extensions"
+                isRunning={isRunning}
+                activeOpKey={op?.key ?? null}
+                onRun={(key) => {
+                  void runOp(key)
+                }}
+              />
+              <ResourceRow
+                label="Webhooks"
+                count={statsError !== null ? -1 : (stats?.webhooks ?? null)}
+                seedKey="seed-webhooks"
+                syncKey="sync-webhooks"
+                wipeKey="wipe-webhooks"
                 isRunning={isRunning}
                 activeOpKey={op?.key ?? null}
                 onRun={(key) => {

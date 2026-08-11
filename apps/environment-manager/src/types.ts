@@ -17,6 +17,14 @@ export type Environment = {
    * management/seeding tooling; the delivery runtime never reads repo IDs.
    */
   repoSiteComponents: string
+  /**
+   * Shared secret the deployment's /api/revalidate-* routes check, and the
+   * value seeded into the webhook headers that call them. Blank ("") means
+   * the webhooks needing it are skipped rather than seeded unauthenticated.
+   * It must match AMPLIENCE_REVALIDATE_SECRET on the deployment itself —
+   * seeding the hub side alone gives a webhook that 401s.
+   */
+  revalidateSecret: string
   clientId: string
   clientSecret: string
   stagingHost: string
@@ -44,6 +52,7 @@ export type EnvironmentStats = {
   schemas: number
   types: number
   extensions: number
+  webhooks: number
   items: number
 }
 
@@ -108,6 +117,9 @@ export type OpKey =
   | 'sync-types'
   | 'seed-extensions'
   | 'sync-extensions'
+  | 'seed-webhooks'
+  | 'sync-webhooks'
+  | 'wipe-webhooks'
   | 'seed-items'
   | 'sync-items'
   | 'wipe-items'
@@ -141,6 +153,7 @@ export const EMPTY_ENV: Environment = {
   repoContent: '',
   repoSlots: '',
   repoSiteComponents: '',
+  revalidateSecret: '',
   clientId: '',
   clientSecret: '',
   stagingHost: '',

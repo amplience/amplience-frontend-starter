@@ -49,6 +49,15 @@
  * AMPLIENCE_CLIENT_ID / AMPLIENCE_CLIENT_SECRET — when only a dc-cli active
  * configuration is available they are skipped with a warning.
  *
+ * Webhooks created by the seed (labelled `Quadratic — …`) are removed first on
+ * a full wipe, and on the standalone `webhooks` scope. First, so the teardown
+ * below can't fire the integrations it is in the middle of removing. Unlike extensions and
+ * workflow states, a stale webhook isn't inert: it keeps firing on every
+ * publish and failing against a deployment that no longer exists, which shows
+ * up in the hub's webhook log as a permanently broken integration. Only the
+ * managed label prefix is touched — a hand-made or third-party webhook on a
+ * shared hub survives.
+ *
  * Extensions and workflow states are deliberately left in place. Both are
  * hub-wide configuration that a hub may share with things other than
  * Quadratic, so a content wipe is the wrong place to destroy them — and it
@@ -75,6 +84,7 @@ import path from 'node:path'
 import { DynamicContent } from 'dc-management-sdk-js'
 
 import { canUnpublish, isEnvironmentalFailure, mayBePublished } from './lib/publishing.mjs'
+import { MANAGED_LABEL_PREFIX } from './lib/webhooks.mjs'
 
 const env = (name) => {
   const value = process.env[name]
@@ -256,18 +266,95 @@ const reclaimRepo = async (client, repoId, repoLabel, ignoreSchemaValidation) =>
 
 // ── Main ─────────────────────────────────────────────────────────────────────
 
+// Scope: `items` wipes only content items (map + delivery keys + items);
+// `webhooks` removes only the seeded webhooks; `all` (default) does both and
+// also archives content types and content type schemas. Mirrors
+// hub-import.mjs's step argument so the two scripts pair up.
+const scopes = ['items', 'webhooks', 'all']
+const scope = process.argv[2] ?? 'all'
+if (!scopes.includes(scope)) {
+  console.error(`Unknown scope "${scope}" — expected one of: ${scopes.join(', ')}`)
+  process.exit(1)
+}
+console.log(`\n▶ hub-wipe scope: ${scope}`)
+
+// A webhooks-only wipe touches no repository, so it doesn't ask for repo ids.
+const wipesContent = scope !== 'webhooks'
+
 const hubName = require_('AMPLIENCE_HUB_NAME', 'identify the hub mapping file')
-const contentRepo = require_('AMPLIENCE_REPO_CONTENT', 'target the content repository')
-const slotsRepo = require_('AMPLIENCE_REPO_SLOTS', 'target the slots repository')
+const contentRepo = wipesContent
+  ? require_('AMPLIENCE_REPO_CONTENT', 'target the content repository')
+  : undefined
+const slotsRepo = wipesContent
+  ? require_('AMPLIENCE_REPO_SLOTS', 'target the slots repository')
+  : undefined
 // Optional — only wiped when the deployment uses CMS-managed site config.
 const siteComponentsRepo = env('AMPLIENCE_REPO_SITE_COMPONENTS')
-require_('AMPLIENCE_HUB_ID', 'archive content type schemas (--hubId is required by dc-cli)')
+require_(
+  'AMPLIENCE_HUB_ID',
+  wipesContent
+    ? 'archive content type schemas (--hubId is required by dc-cli)'
+    : 'identify the hub whose webhooks are being removed',
+)
 
-// Scope: `items` wipes only content items (map + delivery keys + items);
-// `all` (default) also archives content types and content type schemas.
-// Mirrors hub-import.mjs's step argument so the two scripts pair up.
-const scope = process.argv[2] === 'items' ? 'items' : 'all'
-console.log(`\n▶ hub-wipe scope: ${scope}`)
+/**
+ * Delete every webhook the seed owns, leaving anything else alone.
+ *
+ * Identity is the label prefix, the same handle hub-import matches on, so a
+ * wipe and a re-seed agree on what "ours" means without a mapping file.
+ */
+const wipeWebhooks = async () => {
+  const clientId = env('AMPLIENCE_CLIENT_ID')
+  const clientSecret = env('AMPLIENCE_CLIENT_SECRET')
+  if (clientId === undefined || clientSecret === undefined) {
+    console.warn(
+      '\n⚠ Skipping webhooks — AMPLIENCE_CLIENT_ID / AMPLIENCE_CLIENT_SECRET are not set. ' +
+        'Any seeded webhook is still live and will keep firing; remove it in the DC UI ' +
+        'or re-run with credentials.',
+    )
+    return
+  }
+  const client = new DynamicContent({ client_id: clientId, client_secret: clientSecret })
+  const hub = await client.hubs.get(env('AMPLIENCE_HUB_ID'))
+  const all = []
+  for (let page = 0; ; page++) {
+    const result = await hub.related.webhooks.list({ size: 100, page })
+    all.push(...result.getItems())
+    if (page >= (result.page?.totalPages ?? 1) - 1) break
+  }
+  const managed = all.filter(
+    (w) => typeof w.label === 'string' && w.label.startsWith(MANAGED_LABEL_PREFIX),
+  )
+  if (managed.length === 0) {
+    console.log(`\n  No "${MANAGED_LABEL_PREFIX}…" webhooks on the hub (already clean).`)
+    return
+  }
+  console.log(`\nRemoving ${managed.length} seeded webhook(s)…`)
+  for (const webhook of managed) {
+    try {
+      await webhook.related.delete()
+      console.log(`  - ${webhook.label}`)
+    } catch (err) {
+      // One undeletable webhook must not abort the teardown, same principle as
+      // --ignoreError on the archive passes.
+      console.warn(
+        `  ⚠ Could not delete "${webhook.label}": ` +
+          `${err instanceof Error ? err.message : String(err)}`,
+      )
+    }
+  }
+  const left = all.length - managed.length
+  if (left > 0) console.log(`  ${left} unmanaged webhook(s) left untouched.`)
+}
+
+// Webhooks go first on a full wipe: removing them before the content churn
+// means the teardown can't trigger the very integrations it is dismantling,
+// and it matches the resource order the Environment Manager lists.
+if (scope !== 'items') await wipeWebhooks()
+if (scope === 'webhooks') {
+  console.log('\n✓ Webhook wipe complete.')
+  process.exit(0)
+}
 
 // Whether to pass --ignoreSchemaValidation. dc-cli archives by NULLing
 // delivery keys via a schema-validated update, so an item authored under a

@@ -119,7 +119,9 @@ Set the flag in **both** the host environment and your local `.env` — there's 
 AMPLIENCE_CUSTOM_CSS="TRUE"
 ```
 
-When it's off, the frontend does no CMS read for it at all and the deployment stays pure-static. When it's on, the read is cached with an ISR window (`AMPLIENCE_CUSTOM_CSS_REVALIDATE`, default 300s). For instant updates on publish, point an Amplience webhook at `POST /api/revalidate-custom-css` with the shared secret in `AMPLIENCE_REVALIDATE_SECRET`. Local development reads live, so edits show immediately.
+When it's off, the frontend does no CMS read for it at all and the deployment stays pure-static. When it's on, the read is cached with an ISR window (`AMPLIENCE_CUSTOM_CSS_REVALIDATE`, default 300s) with a webhook clearing it on publish, so an edit appears on the next request rather than waiting the window out.
+
+Set `AMPLIENCE_REVALIDATE_SECRET` on both sides — on the deployment (the route checks it) and on the hub environment (the Environment Manager's **Revalidate secret** field, or the same variable in `packages/hub-management/.env`) — then seed the webhook with **Webhooks → Seed** or `pnpm hub:import:webhooks`. One webhook is created per registered web app, because each deployment holds its own cache. With the secret unset the seed skips the webhook rather than creating one that would be rejected on every call, and the ISR window remains the only refresh path. Local development reads live, so edits show immediately.
 
 A missing or empty item injects nothing — never an error.
 

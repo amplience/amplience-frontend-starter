@@ -10,6 +10,13 @@
  *   ${repo:content}         → the target content repository id
  *   ${repo:siteComponents}  → the target Site Components repository id (optional)
  *   ${status:Label}         → the target workflow-state id for that label
+ *   ${site:url}             → a configured web app's origin (webhooks step)
+ *   ${site:label}           → that web app's display label (webhooks step)
+ *   ${secret:name}          → a named secret from the environment (webhooks step)
+ *
+ * `${secret:…}` values are resolved in memory and never staged to disk — the
+ * webhooks step sends them straight to the Management API, so no file in the
+ * working tree ever holds a resolved secret.
  *
  * Workflow-state ids can't be authored ahead of time because dc-cli's
  * `settings import` mints a fresh id per state on each new hub and records the
@@ -62,7 +69,15 @@ export function buildStatusMap(settingsJson, settingsMap) {
  */
 export function resolveTokens(
   text,
-  { hub, repoContent, repoSiteComponents, statusMap = new Map(), source = 'input' },
+  {
+    hub,
+    repoContent,
+    repoSiteComponents,
+    statusMap = new Map(),
+    site,
+    secrets = new Map(),
+    source = 'input',
+  },
 ) {
   let result = text.replace(/\$\{status:([^}]+)\}/g, (_match, rawLabel) => {
     const label = rawLabel.trim()
@@ -102,6 +117,36 @@ export function resolveTokens(
       throw new Error(`${source}: references \${hub} but AMPLIENCE_HUB_NAME is not set.`)
     }
     return hub
+  })
+
+  result = result.replace(/\$\{site:(url|label)\}/g, (_match, field) => {
+    if (site === undefined) {
+      throw new Error(
+        `${source}: references \${site:${field}} but no web app was supplied. ` +
+          `Webhook definitions are expanded once per configured web app — add one ` +
+          `to this hub's "webApps" in quadratic.config.json (the Environment ` +
+          `Manager's site cards write it for you).`,
+      )
+    }
+    const value = field === 'url' ? site.url : site.label
+    if (value === undefined || value === '') {
+      throw new Error(`${source}: the web app has no ${field} to fill \${site:${field}}.`)
+    }
+    return value
+  })
+
+  result = result.replace(/\$\{secret:([^}]+)\}/g, (_match, rawName) => {
+    const name = rawName.trim()
+    const value = secrets.get(name)
+    if (value === undefined || value === '') {
+      throw new Error(
+        `${source}: references \${secret:${name}} but that secret is not configured. ` +
+          `Set it on this environment (Environment Manager → settings) or export it ` +
+          `before running the step — the seed will not create a webhook whose ` +
+          `authentication it cannot fill, because it would fail on every delivery.`,
+      )
+    }
+    return value
   })
 
   const leftover = result.match(/\$\{[^}]+\}/)

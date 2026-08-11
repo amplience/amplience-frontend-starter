@@ -17,11 +17,23 @@ export type SettingsMap = {
   workflowStates?: string[][]
 }
 
+/** A configured deployment a webhook definition is expanded for. */
+export type SiteTarget = {
+  /** Origin, trailing slash already stripped. */
+  url: string
+  /** Display label — what makes per-site webhook labels distinguishable. */
+  label: string
+}
+
 export type ResolveOptions = {
   hub?: string
   repoContent?: string
   repoSiteComponents?: string
   statusMap?: Map<string, string>
+  /** Fills ${site:url} / ${site:label} (webhooks step). */
+  site?: SiteTarget
+  /** Fills ${secret:name} (webhooks step); resolved in memory only. */
+  secrets?: Map<string, string>
   source?: string
 }
 

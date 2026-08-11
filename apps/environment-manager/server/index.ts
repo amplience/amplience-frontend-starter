@@ -70,6 +70,12 @@ type Environment = {
   repoSlots: string
   /** "Site Components" repo (authoring/permission boundary for CMS site config); "" = unset. */
   repoSiteComponents: string
+  /**
+   * Shared secret for the deployment's /api/revalidate-* routes, seeded into
+   * the webhooks that call them; "" = unset, so those webhooks are skipped
+   * rather than seeded unauthenticated (see src/types.ts).
+   */
+  revalidateSecret: string
   clientId: string
   clientSecret: string
   stagingHost: string
@@ -161,6 +167,8 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
   // Blank default site means "use the runtime default" (the hub name, ADR-0014)
   // — comment the var out rather than writing an empty value.
   const defaultSite = env !== null && (env.defaultSite ?? '') !== '' ? env.defaultSite : undefined
+  const revalidateSecret =
+    env !== null && (env.revalidateSecret ?? '') !== '' ? env.revalidateSecret : undefined
 
   // apps/web/.env.local — only the vars the web app needs
   const existingWeb = existsSync(WEB_ENV_LOCAL) ? await readFile(WEB_ENV_LOCAL, 'utf-8') : ''
@@ -171,6 +179,10 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
       AMPLIENCE_STAGING_HOST: stagingHost,
       NEXT_PUBLIC_BRAND: defaultBrand,
       SITE_NAME: defaultSite,
+      // The local dev server accepts revalidate calls with the same secret the
+      // seeded webhooks carry, so a webhook can be pointed at a tunnel while
+      // debugging without a second value to keep in step.
+      AMPLIENCE_REVALIDATE_SECRET: revalidateSecret,
     }),
     'utf-8',
   )
@@ -192,6 +204,7 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
       AMPLIENCE_CLIENT_SECRET: clientSecret,
       AMPLIENCE_STAGING_HOST: stagingHost,
       SITE_NAME: defaultSite,
+      AMPLIENCE_REVALIDATE_SECRET: revalidateSecret,
     }),
     'utf-8',
   )
@@ -352,6 +365,12 @@ function buildEnv(env: Environment, republish = false): NodeJS.ProcessEnv {
     AMPLIENCE_IGNORE_SCHEMA_VALIDATION: env.ignoreSchemaValidation ? '1' : '',
     // Blank = let hub-import apply its own default (the hub name, ADR-0014).
     ...((env.defaultSite ?? '') !== '' && { SITE_NAME: env.defaultSite }),
+    // Fills ${secret:revalidate} in webhook definitions. Absent (not empty)
+    // when unset, so the webhooks step skips those definitions with a warning
+    // instead of seeding a webhook that would 401 on every delivery.
+    ...((env.revalidateSecret ?? '') !== '' && {
+      AMPLIENCE_REVALIDATE_SECRET: env.revalidateSecret,
+    }),
   }
 }
 
@@ -608,6 +627,27 @@ const OP_CONFIG: Record<string, OpConfig> = {
     args: ['extensions'],
     republish: false,
     label: 'Sync extensions',
+  },
+  // Webhooks are seeded through the Management API rather than dc-cli (dc-cli
+  // strips secret headers), but they're the same script and the same step
+  // vocabulary — seed and sync are one operation, as with schemas and types.
+  'seed-webhooks': {
+    script: HUB_IMPORT_SCRIPT,
+    args: ['webhooks'],
+    republish: false,
+    label: 'Seed webhooks',
+  },
+  'sync-webhooks': {
+    script: HUB_IMPORT_SCRIPT,
+    args: ['webhooks'],
+    republish: false,
+    label: 'Sync webhooks',
+  },
+  'wipe-webhooks': {
+    script: HUB_WIPE_SCRIPT,
+    args: ['webhooks'],
+    republish: false,
+    label: 'Remove webhooks',
   },
   'seed-items': {
     script: HUB_IMPORT_SCRIPT,
@@ -1332,10 +1372,15 @@ app.get('/api/environments/:name/stats', async (c) => {
 
   try {
     const token = await getAmplienceToken(env.clientId, env.clientSecret)
-    const [schemas, types, contentItems, slotItems, extensions, workflowStates] = await Promise.all(
-      [
+    // Ordered as the GUI lists them: settings → schemas → types → extensions
+    // → webhooks → content items.
+    const [workflowStates, schemas, types, extensions, webhooks, contentItems, slotItems] =
+      await Promise.all([
+        fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/workflow-states`),
         fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/content-type-schemas?status=ACTIVE`),
         fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/content-types?status=ACTIVE`),
+        fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/extensions`),
+        fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/webhooks`),
         fetchCount(
           token,
           `${AMPLIENCE_API}/content-repositories/${env.repoContent}/content-items?status=ACTIVE`,
@@ -1344,11 +1389,15 @@ app.get('/api/environments/:name/stats', async (c) => {
           token,
           `${AMPLIENCE_API}/content-repositories/${env.repoSlots}/content-items?status=ACTIVE`,
         ),
-        fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/extensions`),
-        fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/workflow-states`),
-      ],
-    )
-    return c.json({ schemas, types, items: contentItems + slotItems, extensions, workflowStates })
+      ])
+    return c.json({
+      workflowStates,
+      schemas,
+      types,
+      extensions,
+      webhooks,
+      items: contentItems + slotItems,
+    })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
     console.error(`Failed to fetch stats for environment!! "${env.name}":`, err)

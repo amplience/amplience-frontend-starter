@@ -1,0 +1,14 @@
+{
+  "label": "Quadratic — revalidate custom CSS (${site:label})",
+  "active": true,
+  "method": "POST",
+  "events": ["dynamic-content.snapshot.published"],
+  "handlers": ["${site:url}/api/revalidate-custom-css"],
+  "headers": [
+    {
+      "key": "x-revalidate-secret",
+      "value": "${secret:revalidate}",
+      "secret": true
+    }
+  ]
+}

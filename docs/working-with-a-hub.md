@@ -39,18 +39,50 @@ Use the **Set active** buttons to switch the local dev server between the fixtur
 Once a hub is added, push the Quadratic Lite content model and starter content to it (typically ~1 min 45 sec for a full set). You can do this from the Environment Manager GUI, or from the terminal:
 
 ```sh
-pnpm hub:import          # imports settings, schemas, content types, extensions, then fixture content (~1m45s end to end)
+pnpm hub:import          # imports settings, schemas, content types, extensions, webhooks, then fixture content (~1m45s end to end)
 
-pnpm hub:wipe            # frees delivery keys, then clears content, content-types, schemas (~45s end to end)
+pnpm hub:wipe            # removes seeded webhooks, frees delivery keys, then clears content, content-types, schemas (~45s end to end)
 
 pnpm hub:import:schemas  # only imports the schemas
 ```
 
 `pnpm hub:import` is also how you push local changes to a hub you've already seeded — it updates in place rather than duplicating. There is no separate `push` command.
 
-Each layer can be seeded on its own (`pnpm hub:import:settings`, `:types`, `:extensions`, `:content`), and every button in the GUI has a terminal equivalent — see the [command reference](commands.md) for the full list, the environment variables the scripts read, and a GUI ↔ terminal mapping table.
+Each layer can be seeded on its own (`pnpm hub:import:settings`, `:types`, `:extensions`, `:webhooks`, `:content`), and every button in the GUI has a terminal equivalent — see the [command reference](commands.md) for the full list, the environment variables the scripts read, and a GUI ↔ terminal mapping table.
 
 For the full walkthrough — prerequisites, repository IDs, verification steps, and publishing behaviour — see the [seeding runbook](runbooks/hub-setup.md).
+
+## Webhooks
+
+Publishing in the CMS updates Amplience's own delivery CDN straight away, but a
+deployment that caches content has to be told. Quadratic Lite can seed the
+webhooks that do the telling: on publish, Amplience calls the deployment and
+clears the affected cache, so an edit shows up on the next request instead of
+waiting out a revalidation window.
+
+Two things have to line up first, which is why this is the one resource that
+isn't ready to seed the moment a hub is added:
+
+- **A registered site.** A webhook needs somewhere to call, and one is created
+  per site registered against the hub — each deployment holds its own cache. Seed
+  a hub before you've deployed anything and the webhooks step is simply skipped.
+- **A shared secret on both sides.** Set **Revalidate secret** on the hub
+  environment (or `AMPLIENCE_REVALIDATE_SECRET` in
+  `packages/hub-management/.env`), _and_ the same value on the deployment itself.
+  The hub side alone produces a webhook that gets rejected on every call — so
+  when the secret is unset, the seed skips the webhook rather than creating a
+  broken one and telling you it worked.
+
+So the usual order is: add the hub → [deploy a site](deploying.md) → set the
+secret in both places → **Webhooks → Seed** (or `pnpm hub:import:webhooks`).
+
+Only webhooks labelled `Quadratic — …` are ever touched, so anything you or
+another integration created on the hub survives both a seed and a wipe. And
+because a webhook is matched to the site it serves, removing a site removes its
+webhook on the next sync — one never outlives the deployment it points at.
+
+What the webhooks are used for today is the CMS-managed custom CSS; see
+[Theming](theming.md#custom-css-from-the-cms).
 
 > [!NOTE] Pulling _from_ a hub
 > Sync runs one way: the repo is the source of truth for the content model, and
