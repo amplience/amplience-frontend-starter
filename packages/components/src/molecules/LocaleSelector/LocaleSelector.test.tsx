@@ -8,6 +8,10 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { LocaleSelector, type SelectorLocale } from './LocaleSelector'
+import {
+  localeSelectorRegistryEntry,
+  validateLocaleSelectorSchema,
+} from './LocaleSelector.registry'
 
 const { nav } = vi.hoisted(() => ({ nav: { path: '/', search: '', push: vi.fn() } }))
 
@@ -131,5 +135,39 @@ describe('LocaleSelector — query-param mode (visualizer)', () => {
   it('falls back to the default when the query param is absent', () => {
     renderQuery('/visualization', 'content=xyz')
     expect(select().value).toBe('en-us')
+  })
+})
+
+describe('localeSelectorRegistryEntry', () => {
+  it('accepts a body with a string label, or none at all', () => {
+    expect(validateLocaleSelectorSchema({ _meta: {} })).toBe(true)
+    expect(validateLocaleSelectorSchema({ _meta: {}, label: 'Language' })).toBe(true)
+  })
+
+  it('rejects a non-object body, or a label of the wrong type', () => {
+    expect(validateLocaleSelectorSchema(null)).toBe(false)
+    expect(validateLocaleSelectorSchema('Language')).toBe(false)
+    expect(validateLocaleSelectorSchema({ _meta: {}, label: 42 })).toBe(false)
+  })
+
+  it('defaults to an empty locale list so the library entry renders nothing', () => {
+    // ADR-0015: the locale list is deployment config the library can't know.
+    // The default entry keeps the schema dispatchable in Storybook and the
+    // visualizer without inventing locales; apps/web overrides it with real
+    // config. Inert, not broken.
+    expect(localeSelectorRegistryEntry.propsFromSchema?.({ _meta: {} }, {})).toEqual({
+      locales: [],
+      defaultSlug: '',
+    })
+  })
+
+  it('keeps an authored label while still defaulting the list', () => {
+    expect(
+      localeSelectorRegistryEntry.propsFromSchema?.({ _meta: {}, label: 'Language' }, {}),
+    ).toEqual({ locales: [], defaultSlug: '', label: 'Language' })
+  })
+
+  it('is not a container', () => {
+    expect(localeSelectorRegistryEntry.getChildren).toBeUndefined()
   })
 })

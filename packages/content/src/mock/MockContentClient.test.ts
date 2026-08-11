@@ -119,4 +119,75 @@ describe('MockContentClient', () => {
     // All present in the fixture set — all should resolve.
     expect(slot.components.every((c) => !isContentLink(c))).toBe(true)
   })
+
+  describe('listBySchema', () => {
+    it('returns every fixture matching the schema URI', async () => {
+      const client = makeMockContentClient()
+      const pages = await client.listBySchema('https://quadratic.amplience.com/v2/content/page')
+      expect(pages.length).toBeGreaterThan(0)
+      expect(
+        pages.every((p) => p._meta.schema === 'https://quadratic.amplience.com/v2/content/page'),
+      ).toBe(true)
+    })
+
+    it('returns [] for a schema no fixture uses', async () => {
+      const client = makeMockContentClient()
+      expect(await client.listBySchema('https://example.com/nope')).toEqual([])
+    })
+
+    it('leaves localized fields raw unless a locale is requested', async () => {
+      // Matches the Delivery API and getByKey: no locale means the caller gets
+      // the `{ values }` object and resolves it itself.
+      const client = makeMockContentClient()
+      const raw = await client.listBySchema('https://quadratic.amplience.com/v2/content/page')
+      const localized = await client.listBySchema(
+        'https://quadratic.amplience.com/v2/content/page',
+        { locale: 'en-GB' },
+      )
+      expect(localized).toHaveLength(raw.length)
+      expect(JSON.stringify(localized)).not.toContain('localized-value')
+    })
+  })
+
+  describe('getHierarchy', () => {
+    it('assembles the tree, nesting the root under `items` and descendants under `children`', async () => {
+      // The two keys are what HierarchyMenu and HierarchyMenuItem's registry
+      // entries read as their children, so the shape is what makes the
+      // dispatcher recurse without special-casing hierarchies.
+      const client = makeMockContentClient()
+      const menu = await client.getHierarchy<{
+        items: { _meta: { deliveryId: string }; children?: unknown[] }[]
+      }>('base-site/site/hierarchy-menu-main')
+
+      expect(menu._meta.schema).toBe('https://quadratic.amplience.com/v2/content/hierarchy-menu')
+      expect(menu.items).toHaveLength(8)
+      expect('children' in menu).toBe(false)
+
+      const womens = menu.items.find(
+        (i) => i._meta.deliveryId === 'c3d4e5f6-0004-4000-8000-000000000002',
+      )
+      expect(womens?.children).toHaveLength(3)
+    })
+
+    it('returns leaf nodes with no children key at all', async () => {
+      // A leaf must not carry `children: []` — HierarchyMenuItem would then
+      // render an empty dropdown rather than a plain link.
+      const client = makeMockContentClient()
+      const menu = await client.getHierarchy<{ items: Record<string, unknown>[] }>(
+        'base-site/site/hierarchy-menu-main',
+      )
+      const leaf = menu.items.find((i) => !('children' in i))
+      expect(leaf).toBeDefined()
+    })
+
+    it('throws ContentClientError(not-found) naming the manifest file for an unknown root key', async () => {
+      const client = makeMockContentClient()
+      await expect(client.getHierarchy('base-site/site/no-such-menu')).rejects.toMatchObject({
+        kind: 'not-found',
+      })
+      await expect(client.getHierarchy('base-site/site/no-such-menu')).rejects.toThrow(
+        /manifests\.json/,
+      )
+    })
+  })
 })
