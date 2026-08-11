@@ -39,17 +39,29 @@ Use the **Set active** buttons to switch the local dev server between the fixtur
 Once a hub is added, push the Quadratic Lite content model and starter content to it (typically ~1 min 45 sec for a full set). You can do this from the Environment Manager GUI, or from the terminal:
 
 ```sh
-pnpm hub:import          # imports schemas, content types, then fixture content (~1m45s end to end)
+pnpm hub:import          # imports settings, schemas, content types, extensions, then fixture content (~1m45s end to end)
 
 pnpm hub:wipe            # frees delivery keys, then clears content, content-types, schemas (~45s end to end)
 
 pnpm hub:import:schemas  # only imports the schemas
 ```
 
-`pnpm hub:import` is also how you push local changes to a hub you've already seeded — it updates in place rather than duplicating.
+`pnpm hub:import` is also how you push local changes to a hub you've already seeded — it updates in place rather than duplicating. There is no separate `push` command.
+
+Each layer can be seeded on its own (`pnpm hub:import:settings`, `:types`, `:extensions`, `:content`), and every button in the GUI has a terminal equivalent — see the [command reference](commands.md) for the full list, the environment variables the scripts read, and a GUI ↔ terminal mapping table.
 
 For the full walkthrough — prerequisites, repository IDs, verification steps, and publishing behaviour — see the [seeding runbook](runbooks/hub-setup.md).
+
+> [!NOTE] Pulling _from_ a hub
+> Sync runs one way: the repo is the source of truth for the content model, and
+> `hub:import` pushes it to a hub. There is no `pull`, and no hub `backup` /
+> `restore` — both are deferred (ADR-0012; requirements §1.3 lists them as
+> nice-to-have). In practice: if you change a schema in the Amplience UI, mirror
+> the change in the repo by hand, and recover a broken hub with `pnpm hub:wipe`
+> followed by a re-seed rather than from a snapshot. See
+> [Not yet available](commands.md#not-yet-available).
 
 ## Next steps
 
 - Deploy a frontend against your hub — see [Deploying a site](deploying.md).
+- Browse the full [command reference](commands.md).

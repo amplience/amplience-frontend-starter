@@ -35,6 +35,7 @@ Your next steps will likely be to use:
 - [Getting started](docs/getting-started.md) — prerequisites, install, running locally
 - [Storybook](docs/storybook.md) — browse the component library in isolation
 - [Working with a hub](docs/working-with-a-hub.md) — connect local dev to a real Amplience hub and seed it
+- [Command reference](docs/commands.md) — every terminal command and its Environment Manager equivalent
 - [Deploying a site](docs/deploying.md) — host `apps/web` and point it at a hub
 - [Theming](docs/theming.md) — update/override design tokens or apply custom CSS, all managed from the codebase or the CMS
 - [Editor setup](docs/editor-setup.md) — optional on-save formatting & lint config

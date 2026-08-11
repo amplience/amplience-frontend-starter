@@ -1,0 +1,39 @@
+{
+  "id": "2fa6967d-7aa4-5f2c-972d-2e6cc87d63b7",
+  "label": "Command reference — hero",
+  "body": {
+    "_meta": {
+      "name": "Command reference — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "2fa6967d-7aa4-5f2c-972d-2e6cc87d63b7"
+    },
+    "title": "Command reference",
+    "description": "Everything Quadratic Lite can do from the command line, and where the same operation lives in the Environment Manager GUI.",
+    "backgroundColor": "dark",
+    "textColor": "white",
+    "contentPositionMobile": "beneath",
+    "verticalPosition": "center",
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "← Documentation"
+            },
+            {
+              "locale": "en-GB",
+              "value": "← Documentation"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs",
+        "variant": "outlined",
+        "color": "white"
+      }
+    ]
+  }
+}

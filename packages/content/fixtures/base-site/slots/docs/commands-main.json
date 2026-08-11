@@ -1,0 +1,26 @@
+{
+  "id": "dd1cd746-3395-549b-9800-f44a3b084744",
+  "label": "Command reference — main slot",
+  "body": {
+    "_meta": {
+      "name": "Command reference — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot"
+    },
+    "components": [
+      {
+        "id": "2fa6967d-7aa4-5f2c-972d-2e6cc87d63b7",
+        "contentType": "https://quadratic.amplience.com/v2/content/hero",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "f195fa57-42c4-53fc-93e8-b29badab33b6",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

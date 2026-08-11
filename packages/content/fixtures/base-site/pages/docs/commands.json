@@ -1,0 +1,28 @@
+{
+  "id": "733ebb78-8e13-52d3-9dd9-c10c5689bb42",
+  "label": "Command reference page",
+  "body": {
+    "_meta": {
+      "name": "Command reference page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "base-site/docs/commands"
+          }
+        ]
+      }
+    },
+    "title": "Command reference",
+    "description": "Everything Quadratic Lite can do from the command line, and where the same operation lives in the Environment Manager GUI.",
+    "slots": [
+      {
+        "id": "dd1cd746-3395-549b-9800-f44a3b084744",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}
