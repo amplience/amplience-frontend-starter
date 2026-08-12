@@ -217,6 +217,86 @@ body {
   margin: 0;
 }
 
+/* Section title paired with its filter input. Wraps on narrow viewports so the
+   input drops below the title rather than squeezing it. */
+.env-list__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+/* ── List filter ───────────────────────────────────────────────────────────── */
+
+.list-filter {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  margin-left: auto;
+}
+
+/* Positioning context for the leading icon and trailing clear button. */
+.list-filter__field {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.list-filter__input {
+  width: 14rem;
+  max-width: 100%;
+  min-height: var(--target-lg);
+  /* Right padding clears the 2rem clear button plus its inset. */
+  padding: 0.4em 2.4rem 0.4em 2rem;
+  background: var(--color-input-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.12s;
+}
+
+.list-filter__input:focus {
+  border-color: var(--color-accent);
+}
+
+.list-filter__input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* The clear button is rendered in markup so it behaves identically across
+   browsers and meets the same target size as every other control. */
+.list-filter__input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.list-filter__icon {
+  position: absolute;
+  left: 0.7rem;
+  display: inline-flex;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.list-filter__clear {
+  position: absolute;
+  right: 0.2rem;
+  font-size: 0.8rem;
+}
+
+.list-filter__count {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 .env-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -1378,6 +1458,13 @@ body {
   gap: 1rem;
   padding: 4rem 1rem;
   color: var(--color-text-muted);
+}
+
+/* Sits between a populated list and its Add button, so it needs far less
+   breathing room than the whole-tab empty state. */
+.empty-state--filter {
+  padding: 1.5rem 1rem;
+  font-size: 0.875rem;
 }
 
 .loading {

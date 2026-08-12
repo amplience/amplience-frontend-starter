@@ -4,7 +4,9 @@ import { api } from './api.js'
 import { EnvironmentCard } from './components/EnvironmentCard.js'
 import { EnvironmentForm } from './components/EnvironmentForm.js'
 import { FixturesCard } from './components/FixturesCard.js'
+import { ListFilter } from './components/ListFilter.js'
 import { SiteCard } from './components/SiteCard.js'
+import { FILTER_MIN_ITEMS, filterEnvironments } from './filter-environments.js'
 import type { Config, Environment } from './types.js'
 import { FIXTURES_NAME } from './types.js'
 
@@ -25,6 +27,7 @@ export function App() {
   const [modal, setModal] = useState<Modal>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [tab, setTab] = useState<Tab>('sources')
+  const [hubQuery, setHubQuery] = useState('')
 
   // useCallback keeps the reference stable so the effect dep array is honest.
   // setState setters are guaranteed stable by React, so no extra deps needed.
@@ -60,6 +63,13 @@ export function App() {
   async function handleDelete(name: string) {
     setConfig(await api.remove(name))
   }
+
+  const hubs = config?.environments ?? []
+  const showHubFilter = hubs.length >= FILTER_MIN_ITEMS
+  // Hiding the input must never leave a filter silently applied — deleting hubs
+  // can drop the count back below the threshold while a query is still set.
+  const hubFilter = showHubFilter ? hubQuery : ''
+  const visibleHubs = filterEnvironments(hubs, hubFilter)
 
   return (
     <div className="app">
@@ -121,8 +131,22 @@ export function App() {
                     void handleActivate(FIXTURES_NAME)
                   }}
                 />
-                <h3 className="env-list__title">Hubs</h3>
-                {config.environments.map((env) => (
+                <div className="env-list__header">
+                  <h3 className="env-list__title">Hubs</h3>
+                  {showHubFilter && (
+                    <ListFilter
+                      label="Filter hubs"
+                      placeholder="Filter hubs…"
+                      noun="hubs"
+                      value={hubQuery}
+                      onChange={setHubQuery}
+                      resultCount={visibleHubs.length}
+                      totalCount={hubs.length}
+                    />
+                  )}
+                </div>
+
+                {visibleHubs.map((env) => (
                   <EnvironmentCard
                     key={env.name}
                     env={env}
@@ -134,6 +158,15 @@ export function App() {
                     onUpdate={setConfig}
                   />
                 ))}
+
+                {visibleHubs.length === 0 && hubFilter.trim() !== '' && (
+                  <p className="empty-state empty-state--filter">
+                    No hubs match “{hubFilter.trim()}”.
+                    <button className="btn btn--sm btn--ghost" onClick={() => setHubQuery('')}>
+                      Clear filter
+                    </button>
+                  </p>
+                )}
 
                 <button
                   className="btn btn--primary btn--add"
