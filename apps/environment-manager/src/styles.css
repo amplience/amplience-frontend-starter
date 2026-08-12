@@ -9,45 +9,63 @@
 }
 
 :root {
-  /* Dark theme (default) */
-  color-scheme: dark;
-  --color-bg: #0f0f13;
-  --color-surface: #1a1a24;
-  --color-surface-2: #23232f;
-  --color-border: #2e2e3e;
-  --color-text: #e8e8f0;
-  --color-text-muted: #888899;
-  --color-accent: #7340e7;
-  --color-accent-hover: #8a57f5;
-  --color-danger: #e74040;
-  --color-danger-hover: #f55757;
-  --color-active: #16a34a;
-  --color-modal-backdrop: rgba(0, 0, 0, 0.7);
+  /* Light theme (default) */
+  color-scheme: light;
+  --color-bg: #f4f4f8;
+  --color-surface: #ffffff;
+  --color-surface-2: #f0f0f5;
+  --color-border: #d8d8e8;
+  --color-text: #1a1a2e;
+  --color-text-muted: #6b6b88;
+  --color-accent: #6330d4;
+  --color-accent-hover: #7340e7;
+  --color-danger: #cc2929;
+  --color-danger-hover: #e74040;
+  --color-active: #15803d;
+  --color-modal-backdrop: rgba(0, 0, 0, 0.33);
+  --color-hover: #e8e8f0;
+  --color-input-bg: #ffffff;
   --radius: 8px;
   --radius-sm: 4px;
+
+  /* Minimum interactive target sizes. WCAG 2.5.8 (AA) sets a 24px floor;
+     these clear it with room to spare so the controls stay comfortable for
+     users with reduced vision or dexterity. Applied as min-height/min-width
+     rather than padding so a target's size is guaranteed regardless of its
+     font-size, line-height or label length.
+       lg — primary and standalone actions, text inputs, tabs
+       md — standalone dismiss controls sitting inside their own header
+       sm — actions inside dense rows, and icon-only buttons */
+  --target-lg: 2.5rem;
+  --target-md: 2.25rem;
+  --target-sm: 2rem;
   --font-code: 'JetBrains Mono', 'Courier New', monospace;
   --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-heading: var(--font-body);
   font-family: var(--font-body);
-  font-size: 14px;
+  /* Master scale for the whole GUI: every size below is expressed in rem/em,
+     so this single value moves the interface up or down as one piece. */
+  font-size: 16px;
   line-height: 1.5;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
-    color-scheme: light;
-    --color-bg: #f4f4f8;
-    --color-surface: #ffffff;
-    --color-surface-2: #f0f0f5;
-    --color-border: #d8d8e8;
-    --color-text: #1a1a2e;
-    --color-text-muted: #6b6b88;
-    --color-accent: #6330d4;
-    --color-accent-hover: #7340e7;
-    --color-danger: #cc2929;
-    --color-danger-hover: #e74040;
-    --color-active: #15803d;
-    --color-modal-backdrop: rgba(0, 0, 0, 0.33);
+    color-scheme: dark;
+    --color-bg: #0f0f13;
+    --color-surface: #1a1a24;
+    --color-surface-2: #23232f;
+    --color-border: #2e2e3e;
+    --color-text: #e8e8f0;
+    --color-text-muted: #888899;
+    --color-accent: #7340e7;
+    --color-accent-hover: #8a57f5;
+    --color-danger: #e74040;
+    --color-danger-hover: #f55757;
+    --color-active: #16a34a;
+    --color-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --color-hover: #2a2a38;
+    --color-input-bg: #14141c;
   }
 }
 
@@ -79,7 +97,7 @@ body {
   gap: 1rem;
   align-items: center;
   justify-content: space-between;
-  max-width: 900px;
+  max-width: 1040px;
   margin: 0 auto;
 }
 
@@ -104,7 +122,7 @@ body {
 
 .app-main {
   flex: 1;
-  max-width: 900px;
+  max-width: 1040px;
   width: 100%;
   margin: 0 auto;
   padding: 2rem 1.5rem;
@@ -117,7 +135,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.4em;
-  padding: 0.5em 1em;
+  min-height: var(--target-lg);
+  padding: 0.5em 1.15em;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
   font-size: 0.875rem;
@@ -168,8 +187,12 @@ body {
   border-color: var(--color-danger);
 }
 
+/* Denser variant for actions that sit inside a table row or a card footer.
+   Still a full target — it reads as secondary through its smaller type and
+   tighter padding rather than through a smaller hit area. */
 .btn--sm {
-  padding: 0.3em 0.7em;
+  min-height: var(--target-sm);
+  padding: 0.3em 0.8em;
   font-size: 0.8rem;
 }
 
@@ -192,6 +215,86 @@ body {
   text-transform: uppercase;
   color: var(--color-text-muted);
   margin: 0;
+}
+
+/* Section title paired with its filter input. Wraps on narrow viewports so the
+   input drops below the title rather than squeezing it. */
+.env-list__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+/* ── List filter ───────────────────────────────────────────────────────────── */
+
+.list-filter {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  margin-left: auto;
+}
+
+/* Positioning context for the leading icon and trailing clear button. */
+.list-filter__field {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.list-filter__input {
+  width: 14rem;
+  max-width: 100%;
+  min-height: var(--target-lg);
+  /* Right padding clears the 2rem clear button plus its inset. */
+  padding: 0.4em 2.4rem 0.4em 2rem;
+  background: var(--color-input-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.12s;
+}
+
+.list-filter__input:focus {
+  border-color: var(--color-accent);
+}
+
+.list-filter__input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* The clear button is rendered in markup so it behaves identically across
+   browsers and meets the same target size as every other control. */
+.list-filter__input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.list-filter__icon {
+  position: absolute;
+  left: 0.7rem;
+  display: inline-flex;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.list-filter__clear {
+  position: absolute;
+  right: 0.2rem;
+  font-size: 0.8rem;
+}
+
+.list-filter__count {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .env-card {
@@ -225,14 +328,14 @@ body {
   gap: 1rem;
   cursor: pointer;
   user-select: none;
-  padding: 1.25rem 1.5rem;
+  padding: 0.5rem 1rem;
 }
 
 .env-card__body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 0 1.5rem 1.25rem;
+  padding: 0 1rem 0.5rem;
 }
 
 .env-card__header:focus-visible {
@@ -242,6 +345,8 @@ body {
 }
 
 .env-card__chevron {
+  width: 0.875rem;
+  height: 0.875rem;
   color: var(--color-text-muted);
   flex-shrink: 0;
   transition: transform 0.18s ease;
@@ -271,7 +376,7 @@ body {
   border: 1px solid color-mix(in srgb, var(--color-text-muted) 20%, transparent);
   border-radius: 999px;
   color: var(--color-text-muted);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.03em;
   line-height: 1;
@@ -279,7 +384,12 @@ body {
   vertical-align: middle;
 }
 
+/* Occupies the slot the "Set active" button uses on inactive cards, so it
+   matches that button's height and sibling card headers stay aligned. */
 .badge--active {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-sm);
   margin-left: auto;
   padding-inline: 1.3em;
   background: color-mix(in srgb, var(--color-active) 18%, transparent);
@@ -311,7 +421,7 @@ body {
 }
 
 .env-card__meta dt {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--color-text-muted);
@@ -344,12 +454,14 @@ body {
 .env-card__header-actions {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.7rem;
   flex-shrink: 0;
   margin-left: auto;
 }
 
 .btn--icon {
+  min-width: var(--target-sm);
+  min-height: var(--target-sm);
   padding: 0.3em 0.5em;
   font-size: 0.9rem;
   line-height: 1;
@@ -358,6 +470,11 @@ body {
 /* Icon-only ghost button — no border/background, just the icon with hover tint.
    Sized to occupy similar space to a bordered btn--sm without the border box. */
 .btn--icon-only {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--target-sm);
+  min-height: var(--target-sm);
   background: none;
   border: none;
   padding: 0.2rem 0.3rem;
@@ -389,7 +506,7 @@ body {
 }
 
 .env-card__stats th {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -400,7 +517,7 @@ body {
 }
 
 .env-card__stats td {
-  padding: 0.55rem 0;
+  padding: 0.4rem 0;
   border-bottom: 1px solid var(--color-border);
   font-size: 0.825rem;
   vertical-align: middle;
@@ -437,9 +554,10 @@ body {
 .btn-skeleton {
   display: inline-block;
   visibility: hidden;
+  min-height: var(--target-sm);
   font-family: var(--font-code);
   font-size: 0.8rem;
-  padding: 0.3em 0.7em;
+  padding: 0.3em 0.8em;
   line-height: normal;
   border: solid 1px transparent;
   width: 3em; /* roughly "Seed" width at 0.8rem */
@@ -504,12 +622,12 @@ body {
 }
 
 .perm-panel__note {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--color-text-muted);
 }
 
 .perm-detail {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--color-text-muted);
 }
 
@@ -710,12 +828,15 @@ body {
 }
 
 .log-close {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-sm);
   background: none;
   border: none;
   color: var(--color-text-muted);
   cursor: pointer;
-  font-size: 0.75rem;
-  padding: 0.1em 0.4em;
+  font-size: 0.8rem;
+  padding: 0.1em 0.5em;
   line-height: 1;
   border-radius: var(--radius-sm);
   transition:
@@ -730,13 +851,16 @@ body {
 }
 
 .log-abort {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-sm);
   background: none;
   border: 1px solid color-mix(in srgb, var(--color-danger) 40%, transparent);
   color: var(--color-danger);
   cursor: pointer;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  padding: 0.15em 0.5em;
+  padding: 0.15em 0.6em;
   line-height: 1;
   border-radius: var(--radius-sm);
   transition:
@@ -778,7 +902,7 @@ body {
 }
 
 .sites-header__title {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -838,27 +962,32 @@ body {
   font-size: 1rem;
   margin-left: auto;
   flex-shrink: 0;
-  opacity: 0;
+  opacity: 0.65;
   transition: opacity 0.1s;
 }
 
-.site-row:hover .site-row__remove {
+.site-row:hover .site-row__remove,
+.site-row__remove:focus-visible {
   opacity: 1;
 }
 
-/* Pencil edit button — hover-reveal, appears on the right */
+/* Pencil edit button. Visible at rest rather than revealed on hover, so it is
+   discoverable without a pointer and reachable by keyboard; hover and focus
+   raise it to full contrast. */
 .site-row__edit {
   font-size: 0.75rem;
   margin-left: auto;
   flex-shrink: 0;
-  opacity: 0.35;
+  opacity: 0.65;
   transition: opacity 0.1s;
   color: var(--color-text-muted);
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
 }
 
-.site-row:hover .site-row__edit {
+.site-row:hover .site-row__edit,
+.site-row__edit:focus-visible {
   opacity: 1;
 }
 
@@ -883,9 +1012,10 @@ body {
 
 .site-row__input {
   flex: 1;
-  min-width: 85.81px;
-  padding: 0.25em 0.45em;
-  font-size: 0.78rem;
+  min-height: var(--target-sm);
+  min-width: 5.5rem;
+  padding: 0.25em 0.5em;
+  font-size: 0.8rem;
   background: var(--color-input-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
@@ -922,7 +1052,9 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
+  min-width: var(--target-sm);
+  min-height: var(--target-sm);
+  font-size: 0.875rem;
   line-height: 1;
   padding: 0.2em 0.4em;
   transition:
@@ -976,7 +1108,8 @@ body {
 
 .add-site-form__input {
   flex: 1;
-  min-width: 100px;
+  min-height: var(--target-sm);
+  min-width: 6.25rem;
   padding: 0.3em 0.5em;
   font-size: 0.8rem;
   background: var(--color-input-bg);
@@ -1100,11 +1233,16 @@ body {
 
 .modal__close {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--target-md);
+  min-height: var(--target-md);
   background: none;
   border: none;
   cursor: pointer;
   color: var(--color-text-muted);
-  font-size: 0.85rem;
+  font-size: 1.1rem;
   line-height: 1;
   padding: 0.2rem 0.3rem;
   border-radius: var(--radius-sm);
@@ -1163,6 +1301,7 @@ body {
   color: var(--color-text);
   font-size: 0.875rem;
   font-family: inherit;
+  min-height: var(--target-lg);
   padding: 0.5em 0.75em;
   outline: none;
   transition: border-color 0.12s;
@@ -1184,9 +1323,12 @@ body {
   color: var(--color-text-muted);
 }
 
+/* The whole label is the target, so it carries the min-height rather than
+   the box alone. */
 .field--checkbox label {
   display: flex;
   align-items: center;
+  min-height: var(--target-sm);
   gap: 0.5rem;
   color: var(--color-text);
   cursor: pointer;
@@ -1194,8 +1336,8 @@ body {
 
 .field--checkbox input[type='checkbox'] {
   accent-color: var(--color-accent);
-  width: 1rem;
-  height: 1rem;
+  width: 1.25rem;
+  height: 1.25rem;
   flex-shrink: 0;
 }
 
@@ -1217,7 +1359,7 @@ body {
 }
 
 .form-section__label {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -1246,7 +1388,7 @@ body {
 }
 
 .badge--autofill {
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 500;
   padding: 0.1em 0.45em;
   border-radius: var(--radius-sm);
@@ -1318,6 +1460,13 @@ body {
   color: var(--color-text-muted);
 }
 
+/* Sits between a populated list and its Add button, so it needs far less
+   breathing room than the whole-tab empty state. */
+.empty-state--filter {
+  padding: 1.5rem 1rem;
+  font-size: 0.875rem;
+}
+
 .loading {
   color: var(--color-text-muted);
   padding: 2rem 0;
@@ -1325,6 +1474,28 @@ body {
 
 .dim {
   color: var(--color-text-muted);
+}
+
+/* ── Focus visibility ──────────────────────────────────────────────────────── */
+
+/* Several controls set `outline: none` for their resting state, and the
+   browser default ring is faint against the dark surfaces. One consistent
+   accent ring keeps every target's focus state legible for keyboard users. */
+.btn:focus-visible,
+.tab:focus-visible,
+.btn--icon:focus-visible,
+.btn--icon-only:focus-visible,
+.site-action:focus-visible,
+.log-close:focus-visible,
+.log-abort:focus-visible,
+.modal__close:focus-visible,
+.site-row__input:focus-visible,
+.add-site-form__input:focus-visible,
+.site-card__select:focus-visible,
+.field input:focus-visible,
+.field--checkbox input[type='checkbox']:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 /* Visually hides content while keeping it available to screen readers. */
@@ -1356,7 +1527,8 @@ body {
   border: none;
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
-  padding: 0.6em 0.9em;
+  min-height: var(--target-lg);
+  padding: 0.6em 1.1em;
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--color-text-muted);
@@ -1404,12 +1576,15 @@ body {
   font-weight: 600;
 }
 
+/* Same reasoning as .site-row__edit — legible at rest, emphasised on
+   hover and focus. */
 .site-card__edit {
-  opacity: 0.5;
+  opacity: 0.65;
   transition: opacity 0.1s;
 }
 
-.site-card:hover .site-card__edit {
+.site-card:hover .site-card__edit,
+.site-card__edit:focus-visible {
   opacity: 1;
 }
 
@@ -1463,6 +1638,7 @@ body {
 
 .site-card__select {
   flex: 1;
+  min-height: var(--target-sm);
   padding: 0.3em 0.5em;
   font-size: 0.8rem;
   background: var(--color-input-bg);
