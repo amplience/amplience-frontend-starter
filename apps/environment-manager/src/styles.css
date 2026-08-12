@@ -9,22 +9,22 @@
 }
 
 :root {
-  /* Dark theme (default) */
-  color-scheme: dark;
-  --color-bg: #0f0f13;
-  --color-surface: #1a1a24;
-  --color-surface-2: #23232f;
-  --color-border: #2e2e3e;
-  --color-text: #e8e8f0;
-  --color-text-muted: #888899;
-  --color-accent: #7340e7;
-  --color-accent-hover: #8a57f5;
-  --color-danger: #e74040;
-  --color-danger-hover: #f55757;
-  --color-active: #16a34a;
-  --color-modal-backdrop: rgba(0, 0, 0, 0.7);
-  --color-hover: #2a2a38;
-  --color-input-bg: #14141c;
+  /* Light theme (default) */
+  color-scheme: light;
+  --color-bg: #f4f4f8;
+  --color-surface: #ffffff;
+  --color-surface-2: #f0f0f5;
+  --color-border: #d8d8e8;
+  --color-text: #1a1a2e;
+  --color-text-muted: #6b6b88;
+  --color-accent: #6330d4;
+  --color-accent-hover: #7340e7;
+  --color-danger: #cc2929;
+  --color-danger-hover: #e74040;
+  --color-active: #15803d;
+  --color-modal-backdrop: rgba(0, 0, 0, 0.33);
+  --color-hover: #e8e8f0;
+  --color-input-bg: #ffffff;
   --radius: 8px;
   --radius-sm: 4px;
 
@@ -49,23 +49,23 @@
   line-height: 1.5;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
-    color-scheme: light;
-    --color-bg: #f4f4f8;
-    --color-surface: #ffffff;
-    --color-surface-2: #f0f0f5;
-    --color-border: #d8d8e8;
-    --color-text: #1a1a2e;
-    --color-text-muted: #6b6b88;
-    --color-accent: #6330d4;
-    --color-accent-hover: #7340e7;
-    --color-danger: #cc2929;
-    --color-danger-hover: #e74040;
-    --color-active: #15803d;
-    --color-modal-backdrop: rgba(0, 0, 0, 0.33);
-    --color-hover: #e8e8f0;
-    --color-input-bg: #ffffff;
+    color-scheme: dark;
+    --color-bg: #0f0f13;
+    --color-surface: #1a1a24;
+    --color-surface-2: #23232f;
+    --color-border: #2e2e3e;
+    --color-text: #e8e8f0;
+    --color-text-muted: #888899;
+    --color-accent: #7340e7;
+    --color-accent-hover: #8a57f5;
+    --color-danger: #e74040;
+    --color-danger-hover: #f55757;
+    --color-active: #16a34a;
+    --color-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --color-hover: #2a2a38;
+    --color-input-bg: #14141c;
   }
 }
 
