@@ -64,6 +64,10 @@ export function App() {
     setConfig(await api.remove(name))
   }
 
+  async function handleSaveFixturesBrand(brand: string) {
+    setConfig(await api.setFixturesBrand(brand))
+  }
+
   const hubs = config?.environments ?? []
   const showHubFilter = hubs.length >= FILTER_MIN_ITEMS
   // Hiding the input must never leave a filter silently applied — deleting hubs
@@ -127,9 +131,11 @@ export function App() {
                 <h3 className="env-list__title">Fixtures</h3>
                 <FixturesCard
                   isActive={config.active === FIXTURES_NAME}
+                  brand={config.fixturesBrand ?? ''}
                   onActivate={() => {
                     void handleActivate(FIXTURES_NAME)
                   }}
+                  onSaveBrand={handleSaveFixturesBrand}
                 />
                 <div className="env-list__header">
                   <h3 className="env-list__title">Hubs</h3>

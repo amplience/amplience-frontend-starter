@@ -34,6 +34,8 @@ export const api = {
       method: 'PUT',
       body: JSON.stringify(env),
     }),
+  setFixturesBrand: (brand: string) =>
+    request<Config>('/fixtures', { method: 'PUT', body: JSON.stringify({ brand }) }),
   activate: (name: string) =>
     request<Config>(`/environments/${encodeURIComponent(name)}/activate`, { method: 'PATCH' }),
   remove: (name: string) =>
