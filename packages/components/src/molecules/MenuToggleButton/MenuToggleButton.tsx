@@ -1,7 +1,7 @@
 'use client'
 
 import clsx from 'clsx'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { IconButton } from '../IconButton/IconButton'
 import styles from './MenuToggleButton.module.css'
@@ -56,6 +56,10 @@ const TARGET_SELECTOR = 'nav.Menu[data-mobile-layout]'
  * sync with the button or each other. `aria-expanded` mirrors the state and
  * the icon swaps menu ↔ x, the conventional hamburger affordance.
  *
+ * An open drawer closes on the next click anywhere on the page, so following
+ * any link — inside the drawer or outside it — leaves it behind, and a tap on
+ * the page dismisses it the way an overlay is expected to behave.
+ *
  * Fail-loud: clicking with no mobile-layout Menu on the page warns to the
  * console instead of silently doing nothing.
  *
@@ -66,17 +70,9 @@ const TARGET_SELECTOR = 'nav.Menu[data-mobile-layout]'
 export function MenuToggleButton({ label, className }: MenuToggleButtonProps) {
   const [open, setOpen] = useState(false)
 
-  const handleClick = useCallback(() => {
-    const targets = document.querySelectorAll(TARGET_SELECTOR)
-    if (targets.length === 0) {
-      console.warn(
-        `MenuToggleButton: no "${TARGET_SELECTOR}" found on the page — nothing to toggle. ` +
-          'Add a Menu with useMobileLayout enabled, or remove this button.',
-      )
-      return
-    }
-    const next = !open
-    for (const nav of targets) {
+  /** Reflects a new state onto both the button and the `data-open` the drawer CSS reads. */
+  const setMenusOpen = useCallback((next: boolean) => {
+    for (const nav of document.querySelectorAll(TARGET_SELECTOR)) {
       if (next) {
         nav.setAttribute('data-open', '')
       } else {
@@ -84,7 +80,31 @@ export function MenuToggleButton({ label, className }: MenuToggleButtonProps) {
       }
     }
     setOpen(next)
-  }, [open])
+  }, [])
+
+  const handleClick = useCallback(() => {
+    if (document.querySelectorAll(TARGET_SELECTOR).length === 0) {
+      console.warn(
+        `MenuToggleButton: no "${TARGET_SELECTOR}" found on the page — nothing to toggle. ` +
+          'Add a Menu with useMobileLayout enabled, or remove this button.',
+      )
+      return
+    }
+    setMenusOpen(!open)
+  }, [open, setMenusOpen])
+
+  // Any click while open closes the drawer — link taps (including one to the
+  // current page, where no route change would fire), and clicks off the menu.
+  // Bubble phase, so a link's own navigation is already under way first.
+  // When mobile submenus land, parent items will need excluding here.
+  useEffect(() => {
+    if (!open) return
+    const close = () => setMenusOpen(false)
+    document.addEventListener('click', close)
+    return () => {
+      document.removeEventListener('click', close)
+    }
+  }, [open, setMenusOpen])
 
   return (
     <IconButton
