@@ -1,5 +1,7 @@
 html {
   -webkit-text-size-adjust: 100%;
+  /* Keeps anchor targets clear of a sticky header (--site-scroll-offset). */
+  scroll-padding-top: calc(var(--site-scroll-offset) + var(--spacing-2));
 }
 
 *,
