@@ -9,6 +9,8 @@
 
 import docsCommandsHero from '../../fixtures/base-site/components/docs/commands-hero.json' with { type: 'json' }
 import docsCommandsMarkdown from '../../fixtures/base-site/components/docs/commands-markdown.json' with { type: 'json' }
+import docsContentTypesHero from '../../fixtures/base-site/components/docs/content-types-hero.json' with { type: 'json' }
+import docsContentTypesMarkdown from '../../fixtures/base-site/components/docs/content-types-markdown.json' with { type: 'json' }
 import docsDeployingHero from '../../fixtures/base-site/components/docs/deploying-hero.json' with { type: 'json' }
 import docsDeployingMarkdown from '../../fixtures/base-site/components/docs/deploying-markdown.json' with { type: 'json' }
 import docsEditorSetupHero from '../../fixtures/base-site/components/docs/editor-setup-hero.json' with { type: 'json' }
@@ -26,6 +28,7 @@ import docsTroubleshootingMarkdown from '../../fixtures/base-site/components/doc
 import docsWorkingWithAHubHero from '../../fixtures/base-site/components/docs/working-with-a-hub-hero.json' with { type: 'json' }
 import docsWorkingWithAHubMarkdown from '../../fixtures/base-site/components/docs/working-with-a-hub-markdown.json' with { type: 'json' }
 import docsCommandsPage from '../../fixtures/base-site/pages/docs/commands.json' with { type: 'json' }
+import docsContentTypesPage from '../../fixtures/base-site/pages/docs/content-types.json' with { type: 'json' }
 import docsDeployingPage from '../../fixtures/base-site/pages/docs/deploying.json' with { type: 'json' }
 import docsEditorSetupPage from '../../fixtures/base-site/pages/docs/editor-setup.json' with { type: 'json' }
 import docsGettingStartedPage from '../../fixtures/base-site/pages/docs/getting-started.json' with { type: 'json' }
@@ -35,6 +38,7 @@ import docsThemingPage from '../../fixtures/base-site/pages/docs/theming.json' w
 import docsTroubleshootingPage from '../../fixtures/base-site/pages/docs/troubleshooting.json' with { type: 'json' }
 import docsWorkingWithAHubPage from '../../fixtures/base-site/pages/docs/working-with-a-hub.json' with { type: 'json' }
 import docsCommandsSlot from '../../fixtures/base-site/slots/docs/commands-main.json' with { type: 'json' }
+import docsContentTypesSlot from '../../fixtures/base-site/slots/docs/content-types-main.json' with { type: 'json' }
 import docsDeployingSlot from '../../fixtures/base-site/slots/docs/deploying-main.json' with { type: 'json' }
 import docsEditorSetupSlot from '../../fixtures/base-site/slots/docs/editor-setup-main.json' with { type: 'json' }
 import docsGettingStartedSlot from '../../fixtures/base-site/slots/docs/getting-started-main.json' with { type: 'json' }
@@ -50,6 +54,10 @@ export const docsFixtures = [
   docsCommandsMarkdown,
   docsCommandsSlot,
   docsCommandsPage,
+  docsContentTypesHero,
+  docsContentTypesMarkdown,
+  docsContentTypesSlot,
+  docsContentTypesPage,
   docsDeployingHero,
   docsDeployingMarkdown,
   docsDeployingSlot,

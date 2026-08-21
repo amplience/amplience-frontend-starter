@@ -86,6 +86,25 @@ describe('Markdown', () => {
     })
   })
 
+  describe('heading anchors (rehype-slug)', () => {
+    it('gives a heading a slugified id', () => {
+      render(<Markdown content="## Section title" />)
+      expect(screen.getByRole('heading', { level: 2 }).id).toBe('section-title')
+    })
+
+    it('suffixes duplicate headings so ids stay unique', () => {
+      render(<Markdown content={'## Media\n\n## Media'} />)
+      const ids = screen.getAllByRole('heading', { level: 2 }).map((h) => h.id)
+      expect(ids).toEqual(['media', 'media-1'])
+    })
+
+    it('renders an in-page anchor link that targets a heading id', () => {
+      render(<Markdown content={'[Jump](#section-title)\n\n## Section title'} />)
+      expect(screen.getByRole('link', { name: 'Jump' }).getAttribute('href')).toBe('#section-title')
+      expect(screen.getByRole('heading', { level: 2 }).id).toBe('section-title')
+    })
+  })
+
   describe('GitHub Flavored Markdown (remark-gfm)', () => {
     it('renders a table with header and body cells', () => {
       const table = ['| Variable | Purpose |', '| --- | --- |', '| SITE_NAME | Namespace |'].join(

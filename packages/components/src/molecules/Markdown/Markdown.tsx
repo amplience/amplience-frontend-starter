@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import ReactMarkdown from 'react-markdown'
 import type { Components } from 'react-markdown'
+import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
 
 import { Link } from '../../atoms/Link/Link'
@@ -38,14 +39,39 @@ export type MarkdownProps = {
 
 /**
  * Non-link element overrides — locale-independent, so they're built once.
+ * Headings forward the `id` rehype-slug adds, so in-page anchor links work.
  */
 const baseComponents: Components = {
-  h1: ({ children }) => <Typography variant="h1">{children}</Typography>,
-  h2: ({ children }) => <Typography variant="h2">{children}</Typography>,
-  h3: ({ children }) => <Typography variant="h3">{children}</Typography>,
-  h4: ({ children }) => <Typography variant="h4">{children}</Typography>,
-  h5: ({ children }) => <Typography variant="h5">{children}</Typography>,
-  h6: ({ children }) => <Typography variant="h6">{children}</Typography>,
+  h1: ({ children, id }) => (
+    <Typography variant="h1" id={id}>
+      {children}
+    </Typography>
+  ),
+  h2: ({ children, id }) => (
+    <Typography variant="h2" id={id}>
+      {children}
+    </Typography>
+  ),
+  h3: ({ children, id }) => (
+    <Typography variant="h3" id={id}>
+      {children}
+    </Typography>
+  ),
+  h4: ({ children, id }) => (
+    <Typography variant="h4" id={id}>
+      {children}
+    </Typography>
+  ),
+  h5: ({ children, id }) => (
+    <Typography variant="h5" id={id}>
+      {children}
+    </Typography>
+  ),
+  h6: ({ children, id }) => (
+    <Typography variant="h6" id={id}>
+      {children}
+    </Typography>
+  ),
   p: ({ children }) => <Typography>{children}</Typography>,
   ul: ({ children }) => <List>{children}</List>,
   ol: ({ children }) => <List as="ol">{children}</List>,
@@ -75,7 +101,9 @@ const makeComponents = (localeBasePath: string): Components => ({
  * Markdown molecule — renders a CommonMark + GFM string as typeset HTML.
  *
  * Anchor elements are routed through the Link atom so internal/external
- * navigation behaviour is consistent across the design system.
+ * navigation behaviour is consistent across the design system. Headings carry
+ * GitHub-compatible ids (rehype-slug uses github-slugger), so a `#heading-text`
+ * link written in a doc resolves the same way in the repo and on the site.
  *
  * Typography (headings, body, caption) mirrors the Typography atom's scale;
  * brands override via CSS variables under [data-brand] without touching
@@ -87,7 +115,11 @@ const makeComponents = (localeBasePath: string): Components => ({
 export function Markdown({ content, localeBasePath = '', className }: MarkdownProps) {
   return (
     <div className={clsx('Markdown', styles.root, className)}>
-      <ReactMarkdown remarkPlugins={[remarkGfm]} components={makeComponents(localeBasePath)}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeSlug]}
+        components={makeComponents(localeBasePath)}
+      >
         {content}
       </ReactMarkdown>
     </div>

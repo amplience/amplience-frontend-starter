@@ -41,6 +41,7 @@ Your next steps will likely be to use:
 - [Overview](docs/index.md) — what Quadratic Lite is and how the content-driven renderer works
 - [Getting started](docs/getting-started.md) — prerequisites, install, running locally
 - [Storybook](docs/storybook.md) — browse the component library in isolation
+- [Content types](docs/content-types.md) — every content type in the model, its fields, and the component that renders it
 - [Working with a hub](docs/working-with-a-hub.md) — connect local dev to a real Amplience hub and seed it
 - [Command reference](docs/commands.md) — every terminal command and its Environment Manager equivalent
 - [Deploying a site](docs/deploying.md) — host `apps/web` and point it at a hub
