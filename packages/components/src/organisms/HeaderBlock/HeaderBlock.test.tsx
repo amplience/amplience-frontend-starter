@@ -9,7 +9,7 @@
 // not asserted.
 
 import { cleanup, render, screen } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { HeaderBlock } from './HeaderBlock'
 import { HeaderRow } from './HeaderRow'
@@ -52,6 +52,56 @@ describe('HeaderBlock', () => {
     const el = screen.getByRole('banner')
     expect(el.classList.contains('HeaderBlock')).toBe(true)
     expect(el.classList.contains('SiteHeader')).toBe(true)
+  })
+})
+
+describe('sticky scroll offset', () => {
+  const HEADER_HEIGHT = 63.4
+  const offset = () => document.documentElement.style.getPropertyValue('--site-scroll-offset')
+
+  const noop = () => undefined
+
+  /** Fires its callback on observe, the way the real observer does. */
+  class ImmediateResizeObserver {
+    constructor(private readonly callback: ResizeObserverCallback) {}
+    observe() {
+      this.callback([], this)
+    }
+    unobserve = noop
+    disconnect = noop
+  }
+
+  const stubLayout = () => {
+    vi.stubGlobal('ResizeObserver', ImmediateResizeObserver)
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      height: HEADER_HEIGHT,
+    } as DOMRect)
+  }
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    vi.restoreAllMocks()
+    document.documentElement.style.removeProperty('--site-scroll-offset')
+  })
+
+  it('publishes the measured header height, rounded up', () => {
+    stubLayout()
+    render(<HeaderBlock sticky />)
+    // Ceil, not round — half a pixel short would still clip the heading.
+    expect(offset()).toBe('64px')
+  })
+
+  it('clears the offset on unmount', () => {
+    stubLayout()
+    const { unmount } = render(<HeaderBlock sticky />)
+    unmount()
+    expect(offset()).toBe('')
+  })
+
+  it('publishes nothing for a static header', () => {
+    stubLayout()
+    render(<HeaderBlock />)
+    expect(offset()).toBe('')
   })
 })
 

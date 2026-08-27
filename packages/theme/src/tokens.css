@@ -13,7 +13,7 @@
  * Token families defined here (expand as needed):
  *   --spacing            base unit for the spacing scale
  *   --radius             base unit for the border-radius scale
- *   --site-*             site layout variables (gutter, max-widths)
+ *   --site-*             site layout variables (gutter, max-widths, scroll offset)
  *   --color-*            colour palette (primary, secondary, neutrals)
  *   --button-*           button defaults (padding, border-radius, colors)
  *   --interactive-hover-* shared hover tokens applied to all interactive
@@ -51,6 +51,9 @@
   --site-max-width-narrow: 640px;
   --site-max-width: 1200px;
   --site-max-width-wide: 1600px;
+  /* Height of any viewport-overlapping chrome, published by a sticky header
+     and read by scroll-padding-top so anchor jumps aren't obscured. */
+  --site-scroll-offset: 0px;
 
   /* Radius — base unit for border-radius.
      e.g. var(--radius) = 4px; calc(var(--radius) * 2) = 8px. */

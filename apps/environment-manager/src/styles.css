@@ -316,6 +316,23 @@ body {
   border-style: solid;
 }
 
+.fixtures-brand-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fixtures-brand {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+
+  label {
+    /* width: auto; */
+    flex-grow: 1;
+  }
+}
+
 .env-card__description {
   font-size: 0.825rem;
   color: var(--color-text-muted);
@@ -944,18 +961,18 @@ body {
 }
 
 .site-row__url {
-  color: var(--color-text-muted);
+  color: var(--color-accent);
   font-size: 0.75rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   flex: 1;
   min-width: 0;
-}
+  text-decoration: none;
 
-.site-row--localhost .site-row__label,
-.site-row--localhost .site-row__url {
-  color: var(--color-text-muted);
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .site-row__remove {

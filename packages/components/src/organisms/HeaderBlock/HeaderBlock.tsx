@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 
 import type { ContainerProps } from '../../atoms/Container/Container'
 import styles from './HeaderBlock.module.css'
+import { StickyScrollOffset } from './StickyScrollOffset'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -11,7 +12,8 @@ import styles from './HeaderBlock.module.css'
 export type HeaderBlockProps = {
   /**
    * When true, the header remains fixed at the top of the viewport on scroll.
-   * Implemented via `position: sticky; top: 0` — works without JS.
+   * Implemented via `position: sticky; top: 0` — works without JS. Also
+   * publishes its height as `--site-scroll-offset` so anchor jumps clear it.
    */
   sticky?: boolean
   /**
@@ -52,6 +54,7 @@ export function HeaderBlock({
       data-max-width={maxWidth}
     >
       {children}
+      {sticky && <StickyScrollOffset />}
     </header>
   )
 }

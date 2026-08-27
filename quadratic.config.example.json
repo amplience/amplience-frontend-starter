@@ -1,5 +1,6 @@
 {
   "active": "fixtures",
+  "fixturesBrand": "",
   "environments": [
     {
       "name": "my-hub",

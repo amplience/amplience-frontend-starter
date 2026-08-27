@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { api } from '../api.js'
+import { hubBrands } from '../hub-brands.js'
 import type {
   Config,
   CreateVercelSiteInput,
@@ -687,12 +688,12 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
       >
         <div className="env-card__header-labels">
           <span className="env-card__label">{env.label || env.name}</span>
-          {env.defaultBrand !== '' && (
-            <span className="badge badge--brand">
+          {hubBrands(env).map((brand) => (
+            <span key={brand} className="badge badge--brand" title="Brand">
               <ThemeIcon />
-              {env.defaultBrand}
+              {brand}
             </span>
-          )}
+          ))}
         </div>
         <div className="env-card__header-actions">
           {isActive ? (
@@ -1048,7 +1049,14 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                 <li className="site-row site-row--localhost">
                   <GlobeIcon />
                   <span className="site-row__label">Web (localhost)</span>
-                  <span className="site-row__url">{env.localhostUrl}</span>
+                  <a
+                    className="site-row__url"
+                    href={env.localhostUrl}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    {env.localhostUrl}
+                  </a>
                   {(env.defaultSite ?? '') !== '' && (
                     <span
                       className="badge badge--brand badge--sm"
@@ -1199,7 +1207,14 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                   <li key={i} className="site-row">
                     <GlobeIcon />
                     <span className="site-row__label">{siteDisplayLabel(site)}</span>
-                    <span className="site-row__url">{site.url}</span>
+                    <a
+                      className="site-row__url"
+                      href={site.url}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >
+                      {site.url}
+                    </a>
                     {(site.name ?? '') !== '' && (
                       <span
                         className="badge badge--brand badge--sm"

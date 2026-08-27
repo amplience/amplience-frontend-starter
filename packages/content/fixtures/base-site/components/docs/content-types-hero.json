@@ -1,0 +1,39 @@
+{
+  "id": "2420ff96-4e0d-5c1e-80d3-7dbe90331ef4",
+  "label": "Content types — hero",
+  "body": {
+    "_meta": {
+      "name": "Content types — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "2420ff96-4e0d-5c1e-80d3-7dbe90331ef4"
+    },
+    "title": "Content types",
+    "description": "Quadratic Lite ships a content model of 24 content types — seven renderable blocks, plus the smaller repeatable types that make up pages, navigation and site chrome. Every item carries its schema URI in `_meta.schema` and the recursive renderer dispatches on it, so this page is also the map from a content type to the component that draws it.",
+    "backgroundColor": "dark",
+    "textColor": "white",
+    "contentPositionMobile": "beneath",
+    "verticalPosition": "center",
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "← Documentation"
+            },
+            {
+              "locale": "en-GB",
+              "value": "← Documentation"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs",
+        "variant": "outlined",
+        "color": "white"
+      }
+    ]
+  }
+}

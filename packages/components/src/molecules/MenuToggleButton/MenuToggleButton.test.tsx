@@ -2,11 +2,14 @@
 //
 // Tests for the MenuToggleButton molecule — the client-side half of Menu's
 // zero-JS drawer contract: clicking toggles `data-open` on every
-// nav.Menu[data-mobile-layout] on the page.
+// nav.Menu[data-mobile-layout] on the page, and an open drawer closes on the
+// next click anywhere.
 // CSS module classes are empty strings in the test environment and are
 // not asserted.
+// Link hrefs are hash targets so jsdom does not log unimplemented navigation.
 
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import type { ReactNode } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { MenuToggleButton } from './MenuToggleButton'
@@ -17,8 +20,21 @@ afterEach(() => {
 })
 
 /** A stand-in for Menu's rendered output: <nav class="Menu" data-mobile-layout>. */
-const MobileMenu = ({ label }: { label: string }) => (
-  <nav className="Menu" data-mobile-layout="true" aria-label={label} />
+const MobileMenu = ({ label, children }: { label: string; children?: ReactNode }) => (
+  <nav className="Menu" data-mobile-layout="true" aria-label={label}>
+    {children}
+  </nav>
+)
+
+/** A stand-in for Menu's items. */
+const MenuItems = () => (
+  <ul>
+    <li>
+      <a href="#womens">
+        <span>Womens</span>
+      </a>
+    </li>
+  </ul>
 )
 
 const getButton = () => screen.getByRole('button', { name: 'Toggle menu' })
@@ -106,6 +122,101 @@ describe('MenuToggleButton', () => {
 
     fireEvent.click(button)
     expect(button.querySelector('svg.lucide-menu')).toBeTruthy()
+  })
+
+  it('closes the drawer when a link inside it is followed', () => {
+    render(
+      <>
+        <MenuToggleButton />
+        <MobileMenu label="Site navigation">
+          <MenuItems />
+        </MobileMenu>
+      </>,
+    )
+    const nav = screen.getByRole('navigation', { name: 'Site navigation' })
+    const button = getButton()
+
+    fireEvent.click(button)
+    expect(nav.hasAttribute('data-open')).toBe(true)
+
+    // Click the label inside the anchor: the click still reaches the document.
+    fireEvent.click(screen.getByText('Womens'))
+    expect(nav.hasAttribute('data-open')).toBe(false)
+    expect(button.getAttribute('aria-expanded')).toBe('false')
+    expect(button.querySelector('svg.lucide-menu')).toBeTruthy()
+  })
+
+  it('closes the drawer when a link elsewhere on the page is followed', () => {
+    render(
+      <>
+        <a href="#home">Home</a>
+        <MenuToggleButton />
+        <MobileMenu label="Site navigation">
+          <MenuItems />
+        </MobileMenu>
+      </>,
+    )
+    const nav = screen.getByRole('navigation', { name: 'Site navigation' })
+
+    fireEvent.click(getButton())
+    fireEvent.click(screen.getByText('Home'))
+    expect(nav.hasAttribute('data-open')).toBe(false)
+    expect(getButton().getAttribute('aria-expanded')).toBe('false')
+  })
+
+  it('closes the drawer on a click outside the menu', () => {
+    render(
+      <>
+        <p>Page content</p>
+        <MenuToggleButton />
+        <MobileMenu label="Site navigation">
+          <MenuItems />
+        </MobileMenu>
+      </>,
+    )
+    const nav = screen.getByRole('navigation', { name: 'Site navigation' })
+
+    fireEvent.click(getButton())
+    fireEvent.click(screen.getByText('Page content'))
+    expect(nav.hasAttribute('data-open')).toBe(false)
+  })
+
+  it('closes every mobile-layout menu when one link is followed', () => {
+    render(
+      <>
+        <MenuToggleButton />
+        <MobileMenu label="Primary">
+          <MenuItems />
+        </MobileMenu>
+        <MobileMenu label="Secondary" />
+      </>,
+    )
+    fireEvent.click(getButton())
+    fireEvent.click(screen.getByText('Womens'))
+    expect(screen.getByRole('navigation', { name: 'Primary' }).hasAttribute('data-open')).toBe(
+      false,
+    )
+    expect(screen.getByRole('navigation', { name: 'Secondary' }).hasAttribute('data-open')).toBe(
+      false,
+    )
+  })
+
+  it('reopens after closing on a link click', () => {
+    render(
+      <>
+        <MenuToggleButton />
+        <MobileMenu label="Site navigation">
+          <MenuItems />
+        </MobileMenu>
+      </>,
+    )
+    const nav = screen.getByRole('navigation', { name: 'Site navigation' })
+
+    fireEvent.click(getButton())
+    fireEvent.click(screen.getByText('Womens'))
+    fireEvent.click(getButton())
+    expect(nav.hasAttribute('data-open')).toBe(true)
+    expect(getButton().getAttribute('aria-expanded')).toBe('true')
   })
 
   it('warns and stays collapsed when no mobile-layout menu exists (fail-loud)', () => {

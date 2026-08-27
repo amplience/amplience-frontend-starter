@@ -10,6 +10,7 @@ import { cors } from 'hono/cors'
 import { streamText } from 'hono/streaming'
 
 import { buildDamCheck, liveGqlFetch } from './dam-permissions.ts'
+import { hubManagementEnvVars, updateEnvVars, webEnvVars } from './env-files.ts'
 import { buildPermissionsReport, type FetchJson } from './permissions.ts'
 import {
   cliAuthTokenPaths,
@@ -37,7 +38,7 @@ const REPO_ROOT = path.resolve(__dirname, '..', '..', '..')
 const HUB_MANAGEMENT_ROOT = path.join(REPO_ROOT, 'packages', 'hub-management')
 const CONFIG_PATH = path.join(REPO_ROOT, 'quadratic.config.json')
 const WEB_APP_ROOT = path.join(REPO_ROOT, 'apps', 'web')
-const WEB_ENV_LOCAL = path.join(WEB_APP_ROOT, '.env.local')
+const WEB_ENV = path.join(WEB_APP_ROOT, '.env')
 const HUB_MANAGEMENT_ENV = path.join(HUB_MANAGEMENT_ROOT, '.env')
 const PORT = 3099
 
@@ -91,13 +92,19 @@ type Environment = {
 type Config = {
   active: string
   environments: Environment[]
+  /**
+   * Brand the built-in Local Fixtures source renders under — the fixtures
+   * equivalent of an environment's defaultBrand. Optional so configs written
+   * before fixtures carried a brand still parse; absent means the base theme.
+   */
+  fixturesBrand?: string
 }
 
 // ── Config helpers ────────────────────────────────────────────────────────────
 
 async function readConfig(): Promise<Config> {
   if (!existsSync(CONFIG_PATH)) {
-    return { active: FIXTURES_NAME, environments: [] }
+    return { active: FIXTURES_NAME, environments: [], fixturesBrand: '' }
   }
   const raw = await readFile(CONFIG_PATH, 'utf-8')
   return JSON.parse(raw) as Config
@@ -107,85 +114,22 @@ async function writeConfig(config: Config): Promise<void> {
   await writeFile(CONFIG_PATH, JSON.stringify(config, null, 2) + '\n', 'utf-8')
 }
 
-// ── .env.local writer ─────────────────────────────────────────────────────────
+// ── .env writer ───────────────────────────────────────────────────────────────
 
 /**
- * Additive update of specific keys in a .env-format string.
- * - Keys already present (active or commented) are updated in place.
- * - Keys not present are appended if they have a value; skipped otherwise.
- * - An undefined/empty value comments the key out (preserves its presence for
- *   readability) rather than removing the line entirely.
- */
-function updateEnvVars(content: string, vars: Record<string, string | undefined>): string {
-  const lines = content.length > 0 ? content.split('\n') : []
-  const handled = new Set<string>()
-
-  const result = lines.map((line) => {
-    // Strip any leading comment marker to find the key
-    const bare = line.replace(/^#\s*/, '')
-    for (const [key, value] of Object.entries(vars)) {
-      if (bare.startsWith(`${key}=`) || bare.startsWith(`${key} =`)) {
-        handled.add(key)
-        return value ? `${key}="${value}"` : `# ${key}=`
-      }
-    }
-    return line
-  })
-
-  // Append keys that weren't already in the file
-  for (const [key, value] of Object.entries(vars)) {
-    if (!handled.has(key) && value) {
-      result.push(`${key}="${value}"`)
-    }
-  }
-
-  const joined = result.join('\n')
-  if (joined.length === 0) return ''
-  return joined.endsWith('\n') ? joined : `${joined}\n`
-}
-
-/**
- * Write Amplience connection vars to apps/web/.env.local AND packages/hub-management/.env
+ * Write Amplience connection vars to apps/web/.env AND packages/hub-management/.env
  * so that both the web app and the CLI scripts (`pnpm hub:import` etc.) stay in sync
- * with the active environment.
- * Pass null (for Fixtures) to comment Amplience vars out; the web app falls back to
- * bundled fixture data and CLI commands will have no hub to target.
+ * with the active environment. Both read a plain `.env` — Next.js ranks an
+ * `.env.local` above it, so a stray one would silently outrank what's written here.
+ * Pass null (for Fixtures) to comment the connection vars out; the web app falls back to
+ * bundled fixture data and CLI commands will have no hub to target. Fixtures still carry
+ * a brand, so `fixturesBrand` is what NEXT_PUBLIC_BRAND becomes in that case.
+ * The key-by-key mapping lives in ./env-files.ts.
  */
-async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
-  // Treat blank strings as no-value so we never write KEY="" to env files.
-  const hubName = env !== null && env.hubName !== '' ? env.hubName : undefined
-  const stagingHost = env !== null && env.stagingHost !== '' ? env.stagingHost : undefined
-  const clientId = env !== null && env.clientId !== '' ? env.clientId : undefined
-  const clientSecret = env !== null && env.clientSecret !== '' ? env.clientSecret : undefined
-  const hubId = env !== null && env.hubId !== '' ? env.hubId : undefined
-  const localhostUrl = env !== null && env.localhostUrl !== '' ? env.localhostUrl : undefined
-  const repoContent = env !== null && env.repoContent !== '' ? env.repoContent : undefined
-  const repoSlots = env !== null && env.repoSlots !== '' ? env.repoSlots : undefined
-  const repoSiteComponents =
-    env !== null && (env.repoSiteComponents ?? '') !== '' ? env.repoSiteComponents : undefined
-  const defaultBrand = env !== null && env.defaultBrand !== '' ? env.defaultBrand : undefined
-  // Blank default site means "use the runtime default" (the hub name, ADR-0014)
-  // — comment the var out rather than writing an empty value.
-  const defaultSite = env !== null && (env.defaultSite ?? '') !== '' ? env.defaultSite : undefined
-  const revalidateSecret =
-    env !== null && (env.revalidateSecret ?? '') !== '' ? env.revalidateSecret : undefined
-
-  // apps/web/.env.local — only the vars the web app needs
-  const existingWeb = existsSync(WEB_ENV_LOCAL) ? await readFile(WEB_ENV_LOCAL, 'utf-8') : ''
-  await writeFile(
-    WEB_ENV_LOCAL,
-    updateEnvVars(existingWeb, {
-      AMPLIENCE_HUB_NAME: hubName,
-      AMPLIENCE_STAGING_HOST: stagingHost,
-      NEXT_PUBLIC_BRAND: defaultBrand,
-      SITE_NAME: defaultSite,
-      // The local dev server accepts revalidate calls with the same secret the
-      // seeded webhooks carry, so a webhook can be pointed at a tunnel while
-      // debugging without a second value to keep in step.
-      AMPLIENCE_REVALIDATE_SECRET: revalidateSecret,
-    }),
-    'utf-8',
-  )
+async function writeActiveEnvFiles(env: Environment | null, fixturesBrand: string): Promise<void> {
+  // apps/web/.env — only the vars the web app needs
+  const existingWeb = existsSync(WEB_ENV) ? await readFile(WEB_ENV, 'utf-8') : ''
+  await writeFile(WEB_ENV, updateEnvVars(existingWeb, webEnvVars(env, fixturesBrand)), 'utf-8')
 
   // packages/hub-management/.env — full set of vars consumed by hub:import / hub:wipe scripts
   const existingHubEnv = existsSync(HUB_MANAGEMENT_ENV)
@@ -193,19 +137,7 @@ async function writeActiveEnvFiles(env: Environment | null): Promise<void> {
     : ''
   await writeFile(
     HUB_MANAGEMENT_ENV,
-    updateEnvVars(existingHubEnv, {
-      AMPLIENCE_HUB_NAME: hubName,
-      AMPLIENCE_HUB_ID: hubId,
-      LOCALHOST_URL: localhostUrl,
-      AMPLIENCE_REPO_CONTENT: repoContent,
-      AMPLIENCE_REPO_SLOTS: repoSlots,
-      AMPLIENCE_REPO_SITE_COMPONENTS: repoSiteComponents,
-      AMPLIENCE_CLIENT_ID: clientId,
-      AMPLIENCE_CLIENT_SECRET: clientSecret,
-      AMPLIENCE_STAGING_HOST: stagingHost,
-      SITE_NAME: defaultSite,
-      AMPLIENCE_REVALIDATE_SECRET: revalidateSecret,
-    }),
+    updateEnvVars(existingHubEnv, hubManagementEnvVars(env)),
     'utf-8',
   )
 }
@@ -699,7 +631,7 @@ app.post('/api/environments', async (c) => {
   // the web app picks up the new hub immediately without a manual activate.
   if (config.environments.length === 1) {
     config.active = body.name
-    await writeActiveEnvFiles(body)
+    await writeActiveEnvFiles(body, config.fixturesBrand ?? '')
   }
 
   await writeConfig(config)
@@ -726,13 +658,29 @@ app.put('/api/environments/:name', async (c) => {
 
   // If the updated environment is currently active, keep the env files in sync.
   if (config.active === body.name) {
-    await writeActiveEnvFiles(body)
+    await writeActiveEnvFiles(body, config.fixturesBrand ?? '')
   }
 
   return c.json(config)
 })
 
-// PATCH /api/environments/:name/activate  — set as active + write apps/web/.env.local
+// PUT /api/fixtures  — update the built-in Local Fixtures source (brand only)
+app.put('/api/fixtures', async (c) => {
+  const body = await c.req.json<{ brand?: string }>()
+  const config = await readConfig()
+
+  config.fixturesBrand = (body.brand ?? '').trim()
+  await writeConfig(config)
+
+  // Only reaches the running app while fixtures are the active source.
+  if (config.active === FIXTURES_NAME) {
+    await writeActiveEnvFiles(null, config.fixturesBrand)
+  }
+
+  return c.json(config)
+})
+
+// PATCH /api/environments/:name/activate  — set as active + write apps/web/.env
 app.patch('/api/environments/:name/activate', async (c) => {
   const { name } = c.req.param()
   const config = await readConfig()
@@ -745,11 +693,12 @@ app.patch('/api/environments/:name/activate', async (c) => {
   config.active = name
   await writeConfig(config)
 
-  // Write connection vars to apps/web/.env.local so `pnpm dev` in apps/web
+  // Write connection vars to apps/web/.env so `pnpm dev` in apps/web
   // picks up the right hub without any manual .env editing.
-  // Fixtures → clears both vars (web app falls back to fixture data).
+  // Fixtures → clears the connection vars (web app falls back to fixture data)
+  // and applies the fixtures brand.
   const env = isFixtures ? null : (config.environments.find((e) => e.name === name) ?? null)
-  await writeActiveEnvFiles(env)
+  await writeActiveEnvFiles(env, config.fixturesBrand ?? '')
 
   return c.json(config)
 })
