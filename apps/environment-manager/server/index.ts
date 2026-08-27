@@ -11,6 +11,7 @@ import { streamText } from 'hono/streaming'
 
 import { buildDamCheck, liveGqlFetch } from './dam-permissions.ts'
 import { hubManagementEnvVars, updateEnvVars, webEnvVars } from './env-files.ts'
+import { deriveIdentifier } from './hub-identifier.ts'
 import { buildPermissionsReport, type FetchJson } from './permissions.ts'
 import {
   cliAuthTokenPaths,
@@ -621,17 +622,24 @@ app.post('/api/environments', async (c) => {
   const body = await c.req.json<Environment>()
   const config = await readConfig()
 
-  if (config.environments.some((e) => e.name === body.name)) {
-    return c.json({ error: `Environment "${body.name}" already exists.` }, 409)
+  // The GUI collects a label, not an identifier — derive one when it's absent
+  // (an explicit name from an API caller or an older client still wins).
+  const name =
+    (body.name ?? '').trim() ||
+    deriveIdentifier(body.label ?? '', [FIXTURES_NAME, ...config.environments.map((e) => e.name)])
+
+  if (config.environments.some((e) => e.name === name)) {
+    return c.json({ error: `A hub with the identifier "${name}" already exists.` }, 409)
   }
 
-  config.environments.push(body)
+  const env: Environment = { ...body, name }
+  config.environments.push(env)
 
   // Auto-activate if this is the first environment, and write env files so
   // the web app picks up the new hub immediately without a manual activate.
   if (config.environments.length === 1) {
-    config.active = body.name
-    await writeActiveEnvFiles(body, config.fixturesBrand ?? '')
+    config.active = name
+    await writeActiveEnvFiles(env, config.fixturesBrand ?? '')
   }
 
   await writeConfig(config)
@@ -861,7 +869,7 @@ app.post('/api/environments/:name/vercel/create-site', async (c) => {
     sitename: body.sitename ?? '',
     ...(body.projectName !== undefined ? { projectName: body.projectName } : {}),
   }
-  const projectName = deriveProjectName(env.name, site)
+  const projectName = deriveProjectName(env.hubName, site)
   const cliOpts = {
     ...(body.token ? { token: body.token } : {}),
     ...(body.scope ? { scope: body.scope } : {}),

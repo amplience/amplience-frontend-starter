@@ -78,9 +78,15 @@ describe('runtimeEnvVars', () => {
 })
 
 describe('deriveProjectName', () => {
-  it('derives a slug from env + site name', () => {
-    expect(deriveProjectName('client-a-staging', { brand: 'acme', sitename: 'acme-store' })).toBe(
-      'client-a-staging-acme-store',
+  it('derives a slug from hub + site name', () => {
+    expect(deriveProjectName('clientastaging', { brand: 'acme', sitename: 'acme-store' })).toBe(
+      'clientastaging-acme-store',
+    )
+  })
+
+  it('falls back to the brand when there is no site name', () => {
+    expect(deriveProjectName('quadraticlite', { brand: 'acme', sitename: '' })).toBe(
+      'quadraticlite-acme',
     )
   })
 
@@ -92,7 +98,7 @@ describe('deriveProjectName', () => {
 
   it('honours an explicit project name (still sanitised)', () => {
     expect(
-      deriveProjectName('env', { brand: 'b', sitename: 's', projectName: 'My Cool Project' }),
+      deriveProjectName('hub', { brand: 'b', sitename: 's', projectName: 'My Cool Project' }),
     ).toBe('my-cool-project')
   })
 

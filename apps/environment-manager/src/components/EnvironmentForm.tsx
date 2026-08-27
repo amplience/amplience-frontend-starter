@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { api } from '../api.js'
+import type { StringEnvKey } from '../required-fields.js'
+import { isRequired, missingRequired } from '../required-fields.js'
 import type { DiscoveredHub, Environment, PermissionsReport } from '../types.js'
 import { EMPTY_ENV } from '../types.js'
 import { PermissionsPanel } from './PermissionsPanel.js'
@@ -14,28 +16,15 @@ type Props = {
 
 // ── Field groups ──────────────────────────────────────────────────────────────
 
-/** Only string-valued keys — excludes boolean fields (republish,
- * ignoreSchemaValidation) and array fields (webApps). The `-?` strips optional
- * modifiers so optional fields don't leak `undefined` into the key union. */
-type StringEnvKey = {
-  [K in keyof Environment]-?: Environment[K] extends string ? K : never
-}[keyof Environment]
-
+/** Required-ness lives in ../required-fields, so the marker and the submit gate can't drift. */
 type FieldMeta = {
   key: StringEnvKey
   label: string
-  required?: boolean
   placeholder?: string
 }
 
 const IDENTITY_FIELDS: FieldMeta[] = [
-  { key: 'label', label: 'Label', required: true, placeholder: 'e.g. Client A — Staging' },
-  {
-    key: 'name',
-    label: 'Identifier',
-    required: true,
-    placeholder: 'e.g. client-a-staging (no spaces)',
-  },
+  { key: 'label', label: 'Label', placeholder: 'e.g. Client A — Staging' },
 ]
 
 const CREDENTIAL_FIELDS: FieldMeta[] = [
@@ -44,10 +33,10 @@ const CREDENTIAL_FIELDS: FieldMeta[] = [
 ]
 
 const HUB_FIELDS: FieldMeta[] = [
-  { key: 'hubName', label: 'Hub name', required: true, placeholder: 'e.g. quadraticlite' },
-  { key: 'hubId', label: 'Hub ID', required: true, placeholder: 'Amplience hub ID' },
-  { key: 'repoContent', label: 'Content repo ID', required: true, placeholder: 'DC repository ID' },
-  { key: 'repoSlots', label: 'Slots repo ID', required: true, placeholder: 'DC repository ID' },
+  { key: 'hubName', label: 'Hub name', placeholder: 'e.g. quadraticlite' },
+  { key: 'hubId', label: 'Hub ID', placeholder: 'Amplience hub ID' },
+  { key: 'repoContent', label: 'Content repo ID', placeholder: 'DC repository ID' },
+  { key: 'repoSlots', label: 'Slots repo ID', placeholder: 'DC repository ID' },
   {
     key: 'repoSiteComponents',
     label: 'Site Components repo ID',
@@ -66,12 +55,7 @@ const HUB_FIELDS: FieldMeta[] = [
 ]
 
 const CONFIG_FIELDS: FieldMeta[] = [
-  {
-    key: 'localhostUrl',
-    label: 'Localhost URL',
-    required: true,
-    placeholder: 'http://localhost:3000',
-  },
+  { key: 'localhostUrl', label: 'Localhost URL', placeholder: 'http://localhost:3000' },
   {
     key: 'defaultBrand',
     label: 'Default brand',
@@ -83,6 +67,14 @@ const CONFIG_FIELDS: FieldMeta[] = [
     placeholder: 'e.g. acme — defaults to hub name if empty',
   },
 ]
+
+/** Field labels by key, for naming what's still blank on a failed submit. */
+const FIELD_LABELS = new Map(
+  [...IDENTITY_FIELDS, ...CREDENTIAL_FIELDS, ...HUB_FIELDS, ...CONFIG_FIELDS].map((f) => [
+    f.key,
+    f.label,
+  ]),
+)
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
@@ -224,6 +216,16 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    // The form is noValidate, so required fields are enforced here.
+    const missing = missingRequired(form)
+    const firstMissing = missing[0]
+    if (firstMissing !== undefined) {
+      setError(
+        `Fill in the required fields: ${missing.map((k) => FIELD_LABELS.get(k) ?? k).join(', ')}.`,
+      )
+      document.getElementById(firstMissing)?.focus()
+      return
+    }
     setSaving(true)
     setError(null)
     try {
@@ -237,7 +239,8 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
   // ── Helpers ────────────────────────────────────────────────────────────────
 
   function renderField(meta: FieldMeta, idx: number) {
-    const { key, label, required, placeholder } = meta
+    const { key, label, placeholder } = meta
+    const required = isRequired(key)
     const isAutoFilled = autoFilled.has(key)
     return (
       <div className="field" key={key}>
@@ -255,11 +258,7 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
           required={required}
           autoComplete="off"
           onChange={(e) => set(key, e.target.value)}
-          disabled={isEdit && key === 'name'}
         />
-        {isEdit && key === 'name' && (
-          <p className="hint">Identifier cannot be changed after creation.</p>
-        )}
       </div>
     )
   }
@@ -279,7 +278,7 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
     >
       <div className="modal" role="dialog" aria-modal="true">
         <div className="modal__header">
-          <h2>{isEdit ? 'Edit environment' : 'Add environment'}</h2>
+          <h2>{isEdit ? 'Edit hub' : 'Add hub'}</h2>
           <button
             type="button"
             className="modal__close"
@@ -426,7 +425,7 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
               Cancel
             </button>
             <button type="submit" className="btn btn--primary" disabled={saving}>
-              {saving ? 'Saving…' : isEdit ? 'Save changes' : 'Add environment'}
+              {saving ? 'Saving…' : isEdit ? 'Save changes' : 'Add hub'}
             </button>
           </div>
         </form>
@@ -441,14 +440,14 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
               onClick={() => {
                 if (
                   confirm(
-                    `Permanently delete "${initial?.name ?? 'this environment'}"? This cannot be undone.`,
+                    `Permanently delete "${initial?.label || initial?.name || 'this hub'}"? This cannot be undone.`,
                   )
                 ) {
                   onDelete()
                 }
               }}
             >
-              Delete environment
+              Delete hub
             </button>
           </div>
         )}
