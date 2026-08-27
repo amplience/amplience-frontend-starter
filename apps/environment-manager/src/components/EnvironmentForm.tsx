@@ -24,7 +24,11 @@ type FieldMeta = {
 }
 
 const IDENTITY_FIELDS: FieldMeta[] = [
-  { key: 'label', label: 'Label', placeholder: 'e.g. Client A — Staging' },
+  {
+    key: 'label',
+    label: 'Label (Just for your personal reference)',
+    placeholder: 'e.g. Client A — Staging',
+  },
 ]
 
 const CREDENTIAL_FIELDS: FieldMeta[] = [
@@ -68,6 +72,22 @@ const CONFIG_FIELDS: FieldMeta[] = [
   },
 ]
 
+/**
+ * Splits a label so any bracketed qualifier — "Staging host (VSE)" — can be
+ * rendered a weight lighter than the name it qualifies.
+ */
+function labelParts(label: string) {
+  return label.split(/(\([^)]*\))/).map((part, i) =>
+    part.startsWith('(') ? (
+      <span key={`${String(i)}-${part}`} className="label-qualifier">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  )
+}
+
 /** Field labels by key, for naming what's still blank on a failed submit. */
 const FIELD_LABELS = new Map(
   [...IDENTITY_FIELDS, ...CREDENTIAL_FIELDS, ...HUB_FIELDS, ...CONFIG_FIELDS].map((f) => [
@@ -84,6 +104,11 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const firstFieldRef = useRef<HTMLInputElement>(null)
+
+  // Adding a hub starts with just the label and credentials; the rest of the
+  // form appears once discovery has resolved a hub into it. Editing shows
+  // everything, since the details already exist.
+  const [revealed, setRevealed] = useState(isEdit)
 
   // Discovery state
   const [discovering, setDiscovering] = useState(false)
@@ -164,6 +189,7 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
       return next
     })
     setAutoFilled(filled)
+    setRevealed(true)
   }
 
   async function handleDiscover() {
@@ -245,7 +271,7 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
     return (
       <div className="field" key={key}>
         <label htmlFor={key}>
-          {label}
+          {labelParts(label)}
           {required && <span className="required">*</span>}
           {isAutoFilled && <span className="badge badge--autofill">Auto-filled</span>}
         </label>
@@ -376,46 +402,52 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
               </div>
             )}
 
-            {/* ── Hub details ── */}
-            <div className="form-section">
-              <span className="form-section__label">Hub details</span>
-            </div>
-            {HUB_FIELDS.map((f) => renderField(f, 99))}
+            {revealed && (
+              <>
+                {/* ── Hub details ── */}
+                <div className="form-section">
+                  <span className="form-section__label">Hub details</span>
+                </div>
+                {HUB_FIELDS.map((f) => renderField(f, 99))}
 
-            {/* ── Config ── */}
-            <div className="form-section">
-              <span className="form-section__label">Local Config</span>
-            </div>
-            {CONFIG_FIELDS.map((f) => renderField(f, 99))}
+                {/* ── Config ── */}
+                <div className="form-section">
+                  <span className="form-section__label">Local Config</span>
+                </div>
+                {CONFIG_FIELDS.map((f) => renderField(f, 99))}
 
-            <div className="field field--checkbox">
-              <label htmlFor="republish">
-                <input
-                  id="republish"
-                  type="checkbox"
-                  checked={form.republish}
-                  onChange={(e) => set('republish', e.target.checked)}
-                />
-                Force republish on import (--republish)
-              </label>
-            </div>
+                <div className="field field--checkbox">
+                  <label htmlFor="republish">
+                    <input
+                      id="republish"
+                      type="checkbox"
+                      checked={form.republish}
+                      onChange={(e) => set('republish', e.target.checked)}
+                    />
+                    {labelParts('Force republish on import (--republish)')}
+                  </label>
+                </div>
 
-            <div className="field field--checkbox">
-              <label htmlFor="ignoreSchemaValidation">
-                <input
-                  id="ignoreSchemaValidation"
-                  type="checkbox"
-                  checked={form.ignoreSchemaValidation ?? false}
-                  onChange={(e) => set('ignoreSchemaValidation', e.target.checked)}
-                />
-                Ignore schema validation on wipe/import (--ignoreSchemaValidation)
-              </label>
-              <p className="hint">
-                Requires the hub&rsquo;s &ldquo;Ignore schema validation&rdquo; setting to be
-                enabled (DC &rarr; hub &rarr; Properties). Lets teardown strip keys from items whose
-                body no longer matches a changed schema.
-              </p>
-            </div>
+                <div className="field field--checkbox">
+                  <label htmlFor="ignoreSchemaValidation">
+                    <input
+                      id="ignoreSchemaValidation"
+                      type="checkbox"
+                      checked={form.ignoreSchemaValidation ?? false}
+                      onChange={(e) => set('ignoreSchemaValidation', e.target.checked)}
+                    />
+                    {labelParts(
+                      'Ignore schema validation on wipe/import (--ignoreSchemaValidation)',
+                    )}
+                  </label>
+                  <p className="hint">
+                    Requires the hub&rsquo;s &ldquo;Ignore schema validation&rdquo; setting to be
+                    enabled (DC &rarr; hub &rarr; Properties). Lets teardown strip keys from items
+                    whose body no longer matches a changed schema.
+                  </p>
+                </div>
+              </>
+            )}
           </div>
 
           {error && <p className="form-error">{error}</p>}
@@ -424,9 +456,11 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
             <button type="button" className="btn btn--ghost" onClick={onCancel} disabled={saving}>
               Cancel
             </button>
-            <button type="submit" className="btn btn--primary" disabled={saving}>
-              {saving ? 'Saving…' : isEdit ? 'Save changes' : 'Add hub'}
-            </button>
+            {revealed && (
+              <button type="submit" className="btn btn--primary" disabled={saving}>
+                {saving ? 'Saving…' : isEdit ? 'Save changes' : 'Add hub'}
+              </button>
+            )}
           </div>
         </form>
 

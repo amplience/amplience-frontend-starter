@@ -1310,6 +1310,11 @@ body {
   margin-left: 0.2em;
 }
 
+/* A label's bracketed qualifier — "(VSE)" — sits a weight below the name. */
+.label-qualifier {
+  font-weight: 300;
+}
+
 .field input[type='text'],
 .field input[type='password'] {
   background: var(--color-surface-2);
