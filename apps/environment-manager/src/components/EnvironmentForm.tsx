@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { api } from '../api.js'
+import type { StringEnvKey } from '../required-fields.js'
+import { isRequired, missingRequired } from '../required-fields.js'
 import type { DiscoveredHub, Environment, PermissionsReport } from '../types.js'
 import { EMPTY_ENV } from '../types.js'
 import { PermissionsPanel } from './PermissionsPanel.js'
@@ -14,27 +16,18 @@ type Props = {
 
 // ── Field groups ──────────────────────────────────────────────────────────────
 
-/** Only string-valued keys — excludes boolean fields (republish,
- * ignoreSchemaValidation) and array fields (webApps). The `-?` strips optional
- * modifiers so optional fields don't leak `undefined` into the key union. */
-type StringEnvKey = {
-  [K in keyof Environment]-?: Environment[K] extends string ? K : never
-}[keyof Environment]
-
+/** Required-ness lives in ../required-fields, so the marker and the submit gate can't drift. */
 type FieldMeta = {
   key: StringEnvKey
   label: string
-  required?: boolean
   placeholder?: string
 }
 
 const IDENTITY_FIELDS: FieldMeta[] = [
-  { key: 'label', label: 'Label', required: true, placeholder: 'e.g. Client A — Staging' },
   {
-    key: 'name',
-    label: 'Identifier',
-    required: true,
-    placeholder: 'e.g. client-a-staging (no spaces)',
+    key: 'label',
+    label: 'Label (Just for your personal reference)',
+    placeholder: 'e.g. Client A — Staging',
   },
 ]
 
@@ -44,10 +37,10 @@ const CREDENTIAL_FIELDS: FieldMeta[] = [
 ]
 
 const HUB_FIELDS: FieldMeta[] = [
-  { key: 'hubName', label: 'Hub name', required: true, placeholder: 'e.g. quadraticlite' },
-  { key: 'hubId', label: 'Hub ID', required: true, placeholder: 'Amplience hub ID' },
-  { key: 'repoContent', label: 'Content repo ID', required: true, placeholder: 'DC repository ID' },
-  { key: 'repoSlots', label: 'Slots repo ID', required: true, placeholder: 'DC repository ID' },
+  { key: 'hubName', label: 'Hub name', placeholder: 'e.g. quadraticlite' },
+  { key: 'hubId', label: 'Hub ID', placeholder: 'Amplience hub ID' },
+  { key: 'repoContent', label: 'Content repo ID', placeholder: 'DC repository ID' },
+  { key: 'repoSlots', label: 'Slots repo ID', placeholder: 'DC repository ID' },
   {
     key: 'repoSiteComponents',
     label: 'Site Components repo ID',
@@ -66,12 +59,7 @@ const HUB_FIELDS: FieldMeta[] = [
 ]
 
 const CONFIG_FIELDS: FieldMeta[] = [
-  {
-    key: 'localhostUrl',
-    label: 'Localhost URL',
-    required: true,
-    placeholder: 'http://localhost:3000',
-  },
+  { key: 'localhostUrl', label: 'Localhost URL', placeholder: 'http://localhost:3000' },
   {
     key: 'defaultBrand',
     label: 'Default brand',
@@ -84,6 +72,30 @@ const CONFIG_FIELDS: FieldMeta[] = [
   },
 ]
 
+/**
+ * Splits a label so any bracketed qualifier — "Staging host (VSE)" — can be
+ * rendered a weight lighter than the name it qualifies.
+ */
+function labelParts(label: string) {
+  return label.split(/(\([^)]*\))/).map((part, i) =>
+    part.startsWith('(') ? (
+      <span key={`${String(i)}-${part}`} className="label-qualifier">
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  )
+}
+
+/** Field labels by key, for naming what's still blank on a failed submit. */
+const FIELD_LABELS = new Map(
+  [...IDENTITY_FIELDS, ...CREDENTIAL_FIELDS, ...HUB_FIELDS, ...CONFIG_FIELDS].map((f) => [
+    f.key,
+    f.label,
+  ]),
+)
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) {
@@ -92,6 +104,11 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const firstFieldRef = useRef<HTMLInputElement>(null)
+
+  // Adding a hub starts with just the label and credentials; the rest of the
+  // form appears once discovery has resolved a hub into it. Editing shows
+  // everything, since the details already exist.
+  const [revealed, setRevealed] = useState(isEdit)
 
   // Discovery state
   const [discovering, setDiscovering] = useState(false)
@@ -172,6 +189,7 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
       return next
     })
     setAutoFilled(filled)
+    setRevealed(true)
   }
 
   async function handleDiscover() {
@@ -224,6 +242,16 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    // The form is noValidate, so required fields are enforced here.
+    const missing = missingRequired(form)
+    const firstMissing = missing[0]
+    if (firstMissing !== undefined) {
+      setError(
+        `Fill in the required fields: ${missing.map((k) => FIELD_LABELS.get(k) ?? k).join(', ')}.`,
+      )
+      document.getElementById(firstMissing)?.focus()
+      return
+    }
     setSaving(true)
     setError(null)
     try {
@@ -237,12 +265,13 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
   // ── Helpers ────────────────────────────────────────────────────────────────
 
   function renderField(meta: FieldMeta, idx: number) {
-    const { key, label, required, placeholder } = meta
+    const { key, label, placeholder } = meta
+    const required = isRequired(key)
     const isAutoFilled = autoFilled.has(key)
     return (
       <div className="field" key={key}>
         <label htmlFor={key}>
-          {label}
+          {labelParts(label)}
           {required && <span className="required">*</span>}
           {isAutoFilled && <span className="badge badge--autofill">Auto-filled</span>}
         </label>
@@ -255,11 +284,7 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
           required={required}
           autoComplete="off"
           onChange={(e) => set(key, e.target.value)}
-          disabled={isEdit && key === 'name'}
         />
-        {isEdit && key === 'name' && (
-          <p className="hint">Identifier cannot be changed after creation.</p>
-        )}
       </div>
     )
   }
@@ -279,7 +304,7 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
     >
       <div className="modal" role="dialog" aria-modal="true">
         <div className="modal__header">
-          <h2>{isEdit ? 'Edit environment' : 'Add environment'}</h2>
+          <h2>{isEdit ? 'Edit hub' : 'Add hub'}</h2>
           <button
             type="button"
             className="modal__close"
@@ -377,46 +402,52 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
               </div>
             )}
 
-            {/* ── Hub details ── */}
-            <div className="form-section">
-              <span className="form-section__label">Hub details</span>
-            </div>
-            {HUB_FIELDS.map((f) => renderField(f, 99))}
+            {revealed && (
+              <>
+                {/* ── Hub details ── */}
+                <div className="form-section">
+                  <span className="form-section__label">Hub details</span>
+                </div>
+                {HUB_FIELDS.map((f) => renderField(f, 99))}
 
-            {/* ── Config ── */}
-            <div className="form-section">
-              <span className="form-section__label">Local Config</span>
-            </div>
-            {CONFIG_FIELDS.map((f) => renderField(f, 99))}
+                {/* ── Config ── */}
+                <div className="form-section">
+                  <span className="form-section__label">Local Config</span>
+                </div>
+                {CONFIG_FIELDS.map((f) => renderField(f, 99))}
 
-            <div className="field field--checkbox">
-              <label htmlFor="republish">
-                <input
-                  id="republish"
-                  type="checkbox"
-                  checked={form.republish}
-                  onChange={(e) => set('republish', e.target.checked)}
-                />
-                Force republish on import (--republish)
-              </label>
-            </div>
+                <div className="field field--checkbox">
+                  <label htmlFor="republish">
+                    <input
+                      id="republish"
+                      type="checkbox"
+                      checked={form.republish}
+                      onChange={(e) => set('republish', e.target.checked)}
+                    />
+                    {labelParts('Force republish on import (--republish)')}
+                  </label>
+                </div>
 
-            <div className="field field--checkbox">
-              <label htmlFor="ignoreSchemaValidation">
-                <input
-                  id="ignoreSchemaValidation"
-                  type="checkbox"
-                  checked={form.ignoreSchemaValidation ?? false}
-                  onChange={(e) => set('ignoreSchemaValidation', e.target.checked)}
-                />
-                Ignore schema validation on wipe/import (--ignoreSchemaValidation)
-              </label>
-              <p className="hint">
-                Requires the hub&rsquo;s &ldquo;Ignore schema validation&rdquo; setting to be
-                enabled (DC &rarr; hub &rarr; Properties). Lets teardown strip keys from items whose
-                body no longer matches a changed schema.
-              </p>
-            </div>
+                <div className="field field--checkbox">
+                  <label htmlFor="ignoreSchemaValidation">
+                    <input
+                      id="ignoreSchemaValidation"
+                      type="checkbox"
+                      checked={form.ignoreSchemaValidation ?? false}
+                      onChange={(e) => set('ignoreSchemaValidation', e.target.checked)}
+                    />
+                    {labelParts(
+                      'Ignore schema validation on wipe/import (--ignoreSchemaValidation)',
+                    )}
+                  </label>
+                  <p className="hint">
+                    Requires the hub&rsquo;s &ldquo;Ignore schema validation&rdquo; setting to be
+                    enabled (DC &rarr; hub &rarr; Properties). Lets teardown strip keys from items
+                    whose body no longer matches a changed schema.
+                  </p>
+                </div>
+              </>
+            )}
           </div>
 
           {error && <p className="form-error">{error}</p>}
@@ -425,9 +456,11 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
             <button type="button" className="btn btn--ghost" onClick={onCancel} disabled={saving}>
               Cancel
             </button>
-            <button type="submit" className="btn btn--primary" disabled={saving}>
-              {saving ? 'Saving…' : isEdit ? 'Save changes' : 'Add environment'}
-            </button>
+            {revealed && (
+              <button type="submit" className="btn btn--primary" disabled={saving}>
+                {saving ? 'Saving…' : isEdit ? 'Save changes' : 'Add hub'}
+              </button>
+            )}
           </div>
         </form>
 
@@ -441,14 +474,14 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
               onClick={() => {
                 if (
                   confirm(
-                    `Permanently delete "${initial?.name ?? 'this environment'}"? This cannot be undone.`,
+                    `Permanently delete "${initial?.label || initial?.name || 'this hub'}"? This cannot be undone.`,
                   )
                 ) {
                   onDelete()
                 }
               }}
             >
-              Delete environment
+              Delete hub
             </button>
           </div>
         )}

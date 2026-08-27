@@ -82,21 +82,21 @@ export function runtimeEnvVars(env: SiteEnvSource, site: VercelSiteInput): Verce
 }
 
 /**
- * Derive a Vercel-safe project name from the environment + site name.
+ * Derive a Vercel-safe project name from the Amplience hub + site name.
  *
  * Vercel project names are lowercase, may contain letters, digits and hyphens,
  * cannot start/end with a hyphen or run hyphens together, and cap at 100 chars.
  * An explicit projectName (if provided) is sanitised the same way so the caller
  * can't smuggle in an invalid name.
  */
-export function deriveProjectName(envName: string, site: VercelSiteInput): string {
+export function deriveProjectName(hubName: string, site: VercelSiteInput): string {
   const explicit = (site.projectName ?? '').trim()
   // Build from only the non-empty parts, so a fully-empty input falls through
   // to the stable default below rather than producing a stray "web".
   const base =
     explicit !== ''
       ? explicit
-      : [envName, site.sitename || site.brand].filter((p) => p !== '').join('-')
+      : [hubName, site.sitename || site.brand].filter((p) => p !== '').join('-')
   const slug = base
     .toLowerCase()
     .replace(/[^a-z0-9-]+/g, '-') // non-alphanumerics → hyphen

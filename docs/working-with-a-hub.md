@@ -19,7 +19,7 @@ Adding a hub takes about 50 seconds via the Environment Manager GUI.
 
 2. Click **+ Add hub**
 
-3. Give it a label and identifier (free text, just for your own reference)
+3. Give it a label (free text, just for your own reference)
 
 4. Enter the Client ID and Client Secret you received from Amplience support
 
