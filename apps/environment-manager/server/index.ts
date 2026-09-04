@@ -18,9 +18,10 @@ import {
   siteIdentity,
   type ActiveSource,
 } from './active-source.ts'
-import { buildDamCheck, liveGqlFetch } from './dam-permissions.ts'
+import { buildDamCheck } from './dam-permissions.ts'
 import { hubManagementEnvVars, updateEnvVars, webEnvVars } from './env-files.ts'
 import { readFixtureSets, resolveFixtureSet, type FixtureSetInfo } from './fixture-sets.ts'
+import { liveGqlFetch } from './graphql.ts'
 import { deriveIdentifier } from './hub-identifier.ts'
 import { buildPermissionsReport, type FetchJson } from './permissions.ts'
 import {
@@ -40,6 +41,7 @@ import {
   stripAnsi,
   type VercelSiteInput,
 } from './vercel.ts'
+import { buildWorkforceCheck, WORKFORCE_KEY, WORKFORCE_LABEL } from './workforce-permissions.ts'
 
 // ── Paths ─────────────────────────────────────────────────────────────────────
 
@@ -257,6 +259,8 @@ type DiscoveredHub = {
   id: string
   name: string
   label: string
+  /** Organization the hub belongs to — half of the opaque Workforce hub id. */
+  organizationId: string
   repos: DiscoveredRepo[]
   stagingHost?: string
 }
@@ -283,6 +287,7 @@ async function discoverHubs(clientId: string, clientSecret: string): Promise<Dis
         id: string
         name: string
         label?: string
+        organizationId: string
         settings?: {
           virtualStagingEnvironment?: { hostname?: string }
           previewVirtualStagingEnvironment?: { hostname?: string }
@@ -305,6 +310,7 @@ async function discoverHubs(clientId: string, clientSecret: string): Promise<Dis
         id: hub.id,
         name: hub.name,
         label: hub.label ?? hub.name,
+        organizationId: hub.organizationId,
         ...(stagingHost !== undefined ? { stagingHost } : {}),
       }
 
@@ -957,6 +963,22 @@ app.post('/api/amplience/permissions', async (c) => {
       report.checks.push({
         key: 'dam',
         label: 'DAM AssetStore (media library)',
+        read: 'error',
+        write: 'error',
+        detail: `probe failed: ${message}`,
+      })
+    }
+
+    // Workforce content flows are managed over the same GraphQL API (ADR-0023).
+    // Probed independently for the same reason as DAM, and equally fail-soft.
+    try {
+      const workforceCheck = await buildWorkforceCheck(liveGqlFetch(token), fetchJson, hubId)
+      report.checks.push(workforceCheck)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      report.checks.push({
+        key: WORKFORCE_KEY,
+        label: WORKFORCE_LABEL,
         read: 'error',
         write: 'error',
         detail: `probe failed: ${message}`,

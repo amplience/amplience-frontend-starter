@@ -17,7 +17,7 @@
 // Everything here is pure orchestration over an injected `fetchJson`, so the
 // logic is unit-testable without network access.
 
-const AMPLIENCE_API = 'https://api.amplience.net/v2/content'
+export const AMPLIENCE_API = 'https://api.amplience.net/v2/content'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
