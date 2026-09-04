@@ -88,6 +88,12 @@ export type DiscoveredHub = {
   id: string
   name: string
   label: string
+  /**
+   * Organization the hub belongs to. Workforce addresses a hub by an opaque id
+   * built from this plus the hub id, so it is surfaced here even though nothing
+   * stores it yet — the credentials probe derives it per call.
+   */
+  organizationId: string
   repos: DiscoveredRepo[]
   stagingHost?: string
 }
