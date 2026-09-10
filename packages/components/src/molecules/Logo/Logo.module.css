@@ -14,21 +14,22 @@
 
 .root {
   display: inline-flex;
-  padding: var(--spacing-2) var(--spacing-3);
+  padding: var(--logo-padding);
   align-items: center;
   flex-shrink: 0;
   text-decoration: none;
+  transition: 0.15s ease-in;
 
   &:hover {
     opacity: 0.75;
-    transition: 0.15s ease-in;
   }
 }
 
 .image {
   display: block;
-  height: var(--logo-height, 40px);
+  height: var(--logo-height);
   box-sizing: content-box;
   width: auto;
   object-fit: contain;
+  transition: 0.15s ease-in;
 }
