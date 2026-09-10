@@ -18,7 +18,10 @@
   align-items: center;
   flex-shrink: 0;
   text-decoration: none;
-  transition: 0.15s ease-in;
+  transition:
+    opacity 0.15s ease-in,
+    padding 0.15s ease-in,
+    height 0.15s ease-in;
 
   &:hover {
     opacity: 0.75;
@@ -31,5 +34,5 @@
   box-sizing: content-box;
   width: auto;
   object-fit: contain;
-  transition: 0.15s ease-in;
+  transition: height 0.15s ease-in;
 }
