@@ -1,4 +1,4 @@
-import type { ContentClientError } from '@amplience/quadratic-content'
+import type { ContentClientError } from '@amplience/frontend-starter-content'
 
 import { FailureCard } from './FailureCard'
 

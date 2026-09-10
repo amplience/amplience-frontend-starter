@@ -1,0 +1,13 @@
+{
+  "id": "a1b2c3d4-0004-4000-8000-200000000008",
+  "label": "Menu item: Docs — Editor setup",
+  "body": {
+    "_meta": {
+      "name": "Menu item: Docs — Editor setup",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "a1b2c3d4-0004-4000-8000-200000000008"
+    },
+    "label": "Editor setup",
+    "link": "/docs/editor-setup"
+  }
+}

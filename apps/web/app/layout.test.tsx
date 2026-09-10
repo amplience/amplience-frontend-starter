@@ -6,7 +6,7 @@
 //
 //  1. The document shell: layout.tsx hooks the deployment's brand onto
 //     `<html data-brand>`, the single attribute every brand overlay keys on.
-//  2. The token contract: @amplience/quadratic-theme's tokens.css defines
+//  2. The token contract: @amplience/frontend-starter-theme's tokens.css defines
 //     the CSS-variable families that components read and brands redefine
 //     under `[data-brand]` selectors (ADR-0002).
 //

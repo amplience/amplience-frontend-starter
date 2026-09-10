@@ -12,7 +12,7 @@
  * The environment switch is evaluated at module load, not per-render.
  */
 
-import type { RendererFailure, SchemaURI } from '@amplience/quadratic-types'
+import type { RendererFailure, SchemaURI } from '@amplience/frontend-starter-types'
 
 const isDev = process.env.NODE_ENV === 'development'
 

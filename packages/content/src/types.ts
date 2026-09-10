@@ -1,5 +1,5 @@
 /**
- * Content type definitions for @amplience/quadratic-content.
+ * Content type definitions for @amplience/frontend-starter-content.
  *
  * Two shapes live here that look similar but mean different things:
  *

@@ -2,7 +2,7 @@
 
 # Command reference
 
-Everything Quadratic Lite can do from the command line, and where the same
+Everything Amplience Frontend Starter can do from the command line, and where the same
 operation lives in the Environment Manager GUI.
 
 Two things worth knowing before you start:
@@ -67,7 +67,7 @@ hub: a webhook needs a deployment to call, so one is seeded per registered site
 and the row does nothing until you've added one. See
 [Working with a hub](working-with-a-hub.md#webhooks).
 
-Configuration it writes lands in a gitignored `quadratic.config.json` plus
+Configuration it writes lands in a gitignored `amplience.config.json` plus
 `.env` files. Credentials never reach version control.
 
 ## Seeding and syncing a hub
@@ -165,21 +165,21 @@ result to a hub.
 
 Deliberately deferred, so you don't go looking for them:
 
-| Capability                            | Status                                                                                                                                                                                                                                                                                                 |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `pull` — hub → repo                   | **Deferred** (requirements §1.3, COULD). The repo is the source of truth for the content model; there is no supported way to bring UI-authored schema changes back into it, so reconcile by hand. A normalising schema pull is the intended v1-migration path and the likelier of these to land first. |
-| `backup` / `restore`                  | **Deferred** (requirements §1.3, COULD). Recovery is `pnpm hub:wipe` followed by a re-seed from source control — which restores the model and the starter content, but not content editors have authored on the hub since.                                                                             |
-| `diff`, `promote` (hub → hub)         | **Deferred** to the MVP automation CLI (ADR-0012).                                                                                                                                                                                                                                                     |
-| Schema deletion                       | Not supported by dc-cli. Removing a content type from a hub is a manual operation in the Dynamic Content UI.                                                                                                                                                                                           |
-| `--dry-run`                           | Planned at MVP for every hub-mutating operation (requirements §1.3).                                                                                                                                                                                                                                   |
-| A single `quadratic <command>` binary | Planned at MVP (ADR-0012). The commands above are its INTERIM form.                                                                                                                                                                                                                                    |
+| Capability                                   | Status                                                                                                                                                                                                                                                                                                 |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `pull` — hub → repo                          | **Deferred** (requirements §1.3, COULD). The repo is the source of truth for the content model; there is no supported way to bring UI-authored schema changes back into it, so reconcile by hand. A normalising schema pull is the intended v1-migration path and the likelier of these to land first. |
+| `backup` / `restore`                         | **Deferred** (requirements §1.3, COULD). Recovery is `pnpm hub:wipe` followed by a re-seed from source control — which restores the model and the starter content, but not content editors have authored on the hub since.                                                                             |
+| `diff`, `promote` (hub → hub)                | **Deferred** to the MVP automation CLI (ADR-0012).                                                                                                                                                                                                                                                     |
+| Schema deletion                              | Not supported by dc-cli. Removing a content type from a hub is a manual operation in the CMS UI.                                                                                                                                                                                                       |
+| `--dry-run`                                  | Planned at MVP for every hub-mutating operation (requirements §1.3).                                                                                                                                                                                                                                   |
+| A single `frontend-starter <command>` binary | Planned at MVP (ADR-0012). The commands above are its INTERIM form.                                                                                                                                                                                                                                    |
 
 ## GUI ↔ terminal equivalence
 
 | Environment Manager                               | Terminal                                        |
 | ------------------------------------------------- | ----------------------------------------------- |
 | **Set active** on _Local Fixtures_                | — (default with no hub configured)              |
-| **+ Add hub** → **Fetch hub details**             | — (GUI only; writes `quadratic.config.json`)    |
+| **+ Add hub** → **Fetch hub details**             | — (GUI only; writes `amplience.config.json`)    |
 | **Check credentials**                             | — (GUI only)                                    |
 | Settings row → **Seed** / **Sync**                | `pnpm hub:import:settings`                      |
 | Content type schemas row → **Seed** / **Sync**    | `pnpm hub:import:schemas`                       |

@@ -13,15 +13,15 @@ import {
   createRegistry,
   HERO_BLOCK_SCHEMA,
   heroBlockRegistryEntry,
-} from '@amplience/quadratic-components/registry'
-import { CONTENT_LINK_SCHEMA } from '@amplience/quadratic-content'
+} from '@amplience/frontend-starter-components/registry'
+import { CONTENT_LINK_SCHEMA } from '@amplience/frontend-starter-content'
 import type {
   AnyComponentRegistryEntry,
   ComponentRegistryEntry,
   MediaLoadPriority,
   Registry,
   SchemaURI,
-} from '@amplience/quadratic-types'
+} from '@amplience/frontend-starter-types'
 
 import { renderContent } from './dispatch'
 

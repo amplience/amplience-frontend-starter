@@ -1,0 +1,24 @@
+{
+  "active": "fixtures",
+  "fixturesBrand": "",
+  "environments": [
+    {
+      "name": "my-hub",
+      "label": "My Hub (example)",
+      "hubName": "",
+      "hubId": "",
+      "localhostUrl": "http://localhost:3000",
+      "repoContent": "",
+      "repoSlots": "",
+      "repoSiteComponents": "",
+      "clientId": "",
+      "clientSecret": "",
+      "stagingHost": "",
+      "revalidateSecret": "",
+      "defaultBrand": "",
+      "defaultSite": "",
+      "webApps": [],
+      "republish": false
+    }
+  ]
+}

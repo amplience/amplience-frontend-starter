@@ -1,0 +1,18 @@
+{
+  "id": "c3d4e5f6-0004-4000-8000-000000000020",
+  "label": "Hierarchy menu item: Docs — Working with a hub",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Docs — Working with a hub",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "c3d4e5f6-0004-4000-8000-000000000020",
+      "hierarchy": {
+        "parentId": "c3d4e5f6-0004-4000-8000-000000000015",
+        "root": false,
+        "position": "gggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Working with a hub",
+    "link": "/docs/working-with-a-hub"
+  }
+}

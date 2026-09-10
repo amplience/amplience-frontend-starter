@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-import type { ContentMediaData, MediaLoadPriority } from '@amplience/quadratic-types'
+import type { ContentMediaData, MediaLoadPriority } from '@amplience/frontend-starter-types'
 
 import { Button } from '../../atoms/Button/Button'
 import type { ButtonColor, ButtonVariant } from '../../atoms/Button/Button'

@@ -60,7 +60,7 @@
  *
  * Extensions and workflow states are deliberately left in place. Both are
  * hub-wide configuration that a hub may share with things other than
- * Quadratic, so a content wipe is the wrong place to destroy them — and it
+ * Amplience Frontend Starter, so a content wipe is the wrong place to destroy them — and it
  * isn't necessary: re-seeding updates each extension in place by name, and
  * updates each workflow state through the settings mapping file (kept at
  * quadratic-settings-<hub>.json, separate from the content map this script
@@ -369,6 +369,7 @@ const ignoreSchemaValidation = ['1', 'true', 'yes'].includes(
 )
 
 // 1. Delete mapping file
+// Filename keeps the `quadratic-` prefix: renaming it orphans every existing hub's map, so dc-cli would re-import the whole model as duplicates.
 const mapFile = path.join(os.homedir(), '.amplience', 'imports', `quadratic-${hubName}.json`)
 if (existsSync(mapFile)) {
   rmSync(mapFile)

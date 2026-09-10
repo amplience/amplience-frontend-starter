@@ -12,7 +12,7 @@ configured web apps at import time, the same convention `extensions/` uses.
 | `${secret:revalidate}` | `AMPLIENCE_REVALIDATE_SECRET`                               |
 
 **A definition is expanded once per configured web app** (`webApps` in
-`quadratic.config.json`). One hub can feed several deployments and each holds
+`amplience.config.json`). One hub can feed several deployments and each holds
 its own cache, so each needs its own webhook — which is why `${site:label}`
 belongs in the label: it's what makes the resulting webhooks distinguishable,
 and the label is the identity the seed matches on when re-running.

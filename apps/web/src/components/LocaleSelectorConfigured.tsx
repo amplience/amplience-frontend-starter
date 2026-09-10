@@ -12,7 +12,7 @@
  * that places the content type sees no dead control.
  */
 
-import { LocaleSelector } from '@amplience/quadratic-components/locale-selector'
+import { LocaleSelector } from '@amplience/frontend-starter-components/locale-selector'
 
 import { defaultLocale, localeLabel, locales } from '../../lib/locales'
 

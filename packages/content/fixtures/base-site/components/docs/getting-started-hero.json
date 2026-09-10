@@ -8,7 +8,7 @@
       "deliveryId": "76ced506-d710-50bc-b3c5-0d4b172f0e14"
     },
     "title": "Getting started",
-    "description": "Everything you need to clone Quadratic Lite and get it running locally on the bundled fixture data — no Amplience hub required.",
+    "description": "Everything you need to clone Amplience Frontend Starter and get it running locally on the bundled fixture data — no Amplience hub required.",
     "backgroundColor": "dark",
     "textColor": "white",
     "contentPositionMobile": "beneath",

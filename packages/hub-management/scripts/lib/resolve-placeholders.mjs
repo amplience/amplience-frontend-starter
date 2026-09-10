@@ -124,7 +124,7 @@ export function resolveTokens(
       throw new Error(
         `${source}: references \${site:${field}} but no web app was supplied. ` +
           `Webhook definitions are expanded once per configured web app — add one ` +
-          `to this hub's "webApps" in quadratic.config.json (the Environment ` +
+          `to this hub's "webApps" in amplience.config.json (the Environment ` +
           `Manager's site cards write it for you).`,
       )
     }

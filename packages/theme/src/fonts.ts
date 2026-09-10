@@ -1,4 +1,4 @@
-// Brand font definitions for @amplience/quadratic-theme.
+// Brand font definitions for @amplience/frontend-starter-theme.
 //
 // Each font is exposed as a CSS variable (--nf-*) so tokens.css can reference
 // it under [data-brand] selectors without coupling to next/font internals.

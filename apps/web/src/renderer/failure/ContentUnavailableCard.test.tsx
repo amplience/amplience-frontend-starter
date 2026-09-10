@@ -5,7 +5,10 @@
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 
-import { ContentClientError, type ContentClientErrorKind } from '@amplience/quadratic-content'
+import {
+  ContentClientError,
+  type ContentClientErrorKind,
+} from '@amplience/frontend-starter-content'
 
 import { ContentUnavailableCard } from './ContentUnavailableCard'
 

@@ -163,7 +163,7 @@
         "color": "primary"
       }
     ],
-    "description": "Helpful information for installing & using Quadratic Lite",
+    "description": "Helpful information for installing & using Amplience Frontend Starter",
     "mobileOverride": true,
     "mobileMedia": {
       "mediaType": "ManualImage",

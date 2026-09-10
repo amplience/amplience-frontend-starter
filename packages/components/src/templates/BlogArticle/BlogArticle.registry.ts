@@ -1,4 +1,4 @@
-import type { ComponentRegistryEntry, ContentMediaData } from '@amplience/quadratic-types'
+import type { ComponentRegistryEntry, ContentMediaData } from '@amplience/frontend-starter-types'
 
 import { contentMediaUrl } from '../../molecules/DynamicImage/di-utils'
 import { BlogArticle, type BlogArticleProps } from './BlogArticle'

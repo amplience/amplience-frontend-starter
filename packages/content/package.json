@@ -1,5 +1,5 @@
 {
-  "name": "@amplience/quadratic-content",
+  "name": "@amplience/frontend-starter-content",
   "version": "0.0.0",
   "private": true,
   "description": "ContentClient port + MockContentClient (POC). Per ADR-0008 — the integration seam between the renderer and the Amplience SDK. Real SDK adapter lands in QL-43.",
@@ -19,6 +19,6 @@
     "dc-delivery-sdk-js": "^1.4.0"
   },
   "devDependencies": {
-    "@amplience/quadratic-config": "workspace:*"
+    "@amplience/frontend-starter-config": "workspace:*"
   }
 }

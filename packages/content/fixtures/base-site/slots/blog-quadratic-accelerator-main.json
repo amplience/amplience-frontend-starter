@@ -1,9 +1,9 @@
 {
   "id": "b10ga721-0002-4000-8000-000000000002",
-  "label": "Blog — Quadratic Accelerator — main slot",
+  "label": "Blog — Frontend Starter Accelerator — main slot",
   "body": {
     "_meta": {
-      "name": "Blog — Quadratic Accelerator — main slot",
+      "name": "Blog — Frontend Starter Accelerator — main slot",
       "schema": "https://quadratic.amplience.com/v2/slots/slot"
     },
     "components": [

@@ -13,7 +13,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   HIERARCHY_MENU_ITEM_SCHEMA,
   HIERARCHY_MENU_SCHEMA,
-} from '@amplience/quadratic-components/registry'
+} from '@amplience/frontend-starter-components/registry'
 
 const { getHierarchyMock } = vi.hoisted(() => ({ getHierarchyMock: vi.fn() }))
 

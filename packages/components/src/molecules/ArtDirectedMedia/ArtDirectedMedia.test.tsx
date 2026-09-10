@@ -10,7 +10,7 @@
 import { cleanup, render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import type { ContentMediaData } from '@amplience/quadratic-types'
+import type { ContentMediaData } from '@amplience/frontend-starter-types'
 
 import { ArtDirectedMedia } from './ArtDirectedMedia'
 

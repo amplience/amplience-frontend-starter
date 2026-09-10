@@ -31,7 +31,7 @@ async function getActiveTab(): Promise<chrome.tabs.Tab | null> {
 }
 
 // ---------------------------------------------------------------------------
-// Connection pill — detects data-quadratic bridge marker on the active tab.
+// Connection pill — detects data-amplience-starter bridge marker on the active tab.
 // Pill stays grey until QL-84 publishes the marker from the content script.
 // ---------------------------------------------------------------------------
 
@@ -39,7 +39,7 @@ async function detectBridge(tabId: number, tabUrl: string): Promise<void> {
   try {
     const [result] = await chrome.scripting.executeScript({
       target: { tabId },
-      func: () => document.documentElement.dataset.quadratic ?? null,
+      func: () => document.documentElement.dataset.amplienceStarter ?? null,
     })
 
     const bridgeVersion = result?.result as string | null

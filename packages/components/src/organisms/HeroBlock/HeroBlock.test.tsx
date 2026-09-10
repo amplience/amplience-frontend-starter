@@ -87,9 +87,9 @@ describe('HeroBlock', () => {
     })
 
     it('renders the title as an h1', () => {
-      render(<HeroBlock title="Welcome to Quadratic Lite" />)
+      render(<HeroBlock title="Welcome to Amplience Frontend Starter" />)
       expect(
-        screen.getByRole('heading', { level: 1, name: 'Welcome to Quadratic Lite' }),
+        screen.getByRole('heading', { level: 1, name: 'Welcome to Amplience Frontend Starter' }),
       ).toBeTruthy()
     })
 

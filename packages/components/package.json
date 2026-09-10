@@ -1,5 +1,5 @@
 {
-  "name": "@amplience/quadratic-components",
+  "name": "@amplience/frontend-starter-components",
   "version": "0.0.0",
   "private": true,
   "description": "Atomic-design component library.",
@@ -45,8 +45,8 @@
     "react": "^19.0.0"
   },
   "devDependencies": {
-    "@amplience/quadratic-config": "workspace:*",
-    "@amplience/quadratic-theme": "workspace:*",
+    "@amplience/frontend-starter-config": "workspace:*",
+    "@amplience/frontend-starter-theme": "workspace:*",
     "@storybook/addon-a11y": "^10.6.0",
     "@storybook/addon-docs": "^10.6.0",
     "@storybook/addon-links": "^10.6.0",
@@ -64,8 +64,8 @@
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "@amplience/quadratic-content": "workspace:*",
-    "@amplience/quadratic-types": "workspace:*",
+    "@amplience/frontend-starter-content": "workspace:*",
+    "@amplience/frontend-starter-types": "workspace:*",
     "clsx": "^2.1.1",
     "lucide-react": "^1.44.0",
     "react-markdown": "^10.1.0",

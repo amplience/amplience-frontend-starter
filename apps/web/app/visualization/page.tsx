@@ -40,10 +40,10 @@ import {
   BLOG_ARTICLE_SCHEMA,
   LOCALE_SELECTOR_SCHEMA,
   PAGE_SCHEMA,
-} from '@amplience/quadratic-components/registry'
-import { isContentClientError, resolveContentConfig } from '@amplience/quadratic-content'
-import { makeSdkContentClient } from '@amplience/quadratic-content/sdk'
-import type { AnyComponentRegistryEntry } from '@amplience/quadratic-types'
+} from '@amplience/frontend-starter-components/registry'
+import { isContentClientError, resolveContentConfig } from '@amplience/frontend-starter-content'
+import { makeSdkContentClient } from '@amplience/frontend-starter-content/sdk'
+import type { AnyComponentRegistryEntry } from '@amplience/frontend-starter-types'
 
 import { CUSTOM_CSS_SCHEMA, sanitizeCustomCss } from '../../lib/custom-css-schema'
 import {

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate branded placeholder icons for Quadratic Lite content types.
+"""Generate branded placeholder icons for Amplience Frontend Starter content types.
 
 Style system (matched to the branded examples, tuned per Matt's review):
   - steel blue line work #1f5e8c, round caps/joins, ~3.5px main stroke at 256

@@ -4,7 +4,7 @@
 import { describe, expect, it } from 'vitest'
 
 describe('toolchain smoke', () => {
-  it('runs Vitest under the shared @amplience/quadratic-config preset', () => {
+  it('runs Vitest under the shared @amplience/frontend-starter-config preset', () => {
     expect(1 + 1).toBe(2)
   })
 })

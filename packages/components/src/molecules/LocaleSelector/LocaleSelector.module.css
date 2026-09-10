@@ -6,6 +6,12 @@
  */
 
 .root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.select {
   font: inherit;
   font-size: var(--locale-selector-font-size, 0.875rem);
   color: var(--locale-selector-color, inherit);

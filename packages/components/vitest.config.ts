@@ -6,7 +6,7 @@
 //
 // NOTE: this config is not yet wired into a vitest workspace. Until a
 // vitest.workspace.ts is added at the repo root, run tests in this package via
-// `pnpm --filter @amplience/quadratic-components test`.
+// `pnpm --filter @amplience/frontend-starter-components test`.
 //
 // REACT DEDUPLICATION:
 // pnpm installs a local copy of `react` in packages/components/node_modules
@@ -25,7 +25,7 @@ import { createRequire } from 'node:module'
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
 import { defineConfig, mergeConfig } from 'vitest/config'
 
-import base from '@amplience/quadratic-config/vitest'
+import base from '@amplience/frontend-starter-config/vitest'
 
 const _require = createRequire(import.meta.url)
 const reactDomPkg = _require.resolve('react-dom/package.json')

@@ -45,6 +45,6 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Fire keep-alive webhooks
-        run: pnpm --filter @amplience/quadratic-automation keep-alive
+        run: pnpm --filter @amplience/frontend-starter-automation keep-alive
         env:
           KEEPALIVE_WEBHOOK_URLS: ${{ secrets.KEEPALIVE_WEBHOOK_URLS }}

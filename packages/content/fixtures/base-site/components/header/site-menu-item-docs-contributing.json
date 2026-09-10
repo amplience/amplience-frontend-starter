@@ -1,0 +1,13 @@
+{
+  "id": "a1b2c3d4-0004-4000-8000-200000000010",
+  "label": "Menu item: Docs — Contributing",
+  "body": {
+    "_meta": {
+      "name": "Menu item: Docs — Contributing",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "a1b2c3d4-0004-4000-8000-200000000010"
+    },
+    "label": "Contributing",
+    "link": "/contributing"
+  }
+}

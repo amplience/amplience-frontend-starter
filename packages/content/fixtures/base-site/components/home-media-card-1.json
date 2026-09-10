@@ -42,27 +42,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Every schema you define in Amplience Dynamic Content is rendered automatically — from hero banners to rich editorial layouts."
+          "value": "Every schema you define in the Amplience CMS is rendered automatically — from hero banners to rich editorial layouts."
         },
         {
           "locale": "en-GB",
-          "value": "Every schema you define in Amplience Dynamic Content is rendered automatically — from hero banners to rich editorial layouts."
+          "value": "Every schema you define in the Amplience CMS is rendered automatically — from hero banners to rich editorial layouts."
         },
         {
           "locale": "es-ES",
-          "value": "Cada esquema que defines en Amplience Dynamic Content se renderiza automáticamente, desde banners hero hasta ricos diseños editoriales."
+          "value": "Cada esquema que defines en el CMS de Amplience se renderiza automáticamente, desde banners hero hasta ricos diseños editoriales."
         },
         {
           "locale": "fr-FR",
-          "value": "Chaque schéma que vous définissez dans Amplience Dynamic Content est affiché automatiquement — des bannières hero aux mises en page éditoriales riches."
+          "value": "Chaque schéma que vous définissez dans le CMS d'Amplience est affiché automatiquement — des bannières hero aux mises en page éditoriales riches."
         },
         {
           "locale": "de-DE",
-          "value": "Jedes Schema, das Sie in Amplience Dynamic Content definieren, wird automatisch dargestellt — von Hero-Bannern bis hin zu umfangreichen redaktionellen Layouts."
+          "value": "Jedes Schema, das Sie im Amplience CMS definieren, wird automatisch dargestellt — von Hero-Bannern bis hin zu umfangreichen redaktionellen Layouts."
         },
         {
           "locale": "it-IT",
-          "value": "Ogni schema che definisci in Amplience Dynamic Content viene visualizzato automaticamente — dai banner hero ai ricchi layout editoriali."
+          "value": "Ogni schema che definisci nel CMS di Amplience viene visualizzato automaticamente — dai banner hero ai ricchi layout editoriali."
         }
       ],
       "_meta": {

@@ -2,7 +2,7 @@
 
 # Content types
 
-Quadratic Lite ships a content model of 24 content types — seven renderable blocks, plus the smaller repeatable types that make up pages, navigation and site chrome. Every item carries its schema URI in `_meta.schema` and the recursive renderer dispatches on it, so this page is also the map from a content type to the component that draws it.
+Amplience Frontend Starter ships a content model of 24 content types — seven renderable blocks, plus the smaller repeatable types that make up pages, navigation and site chrome. Every item carries its schema URI in `_meta.schema` and the recursive renderer dispatches on it, so this page is also the map from a content type to the component that draws it.
 
 The model is registered in a hub by `pnpm hub:import` — see [Working with a hub](working-with-a-hub.md). Where things live:
 

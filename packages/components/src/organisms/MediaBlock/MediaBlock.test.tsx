@@ -5,7 +5,7 @@
 import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import type { ContentMediaData } from '@amplience/quadratic-types'
+import type { ContentMediaData } from '@amplience/frontend-starter-types'
 
 import { MediaBlock } from './MediaBlock'
 

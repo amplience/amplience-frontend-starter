@@ -27,7 +27,11 @@
  * this sensible default. Components never register themselves (ADR-0010 §10).
  */
 
-import type { AnyComponentRegistryEntry, Registry, SchemaURI } from '@amplience/quadratic-types'
+import type {
+  AnyComponentRegistryEntry,
+  Registry,
+  SchemaURI,
+} from '@amplience/frontend-starter-types'
 
 import {
   ICON_BUTTON_SCHEMA,

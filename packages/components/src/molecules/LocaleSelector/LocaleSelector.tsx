@@ -173,18 +173,20 @@ function LocaleSelect({ locales, label, className, currentSlug, onNavigate }: Lo
   const selectId = useId()
 
   return (
-    <select
-      id={selectId}
-      className={clsx('LocaleSelector', styles.root, className)}
-      aria-label={label ?? 'Language'}
-      value={currentSlug}
-      onChange={(event) => onNavigate(event.target.value)}
-    >
-      {locales.map(({ slug, label: optionLabel }) => (
-        <option key={slug} value={slug}>
-          {optionLabel}
-        </option>
-      ))}
-    </select>
+    <label htmlFor={selectId} className={clsx('LocaleSelector', styles.root)}>
+      <select
+        id={selectId}
+        className={clsx(styles.select, className)}
+        aria-label={label ?? 'Language'}
+        value={currentSlug}
+        onChange={(event) => onNavigate(event.target.value)}
+      >
+        {locales.map(({ slug, label: optionLabel }) => (
+          <option key={slug} value={slug}>
+            {optionLabel}
+          </option>
+        ))}
+      </select>
+    </label>
   )
 }

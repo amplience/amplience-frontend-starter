@@ -1,5 +1,5 @@
 /**
- * Content script — Quadratic Helper preference applier.
+ * Content script — Amplience Frontend Helper preference applier.
  *
  * Runs once per full page load (document_end). Responsibilities:
  *

@@ -82,7 +82,7 @@ export function App() {
           <div>
             <h1>Environment Manager</h1>
             <p className="app-header__sub">
-              Manage <code>quadratic.config.json</code> — credentials never leave your machine.
+              Manage <code>amplience.config.json</code> — credentials never leave your machine.
             </p>
           </div>
         </div>

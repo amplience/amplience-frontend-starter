@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import NextImage from 'next/image'
 import type { CSSProperties } from 'react'
 
-import type { DynamicImageData } from '@amplience/quadratic-types'
+import type { DynamicImageData } from '@amplience/frontend-starter-types'
 
 import { amplienceDiLoader, buildDiBaseUrl, resolveDiAspectRatio } from './di-utils'
 import styles from './DynamicImage.module.css'

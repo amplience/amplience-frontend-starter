@@ -2,13 +2,13 @@
 
 # Getting started
 
-Everything you need to clone Quadratic Lite and get it running locally on the bundled fixture data — no Amplience hub required.
+Everything you need to clone Amplience Frontend Starter and get it running locally on the bundled fixture data — no Amplience hub required.
 
 ## Prerequisites
 
 ### Node.js v22+
 
-Quadratic Lite requires Node.js v22 or newer, although we currently recommend v24.
+Frontend Starter requires Node.js v22 or newer, although we currently recommend v24.
 
 - ~~v**20**~~ (Iron) reached end-of-life in April 2026
 - v**22** (Jod) is in **Maintenance LTS** (critical fixes only; EOL ~April 2027) — this is our supported floor
@@ -33,10 +33,10 @@ As a monorepo, we use [pnpm (performant node package manager)](https://pnpm.io/)
 Local setup takes about 40 seconds, and needs no Amplience hub:
 
 1. Clone the repo\
-   `git clone https://github.com/amplience/quadratic-lite.git`
+   `git clone https://github.com/amplience/frontend-starter.git`
 
 2. Navigate into the directory\
-   `cd quadratic-lite`
+   `cd frontend-starter`
 
 3. Install the packages\
    `pnpm i` or `pnpm install`

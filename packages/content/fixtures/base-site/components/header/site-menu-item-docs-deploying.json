@@ -1,0 +1,13 @@
+{
+  "id": "a1b2c3d4-0004-4000-8000-200000000006",
+  "label": "Menu item: Docs — Deploying a site",
+  "body": {
+    "_meta": {
+      "name": "Menu item: Docs — Deploying a site",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "a1b2c3d4-0004-4000-8000-200000000006"
+    },
+    "label": "Deploying a site",
+    "link": "/docs/deploying"
+  }
+}

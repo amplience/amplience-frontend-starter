@@ -1,8 +1,8 @@
 {
-  "name": "@amplience/quadratic-extension",
+  "name": "@amplience/frontend-starter-extension",
   "version": "0.1.0",
   "private": true,
-  "description": "Quadratic Helper — browser extension for Quadratic demo sites.",
+  "description": "Amplience Frontend Helper — browser extension for Amplience Frontend Starter sites.",
   "type": "module",
   "scripts": {
     "prepare": "wxt prepare",
@@ -13,7 +13,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@amplience/quadratic-config": "workspace:*",
+    "@amplience/frontend-starter-config": "workspace:*",
     "@types/chrome": "^0.2.5",
     "typescript": "^6.0.3",
     "wxt": "^0.21.3"

@@ -31,11 +31,11 @@ function Welcome() {
       }}
     >
       {/* Header */}
-      <Typography variant="h1">Quadratic Component Library</Typography>
+      <Typography variant="h1">Amplience Frontend Starter Component Library</Typography>
       <Typography
         style={{ fontSize: '1.125rem', color: 'var(--color-text-muted, #555)', marginTop: 0 }}
       >
-        A living catalogue of the UI components that power Quadratic storefronts.
+        A living catalogue of the UI components that power Amplience Frontend Starter sites.
       </Typography>
 
       <Divider />

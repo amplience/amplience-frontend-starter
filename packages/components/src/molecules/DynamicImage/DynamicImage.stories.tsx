@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import type { DynamicImageData } from '@amplience/quadratic-types'
+import type { DynamicImageData } from '@amplience/frontend-starter-types'
 
 import { DynamicImage } from './DynamicImage'
 

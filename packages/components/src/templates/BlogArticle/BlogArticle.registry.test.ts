@@ -10,7 +10,7 @@
 
 import { describe, expect, it } from 'vitest'
 
-import type { ContentMediaData } from '@amplience/quadratic-types'
+import type { ContentMediaData } from '@amplience/frontend-starter-types'
 
 import {
   blogArticleMetadataFromSchema,

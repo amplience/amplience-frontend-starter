@@ -1,4 +1,4 @@
-# Gitleaks config for Quadratic Lite.
+# Gitleaks config for Amplience Frontend Starter.
 #
 # We extend the upstream default ruleset (which covers AWS / GCP / Stripe / Slack / GitHub /
 # generic high-entropy patterns, etc.) and add a small allowlist for legitimate non-secret
@@ -13,7 +13,7 @@
 useDefault = true
 
 [allowlist]
-description = "Quadratic Lite allowlist — non-secret matches we accept."
+description = "Amplience Frontend Starter allowlist — non-secret matches we accept."
 
 paths = [
   # Example env file — committed deliberately as documentation of required vars.

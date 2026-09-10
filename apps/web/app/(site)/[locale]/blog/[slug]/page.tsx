@@ -25,9 +25,9 @@ import { notFound } from 'next/navigation'
 import {
   BLOG_ARTICLE_SCHEMA,
   blogArticleMetadataFromSchema,
-} from '@amplience/quadratic-components/registry'
-import type { BlogArticleSchema } from '@amplience/quadratic-components/registry'
-import { isContentClientError } from '@amplience/quadratic-content'
+} from '@amplience/frontend-starter-components/registry'
+import type { BlogArticleSchema } from '@amplience/frontend-starter-components/registry'
+import { isContentClientError } from '@amplience/frontend-starter-content'
 
 import { blogArchiveFromItems } from '../../../../../lib/blog-archive'
 import { client, siteName } from '../../../../../lib/content-client'

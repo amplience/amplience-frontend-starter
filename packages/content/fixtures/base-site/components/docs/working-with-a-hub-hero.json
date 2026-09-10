@@ -8,7 +8,7 @@
       "deliveryId": "1f2d38d1-938c-5e63-b0e7-9d7a9dfb8fee"
     },
     "title": "Working with a hub",
-    "description": "By default Quadratic Lite serves the bundled fixtures offline. When you're ready to use real content, you can point local dev at an Amplience hub and push the Quadratic Lite content model and starter content to it.",
+    "description": "By default Amplience Frontend Starter serves the bundled fixtures offline. When you're ready to use real content, you can point local dev at an Amplience hub and push the content model and starter content to it.",
     "backgroundColor": "dark",
     "textColor": "white",
     "contentPositionMobile": "beneath",

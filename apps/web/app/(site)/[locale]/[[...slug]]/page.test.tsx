@@ -13,14 +13,14 @@ import type { ReactNode } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { PAGE_SCHEMA } from '@amplience/quadratic-components/registry'
-import type { ContentClient, ContentClientErrorKind } from '@amplience/quadratic-content'
+import { PAGE_SCHEMA } from '@amplience/frontend-starter-components/registry'
+import type { ContentClient, ContentClientErrorKind } from '@amplience/frontend-starter-content'
 
 let failKind: ContentClientErrorKind | undefined
 let stubClient: ContentClient | undefined
 
-vi.mock('@amplience/quadratic-content/mock', async (importOriginal) => {
-  const original = await importOriginal<typeof import('@amplience/quadratic-content/mock')>()
+vi.mock('@amplience/frontend-starter-content/mock', async (importOriginal) => {
+  const original = await importOriginal<typeof import('@amplience/frontend-starter-content/mock')>()
   return {
     ...original,
     makeMockContentClient: () =>

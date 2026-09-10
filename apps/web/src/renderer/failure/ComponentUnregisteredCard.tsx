@@ -1,4 +1,4 @@
-import type { ComponentUnregisteredFailure } from '@amplience/quadratic-types'
+import type { ComponentUnregisteredFailure } from '@amplience/frontend-starter-types'
 
 import { FailureCard } from './FailureCard'
 

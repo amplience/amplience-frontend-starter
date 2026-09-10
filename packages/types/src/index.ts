@@ -38,7 +38,7 @@ export type SchemaURI = string
  * for a given block depends on the visitor's viewport, so there is no value an
  * author could set that would be correct for all of them.
  *
- * `mediaLoadingProps` in `@amplience/quadratic-components` is the single place
+ * `mediaLoadingProps` in `@amplience/frontend-starter-components` is the single place
  * a tier becomes next/image props — components pass the tier along rather than
  * constructing `priority`, `loading` or `fetchPriority` themselves, which is
  * what keeps the combinations next/image rejects unrepresentable.

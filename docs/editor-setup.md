@@ -2,7 +2,7 @@
 
 # Editor setup
 
-Quadratic Lite is editor-agnostic. The repo enforces output (formatting, lint rules) but never the editor — `.vscode/` is gitignored, and there is no mandated IDE. Anyone cloning the repo gets the same outcome on macOS, Linux, or Windows because of three repo-level mechanisms:
+Amplience Frontend Starter is editor-agnostic. The repo enforces output (formatting, lint rules) but never the editor — `.vscode/` is gitignored, and there is no mandated IDE. Anyone cloning the repo gets the same outcome on macOS, Linux, or Windows because of three repo-level mechanisms:
 
 - `.editorconfig` covers indentation, line endings, charset, trailing whitespace, final-newline behaviour.
 - `.gitattributes` pins LF line endings at the source-control layer.

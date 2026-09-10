@@ -10,14 +10,14 @@
 import { renderToStaticMarkup } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { ContentClient } from '@amplience/quadratic-content'
+import type { ContentClient } from '@amplience/frontend-starter-content'
 
 let sdkConfigs: unknown[] = []
 let stubClient: ContentClient | undefined
 
-vi.mock('@amplience/quadratic-content/sdk', async () => {
+vi.mock('@amplience/frontend-starter-content/sdk', async () => {
   const { makeMockContentClient, makeFailingContentClient } =
-    await import('@amplience/quadratic-content/mock')
+    await import('@amplience/frontend-starter-content/mock')
   return {
     makeSdkContentClient: (config: unknown) => {
       sdkConfigs.push(config)
@@ -153,7 +153,7 @@ describe('Visualization — content failures stay loud', () => {
   })
 
   it('renders the ContentUnavailable card when the client fails', async () => {
-    const { makeFailingContentClient } = await import('@amplience/quadratic-content/mock')
+    const { makeFailingContentClient } = await import('@amplience/frontend-starter-content/mock')
     stubClient = makeFailingContentClient('network')
     const markup = await render({ vse: VSE, content: HERO_ID })
     expect(markup).toContain('data-renderer-failure')

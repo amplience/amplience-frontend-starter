@@ -37,7 +37,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // apps/environment-manager/server/ → 3 levels up → repo root
 const REPO_ROOT = path.resolve(__dirname, '..', '..', '..')
 const HUB_MANAGEMENT_ROOT = path.join(REPO_ROOT, 'packages', 'hub-management')
-const CONFIG_PATH = path.join(REPO_ROOT, 'quadratic.config.json')
+const CONFIG_PATH = path.join(REPO_ROOT, 'amplience.config.json')
 const WEB_APP_ROOT = path.join(REPO_ROOT, 'apps', 'web')
 const WEB_ENV = path.join(WEB_APP_ROOT, '.env')
 const HUB_MANAGEMENT_ENV = path.join(HUB_MANAGEMENT_ROOT, '.env')
@@ -49,7 +49,7 @@ const FIXTURES_NAME = 'fixtures'
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 // `name` is the delivery-key namespace (SITE_NAME, ADR-0014); matches the
-// field the UI reads/writes and what's stored in quadratic.config.json.
+// field the UI reads/writes and what's stored in amplience.config.json.
 // vercelProjectName/vercelScope are set only for sites provisioned via
 // "Create Vercel site" — they're what let the destroy-site endpoint find and
 // remove the right Vercel project later.
@@ -1078,7 +1078,7 @@ app.post('/api/environments/:name/vercel/redeploy-site', async (c) => {
     return c.json(
       {
         error:
-          'This site has no tracked Vercel project — it was added manually, not provisioned by Quadratic Lite. Move it without a redeploy instead.',
+          'This site has no tracked Vercel project — it was added manually, not provisioned by Amplience Frontend Starter. Move it without a redeploy instead.',
       },
       400,
     )
@@ -1256,7 +1256,7 @@ app.post('/api/environments/:name/vercel/destroy-site', async (c) => {
     return c.json(
       {
         error:
-          'This site has no tracked Vercel project — it was added manually, not provisioned by Quadratic Lite. Remove it from the config instead.',
+          'This site has no tracked Vercel project — it was added manually, not provisioned by Amplience Frontend Starter. Remove it from the config instead.',
       },
       400,
     )

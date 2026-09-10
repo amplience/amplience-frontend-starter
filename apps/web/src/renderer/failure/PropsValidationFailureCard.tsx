@@ -1,4 +1,4 @@
-import type { PropsValidationFailure } from '@amplience/quadratic-types'
+import type { PropsValidationFailure } from '@amplience/frontend-starter-types'
 
 import { FailureCard } from './FailureCard'
 

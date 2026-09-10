@@ -12,10 +12,10 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { Container } from '@amplience/quadratic-components/container'
-import { Stack } from '@amplience/quadratic-components/stack'
-import { Typography } from '@amplience/quadratic-components/typography'
-import { CONTENT_LINK_SCHEMA, ContentClientError } from '@amplience/quadratic-content'
+import { Container } from '@amplience/frontend-starter-components/container'
+import { Stack } from '@amplience/frontend-starter-components/stack'
+import { Typography } from '@amplience/frontend-starter-components/typography'
+import { CONTENT_LINK_SCHEMA, ContentClientError } from '@amplience/frontend-starter-content'
 
 import { registry } from '../../../lib/registry'
 import { ContentUnavailableCard, renderContent } from '../../../src/renderer'

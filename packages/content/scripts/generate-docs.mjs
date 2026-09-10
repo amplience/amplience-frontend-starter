@@ -295,7 +295,7 @@ const UPDATE_ONLY = {
   docs: {
     // /docs pins its own title/description; only its body comes from the README.
     title: 'Documentation',
-    description: 'Helpful information for installing & using Quadratic Lite',
+    description: 'Helpful information for installing & using Amplience Frontend Starter',
     page: 'pages/docs.json',
     markdown: 'components/docs-markdown.json',
   },

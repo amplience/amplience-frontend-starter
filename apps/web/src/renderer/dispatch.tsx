@@ -21,14 +21,14 @@
 
 import { createElement, Fragment, type ComponentType, type ReactNode } from 'react'
 
-import { isContentLink } from '@amplience/quadratic-content'
+import { isContentLink } from '@amplience/frontend-starter-content'
 import type {
   MediaLoadPriority,
   Registry,
   RenderContext,
   RendererFailure,
   SchemaURI,
-} from '@amplience/quadratic-types'
+} from '@amplience/frontend-starter-types'
 
 import { emitRendererFailure } from './console'
 import { ComponentUnregisteredCard } from './failure/ComponentUnregisteredCard'

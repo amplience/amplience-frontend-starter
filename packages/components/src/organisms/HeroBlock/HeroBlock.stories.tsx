@@ -107,7 +107,8 @@ const landscapeMedia = {
 
 const baseCopy = {
   title: 'Build composable sites without the boilerplate.',
-  subtitle: 'Quadratic Lite is the open-source accelerator for Amplience-backed projects.',
+  subtitle:
+    'Amplience Frontend Starter is the open-source accelerator for Amplience-backed projects.',
 } as const
 
 const singleCta = [{ label: 'Get started', href: '/docs/getting-started' }] as const

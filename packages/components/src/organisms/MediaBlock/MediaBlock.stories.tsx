@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import type { ContentMediaData } from '@amplience/quadratic-types'
+import type { ContentMediaData } from '@amplience/frontend-starter-types'
 
 import { MediaBlock } from './MediaBlock'
 
@@ -73,7 +73,7 @@ export const WithCaption: Story = {
   render: () => (
     <MediaBlock
       media={landscapeMedia}
-      caption="A scenic view from the Quadratic Lite launch event."
+      caption="A scenic view from the Amplience Frontend Starter launch event."
     />
   ),
 }

@@ -1,4 +1,4 @@
-import type { SchemaUnknownFailure } from '@amplience/quadratic-types'
+import type { SchemaUnknownFailure } from '@amplience/frontend-starter-types'
 
 import { FailureCard } from './FailureCard'
 

@@ -19,18 +19,22 @@
 
 .root {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   flex: 1;
 }
 
 .list {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: var(--spacing);
   list-style: none;
   margin: 0;
   padding: 0;
   flex-wrap: wrap;
+
+  li {
+    display: flex;
+  }
 }
 
 /* ---------------------------------------------------------------------------
