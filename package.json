@@ -12,10 +12,10 @@
   "packageManager": "pnpm@9.15.4",
   "pnpm": {
     "overrides": {
+      "ajv>fast-uri": "^3.1.7",
       "@amplience/dc-cli>ajv": "^6.14.0",
       "axios": ">=1.18.0",
-      "lodash": ">=4.18.0",
-      "valibot": ">=1.4.2"
+      "lodash": ">=4.18.0"
     }
   },
   "engines": {
@@ -52,21 +52,21 @@
     "@amplience/quadratic-config": "workspace:*",
     "@eslint/js": "^9.39.4",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
-    "@next/eslint-plugin-next": "^16.3.0",
-    "@types/node": "^26.2.0",
-    "@vitest/coverage-v8": "4.1.10",
+    "@next/eslint-plugin-next": "^16.3.4",
+    "@types/node": "^26.5.1",
+    "@vitest/coverage-v8": "^4.1.11",
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-regexp": "^3.1.1",
+    "eslint-plugin-regexp": "^3.3.0",
     "eslint-plugin-unused-imports": "^4.4.1",
     "husky": "^9.1.7",
-    "lint-staged": "^17.3.0",
+    "lint-staged": "^17.5.0",
     "prettier": "^3.9.6",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.66.0",
-    "vitest": "^4.1.10"
+    "typescript-eslint": "^8.70.0",
+    "vitest": "^4.1.11"
   }
 }

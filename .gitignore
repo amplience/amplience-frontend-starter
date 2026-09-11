@@ -5,6 +5,7 @@
 
 # Local environment config (credentials — never commit)
 quadratic.config.json
+amplience.config.json
 
 # IDE settings
 .vscode/settings.json
