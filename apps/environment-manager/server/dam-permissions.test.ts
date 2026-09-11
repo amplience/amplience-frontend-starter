@@ -3,14 +3,11 @@ import { describe, expect, it } from 'vitest'
 import {
   buildDamCheck,
   extractRepositories,
-  gqlErrors,
-  isAuthError,
   pickRepository,
   readProbeState,
   writeProbe,
-  type GqlFetch,
-  type GqlResult,
 } from './dam-permissions.ts'
+import { gqlErrors, isAuthError, type GqlFetch, type GqlResult } from './graphql.ts'
 
 // ── Fixtures ────────────────────────────────────────────────────────────────────
 
