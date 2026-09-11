@@ -23,8 +23,8 @@ _New to the stack, or need Node / pnpm set up first? See [Getting started](docs/
 Local setup takes about 40 seconds and needs no Amplience hub:
 
 ```sh
-git clone https://github.com/amplience/frontend-starter.git
-cd frontend-starter
+git clone https://github.com/amplience/amplience-frontend-starter.git
+cd amplience-frontend-starter
 pnpm i
 pnpm dev
 ```

@@ -110,7 +110,7 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "https://github.com/amplience/frontend-starter",
+        "href": "https://github.com/amplience/amplience-frontend-starter",
         "variant": "outlined",
         "color": "white"
       }

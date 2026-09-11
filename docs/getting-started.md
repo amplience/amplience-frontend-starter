@@ -33,10 +33,10 @@ As a monorepo, we use [pnpm (performant node package manager)](https://pnpm.io/)
 Local setup takes about 40 seconds, and needs no Amplience hub:
 
 1. Clone the repo\
-   `git clone https://github.com/amplience/frontend-starter.git`
+   `git clone https://github.com/amplience/amplience-frontend-starter.git`
 
 2. Navigate into the directory\
-   `cd frontend-starter`
+   `cd amplience-frontend-starter`
 
 3. Install the packages\
    `pnpm i` or `pnpm install`

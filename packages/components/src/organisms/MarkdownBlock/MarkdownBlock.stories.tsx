@@ -98,7 +98,7 @@ export const WithCtas: Story = {
       { label: 'Read the docs', href: '/docs', variant: 'solid', color: 'primary' },
       {
         label: 'View on GitHub',
-        href: 'https://github.com/amplience/quadratic-lite',
+        href: 'https://github.com/amplience/amplience-frontend-starter',
         variant: 'outlined',
         color: 'primary',
       },
