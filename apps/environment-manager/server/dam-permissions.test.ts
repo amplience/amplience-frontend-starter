@@ -27,7 +27,7 @@ function reposBody(repos: { id: string; label: string }[]): unknown {
   }
 }
 
-const ONE_REPO = reposBody([{ id: 'repo-1', label: 'Quadratic Assets' }])
+const ONE_REPO = reposBody([{ id: 'repo-1', label: 'Demo Assets' }])
 
 /**
  * Build a GqlFetch stub from a query-substring → response table (first match
@@ -100,7 +100,7 @@ describe('isAuthError', () => {
 
 describe('extractRepositories', () => {
   it('flattens repositories across media hubs', () => {
-    expect(extractRepositories(ONE_REPO)).toEqual([{ id: 'repo-1', label: 'Quadratic Assets' }])
+    expect(extractRepositories(ONE_REPO)).toEqual([{ id: 'repo-1', label: 'Demo Assets' }])
   })
 
   it('returns [] for empty or malformed bodies', () => {
@@ -226,7 +226,7 @@ describe('readProbeState', () => {
 
 // ── Write probe ──────────────────────────────────────────────────────────────────
 
-const REPO = { id: 'repo-1', label: 'Quadratic Assets' }
+const REPO = { id: 'repo-1', label: 'Demo Assets' }
 const FIXED_NAME = () => 'ql-cred-check-test'
 
 describe('writeProbe', () => {
@@ -237,7 +237,7 @@ describe('writeProbe', () => {
     ])
     const probe = await writeProbe(gql, REPO, { assetName: FIXED_NAME })
     expect(probe.state).toBe('ok')
-    expect(probe.detail).toContain('Quadratic Assets')
+    expect(probe.detail).toContain('Demo Assets')
   })
 
   it('is denied when create is an authorization error', async () => {

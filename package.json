@@ -1,13 +1,13 @@
 {
-  "name": "quadratic-lite",
+  "name": "amplience-frontend-starter",
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Open-source accelerator for the Amplience Quadratic demo platform.",
+  "description": "Open-source frontend accelerator for Amplience — the Amplience Frontend Starter.",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/amplience/quadratic-lite.git"
+    "url": "https://github.com/amplience/amplience-frontend-starter.git"
   },
   "packageManager": "pnpm@9.15.4",
   "pnpm": {
@@ -24,9 +24,9 @@
   },
   "scripts": {
     "prepare": "husky",
-    "dev": "pnpm --filter @amplience/quadratic-web dev",
-    "build": "pnpm --filter @amplience/quadratic-web build",
-    "start": "pnpm --filter @amplience/quadratic-web start",
+    "dev": "pnpm --filter @amplience/frontend-starter-web dev",
+    "build": "pnpm --filter @amplience/frontend-starter-web build",
+    "start": "pnpm --filter @amplience/frontend-starter-web start",
     "typecheck": "tsc --noEmit && pnpm -r typecheck",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix --max-warnings=0",
@@ -37,19 +37,19 @@
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "docs:generate": "node packages/content/scripts/generate-docs.mjs",
-    "storybook": "pnpm --filter @amplience/quadratic-components storybook",
+    "storybook": "pnpm --filter @amplience/frontend-starter-components storybook",
     "sb": "pnpm storybook",
-    "hub:import": "pnpm --filter @amplience/quadratic-hub-management hub:import",
-    "hub:import:settings": "pnpm --filter @amplience/quadratic-hub-management hub:import:settings",
-    "hub:import:schemas": "pnpm --filter @amplience/quadratic-hub-management hub:import:schemas",
-    "hub:import:types": "pnpm --filter @amplience/quadratic-hub-management hub:import:types",
-    "hub:import:extensions": "pnpm --filter @amplience/quadratic-hub-management hub:import:extensions",
-    "hub:import:content": "pnpm --filter @amplience/quadratic-hub-management hub:import:content",
-    "hub:wipe": "pnpm --filter @amplience/quadratic-hub-management hub:wipe",
+    "hub:import": "pnpm --filter @amplience/frontend-starter-hub-management hub:import",
+    "hub:import:settings": "pnpm --filter @amplience/frontend-starter-hub-management hub:import:settings",
+    "hub:import:schemas": "pnpm --filter @amplience/frontend-starter-hub-management hub:import:schemas",
+    "hub:import:types": "pnpm --filter @amplience/frontend-starter-hub-management hub:import:types",
+    "hub:import:extensions": "pnpm --filter @amplience/frontend-starter-hub-management hub:import:extensions",
+    "hub:import:content": "pnpm --filter @amplience/frontend-starter-hub-management hub:import:content",
+    "hub:wipe": "pnpm --filter @amplience/frontend-starter-hub-management hub:wipe",
     "env-manager": "pnpm --filter @amplience/environment-manager dev"
   },
   "devDependencies": {
-    "@amplience/quadratic-config": "workspace:*",
+    "@amplience/frontend-starter-config": "workspace:*",
     "@eslint/js": "^9.39.4",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@next/eslint-plugin-next": "^16.3.4",

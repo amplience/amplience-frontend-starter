@@ -27,12 +27,12 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { Container } from '@amplience/quadratic-components/container'
-import { GridBlock } from '@amplience/quadratic-components/grid-block'
-import { HeroBlock } from '@amplience/quadratic-components/hero-block'
-import { MediaCard } from '@amplience/quadratic-components/media-card'
-import { BLOG_ARTICLE_SCHEMA } from '@amplience/quadratic-components/registry'
-import type { BlogArticleSchema } from '@amplience/quadratic-components/registry'
+import { Container } from '@amplience/frontend-starter-components/container'
+import { GridBlock } from '@amplience/frontend-starter-components/grid-block'
+import { HeroBlock } from '@amplience/frontend-starter-components/hero-block'
+import { MediaCard } from '@amplience/frontend-starter-components/media-card'
+import { BLOG_ARTICLE_SCHEMA } from '@amplience/frontend-starter-components/registry'
+import type { BlogArticleSchema } from '@amplience/frontend-starter-components/registry'
 
 import { blogArchiveFromItems, warnOnDuplicateSlugs } from '../../../../lib/blog-archive'
 import { client, siteName } from '../../../../lib/content-client'

@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-import type { ContentMediaData } from '@amplience/quadratic-types'
+import type { ContentMediaData } from '@amplience/frontend-starter-types'
 
 import { Link } from '../../atoms/Link/Link'
 import { ContentMedia } from '../ContentMedia/ContentMedia'

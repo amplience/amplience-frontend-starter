@@ -2,7 +2,7 @@
 
 # Runbook — seeding an Amplience hub
 
-How a fresh Dynamic Content hub comes to carry the Quadratic Lite content
+How a fresh Amplience CMS hub comes to carry the Amplience Frontend Starter content
 model and starter content. Everything the hub needs lives in this repo —
 settings, schemas, content types and extensions in `packages/hub-management/`,
 starter content in
@@ -12,7 +12,7 @@ all. Running it against a second hub is the same procedure with different
 environment values.
 
 > **INTERIM (QL-92):** the import runs through dc-cli wrapper scripts until
-> the automation CLI's `quadratic schemas push` supersedes them (QL-58,
+> the automation CLI's `frontend-starter schemas push` supersedes them (QL-58,
 > ADR-0012 — schema-as-code and hub sync). The file layout is already the
 > one that CLI will consume.
 

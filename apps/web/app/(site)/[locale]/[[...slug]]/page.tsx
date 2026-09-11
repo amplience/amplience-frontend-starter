@@ -41,9 +41,12 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { PAGE_SCHEMA, pageMetadataFromSchema } from '@amplience/quadratic-components/registry'
-import type { PageSchema } from '@amplience/quadratic-components/registry'
-import { isContentClientError } from '@amplience/quadratic-content'
+import {
+  PAGE_SCHEMA,
+  pageMetadataFromSchema,
+} from '@amplience/frontend-starter-components/registry'
+import type { PageSchema } from '@amplience/frontend-starter-components/registry'
+import { isContentClientError } from '@amplience/frontend-starter-content'
 
 import { client, siteName } from '../../../../lib/content-client'
 import { localeBasePath, localeForSlug, publicPath } from '../../../../lib/locales'

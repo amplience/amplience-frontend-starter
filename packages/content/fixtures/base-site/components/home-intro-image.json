@@ -13,7 +13,7 @@
       "mediaType": "ManualImage",
       "image": {
         "src": "/placeholders/whats-in-the-box.png",
-        "alt": "Quadratic Lite — accelerator for composable Amplience sites",
+        "alt": "Amplience Frontend Starter — accelerator for composable content sites",
         "width": 1080,
         "height": 1080
       }

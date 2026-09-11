@@ -26,14 +26,21 @@ describe('slugifyLabel', () => {
 
 describe('deriveIdentifier', () => {
   it('uses the plain slug when it is free', () => {
-    expect(deriveIdentifier('Quadratic Lite', ['fixtures'])).toBe('quadratic-lite')
+    expect(deriveIdentifier('Amplience Frontend Starter', ['fixtures'])).toBe(
+      'amplience-frontend-starter',
+    )
   })
 
   it('suffixes on collision', () => {
-    expect(deriveIdentifier('Quadratic Lite', ['quadratic-lite'])).toBe('quadratic-lite-2')
-    expect(deriveIdentifier('Quadratic Lite', ['quadratic-lite', 'quadratic-lite-2'])).toBe(
-      'quadratic-lite-3',
+    expect(deriveIdentifier('Amplience Frontend Starter', ['amplience-frontend-starter'])).toBe(
+      'amplience-frontend-starter-2',
     )
+    expect(
+      deriveIdentifier('Amplience Frontend Starter', [
+        'amplience-frontend-starter',
+        'amplience-frontend-starter-2',
+      ]),
+    ).toBe('amplience-frontend-starter-3')
   })
 
   it('falls back to "hub" for an unslugifiable label', () => {

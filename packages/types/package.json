@@ -1,5 +1,5 @@
 {
-  "name": "@amplience/quadratic-types",
+  "name": "@amplience/frontend-starter-types",
   "version": "0.0.0",
   "private": true,
   "description": "Shared schema and prop-type contracts.",
@@ -14,7 +14,7 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "@amplience/quadratic-config": "workspace:*",
+    "@amplience/frontend-starter-config": "workspace:*",
     "@types/react": "^19.3.0"
   }
 }

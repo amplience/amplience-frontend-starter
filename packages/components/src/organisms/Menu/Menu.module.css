@@ -10,8 +10,8 @@
  *
  * Mobile layout (data-mobile-layout):
  *   The list is hidden; the application/brand layer adds a hamburger button
- *   and toggles data-open on the <nav> to reveal the drawer. The drawer
- *   inherits background-color from the parent HeaderRow automatically.
+ *   and toggles data-open on the <nav> to reveal the drawer. The open drawer
+ *   is positioned out of flow below the header and paints its own surface.
  *
  * Brand overrides:
  *   [data-brand="acme"] .list { gap: var(--spacing-6); }
@@ -19,18 +19,22 @@
 
 .root {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   flex: 1;
 }
 
 .list {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: var(--spacing);
   list-style: none;
   margin: 0;
   padding: 0;
   flex-wrap: wrap;
+
+  li {
+    display: flex;
+  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -51,7 +55,6 @@
   min-width: 160px;
   list-style: none;
   margin: 0;
-  padding: var(--spacing-2) 0;
   background-color: var(--color-white);
   color: var(--color-black);
   box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
@@ -210,7 +213,6 @@
     .list {
       display: block;
       width: 100%;
-      z-index: var(--z-menu-drawer, 200);
 
       > li {
         > a {
@@ -241,5 +243,37 @@
 
   .root[data-mobile-layout][data-open] {
     display: block;
+
+    /*
+     * Out of the HeaderRow's flex layout, so the drawer can't be squeezed into
+     * a middle column between the Logo and the icon group. `top: 100%`
+     * resolves against the sticky <header> (the nearest positioned ancestor),
+     * so the drawer hangs directly below the whole header however many rows it
+     * has — the same way the dropdowns above position themselves.
+     *
+     * Out of flow also keeps the header's own height stable, so opening the
+     * drawer doesn't move --site-scroll-offset (see StickyScrollOffset).
+     */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: var(--z-menu-drawer, 200);
+
+    /*
+     * The drawer now spans the viewport rather than sitting inside the row's
+     * Container, so it has to supply the gutter the Container was providing:
+     * the item bleed above is measured against a gutter-padded parent.
+     */
+    padding-inline: var(--site-gutter);
+
+    /*
+     * background-color does not inherit, and out of flow the drawer no longer
+     * sits on the HeaderRow's painted background — without its own surface the
+     * page would show through. Same tokens as the dropdown panel above, so the
+     * two read as one component; brands override via --color-* .
+     */
+    background-color: var(--color-white);
+    color: var(--color-black);
   }
 }

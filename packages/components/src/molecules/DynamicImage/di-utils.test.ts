@@ -6,7 +6,7 @@ import type {
   AmplienceImageLink,
   ContentMediaData,
   TransformedImageField,
-} from '@amplience/quadratic-types'
+} from '@amplience/frontend-starter-types'
 
 import {
   amplienceDiLoader,

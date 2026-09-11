@@ -1,4 +1,4 @@
-# @amplience/quadratic-content
+# @amplience/frontend-starter-content
 
 The `ContentClient` port and its POC mock implementation — the integration seam
 between the renderer and the Amplience SDK. Established by
@@ -21,9 +21,9 @@ port, not on the concrete adapter.
 ## Quick start
 
 ```ts
-import { resolveContentConfig } from '@amplience/quadratic-content'
-import { makeMockContentClient } from '@amplience/quadratic-content/mock'
-import { makeSdkContentClient } from '@amplience/quadratic-content/sdk'
+import { resolveContentConfig } from '@amplience/frontend-starter-content'
+import { makeMockContentClient } from '@amplience/frontend-starter-content/mock'
+import { makeSdkContentClient } from '@amplience/frontend-starter-content/sdk'
 
 const config = resolveContentConfig() // env-driven; no config → mock
 const client = config.kind === 'sdk' ? makeSdkContentClient(config) : makeMockContentClient()

@@ -8,7 +8,7 @@
       "deliveryId": "2fa6967d-7aa4-5f2c-972d-2e6cc87d63b7"
     },
     "title": "Command reference",
-    "description": "Everything Quadratic Lite can do from the command line, and where the same operation lives in the Environment Manager GUI.",
+    "description": "Everything Amplience Frontend Starter can do from the command line, and where the same operation lives in the Environment Manager GUI.",
     "backgroundColor": "dark",
     "textColor": "white",
     "contentPositionMobile": "beneath",

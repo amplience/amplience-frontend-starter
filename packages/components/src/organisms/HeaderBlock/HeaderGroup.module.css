@@ -8,7 +8,7 @@
 
 .root {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: var(--spacing-2);
   flex-wrap: wrap;
 

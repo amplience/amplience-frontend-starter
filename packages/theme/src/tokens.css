@@ -1,5 +1,5 @@
 /*
- * Design token contract — @amplience/quadratic-theme
+ * Design token contract — @amplience/frontend-starter-theme
  *
  * These CSS custom properties are the public contract between this repo and
  * any private brand implementation. Renaming a variable here is a breaking
@@ -99,6 +99,9 @@
   --button-hover-border-color: var(--color-gray-800);
   --button-hover-color: var(--color-white);
 
+  --logo-height: 40px;
+  --logo-padding: var(--spacing-2) var(--spacing-3);
+
   /* Interactive hover — shared across all interactive surfaces.
      Default values are no-ops; brands override to add motion/depth. */
   --interactive-hover-shadow: none;
@@ -130,6 +133,19 @@
 
   --radius: 10px;
   --button-border-radius: 100px;
+
+  --logo-height: 30px;
+  --logo-padding: var(--spacing-3) var(--spacing-2) var(--spacing-4);
+
+  @media (max-width: 576px) {
+    --logo-padding: var(--spacing-2);
+    .Logo img {
+      margin: 0 -5px -5px 0;
+      object-fit: cover;
+      object-position: center left;
+      aspect-ratio: 1;
+    }
+  }
 
   .Typography {
     h1& {
@@ -197,6 +213,12 @@
       .Image {
         transform: scale(1.02);
       }
+    }
+  }
+
+  @media (max-width: 300px) {
+    .LocaleSelector {
+      display: none;
     }
   }
 }

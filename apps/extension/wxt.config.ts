@@ -3,9 +3,9 @@ import { defineConfig } from 'wxt'
 export default defineConfig({
   extensionApi: 'chrome',
   manifest: {
-    name: 'Quadratic Helper',
+    name: 'Amplience Frontend Helper',
     description:
-      'Demo tooling for Quadratic sites — cache busting, segment switching, theme preview.',
+      'Demo tooling for Amplience Frontend Starter sites — cache busting, segment switching, theme preview.',
     version: '0.1.0',
     icons: {
       '16': 'icons/icon-16.png',
@@ -14,7 +14,7 @@ export default defineConfig({
       '128': 'icons/icon-128.png',
     },
     action: {
-      default_title: 'Quadratic Helper',
+      default_title: 'Amplience Frontend Helper',
       default_icon: {
         '16': 'icons/icon-16.png',
         '32': 'icons/icon-32.png',

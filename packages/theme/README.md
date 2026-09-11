@@ -1,9 +1,9 @@
 # Theme
 
-`@amplience/quadratic-theme` owns the design-token contract from ADR-0002 — Styling strategy (see the project architecture docs). It exports one stylesheet:
+`@amplience/frontend-starter-theme` owns the design-token contract from ADR-0002 — Styling strategy (see the project architecture docs). It exports one stylesheet:
 
 ```ts
-import '@amplience/quadratic-theme/tokens.css'
+import '@amplience/frontend-starter-theme/tokens.css'
 ```
 
 `apps/web` imports it once, at the layout root. Components never import it directly — they just reference the variables it defines.

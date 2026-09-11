@@ -9,7 +9,7 @@ A content tree (here, what the mock client returns for `getByKey('home', { depth
 ```jsonc
 {
   "_meta": { "schema": "https://quadratic.amplience.com/v2/content/page" },
-  "title": "Welcome to Quadratic Lite",
+  "title": "Welcome to Amplience Frontend Starter",
   "slots": [
     {
       "_meta": {
@@ -36,7 +36,7 @@ A content tree (here, what the mock client returns for `getByKey('home', { depth
 A registry (the deployment's composition act — `lib/registry.ts` uses the library default):
 
 ```ts
-import { defaultRegistry } from '@amplience/quadratic-components/registry'
+import { defaultRegistry } from '@amplience/frontend-starter-components/registry'
 
 export const registry = defaultRegistry
 ```
@@ -80,7 +80,7 @@ The card is identical in dev and prod; dev adds an expandable `<details>` diagno
 
 The three classes above cover "the tree arrived but a node can't render". A fourth surface covers "the tree never arrived" (QL-37): routes catch `ContentClientError` from the content client and act on its `kind` — `not-found` becomes a branded 404 via `notFound()`, every other kind renders `ContentUnavailableCard` in place of the page tree, server-rendered like the dispatch cards, with the same dev-verbose/prod-redacted console emission (`emitContentFailure`). Only genuinely unexpected errors fall through to `app/error.tsx`, the one client-component piece of the failure surface.
 
-Per-route wiring a new page needs: the `generateMetadata` stub, plus the try/catch shown in `app/page.tsx`. Failure kinds are testable without an SDK via `makeFailingContentClient(kind)` from `@amplience/quadratic-content/mock`.
+Per-route wiring a new page needs: the `generateMetadata` stub, plus the try/catch shown in `app/page.tsx`. Failure kinds are testable without an SDK via `makeFailingContentClient(kind)` from `@amplience/frontend-starter-content/mock`.
 
 ### Smoke-checking
 
@@ -88,7 +88,7 @@ Per-route wiring a new page needs: the `generateMetadata` stub, plus the try/cat
 
 ## Theming
 
-The renderer itself is brand-agnostic — it never reads theme state. Branding happens entirely in CSS: `app/layout.tsx` imports the token contract from [`@amplience/quadratic-theme`](../../../../packages/theme/README.md) and sets the brand attribute on the root element:
+The renderer itself is brand-agnostic — it never reads theme state. Branding happens entirely in CSS: `app/layout.tsx` imports the token contract from [`@amplience/frontend-starter-theme`](../../../../packages/theme/README.md) and sets the brand attribute on the root element:
 
 ```tsx
 <html lang="en" data-brand={process.env.NEXT_PUBLIC_BRAND ?? 'default'}>

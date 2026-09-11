@@ -15,7 +15,7 @@ import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig, mergeConfig } from 'vitest/config'
 
-import base from '@amplience/quadratic-config/vitest'
+import base from '@amplience/frontend-starter-config/vitest'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 

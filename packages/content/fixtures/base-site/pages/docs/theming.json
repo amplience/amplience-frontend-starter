@@ -14,7 +14,7 @@
       }
     },
     "title": "Theming",
-    "description": "Every visual decision in Quadratic Lite resolves through a CSS custom property. Brands redefine those properties — in code, in the CMS, or both — and no component file changes.",
+    "description": "Every visual decision in Amplience Frontend Starter resolves through a CSS custom property. Brands redefine those properties — in code, in the CMS, or both — and no component file changes.",
     "slots": [
       {
         "id": "925341c1-4770-58e0-bc29-318a698454be",

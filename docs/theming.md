@@ -2,15 +2,15 @@
 
 # Theming
 
-Every visual decision in Quadratic Lite resolves through a CSS custom property. Brands redefine those properties — in code, in the CMS, or both — and no component file changes.
+Every visual decision in Amplience Frontend Starter resolves through a CSS custom property. Brands redefine those properties — in code, in the CMS, or both — and no component file changes.
 
 ## Two places theming can be managed
 
-Quadratic Lite supports two ownership models, because teams differ in who owns the look and whether they have a deploy pipeline.
+Frontend Starter supports two ownership models, because teams differ in who owns the look and whether they have a deploy pipeline.
 
 |                        | In code (`tokens.css`)    | In the CMS (custom CSS)                 |
 | ---------------------- | ------------------------- | --------------------------------------- |
-| Who edits it           | Developers, via a PR      | Content editors, in Dynamic Content     |
+| Who edits it           | Developers, via a PR      | Content editors, in CMS                 |
 | Ships via              | A deployment              | A publish                               |
 | Rendering              | Pure static               | ISR (a periodic content read)           |
 | Versioned & reviewable | Yes, in git               | CMS revision history only               |
@@ -107,7 +107,7 @@ The reference brands (`amplience`, `anyafinn`, `arbor-harvest`, `azure-harvest`,
 
 ## Custom CSS from the CMS
 
-An optional layer of site-wide CSS, authored in Dynamic Content and injected on top of the design tokens. No code edit, no redeploy.
+An optional layer of site-wide CSS, authored in the CMS and injected on top of the design tokens. No code edit, no redeploy.
 
 This exists for teams who want their **content editors** to own the styling. It comes into its own when branded sites are being stood up off the cuff — a temporary campaign site, a partner demo, a prospect's brand dropped onto a running deployment — where the brand is decided by the people producing the content and waiting on a release would defeat the point. It's equally handy for iterating on a look quickly before folding the result back into `tokens.css`.
 

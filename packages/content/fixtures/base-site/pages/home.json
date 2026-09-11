@@ -9,17 +9,17 @@
         "values": [{ "value": "base-site/homepage" }]
       }
     },
-    "title": "Welcome to Quadratic Lite",
+    "title": "Welcome to Amplience Frontend Starter",
     "description": "A clean starting point for an Amplience-backed site.",
     "keywords": ["amplience", "accelerator", "next.js", "composable content"],
     "social": {
-      "title": "Quadratic Lite — composable sites without the boilerplate",
+      "title": "Amplience Frontend Starter — composable sites without the boilerplate",
       "description": "An open-source Amplience accelerator: recursive renderer, atomic component library, automation CLI.",
       "image": {
         "mediaType": "ManualImage",
         "image": {
           "src": "https://cdn.media.amplience.net/i/quadraticdemo/introducing-quadratic-dynamic-hero?fmt=webp&w=2752",
-          "alt": "Hero — Quadratic Lite accelerator",
+          "alt": "Hero — Amplience Frontend Starter accelerator",
           "width": 2752,
           "height": 1536
         }

@@ -1,4 +1,4 @@
-# Quadratic Lite
+# Amplience Frontend Starter
 
 An open-source frontend accelerator for Amplience.
 
@@ -7,7 +7,7 @@ An open-source frontend accelerator for Amplience.
 >
 > NB: If you are internal staff and want to demo more advanced features, they might be available on [Quadratic](https://github.com/amplience/quadratic), our older private (but more feature-rich) demo frontend.
 >
-> Eventually Quadratic Lite will expand to reach feature parity with the older Quadratic codebase, but in the meantime you can still run the original for the features not yet migrated.
+> Eventually Amplience Frontend Starter will expand to reach feature parity with the older Quadratic codebase, but in the meantime you can still run the original for the features not yet migrated.
 
 ## Prerequisites
 
@@ -23,8 +23,8 @@ _New to the stack, or need Node / pnpm set up first? See [Getting started](docs/
 Local setup takes about 40 seconds and needs no Amplience hub:
 
 ```sh
-git clone https://github.com/amplience/quadratic-lite.git
-cd quadratic-lite
+git clone https://github.com/amplience/amplience-frontend-starter.git
+cd amplience-frontend-starter
 pnpm i
 pnpm dev
 ```
@@ -38,7 +38,7 @@ Your next steps will likely be to use:
 
 ## Documentation
 
-- [Overview](docs/index.md) — what Quadratic Lite is and how the content-driven renderer works
+- [Overview](docs/index.md) — what Amplience Frontend Starter is and how the content-driven renderer works
 - [Getting started](docs/getting-started.md) — prerequisites, install, running locally
 - [Storybook](docs/storybook.md) — browse the component library in isolation
 - [Content types](docs/content-types.md) — every content type in the model, its fields, and the component that renders it

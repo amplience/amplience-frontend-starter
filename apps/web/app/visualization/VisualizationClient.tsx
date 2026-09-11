@@ -30,10 +30,10 @@
 import { init } from 'dc-visualization-sdk'
 import { useEffect, useMemo, useState, useTransition } from 'react'
 
-import { defaultRegistry } from '@amplience/quadratic-components/registry'
-import { resolveLocalized } from '@amplience/quadratic-content'
-import type { ContentBody } from '@amplience/quadratic-content'
-import type { MediaLoadPriority, RenderContext } from '@amplience/quadratic-types'
+import { defaultRegistry } from '@amplience/frontend-starter-components/registry'
+import { resolveLocalized } from '@amplience/frontend-starter-content'
+import type { ContentBody } from '@amplience/frontend-starter-content'
+import type { MediaLoadPriority, RenderContext } from '@amplience/frontend-starter-types'
 
 import { renderContent } from '../../src/renderer'
 

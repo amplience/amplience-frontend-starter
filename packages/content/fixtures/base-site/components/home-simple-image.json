@@ -11,7 +11,7 @@
       "mediaType": "ManualImage",
       "image": {
         "src": "https://picsum.photos/seed/ql-feature/600/600",
-        "alt": "Quadratic Lite \u2014 open-source accelerator for Amplience-backed projects",
+        "alt": "Amplience Frontend Starter \u2014 open-source accelerator for Amplience-backed projects",
         "width": 600,
         "height": 600
       }

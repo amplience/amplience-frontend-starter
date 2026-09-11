@@ -1,7 +1,7 @@
 import type { StorybookConfig } from '@storybook/nextjs-vite'
 
 /**
- * Storybook configuration for @amplience/quadratic-components.
+ * Storybook configuration for @amplience/frontend-starter-components.
  *
  * Framework: @storybook/nextjs-vite (Storybook 10)
  *   - Official framework for Next.js + Vite (recommended over experimental-nextjs-vite)

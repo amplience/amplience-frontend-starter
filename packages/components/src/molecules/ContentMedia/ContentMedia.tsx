@@ -1,4 +1,4 @@
-import type { ContentMediaData } from '@amplience/quadratic-types'
+import type { ContentMediaData } from '@amplience/frontend-starter-types'
 
 import { DynamicImage } from '../DynamicImage/DynamicImage'
 import { ManualImage } from '../ManualImage/ManualImage'

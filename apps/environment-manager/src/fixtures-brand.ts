@@ -1,7 +1,7 @@
 /**
  * Brand resolution for the built-in Local Fixtures source.
  *
- * Fixtures store their brand in `quadratic.config.json` (`fixturesBrand`) and
+ * Fixtures store their brand in `amplience.config.json` (`fixturesBrand`) and
  * the Environment Manager writes it to NEXT_PUBLIC_BRAND when fixtures are the
  * active source. A blank value writes no var at all, which apps/web reads as
  * `data-brand="default"` — so blank and "default" describe the same rendering.

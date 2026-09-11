@@ -42,27 +42,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Quadratic Lite"
+          "value": "Amplience Frontend Starter"
         },
         {
           "locale": "en-GB",
-          "value": "Quadratic Lite"
+          "value": "Amplience Frontend Starter"
         },
         {
           "locale": "es-ES",
-          "value": "Quadratic Lite"
+          "value": "Amplience Frontend Starter"
         },
         {
           "locale": "fr-FR",
-          "value": "Quadratic Lite"
+          "value": "Amplience Frontend Starter"
         },
         {
           "locale": "de-DE",
-          "value": "Quadratic Lite"
+          "value": "Amplience Frontend Starter"
         },
         {
           "locale": "it-IT",
-          "value": "Quadratic Lite"
+          "value": "Amplience Frontend Starter"
         }
       ],
       "_meta": {
@@ -103,8 +103,8 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "/placeholders/introducing-quadratic-dynamic-hero.jpeg",
-        "alt": "The Quadratic Lite logo",
+        "src": "/placeholders/introducing-amplience-frontend-starter-dynamic-hero.jpg",
+        "alt": "The Amplience Frontend Starter logo",
         "width": 2752,
         "height": 1536
       }
@@ -113,8 +113,8 @@
     "mobileMedia": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "/placeholders/introducing-quadratic-dynamic-hero-mobile.jpeg",
-        "alt": "The Quadratic Lite logo",
+        "src": "/placeholders/introducing-amplience-frontend-starter-dynamic-hero-mobile.jpg",
+        "alt": "The Amplience Frontend Starter logo",
         "width": 2752,
         "height": 1275
       }

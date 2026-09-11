@@ -3,7 +3,10 @@
 .env.*
 !.env.example
 
-# Local environment config (credentials — never commit)
+# Local environment config (credentials — never commit).
+# quadratic.config.json is the pre-rename name, still ignored so a leftover
+# copy can't be committed.
+amplience.config.json
 quadratic.config.json
 amplience.config.json
 

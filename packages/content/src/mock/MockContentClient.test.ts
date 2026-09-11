@@ -9,7 +9,7 @@ describe('MockContentClient', () => {
     const client = makeMockContentClient()
     const home = await client.getByKey<{ title: string }>('base-site/homepage')
     expect(home._meta.schema).toBe('https://quadratic.amplience.com/v2/content/page')
-    expect(home.title).toBe('Welcome to Quadratic Lite')
+    expect(home.title).toBe('Welcome to Amplience Frontend Starter')
   })
 
   it('returns content-links unresolved by default (depth: root)', async () => {
@@ -160,13 +160,13 @@ describe('MockContentClient', () => {
       }>('base-site/site/hierarchy-menu-main')
 
       expect(menu._meta.schema).toBe('https://quadratic.amplience.com/v2/content/hierarchy-menu')
-      expect(menu.items).toHaveLength(8)
+      expect(menu.items).toHaveLength(5)
       expect('children' in menu).toBe(false)
 
-      const womens = menu.items.find(
-        (i) => i._meta.deliveryId === 'c3d4e5f6-0004-4000-8000-000000000002',
+      const docs = menu.items.find(
+        (i) => i._meta.deliveryId === 'c3d4e5f6-0004-4000-8000-000000000015',
       )
-      expect(womens?.children).toHaveLength(3)
+      expect(docs?.children).toHaveLength(10)
     })
 
     it('returns leaf nodes with no children key at all', async () => {

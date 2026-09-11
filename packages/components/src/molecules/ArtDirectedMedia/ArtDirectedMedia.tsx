@@ -1,6 +1,6 @@
 import { getImageProps } from 'next/image'
 
-import type { ContentMediaData } from '@amplience/quadratic-types'
+import type { ContentMediaData } from '@amplience/frontend-starter-types'
 
 import {
   amplienceDiLoader,

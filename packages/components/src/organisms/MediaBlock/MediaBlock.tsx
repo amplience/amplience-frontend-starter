@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-import type { ContentMediaData, MediaLoadPriority } from '@amplience/quadratic-types'
+import type { ContentMediaData, MediaLoadPriority } from '@amplience/frontend-starter-types'
 
 import { Container } from '../../atoms/Container/Container'
 import type { ContainerProps } from '../../atoms/Container/Container'

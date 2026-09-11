@@ -1,5 +1,5 @@
 /**
- * @amplience/quadratic-content — public surface.
+ * @amplience/frontend-starter-content — public surface.
  *
  * The port and shared types live here; concrete implementations live under
  * subpaths (`./mock` and, since QL-43, `./sdk`). `resolveContentConfig` is

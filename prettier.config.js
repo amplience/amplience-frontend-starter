@@ -1,2 +1,2 @@
 // Root Prettier config — re-exports the shared preset.
-export { default } from '@amplience/quadratic-config/prettier'
+export { default } from '@amplience/frontend-starter-config/prettier'

@@ -13,7 +13,7 @@
  * provided, so wrapping here would nest `<main>` elements.
  */
 
-import { HeroBlock } from '@amplience/quadratic-components/hero-block'
+import { HeroBlock } from '@amplience/frontend-starter-components/hero-block'
 
 export function NotFoundContent() {
   return (

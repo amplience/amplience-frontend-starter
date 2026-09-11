@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 
-import { brandFonts } from '@amplience/quadratic-theme/fonts'
+import { brandFonts } from '@amplience/frontend-starter-theme/fonts'
 
 import './globals.css'
-import '@amplience/quadratic-theme/tokens.css'
+import '@amplience/frontend-starter-theme/tokens.css'
 
 import { getCustomCss } from '../lib/custom-css'
 import { CUSTOM_CSS_STYLE_ID } from '../lib/custom-css-schema'

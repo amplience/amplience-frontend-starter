@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * INTERIM (QL-92) — dc-cli import wrapper, superseded by the automation
- * CLI's `quadratic schemas push` when QL-58 lands (ADR-0012). The file
+ * CLI's `frontend-starter schemas push` when QL-58 lands (ADR-0012). The file
  * layout it imports is the layout that CLI will adopt, so retiring this
  * script changes the verb, not the content.
  *
@@ -133,14 +133,14 @@ const fixturesDir = path.join(packageRoot, '..', 'content', 'fixtures', 'base-si
 const stagingDir = path.join(packageRoot, '.import')
 
 /**
- * Load webApps for a given hub name from quadratic.config.json.
+ * Load webApps for a given hub name from amplience.config.json.
  * Falls back to the example config if the real one isn't present.
  * Returns an empty array if the config can't be found or the hub isn't listed.
  */
 function loadWebApps(hubName) {
-  const configPath = existsSync(path.join(repoRoot, 'quadratic.config.json'))
-    ? path.join(repoRoot, 'quadratic.config.json')
-    : path.join(repoRoot, 'quadratic.config.example.json')
+  const configPath = existsSync(path.join(repoRoot, 'amplience.config.json'))
+    ? path.join(repoRoot, 'amplience.config.json')
+    : path.join(repoRoot, 'amplience.config.example.json')
   if (!existsSync(configPath)) return []
   try {
     const config = JSON.parse(readFileSync(configPath, 'utf8'))
@@ -217,7 +217,7 @@ const dcCli = (...args) =>
     watch(child.stderr, process.stderr)
     child.on('error', () => {
       console.error(
-        'Could not run dc-cli. It is a devDependency of @amplience/quadratic-schemas — run this script via pnpm (e.g. `pnpm hub:import`) so node_modules/.bin is on the PATH.',
+        'Could not run dc-cli. It is a devDependency of @amplience/frontend-starter-schemas — run this script via pnpm (e.g. `pnpm hub:import`) so node_modules/.bin is on the PATH.',
       )
       process.exit(1)
     })
@@ -245,6 +245,7 @@ const dcCli = (...args) =>
  * never drops the status mappings the extensions step depends on. Keyed by
  * hub so parallel hubs don't collide.
  */
+// Filename keeps the `quadratic-` prefix for the same reason as the content map above.
 const settingsMapFile = () => {
   const key = env('AMPLIENCE_HUB_NAME') ?? env('AMPLIENCE_HUB_ID') ?? 'default'
   return path.join(os.homedir(), '.amplience', 'imports', `quadratic-settings-${key}.json`)
@@ -325,7 +326,7 @@ const importTypes = async () => {
   let localhostUrl = env('LOCALHOST_URL') ?? 'http://localhost:3000'
   while (localhostUrl.endsWith('/')) localhostUrl = localhostUrl.slice(0, -1)
 
-  // Additional deployed sites — sourced from quadratic.config.json at import time.
+  // Additional deployed sites — sourced from amplience.config.json at import time.
   // Strip trailing slashes from each URL for consistency.
   const webApps = loadWebApps(hubName).map((site) => ({
     ...site,
@@ -449,6 +450,7 @@ const importContent = async () => {
   const publishFlags = env('AMPLIENCE_REPUBLISH') ? ['--publish', '--republish'] : ['--publish']
 
   // One map across all phases and repositories (see module doc).
+  // Filename keeps the `quadratic-` prefix: renaming it orphans every existing hub's map, so dc-cli would re-import the whole model as duplicates.
   const mapFile = path.join(os.homedir(), '.amplience', 'imports', `quadratic-${hubName}.json`)
 
   // Leaf-first phases: an item is only ever imported after everything it
@@ -535,7 +537,7 @@ const importWebhooks = async () => {
   }))
   if (webApps.length === 0) {
     console.log(
-      `\n→ Hub "${hubName}" has no web apps registered in quadratic.config.json — ` +
+      `\n→ Hub "${hubName}" has no web apps registered in amplience.config.json — ` +
         `skipping webhooks (a webhook needs a deployment to call). Add a site in the ` +
         `Environment Manager, then re-run this step.`,
     )

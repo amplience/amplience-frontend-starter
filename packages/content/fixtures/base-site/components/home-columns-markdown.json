@@ -11,27 +11,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "## Built for speed\n\nQuadratic Lite removes the boilerplate so your team can focus on content and experience — not infrastructure.\n\n- **Mock-first** — build and test offline without a live hub\n- **Token-driven** — swap brands by redefining CSS variables\n- **Composable** — atoms, molecules, and organisms stack cleanly\n\nReady to ship? Clone the repo, point it at your Amplience hub, and go."
+          "value": "## Built for speed\n\nFrontend Starter removes the boilerplate so your team can focus on content and experience — not infrastructure.\n\n- **Mock-first** — build and test offline without a live hub\n- **Token-driven** — swap brands by redefining CSS variables\n- **Composable** — atoms, molecules, and organisms stack cleanly\n\nReady to ship? Clone the repo, point it at your Amplience hub, and go."
         },
         {
           "locale": "en-GB",
-          "value": "## Built for speed\n\nQuadratic Lite removes the boilerplate so your team can focus on content and experience — not infrastructure.\n\n- **Mock-first** — build and test offline without a live hub\n- **Token-driven** — swap brands by redefining CSS variables\n- **Composable** — atoms, molecules, and organisms stack cleanly\n\nReady to ship? Clone the repo, point it at your Amplience hub, and go."
+          "value": "## Built for speed\n\nFrontend Starter removes the boilerplate so your team can focus on content and experience — not infrastructure.\n\n- **Mock-first** — build and test offline without a live hub\n- **Token-driven** — swap brands by redefining CSS variables\n- **Composable** — atoms, molecules, and organisms stack cleanly\n\nReady to ship? Clone the repo, point it at your Amplience hub, and go."
         },
         {
           "locale": "es-ES",
-          "value": "## Diseñado para la velocidad\n\nQuadratic Lite elimina el código repetitivo para que tu equipo pueda centrarse en el contenido y la experiencia, no en la infraestructura.\n\n- **Mock primero** — desarrolla y prueba sin conexión, sin un hub activo\n- **Basado en tokens** — cambia de marca redefiniendo variables CSS\n- **Componible** — átomos, moléculas y organismos se apilan limpiamente\n\n¿Listo para publicar? Clona el repositorio, apúntalo a tu hub de Amplience y adelante."
+          "value": "## Diseñado para la velocidad\n\nFrontend Starter elimina el código repetitivo para que tu equipo pueda centrarse en el contenido y la experiencia, no en la infraestructura.\n\n- **Mock primero** — desarrolla y prueba sin conexión, sin un hub activo\n- **Basado en tokens** — cambia de marca redefiniendo variables CSS\n- **Componible** — átomos, moléculas y organismos se apilan limpiamente\n\n¿Listo para publicar? Clona el repositorio, apúntalo a tu hub de Amplience y adelante."
         },
         {
           "locale": "fr-FR",
-          "value": "## Conçu pour la vitesse\n\nQuadratic Lite supprime le code standard pour que votre équipe puisse se concentrer sur le contenu et l'expérience — pas sur l'infrastructure.\n\n- **Mock d'abord** — développez et testez hors ligne sans hub actif\n- **Piloté par les tokens** — changez de marque en redéfinissant des variables CSS\n- **Composable** — atomes, molécules et organismes s'empilent proprement\n\nPrêt à déployer ? Clonez le dépôt, pointez-le vers votre hub Amplience, et c'est parti."
+          "value": "## Conçu pour la vitesse\n\nFrontend Starter supprime le code standard pour que votre équipe puisse se concentrer sur le contenu et l'expérience — pas sur l'infrastructure.\n\n- **Mock d'abord** — développez et testez hors ligne sans hub actif\n- **Piloté par les tokens** — changez de marque en redéfinissant des variables CSS\n- **Composable** — atomes, molécules et organismes s'empilent proprement\n\nPrêt à déployer ? Clonez le dépôt, pointez-le vers votre hub Amplience, et c'est parti."
         },
         {
           "locale": "de-DE",
-          "value": "## Auf Geschwindigkeit ausgelegt\n\nQuadratic Lite entfernt den Boilerplate-Code, damit sich Ihr Team auf Inhalt und Erlebnis konzentrieren kann — nicht auf die Infrastruktur.\n\n- **Mock-first** — offline entwickeln und testen, ohne aktiven Hub\n- **Token-gesteuert** — Marken durch Neudefinition von CSS-Variablen wechseln\n- **Komponierbar** — Atome, Moleküle und Organismen fügen sich sauber zusammen\n\nBereit zum Ausliefern? Klonen Sie das Repository, richten Sie es auf Ihren Amplience-Hub aus, und los."
+          "value": "## Auf Geschwindigkeit ausgelegt\n\nFrontend Starter entfernt den Boilerplate-Code, damit sich Ihr Team auf Inhalt und Erlebnis konzentrieren kann — nicht auf die Infrastruktur.\n\n- **Mock-first** — offline entwickeln und testen, ohne aktiven Hub\n- **Token-gesteuert** — Marken durch Neudefinition von CSS-Variablen wechseln\n- **Komponierbar** — Atome, Moleküle und Organismen fügen sich sauber zusammen\n\nBereit zum Ausliefern? Klonen Sie das Repository, richten Sie es auf Ihren Amplience-Hub aus, und los."
         },
         {
           "locale": "it-IT",
-          "value": "## Costruito per la velocità\n\nQuadratic Lite elimina il boilerplate così il tuo team può concentrarsi su contenuto ed esperienza — non sull'infrastruttura.\n\n- **Mock-first** — sviluppa e testa offline senza un hub attivo\n- **Guidato dai token** — cambia brand ridefinendo le variabili CSS\n- **Componibile** — atomi, molecole e organismi si impilano in modo pulito\n\nPronto a rilasciare? Clona il repository, puntalo al tuo hub Amplience e vai."
+          "value": "## Costruito per la velocità\n\nFrontend Starter elimina il boilerplate così il tuo team può concentrarsi su contenuto ed esperienza — non sull'infrastruttura.\n\n- **Mock-first** — sviluppa e testa offline senza un hub attivo\n- **Guidato dai token** — cambia brand ridefinendo le variabili CSS\n- **Componibile** — atomi, molecole e organismi si impilano in modo pulito\n\nPronto a rilasciare? Clona il repository, puntalo al tuo hub Amplience e vai."
         }
       ],
       "_meta": {

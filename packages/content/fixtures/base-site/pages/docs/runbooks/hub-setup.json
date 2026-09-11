@@ -14,7 +14,7 @@
       }
     },
     "title": "Runbook — seeding an Amplience hub",
-    "description": "How a fresh Dynamic Content hub comes to carry the Quadratic Lite content model and starter content. Everything the hub needs lives in this repo — settings, schemas, content types and extensions in `packages/hub-management/`, starter content in `packages/content/fixtures/base-site/` (the same files the mock client serves, so the hub and local dev never drift) — and one command pushes it all. Running it against a second hub is the same procedure with different environment values.",
+    "description": "How a fresh Amplience CMS hub comes to carry the Amplience Frontend Starter content model and starter content. Everything the hub needs lives in this repo — settings, schemas, content types and extensions in `packages/hub-management/`, starter content in `packages/content/fixtures/base-site/` (the same files the mock client serves, so the hub and local dev never drift) — and one command pushes it all. Running it against a second hub is the same procedure with different environment values.",
     "slots": [
       {
         "id": "d2482062-3e6d-570f-8d46-f6d628ac99d0",

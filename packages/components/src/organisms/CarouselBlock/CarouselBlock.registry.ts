@@ -1,4 +1,4 @@
-import type { ComponentRegistryEntry } from '@amplience/quadratic-types'
+import type { ComponentRegistryEntry } from '@amplience/frontend-starter-types'
 
 import { carouselSlotSizes } from '../../utils/imageSizes'
 import { CarouselBlock, type CarouselBlockProps } from './CarouselBlock'

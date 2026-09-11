@@ -19,7 +19,7 @@
 import Ajv from 'ajv'
 import { describe, expect, it } from 'vitest'
 
-import { allFixtures } from '@amplience/quadratic-content/mock'
+import { allFixtures } from '@amplience/frontend-starter-content/mock'
 
 import { contentTypeSchemas, findSchema, schemaManifest } from './index'
 

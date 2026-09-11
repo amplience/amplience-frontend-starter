@@ -1,7 +1,7 @@
 /**
  * Publishing-state predicates for the wipe script.
  *
- * Archiving a content item in Dynamic Content does *not* remove it from
+ * Archiving a content item in the CMS does *not* remove it from
  * Delivery. Archive is a management-side lifecycle change; the published
  * snapshot on the CDN is a separate artefact that only `unpublish` retracts.
  * A wipe that only archives therefore leaves every previous generation of

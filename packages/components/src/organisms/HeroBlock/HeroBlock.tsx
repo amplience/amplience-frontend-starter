@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { useId, type ReactNode } from 'react'
 
-import type { ContentMediaData, MediaLoadPriority } from '@amplience/quadratic-types'
+import type { ContentMediaData, MediaLoadPriority } from '@amplience/frontend-starter-types'
 
 import { Button, type ButtonProps } from '../../atoms/Button/Button'
 import { Container } from '../../atoms/Container/Container'

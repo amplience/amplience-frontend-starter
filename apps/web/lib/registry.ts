@@ -25,7 +25,7 @@
  *      ])
  *
  * Schema URI constants, entries, and both helpers are all exported from
- * '@amplience/quadratic-components/registry'. The helpers exist because a
+ * '@amplience/frontend-starter-components/registry'. The helpers exist because a
  * bare `new Map(...)` anchors its value type on the first entry and rejects
  * entries for other schemas.
  */
@@ -34,8 +34,8 @@ import {
   defaultRegistry,
   HIERARCHY_MENU_SCHEMA,
   LOCALE_SELECTOR_SCHEMA,
-} from '@amplience/quadratic-components/registry'
-import type { AnyComponentRegistryEntry, Registry } from '@amplience/quadratic-types'
+} from '@amplience/frontend-starter-components/registry'
+import type { AnyComponentRegistryEntry, Registry } from '@amplience/frontend-starter-types'
 
 import { HierarchyMenuServer } from '../src/components/HierarchyMenuServer'
 import { LocaleSelectorConfigured } from '../src/components/LocaleSelectorConfigured'

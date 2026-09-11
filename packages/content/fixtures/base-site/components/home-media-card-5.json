@@ -42,27 +42,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Skip the boilerplate. Quadratic Lite gets new Amplience implementations to a working frontend faster, so teams can focus on what matters."
+          "value": "Skip the boilerplate. Frontend Starter gets new Amplience implementations to a working frontend faster, so teams can focus on what matters."
         },
         {
           "locale": "en-GB",
-          "value": "Skip the boilerplate. Quadratic Lite gets new Amplience implementations to a working frontend faster, so teams can focus on what matters."
+          "value": "Skip the boilerplate. Frontend Starter gets new Amplience implementations to a working frontend faster, so teams can focus on what matters."
         },
         {
           "locale": "es-ES",
-          "value": "Olvídate del código repetitivo. Quadratic Lite lleva las nuevas implementaciones de Amplience a un frontend funcional más rápido, para que los equipos puedan centrarse en lo que importa."
+          "value": "Olvídate del código repetitivo. Frontend Starter lleva las nuevas implementaciones de Amplience a un frontend funcional más rápido, para que los equipos puedan centrarse en lo que importa."
         },
         {
           "locale": "fr-FR",
-          "value": "Fini le code standard. Quadratic Lite amène plus rapidement les nouvelles implémentations Amplience à un frontend fonctionnel, pour que les équipes se concentrent sur l'essentiel."
+          "value": "Fini le code standard. Frontend Starter amène plus rapidement les nouvelles implémentations Amplience à un frontend fonctionnel, pour que les équipes se concentrent sur l'essentiel."
         },
         {
           "locale": "de-DE",
-          "value": "Sparen Sie sich den Boilerplate-Code. Quadratic Lite bringt neue Amplience-Implementierungen schneller zu einem funktionierenden Frontend, damit sich Teams auf das Wesentliche konzentrieren können."
+          "value": "Sparen Sie sich den Boilerplate-Code. Frontend Starter bringt neue Amplience-Implementierungen schneller zu einem funktionierenden Frontend, damit sich Teams auf das Wesentliche konzentrieren können."
         },
         {
           "locale": "it-IT",
-          "value": "Salta il boilerplate. Quadratic Lite porta le nuove implementazioni Amplience a un frontend funzionante più velocemente, così i team possono concentrarsi su ciò che conta."
+          "value": "Salta il boilerplate. Frontend Starter porta le nuove implementazioni Amplience a un frontend funzionante più velocemente, così i team possono concentrarsi su ciò che conta."
         }
       ],
       "_meta": {

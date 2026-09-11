@@ -8,7 +8,7 @@
       "deliveryId": "b18e7492-0657-50ea-adca-658394871c64"
     },
     "title": "Editor setup",
-    "description": "Quadratic Lite is editor-agnostic. The repo enforces output (formatting, lint rules) but never the editor — `.vscode/` is gitignored, and there is no mandated IDE. Anyone cloning the repo gets the same outcome on macOS, Linux, or Windows because of three repo-level mechanisms:",
+    "description": "Amplience Frontend Starter is editor-agnostic. The repo enforces output (formatting, lint rules) but never the editor — `.vscode/` is gitignored, and there is no mandated IDE. Anyone cloning the repo gets the same outcome on macOS, Linux, or Windows because of three repo-level mechanisms:",
     "backgroundColor": "dark",
     "textColor": "white",
     "contentPositionMobile": "beneath",

@@ -12,7 +12,7 @@ import type { ReactNode } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { ContentClient } from '@amplience/quadratic-content'
+import type { ContentClient } from '@amplience/frontend-starter-content'
 
 const state = vi.hoisted((): { locale: string | null; stubClient: ContentClient | undefined } => ({
   // The value the mocked `headers()` returns for `x-locale` (null = unset).
@@ -26,8 +26,8 @@ vi.mock('next/headers', () => ({
     Promise.resolve(new Headers(state.locale === null ? {} : { 'x-locale': state.locale })),
 }))
 
-vi.mock('@amplience/quadratic-content/mock', async (importOriginal) => {
-  const original = await importOriginal<typeof import('@amplience/quadratic-content/mock')>()
+vi.mock('@amplience/frontend-starter-content/mock', async (importOriginal) => {
+  const original = await importOriginal<typeof import('@amplience/frontend-starter-content/mock')>()
   return {
     ...original,
     makeMockContentClient: () => state.stubClient ?? original.makeMockContentClient(),

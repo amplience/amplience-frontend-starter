@@ -15,10 +15,10 @@
  * composition time, not a failure card at request time.
  */
 
-import { resolveContentConfig } from '@amplience/quadratic-content'
-import type { ContentClient } from '@amplience/quadratic-content'
-import { makeMockContentClient } from '@amplience/quadratic-content/mock'
-import { makeSdkContentClient } from '@amplience/quadratic-content/sdk'
+import { resolveContentConfig } from '@amplience/frontend-starter-content'
+import type { ContentClient } from '@amplience/frontend-starter-content'
+import { makeMockContentClient } from '@amplience/frontend-starter-content/mock'
+import { makeSdkContentClient } from '@amplience/frontend-starter-content/sdk'
 
 const config = resolveContentConfig()
 

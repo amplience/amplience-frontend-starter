@@ -1,9 +1,9 @@
 {
   "id": "a1b2c3d4-0001-4000-8000-000000000023",
-  "label": "Home — Quadratic attributes carousel",
+  "label": "Home — Frontend Starter attributes carousel",
   "body": {
     "_meta": {
-      "name": "Home — Quadratic attributes carousel",
+      "name": "Home — Frontend Starter attributes carousel",
       "schema": "https://quadratic.amplience.com/v2/content/carousel",
       "deliveryId": "a1b2c3d4-0001-4000-8000-000000000023"
     },
@@ -43,27 +43,27 @@
         "values": [
           {
             "locale": "en-US",
-            "value": "A demo-ready frontend accelerator that brings Amplience Dynamic Content to life."
+            "value": "A demo-ready frontend accelerator that brings Amplience content to life."
           },
           {
             "locale": "en-GB",
-            "value": "A demo-ready frontend accelerator that brings Amplience Dynamic Content to life."
+            "value": "A demo-ready frontend accelerator that brings Amplience content to life."
           },
           {
             "locale": "es-ES",
-            "value": "Un acelerador de frontend listo para demostraciones que da vida al contenido dinámico de Amplience."
+            "value": "Un acelerador de frontend listo para demostraciones que da vida al contenido de Amplience."
           },
           {
             "locale": "fr-FR",
-            "value": "Un accélérateur de frontend prêt pour la démonstration qui donne vie au contenu dynamique d'Amplience."
+            "value": "Un accélérateur de frontend prêt pour la démonstration qui donne vie au contenu d'Amplience."
           },
           {
             "locale": "de-DE",
-            "value": "Ein demo-bereiter Frontend-Beschleuniger, der Amplience Dynamic Content zum Leben erweckt."
+            "value": "Ein demo-bereiter Frontend-Beschleuniger, der Amplience Inhalt zum Leben erweckt."
           },
           {
             "locale": "it-IT",
-            "value": "Un acceleratore frontend pronto per la demo che dà vita ai contenuti dinamici di Amplience."
+            "value": "Un acceleratore frontend pronto per la demo che dà vita ai contenuti di Amplience."
           }
         ],
         "_meta": {

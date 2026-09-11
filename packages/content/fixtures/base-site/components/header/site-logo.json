@@ -10,10 +10,10 @@
     "image": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "/favicon/icon-192.png",
-        "alt": "Quadratic logo",
-        "width": 40,
-        "height": 40
+        "src": "/amplience-logo-light.svg",
+        "alt": "Amplience Frontend Starter logo",
+        "width": 160,
+        "height": 30
       }
     },
     "link": "/"

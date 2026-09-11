@@ -1,4 +1,4 @@
-import type { ManualImageData } from '@amplience/quadratic-types'
+import type { ManualImageData } from '@amplience/frontend-starter-types'
 
 import { Image } from '../../atoms/Image/Image'
 

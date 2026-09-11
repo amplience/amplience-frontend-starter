@@ -14,7 +14,7 @@
  * not loop back into another `getHierarchy` call.
  *
  * Registered as the `HIERARCHY_MENU_SCHEMA` component in `apps/web/lib/registry.ts`.
- * The plain entry from `@amplience/quadratic-components` stays in the default
+ * The plain entry from `@amplience/frontend-starter-components` stays in the default
  * registry and remains the correct choice when data is already assembled (e.g.
  * mock fixtures, or a direct `renderContent` call on a pre-fetched tree).
  */
@@ -25,7 +25,7 @@ import {
   HIERARCHY_MENU_SCHEMA,
   hierarchyMenuItemRegistryEntry,
   hierarchyMenuRegistryEntry,
-} from '@amplience/quadratic-components/registry'
+} from '@amplience/frontend-starter-components/registry'
 
 import { client } from '../../lib/content-client'
 import { renderContent } from '../renderer'

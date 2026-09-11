@@ -1,4 +1,4 @@
-import type { MediaLoadPriority } from '@amplience/quadratic-types'
+import type { MediaLoadPriority } from '@amplience/frontend-starter-types'
 
 /**
  * The next/image loading props for one tier — everything a component needs to

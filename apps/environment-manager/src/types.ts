@@ -70,7 +70,7 @@ export type WebApp = {
   /**
    * The Vercel project this site was provisioned into via "Create Vercel
    * site" (ADR-0017). Absent for sites added via "Add existing site" — those
-   * weren't created by Quadratic Lite, so there's nothing safe to destroy.
+   * weren't created by Amplience Frontend Starter, so there's nothing safe to destroy.
    */
   vercelProjectName?: string
   /** Vercel team (scope) the project lives under, if not the personal scope. */
