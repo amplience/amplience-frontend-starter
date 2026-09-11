@@ -7,9 +7,6 @@
 quadratic.config.json
 amplience.config.json
 
-# gitleaks SARIF report, written in CI only
-results.sarif
-
 # IDE settings
 .vscode/settings.json
 .vscode/css-custom-data.json
