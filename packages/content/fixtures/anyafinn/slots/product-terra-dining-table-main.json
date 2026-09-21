@@ -1,0 +1,20 @@
+{
+  "id": "3d88a30c-88da-55cb-97ee-f53eb395c2b9",
+  "label": "Product — Terra Dining Table — main slot",
+  "body": {
+    "_meta": {
+      "name": "Product — Terra Dining Table — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot",
+      "deliveryId": "3d88a30c-88da-55cb-97ee-f53eb395c2b9"
+    },
+    "components": [
+      {
+        "id": "1eb246d3-388f-527a-a9af-c653bf58151c",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

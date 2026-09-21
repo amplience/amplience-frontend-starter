@@ -1,0 +1,167 @@
+{
+  "id": "f8431378-6363-5e88-8b66-15994f6ed929",
+  "label": "Product — Verde Ceramic Planter",
+  "body": {
+    "_meta": {
+      "name": "Verde Ceramic Planter",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "f8431378-6363-5e88-8b66-15994f6ed929",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/verde-ceramic-planter"
+          }
+        ]
+      }
+    },
+    "sku": "VER-POT-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Verde Ceramic Planter"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Verde Ceramic Planter"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Macetero de cerámica Verde"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Cache-pot en céramique Verde"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Verde Keramik-Übertopf"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Vaso in ceramica Verde"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A glazed stoneware planter. Discontinued — kept here so the retired state has something to render."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A glazed stoneware planter. Discontinued — kept here so the retired state has something to render."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Un macetero de gres esmaltado. Descatalogado: se conserva para que el estado retirado tenga algo que mostrar."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un cache-pot en grès émaillé. Arrêté — conservé pour que l’état retiré ait quelque chose à afficher."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein Übertopf aus glasiertem Steinzeug. Eingestellt — hier belassen, damit der Zustand etwas zu rendern hat."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Un vaso in gres smaltato. Fuori produzione: tenuto qui perché lo stato ritirato abbia qualcosa da mostrare."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "discontinued",
+    "price": {
+      "amount": 45,
+      "currencyCode": "GBP"
+    },
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/seed/product-verde-ceramic-planter/1200/1200",
+          "alt": "Verde Ceramic Planter — main view",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matériau"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Glazed stoneware"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Glazed stoneware"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Gres esmaltado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Grès émaillé"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Glasiertes Steinzeug"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Gres smaltato"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "category": "Accessories",
+    "tags": ["ceramic", "planter"],
+    "title": "Verde Ceramic Planter | Amplience Frontend Starter",
+    "description": "A glazed stoneware planter. Discontinued — kept here so the retired state has something to render."
+  }
+}

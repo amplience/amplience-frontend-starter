@@ -57,11 +57,22 @@ import homeCardOpulentDecadence from '../../../fixtures/anyafinn/components/home
 import homeCardPiratecore from '../../../fixtures/anyafinn/components/home-card-piratecore.json' with { type: 'json' }
 import homeHero from '../../../fixtures/anyafinn/components/home-hero.json' with { type: 'json' }
 import homeShopTheLook from '../../../fixtures/anyafinn/components/home-shop-the-look.json' with { type: 'json' }
+import productAuroraLoungeChairStory from '../../../fixtures/anyafinn/components/products/aurora-lounge-chair-story.json' with { type: 'json' }
+import productTerraDiningTableStory from '../../../fixtures/anyafinn/components/products/terra-dining-table-story.json' with { type: 'json' }
 import shopTheLookHero from '../../../fixtures/anyafinn/components/shop-the-look-hero.json' with { type: 'json' }
 import shopTheLookMarkdown from '../../../fixtures/anyafinn/components/shop-the-look-markdown.json' with { type: 'json' }
 import home from '../../../fixtures/anyafinn/pages/home.json' with { type: 'json' }
+import productAuroraLoungeChair from '../../../fixtures/anyafinn/pages/products/aurora-lounge-chair.json' with { type: 'json' }
+import productAuroraShelving from '../../../fixtures/anyafinn/pages/products/aurora-shelving.json' with { type: 'json' }
+import productAuroraSideTable from '../../../fixtures/anyafinn/pages/products/aurora-side-table.json' with { type: 'json' }
+import productLumenFloorLamp from '../../../fixtures/anyafinn/pages/products/lumen-floor-lamp.json' with { type: 'json' }
+import productMaraWoolThrow from '../../../fixtures/anyafinn/pages/products/mara-hand-woven-wool-throw.json' with { type: 'json' }
+import productTerraDiningTable from '../../../fixtures/anyafinn/pages/products/terra-dining-table.json' with { type: 'json' }
+import productVerdeCeramicPlanter from '../../../fixtures/anyafinn/pages/products/verde-ceramic-planter.json' with { type: 'json' }
 import shopTheLook from '../../../fixtures/anyafinn/pages/shop-the-look.json' with { type: 'json' }
 import homeMain from '../../../fixtures/anyafinn/slots/home-main.json' with { type: 'json' }
+import productAuroraLoungeChairMainSlot from '../../../fixtures/anyafinn/slots/product-aurora-lounge-chair-main.json' with { type: 'json' }
+import productTerraDiningTableMainSlot from '../../../fixtures/anyafinn/slots/product-terra-dining-table-main.json' with { type: 'json' }
 import shopTheLookMain from '../../../fixtures/anyafinn/slots/shop-the-look-main.json' with { type: 'json' }
 import type { EnrichedContentItem } from '../../types'
 import type { FixtureSet } from '../set'
@@ -120,6 +131,17 @@ const fixtures: readonly EnrichedContentItem[] = [
   shopTheLook,
   homeMain,
   shopTheLookMain,
+  productAuroraLoungeChairStory,
+  productTerraDiningTableStory,
+  productAuroraLoungeChair,
+  productAuroraShelving,
+  productAuroraSideTable,
+  productLumenFloorLamp,
+  productMaraWoolThrow,
+  productTerraDiningTable,
+  productVerdeCeramicPlanter,
+  productAuroraLoungeChairMainSlot,
+  productTerraDiningTableMainSlot,
 ]
 
 export const anyafinnSet: FixtureSet = {

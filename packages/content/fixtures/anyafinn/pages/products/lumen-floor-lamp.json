@@ -1,0 +1,231 @@
+{
+  "id": "fb83bb2c-f5fb-5ab5-9d7e-5a8a301f8291",
+  "label": "Product — Lumen Floor Lamp",
+  "body": {
+    "_meta": {
+      "name": "Lumen Floor Lamp",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "fb83bb2c-f5fb-5ab5-9d7e-5a8a301f8291",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/lumen-floor-lamp"
+          }
+        ]
+      }
+    },
+    "sku": "LUM-LAMP-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Lumen Floor Lamp"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Lumen Floor Lamp"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Lámpara de pie Lumen"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Lampadaire Lumen"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Lumen Stehleuchte"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Lampada da terra Lumen"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A slim brass floor lamp with a linen shade and a dimmable warm bulb."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A slim brass floor lamp with a linen shade and a dimmable warm bulb."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Una esbelta lámpara de pie de latón con pantalla de lino y bombilla cálida regulable."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un lampadaire fin en laiton avec abat-jour en lin et ampoule chaude variable."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Eine schlanke Messing-Stehleuchte mit Leinenschirm und dimmbarem warmem Leuchtmittel."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Una sottile lampada da terra in ottone con paralume in lino e lampadina calda dimmerabile."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "price": {
+      "amount": 189,
+      "currencyCode": "GBP"
+    },
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/seed/product-lumen-floor-lamp/1200/1200",
+          "alt": "Lumen Floor Lamp — main view",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Finish"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Finish"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Acabado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Finition"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Oberfläche"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Finitura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Brushed brass"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Brushed brass"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Latón cepillado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Laiton brossé"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Gebürstetes Messing"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Ottone spazzolato"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Height"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Height"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Altura"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Hauteur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Höhe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Altezza"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "152 cm"
+            },
+            {
+              "locale": "en-GB",
+              "value": "152 cm"
+            },
+            {
+              "locale": "es-ES",
+              "value": "152 cm"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "152 cm"
+            },
+            {
+              "locale": "de-DE",
+              "value": "152 cm"
+            },
+            {
+              "locale": "it-IT",
+              "value": "152 cm"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "category": "Lighting",
+    "tags": ["brass", "lighting"],
+    "title": "Lumen Floor Lamp | Amplience Frontend Starter",
+    "description": "A slim brass floor lamp with a linen shade and a dimmable warm bulb."
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "1eb246d3-388f-527a-a9af-c653bf58151c",
+  "label": "Product — Terra Dining Table — story",
+  "body": {
+    "_meta": {
+      "name": "Product — Terra Dining Table — story",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "1eb246d3-388f-527a-a9af-c653bf58151c"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "## Reclaimed, not reproduced\n\nEvery Terra top is milled from elm salvaged from farm buildings in the Welsh borders. No two are the same colour, and the nail-holes are left in.\n\n## Care\n\nHand-wax twice a year. Avoid standing water — reclaimed elm drinks."
+        },
+        {
+          "locale": "en-GB",
+          "value": "## Reclaimed, not reproduced\n\nEvery Terra top is milled from elm salvaged from farm buildings in the Welsh borders. No two are the same colour, and the nail-holes are left in.\n\n## Care\n\nHand-wax twice a year. Avoid standing water — reclaimed elm drinks."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}
