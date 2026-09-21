@@ -160,7 +160,7 @@ describe('MockContentClient', () => {
       }>('base-site/site/hierarchy-menu-main')
 
       expect(menu._meta.schema).toBe('https://quadratic.amplience.com/v2/content/hierarchy-menu')
-      expect(menu.items).toHaveLength(5)
+      expect(menu.items).toHaveLength(6)
       expect('children' in menu).toBe(false)
 
       const docs = menu.items.find(

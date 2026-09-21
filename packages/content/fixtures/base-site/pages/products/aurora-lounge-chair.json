@@ -1,0 +1,349 @@
+{
+  "id": "01a49434-9900-576a-8866-4ce15d9cb132",
+  "label": "Product — Aurora Lounge Chair",
+  "body": {
+    "_meta": {
+      "name": "Aurora Lounge Chair",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "01a49434-9900-576a-8866-4ce15d9cb132",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "base-site/products/aurora-lounge-chair"
+          }
+        ]
+      }
+    },
+    "sku": "AUR-CHAIR-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Aurora Lounge Chair"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Aurora Lounge Chair"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Sillón Aurora"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Fauteuil Aurora"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Aurora Loungesessel"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Poltrona Aurora"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A low-slung lounge chair in oiled oak and wool bouclé, built for long evenings."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A low-slung lounge chair in oiled oak and wool bouclé, built for long evenings."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Un sillón bajo en roble aceitado y bouclé de lana, pensado para las tardes largas."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un fauteuil bas en chêne huilé et bouclette de laine, pensé pour les longues soirées."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein niedriger Loungesessel aus geölter Eiche und Woll-Bouclé, gemacht für lange Abende."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Una poltrona bassa in rovere oliato e bouclé di lana, pensata per le lunghe serate."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "price": {
+      "amount": 749,
+      "currencyCode": "GBP"
+    },
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/seed/product-aurora-lounge-chair/1200/1200",
+          "alt": "Aurora Lounge Chair — main view",
+          "width": 1200,
+          "height": 1200
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/seed/product-aurora-lounge-chair-2/1200/1200",
+          "alt": "Aurora Lounge Chair — view 2",
+          "width": 1200,
+          "height": 1200
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/seed/product-aurora-lounge-chair-3/1200/1200",
+          "alt": "Aurora Lounge Chair — view 3",
+          "width": 1200,
+          "height": 1200
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/seed/product-aurora-lounge-chair-4/1200/1200",
+          "alt": "Aurora Lounge Chair — view 4",
+          "width": 1200,
+          "height": 1200
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/seed/product-aurora-lounge-chair-5/1200/1200",
+          "alt": "Aurora Lounge Chair — view 5",
+          "width": 1200,
+          "height": 1200
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/seed/product-aurora-lounge-chair-6/1200/1200",
+          "alt": "Aurora Lounge Chair — view 6",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Frame"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Frame"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Estructura"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Structure"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Gestell"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Struttura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Oiled oak"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Oiled oak"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Roble aceitado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Chêne huilé"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Geölte Eiche"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Rovere oliato"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Upholstery"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Upholstery"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tapicería"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Revêtement"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Bezug"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Rivestimento"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Wool bouclé"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Wool bouclé"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Bouclé de lana"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Bouclette de laine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Woll-Bouclé"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Bouclé di lana"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Dimensiones"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maße"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Dimensioni"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "78 × 82 × 71 cm"
+            },
+            {
+              "locale": "en-GB",
+              "value": "78 × 82 × 71 cm"
+            },
+            {
+              "locale": "es-ES",
+              "value": "78 × 82 × 71 cm"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "78 × 82 × 71 cm"
+            },
+            {
+              "locale": "de-DE",
+              "value": "78 × 82 × 71 cm"
+            },
+            {
+              "locale": "it-IT",
+              "value": "78 × 82 × 71 cm"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "category": "Seating",
+    "tags": ["oak", "lounge", "bouclé"],
+    "title": "Aurora Lounge Chair | Amplience Frontend Starter",
+    "description": "A low-slung lounge chair in oiled oak and wool bouclé, built for long evenings.",
+    "slots": [
+      {
+        "id": "f8a8c55f-263d-5c66-8a23-2c8149da4d1d",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

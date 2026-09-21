@@ -1,0 +1,26 @@
+{
+  "id": "927c1ad2-e75a-561a-98ee-648cda4618d6",
+  "label": "Product — Aurora Lounge Chair — story",
+  "body": {
+    "_meta": {
+      "name": "Product — Aurora Lounge Chair — story",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "927c1ad2-e75a-561a-98ee-648cda4618d6"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "## Made to be sat in\n\nThe Aurora frame is cut from a single oiled oak billet, steam-bent rather than jointed, so the arm and the rear leg are one continuous piece. It takes four days to set.\n\n## Care\n\nWipe the frame with a barely-damp cloth. Re-oil once a year. The bouclé is removable and dry-clean only."
+        },
+        {
+          "locale": "en-GB",
+          "value": "## Made to be sat in\n\nThe Aurora frame is cut from a single oiled oak billet, steam-bent rather than jointed, so the arm and the rear leg are one continuous piece. It takes four days to set.\n\n## Care\n\nWipe the frame with a barely-damp cloth. Re-oil once a year. The bouclé is removable and dry-clean only."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

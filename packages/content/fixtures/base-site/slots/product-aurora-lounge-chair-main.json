@@ -1,0 +1,20 @@
+{
+  "id": "f8a8c55f-263d-5c66-8a23-2c8149da4d1d",
+  "label": "Product — Aurora Lounge Chair — main slot",
+  "body": {
+    "_meta": {
+      "name": "Product — Aurora Lounge Chair — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot",
+      "deliveryId": "f8a8c55f-263d-5c66-8a23-2c8149da4d1d"
+    },
+    "components": [
+      {
+        "id": "927c1ad2-e75a-561a-98ee-648cda4618d6",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

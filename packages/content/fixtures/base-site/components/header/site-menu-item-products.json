@@ -1,0 +1,13 @@
+{
+  "id": "7e3bbe92-9ba2-5617-9a4b-0efd293ae10b",
+  "label": "Menu item: Products",
+  "body": {
+    "_meta": {
+      "name": "Menu item: Products",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "7e3bbe92-9ba2-5617-9a4b-0efd293ae10b"
+    },
+    "label": "Products",
+    "link": "/products"
+  }
+}
