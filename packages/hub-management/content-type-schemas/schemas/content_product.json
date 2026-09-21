@@ -1,0 +1,262 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/product",
+  "title": "Product",
+  "description": "A product page — presentation-grade commerce fields plus optional slots for editorial content. Deliberately a brochure, not a catalogue: no variants, no inventory, no pricing rules (ADR-0018). A field belongs here only if a real PIM would overwrite it; a field a PIM would have to be reconciled with — a category taxonomy, a variant graph, a product-type schema — does not.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    },
+    {
+      "$ref": "https://quadratic.amplience.com/v2/partials/seo"
+    }
+  ],
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "🛍️ Product",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "🛍️ Product",
+            "pointers": ["/sku", "/name", "/price", "/shortDescription", "/status"]
+          },
+          {
+            "label": "🖼️ Media",
+            "pointers": ["/images"]
+          },
+          {
+            "label": "📋 Details",
+            "pointers": ["/attributes", "/category", "/tags"]
+          },
+          {
+            "label": "📝 Content",
+            "pointers": ["/slots"]
+          },
+          {
+            "label": "🔗 URL",
+            "pointers": ["/_meta/deliveryKeys/values"]
+          },
+          {
+            "label": "⚙️ Metadata",
+            "pointers": [
+              "/title",
+              "/description",
+              "/keywords",
+              "/canonicalUrl",
+              "/robots",
+              "/social"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "_meta": {
+      "title": "Delivery",
+      "type": "object",
+      "properties": {
+        "deliveryKeys": {
+          "title": "Delivery keys",
+          "description": "Variant delivery keys for this item. Use the {site}/products/{slug} convention (ADR-0014) — e.g. acme/products/aurora-lounge-chair.",
+          "type": "object",
+          "properties": {
+            "values": {
+              "title": "URL",
+              "description": "Serve the product at this URL",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Use the format {siteKey}/products/{slug}\n(e.g. acme site would have acme/products/aurora-lounge-chair)",
+                    "title": "Delivery Key",
+                    "minLength": 1,
+                    "maxLength": 150
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "title": {
+      "description": "Product page title — <title> and SEO. Falls back to the product name when unset."
+    },
+    "social": {
+      "description": "Open Graph overrides. Unset fields fall back to the product's own name and description."
+    },
+    "canonicalUrl": {
+      "description": "Rarely set — when absent, the canonical defaults to the product's /products/{slug} path."
+    },
+    "sku": {
+      "type": "string",
+      "title": "SKU",
+      "description": "The product's identifier in your commerce or PIM system. Nothing renders it today — it is the join key to a PIM record or a search index later, and backfilling it across authored content is far more expensive than typing it now.",
+      "minLength": 1
+    },
+    "name": {
+      "title": "Product Name",
+      "description": "The product's display name.",
+      "minLength": 1,
+      "allOf": [
+        {
+          "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+        }
+      ]
+    },
+    "price": {
+      "type": "object",
+      "title": "Price",
+      "description": "Display only — this is not a pricing engine. No tax, no promotions, no currency conversion; a product shows the one price authored here.",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "title": "Amount",
+          "description": "In major units — 19.99, not 1999.",
+          "minimum": 0
+        },
+        "currencyCode": {
+          "type": "string",
+          "title": "Currency",
+          "description": "ISO 4217 code, e.g. GBP, USD, EUR.",
+          "pattern": "^[A-Z]{3}$"
+        }
+      },
+      "propertyOrder": ["amount", "currencyCode"],
+      "required": ["amount", "currencyCode"]
+    },
+    "shortDescription": {
+      "title": "Short Description",
+      "description": "A sentence or two shown on the product page and in cards. Longer copy belongs in the Content tab.",
+      "allOf": [
+        {
+          "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      ],
+      "properties": {
+        "values": {
+          "items": {
+            "properties": {
+              "value": {
+                "type": "string",
+                "title": "Short Description",
+                "description": "A sentence or two shown on the product page and in cards.",
+                "ui:component": "text-area"
+              }
+            }
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "description": "Editorial lifecycle, not stock. Availability is owned by your commerce system and changes by the hour; what the CMS knows is whether this page is live, teasing, or retired.",
+      "enum": ["active", "coming-soon", "discontinued"],
+      "default": "active"
+    },
+    "images": {
+      "type": "array",
+      "title": "Images",
+      "description": "Product imagery. The first image is the primary one — used on cards and as the lead image on the product page. Add more to turn the product page's image area into a gallery; one image renders as a single image, and none renders nothing at all.",
+      "items": {
+        "title": "Image",
+        "allOf": [
+          {
+            "$ref": "https://quadratic.amplience.com/v2/partials/media"
+          }
+        ]
+      }
+    },
+    "attributes": {
+      "type": "array",
+      "title": "Attributes",
+      "description": "Display-only spec rows — label and value, rendered as a definition list. Not a typed attribute system; a PIM owns that.",
+      "items": {
+        "type": "object",
+        "title": "Attribute",
+        "properties": {
+          "label": {
+            "title": "Label",
+            "description": "e.g. Material, Dimensions, Weight.",
+            "minLength": 1,
+            "allOf": [
+              {
+                "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+              }
+            ]
+          },
+          "value": {
+            "title": "Value",
+            "minLength": 1,
+            "allOf": [
+              {
+                "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+              }
+            ]
+          }
+        },
+        "propertyOrder": ["label", "value"],
+        "required": ["label", "value"]
+      }
+    },
+    "category": {
+      "type": "string",
+      "title": "Category",
+      "description": "Free-text category label (e.g. \"Seating\", \"Tables\"). Deliberately not a managed taxonomy — a real PIM owns that, and two taxonomies would have to be reconciled rather than simply replaced."
+    },
+    "tags": {
+      "type": "array",
+      "title": "Tags",
+      "description": "Topic tags — used for filtering and display.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "slots": {
+      "title": "Slots",
+      "description": "Ordered slots composing editorial content below the product detail — same pattern as Page and Blog Article. Optional: a product with none renders just its commerce fields.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+          },
+          {
+            "properties": {
+              "contentType": {
+                "enum": ["https://quadratic.amplience.com/v2/slots/slot"]
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "propertyOrder": [
+    "sku",
+    "name",
+    "price",
+    "shortDescription",
+    "status",
+    "images",
+    "attributes",
+    "category",
+    "tags",
+    "slots",
+    "title",
+    "description",
+    "keywords",
+    "social",
+    "canonicalUrl",
+    "robots"
+  ],
+  "required": ["sku", "name"]
+}
