@@ -293,6 +293,17 @@ carousel = (CARD_CLIP
             + cdot(107, active=True) + cdot(121) + cdot(135) + cdot(149))
 ICONS["content_carousel"] = card_b(carousel)
 
+# product: price tag, hole punched top-right, hatched panel for the label area
+product = ('<g transform="translate({tx},{ty})">'
+           '<path d="M114 66 h54 a16 16 0 0 1 16 16 v54 a9 9 0 0 1 -2.6 6.4 l-56 56 '
+           'a9 9 0 0 1 -12.8 0 l-60 -60 a9 9 0 0 1 0 -12.8 l56 -56 A9 9 0 0 1 114 66 Z" '
+           f'fill="{{fill}}" stroke="{{stroke}}" stroke-width="{SW}"/>'
+           f'<circle cx="157" cy="93" r="11.5" fill="url(#hatchL)" stroke="{{stroke}}" stroke-width="{SW_MED}"/>'
+           f'<path d="M83 139 l30 30" stroke="{{stroke}}" stroke-width="{SW_THIN}"/>'
+           f'<path d="M99 123 l30 30" stroke="{{stroke}}" stroke-width="{SW_THIN}"/>'
+           '</g>')
+ICONS["content_product"] = card_a(shadowed(product))
+
 # ---------- Aliases ----------
 # Types that deliberately share an icon. Files are still written out under
 # each name so every content type has an explicit png/svg pair.
