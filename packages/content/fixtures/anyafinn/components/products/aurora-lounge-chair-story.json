@@ -21,6 +21,8 @@
       "_meta": {
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
-    }
+    },
+    "gutter": true,
+    "maxWidth": "default"
   }
 }

@@ -75,7 +75,23 @@ export type Product = {
   readonly sku: string
   readonly slug: string
   readonly name: string
+  /**
+   * The price for the requested currency. Mirrors commercetools, whose
+   * `ProductVariant.price` is the one matching the price-selection
+   * parameters and is absent until you supply them — selection there happens
+   * server-side, and a PIM adapter should not have to redo it client-side.
+   * Undefined when the source has no price in the requested currency.
+   */
   readonly price?: ProductPrice
+  /**
+   * Every price the source holds, in no particular order. The counterpart to
+   * `price`, again mirroring commercetools' `prices[]`. Optional because a
+   * source that selects server-side may not return the full set cheaply.
+   *
+   * This is what makes "two currencies on one page" a component change rather
+   * than a data-model change — the set is already here.
+   */
+  readonly prices?: readonly ProductPrice[]
   readonly images?: readonly ProductImage[]
   readonly shortDescription?: string
   readonly attributes?: readonly ProductAttribute[]
@@ -94,6 +110,8 @@ export type Product = {
 /** Options for a catalogue listing. All optional; all advisory. */
 export type ProductListOptions = {
   readonly locale?: string
+  /** Currency to select a price for. See `CurrencyCode`. */
+  readonly currency?: CurrencyCode
   /** Free-text category match, when the source can filter on it. */
   readonly category?: string
   readonly limit?: number
@@ -118,6 +136,8 @@ export type SourceCapabilities = {
   readonly variants: boolean
   readonly realtimePricing: boolean
   readonly inventory: boolean
+  /** Whether this source holds prices in more than one currency. */
+  readonly multiCurrency: boolean
 }
 
 /** Capability baseline — spread and override the few a source supports. */
@@ -128,4 +148,5 @@ export const NO_CAPABILITIES: SourceCapabilities = {
   variants: false,
   realtimePricing: false,
   inventory: false,
+  multiCurrency: false,
 }

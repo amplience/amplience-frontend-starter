@@ -51,11 +51,25 @@ export function Price({ amount, currencyCode, locale, className, ...rest }: Pric
   )
 }
 
+// `process` via globalThis — this package has DOM types but not node's.
+const proc = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process
+
 /**
- * Format an amount, degrading to `amount + code` if the currency code is one
- * `Intl` rejects. A malformed code is a content error, and showing
- * `749 XYZ` surfaces it; throwing would take out the whole page over one
- * mistyped field.
+ * Format an amount, degrading to `amount + code` when `Intl` rejects the
+ * arguments. Throwing would take out a whole page over one mistyped field,
+ * so the fallback stays — but it warns outside production, because the two
+ * things that land here have very different causes and the silent version
+ * makes them indistinguishable:
+ *
+ *   a bad **currency code** is a content error — one product, one author to
+ *   tell, and `749 XYZ` on the page is the message;
+ *
+ *   a bad **locale** is a configuration error — every price on the site,
+ *   and the most likely cause is passing Amplience's delivery-locale
+ *   preference list (`en-GB,*`) where a BCP 47 tag (`en-GB`) belongs. That
+ *   is a real mistake this repo has already made once; `Locale` keeps
+ *   `code`, `slug` and `delivery` apart precisely because they are not
+ *   interchangeable, and `Price` wants `code`.
  */
 export function formatPrice(amount: number, currencyCode: string, locale?: string): string {
   try {
@@ -63,6 +77,15 @@ export function formatPrice(amount: number, currencyCode: string, locale?: strin
       amount,
     )
   } catch {
+    if (proc?.env?.NODE_ENV !== 'production') {
+      const cause = locale?.includes(',')
+        ? ` "${locale}" looks like a delivery-locale preference list; Price wants a BCP 47 tag (e.g. "en-GB").`
+        : ''
+      console.warn(
+        `[Price] Intl.NumberFormat rejected locale="${locale ?? 'undefined'}" ` +
+          `currency="${currencyCode}"; falling back to an unformatted amount.${cause}`,
+      )
+    }
     return `${String(amount)} ${currencyCode}`
   }
 }
