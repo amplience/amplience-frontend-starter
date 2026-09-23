@@ -41,7 +41,9 @@
     "./markdown-block": "./src/organisms/MarkdownBlock/MarkdownBlock.tsx",
     "./slot": "./src/organisms/Slot/Slot.tsx",
     "./page": "./src/templates/Page/Page.tsx",
+    "./product-detail": "./src/templates/ProductDetail/ProductDetail.tsx",
     "./product-carousel": "./src/organisms/ProductCarousel/ProductCarousel.tsx",
+    "./image-sizes": "./src/utils/imageSizes.ts",
     "./registry": "./src/registry.ts"
   },
   "peerDependencies": {

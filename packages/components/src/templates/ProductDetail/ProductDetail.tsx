@@ -109,7 +109,7 @@ export function ProductDetail({
 
   return (
     <article className={clsx('ProductDetail', styles.root)} data-product-detail>
-      <Container>
+      <Container gutter>
         <div className={styles.layout}>
           <div className={styles.gallery}>{renderGallery(gallery, name, loadPriority)}</div>
 

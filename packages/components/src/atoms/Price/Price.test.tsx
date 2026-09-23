@@ -4,9 +4,12 @@
 // what `Intl` does with each locale/currency pair rather than about markup.
 
 import { cleanup, render, screen } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { formatPrice, Price } from './Price'
+
+/** `console` via globalThis — matches how the other guards spy on it. */
+const globalConsole = (globalThis as unknown as { console: { warn: (m: string) => void } }).console
 
 afterEach(cleanup)
 
@@ -47,7 +50,40 @@ describe('Price', () => {
 
   it('degrades to amount + code for a currency Intl rejects', () => {
     // A mistyped currency in content shouldn't take out the page.
-    expect(formatPrice(749, 'NOTACODE', 'en-GB')).toBe('749 NOTACODE')
+    const warn = vi.spyOn(globalConsole, 'warn').mockImplementation(() => undefined)
+    try {
+      expect(formatPrice(749, 'NOTACODE', 'en-GB')).toBe('749 NOTACODE')
+    } finally {
+      warn.mockRestore()
+    }
+  })
+
+  it('rejects a delivery-locale preference list, and says so', () => {
+    // The bug this test exists for: Amplience's delivery locale is a
+    // preference list ("en-GB,*"), which Intl throws on. `Locale` keeps
+    // `code`, `slug` and `delivery` apart for exactly this reason — Price
+    // wants `code`. Silently falling back made a config error look like a
+    // content one, so the fallback now warns outside production.
+    const warn = vi.spyOn(globalConsole, 'warn').mockImplementation(() => undefined)
+    try {
+      expect(formatPrice(749, 'GBP', 'en-GB,*')).toBe('749 GBP')
+      expect(warn).toHaveBeenCalledTimes(1)
+      expect(warn.mock.calls[0]?.[0]).toContain('BCP 47')
+    } finally {
+      warn.mockRestore()
+    }
+  })
+
+  it('stays quiet in production', () => {
+    const warn = vi.spyOn(globalConsole, 'warn').mockImplementation(() => undefined)
+    vi.stubEnv('NODE_ENV', 'production')
+    try {
+      expect(formatPrice(749, 'GBP', 'en-GB,*')).toBe('749 GBP')
+      expect(warn).not.toHaveBeenCalled()
+    } finally {
+      vi.unstubAllEnvs()
+      warn.mockRestore()
+    }
   })
 
   it('carries its theming hook and forwards a className', () => {
