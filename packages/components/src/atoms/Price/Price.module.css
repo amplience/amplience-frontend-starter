@@ -1,0 +1,21 @@
+/*
+ * Price atom styles.
+ *
+ * Deliberately minimal: a price is a number in the surrounding type scale,
+ * not a badge. Size and weight are rebindable so a PDP can render a large
+ * price and a card a small one without a variant prop — per ADR-0002
+ * §conventions 7, brands retune at the [data-brand] layer.
+ *
+ * `font-variant-numeric: tabular-nums` keeps digits on a fixed advance so a
+ * column of prices in a grid aligns on the decimal point instead of wobbling.
+ */
+
+.root {
+  display: inline-block;
+  color: var(--price-color, inherit);
+  font-size: var(--price-font-size, inherit);
+  font-weight: var(--price-font-weight, 600);
+  font-variant-numeric: tabular-nums;
+  line-height: inherit;
+  white-space: nowrap;
+}

@@ -1,0 +1,45 @@
+/*
+ * AttributeList molecule styles.
+ *
+ * Each pair is wrapped in a div so the <dl> can be a simple flex column and
+ * the row itself owns the label/value split — a bare dt/dd grid breaks as
+ * soon as one value wraps to two lines.
+ *
+ * Labels are given a rebindable minimum width rather than a fixed column, so
+ * short labels align without a long one being truncated.
+ */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  gap: var(--attribute-list-gap, var(--spacing-2));
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  padding-block: var(--attribute-list-row-padding, var(--spacing-2));
+  border-bottom: var(--attribute-list-border, 1px solid var(--color-gray-200));
+  gap: var(--attribute-list-column-gap, var(--spacing-4));
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  flex: 0 0 auto;
+  min-width: var(--attribute-list-label-width, 8rem);
+  color: var(--attribute-list-label-color, var(--color-gray-600));
+  font-size: var(--attribute-list-label-font-size, 0.875rem);
+  font-weight: var(--attribute-list-label-font-weight, 500);
+}
+
+.value {
+  flex: 1 1 12rem;
+  margin: 0;
+  color: var(--attribute-list-value-color, inherit);
+  font-size: var(--attribute-list-value-font-size, 0.875rem);
+}
