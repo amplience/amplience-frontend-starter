@@ -1,0 +1,118 @@
+/*
+ * ProductDetail template styles.
+ *
+ * Two-column on desktop (gallery left, summary right), stacked below 769px —
+ * the same breakpoint the grid and carousel helpers use, so the `sizes` hints
+ * derived from slide counts stay truthful.
+ *
+ * The editorial content below sits outside the Container because its own
+ * blocks (hero, columns, grid) bring their own width constraints; wrapping it
+ * again would double-constrain them.
+ */
+
+.root {
+  display: block;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding-block: var(--product-detail-padding-block, var(--spacing-6));
+  gap: var(--product-detail-gap, var(--spacing-6));
+}
+
+@media (min-width: 769px) {
+  .layout {
+    grid-template-columns: var(--product-detail-columns, 1fr 1fr);
+    align-items: start;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Gallery
+   --------------------------------------------------------------------------- */
+
+.gallery {
+  position: relative;
+  min-width: 0; /* let the carousel track shrink inside the grid column */
+}
+
+.slide {
+  width: 100%;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  border-radius: var(--product-detail-image-radius, var(--radius-md, 0.5rem));
+  aspect-ratio: var(--product-detail-image-ratio, 1 / 1);
+  object-fit: var(--product-detail-image-fit, cover);
+}
+
+.carousel {
+  --carousel-gap: var(--product-detail-carousel-gap, var(--spacing-2));
+}
+
+/* ---------------------------------------------------------------------------
+   Summary
+   --------------------------------------------------------------------------- */
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--product-detail-summary-gap, var(--spacing-3));
+}
+
+.category {
+  margin: 0;
+  color: var(--product-detail-category-color, var(--color-gray-600));
+  font-size: var(--product-detail-category-font-size, 0.8125rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.name {
+  margin: 0;
+}
+
+.status {
+  padding: 0.25em 0.7em;
+  border-radius: var(--radius-full, 9999px);
+  background: var(--product-detail-status-background, var(--color-gray-900));
+  color: var(--product-detail-status-color, var(--color-white));
+  font-size: var(--product-detail-status-font-size, 0.75rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.status[data-status='discontinued'] {
+  --product-detail-status-background: var(--color-gray-500);
+}
+
+.price {
+  --price-font-size: var(--product-detail-price-font-size, 1.5rem);
+}
+
+.description {
+  margin: 0;
+  color: var(--product-detail-description-color, var(--color-gray-700));
+}
+
+.attributes {
+  width: 100%;
+  margin-top: var(--spacing-2);
+}
+
+.tags {
+  margin-top: var(--spacing-1);
+}
+
+/* ---------------------------------------------------------------------------
+   Editorial content
+   --------------------------------------------------------------------------- */
+
+.content {
+  display: block;
+}
