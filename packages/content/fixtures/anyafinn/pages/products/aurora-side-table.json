@@ -46,6 +46,20 @@
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
+    "prices": [
+      {
+        "amount": 229,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 265,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 289,
+        "currencyCode": "USD"
+      }
+    ],
     "shortDescription": {
       "values": [
         {
@@ -78,10 +92,6 @@
       }
     },
     "status": "active",
-    "price": {
-      "amount": 229,
-      "currencyCode": "GBP"
-    },
     "images": [
       {
         "mediaType": "ManualImage",

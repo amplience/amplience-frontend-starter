@@ -29,6 +29,7 @@ import { HeroBlock } from '@amplience/frontend-starter-components/hero-block'
 import { gridBlockSlotSizes } from '@amplience/frontend-starter-components/image-sizes'
 import { ProductCard } from '@amplience/frontend-starter-components/product-card'
 
+import { resolveCurrency } from '../../../../lib/currency'
 import { localeBasePath, localeForSlug, publicPath } from '../../../../lib/locales'
 import { productMedia } from '../../../../lib/product-media'
 import { productSource } from '../../../../lib/product-source'
@@ -63,7 +64,10 @@ async function ProductListing({ params }: RouteProps) {
   const locale = localeForSlug(localeSlug)
   if (locale === undefined) notFound()
 
-  const { products } = await productSource.list({ locale: locale.delivery })
+  const { products } = await productSource.list({
+    locale: locale.delivery,
+    currency: resolveCurrency(locale.code),
+  })
 
   return (
     <main data-product-listing>

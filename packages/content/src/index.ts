@@ -15,6 +15,7 @@ export type { ContentClient } from './port'
 export type { ProductSource } from './product-port'
 export { NO_CAPABILITIES } from './product-types'
 export type {
+  CurrencyCode,
   Product,
   ProductAttribute,
   ProductImage,

@@ -46,6 +46,20 @@
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
+    "prices": [
+      {
+        "amount": 45,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 52,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 57,
+        "currencyCode": "USD"
+      }
+    ],
     "shortDescription": {
       "values": [
         {
@@ -78,10 +92,6 @@
       }
     },
     "status": "discontinued",
-    "price": {
-      "amount": 45,
-      "currencyCode": "GBP"
-    },
     "images": [
       {
         "mediaType": "ManualImage",

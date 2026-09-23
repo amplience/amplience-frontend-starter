@@ -14,6 +14,7 @@
  */
 
 import type {
+  CurrencyCode,
   Product,
   ProductAttribute,
   ProductImage,
@@ -22,6 +23,7 @@ import type {
 } from '../product-types'
 import type { ContentItem } from '../types'
 import { isMediaImageLink, mediaImageUrl } from '../types'
+import { selectPrice, warnOnMissingCurrency } from './selectPrice'
 
 const STATUSES: readonly ProductStatus[] = ['active', 'coming-soon', 'discontinued']
 
@@ -37,6 +39,21 @@ const mapPrice = (v: unknown): ProductPrice | undefined => {
   const currencyCode = str(p?.currencyCode)
   if (amount === undefined || currencyCode === undefined) return undefined
   return { amount, currencyCode }
+}
+
+/**
+ * Every well-formed price on the body, de-duplicated by currency — a schema
+ * can't express "unique by currencyCode", so two GBP rows are authorable and
+ * would make selection depend on array order. First wins, deterministically.
+ */
+const mapPrices = (v: unknown): readonly ProductPrice[] => {
+  if (!Array.isArray(v)) return []
+  const seen = new Set<string>()
+  return v.map(mapPrice).filter((p): p is ProductPrice => {
+    if (p === undefined || seen.has(p.currencyCode)) return false
+    seen.add(p.currencyCode)
+    return true
+  })
 }
 
 /**
@@ -103,7 +120,11 @@ const isPresent = <T>(v: T | undefined): v is T => v !== undefined
  * sensibly substitute. Dropping such an item keeps one malformed product
  * from taking out a whole listing.
  */
-export const mapProduct = (body: unknown, slug: string): Product | undefined => {
+export const mapProduct = (
+  body: unknown,
+  slug: string,
+  currency?: CurrencyCode,
+): Product | undefined => {
   const b = body as Record<string, unknown> | undefined
   if (!b || typeof b !== 'object') return undefined
 
@@ -118,7 +139,9 @@ export const mapProduct = (body: unknown, slug: string): Product | undefined => 
   const tags = Array.isArray(b.tags) ? b.tags.filter((t): t is string => typeof t === 'string') : []
   const slots = Array.isArray(b.slots) ? (b.slots as readonly ContentItem[]) : []
 
-  const price = mapPrice(b.price)
+  const prices = mapPrices(b.prices)
+  warnOnMissingCurrency(slug, currency, prices)
+  const price = selectPrice(prices, currency)
   const shortDescription = str(b.shortDescription)
   const category = str(b.category)
   const status = mapStatus(b.status)
@@ -128,6 +151,7 @@ export const mapProduct = (body: unknown, slug: string): Product | undefined => 
     slug,
     name,
     ...(price !== undefined ? { price } : {}),
+    ...(prices.length > 0 ? { prices } : {}),
     ...(images.length > 0 ? { images } : {}),
     ...(shortDescription !== undefined ? { shortDescription } : {}),
     ...(attributes.length > 0 ? { attributes } : {}),

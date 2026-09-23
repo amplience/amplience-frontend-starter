@@ -20,7 +20,7 @@
         "items": [
           {
             "label": "🛍️ Product",
-            "pointers": ["/sku", "/name", "/price", "/shortDescription", "/status"]
+            "pointers": ["/sku", "/name", "/prices", "/shortDescription", "/status"]
           },
           {
             "label": "🖼️ Media",
@@ -109,27 +109,6 @@
           "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
         }
       ]
-    },
-    "price": {
-      "type": "object",
-      "title": "Price",
-      "description": "Display only — this is not a pricing engine. No tax, no promotions, no currency conversion; a product shows the one price authored here.",
-      "properties": {
-        "amount": {
-          "type": "number",
-          "title": "Amount",
-          "description": "In major units — 19.99, not 1999.",
-          "minimum": 0
-        },
-        "currencyCode": {
-          "type": "string",
-          "title": "Currency",
-          "description": "ISO 4217 code, e.g. GBP, USD, EUR.",
-          "pattern": "^[A-Z]{3}$"
-        }
-      },
-      "propertyOrder": ["amount", "currencyCode"],
-      "required": ["amount", "currencyCode"]
     },
     "shortDescription": {
       "title": "Short Description",
@@ -238,12 +217,37 @@
           }
         ]
       }
+    },
+    "prices": {
+      "type": "array",
+      "title": "Prices",
+      "description": "One price per currency. Display only — this is not a pricing engine: no tax, no promotions, no conversion between currencies. Most catalogues need a single entry. Which of these a visitor sees is a deployment setting (PRODUCT_CURRENCIES), not a property of the product, which is why prices are keyed by currency and not localized: a currency can serve several locales, and a locale can offer several currencies. A product with no price in the requested currency shows no price — prices are never substituted across currencies.",
+      "items": {
+        "type": "object",
+        "title": "Price",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "title": "Amount",
+            "description": "In major units — 19.99, not 1999.",
+            "minimum": 0
+          },
+          "currencyCode": {
+            "type": "string",
+            "title": "Currency",
+            "description": "ISO 4217 code, e.g. GBP, USD, EUR.",
+            "pattern": "^[A-Z]{3}$"
+          }
+        },
+        "propertyOrder": ["amount", "currencyCode"],
+        "required": ["amount", "currencyCode"]
+      }
     }
   },
   "propertyOrder": [
     "sku",
     "name",
-    "price",
+    "prices",
     "shortDescription",
     "status",
     "images",

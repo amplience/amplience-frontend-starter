@@ -35,6 +35,7 @@ export type StoryProduct = {
   readonly name: string
   readonly shortDescription?: string
   readonly price?: { readonly amount: number; readonly currencyCode: string }
+  readonly prices: readonly { readonly amount: number; readonly currencyCode: string }[]
   readonly images: readonly ContentMediaData[]
   readonly attributes: readonly { label: string; value: string }[]
   readonly category?: string
@@ -71,16 +72,30 @@ const isStatus = (v: unknown): v is NonNullable<StoryProduct['status']> =>
  * `images`, `price` or `attributes` at all, so a shared literal type would
  * have to be the union of all seven.
  */
-const toStoryProduct = (fixture: unknown, locale: string = DEFAULT_LOCALE): StoryProduct => {
+const toStoryProduct = (
+  fixture: unknown,
+  locale: string = DEFAULT_LOCALE,
+  currency?: string,
+): StoryProduct => {
   const body = (fixture as { body: Record<string, unknown> }).body
   const key = (body._meta as { deliveryKeys?: { values?: { value: string }[] } } | undefined)
     ?.deliveryKeys?.values?.[0]?.value
   const slug = key?.split('/').pop() ?? ''
 
-  const priceField = body.price as { amount?: unknown; currencyCode?: unknown } | undefined
-  const amount = num(priceField?.amount)
-  const currencyCode =
-    typeof priceField?.currencyCode === 'string' ? priceField.currencyCode : undefined
+  // Content holds one price per currency; a story shows one of them. Which
+  // one is a deployment policy (`resolveCurrency` in apps/web), so a story
+  // just takes the first — or the requested one, for the localized stories.
+  const prices = Array.isArray(body.prices)
+    ? body.prices.flatMap((entry) => {
+        const p = entry as { amount?: unknown; currencyCode?: unknown }
+        const amount = num(p.amount)
+        return typeof p.currencyCode === 'string' && amount !== undefined
+          ? [{ amount, currencyCode: p.currencyCode }]
+          : []
+      })
+    : []
+  const selected =
+    currency === undefined ? prices[0] : prices.find((p) => p.currencyCode === currency)
 
   const attributes = Array.isArray(body.attributes)
     ? body.attributes.flatMap((a) => {
@@ -100,7 +115,8 @@ const toStoryProduct = (fixture: unknown, locale: string = DEFAULT_LOCALE): Stor
     href: `/products/${slug}`,
     name: text(body.name, locale) ?? slug,
     ...(shortDescription !== undefined && { shortDescription }),
-    ...(amount !== undefined && currencyCode !== undefined && { price: { amount, currencyCode } }),
+    ...(selected !== undefined && { price: selected }),
+    prices,
     // The media partial's delivery shape is exactly `ContentMediaData`; the
     // cast is only because a JSON import widens `mediaType` to `string`.
     images: Array.isArray(body.images) ? (body.images as ContentMediaData[]) : [],
@@ -132,7 +148,7 @@ export const storyProduct = (slug: string): StoryProduct => {
 }
 
 /** The same product in a different locale, for the localization stories. */
-export const storyProductIn = (slug: string, locale: string): StoryProduct => {
+export const storyProductIn = (slug: string, locale: string, currency?: string): StoryProduct => {
   const source = [
     auroraLoungeChair,
     auroraShelving,
@@ -143,5 +159,5 @@ export const storyProductIn = (slug: string, locale: string): StoryProduct => {
     verdePlanter,
   ].find((f) => toStoryProduct(f).slug === slug)
   if (source === undefined) throw new Error(`No product fixture with slug "${slug}"`)
-  return toStoryProduct(source, locale)
+  return toStoryProduct(source, locale, currency)
 }

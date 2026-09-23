@@ -118,6 +118,11 @@ describe('CmsProductSource — mapping', () => {
     const product = await source().getBySlug('aurora-lounge-chair')
     expect(product.sku).toBe('AUR-CHAIR-01')
     expect(product.price).toEqual({ amount: 749, currencyCode: 'GBP' })
+    expect(product.prices).toEqual([
+      { amount: 749, currencyCode: 'GBP' },
+      { amount: 869, currencyCode: 'EUR' },
+      { amount: 949, currencyCode: 'USD' },
+    ])
     expect(product.images).toHaveLength(6)
     expect(product.images?.[0]?.url).toContain('picsum.photos')
     expect(product.attributes?.length).toBeGreaterThan(0)
@@ -195,7 +200,21 @@ describe('CmsProductSource — listing', () => {
     expect(products.every((p) => typeof p.name === 'string' && p.name.length > 0)).toBe(true)
   })
 
-  it('advertises no capabilities', () => {
-    expect(Object.values(source().capabilities).every((v) => v === false)).toBe(true)
+  it('advertises multiCurrency and nothing else', () => {
+    // Every authored price is present, so currency selection is a local
+    // filter — the one thing a CMS catalogue genuinely does.
+    const { multiCurrency, ...rest } = source().capabilities
+    expect(multiCurrency).toBe(true)
+    expect(Object.values(rest).every((v) => v === false)).toBe(true)
+  })
+
+  it.each(['GBP', 'EUR', 'USD'])('selects %s across the catalogue', (currency) => {
+    return source()
+      .list({ currency })
+      .then(({ products }) => {
+        const priced = products.filter((p) => p.price !== undefined)
+        expect(priced.length).toBeGreaterThan(0)
+        expect(priced.every((p) => p.price?.currencyCode === currency)).toBe(true)
+      })
   })
 })

@@ -35,6 +35,11 @@ const PRODUCTS: readonly Product[] = [
     slug: 'aurora-lounge-chair',
     name: 'Aurora Lounge Chair',
     price: { amount: 749, currencyCode: 'GBP' },
+    prices: [
+      { amount: 749, currencyCode: 'GBP' },
+      { amount: 869, currencyCode: 'EUR' },
+      { amount: 949, currencyCode: 'USD' },
+    ],
     shortDescription: 'A low-slung lounge chair in oiled oak and bouclé.',
     images: [
       {
@@ -63,6 +68,11 @@ const PRODUCTS: readonly Product[] = [
     slug: 'aurora-side-table',
     name: 'Aurora Side Table',
     price: { amount: 229, currencyCode: 'GBP' },
+    prices: [
+      { amount: 229, currencyCode: 'GBP' },
+      { amount: 265, currencyCode: 'EUR' },
+      { amount: 289, currencyCode: 'USD' },
+    ],
     images: [{ url: 'https://example.invalid/table-1.jpg', alt: 'Aurora side table' }],
     category: 'Tables',
     status: 'active',
