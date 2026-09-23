@@ -1,18 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import type { ReactNode } from 'react'
 
-import type { ContentMediaData } from '@amplience/frontend-starter-types'
-
+import { storyProduct, storyProducts } from '../../fixtures/products'
 import { ProductCard } from './ProductCard'
-
-const media: ContentMediaData = {
-  mediaType: 'ManualImage',
-  image: {
-    src: 'https://picsum.photos/seed/product-aurora-lounge-chair/800/800',
-    alt: 'Aurora Lounge Chair',
-    width: 800,
-    height: 800,
-  },
-}
 
 const meta = {
   title: 'Molecules/ProductCard',
@@ -27,7 +17,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof ProductCard>
 
-const grid = (children: React.ReactNode) => (
+const grid = (children: ReactNode) => (
   <div
     style={{
       display: 'grid',
@@ -40,17 +30,36 @@ const grid = (children: React.ReactNode) => (
   </div>
 )
 
+/** Spread a fixture product into the card's props. */
+const fromFixture = (slug: string) => {
+  const p = storyProduct(slug)
+  return {
+    name: p.name,
+    href: p.href,
+    locale: 'en-GB',
+    ...(p.price !== undefined && { price: p.price }),
+    ...(p.images[0] !== undefined && { media: p.images[0] }),
+    ...(p.shortDescription !== undefined && { shortDescription: p.shortDescription }),
+    ...(p.status !== undefined && { status: p.status }),
+  }
+}
+
 export const Playground: Story = {
   parameters: { controls: { disable: false } },
-  args: {
-    name: 'Aurora Lounge Chair',
-    href: '/products/aurora-lounge-chair',
-    price: { amount: 749, currencyCode: 'GBP' },
-    shortDescription: 'A low-slung lounge chair in oiled oak and wool bouclé.',
-    media,
-    locale: 'en-GB',
-  },
+  args: fromFixture('aurora-lounge-chair'),
   render: (args) => <div style={{ maxWidth: '280px' }}>{grid(<ProductCard {...args} />)}</div>,
+}
+
+export const TheFixtureSet: Story = {
+  name: 'Every fixture product',
+  render: () =>
+    grid(
+      <>
+        {storyProducts.map((p) => (
+          <ProductCard key={p.slug} {...fromFixture(p.slug)} />
+        ))}
+      </>,
+    ),
 }
 
 export const States: Story = {
@@ -58,28 +67,9 @@ export const States: Story = {
   render: () =>
     grid(
       <>
-        <ProductCard
-          name="Active"
-          href="#"
-          price={{ amount: 749, currencyCode: 'GBP' }}
-          media={media}
-          locale="en-GB"
-        />
-        <ProductCard
-          name="Coming soon"
-          href="#"
-          status="coming-soon"
-          media={media}
-          locale="en-GB"
-        />
-        <ProductCard
-          name="Discontinued"
-          href="#"
-          status="discontinued"
-          price={{ amount: 45, currencyCode: 'GBP' }}
-          media={media}
-          locale="en-GB"
-        />
+        <ProductCard {...fromFixture('aurora-side-table')} />
+        <ProductCard {...fromFixture('aurora-shelving')} />
+        <ProductCard {...fromFixture('verde-ceramic-planter')} />
       </>,
     ),
 }
@@ -89,22 +79,11 @@ export const SparseData: Story = {
   render: () =>
     grid(
       <>
-        <ProductCard
-          name="Everything"
-          href="#"
-          price={{ amount: 749, currencyCode: 'GBP' }}
-          shortDescription="Full card."
-          media={media}
-          locale="en-GB"
-        />
-        <ProductCard
-          name="No image"
-          href="#"
-          price={{ amount: 229, currencyCode: 'GBP' }}
-          shortDescription="Box is reserved so the row stays aligned."
-          locale="en-GB"
-        />
-        <ProductCard name="Aurora Shelving" href="#" status="coming-soon" />
+        <ProductCard {...fromFixture('aurora-lounge-chair')} />
+        <ProductCard {...fromFixture('lumen-floor-lamp')} />
+        {/* No image and no price — the box is still reserved, so the row
+            keeps a straight baseline. */}
+        <ProductCard {...fromFixture('aurora-shelving')} />
       </>,
     ),
 }
@@ -114,21 +93,8 @@ export const LongName: Story = {
   render: () =>
     grid(
       <>
-        <ProductCard
-          name="Mara Hand-Woven Undyed Wool Throw"
-          href="#"
-          price={{ amount: 95, currencyCode: 'GBP' }}
-          shortDescription="Undyed wool, woven on a hand loom."
-          media={media}
-          locale="en-GB"
-        />
-        <ProductCard
-          name="Short"
-          href="#"
-          price={{ amount: 45, currencyCode: 'GBP' }}
-          media={media}
-          locale="en-GB"
-        />
+        <ProductCard {...fromFixture('mara-hand-woven-wool-throw')} />
+        <ProductCard {...fromFixture('verde-ceramic-planter')} />
       </>,
     ),
 }

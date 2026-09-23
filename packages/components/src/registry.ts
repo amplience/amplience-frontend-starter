@@ -114,6 +114,12 @@ import type {
   PageSchema,
   PageSocialCard,
 } from './templates/Page/Page.registry'
+import {
+  PRODUCT_SCHEMA,
+  productMetadataFromSchema,
+  productRegistryEntry,
+} from './templates/ProductDetail/ProductDetail.registry'
+import type { ProductSchema } from './templates/ProductDetail/ProductDetail.registry'
 
 /**
  * Build a Registry from `[schemaURI, entry]` pairs.
@@ -156,6 +162,7 @@ export const createRegistryWithout = (base: Registry, exclude: readonly SchemaUR
 export const defaultRegistry: Registry = createRegistry([
   [PAGE_SCHEMA, pageRegistryEntry],
   [BLOG_ARTICLE_SCHEMA, blogArticleRegistryEntry],
+  [PRODUCT_SCHEMA, productRegistryEntry],
   [SLOT_SCHEMA, slotRegistryEntry],
   [HERO_BLOCK_SCHEMA, heroBlockRegistryEntry],
   [MEDIA_BLOCK_SCHEMA, mediaBlockRegistryEntry],
@@ -230,3 +237,5 @@ export {
 export { FOOTER_BLOCK_SCHEMA, footerBlockRegistryEntry, FOOTER_ROW_SCHEMA, footerRowRegistryEntry }
 export { BLOG_ARTICLE_SCHEMA, blogArticleRegistryEntry, blogArticleMetadataFromSchema }
 export type { BlogArticleSchema }
+export { PRODUCT_SCHEMA, productRegistryEntry, productMetadataFromSchema }
+export type { ProductSchema }
