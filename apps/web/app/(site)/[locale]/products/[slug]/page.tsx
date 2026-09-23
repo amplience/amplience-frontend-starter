@@ -31,6 +31,7 @@ import { Suspense } from 'react'
 import { ProductDetail } from '@amplience/frontend-starter-components/product-detail'
 import { isContentClientError } from '@amplience/frontend-starter-content'
 
+import { resolveCurrency } from '../../../../../lib/currency'
 import { localeBasePath, localeForSlug, locales, publicPath } from '../../../../../lib/locales'
 import { productMediaList } from '../../../../../lib/product-media'
 import { productSource } from '../../../../../lib/product-source'
@@ -61,7 +62,10 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
   if (locale === undefined) notFound()
 
   try {
-    const product = await productSource.getBySlug(slug, { locale: locale.delivery })
+    const product = await productSource.getBySlug(slug, {
+      locale: locale.delivery,
+      currency: resolveCurrency(locale.code),
+    })
     // The canonical is the public URL, not a delivery key — the site prefix
     // never surfaces in URLs (ADR-0014), the locale prefix does except for
     // the default locale (ADR-0015).
@@ -90,7 +94,7 @@ async function ProductDetailPage({ params }: RouteProps) {
   if (locale === undefined) notFound()
 
   const product = await productSource
-    .getBySlug(slug, { locale: locale.delivery })
+    .getBySlug(slug, { locale: locale.delivery, currency: resolveCurrency(locale.code) })
     .catch((error: unknown) => {
       if (!isContentClientError(error)) throw error
       if (error.kind === 'not-found') notFound()

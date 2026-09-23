@@ -41,6 +41,17 @@ export type ProductPrice = {
 }
 
 /**
+ * An ISO 4217 currency code.
+ *
+ * Passed per request rather than configured on the source, because which
+ * currency a visitor sees is a policy of the *deployment* — derived from the
+ * locale today, from a picker or a geo lookup tomorrow — not a fact about the
+ * catalogue. Keeping it a request parameter is what lets that policy change
+ * without the source, the schema or the components changing.
+ */
+export type CurrencyCode = string
+
+/**
  * A product image, shaped after the commerce mainstream: commercetools
  * (`url` + `label` + `dimensions`), Shopify (`url` + `altText` + `width` +
  * `height`), BigCommerce and SFCC all hand back a URL and never a CMS asset

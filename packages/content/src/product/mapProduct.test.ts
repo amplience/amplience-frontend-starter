@@ -98,23 +98,53 @@ describe('mapProduct — images', () => {
   })
 })
 
-describe('mapProduct — optional fields', () => {
-  it('maps a well-formed price', () => {
-    expect(
-      mapProduct({ ...base, price: { amount: 19.99, currencyCode: 'GBP' } }, 's')?.price,
-    ).toEqual({ amount: 19.99, currencyCode: 'GBP' })
+describe('mapProduct — prices', () => {
+  const gbp = { amount: 19.99, currencyCode: 'GBP' }
+  const eur = { amount: 23.5, currencyCode: 'EUR' }
+
+  it('maps the whole price set', () => {
+    expect(mapProduct({ ...base, prices: [gbp, eur] }, 's')?.prices).toEqual([gbp, eur])
+  })
+
+  it('selects the requested currency', () => {
+    expect(mapProduct({ ...base, prices: [gbp, eur] }, 's', 'EUR')?.price).toEqual(eur)
+  })
+
+  it('selects the first price when no currency is requested', () => {
+    // A single-currency catalogue needs no configuration to show its price.
+    expect(mapProduct({ ...base, prices: [gbp, eur] }, 's')?.price).toEqual(gbp)
+  })
+
+  it('never substitutes another currency', () => {
+    const product = mapProduct({ ...base, prices: [eur] }, 's', 'GBP')
+    expect(product?.price).toBeUndefined()
+    // The set is still there — the component could show EUR if it chose to.
+    expect(product?.prices).toEqual([eur])
+  })
+
+  it('de-duplicates by currency so selection is order-independent', () => {
+    // The schema can't express "unique by currencyCode", so two GBP rows are
+    // authorable; first wins, deterministically.
+    const dupes = [gbp, { amount: 99, currencyCode: 'GBP' }]
+    expect(mapProduct({ ...base, prices: dupes }, 's', 'GBP')?.price).toEqual(gbp)
   })
 
   it('drops a price missing its currency, rather than rendering a bare number', () => {
-    expect(mapProduct({ ...base, price: { amount: 19.99 } }, 's')?.price).toBeUndefined()
+    expect(mapProduct({ ...base, prices: [{ amount: 19.99 }] }, 's')?.prices).toBeUndefined()
   })
 
   it('drops a non-finite price rather than rendering NaN', () => {
     expect(
-      mapProduct({ ...base, price: { amount: NaN, currencyCode: 'GBP' } }, 's')?.price,
+      mapProduct({ ...base, prices: [{ amount: NaN, currencyCode: 'GBP' }] }, 's')?.prices,
     ).toBeUndefined()
   })
 
+  it('ignores a non-array prices field', () => {
+    expect(mapProduct({ ...base, prices: 'nope' }, 's')?.prices).toBeUndefined()
+  })
+})
+
+describe('mapProduct — optional fields', () => {
   it('maps attributes and drops incomplete pairs', () => {
     const attributes = [{ label: 'Material', value: 'Oak' }, { label: 'Missing value' }]
     expect(mapProduct({ ...base, attributes }, 's')?.attributes).toEqual([

@@ -11,15 +11,17 @@
  * different sites — which is exactly what cross-set isolation needs testing
  * for (ADR-0019 puts two fixture sets on one hub).
  *
- * Every capability is false. A CMS catalogue has no search, no facets, no
- * server-side pagination, no variants, no live pricing and no stock; saying
- * so is what lets a consumer light those up when a PIM adapter arrives
- * without a route change.
+ * Almost every capability is false. A CMS catalogue has no search, no facets,
+ * no server-side pagination, no variants, no live pricing and no stock; saying
+ * so is what lets a consumer light those up when a PIM adapter arrives without
+ * a route change. `multiCurrency` is the exception — every authored price is
+ * present, so selection is a local filter.
  */
 
 import type { ContentClient } from '../port'
 import type { ProductSource } from '../product-port'
 import type {
+  CurrencyCode,
   Product,
   ProductListOptions,
   ProductListResult,
@@ -56,7 +58,10 @@ export type CmsProductSourceOptions = {
 }
 
 export class CmsProductSource implements ProductSource {
-  readonly capabilities: SourceCapabilities = NO_CAPABILITIES
+  // Multi-currency is the one thing a CMS catalogue genuinely can do: every
+  // price the author wrote is present, so selection is a local filter rather
+  // than a second request.
+  readonly capabilities: SourceCapabilities = { ...NO_CAPABILITIES, multiCurrency: true }
 
   readonly #client: ContentClient
   readonly #siteName: string
@@ -73,14 +78,17 @@ export class CmsProductSource implements ProductSource {
    * a detail page needs the whole tree, and the key is derivable, so there is
    * no reason to page the catalogue to find one item.
    */
-  async getBySlug(slug: string, opts?: { readonly locale?: string }): Promise<Product> {
+  async getBySlug(
+    slug: string,
+    opts?: { readonly locale?: string; readonly currency?: CurrencyCode },
+  ): Promise<Product> {
     const key = this.#keyFor(slug)
     const item = await this.#client.getByKey<Record<string, unknown>>(key, {
       depth: 'all',
       locale: opts?.locale ?? ANY_LOCALE,
     })
 
-    const product = mapProduct(item, slug)
+    const product = mapProduct(item, slug, opts?.currency)
     if (!product) {
       throw new ContentClientError(
         'malformed',
@@ -92,11 +100,11 @@ export class CmsProductSource implements ProductSource {
 
   async getBySkus(
     skus: readonly string[],
-    opts?: { readonly locale?: string },
+    opts?: { readonly locale?: string; readonly currency?: CurrencyCode },
   ): Promise<readonly Product[]> {
     if (skus.length === 0) return []
 
-    const all = await this.#catalogue(opts?.locale)
+    const all = await this.#catalogue(opts?.locale, opts?.currency)
     const bySku = new Map(all.map((p) => [p.sku, p]))
     const resolved = skus.map((sku) => bySku.get(sku)).filter((p): p is Product => p !== undefined)
     warnOnMissingSkus(missingSkus(skus, resolved))
@@ -110,7 +118,7 @@ export class CmsProductSource implements ProductSource {
    * count before slicing, which is what a pager needs.
    */
   async list(opts: ProductListOptions = {}): Promise<ProductListResult> {
-    const all = await this.#catalogue(opts.locale)
+    const all = await this.#catalogue(opts.locale, opts.currency)
     const matching = opts.category ? all.filter((p) => p.category === opts.category) : all
 
     const offset = opts.offset ?? 0
@@ -148,10 +156,10 @@ export class CmsProductSource implements ProductSource {
    * dropped: one product missing its required fields shouldn't empty a
    * listing page.
    */
-  async #catalogue(locale?: string): Promise<readonly Product[]> {
+  async #catalogue(locale?: string, currency?: CurrencyCode): Promise<readonly Product[]> {
     const { entries } = await this.#read(locale)
     return entries
-      .map((e) => mapProduct(e.item, e.slug))
+      .map((e) => mapProduct(e.item, e.slug, currency))
       .filter((p): p is Product => p !== undefined)
   }
 }

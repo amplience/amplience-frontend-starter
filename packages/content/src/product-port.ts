@@ -19,6 +19,7 @@
  */
 
 import type {
+  CurrencyCode,
   Product,
   ProductListOptions,
   ProductListResult,
@@ -34,7 +35,10 @@ export type ProductSource = {
    * error taxonomy across the package, discriminated with
    * `isContentClientError`.
    */
-  getBySlug(slug: string, opts?: { readonly locale?: string }): Promise<Product>
+  getBySlug(
+    slug: string,
+    opts?: { readonly locale?: string; readonly currency?: CurrencyCode },
+  ): Promise<Product>
 
   /**
    * Fetch products by SKU, for content that references products by identity
@@ -48,7 +52,7 @@ export type ProductSource = {
    */
   getBySkus(
     skus: readonly string[],
-    opts?: { readonly locale?: string },
+    opts?: { readonly locale?: string; readonly currency?: CurrencyCode },
   ): Promise<readonly Product[]>
 
   /**
