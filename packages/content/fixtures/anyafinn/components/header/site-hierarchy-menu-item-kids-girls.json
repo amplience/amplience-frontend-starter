@@ -1,0 +1,18 @@
+{
+  "id": "0a7d2d01-796e-5952-9e6e-8593a35ff67b",
+  "label": "Hierarchy menu item: Kids — Girls",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Kids — Girls",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "0a7d2d01-796e-5952-9e6e-8593a35ff67b",
+      "hierarchy": {
+        "parentId": "2cc4871a-4a82-5605-adce-3a70f4fa6cd1",
+        "root": false,
+        "position": "gO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Girls",
+    "link": "/kids-girls"
+  }
+}

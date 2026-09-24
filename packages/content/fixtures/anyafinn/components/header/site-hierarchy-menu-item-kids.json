@@ -1,0 +1,18 @@
+{
+  "id": "2cc4871a-4a82-5605-adce-3a70f4fa6cd1",
+  "label": "Hierarchy menu item: Kids",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Kids",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "2cc4871a-4a82-5605-adce-3a70f4fa6cd1",
+      "hierarchy": {
+        "parentId": "9f138dcb-634b-5135-9c06-f365b1504264",
+        "root": false,
+        "position": "ggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Kids",
+    "link": "/kids"
+  }
+}

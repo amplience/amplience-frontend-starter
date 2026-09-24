@@ -62,8 +62,25 @@
   flex-direction: column;
 }
 
-.root[data-display='dropdownOnHover'] .list > li:hover > ul,
-.root[data-display='dropdownOnHover'] .list > li:focus-within > ul {
+.root[data-display='dropdownOnHover'] .list > li:hover > ul {
+  display: flex;
+}
+
+/*
+ * Keyboard equivalent of the hover rule above.
+ *
+ * `:has(:focus-visible)` rather than `:focus-within`: a mouse click leaves
+ * focus on the link it activated, so with `:focus-within` the panel stayed
+ * open after navigating and hovering a sibling opened a *second* panel on top
+ * of it. `:focus-visible` is only set for keyboard and assistive-tech focus,
+ * so clicking closes the panel while tabbing still opens it.
+ *
+ * Deliberately its own rule, not appended to the selector list above: one
+ * unsupported selector invalidates an entire comma-separated list, so a
+ * browser without `:has()` would lose hover as well. Split, it only loses the
+ * keyboard reveal.
+ */
+.root[data-display='dropdownOnHover'] .list > li:has(:focus-visible) > ul {
   display: flex;
 }
 
@@ -113,8 +130,12 @@
   z-index: var(--z-menu-dropdown, 150);
 }
 
-.root[data-display='megaMenuOnHover'] .list > li:hover > ul,
-.root[data-display='megaMenuOnHover'] .list > li:focus-within > ul {
+.root[data-display='megaMenuOnHover'] .list > li:hover > ul {
+  display: flex;
+}
+
+/* Keyboard equivalent — same reasoning as the dropdownOnHover rule above. */
+.root[data-display='megaMenuOnHover'] .list > li:has(:focus-visible) > ul {
   display: flex;
 }
 

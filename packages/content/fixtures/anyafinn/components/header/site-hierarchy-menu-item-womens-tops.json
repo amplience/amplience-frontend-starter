@@ -1,0 +1,18 @@
+{
+  "id": "b6dea85c-1ccf-529a-bc56-832f6d56e88e",
+  "label": "Hierarchy menu item: Womens — Tops",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Womens — Tops",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "b6dea85c-1ccf-529a-bc56-832f6d56e88e",
+      "hierarchy": {
+        "parentId": "32722372-7a57-5d8e-b95b-0ae3124ca58c",
+        "root": false,
+        "position": "gO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Tops",
+    "link": "/womens-tops"
+  }
+}

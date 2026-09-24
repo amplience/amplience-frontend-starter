@@ -1,0 +1,18 @@
+{
+  "id": "b0b38152-a606-558d-a2cc-cbacc6f4f23b",
+  "label": "Hierarchy menu item: Mens — Jackets",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Mens — Jackets",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "b0b38152-a606-558d-a2cc-cbacc6f4f23b",
+      "hierarchy": {
+        "parentId": "5c76289c-d092-5c6b-810f-05a5da4ff054",
+        "root": false,
+        "position": "ggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Jackets",
+    "link": "/mens-jackets"
+  }
+}

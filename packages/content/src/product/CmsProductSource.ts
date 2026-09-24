@@ -141,6 +141,22 @@ export class CmsProductSource implements ProductSource {
     return entries.map((e) => e.slug)
   }
 
+  /**
+   * The category set, derived rather than authored (ADR-0024).
+   *
+   * `distinct()` over the `categories` values already on the products — so
+   * the CMS holds no category list, and there is no second place for one to
+   * drift from. Publishing a product into a new category is what creates
+   * that category.
+   *
+   * Sorted only so enumeration and tests are deterministic; the contract is
+   * a set, and no caller may read meaning into the order.
+   */
+  async listCategories(): Promise<readonly string[]> {
+    const all = await this.#catalogue()
+    return [...new Set(all.flatMap((p) => p.categories ?? []))].sort()
+  }
+
   #keyFor(slug: string): string {
     return `${this.#siteName}/products/${slug}`
   }

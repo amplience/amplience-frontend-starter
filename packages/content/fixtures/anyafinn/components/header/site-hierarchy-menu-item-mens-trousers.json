@@ -1,0 +1,18 @@
+{
+  "id": "84eb0faf-7fc0-5254-b00f-a371b615f941",
+  "label": "Hierarchy menu item: Mens — Trousers",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Mens — Trousers",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "84eb0faf-7fc0-5254-b00f-a371b615f941",
+      "hierarchy": {
+        "parentId": "5c76289c-d092-5c6b-810f-05a5da4ff054",
+        "root": false,
+        "position": "gO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Trousers",
+    "link": "/mens-trousers"
+  }
+}

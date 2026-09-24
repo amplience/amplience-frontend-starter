@@ -1,0 +1,18 @@
+{
+  "id": "dd3dabab-7094-5cbb-a609-fd0c142aa3d9",
+  "label": "Hierarchy menu item: Womens — Dresses",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Womens — Dresses",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "dd3dabab-7094-5cbb-a609-fd0c142aa3d9",
+      "hierarchy": {
+        "parentId": "32722372-7a57-5d8e-b95b-0ae3124ca58c",
+        "root": false,
+        "position": "O~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Dresses",
+    "link": "/womens-dresses"
+  }
+}

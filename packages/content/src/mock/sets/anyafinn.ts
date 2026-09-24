@@ -45,7 +45,20 @@ import siteHeaderGroupIcons from '../../../fixtures/anyafinn/components/header/s
 import siteHeaderRow1 from '../../../fixtures/anyafinn/components/header/site-header-row-1.json' with { type: 'json' }
 import siteHeaderRow2 from '../../../fixtures/anyafinn/components/header/site-header-row-2.json' with { type: 'json' }
 import siteHeader from '../../../fixtures/anyafinn/components/header/site-header.json' with { type: 'json' }
+import siteHierarchyMenuItemHomeware from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-homeware.json' with { type: 'json' }
+import siteHierarchyMenuItemKidsBaby from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-kids-baby.json' with { type: 'json' }
+import siteHierarchyMenuItemKidsBoys from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-kids-boys.json' with { type: 'json' }
+import siteHierarchyMenuItemKidsGirls from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-kids-girls.json' with { type: 'json' }
+import siteHierarchyMenuItemKids from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-kids.json' with { type: 'json' }
+import siteHierarchyMenuItemMensJackets from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens-jackets.json' with { type: 'json' }
+import siteHierarchyMenuItemMensShirts from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens-shirts.json' with { type: 'json' }
+import siteHierarchyMenuItemMensTrousers from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens-trousers.json' with { type: 'json' }
+import siteHierarchyMenuItemMens from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens.json' with { type: 'json' }
 import siteHierarchyMenuItemShopTheLook from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-shop-the-look.json' with { type: 'json' }
+import siteHierarchyMenuItemWomensAccessories from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens-accessories.json' with { type: 'json' }
+import siteHierarchyMenuItemWomensDresses from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens-dresses.json' with { type: 'json' }
+import siteHierarchyMenuItemWomensTops from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens-tops.json' with { type: 'json' }
+import siteHierarchyMenuItemWomens from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens.json' with { type: 'json' }
 import siteHierarchyMenuMain from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-main.json' with { type: 'json' }
 import siteIconButtonAccount from '../../../fixtures/anyafinn/components/header/site-icon-button-account.json' with { type: 'json' }
 import siteIconButtonCart from '../../../fixtures/anyafinn/components/header/site-icon-button-cart.json' with { type: 'json' }
@@ -131,6 +144,19 @@ const fixtures: readonly EnrichedContentItem[] = [
   siteHeaderRow1,
   siteHeaderRow2,
   siteHeader,
+  siteHierarchyMenuItemMens,
+  siteHierarchyMenuItemMensShirts,
+  siteHierarchyMenuItemMensTrousers,
+  siteHierarchyMenuItemMensJackets,
+  siteHierarchyMenuItemWomens,
+  siteHierarchyMenuItemWomensDresses,
+  siteHierarchyMenuItemWomensTops,
+  siteHierarchyMenuItemWomensAccessories,
+  siteHierarchyMenuItemKids,
+  siteHierarchyMenuItemKidsBoys,
+  siteHierarchyMenuItemKidsGirls,
+  siteHierarchyMenuItemKidsBaby,
+  siteHierarchyMenuItemHomeware,
   siteHierarchyMenuItemShopTheLook,
   siteHierarchyMenuMain,
   siteIconButtonAccount,
