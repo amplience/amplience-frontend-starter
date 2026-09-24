@@ -1,7 +1,7 @@
 /**
  * Story data for the product components, read from the real content fixtures.
  *
- * These are the same seven items `packages/content/fixtures/base-site/pages/
+ * These are the same seven items `packages/content/fixtures/anyafinn/pages/
  * products/` seeds into a hub, so a story shows what the CMS actually holds —
  * including the awkward ones. `aurora-shelving` has no image and no price;
  * `mara-hand-woven-wool-throw` has a name long enough to break a card;
@@ -20,13 +20,13 @@
 
 import type { ContentMediaData } from '@amplience/frontend-starter-types'
 
-import auroraLoungeChair from '../../../content/fixtures/base-site/pages/products/aurora-lounge-chair.json'
-import auroraShelving from '../../../content/fixtures/base-site/pages/products/aurora-shelving.json'
-import auroraSideTable from '../../../content/fixtures/base-site/pages/products/aurora-side-table.json'
-import lumenFloorLamp from '../../../content/fixtures/base-site/pages/products/lumen-floor-lamp.json'
-import maraWoolThrow from '../../../content/fixtures/base-site/pages/products/mara-hand-woven-wool-throw.json'
-import terraDiningTable from '../../../content/fixtures/base-site/pages/products/terra-dining-table.json'
-import verdePlanter from '../../../content/fixtures/base-site/pages/products/verde-ceramic-planter.json'
+import auroraLoungeChair from '../../../content/fixtures/anyafinn/pages/products/aurora-lounge-chair.json'
+import auroraShelving from '../../../content/fixtures/anyafinn/pages/products/aurora-shelving.json'
+import auroraSideTable from '../../../content/fixtures/anyafinn/pages/products/aurora-side-table.json'
+import lumenFloorLamp from '../../../content/fixtures/anyafinn/pages/products/lumen-floor-lamp.json'
+import maraWoolThrow from '../../../content/fixtures/anyafinn/pages/products/mara-hand-woven-wool-throw.json'
+import terraDiningTable from '../../../content/fixtures/anyafinn/pages/products/terra-dining-table.json'
+import verdePlanter from '../../../content/fixtures/anyafinn/pages/products/verde-ceramic-planter.json'
 
 /** The presentational shape the product components take. */
 export type StoryProduct = {

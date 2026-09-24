@@ -1,63 +1,63 @@
 {
-  "id": "03b8d71c-2729-547d-9348-ed2a7d5ac43c",
-  "label": "Product — Aurora Side Table",
+  "id": "62b852c3-6caa-5790-a299-c7bf04603252",
+  "label": "Product — Marisol Ribbed Knit Top",
   "body": {
     "_meta": {
-      "name": "Aurora Side Table",
+      "name": "Marisol Ribbed Knit Top",
       "schema": "https://quadratic.amplience.com/v2/content/product",
-      "deliveryId": "03b8d71c-2729-547d-9348-ed2a7d5ac43c",
+      "deliveryId": "62b852c3-6caa-5790-a299-c7bf04603252",
       "deliveryKeys": {
         "values": [
           {
-            "value": "anyafinn/products/aurora-side-table"
+            "value": "anyafinn/products/ribbed-knit-top"
           }
         ]
       }
     },
-    "sku": "AUR-TABLE-01",
+    "sku": "MAR-TOP-01",
     "name": {
       "values": [
         {
           "locale": "en-US",
-          "value": "Side Table"
+          "value": "Ribbed Knit Top"
         },
         {
           "locale": "en-GB",
-          "value": "Side Table"
+          "value": "Ribbed Knit Top"
         },
         {
           "locale": "es-ES",
-          "value": "Mesa auxiliar"
+          "value": "Top de punto acanalado"
         },
         {
           "locale": "fr-FR",
-          "value": "Table d’appoint"
+          "value": "Haut en maille côtelée"
         },
         {
           "locale": "de-DE",
-          "value": "Beistelltisch"
+          "value": "Geripptes Stricktop"
         },
         {
           "locale": "it-IT",
-          "value": "Tavolino"
+          "value": "Top a costine"
         }
       ],
       "_meta": {
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
-    "brand": "Aurora",
+    "brand": "Marisol",
     "prices": [
       {
-        "amount": 229,
+        "amount": 78,
         "currencyCode": "GBP"
       },
       {
-        "amount": 265,
+        "amount": 89,
         "currencyCode": "EUR"
       },
       {
-        "amount": 289,
+        "amount": 99,
         "currencyCode": "USD"
       }
     ],
@@ -65,27 +65,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "A fine-gauge merino rib that holds its shape and layers under everything."
         },
         {
           "locale": "en-GB",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "A fine-gauge merino rib that holds its shape and layers under everything."
         },
         {
           "locale": "es-ES",
-          "value": "Una pequeña mesa auxiliar de roble que combina con el sillón Aurora."
+          "value": "Un punto fino de merino acanalado que mantiene la forma y sirve de capa base."
         },
         {
           "locale": "fr-FR",
-          "value": "Une petite table d’appoint en chêne assortie au fauteuil Aurora."
+          "value": "Une côte fine en mérinos qui garde sa forme et se superpose à tout."
         },
         {
           "locale": "de-DE",
-          "value": "Ein kleiner Beistelltisch aus Eiche, passend zum Aurora Sessel."
+          "value": "Ein feiner Merinorippstrick, der die Form hält und sich unterschichten lässt."
         },
         {
           "locale": "it-IT",
-          "value": "Un piccolo tavolino in rovere abbinato alla poltrona Aurora."
+          "value": "Una costina fine in merino che tiene la forma e si porta sotto a tutto."
         }
       ],
       "_meta": {
@@ -97,8 +97,8 @@
       {
         "mediaType": "ManualImage",
         "image": {
-          "src": "https://picsum.photos/id/445/1200/1200",
-          "alt": "Aurora Side Table — main view",
+          "src": "https://picsum.photos/id/660/1200/1200",
+          "alt": "Marisol Ribbed Knit Top",
           "width": 1200,
           "height": 1200
         }
@@ -141,27 +141,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Solid oak"
+              "value": "Merino wool"
             },
             {
               "locale": "en-GB",
-              "value": "Solid oak"
+              "value": "Merino wool"
             },
             {
               "locale": "es-ES",
-              "value": "Roble macizo"
+              "value": "Lana merino"
             },
             {
               "locale": "fr-FR",
-              "value": "Chêne massif"
+              "value": "Laine mérinos"
             },
             {
               "locale": "de-DE",
-              "value": "Massive Eiche"
+              "value": "Merinowolle"
             },
             {
               "locale": "it-IT",
-              "value": "Rovere massello"
+              "value": "Lana merino"
             }
           ],
           "_meta": {
@@ -174,27 +174,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Diameter"
+              "value": "Fit"
             },
             {
               "locale": "en-GB",
-              "value": "Diameter"
+              "value": "Fit"
             },
             {
               "locale": "es-ES",
-              "value": "Diámetro"
+              "value": "Corte"
             },
             {
               "locale": "fr-FR",
-              "value": "Diamètre"
+              "value": "Coupe"
             },
             {
               "locale": "de-DE",
-              "value": "Durchmesser"
+              "value": "Passform"
             },
             {
               "locale": "it-IT",
-              "value": "Diametro"
+              "value": "Vestibilità"
             }
           ],
           "_meta": {
@@ -205,27 +205,91 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "45 cm"
+              "value": "Slim fit"
             },
             {
               "locale": "en-GB",
-              "value": "45 cm"
+              "value": "Slim fit"
             },
             {
               "locale": "es-ES",
-              "value": "45 cm"
+              "value": "Corte ajustado"
             },
             {
               "locale": "fr-FR",
-              "value": "45 cm"
+              "value": "Coupe ajustée"
             },
             {
               "locale": "de-DE",
-              "value": "45 cm"
+              "value": "Schmale Passform"
             },
             {
               "locale": "it-IT",
-              "value": "45 cm"
+              "value": "Vestibilità slim"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Cura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine wash at 30°"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine wash at 30°"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavar a máquina a 30°"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavage en machine à 30°"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwäsche bei 30°"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavaggio in lavatrice a 30°"
             }
           ],
           "_meta": {
@@ -234,9 +298,9 @@
         }
       }
     ],
-    "tags": ["oak", "side-table"],
-    "title": "Aurora Side Table | Amplience Frontend Starter",
-    "description": "A small oak side table that pairs with the Aurora chair.",
-    "categories": ["home", "home-tables"]
+    "categories": ["womens", "womens-tops"],
+    "tags": ["tops", "marisol"],
+    "title": "Marisol Ribbed Knit Top | Amplience Frontend Starter",
+    "description": "A fine-gauge merino rib that holds its shape and layers under everything."
   }
 }

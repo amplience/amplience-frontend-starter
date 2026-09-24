@@ -65,10 +65,28 @@ import home from '../../../fixtures/anyafinn/pages/home.json' with { type: 'json
 import productAuroraLoungeChair from '../../../fixtures/anyafinn/pages/products/aurora-lounge-chair.json' with { type: 'json' }
 import productAuroraShelving from '../../../fixtures/anyafinn/pages/products/aurora-shelving.json' with { type: 'json' }
 import productAuroraSideTable from '../../../fixtures/anyafinn/pages/products/aurora-side-table.json' with { type: 'json' }
+import productCargoShorts from '../../../fixtures/anyafinn/pages/products/cargo-shorts.json'
+import productCordPinafore from '../../../fixtures/anyafinn/pages/products/cord-pinafore.json'
+import productCorduroyTrousers from '../../../fixtures/anyafinn/pages/products/corduroy-trousers.json'
+import productFloralBlouse from '../../../fixtures/anyafinn/pages/products/floral-blouse.json'
+import productKnittedBooties from '../../../fixtures/anyafinn/pages/products/knitted-booties.json'
+import productLeatherTote from '../../../fixtures/anyafinn/pages/products/leather-tote.json'
+import productLinenCampShirt from '../../../fixtures/anyafinn/pages/products/linen-camp-shirt.json'
 import productLumenFloorLamp from '../../../fixtures/anyafinn/pages/products/lumen-floor-lamp.json' with { type: 'json' }
 import productMaraWoolThrow from '../../../fixtures/anyafinn/pages/products/mara-hand-woven-wool-throw.json' with { type: 'json' }
+import productMidiWrapDress from '../../../fixtures/anyafinn/pages/products/midi-wrap-dress.json'
+import productOrganicBabygro from '../../../fixtures/anyafinn/pages/products/organic-babygro.json'
+import productOxfordShirt from '../../../fixtures/anyafinn/pages/products/oxford-shirt.json'
+import productPleatedSundress from '../../../fixtures/anyafinn/pages/products/pleated-sundress.json'
+import productQuiltedBomber from '../../../fixtures/anyafinn/pages/products/quilted-bomber.json'
+import productRibbedKnitTop from '../../../fixtures/anyafinn/pages/products/ribbed-knit-top.json'
+import productSilkBlouse from '../../../fixtures/anyafinn/pages/products/silk-blouse.json'
+import productSilkScarf from '../../../fixtures/anyafinn/pages/products/silk-scarf.json'
+import productStripedRugbyShirt from '../../../fixtures/anyafinn/pages/products/striped-rugby-shirt.json'
+import productTaperedChinos from '../../../fixtures/anyafinn/pages/products/tapered-chinos.json'
 import productTerraDiningTable from '../../../fixtures/anyafinn/pages/products/terra-dining-table.json' with { type: 'json' }
 import productVerdeCeramicPlanter from '../../../fixtures/anyafinn/pages/products/verde-ceramic-planter.json' with { type: 'json' }
+import productWaxedFieldJacket from '../../../fixtures/anyafinn/pages/products/waxed-field-jacket.json'
 import shopTheLook from '../../../fixtures/anyafinn/pages/shop-the-look.json' with { type: 'json' }
 import homeMain from '../../../fixtures/anyafinn/slots/home-main.json' with { type: 'json' }
 import productAuroraLoungeChairMainSlot from '../../../fixtures/anyafinn/slots/product-aurora-lounge-chair-main.json' with { type: 'json' }
@@ -142,6 +160,24 @@ const fixtures: readonly EnrichedContentItem[] = [
   productVerdeCeramicPlanter,
   productAuroraLoungeChairMainSlot,
   productTerraDiningTableMainSlot,
+  productOxfordShirt,
+  productLinenCampShirt,
+  productTaperedChinos,
+  productCorduroyTrousers,
+  productWaxedFieldJacket,
+  productQuiltedBomber,
+  productSilkBlouse,
+  productRibbedKnitTop,
+  productMidiWrapDress,
+  productPleatedSundress,
+  productLeatherTote,
+  productSilkScarf,
+  productStripedRugbyShirt,
+  productCargoShorts,
+  productCordPinafore,
+  productFloralBlouse,
+  productOrganicBabygro,
+  productKnittedBooties,
 ]
 
 export const anyafinnSet: FixtureSet = {

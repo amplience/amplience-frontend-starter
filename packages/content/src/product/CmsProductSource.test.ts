@@ -10,16 +10,19 @@ import { describeProductSource } from './conformance'
 /** `console` via globalThis — this package compiles without DOM/node types. */
 const globalConsole = (globalThis as unknown as { console: { warn: (m: string) => void } }).console
 
-const source = () =>
-  new CmsProductSource({ client: makeMockContentClient(), siteName: 'base-site' })
+const SET = 'anyafinn'
+
+const source = () => new CmsProductSource({ client: makeMockContentClient(SET), siteName: SET })
 
 // The contract every source must satisfy, run against the real fixtures.
 describeProductSource('CmsProductSource', () => ({
   source: source(),
   knownSlug: 'aurora-lounge-chair',
   knownSku: 'AUR-CHAIR-01',
+  // Same set, different site: proves the *site* scoping returns nothing, rather
+  // than passing because the set happened to hold no products.
   emptySource: new CmsProductSource({
-    client: makeMockContentClient(),
+    client: makeMockContentClient(SET),
     siteName: 'no-such-site',
   }),
 }))
@@ -124,7 +127,9 @@ describe('CmsProductSource — mapping', () => {
       { amount: 949, currencyCode: 'USD' },
     ])
     expect(product.images).toHaveLength(6)
-    expect(product.images?.[0]?.url).toContain('picsum.photos')
+    // The URL, not the host: which placeholder service the fixtures point at
+    // is a property of the fixtures, not of the mapping under test.
+    expect(product.images?.[0]?.url).toMatch(/^https:\/\//)
     expect(product.attributes?.length).toBeGreaterThan(0)
     expect(product.status).toBe('active')
   })

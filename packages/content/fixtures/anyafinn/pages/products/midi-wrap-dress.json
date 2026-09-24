@@ -1,63 +1,63 @@
 {
-  "id": "03b8d71c-2729-547d-9348-ed2a7d5ac43c",
-  "label": "Product — Aurora Side Table",
+  "id": "31f55362-d9b1-5b73-852c-346406fdd771",
+  "label": "Product — Oreline Midi Wrap Dress",
   "body": {
     "_meta": {
-      "name": "Aurora Side Table",
+      "name": "Oreline Midi Wrap Dress",
       "schema": "https://quadratic.amplience.com/v2/content/product",
-      "deliveryId": "03b8d71c-2729-547d-9348-ed2a7d5ac43c",
+      "deliveryId": "31f55362-d9b1-5b73-852c-346406fdd771",
       "deliveryKeys": {
         "values": [
           {
-            "value": "anyafinn/products/aurora-side-table"
+            "value": "anyafinn/products/midi-wrap-dress"
           }
         ]
       }
     },
-    "sku": "AUR-TABLE-01",
+    "sku": "ORE-DRES-01",
     "name": {
       "values": [
         {
           "locale": "en-US",
-          "value": "Side Table"
+          "value": "Midi Wrap Dress"
         },
         {
           "locale": "en-GB",
-          "value": "Side Table"
+          "value": "Midi Wrap Dress"
         },
         {
           "locale": "es-ES",
-          "value": "Mesa auxiliar"
+          "value": "Vestido midi cruzado"
         },
         {
           "locale": "fr-FR",
-          "value": "Table d’appoint"
+          "value": "Robe portefeuille midi"
         },
         {
           "locale": "de-DE",
-          "value": "Beistelltisch"
+          "value": "Midi-Wickelkleid"
         },
         {
           "locale": "it-IT",
-          "value": "Tavolino"
+          "value": "Abito midi a portafoglio"
         }
       ],
       "_meta": {
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
-    "brand": "Aurora",
+    "brand": "Oreline",
     "prices": [
       {
-        "amount": 229,
+        "amount": 165,
         "currencyCode": "GBP"
       },
       {
-        "amount": 265,
+        "amount": 189,
         "currencyCode": "EUR"
       },
       {
-        "amount": 289,
+        "amount": 209,
         "currencyCode": "USD"
       }
     ],
@@ -65,27 +65,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "A true wrap in crepe, tied at the waist and cut to fall mid-calf."
         },
         {
           "locale": "en-GB",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "A true wrap in crepe, tied at the waist and cut to fall mid-calf."
         },
         {
           "locale": "es-ES",
-          "value": "Una pequeña mesa auxiliar de roble que combina con el sillón Aurora."
+          "value": "Un cruzado auténtico en crepé, atado a la cintura y cortado a media pantorrilla."
         },
         {
           "locale": "fr-FR",
-          "value": "Une petite table d’appoint en chêne assortie au fauteuil Aurora."
+          "value": "Un vrai portefeuille en crêpe, noué à la taille, tombant à mi-mollet."
         },
         {
           "locale": "de-DE",
-          "value": "Ein kleiner Beistelltisch aus Eiche, passend zum Aurora Sessel."
+          "value": "Ein echtes Wickelkleid aus Krepp, in der Taille gebunden, wadenlang."
         },
         {
           "locale": "it-IT",
-          "value": "Un piccolo tavolino in rovere abbinato alla poltrona Aurora."
+          "value": "Un vero portafoglio in crêpe, annodato in vita, lunghezza a metà polpaccio."
         }
       ],
       "_meta": {
@@ -97,8 +97,8 @@
       {
         "mediaType": "ManualImage",
         "image": {
-          "src": "https://picsum.photos/id/445/1200/1200",
-          "alt": "Aurora Side Table — main view",
+          "src": "https://picsum.photos/id/656/1200/1200",
+          "alt": "Oreline Midi Wrap Dress",
           "width": 1200,
           "height": 1200
         }
@@ -110,27 +110,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Material"
+              "value": "Length"
             },
             {
               "locale": "en-GB",
-              "value": "Material"
+              "value": "Length"
             },
             {
               "locale": "es-ES",
-              "value": "Material"
+              "value": "Largo"
             },
             {
               "locale": "fr-FR",
-              "value": "Matériau"
+              "value": "Longueur"
             },
             {
               "locale": "de-DE",
-              "value": "Material"
+              "value": "Länge"
             },
             {
               "locale": "it-IT",
-              "value": "Materiale"
+              "value": "Lunghezza"
             }
           ],
           "_meta": {
@@ -141,27 +141,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Solid oak"
+              "value": "Midi"
             },
             {
               "locale": "en-GB",
-              "value": "Solid oak"
+              "value": "Midi"
             },
             {
               "locale": "es-ES",
-              "value": "Roble macizo"
+              "value": "Midi"
             },
             {
               "locale": "fr-FR",
-              "value": "Chêne massif"
+              "value": "Midi"
             },
             {
               "locale": "de-DE",
-              "value": "Massive Eiche"
+              "value": "Midi"
             },
             {
               "locale": "it-IT",
-              "value": "Rovere massello"
+              "value": "Midi"
             }
           ],
           "_meta": {
@@ -174,27 +174,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Diameter"
+              "value": "Care"
             },
             {
               "locale": "en-GB",
-              "value": "Diameter"
+              "value": "Care"
             },
             {
               "locale": "es-ES",
-              "value": "Diámetro"
+              "value": "Cuidado"
             },
             {
               "locale": "fr-FR",
-              "value": "Diamètre"
+              "value": "Entretien"
             },
             {
               "locale": "de-DE",
-              "value": "Durchmesser"
+              "value": "Pflege"
             },
             {
               "locale": "it-IT",
-              "value": "Diametro"
+              "value": "Cura"
             }
           ],
           "_meta": {
@@ -205,27 +205,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "45 cm"
+              "value": "Dry clean only"
             },
             {
               "locale": "en-GB",
-              "value": "45 cm"
+              "value": "Dry clean only"
             },
             {
               "locale": "es-ES",
-              "value": "45 cm"
+              "value": "Solo limpieza en seco"
             },
             {
               "locale": "fr-FR",
-              "value": "45 cm"
+              "value": "Nettoyage à sec uniquement"
             },
             {
               "locale": "de-DE",
-              "value": "45 cm"
+              "value": "Nur chemische Reinigung"
             },
             {
               "locale": "it-IT",
-              "value": "45 cm"
+              "value": "Solo lavaggio a secco"
             }
           ],
           "_meta": {
@@ -234,9 +234,9 @@
         }
       }
     ],
-    "tags": ["oak", "side-table"],
-    "title": "Aurora Side Table | Amplience Frontend Starter",
-    "description": "A small oak side table that pairs with the Aurora chair.",
-    "categories": ["home", "home-tables"]
+    "categories": ["womens", "womens-dresses"],
+    "tags": ["dresses", "oreline"],
+    "title": "Oreline Midi Wrap Dress | Amplience Frontend Starter",
+    "description": "A true wrap in crepe, tied at the waist and cut to fall mid-calf."
   }
 }

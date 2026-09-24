@@ -97,7 +97,7 @@
       {
         "mediaType": "ManualImage",
         "image": {
-          "src": "https://picsum.photos/seed/product-aurora-lounge-chair/1200/1200",
+          "src": "https://picsum.photos/id/553/1200/1200",
           "alt": "Aurora Lounge Chair — main view",
           "width": 1200,
           "height": 1200
@@ -106,7 +106,7 @@
       {
         "mediaType": "ManualImage",
         "image": {
-          "src": "https://picsum.photos/seed/product-aurora-lounge-chair-2/1200/1200",
+          "src": "https://picsum.photos/id/555/1200/1200",
           "alt": "Aurora Lounge Chair — view 2",
           "width": 1200,
           "height": 1200
@@ -115,7 +115,7 @@
       {
         "mediaType": "ManualImage",
         "image": {
-          "src": "https://picsum.photos/seed/product-aurora-lounge-chair-3/1200/1200",
+          "src": "https://picsum.photos/id/782/1200/1200",
           "alt": "Aurora Lounge Chair — view 3",
           "width": 1200,
           "height": 1200
@@ -124,7 +124,7 @@
       {
         "mediaType": "ManualImage",
         "image": {
-          "src": "https://picsum.photos/seed/product-aurora-lounge-chair-4/1200/1200",
+          "src": "https://picsum.photos/id/71/1200/1200",
           "alt": "Aurora Lounge Chair — view 4",
           "width": 1200,
           "height": 1200
@@ -133,7 +133,7 @@
       {
         "mediaType": "ManualImage",
         "image": {
-          "src": "https://picsum.photos/seed/product-aurora-lounge-chair-5/1200/1200",
+          "src": "https://picsum.photos/id/31/1200/1200",
           "alt": "Aurora Lounge Chair — view 5",
           "width": 1200,
           "height": 1200
@@ -142,7 +142,7 @@
       {
         "mediaType": "ManualImage",
         "image": {
-          "src": "https://picsum.photos/seed/product-aurora-lounge-chair-6/1200/1200",
+          "src": "https://picsum.photos/id/203/1200/1200",
           "alt": "Aurora Lounge Chair — view 6",
           "width": 1200,
           "height": 1200
