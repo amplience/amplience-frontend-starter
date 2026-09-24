@@ -128,10 +128,28 @@ import homePage from '../../fixtures/base-site/pages/home.json' with { type: 'js
 import productAuroraLoungeChair from '../../fixtures/base-site/pages/products/aurora-lounge-chair.json' with { type: 'json' }
 import productAuroraShelving from '../../fixtures/base-site/pages/products/aurora-shelving.json' with { type: 'json' }
 import productAuroraSideTable from '../../fixtures/base-site/pages/products/aurora-side-table.json' with { type: 'json' }
+import productCargoShorts from '../../fixtures/base-site/pages/products/cargo-shorts.json'
+import productCordPinafore from '../../fixtures/base-site/pages/products/cord-pinafore.json'
+import productCorduroyTrousers from '../../fixtures/base-site/pages/products/corduroy-trousers.json'
+import productFloralBlouse from '../../fixtures/base-site/pages/products/floral-blouse.json'
+import productKnittedBooties from '../../fixtures/base-site/pages/products/knitted-booties.json'
+import productLeatherTote from '../../fixtures/base-site/pages/products/leather-tote.json'
+import productLinenCampShirt from '../../fixtures/base-site/pages/products/linen-camp-shirt.json'
 import productLumenFloorLamp from '../../fixtures/base-site/pages/products/lumen-floor-lamp.json' with { type: 'json' }
 import productMaraWoolThrow from '../../fixtures/base-site/pages/products/mara-hand-woven-wool-throw.json' with { type: 'json' }
+import productMidiWrapDress from '../../fixtures/base-site/pages/products/midi-wrap-dress.json'
+import productOrganicBabygro from '../../fixtures/base-site/pages/products/organic-babygro.json'
+import productOxfordShirt from '../../fixtures/base-site/pages/products/oxford-shirt.json'
+import productPleatedSundress from '../../fixtures/base-site/pages/products/pleated-sundress.json'
+import productQuiltedBomber from '../../fixtures/base-site/pages/products/quilted-bomber.json'
+import productRibbedKnitTop from '../../fixtures/base-site/pages/products/ribbed-knit-top.json'
+import productSilkBlouse from '../../fixtures/base-site/pages/products/silk-blouse.json'
+import productSilkScarf from '../../fixtures/base-site/pages/products/silk-scarf.json'
+import productStripedRugbyShirt from '../../fixtures/base-site/pages/products/striped-rugby-shirt.json'
+import productTaperedChinos from '../../fixtures/base-site/pages/products/tapered-chinos.json'
 import productTerraDiningTable from '../../fixtures/base-site/pages/products/terra-dining-table.json' with { type: 'json' }
 import productVerdeCeramicPlanter from '../../fixtures/base-site/pages/products/verde-ceramic-planter.json' with { type: 'json' }
+import productWaxedFieldJacket from '../../fixtures/base-site/pages/products/waxed-field-jacket.json'
 import siteCustomCss from '../../fixtures/base-site/site-components/custom-css.json' with { type: 'json' }
 import aboutMainSlot from '../../fixtures/base-site/slots/about-main.json' with { type: 'json' }
 import blogContentModellingMainSlot from '../../fixtures/base-site/slots/blog-content-modelling-main.json' with { type: 'json' }
@@ -292,6 +310,24 @@ const fixtures: readonly EnrichedContentItem[] = [
   productVerdeCeramicPlanter,
   productAuroraLoungeChairMainSlot,
   productTerraDiningTableMainSlot,
+  productOxfordShirt,
+  productLinenCampShirt,
+  productTaperedChinos,
+  productCorduroyTrousers,
+  productWaxedFieldJacket,
+  productQuiltedBomber,
+  productSilkBlouse,
+  productRibbedKnitTop,
+  productMidiWrapDress,
+  productPleatedSundress,
+  productLeatherTote,
+  productSilkScarf,
+  productStripedRugbyShirt,
+  productCargoShorts,
+  productCordPinafore,
+  productFloralBlouse,
+  productOrganicBabygro,
+  productKnittedBooties,
 ]
 
 /** Build `id → item` and `deliveryKey → item` maps from the fixture set. */

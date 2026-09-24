@@ -124,7 +124,9 @@ describe('CmsProductSource — mapping', () => {
       { amount: 949, currencyCode: 'USD' },
     ])
     expect(product.images).toHaveLength(6)
-    expect(product.images?.[0]?.url).toContain('picsum.photos')
+    // The URL, not the host: which placeholder service the fixtures point at
+    // is a property of the fixtures, not of the mapping under test.
+    expect(product.images?.[0]?.url).toMatch(/^https:\/\//)
     expect(product.attributes?.length).toBeGreaterThan(0)
     expect(product.status).toBe('active')
   })

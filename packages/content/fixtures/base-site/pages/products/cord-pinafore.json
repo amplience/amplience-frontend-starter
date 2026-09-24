@@ -1,63 +1,63 @@
 {
-  "id": "cbb695cd-e96f-56f5-ab73-09cdc85d3d2a",
-  "label": "Product — Aurora Side Table",
+  "id": "3c93f905-6a12-5dc3-bfea-1e536a4dc295",
+  "label": "Product — Fieldnote Cord Pinafore",
   "body": {
     "_meta": {
-      "name": "Aurora Side Table",
+      "name": "Fieldnote Cord Pinafore",
       "schema": "https://quadratic.amplience.com/v2/content/product",
-      "deliveryId": "cbb695cd-e96f-56f5-ab73-09cdc85d3d2a",
+      "deliveryId": "3c93f905-6a12-5dc3-bfea-1e536a4dc295",
       "deliveryKeys": {
         "values": [
           {
-            "value": "base-site/products/aurora-side-table"
+            "value": "base-site/products/cord-pinafore"
           }
         ]
       }
     },
-    "sku": "AUR-TABLE-01",
+    "sku": "FLD-GIRL-01",
     "name": {
       "values": [
         {
           "locale": "en-US",
-          "value": "Side Table"
+          "value": "Cord Pinafore"
         },
         {
           "locale": "en-GB",
-          "value": "Side Table"
+          "value": "Cord Pinafore"
         },
         {
           "locale": "es-ES",
-          "value": "Mesa auxiliar"
+          "value": "Pichi de pana"
         },
         {
           "locale": "fr-FR",
-          "value": "Table d’appoint"
+          "value": "Robe-chasuble en velours"
         },
         {
           "locale": "de-DE",
-          "value": "Beistelltisch"
+          "value": "Cord-Trägerkleid"
         },
         {
           "locale": "it-IT",
-          "value": "Tavolino"
+          "value": "Scamiciato in velluto"
         }
       ],
       "_meta": {
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
-    "brand": "Aurora",
+    "brand": "Fieldnote",
     "prices": [
       {
-        "amount": 229,
+        "amount": 42,
         "currencyCode": "GBP"
       },
       {
-        "amount": 265,
+        "amount": 48,
         "currencyCode": "EUR"
       },
       {
-        "amount": 289,
+        "amount": 52,
         "currencyCode": "USD"
       }
     ],
@@ -65,27 +65,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "A corduroy pinafore with adjustable straps and a pocket on the front."
         },
         {
           "locale": "en-GB",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "A corduroy pinafore with adjustable straps and a pocket on the front."
         },
         {
           "locale": "es-ES",
-          "value": "Una pequeña mesa auxiliar de roble que combina con el sillón Aurora."
+          "value": "Un pichi de pana con tirantes ajustables y un bolsillo delantero."
         },
         {
           "locale": "fr-FR",
-          "value": "Une petite table d’appoint en chêne assortie au fauteuil Aurora."
+          "value": "Une robe-chasuble en velours côtelé, bretelles réglables et poche devant."
         },
         {
           "locale": "de-DE",
-          "value": "Ein kleiner Beistelltisch aus Eiche, passend zum Aurora Sessel."
+          "value": "Ein Cord-Trägerkleid mit verstellbaren Trägern und Tasche vorn."
         },
         {
           "locale": "it-IT",
-          "value": "Un piccolo tavolino in rovere abbinato alla poltrona Aurora."
+          "value": "Uno scamiciato in velluto con spalline regolabili e tasca davanti."
         }
       ],
       "_meta": {
@@ -97,8 +97,8 @@
       {
         "mediaType": "ManualImage",
         "image": {
-          "src": "https://picsum.photos/id/445/1200/1200",
-          "alt": "Aurora Side Table — main view",
+          "src": "https://picsum.photos/id/838/1200/1200",
+          "alt": "Fieldnote Cord Pinafore",
           "width": 1200,
           "height": 1200
         }
@@ -141,27 +141,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Solid oak"
+              "value": "Cotton corduroy"
             },
             {
               "locale": "en-GB",
-              "value": "Solid oak"
+              "value": "Cotton corduroy"
             },
             {
               "locale": "es-ES",
-              "value": "Roble macizo"
+              "value": "Pana de algodón"
             },
             {
               "locale": "fr-FR",
-              "value": "Chêne massif"
+              "value": "Velours côtelé"
             },
             {
               "locale": "de-DE",
-              "value": "Massive Eiche"
+              "value": "Baumwollcord"
             },
             {
               "locale": "it-IT",
-              "value": "Rovere massello"
+              "value": "Velluto a coste"
             }
           ],
           "_meta": {
@@ -174,27 +174,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Diameter"
+              "value": "Age"
             },
             {
               "locale": "en-GB",
-              "value": "Diameter"
+              "value": "Age"
             },
             {
               "locale": "es-ES",
-              "value": "Diámetro"
+              "value": "Edad"
             },
             {
               "locale": "fr-FR",
-              "value": "Diamètre"
+              "value": "Âge"
             },
             {
               "locale": "de-DE",
-              "value": "Durchmesser"
+              "value": "Alter"
             },
             {
               "locale": "it-IT",
-              "value": "Diametro"
+              "value": "Età"
             }
           ],
           "_meta": {
@@ -205,27 +205,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "45 cm"
+              "value": "2–8 years"
             },
             {
               "locale": "en-GB",
-              "value": "45 cm"
+              "value": "2–8 years"
             },
             {
               "locale": "es-ES",
-              "value": "45 cm"
+              "value": "2–8 años"
             },
             {
               "locale": "fr-FR",
-              "value": "45 cm"
+              "value": "2–8 ans"
             },
             {
               "locale": "de-DE",
-              "value": "45 cm"
+              "value": "2–8 Jahre"
             },
             {
               "locale": "it-IT",
-              "value": "45 cm"
+              "value": "2–8 anni"
             }
           ],
           "_meta": {
@@ -234,9 +234,9 @@
         }
       }
     ],
-    "tags": ["oak", "side-table"],
-    "title": "Aurora Side Table | Amplience Frontend Starter",
-    "description": "A small oak side table that pairs with the Aurora chair.",
-    "categories": ["home", "home-tables"]
+    "categories": ["kids", "kids-girls"],
+    "tags": ["girls", "fieldnote"],
+    "title": "Fieldnote Cord Pinafore | Amplience Frontend Starter",
+    "description": "A corduroy pinafore with adjustable straps and a pocket on the front."
   }
 }

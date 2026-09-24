@@ -1,63 +1,63 @@
 {
-  "id": "cbb695cd-e96f-56f5-ab73-09cdc85d3d2a",
-  "label": "Product — Aurora Side Table",
+  "id": "307451bf-90a9-56d3-8348-83c0e5435d59",
+  "label": "Product — Fieldnote Organic Babygro",
   "body": {
     "_meta": {
-      "name": "Aurora Side Table",
+      "name": "Fieldnote Organic Babygro",
       "schema": "https://quadratic.amplience.com/v2/content/product",
-      "deliveryId": "cbb695cd-e96f-56f5-ab73-09cdc85d3d2a",
+      "deliveryId": "307451bf-90a9-56d3-8348-83c0e5435d59",
       "deliveryKeys": {
         "values": [
           {
-            "value": "base-site/products/aurora-side-table"
+            "value": "base-site/products/organic-babygro"
           }
         ]
       }
     },
-    "sku": "AUR-TABLE-01",
+    "sku": "FLD-BABY-01",
     "name": {
       "values": [
         {
           "locale": "en-US",
-          "value": "Side Table"
+          "value": "Organic Babygro"
         },
         {
           "locale": "en-GB",
-          "value": "Side Table"
+          "value": "Organic Babygro"
         },
         {
           "locale": "es-ES",
-          "value": "Mesa auxiliar"
+          "value": "Pelele orgánico"
         },
         {
           "locale": "fr-FR",
-          "value": "Table d’appoint"
+          "value": "Grenouillère bio"
         },
         {
           "locale": "de-DE",
-          "value": "Beistelltisch"
+          "value": "Bio-Strampler"
         },
         {
           "locale": "it-IT",
-          "value": "Tavolino"
+          "value": "Tutina biologica"
         }
       ],
       "_meta": {
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
-    "brand": "Aurora",
+    "brand": "Fieldnote",
     "prices": [
       {
-        "amount": 229,
+        "amount": 24,
         "currencyCode": "GBP"
       },
       {
-        "amount": 265,
+        "amount": 28,
         "currencyCode": "EUR"
       },
       {
-        "amount": 289,
+        "amount": 29,
         "currencyCode": "USD"
       }
     ],
@@ -65,27 +65,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "Organic cotton with poppers all the way down, for changes at three in the morning."
         },
         {
           "locale": "en-GB",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "Organic cotton with poppers all the way down, for changes at three in the morning."
         },
         {
           "locale": "es-ES",
-          "value": "Una pequeña mesa auxiliar de roble que combina con el sillón Aurora."
+          "value": "Algodón orgánico con corchetes hasta abajo, para los cambios de madrugada."
         },
         {
           "locale": "fr-FR",
-          "value": "Une petite table d’appoint en chêne assortie au fauteuil Aurora."
+          "value": "Coton biologique à pressions sur toute la longueur, pour les changes de 3 h du matin."
         },
         {
           "locale": "de-DE",
-          "value": "Ein kleiner Beistelltisch aus Eiche, passend zum Aurora Sessel."
+          "value": "Bio-Baumwolle mit durchgehenden Druckknöpfen, für Wechsel um drei Uhr nachts."
         },
         {
           "locale": "it-IT",
-          "value": "Un piccolo tavolino in rovere abbinato alla poltrona Aurora."
+          "value": "Cotone biologico con bottoni a pressione fino in fondo, per i cambi delle tre di notte."
         }
       ],
       "_meta": {
@@ -97,8 +97,8 @@
       {
         "mediaType": "ManualImage",
         "image": {
-          "src": "https://picsum.photos/id/445/1200/1200",
-          "alt": "Aurora Side Table — main view",
+          "src": "https://picsum.photos/id/1066/1200/1200",
+          "alt": "Fieldnote Organic Babygro",
           "width": 1200,
           "height": 1200
         }
@@ -141,27 +141,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Solid oak"
+              "value": "Organic cotton"
             },
             {
               "locale": "en-GB",
-              "value": "Solid oak"
+              "value": "Organic cotton"
             },
             {
               "locale": "es-ES",
-              "value": "Roble macizo"
+              "value": "Algodón orgánico"
             },
             {
               "locale": "fr-FR",
-              "value": "Chêne massif"
+              "value": "Coton biologique"
             },
             {
               "locale": "de-DE",
-              "value": "Massive Eiche"
+              "value": "Bio-Baumwolle"
             },
             {
               "locale": "it-IT",
-              "value": "Rovere massello"
+              "value": "Cotone biologico"
             }
           ],
           "_meta": {
@@ -174,27 +174,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Diameter"
+              "value": "Age"
             },
             {
               "locale": "en-GB",
-              "value": "Diameter"
+              "value": "Age"
             },
             {
               "locale": "es-ES",
-              "value": "Diámetro"
+              "value": "Edad"
             },
             {
               "locale": "fr-FR",
-              "value": "Diamètre"
+              "value": "Âge"
             },
             {
               "locale": "de-DE",
-              "value": "Durchmesser"
+              "value": "Alter"
             },
             {
               "locale": "it-IT",
-              "value": "Diametro"
+              "value": "Età"
             }
           ],
           "_meta": {
@@ -205,27 +205,91 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "45 cm"
+              "value": "0–24 months"
             },
             {
               "locale": "en-GB",
-              "value": "45 cm"
+              "value": "0–24 months"
             },
             {
               "locale": "es-ES",
-              "value": "45 cm"
+              "value": "0–24 meses"
             },
             {
               "locale": "fr-FR",
-              "value": "45 cm"
+              "value": "0–24 mois"
             },
             {
               "locale": "de-DE",
-              "value": "45 cm"
+              "value": "0–24 Monate"
             },
             {
               "locale": "it-IT",
-              "value": "45 cm"
+              "value": "0–24 mesi"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Cura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine wash at 30°"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine wash at 30°"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavar a máquina a 30°"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavage en machine à 30°"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwäsche bei 30°"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavaggio in lavatrice a 30°"
             }
           ],
           "_meta": {
@@ -234,9 +298,9 @@
         }
       }
     ],
-    "tags": ["oak", "side-table"],
-    "title": "Aurora Side Table | Amplience Frontend Starter",
-    "description": "A small oak side table that pairs with the Aurora chair.",
-    "categories": ["home", "home-tables"]
+    "categories": ["kids", "kids-baby"],
+    "tags": ["baby", "fieldnote"],
+    "title": "Fieldnote Organic Babygro | Amplience Frontend Starter",
+    "description": "Organic cotton with poppers all the way down, for changes at three in the morning."
   }
 }

@@ -1,63 +1,63 @@
 {
-  "id": "cbb695cd-e96f-56f5-ab73-09cdc85d3d2a",
-  "label": "Product — Aurora Side Table",
+  "id": "18c25e59-ac98-5888-bafa-c2cce18eca38",
+  "label": "Product — Oreline Leather Tote",
   "body": {
     "_meta": {
-      "name": "Aurora Side Table",
+      "name": "Oreline Leather Tote",
       "schema": "https://quadratic.amplience.com/v2/content/product",
-      "deliveryId": "cbb695cd-e96f-56f5-ab73-09cdc85d3d2a",
+      "deliveryId": "18c25e59-ac98-5888-bafa-c2cce18eca38",
       "deliveryKeys": {
         "values": [
           {
-            "value": "base-site/products/aurora-side-table"
+            "value": "base-site/products/leather-tote"
           }
         ]
       }
     },
-    "sku": "AUR-TABLE-01",
+    "sku": "ORE-ACC-01",
     "name": {
       "values": [
         {
           "locale": "en-US",
-          "value": "Side Table"
+          "value": "Leather Tote"
         },
         {
           "locale": "en-GB",
-          "value": "Side Table"
+          "value": "Leather Tote"
         },
         {
           "locale": "es-ES",
-          "value": "Mesa auxiliar"
+          "value": "Bolso shopper de piel"
         },
         {
           "locale": "fr-FR",
-          "value": "Table d’appoint"
+          "value": "Cabas en cuir"
         },
         {
           "locale": "de-DE",
-          "value": "Beistelltisch"
+          "value": "Ledershopper"
         },
         {
           "locale": "it-IT",
-          "value": "Tavolino"
+          "value": "Borsa tote in pelle"
         }
       ],
       "_meta": {
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
-    "brand": "Aurora",
+    "brand": "Oreline",
     "prices": [
       {
-        "amount": 229,
+        "amount": 295,
         "currencyCode": "GBP"
       },
       {
-        "amount": 265,
+        "amount": 339,
         "currencyCode": "EUR"
       },
       {
-        "amount": 289,
+        "amount": 369,
         "currencyCode": "USD"
       }
     ],
@@ -65,27 +65,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "An unlined full-grain tote that softens with carrying and holds its shape."
         },
         {
           "locale": "en-GB",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "An unlined full-grain tote that softens with carrying and holds its shape."
         },
         {
           "locale": "es-ES",
-          "value": "Una pequeña mesa auxiliar de roble que combina con el sillón Aurora."
+          "value": "Un shopper sin forro de cuero flor entera que se ablanda con el uso."
         },
         {
           "locale": "fr-FR",
-          "value": "Une petite table d’appoint en chêne assortie au fauteuil Aurora."
+          "value": "Un cabas non doublé en cuir pleine fleur qui s’assouplit à l’usage."
         },
         {
           "locale": "de-DE",
-          "value": "Ein kleiner Beistelltisch aus Eiche, passend zum Aurora Sessel."
+          "value": "Ein ungefütterter Shopper aus Vollnarbenleder, der mit dem Tragen weicher wird."
         },
         {
           "locale": "it-IT",
-          "value": "Un piccolo tavolino in rovere abbinato alla poltrona Aurora."
+          "value": "Una tote sfoderata in pelle pieno fiore che si ammorbidisce con l’uso."
         }
       ],
       "_meta": {
@@ -97,8 +97,8 @@
       {
         "mediaType": "ManualImage",
         "image": {
-          "src": "https://picsum.photos/id/445/1200/1200",
-          "alt": "Aurora Side Table — main view",
+          "src": "https://picsum.photos/id/7/1200/1200",
+          "alt": "Oreline Leather Tote",
           "width": 1200,
           "height": 1200
         }
@@ -141,27 +141,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Solid oak"
+              "value": "Full-grain leather"
             },
             {
               "locale": "en-GB",
-              "value": "Solid oak"
+              "value": "Full-grain leather"
             },
             {
               "locale": "es-ES",
-              "value": "Roble macizo"
+              "value": "Cuero flor entera"
             },
             {
               "locale": "fr-FR",
-              "value": "Chêne massif"
+              "value": "Cuir pleine fleur"
             },
             {
               "locale": "de-DE",
-              "value": "Massive Eiche"
+              "value": "Vollnarbenleder"
             },
             {
               "locale": "it-IT",
-              "value": "Rovere massello"
+              "value": "Pelle pieno fiore"
             }
           ],
           "_meta": {
@@ -174,27 +174,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Diameter"
+              "value": "Lining"
             },
             {
               "locale": "en-GB",
-              "value": "Diameter"
+              "value": "Lining"
             },
             {
               "locale": "es-ES",
-              "value": "Diámetro"
+              "value": "Forro"
             },
             {
               "locale": "fr-FR",
-              "value": "Diamètre"
+              "value": "Doublure"
             },
             {
               "locale": "de-DE",
-              "value": "Durchmesser"
+              "value": "Futter"
             },
             {
               "locale": "it-IT",
-              "value": "Diametro"
+              "value": "Fodera"
             }
           ],
           "_meta": {
@@ -205,27 +205,91 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "45 cm"
+              "value": "Unlined"
             },
             {
               "locale": "en-GB",
-              "value": "45 cm"
+              "value": "Unlined"
             },
             {
               "locale": "es-ES",
-              "value": "45 cm"
+              "value": "Sin forro"
             },
             {
               "locale": "fr-FR",
-              "value": "45 cm"
+              "value": "Non doublé"
             },
             {
               "locale": "de-DE",
-              "value": "45 cm"
+              "value": "Ungefüttert"
             },
             {
               "locale": "it-IT",
-              "value": "45 cm"
+              "value": "Sfoderato"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Strap"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Strap"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Asa"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Anse"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Trageriemen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manico"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Shoulder"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Shoulder"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Al hombro"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Portée épaule"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Schulter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "A spalla"
             }
           ],
           "_meta": {
@@ -234,9 +298,9 @@
         }
       }
     ],
-    "tags": ["oak", "side-table"],
-    "title": "Aurora Side Table | Amplience Frontend Starter",
-    "description": "A small oak side table that pairs with the Aurora chair.",
-    "categories": ["home", "home-tables"]
+    "categories": ["womens", "womens-accessories"],
+    "tags": ["accessories", "oreline"],
+    "title": "Oreline Leather Tote | Amplience Frontend Starter",
+    "description": "An unlined full-grain tote that softens with carrying and holds its shape."
   }
 }

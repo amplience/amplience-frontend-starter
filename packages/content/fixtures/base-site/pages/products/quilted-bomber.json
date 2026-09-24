@@ -1,63 +1,63 @@
 {
-  "id": "cbb695cd-e96f-56f5-ab73-09cdc85d3d2a",
-  "label": "Product — Aurora Side Table",
+  "id": "ad97d106-9df8-5861-a302-5bd4e4b180ae",
+  "label": "Product — Brackish Quilted Bomber",
   "body": {
     "_meta": {
-      "name": "Aurora Side Table",
+      "name": "Brackish Quilted Bomber",
       "schema": "https://quadratic.amplience.com/v2/content/product",
-      "deliveryId": "cbb695cd-e96f-56f5-ab73-09cdc85d3d2a",
+      "deliveryId": "ad97d106-9df8-5861-a302-5bd4e4b180ae",
       "deliveryKeys": {
         "values": [
           {
-            "value": "base-site/products/aurora-side-table"
+            "value": "base-site/products/quilted-bomber"
           }
         ]
       }
     },
-    "sku": "AUR-TABLE-01",
+    "sku": "BRK-JACK-01",
     "name": {
       "values": [
         {
           "locale": "en-US",
-          "value": "Side Table"
+          "value": "Quilted Bomber"
         },
         {
           "locale": "en-GB",
-          "value": "Side Table"
+          "value": "Quilted Bomber"
         },
         {
           "locale": "es-ES",
-          "value": "Mesa auxiliar"
+          "value": "Bómber acolchado"
         },
         {
           "locale": "fr-FR",
-          "value": "Table d’appoint"
+          "value": "Blouson matelassé"
         },
         {
           "locale": "de-DE",
-          "value": "Beistelltisch"
+          "value": "Gesteppte Bomberjacke"
         },
         {
           "locale": "it-IT",
-          "value": "Tavolino"
+          "value": "Bomber trapuntato"
         }
       ],
       "_meta": {
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
-    "brand": "Aurora",
+    "brand": "Brackish",
     "prices": [
       {
-        "amount": 229,
+        "amount": 189,
         "currencyCode": "GBP"
       },
       {
-        "amount": 265,
+        "amount": 219,
         "currencyCode": "EUR"
       },
       {
-        "amount": 289,
+        "amount": 239,
         "currencyCode": "USD"
       }
     ],
@@ -65,27 +65,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "A lightly quilted bomber with a ribbed collar and a zip that runs both ways."
         },
         {
           "locale": "en-GB",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "A lightly quilted bomber with a ribbed collar and a zip that runs both ways."
         },
         {
           "locale": "es-ES",
-          "value": "Una pequeña mesa auxiliar de roble que combina con el sillón Aurora."
+          "value": "Un bómber ligeramente acolchado con cuello de canalé y cremallera doble."
         },
         {
           "locale": "fr-FR",
-          "value": "Une petite table d’appoint en chêne assortie au fauteuil Aurora."
+          "value": "Un blouson légèrement matelassé, col côtelé et fermeture à double curseur."
         },
         {
           "locale": "de-DE",
-          "value": "Ein kleiner Beistelltisch aus Eiche, passend zum Aurora Sessel."
+          "value": "Eine leicht gesteppte Bomberjacke mit Rippkragen und Zweiwege-Reißverschluss."
         },
         {
           "locale": "it-IT",
-          "value": "Un piccolo tavolino in rovere abbinato alla poltrona Aurora."
+          "value": "Un bomber leggermente trapuntato con collo a coste e cerniera bidirezionale."
         }
       ],
       "_meta": {
@@ -97,8 +97,8 @@
       {
         "mediaType": "ManualImage",
         "image": {
-          "src": "https://picsum.photos/id/445/1200/1200",
-          "alt": "Aurora Side Table — main view",
+          "src": "https://picsum.photos/id/338/1200/1200",
+          "alt": "Brackish Quilted Bomber",
           "width": 1200,
           "height": 1200
         }
@@ -110,27 +110,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Material"
+              "value": "Lining"
             },
             {
               "locale": "en-GB",
-              "value": "Material"
+              "value": "Lining"
             },
             {
               "locale": "es-ES",
-              "value": "Material"
+              "value": "Forro"
             },
             {
               "locale": "fr-FR",
-              "value": "Matériau"
+              "value": "Doublure"
             },
             {
               "locale": "de-DE",
-              "value": "Material"
+              "value": "Futter"
             },
             {
               "locale": "it-IT",
-              "value": "Materiale"
+              "value": "Fodera"
             }
           ],
           "_meta": {
@@ -141,27 +141,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Solid oak"
+              "value": "Quilted lining"
             },
             {
               "locale": "en-GB",
-              "value": "Solid oak"
+              "value": "Quilted lining"
             },
             {
               "locale": "es-ES",
-              "value": "Roble macizo"
+              "value": "Forro acolchado"
             },
             {
               "locale": "fr-FR",
-              "value": "Chêne massif"
+              "value": "Doublure matelassée"
             },
             {
               "locale": "de-DE",
-              "value": "Massive Eiche"
+              "value": "Steppfutter"
             },
             {
               "locale": "it-IT",
-              "value": "Rovere massello"
+              "value": "Fodera trapuntata"
             }
           ],
           "_meta": {
@@ -174,27 +174,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Diameter"
+              "value": "Closure"
             },
             {
               "locale": "en-GB",
-              "value": "Diameter"
+              "value": "Closure"
             },
             {
               "locale": "es-ES",
-              "value": "Diámetro"
+              "value": "Cierre"
             },
             {
               "locale": "fr-FR",
-              "value": "Diamètre"
+              "value": "Fermeture"
             },
             {
               "locale": "de-DE",
-              "value": "Durchmesser"
+              "value": "Verschluss"
             },
             {
               "locale": "it-IT",
-              "value": "Diametro"
+              "value": "Chiusura"
             }
           ],
           "_meta": {
@@ -205,27 +205,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "45 cm"
+              "value": "Two-way zip"
             },
             {
               "locale": "en-GB",
-              "value": "45 cm"
+              "value": "Two-way zip"
             },
             {
               "locale": "es-ES",
-              "value": "45 cm"
+              "value": "Cremallera doble"
             },
             {
               "locale": "fr-FR",
-              "value": "45 cm"
+              "value": "Fermeture à double curseur"
             },
             {
               "locale": "de-DE",
-              "value": "45 cm"
+              "value": "Zweiwege-Reißverschluss"
             },
             {
               "locale": "it-IT",
-              "value": "45 cm"
+              "value": "Cerniera bidirezionale"
             }
           ],
           "_meta": {
@@ -234,9 +234,9 @@
         }
       }
     ],
-    "tags": ["oak", "side-table"],
-    "title": "Aurora Side Table | Amplience Frontend Starter",
-    "description": "A small oak side table that pairs with the Aurora chair.",
-    "categories": ["home", "home-tables"]
+    "categories": ["mens", "mens-jackets"],
+    "tags": ["jackets", "brackish"],
+    "title": "Brackish Quilted Bomber | Amplience Frontend Starter",
+    "description": "A lightly quilted bomber with a ribbed collar and a zip that runs both ways."
   }
 }

@@ -1,63 +1,63 @@
 {
-  "id": "cbb695cd-e96f-56f5-ab73-09cdc85d3d2a",
-  "label": "Product — Aurora Side Table",
+  "id": "3386ce5a-e856-58e5-9e07-456116681e3c",
+  "label": "Product — Oreline Silk Blouse",
   "body": {
     "_meta": {
-      "name": "Aurora Side Table",
+      "name": "Oreline Silk Blouse",
       "schema": "https://quadratic.amplience.com/v2/content/product",
-      "deliveryId": "cbb695cd-e96f-56f5-ab73-09cdc85d3d2a",
+      "deliveryId": "3386ce5a-e856-58e5-9e07-456116681e3c",
       "deliveryKeys": {
         "values": [
           {
-            "value": "base-site/products/aurora-side-table"
+            "value": "base-site/products/silk-blouse"
           }
         ]
       }
     },
-    "sku": "AUR-TABLE-01",
+    "sku": "ORE-TOP-01",
     "name": {
       "values": [
         {
           "locale": "en-US",
-          "value": "Side Table"
+          "value": "Silk Blouse"
         },
         {
           "locale": "en-GB",
-          "value": "Side Table"
+          "value": "Silk Blouse"
         },
         {
           "locale": "es-ES",
-          "value": "Mesa auxiliar"
+          "value": "Blusa de seda"
         },
         {
           "locale": "fr-FR",
-          "value": "Table d’appoint"
+          "value": "Chemisier en soie"
         },
         {
           "locale": "de-DE",
-          "value": "Beistelltisch"
+          "value": "Seidenbluse"
         },
         {
           "locale": "it-IT",
-          "value": "Tavolino"
+          "value": "Camicetta di seta"
         }
       ],
       "_meta": {
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
-    "brand": "Aurora",
+    "brand": "Oreline",
     "prices": [
       {
-        "amount": 229,
+        "amount": 145,
         "currencyCode": "GBP"
       },
       {
-        "amount": 265,
+        "amount": 169,
         "currencyCode": "EUR"
       },
       {
-        "amount": 289,
+        "amount": 185,
         "currencyCode": "USD"
       }
     ],
@@ -65,27 +65,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "A fluid silk blouse with a concealed placket and a soft shoulder."
         },
         {
           "locale": "en-GB",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "A fluid silk blouse with a concealed placket and a soft shoulder."
         },
         {
           "locale": "es-ES",
-          "value": "Una pequeña mesa auxiliar de roble que combina con el sillón Aurora."
+          "value": "Una blusa de seda fluida con tapeta oculta y hombro suave."
         },
         {
           "locale": "fr-FR",
-          "value": "Une petite table d’appoint en chêne assortie au fauteuil Aurora."
+          "value": "Un chemisier en soie fluide, patte cachée et épaule douce."
         },
         {
           "locale": "de-DE",
-          "value": "Ein kleiner Beistelltisch aus Eiche, passend zum Aurora Sessel."
+          "value": "Eine fließende Seidenbluse mit verdeckter Knopfleiste und weicher Schulter."
         },
         {
           "locale": "it-IT",
-          "value": "Un piccolo tavolino in rovere abbinato alla poltrona Aurora."
+          "value": "Una camicetta di seta fluida con abbottonatura nascosta e spalla morbida."
         }
       ],
       "_meta": {
@@ -97,8 +97,8 @@
       {
         "mediaType": "ManualImage",
         "image": {
-          "src": "https://picsum.photos/id/445/1200/1200",
-          "alt": "Aurora Side Table — main view",
+          "src": "https://picsum.photos/id/832/1200/1200",
+          "alt": "Oreline Silk Blouse",
           "width": 1200,
           "height": 1200
         }
@@ -141,27 +141,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Solid oak"
+              "value": "100% silk"
             },
             {
               "locale": "en-GB",
-              "value": "Solid oak"
+              "value": "100% silk"
             },
             {
               "locale": "es-ES",
-              "value": "Roble macizo"
+              "value": "100% seda"
             },
             {
               "locale": "fr-FR",
-              "value": "Chêne massif"
+              "value": "100% soie"
             },
             {
               "locale": "de-DE",
-              "value": "Massive Eiche"
+              "value": "100% Seide"
             },
             {
               "locale": "it-IT",
-              "value": "Rovere massello"
+              "value": "100% seta"
             }
           ],
           "_meta": {
@@ -174,27 +174,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Diameter"
+              "value": "Care"
             },
             {
               "locale": "en-GB",
-              "value": "Diameter"
+              "value": "Care"
             },
             {
               "locale": "es-ES",
-              "value": "Diámetro"
+              "value": "Cuidado"
             },
             {
               "locale": "fr-FR",
-              "value": "Diamètre"
+              "value": "Entretien"
             },
             {
               "locale": "de-DE",
-              "value": "Durchmesser"
+              "value": "Pflege"
             },
             {
               "locale": "it-IT",
-              "value": "Diametro"
+              "value": "Cura"
             }
           ],
           "_meta": {
@@ -205,27 +205,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "45 cm"
+              "value": "Dry clean only"
             },
             {
               "locale": "en-GB",
-              "value": "45 cm"
+              "value": "Dry clean only"
             },
             {
               "locale": "es-ES",
-              "value": "45 cm"
+              "value": "Solo limpieza en seco"
             },
             {
               "locale": "fr-FR",
-              "value": "45 cm"
+              "value": "Nettoyage à sec uniquement"
             },
             {
               "locale": "de-DE",
-              "value": "45 cm"
+              "value": "Nur chemische Reinigung"
             },
             {
               "locale": "it-IT",
-              "value": "45 cm"
+              "value": "Solo lavaggio a secco"
             }
           ],
           "_meta": {
@@ -234,9 +234,9 @@
         }
       }
     ],
-    "tags": ["oak", "side-table"],
-    "title": "Aurora Side Table | Amplience Frontend Starter",
-    "description": "A small oak side table that pairs with the Aurora chair.",
-    "categories": ["home", "home-tables"]
+    "categories": ["womens", "womens-tops"],
+    "tags": ["tops", "oreline"],
+    "title": "Oreline Silk Blouse | Amplience Frontend Starter",
+    "description": "A fluid silk blouse with a concealed placket and a soft shoulder."
   }
 }

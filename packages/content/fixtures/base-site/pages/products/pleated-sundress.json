@@ -1,63 +1,63 @@
 {
-  "id": "cbb695cd-e96f-56f5-ab73-09cdc85d3d2a",
-  "label": "Product — Aurora Side Table",
+  "id": "a15487ea-9e83-5066-845d-449f7db658cf",
+  "label": "Product — Marisol Pleated Sundress",
   "body": {
     "_meta": {
-      "name": "Aurora Side Table",
+      "name": "Marisol Pleated Sundress",
       "schema": "https://quadratic.amplience.com/v2/content/product",
-      "deliveryId": "cbb695cd-e96f-56f5-ab73-09cdc85d3d2a",
+      "deliveryId": "a15487ea-9e83-5066-845d-449f7db658cf",
       "deliveryKeys": {
         "values": [
           {
-            "value": "base-site/products/aurora-side-table"
+            "value": "base-site/products/pleated-sundress"
           }
         ]
       }
     },
-    "sku": "AUR-TABLE-01",
+    "sku": "MAR-DRES-01",
     "name": {
       "values": [
         {
           "locale": "en-US",
-          "value": "Side Table"
+          "value": "Pleated Sundress"
         },
         {
           "locale": "en-GB",
-          "value": "Side Table"
+          "value": "Pleated Sundress"
         },
         {
           "locale": "es-ES",
-          "value": "Mesa auxiliar"
+          "value": "Vestido plisado"
         },
         {
           "locale": "fr-FR",
-          "value": "Table d’appoint"
+          "value": "Robe d’été plissée"
         },
         {
           "locale": "de-DE",
-          "value": "Beistelltisch"
+          "value": "Plissiertes Sommerkleid"
         },
         {
           "locale": "it-IT",
-          "value": "Tavolino"
+          "value": "Abito plissettato"
         }
       ],
       "_meta": {
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
-    "brand": "Aurora",
+    "brand": "Marisol",
     "prices": [
       {
-        "amount": 229,
+        "amount": 120,
         "currencyCode": "GBP"
       },
       {
-        "amount": 265,
+        "amount": 139,
         "currencyCode": "EUR"
       },
       {
-        "amount": 289,
+        "amount": 149,
         "currencyCode": "USD"
       }
     ],
@@ -65,27 +65,27 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "Knife pleats in washed cotton, with a strap that adjusts at the shoulder."
         },
         {
           "locale": "en-GB",
-          "value": "A small oak side table that pairs with the Aurora chair."
+          "value": "Knife pleats in washed cotton, with a strap that adjusts at the shoulder."
         },
         {
           "locale": "es-ES",
-          "value": "Una pequeña mesa auxiliar de roble que combina con el sillón Aurora."
+          "value": "Tablas finas en algodón lavado, con tirante ajustable al hombro."
         },
         {
           "locale": "fr-FR",
-          "value": "Une petite table d’appoint en chêne assortie au fauteuil Aurora."
+          "value": "Plis plats en coton lavé, avec une bretelle réglable à l’épaule."
         },
         {
           "locale": "de-DE",
-          "value": "Ein kleiner Beistelltisch aus Eiche, passend zum Aurora Sessel."
+          "value": "Kellerfalten aus gewaschener Baumwolle, mit an der Schulter verstellbarem Träger."
         },
         {
           "locale": "it-IT",
-          "value": "Un piccolo tavolino in rovere abbinato alla poltrona Aurora."
+          "value": "Pieghe piatte in cotone lavato, con spallina regolabile."
         }
       ],
       "_meta": {
@@ -97,8 +97,8 @@
       {
         "mediaType": "ManualImage",
         "image": {
-          "src": "https://picsum.photos/id/445/1200/1200",
-          "alt": "Aurora Side Table — main view",
+          "src": "https://picsum.photos/id/778/1200/1200",
+          "alt": "Marisol Pleated Sundress",
           "width": 1200,
           "height": 1200
         }
@@ -141,27 +141,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Solid oak"
+              "value": "100% cotton"
             },
             {
               "locale": "en-GB",
-              "value": "Solid oak"
+              "value": "100% cotton"
             },
             {
               "locale": "es-ES",
-              "value": "Roble macizo"
+              "value": "100% algodón"
             },
             {
               "locale": "fr-FR",
-              "value": "Chêne massif"
+              "value": "100% coton"
             },
             {
               "locale": "de-DE",
-              "value": "Massive Eiche"
+              "value": "100% Baumwolle"
             },
             {
               "locale": "it-IT",
-              "value": "Rovere massello"
+              "value": "100% cotone"
             }
           ],
           "_meta": {
@@ -174,27 +174,27 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Diameter"
+              "value": "Length"
             },
             {
               "locale": "en-GB",
-              "value": "Diameter"
+              "value": "Length"
             },
             {
               "locale": "es-ES",
-              "value": "Diámetro"
+              "value": "Largo"
             },
             {
               "locale": "fr-FR",
-              "value": "Diamètre"
+              "value": "Longueur"
             },
             {
               "locale": "de-DE",
-              "value": "Durchmesser"
+              "value": "Länge"
             },
             {
               "locale": "it-IT",
-              "value": "Diametro"
+              "value": "Lunghezza"
             }
           ],
           "_meta": {
@@ -205,27 +205,91 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "45 cm"
+              "value": "Knee length"
             },
             {
               "locale": "en-GB",
-              "value": "45 cm"
+              "value": "Knee length"
             },
             {
               "locale": "es-ES",
-              "value": "45 cm"
+              "value": "Hasta la rodilla"
             },
             {
               "locale": "fr-FR",
-              "value": "45 cm"
+              "value": "Longueur genou"
             },
             {
               "locale": "de-DE",
-              "value": "45 cm"
+              "value": "Knielang"
             },
             {
               "locale": "it-IT",
-              "value": "45 cm"
+              "value": "Al ginocchio"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Cura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine wash at 30°"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine wash at 30°"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavar a máquina a 30°"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavage en machine à 30°"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwäsche bei 30°"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavaggio in lavatrice a 30°"
             }
           ],
           "_meta": {
@@ -234,9 +298,9 @@
         }
       }
     ],
-    "tags": ["oak", "side-table"],
-    "title": "Aurora Side Table | Amplience Frontend Starter",
-    "description": "A small oak side table that pairs with the Aurora chair.",
-    "categories": ["home", "home-tables"]
+    "categories": ["womens", "womens-dresses"],
+    "tags": ["dresses", "marisol"],
+    "title": "Marisol Pleated Sundress | Amplience Frontend Starter",
+    "description": "Knife pleats in washed cotton, with a strap that adjusts at the shoulder."
   }
 }
