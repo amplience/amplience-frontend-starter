@@ -19,33 +19,34 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Mara Hand-Woven Undyed Wool Throw"
+          "value": "Hand-Woven Undyed Wool Throw"
         },
         {
           "locale": "en-GB",
-          "value": "Mara Hand-Woven Undyed Wool Throw"
+          "value": "Hand-Woven Undyed Wool Throw"
         },
         {
           "locale": "es-ES",
-          "value": "Manta Mara de lana sin teñir tejida a mano"
+          "value": "Manta de lana sin teñir tejida a mano"
         },
         {
           "locale": "fr-FR",
-          "value": "Plaid Mara en laine écrue tissé à la main"
+          "value": "Plaid en laine écrue tissé à la main"
         },
         {
           "locale": "de-DE",
-          "value": "Mara handgewebte Decke aus ungefärbter Wolle"
+          "value": "Handgewebte Decke aus ungefärbter Wolle"
         },
         {
           "locale": "it-IT",
-          "value": "Coperta Mara in lana non tinta tessuta a mano"
+          "value": "Coperta in lana non tinta tessuta a mano"
         }
       ],
       "_meta": {
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
+    "brand": "Mara",
     "prices": [
       {
         "amount": 95,
@@ -233,9 +234,9 @@
         }
       }
     ],
-    "category": "Textiles",
     "tags": ["wool", "throw"],
     "title": "Mara Hand-Woven Undyed Wool Throw | Amplience Frontend Starter",
-    "description": "Undyed wool, woven on a hand loom. The long name is deliberate — it is the card-layout stress test."
+    "description": "Undyed wool, woven on a hand loom. The long name is deliberate — it is the card-layout stress test.",
+    "categories": ["home", "home-textiles"]
   }
 }

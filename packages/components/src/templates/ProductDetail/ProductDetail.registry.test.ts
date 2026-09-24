@@ -38,19 +38,31 @@ describe('productRegistryEntry', () => {
     expect(productRegistryEntry.getChildren?.(schema())).toEqual([])
   })
 
+  it('does not pass category identifiers to the template', () => {
+    // They are opaque — the labels and hierarchy live with the navigation,
+    // not in content, so there is nothing sensible to render from them.
+    const props = productRegistryEntry.propsFromSchema?.(
+      schema({ categories: ['home', 'home-seating'] }),
+      ctx,
+    )
+    expect(props).not.toHaveProperty('category')
+    expect(props).not.toHaveProperty('categories')
+  })
+
   it('maps the delivery body to props', () => {
     const props = productRegistryEntry.propsFromSchema?.(
       schema({
         price: { amount: 749, currencyCode: 'GBP' },
         shortDescription: 'A low-slung chair.',
-        category: 'Seating',
+        brand: 'Aurora',
+        categories: ['home', 'home-seating'],
         status: 'active',
       }),
       ctx,
     )
     expect(props?.name).toBe('Aurora Lounge Chair')
     expect(props?.price).toEqual({ amount: 749, currencyCode: 'GBP' })
-    expect(props?.category).toBe('Seating')
+    expect(props?.brand).toBe('Aurora')
   })
 
   it('drops a half-specified price rather than passing a partial object', () => {

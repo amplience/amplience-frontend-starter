@@ -176,11 +176,21 @@ describe('CmsProductSource — listing', () => {
     expect([...names].sort((a, b) => a.localeCompare(b))).toEqual(names)
   })
 
-  it('filters by category', async () => {
-    const { products, total } = await source().list({ category: 'Tables' })
+  it('filters by an exact category identifier', async () => {
+    const { products, total } = await source().list({ category: 'home-tables' })
     expect(products.length).toBeGreaterThan(0)
-    expect(products.every((p) => p.category === 'Tables')).toBe(true)
+    expect(products.every((p) => p.categories?.includes('home-tables'))).toBe(true)
     expect(total).toBe(products.length)
+  })
+
+  it('matches an ancestor because ancestors are denormalised onto the product', () => {
+    // No tree walk: a product in `home-tables` also lists `home`, which is
+    // what commercetools recommends and what makes this an exact match.
+    return source()
+      .list({ category: 'home' })
+      .then(({ products }) => {
+        expect(products.length).toBeGreaterThan(1)
+      })
   })
 
   it('reports the pre-slice total alongside a limited page', async () => {

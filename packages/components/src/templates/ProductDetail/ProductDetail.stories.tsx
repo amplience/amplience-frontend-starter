@@ -27,7 +27,7 @@ const fromFixture = (slug: string, locale = 'en-GB') => {
     locale,
     ...(p.price !== undefined && { price: p.price }),
     ...(p.shortDescription !== undefined && { shortDescription: p.shortDescription }),
-    ...(p.category !== undefined && { category: p.category }),
+    ...(p.brand !== undefined && { brand: p.brand }),
     ...(p.status !== undefined && { status: p.status }),
   }
 }

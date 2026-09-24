@@ -19,33 +19,34 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Aurora Lounge Chair"
+          "value": "Lounge Chair"
         },
         {
           "locale": "en-GB",
-          "value": "Aurora Lounge Chair"
+          "value": "Lounge Chair"
         },
         {
           "locale": "es-ES",
-          "value": "Sillón Aurora"
+          "value": "Sillón"
         },
         {
           "locale": "fr-FR",
-          "value": "Fauteuil Aurora"
+          "value": "Fauteuil"
         },
         {
           "locale": "de-DE",
-          "value": "Aurora Loungesessel"
+          "value": "Loungesessel"
         },
         {
           "locale": "it-IT",
-          "value": "Poltrona Aurora"
+          "value": "Poltrona"
         }
       ],
       "_meta": {
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
+    "brand": "Aurora",
     "prices": [
       {
         "amount": 749,
@@ -342,7 +343,6 @@
         }
       }
     ],
-    "category": "Seating",
     "tags": ["oak", "lounge", "bouclé"],
     "title": "Aurora Lounge Chair | Amplience Frontend Starter",
     "description": "A low-slung lounge chair in oiled oak and wool bouclé, built for long evenings.",
@@ -354,6 +354,7 @@
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       }
-    ]
+    ],
+    "categories": ["home", "home-seating"]
   }
 }

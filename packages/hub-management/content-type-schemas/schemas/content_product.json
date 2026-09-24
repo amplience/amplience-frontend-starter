@@ -20,7 +20,7 @@
         "items": [
           {
             "label": "🛍️ Product",
-            "pointers": ["/sku", "/name", "/prices", "/shortDescription", "/status"]
+            "pointers": ["/sku", "/name", "/brand", "/prices", "/shortDescription", "/status"]
           },
           {
             "label": "🖼️ Media",
@@ -28,7 +28,7 @@
           },
           {
             "label": "📋 Details",
-            "pointers": ["/attributes", "/category", "/tags"]
+            "pointers": ["/attributes", "/categories", "/tags"]
           },
           {
             "label": "📝 Content",
@@ -185,11 +185,6 @@
         "required": ["label", "value"]
       }
     },
-    "category": {
-      "type": "string",
-      "title": "Category",
-      "description": "Free-text category label (e.g. \"Seating\", \"Tables\"). Deliberately not a managed taxonomy — a real PIM owns that, and two taxonomies would have to be reconciled rather than simply replaced."
-    },
     "tags": {
       "type": "array",
       "title": "Tags",
@@ -242,17 +237,33 @@
         "propertyOrder": ["amount", "currencyCode"],
         "required": ["amount", "currencyCode"]
       }
+    },
+    "brand": {
+      "type": "string",
+      "title": "Brand",
+      "description": "Brand or vendor name, as displayed — not a reference. Every commerce platform carries one, though they model it differently (BigCommerce has a Brand resource, Shopify a `vendor` string, commercetools and SFCC a product attribute), so a plain name is what they can all supply. Shown above the product name."
+    },
+    "categories": {
+      "type": "array",
+      "title": "Categories",
+      "description": "Category identifiers this product belongs to. These are opaque to the frontend — nothing parses them, and they need not match any URL. Hierarchy, labels and URLs live with your navigation or your commerce system, not here.\n\nInclude the ancestors as well as the leaf: a shirt in mens-clothes-shirts should also list mens-clothes and mens. That is what commercetools itself recommends, and it is what makes category filtering a simple exact match — asking for mens returns everything beneath it without the site needing to know the tree.",
+      "items": {
+        "type": "string",
+        "title": "Category ID",
+        "minLength": 1
+      }
     }
   },
   "propertyOrder": [
     "sku",
     "name",
+    "brand",
     "prices",
     "shortDescription",
     "status",
     "images",
     "attributes",
-    "category",
+    "categories",
     "tags",
     "slots",
     "title",

@@ -15,11 +15,17 @@ describeProductSource('StubProductSource', () => ({
 }))
 
 describe('StubProductSource specifics', () => {
-  it('filters by category', async () => {
+  it('filters by an exact category identifier', async () => {
     const source = new StubProductSource()
-    const { products, total } = await source.list({ category: 'Tables' })
+    const { products, total } = await source.list({ category: 'home-tables' })
     expect(products.map((p) => p.sku)).toEqual(['AUR-TABLE-01'])
     expect(total).toBe(1)
+  })
+
+  it('matches an ancestor, because ancestors are denormalised onto the product', async () => {
+    // No tree walk anywhere — every product lists `home` alongside its leaf.
+    const { products } = await new StubProductSource().list({ category: 'home' })
+    expect(products).toHaveLength(3)
   })
 
   it('serves a product with no price, images or attributes', async () => {

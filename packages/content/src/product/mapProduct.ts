@@ -143,7 +143,10 @@ export const mapProduct = (
   warnOnMissingCurrency(slug, currency, prices)
   const price = selectPrice(prices, currency)
   const shortDescription = str(b.shortDescription)
-  const category = str(b.category)
+  const brand = str(b.brand)
+  const categories = Array.isArray(b.categories)
+    ? [...new Set(b.categories.filter((c): c is string => typeof c === 'string' && c.length > 0))]
+    : []
   const status = mapStatus(b.status)
 
   return {
@@ -155,7 +158,8 @@ export const mapProduct = (
     ...(images.length > 0 ? { images } : {}),
     ...(shortDescription !== undefined ? { shortDescription } : {}),
     ...(attributes.length > 0 ? { attributes } : {}),
-    ...(category !== undefined ? { category } : {}),
+    ...(brand !== undefined ? { brand } : {}),
+    ...(categories.length > 0 ? { categories } : {}),
     ...(tags.length > 0 ? { tags } : {}),
     ...(status !== undefined ? { status } : {}),
     ...(slots.length > 0 ? { content: slots } : {}),

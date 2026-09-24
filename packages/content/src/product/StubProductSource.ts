@@ -59,7 +59,8 @@ const PRODUCTS: readonly Product[] = [
       { label: 'Frame', value: 'Oiled oak' },
       { label: 'Upholstery', value: 'Wool bouclé' },
     ],
-    category: 'Seating',
+    brand: 'Aurora',
+    categories: ['home', 'home-seating'],
     tags: ['oak', 'lounge'],
     status: 'active',
   },
@@ -74,7 +75,8 @@ const PRODUCTS: readonly Product[] = [
       { amount: 289, currencyCode: 'USD' },
     ],
     images: [{ url: 'https://example.invalid/table-1.jpg', alt: 'Aurora side table' }],
-    category: 'Tables',
+    brand: 'Aurora',
+    categories: ['home', 'home-tables'],
     status: 'active',
   },
   {
@@ -83,6 +85,8 @@ const PRODUCTS: readonly Product[] = [
     sku: 'AUR-SHELF-01',
     slug: 'aurora-shelving',
     name: 'Aurora Shelving',
+    brand: 'Aurora',
+    categories: ['home', 'home-storage'],
     status: 'coming-soon',
   },
 ]
@@ -130,8 +134,10 @@ export class StubProductSource implements ProductSource {
   }
 
   list(opts: ProductListOptions = {}): Promise<ProductListResult> {
-    const matching = opts.category
-      ? this.#products.filter((p) => p.category === opts.category)
+    // Exact membership — ancestors are denormalised onto each product.
+    const { category } = opts
+    const matching = category
+      ? this.#products.filter((p) => p.categories?.includes(category))
       : this.#products
 
     // `capabilities.pagination` is false, so limit/offset are honoured by

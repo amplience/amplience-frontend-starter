@@ -64,10 +64,13 @@
   gap: var(--product-detail-summary-gap, var(--spacing-3));
 }
 
-.category {
+/* Brand sits above the product name — the retail convention, and the value
+   is its own label (unlike a category identifier, which needs a lookup). */
+.brand {
   margin: 0;
-  color: var(--product-detail-category-color, var(--color-gray-600));
-  font-size: var(--product-detail-category-font-size, 0.8125rem);
+  color: var(--product-detail-brand-color, var(--color-gray-600));
+  font-size: var(--product-detail-brand-font-size, 0.8125rem);
+  font-weight: var(--product-detail-brand-font-weight, 500);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }

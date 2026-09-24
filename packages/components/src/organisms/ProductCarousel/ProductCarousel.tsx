@@ -31,6 +31,7 @@ export type ProductCarouselItem = {
   readonly href: string
   readonly price?: { readonly amount: number; readonly currencyCode: string }
   readonly media?: ContentMediaData
+  readonly brand?: string
   readonly shortDescription?: string
   readonly status?: ProductCardStatus
 }
@@ -136,6 +137,7 @@ export function ProductCarousel({
               loadPriority={index === 0 ? loadPriority : 'lazy'}
               {...(product.price !== undefined && { price: product.price })}
               {...(product.media !== undefined && { media: product.media })}
+              {...(product.brand !== undefined && { brand: product.brand })}
               {...(product.shortDescription !== undefined && {
                 shortDescription: product.shortDescription,
               })}

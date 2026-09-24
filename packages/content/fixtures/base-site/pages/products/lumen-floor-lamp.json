@@ -19,33 +19,34 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Lumen Floor Lamp"
+          "value": "Floor Lamp"
         },
         {
           "locale": "en-GB",
-          "value": "Lumen Floor Lamp"
+          "value": "Floor Lamp"
         },
         {
           "locale": "es-ES",
-          "value": "Lámpara de pie Lumen"
+          "value": "Lámpara de pie"
         },
         {
           "locale": "fr-FR",
-          "value": "Lampadaire Lumen"
+          "value": "Lampadaire"
         },
         {
           "locale": "de-DE",
-          "value": "Lumen Stehleuchte"
+          "value": "Stehleuchte"
         },
         {
           "locale": "it-IT",
-          "value": "Lampada da terra Lumen"
+          "value": "Lampada da terra"
         }
       ],
       "_meta": {
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
+    "brand": "Lumen",
     "prices": [
       {
         "amount": 189,
@@ -233,9 +234,9 @@
         }
       }
     ],
-    "category": "Lighting",
     "tags": ["brass", "lighting"],
     "title": "Lumen Floor Lamp | Amplience Frontend Starter",
-    "description": "A slim brass floor lamp with a linen shade and a dimmable warm bulb."
+    "description": "A slim brass floor lamp with a linen shade and a dimmable warm bulb.",
+    "categories": ["home", "home-lighting"]
   }
 }

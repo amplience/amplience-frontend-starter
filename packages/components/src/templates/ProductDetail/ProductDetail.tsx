@@ -35,8 +35,11 @@ export type ProductDetailProps = {
   readonly shortDescription?: string
   /** Display-only spec rows. */
   readonly attributes?: readonly Attribute[]
-  /** Free-text category label. */
-  readonly category?: string
+  /**
+   * Brand or vendor name, rendered above the product name. Unlike a category
+   * identifier, this is the display value itself — no lookup needed.
+   */
+  readonly brand?: string
   /** Topic tags. */
   readonly tags?: readonly string[]
   /** Editorial lifecycle. `active` shows no badge. */
@@ -98,7 +101,7 @@ export function ProductDetail({
   images,
   shortDescription,
   attributes,
-  category,
+  brand,
   tags,
   status = 'active',
   locale,
@@ -114,9 +117,9 @@ export function ProductDetail({
           <div className={styles.gallery}>{renderGallery(gallery, name, loadPriority)}</div>
 
           <div className={styles.summary}>
-            {category !== undefined && (
-              <Typography variant="p" className={clsx(styles.category)}>
-                {category}
+            {brand !== undefined && (
+              <Typography variant="p" className={clsx(styles.brand)}>
+                {brand}
               </Typography>
             )}
 

@@ -19,33 +19,34 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Aurora Shelving"
+          "value": "Shelving"
         },
         {
           "locale": "en-GB",
-          "value": "Aurora Shelving"
+          "value": "Shelving"
         },
         {
           "locale": "es-ES",
-          "value": "Estantería Aurora"
+          "value": "Estantería"
         },
         {
           "locale": "fr-FR",
-          "value": "Étagère Aurora"
+          "value": "Étagère"
         },
         {
           "locale": "de-DE",
-          "value": "Aurora Regal"
+          "value": "Regal"
         },
         {
           "locale": "it-IT",
-          "value": "Scaffalatura Aurora"
+          "value": "Scaffalatura"
         }
       ],
       "_meta": {
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
+    "brand": "Aurora",
     "shortDescription": {
       "values": [
         {
@@ -78,9 +79,9 @@
       }
     },
     "status": "coming-soon",
-    "category": "Storage",
     "tags": ["oak", "shelving"],
     "title": "Aurora Shelving | Amplience Frontend Starter",
-    "description": "Coming soon. Deliberately has no image and no price — the empty-state product."
+    "description": "Coming soon. Deliberately has no image and no price — the empty-state product.",
+    "categories": ["home", "home-storage"]
   }
 }

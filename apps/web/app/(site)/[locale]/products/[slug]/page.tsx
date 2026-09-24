@@ -131,7 +131,7 @@ async function ProductDetailPage({ params }: RouteProps) {
         {...(product.shortDescription !== undefined && {
           shortDescription: product.shortDescription,
         })}
-        {...(product.category !== undefined && { category: product.category })}
+        {...(product.brand !== undefined && { brand: product.brand })}
         {...(product.status !== undefined && { status: product.status })}
       >
         {content}
