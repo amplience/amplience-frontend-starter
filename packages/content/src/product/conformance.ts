@@ -167,12 +167,44 @@ export const describeProductSource = (
       })
     })
 
+    describe('listCategories', () => {
+      it('returns a flat set of unique identifiers', async () => {
+        const { source } = await fixture()
+        const categories = await source.listCategories()
+        expect(Array.isArray(categories)).toBe(true)
+        for (const category of categories) expect(typeof category).toBe('string')
+        expect(new Set(categories).size).toBe(categories.length)
+      })
+
+      it('agrees with the categories on the products, in both directions', async () => {
+        // The set is a projection of product values (ADR-0024) — so a category
+        // no product is in, or a product in a category the set omits, means the
+        // source has grown a second opinion about the taxonomy.
+        const { source } = await fixture()
+        const categories = await source.listCategories()
+        const { products } = await source.list()
+        const onProducts = new Set(products.flatMap((p: Product) => p.categories ?? []))
+        expect([...categories].sort()).toEqual([...onProducts].sort())
+      })
+
+      it('returns categories that each match at least one product', async () => {
+        const { source } = await fixture()
+        for (const category of await source.listCategories()) {
+          const { products } = await source.list({ category })
+          expect(products.length, `category "${category}"`).toBeGreaterThan(0)
+        }
+      })
+    })
+
     describe('empty catalogue', () => {
       it('lists nothing without throwing', async () => {
         const { emptySource } = await fixture()
         if (!emptySource) return
         expect((await emptySource.list()).products).toEqual([])
         expect(await emptySource.listSlugs()).toEqual([])
+        // An empty set, not an error: "this source has no categories" is a
+        // real answer that routes to 404.
+        expect(await emptySource.listCategories()).toEqual([])
       })
     })
   })

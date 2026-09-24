@@ -66,8 +66,20 @@ import siteHierarchyMenuItemDocsTheming from '../../fixtures/base-site/component
 import siteHierarchyMenuItemDocsTroubleshooting from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-docs-troubleshooting.json' with { type: 'json' }
 import siteHierarchyMenuItemDocsWorkingWithAHub from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-docs-working-with-a-hub.json' with { type: 'json' }
 import siteHierarchyMenuItemDocs from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-docs.json' with { type: 'json' }
-import siteHierarchyMenuItemProducts from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-products.json' with { type: 'json' }
+import siteHierarchyMenuItemHomeware from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-homeware.json' with { type: 'json' }
+import siteHierarchyMenuItemKidsBaby from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-kids-baby.json' with { type: 'json' }
+import siteHierarchyMenuItemKidsBoys from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-kids-boys.json' with { type: 'json' }
+import siteHierarchyMenuItemKidsGirls from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-kids-girls.json' with { type: 'json' }
+import siteHierarchyMenuItemKids from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-kids.json' with { type: 'json' }
+import siteHierarchyMenuItemMensJackets from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-mens-jackets.json' with { type: 'json' }
+import siteHierarchyMenuItemMensShirts from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-mens-shirts.json' with { type: 'json' }
+import siteHierarchyMenuItemMensTrousers from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-mens-trousers.json' with { type: 'json' }
+import siteHierarchyMenuItemMens from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-mens.json' with { type: 'json' }
 import siteHierarchyMenuItemStores from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-stores.json' with { type: 'json' }
+import siteHierarchyMenuItemWomensAccessories from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-womens-accessories.json' with { type: 'json' }
+import siteHierarchyMenuItemWomensDresses from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-womens-dresses.json' with { type: 'json' }
+import siteHierarchyMenuItemWomensTops from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-womens-tops.json' with { type: 'json' }
+import siteHierarchyMenuItemWomens from '../../fixtures/base-site/components/header/site-hierarchy-menu-item-womens.json' with { type: 'json' }
 import siteHierarchyMenuMain from '../../fixtures/base-site/components/header/site-hierarchy-menu-main.json' with { type: 'json' }
 import siteIconButtonCart from '../../fixtures/base-site/components/header/site-icon-button-cart.json' with { type: 'json' }
 import siteIconButtonLocation from '../../fixtures/base-site/components/header/site-icon-button-location.json' with { type: 'json' }
@@ -299,7 +311,19 @@ const fixtures: readonly EnrichedContentItem[] = [
   blogContentModellingBody,
   productAuroraLoungeChairStory,
   productTerraDiningTableStory,
-  siteHierarchyMenuItemProducts,
+  siteHierarchyMenuItemHomeware,
+  siteHierarchyMenuItemMens,
+  siteHierarchyMenuItemMensShirts,
+  siteHierarchyMenuItemMensTrousers,
+  siteHierarchyMenuItemMensJackets,
+  siteHierarchyMenuItemWomens,
+  siteHierarchyMenuItemWomensDresses,
+  siteHierarchyMenuItemWomensTops,
+  siteHierarchyMenuItemWomensAccessories,
+  siteHierarchyMenuItemKids,
+  siteHierarchyMenuItemKidsBoys,
+  siteHierarchyMenuItemKidsGirls,
+  siteHierarchyMenuItemKidsBaby,
   siteMenuItemProducts,
   productAuroraLoungeChair,
   productAuroraShelving,

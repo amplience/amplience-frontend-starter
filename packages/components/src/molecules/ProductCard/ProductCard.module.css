@@ -1,10 +1,15 @@
 /*
  * ProductCard molecule styles.
  *
- * The root is the <a>, so it owns no visual treatment beyond stripping link
- * decoration — the Card atom inside it draws the surface and owns the
- * interactive hover/focus states. Keeping those on the Card rather than the
- * link means the focus ring matches every other card in the library.
+ * The root is the Card and the <a> sits inside it — the same nesting as
+ * MediaCard, and the reason this file defines no hover or focus rules of its
+ * own. `data-interactive` on the Card atom owns both, so every card in the
+ * library reacts identically and a brand retunes them in one place via
+ * `--interactive-hover-*`.
+ *
+ * The order matters rather than being a style preference: Card carries the
+ * `:focus-visible` ring, but focus lands on the <a>. With the link outside,
+ * the ring could never render — keyboard users got no focus indicator at all.
  *
  * The media box reserves its aspect ratio whether or not there is an image,
  * so a grid row of cards keeps a straight baseline when one product has no
@@ -12,17 +17,18 @@
  */
 
 .root {
-  display: block;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Fills the card so the whole surface is the click target. */
+.link {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
   height: 100%;
   color: inherit;
   text-decoration: none;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
 }
 
 /* ---------------------------------------------------------------------------

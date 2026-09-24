@@ -99,12 +99,17 @@ export function ProductCard({
   className,
 }: ProductCardProps) {
   return (
-    <Link
-      href={href}
+    <Card
+      interactive
+      elevation="flat"
+      padding="none"
       className={clsx('ProductCard', styles.root, className)}
-      {...(localeBasePath !== undefined && { localeBasePath })}
     >
-      <Card interactive elevation="flat" padding="none" className={clsx(styles.card)}>
+      <Link
+        href={href}
+        className={clsx(styles.link)}
+        {...(localeBasePath !== undefined && { localeBasePath })}
+      >
         <div className={styles.media} data-empty={media === undefined ? 'true' : undefined}>
           {media !== undefined && (
             <ContentMedia
@@ -147,8 +152,8 @@ export function ProductCard({
             />
           )}
         </div>
-      </Card>
-    </Link>
+      </Link>
+    </Card>
   )
 }
 

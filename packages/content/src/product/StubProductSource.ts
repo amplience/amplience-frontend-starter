@@ -155,4 +155,9 @@ export class StubProductSource implements ProductSource {
   listSlugs(): Promise<readonly string[]> {
     return Promise.resolve(this.#products.map((p) => p.slug))
   }
+
+  /** Derived from the products, like the CMS adapter (ADR-0024). Sorted for determinism. */
+  listCategories(): Promise<readonly string[]> {
+    return Promise.resolve([...new Set(this.#products.flatMap((p) => p.categories ?? []))].sort())
+  }
 }

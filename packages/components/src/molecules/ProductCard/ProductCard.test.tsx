@@ -83,10 +83,21 @@ describe('ProductCard', () => {
   })
 
   it('carries its theming hook and forwards a className', () => {
+    // The root is the Card, not the link — see the note in the CSS module.
     const { container } = render(<ProductCard {...base} className="custom" />)
-    const root = container.querySelector('a')
-    expect(root?.className).toContain('ProductCard')
+    const root = container.querySelector('.ProductCard')
+    expect(root?.className).toContain('Card')
     expect(root?.className).toContain('custom')
+  })
+
+  it('puts the interactive Card outside the link, so the focus ring can render', () => {
+    // Card owns `:focus-visible`, but focus lands on the <a>. Nested the other
+    // way round the ring is unreachable and keyboard users get no indicator.
+    const { container } = render(<ProductCard {...base} />)
+    const card = container.querySelector('[data-interactive="true"]')
+    expect(card).not.toBeNull()
+    expect(card?.querySelector('a')).not.toBeNull()
+    expect(container.querySelector('a [data-interactive="true"]')).toBeNull()
   })
 
   it('renders the heading at the requested level', () => {

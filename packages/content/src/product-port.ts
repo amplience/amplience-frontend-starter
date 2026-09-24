@@ -71,6 +71,23 @@ export type ProductSource = {
    */
   listSlugs(): Promise<readonly string[]>
 
+  /**
+   * Every category identifier the source can serve, as a flat set (ADR-0024).
+   *
+   * Flat and unordered by contract: identifiers are opaque and carry no
+   * relationship to one another. A source that exposed a tree here would be
+   * asserting a taxonomy, which is the thing ADR-0018 Decision §8 rules out —
+   * ancestor browsing works instead because ancestors are denormalised onto
+   * each product's `categories`.
+   *
+   * Required rather than capability-gated: a source with no categories
+   * returns `[]`, which is a real answer (those URLs 404), not a missing
+   * feature. Routing consults this to decide whether a URL segment names a
+   * category at all, so an adapter that omitted it would make every category
+   * URL a 404 with nothing to indicate why.
+   */
+  listCategories(): Promise<readonly string[]>
+
   /** What this source can do. See `SourceCapabilities`. */
   readonly capabilities: SourceCapabilities
 }
