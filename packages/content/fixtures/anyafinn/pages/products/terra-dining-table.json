@@ -19,33 +19,34 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Terra Dining Table"
+          "value": "Dining Table"
         },
         {
           "locale": "en-GB",
-          "value": "Terra Dining Table"
+          "value": "Dining Table"
         },
         {
           "locale": "es-ES",
-          "value": "Mesa de comedor Terra"
+          "value": "Mesa de comedor"
         },
         {
           "locale": "fr-FR",
-          "value": "Table à manger Terra"
+          "value": "Table à manger"
         },
         {
           "locale": "de-DE",
-          "value": "Terra Esstisch"
+          "value": "Esstisch"
         },
         {
           "locale": "it-IT",
-          "value": "Tavolo da pranzo Terra"
+          "value": "Tavolo da pranzo"
         }
       ],
       "_meta": {
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
+    "brand": "Terra",
     "prices": [
       {
         "amount": 1290,
@@ -297,7 +298,6 @@
         }
       }
     ],
-    "category": "Tables",
     "tags": ["elm", "dining", "reclaimed"],
     "title": "Terra Dining Table | Amplience Frontend Starter",
     "description": "A six-seat dining table in reclaimed elm with a hand-waxed finish.",
@@ -309,6 +309,7 @@
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       }
-    ]
+    ],
+    "categories": ["home", "home-tables"]
   }
 }

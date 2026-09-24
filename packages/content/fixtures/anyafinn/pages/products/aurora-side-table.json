@@ -19,33 +19,34 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Aurora Side Table"
+          "value": "Side Table"
         },
         {
           "locale": "en-GB",
-          "value": "Aurora Side Table"
+          "value": "Side Table"
         },
         {
           "locale": "es-ES",
-          "value": "Mesa auxiliar Aurora"
+          "value": "Mesa auxiliar"
         },
         {
           "locale": "fr-FR",
-          "value": "Table d’appoint Aurora"
+          "value": "Table d’appoint"
         },
         {
           "locale": "de-DE",
-          "value": "Aurora Beistelltisch"
+          "value": "Beistelltisch"
         },
         {
           "locale": "it-IT",
-          "value": "Tavolino Aurora"
+          "value": "Tavolino"
         }
       ],
       "_meta": {
         "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
       }
     },
+    "brand": "Aurora",
     "prices": [
       {
         "amount": 229,
@@ -233,9 +234,9 @@
         }
       }
     ],
-    "category": "Tables",
     "tags": ["oak", "side-table"],
     "title": "Aurora Side Table | Amplience Frontend Starter",
-    "description": "A small oak side table that pairs with the Aurora chair."
+    "description": "A small oak side table that pairs with the Aurora chair.",
+    "categories": ["home", "home-tables"]
   }
 }

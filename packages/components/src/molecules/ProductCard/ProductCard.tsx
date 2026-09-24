@@ -25,6 +25,8 @@ export type ProductCardProps = {
   price?: { amount: number; currencyCode: string }
   /** Lead image. Omit for a product with none — the card renders text-only. */
   media?: ContentMediaData
+  /** Brand or vendor name, rendered above the product name. */
+  brand?: string
   /** A sentence of body copy under the name. */
   shortDescription?: string
   /**
@@ -86,6 +88,7 @@ export function ProductCard({
   href,
   price,
   media,
+  brand,
   shortDescription,
   status = 'active',
   locale,
@@ -119,6 +122,12 @@ export function ProductCard({
         </div>
 
         <div className={styles.body}>
+          {brand !== undefined && (
+            <Typography variant="p" className={clsx(styles.brand)}>
+              {brand}
+            </Typography>
+          )}
+
           <Typography variant={headingVariant} className={clsx(styles.name)}>
             {name}
           </Typography>

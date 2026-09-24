@@ -41,7 +41,8 @@ export type ProductSchema = {
   readonly status?: 'active' | 'coming-soon' | 'discontinued'
   readonly images?: readonly ContentMediaData[]
   readonly attributes?: readonly ProductAttributeSchema[]
-  readonly category?: string
+  readonly brand?: string
+  readonly categories?: readonly string[]
   readonly tags?: readonly string[]
   readonly slots?: readonly unknown[]
 }
@@ -135,7 +136,7 @@ export const productRegistryEntry: ComponentRegistryEntry<ProductSchema, Product
         shortDescription: schema.shortDescription,
       }),
       ...(attributes !== undefined && attributes.length > 0 && { attributes }),
-      ...(schema.category !== undefined && { category: schema.category }),
+      ...(schema.brand !== undefined && { brand: schema.brand }),
       ...(schema.tags !== undefined && { tags: schema.tags }),
       ...(schema.status !== undefined && { status: schema.status }),
     }

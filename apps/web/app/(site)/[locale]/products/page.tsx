@@ -99,6 +99,7 @@ async function ProductListing({ params }: RouteProps) {
                 locale={locale.code}
                 localeBasePath={localeBasePath(locale)}
                 {...(product.price !== undefined && { price: product.price })}
+                {...(product.brand !== undefined && { brand: product.brand })}
                 {...(media !== undefined && { media })}
                 {...(product.shortDescription !== undefined && {
                   shortDescription: product.shortDescription,

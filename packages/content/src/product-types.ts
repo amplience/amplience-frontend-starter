@@ -106,7 +106,37 @@ export type Product = {
   readonly images?: readonly ProductImage[]
   readonly shortDescription?: string
   readonly attributes?: readonly ProductAttribute[]
-  readonly category?: string
+  /**
+   * Brand or vendor name — the value as displayed, not a reference.
+   *
+   * Universally present across PIMs but inconsistently modelled: BigCommerce
+   * has a first-class Brand resource, Shopify a plain `vendor` string
+   * defaulting to the store name, commercetools and SFCC a product-type
+   * attribute. A string is what all four can fill — a BigCommerce adapter
+   * dereferences its brand to the name.
+   *
+   * Unlike `categories`, a brand needs no lookup to display: the value *is*
+   * the label.
+   */
+  readonly brand?: string
+  /**
+   * Category identifiers this product belongs to — **opaque**, flat and
+   * unordered. Nothing here parses them.
+   *
+   * Every mainstream PIM models it this way: the product holds references,
+   * and the hierarchy, labels and URLs live on the category resource
+   * (commercetools `parent`/`ancestors`, BigCommerce `parent_id`). We do not
+   * model that resource — a CMS-owned taxonomy is what ADR-0018 §8 excludes,
+   * because a PIM owns one too and two would need reconciling.
+   *
+   * The set is **denormalised to include ancestors**, which is what
+   * commercetools itself recommends ("assign all relevant parent Categories
+   * directly to the Product alongside the child Category") — a product in
+   * `mens-clothes-shirts` also lists `mens-clothes` and `mens`. That is what
+   * makes filtering an exact membership test rather than a tree walk, and it
+   * is the author's (or the PIM's) job, not something inferred here.
+   */
+  readonly categories?: readonly string[]
   readonly tags?: readonly string[]
   readonly status?: ProductStatus
   /**
@@ -123,7 +153,11 @@ export type ProductListOptions = {
   readonly locale?: string
   /** Currency to select a price for. See `CurrencyCode`. */
   readonly currency?: CurrencyCode
-  /** Free-text category match, when the source can filter on it. */
+  /**
+   * Restrict to products whose `categories` contain this identifier. An exact
+   * match, not a prefix or a tree walk — ancestors are denormalised onto the
+   * product, so `mens` already matches everything beneath it.
+   */
   readonly category?: string
   readonly limit?: number
   readonly offset?: number

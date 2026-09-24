@@ -77,6 +77,15 @@
   gap: var(--product-card-body-gap, var(--spacing-1));
 }
 
+.brand {
+  margin: 0;
+  color: var(--product-card-brand-color, var(--color-gray-500));
+  font-size: var(--product-card-brand-font-size, 0.6875rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .name {
   margin: 0;
   font-size: var(--product-card-name-font-size, 1rem);

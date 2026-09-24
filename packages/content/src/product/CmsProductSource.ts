@@ -119,7 +119,11 @@ export class CmsProductSource implements ProductSource {
    */
   async list(opts: ProductListOptions = {}): Promise<ProductListResult> {
     const all = await this.#catalogue(opts.locale, opts.currency)
-    const matching = opts.category ? all.filter((p) => p.category === opts.category) : all
+    // Exact membership, not a prefix or a tree walk: ancestors are
+    // denormalised onto each product (see `Product.categories`), so asking for
+    // `mens` already returns everything beneath it.
+    const { category } = opts
+    const matching = category ? all.filter((p) => p.categories?.includes(category)) : all
 
     const offset = opts.offset ?? 0
     const products =

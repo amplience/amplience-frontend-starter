@@ -38,7 +38,8 @@ export type StoryProduct = {
   readonly prices: readonly { readonly amount: number; readonly currencyCode: string }[]
   readonly images: readonly ContentMediaData[]
   readonly attributes: readonly { label: string; value: string }[]
-  readonly category?: string
+  readonly brand?: string
+  readonly categories: readonly string[]
   readonly tags: readonly string[]
   readonly status?: 'active' | 'coming-soon' | 'discontinued'
 }
@@ -121,7 +122,10 @@ const toStoryProduct = (
     // cast is only because a JSON import widens `mediaType` to `string`.
     images: Array.isArray(body.images) ? (body.images as ContentMediaData[]) : [],
     attributes,
-    ...(typeof body.category === 'string' && { category: body.category }),
+    ...(typeof body.brand === 'string' && { brand: body.brand }),
+    categories: Array.isArray(body.categories)
+      ? body.categories.filter((c): c is string => typeof c === 'string')
+      : [],
     tags,
     ...(isStatus(body.status) && { status: body.status }),
   }

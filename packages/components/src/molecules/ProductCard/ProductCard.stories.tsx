@@ -39,6 +39,7 @@ const fromFixture = (slug: string) => {
     locale: 'en-GB',
     ...(p.price !== undefined && { price: p.price }),
     ...(p.images[0] !== undefined && { media: p.images[0] }),
+    ...(p.brand !== undefined && { brand: p.brand }),
     ...(p.shortDescription !== undefined && { shortDescription: p.shortDescription }),
     ...(p.status !== undefined && { status: p.status }),
   }
