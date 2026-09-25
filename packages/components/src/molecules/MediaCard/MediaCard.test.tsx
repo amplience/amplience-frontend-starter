@@ -3,7 +3,7 @@
 // Smoke tests for the MediaCard molecule (QL-70).
 
 import { cleanup, render, screen } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { MediaCard } from './MediaCard'
 
@@ -69,6 +69,39 @@ describe('MediaCard', () => {
     it('keeps the full-width hint for a dynamic layout (container query, safe upper bound)', () => {
       render(<MediaCard title="Title" media={sampleMedia} sizes={slot} layout="dynamic" />)
       expect(screen.getByAltText('A product photo').getAttribute('sizes')).toBe(slot)
+    })
+  })
+
+  describe('video media', () => {
+    const video = {
+      mediaType: 'ExternalVideo' as const,
+      url: 'https://cdn.example.com/loop.mp4',
+      title: 'Workshop film',
+    }
+
+    beforeEach(() => {
+      vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue(undefined)
+      vi.spyOn(HTMLMediaElement.prototype, 'pause').mockImplementation(() => undefined)
+    })
+    afterEach(() => vi.restoreAllMocks())
+
+    it('plays as authored — a player with controls by default', () => {
+      const { container } = render(<MediaCard title="Card" media={video} />)
+      expect(container.querySelector('video')?.controls).toBe(true)
+    })
+
+    it('goes ambient, with its pause button, in the overlay layout', () => {
+      const { container } = render(<MediaCard title="Card" media={video} layout="overlay" />)
+      expect(container.querySelector('video')?.controls).toBe(false)
+      expect(screen.getByRole('button', { name: 'Pause background video' })).toBeTruthy()
+    })
+
+    it('goes ambient inside a link — no button, and it waits for a hover', () => {
+      const { container } = render(
+        <MediaCard title="Card" media={video} links={{ href: '/workshops' }} />,
+      )
+      expect(container.querySelector('video')?.controls).toBe(false)
+      expect(screen.queryByRole('button')).toBeNull()
     })
   })
 

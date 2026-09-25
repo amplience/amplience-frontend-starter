@@ -1,4 +1,8 @@
-import type { ComponentRegistryEntry, ContentMediaData } from '@amplience/frontend-starter-types'
+import type {
+  ComponentRegistryEntry,
+  ContentImageData,
+  ContentMediaData,
+} from '@amplience/frontend-starter-types'
 
 import { contentMediaUrl } from '../../molecules/DynamicImage/di-utils'
 import { BlogArticle, type BlogArticleProps } from './BlogArticle'
@@ -21,11 +25,11 @@ export type BlogArticleSchema = {
     readonly title?: string
     readonly description?: string
     /** Media partial — og:image URL built at mapping time via contentMediaUrl. */
-    readonly image?: ContentMediaData
+    readonly image?: ContentImageData
   }
   readonly canonicalUrl?: string
   readonly robots?: { readonly noindex?: boolean; readonly nofollow?: boolean }
-  /** Media partial — the article's hero/cover image. */
+  /** Rich-media partial — the article's hero/cover image or video. */
   readonly coverImage?: ContentMediaData
   readonly author?: string
   readonly publishDate?: string

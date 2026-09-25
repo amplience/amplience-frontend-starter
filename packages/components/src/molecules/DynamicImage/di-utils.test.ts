@@ -12,6 +12,7 @@ import {
   amplienceDiLoader,
   buildDiBaseUrl,
   contentMediaUrl,
+  resolveContentMediaAspectRatio,
   resolveDiAspectRatio,
 } from './di-utils'
 
@@ -157,5 +158,68 @@ describe('contentMediaUrl', () => {
       image: { image: { name: '', endpoint: 'my-store', defaultHost: 'cdn.media.amplience.net' } },
     }
     expect(contentMediaUrl(broken)).toBeUndefined()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// Video media — og:image fallbacks and reserved frame ratios
+// ---------------------------------------------------------------------------
+
+describe('contentMediaUrl — video', () => {
+  const dynamicVideo: ContentMediaData = { mediaType: 'DynamicVideo', video: sampleLink }
+
+  it('uses the DAM thumbnail for a DynamicVideo with no poster', () => {
+    expect(contentMediaUrl(dynamicVideo, { width: 1200 })).toBe(
+      'https://cdn.media.amplience.net/v/my-store/hero-image?w=1200',
+    )
+  })
+
+  it('prefers the authored poster for a DynamicVideo', () => {
+    const withPoster: ContentMediaData = {
+      ...dynamicVideo,
+      poster: { ...sampleLink, name: 'poster' },
+    }
+    expect(contentMediaUrl(withPoster, { width: 1200 })).toBe(
+      'https://cdn.media.amplience.net/i/my-store/poster?w=1200',
+    )
+    expect(contentMediaUrl(withPoster)).toBe('https://cdn.media.amplience.net/i/my-store/poster')
+  })
+
+  it('returns undefined when the DynamicVideo link is incomplete', () => {
+    expect(
+      contentMediaUrl({ mediaType: 'DynamicVideo', video: { ...sampleLink, name: '' } }),
+    ).toBeUndefined()
+  })
+
+  it('uses the poster URL, else the YouTube thumbnail, for an ExternalVideo', () => {
+    const youtube: ContentMediaData = {
+      mediaType: 'ExternalVideo',
+      url: 'https://youtu.be/dQw4w9WgXcQ',
+      title: 'Film',
+    }
+    expect(contentMediaUrl(youtube)).toBe('https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg')
+    expect(contentMediaUrl({ ...youtube, posterUrl: 'https://x.com/p.jpg' })).toBe(
+      'https://x.com/p.jpg',
+    )
+    expect(contentMediaUrl({ ...youtube, url: 'https://vimeo.com/76979871' })).toBeUndefined()
+  })
+})
+
+describe('resolveContentMediaAspectRatio — video', () => {
+  it('returns the authored frame shape, defaulting to 16:9', () => {
+    expect(
+      resolveContentMediaAspectRatio({
+        mediaType: 'DynamicVideo',
+        video: sampleLink,
+        aspectRatio: '9:16',
+      }),
+    ).toBe('9 / 16')
+    expect(
+      resolveContentMediaAspectRatio({
+        mediaType: 'ExternalVideo',
+        url: 'https://youtu.be/dQw4w9WgXcQ',
+        title: 'x',
+      }),
+    ).toBe('16 / 9')
   })
 })

@@ -44,6 +44,7 @@ import partialsContentBlocks from '../content-type-schemas/schemas/partials_cont
 import partialsCta from '../content-type-schemas/schemas/partials_cta.json'
 import partialsIcon from '../content-type-schemas/schemas/partials_icon.json'
 import partialsMedia from '../content-type-schemas/schemas/partials_media.json'
+import partialsRichMedia from '../content-type-schemas/schemas/partials_rich-media.json'
 import partialsSectionHeader from '../content-type-schemas/schemas/partials_section-header.json'
 import sitestructureCustomCss from '../content-type-schemas/schemas/sitestructure_custom-css.json'
 import slotsSlot from '../content-type-schemas/schemas/slots_slot.json'
@@ -76,6 +77,7 @@ const entry = (
 /** Every schema in the package, partials included. */
 export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(partialsMedia, 'PARTIAL'),
+  entry(partialsRichMedia, 'PARTIAL'),
   entry(partialsCta, 'PARTIAL'),
   entry(partialsContentBlocks, 'PARTIAL'),
   entry(partialsCarouselItems, 'PARTIAL'),

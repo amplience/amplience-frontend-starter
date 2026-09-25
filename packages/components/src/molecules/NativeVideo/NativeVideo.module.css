@@ -1,0 +1,27 @@
+/* Ratio via --video-aspect-ratio so layouts can override it (as --di-aspect-ratio). */
+.root {
+  --video-background: var(--color-black);
+
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: var(--video-aspect-ratio, 16 / 9);
+  background: var(--video-background);
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Ambient fills its box over the block's own background. */
+.root[data-playback='ambient'] {
+  background: transparent;
+
+  & .video {
+    object-fit: cover;
+  }
+}

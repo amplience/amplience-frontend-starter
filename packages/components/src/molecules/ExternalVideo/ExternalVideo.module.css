@@ -1,0 +1,95 @@
+/* Same frame contract as NativeVideo; --video-ratio is the number form, for the cover maths. */
+.root {
+  --video-background: var(--color-black);
+  --video-play-size: 4rem;
+  --video-play-background: rgb(0 0 0 / 65%);
+  --video-play-color: var(--color-white);
+
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: var(--video-aspect-ratio, 16 / 9);
+  background: var(--video-background);
+  container-type: size;
+}
+
+.poster {
+  object-fit: cover;
+}
+
+.iframe {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Player — poster + play button until pressed */
+
+.facade {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: -3px;
+  }
+}
+
+.playIcon {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--video-play-size);
+  height: var(--video-play-size);
+  padding-inline-start: 4px;
+  border-radius: 50%;
+  background: var(--video-play-background);
+  color: var(--video-play-color);
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease;
+
+  .facade:hover & {
+    transform: scale(1.06);
+    background: rgb(0 0 0 / 80%);
+  }
+}
+
+/* Ambient — iframes can't object-fit, so cover the box by hand. */
+
+.root[data-playback='ambient'] {
+  background: transparent;
+}
+
+.frame {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Hidden (poster shows) until the embed reports it's playing. */
+  opacity: 0;
+  transition: opacity 0.4s ease;
+
+  &[data-confirmed] {
+    opacity: 1;
+  }
+}
+
+.root[data-playback='ambient'] .iframe {
+  inset: auto;
+  top: 50%;
+  left: 50%;
+  width: max(100cqw, calc(100cqh * var(--video-ratio, 1.7778)));
+  height: max(100cqh, calc(100cqw / var(--video-ratio, 1.7778)));
+  translate: -50% -50%;
+}

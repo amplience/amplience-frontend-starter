@@ -111,6 +111,8 @@ import homeMediaCard2 from '../../fixtures/base-site/components/home-media-card-
 import homeMediaCard3 from '../../fixtures/base-site/components/home-media-card-3.json' with { type: 'json' }
 import homeMediaCard4 from '../../fixtures/base-site/components/home-media-card-4.json' with { type: 'json' }
 import homeMediaCard5 from '../../fixtures/base-site/components/home-media-card-5.json' with { type: 'json' }
+import mediaVideoAmbient from '../../fixtures/base-site/components/media/video-ambient.json' with { type: 'json' }
+import mediaVideoPlayer from '../../fixtures/base-site/components/media/video-player.json' with { type: 'json' }
 import notFoundHero from '../../fixtures/base-site/components/not-found-hero.json' with { type: 'json' }
 import aboutPage from '../../fixtures/base-site/pages/about.json' with { type: 'json' }
 import blogContentModellingPage from '../../fixtures/base-site/pages/blog/content-modelling.json' with { type: 'json' }
@@ -229,6 +231,10 @@ const fixtures: readonly EnrichedContentItem[] = [
   homeMediaCard3,
   homeMediaCard4,
   homeMediaCard5,
+  // Standalone video examples — not placed on a page; drop them into a slot
+  // to see them rendered.
+  mediaVideoPlayer,
+  mediaVideoAmbient,
   homeGuides,
   homeGuideCardGettingStarted,
   homeGuideCardWorkingWithAHub,

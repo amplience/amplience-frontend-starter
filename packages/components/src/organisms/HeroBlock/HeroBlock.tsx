@@ -1,7 +1,11 @@
 import clsx from 'clsx'
 import { useId, type ReactNode } from 'react'
 
-import type { ContentMediaData, MediaLoadPriority } from '@amplience/frontend-starter-types'
+import type {
+  ContentImageData,
+  ContentMediaData,
+  MediaLoadPriority,
+} from '@amplience/frontend-starter-types'
 
 import { Button, type ButtonProps } from '../../atoms/Button/Button'
 import { Container } from '../../atoms/Container/Container'
@@ -9,6 +13,7 @@ import type { ContainerProps } from '../../atoms/Container/Container'
 import { Typography } from '../../atoms/Typography/Typography'
 import { ArtDirectedMedia } from '../../molecules/ArtDirectedMedia/ArtDirectedMedia'
 import { ContentMedia } from '../../molecules/ContentMedia/ContentMedia'
+import { isImageMedia } from '../../molecules/ContentMedia/media-guards'
 import { mediaLoadingProps } from '../../molecules/ContentMedia/mediaLoadingProps'
 import { resolveContentMediaAspectRatio } from '../../molecules/DynamicImage/di-utils'
 import styles from './HeroBlock.module.css'
@@ -44,8 +49,10 @@ export type HeroBlockProps = {
   subtitle?: string
   description?: string
   /**
-   * Optional hero media. Accepts ManualImage (direct URL) or DynamicImage
-   * (Amplience DAM asset). Omit for a text-only hero.
+   * Optional hero media — an image (ManualImage, DynamicImage) or a video
+   * (DynamicVideo, ExternalVideo). A video always plays as an ambient
+   * background (muted, looping, no controls, with a pause button), whatever
+   * its authored playback. Omit for a text-only hero.
    */
   media?: ContentMediaData
   /**
@@ -53,15 +60,16 @@ export type HeroBlockProps = {
    * is shown at ≤768px and `media` above it, rendered as a <picture> so only
    * the matched image downloads. The two may have different aspect ratios —
    * each breakpoint reserves its own box, so there is no layout shift.
-   * Ignored unless `media` is also present.
+   * Ignored unless `media` is also present and is an image — a `<picture>`
+   * can't art-direct a video.
    */
   mobileOverride?: boolean
   /**
    * The art-directed image shown at ≤768px when `mobileOverride` is true.
-   * Same shape as `media` (ManualImage or DynamicImage). Has no effect on its
-   * own — `mobileOverride` must also be true and `media` must be present.
+   * Image-only (ManualImage or DynamicImage). Has no effect on its own —
+   * `mobileOverride` must also be true and `media` must be an image.
    */
-  mobileMedia?: ContentMediaData
+  mobileMedia?: ContentImageData
   ctas?: HeroBlockCtaProps[]
   /**
    * Where the content sits relative to the image on mobile (≤ 768px).
@@ -295,9 +303,12 @@ export function HeroBlock({
   className,
 }: HeroBlockProps) {
   const hasMedia = media != null
-  // Art-direct only when the author opted in AND supplied a mobile image.
-  // `media` is guaranteed present here (mobileMedia has no effect without it).
-  const hasMobileOverride = hasMedia && mobileOverride === true && mobileMedia != null
+  // Art-direct only when opted in, with a mobile image, and the main media is an image.
+  const artDirectedDesktop =
+    hasMedia && mobileOverride === true && mobileMedia != null && isImageMedia(media)
+      ? media
+      : undefined
+  const hasMobileOverride = artDirectedDesktop !== undefined
   const titleId = useId()
 
   // The ::before spacer in 'flexible' overlay mode needs the media aspect
@@ -334,7 +345,7 @@ export function HeroBlock({
           if (ratio !== undefined) vars['--media-aspect-ratio'] = ratio
           // When art-directing, the mobile image may have a different ratio;
           // reserve its box separately so the ≤768px spacer avoids CLS.
-          if (hasMobileOverride) {
+          if (hasMobileOverride && mobileMedia != null) {
             const mobileRatio = resolveContentMediaAspectRatio(mobileMedia)
             if (mobileRatio !== undefined) vars['--media-aspect-ratio-mobile'] = mobileRatio
           }
@@ -358,13 +369,13 @@ export function HeroBlock({
               breakpoint. Declaring it lets next/image preload the correctly
               sized candidate instead of defaulting to the largest 3840px image.
           */}
-          {hasMobileOverride ? (
+          {artDirectedDesktop !== undefined && mobileMedia != null ? (
             // Art direction: <picture> with a mobile <source> + desktop
             // fallback <img>, both via next/image's getImageProps so only the
             // matched image downloads. Per-breakpoint preload replaces the
             // single ContentMedia preload for the LCP hero.
             <ArtDirectedMedia
-              desktop={media}
+              desktop={artDirectedDesktop}
               mobile={mobileMedia}
               {...mediaLoadingProps(loadPriority)}
               sizes="100vw"
@@ -375,6 +386,7 @@ export function HeroBlock({
               {...mediaLoadingProps(loadPriority)}
               sizes="100vw"
               {...media}
+              videoContext="background"
               {...(styles.image !== undefined && { className: styles.image })}
             />
           )}

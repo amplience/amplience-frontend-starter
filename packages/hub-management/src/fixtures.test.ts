@@ -21,6 +21,8 @@ import { describe, expect, it } from 'vitest'
 
 import { allFixtures } from '@amplience/frontend-starter-content/mock'
 
+import partialsMedia from '../content-type-schemas/schemas/partials_media.json'
+import partialsRichMedia from '../content-type-schemas/schemas/partials_rich-media.json'
 import { contentTypeSchemas, findSchema, schemaManifest } from './index'
 
 /** Minimal stand-in for the platform-hosted core schema (see module doc). */
@@ -36,9 +38,22 @@ const coreSchemaStub = {
         contentType: { type: 'string' },
       },
     },
-    // Referenced by partials/media (DynamicImage branch, image-poi extension).
+    // Referenced by partials/media and partials/rich-media (DynamicImage
+    // branch, image-poi extension; DynamicVideo poster).
     // Mirrors the fields the renderer requires to build a DI URL.
     'image-link': {
+      type: 'object',
+      required: ['name', 'endpoint', 'defaultHost'],
+      properties: {
+        id: { type: 'string' },
+        name: { type: 'string' },
+        endpoint: { type: 'string' },
+        defaultHost: { type: 'string' },
+      },
+    },
+    // Referenced by partials/rich-media (DynamicVideo branch). Same fields a
+    // DAM video URL is built from.
+    'video-link': {
       type: 'object',
       required: ['name', 'endpoint', 'defaultHost'],
       properties: {
@@ -125,6 +140,9 @@ describe('schema manifest', () => {
     expect(findSchema('https://quadratic.amplience.com/v2/partials/media')?.validationLevel).toBe(
       'PARTIAL',
     )
+    expect(
+      findSchema('https://quadratic.amplience.com/v2/partials/rich-media')?.validationLevel,
+    ).toBe('PARTIAL')
   })
 })
 
@@ -203,4 +221,117 @@ describe('every content-link names its target’s actual content type', () => {
       }
     })
   }
+})
+
+/**
+ * The media partials' branch rules — the fixtures only exercise the happy
+ * paths, so these pin down what each `mediaType` requires and what the two
+ * partials accept. partials/media stays image-only; partials/rich-media adds
+ * the two video branches on top of the same image definitions.
+ */
+describe('media partials', () => {
+  const MEDIA = 'https://quadratic.amplience.com/v2/partials/media'
+  const RICH_MEDIA = 'https://quadratic.amplience.com/v2/partials/rich-media'
+  const damLink = { name: 'clip', endpoint: 'demo', defaultHost: 'cdn.media.amplience.net' }
+  const dynamicImage = { mediaType: 'DynamicImage', image: { image: damLink } }
+  const manualImage = {
+    mediaType: 'ManualImage',
+    image: { src: 'https://example.com/a.jpg', alt: 'A', width: 800, height: 600 },
+  }
+  const dynamicVideo = { mediaType: 'DynamicVideo', video: damLink, playback: 'ambient' }
+  const externalVideo = {
+    mediaType: 'ExternalVideo',
+    url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    title: 'Product walkthrough',
+  }
+
+  const validates = (schemaId: string, body: unknown) => ajv.getSchema(schemaId)?.(body) === true
+
+  it('partials/media accepts both image types and rejects video', () => {
+    expect(validates(MEDIA, dynamicImage)).toBe(true)
+    expect(validates(MEDIA, manualImage)).toBe(true)
+    expect(validates(MEDIA, dynamicVideo)).toBe(false)
+    expect(validates(MEDIA, externalVideo)).toBe(false)
+  })
+
+  it('partials/rich-media accepts all four media types', () => {
+    for (const body of [dynamicImage, manualImage, dynamicVideo, externalVideo]) {
+      expect(validates(RICH_MEDIA, body), body.mediaType).toBe(true)
+    }
+  })
+
+  it('still enforces the ManualImage required fields in partials/rich-media', () => {
+    expect(validates(RICH_MEDIA, { mediaType: 'ManualImage', image: { src: '/a.jpg' } })).toBe(
+      false,
+    )
+  })
+
+  it('requires a video on DynamicVideo', () => {
+    expect(validates(RICH_MEDIA, { mediaType: 'DynamicVideo' })).toBe(false)
+  })
+
+  it('requires a url and a title on ExternalVideo', () => {
+    expect(validates(RICH_MEDIA, { ...externalVideo, title: undefined })).toBe(false)
+    expect(validates(RICH_MEDIA, { mediaType: 'ExternalVideo', title: 'x' })).toBe(false)
+  })
+
+  it('requires an https poster URL', () => {
+    expect(validates(RICH_MEDIA, { ...externalVideo, posterUrl: 'http://x.com/p.jpg' })).toBe(false)
+  })
+
+  it('rejects an unknown playback mode or aspect ratio', () => {
+    expect(validates(RICH_MEDIA, { ...dynamicVideo, playback: 'autoplay' })).toBe(false)
+    expect(validates(RICH_MEDIA, { ...dynamicVideo, aspectRatio: '3:2' })).toBe(false)
+  })
+
+  // rich-media is an object content palette (the DC editor doesn't support
+  // several if/then branches); its image options copy partials/media's fields.
+  it('carries image options identical to partials/media', () => {
+    const option = (mediaType: string) => {
+      const found = partialsRichMedia.oneOf.find((o) => o.properties.mediaType.const === mediaType)
+      const { mediaType: _discriminator, ...fields } = found?.properties ?? {}
+      return fields
+    }
+    expect(option('DynamicImage')).toEqual(partialsMedia.then.properties)
+    expect(option('ManualImage')).toEqual(partialsMedia.else.properties)
+  })
+
+  it('gives every palette option a unique, hidden mediaType const', () => {
+    const consts = partialsRichMedia.oneOf.map((o) => o.properties.mediaType)
+    expect(new Set(consts.map((c) => c.const)).size).toBe(consts.length)
+    expect(consts.every((c) => c['ui:component'] === 'none')).toBe(true)
+  })
+
+  it('rejects a body with no mediaType', () => {
+    expect(validates(RICH_MEDIA, { image: manualImage.image })).toBe(false)
+  })
+
+  it.each([
+    'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    'https://youtu.be/dQw4w9WgXcQ',
+    'https://www.youtube.com/shorts/dQw4w9WgXcQ',
+    'https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ',
+    'https://m.youtube.com/watch?v=dQw4w9WgXcQ',
+    'https://vimeo.com/76979871',
+    'https://player.vimeo.com/video/76979871',
+    'https://cdn.example.com/media/loop.mp4',
+    'https://cdn.example.com/media/loop.mp4?v=2',
+    'https://cdn.example.com/media/LOOP.MP4',
+    'https://vimeo.com/showcase/123/video/456',
+  ])('accepts the external video URL %s', (url) => {
+    expect(validates(RICH_MEDIA, { ...externalVideo, url })).toBe(true)
+  })
+
+  it.each([
+    'http://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    'https://example.com/video',
+    'https://example.com/clip.mov',
+    'https://example.com/?file=clip.mp4',
+    'https://www.youtube.com/',
+    'https://www.youtube.com/@amplience',
+    'https://www.youtube.com/playlist?list=PL123',
+    'https://vimeo.com/channels/staffpicks',
+  ])('rejects the external video URL %s', (url) => {
+    expect(validates(RICH_MEDIA, { ...externalVideo, url })).toBe(false)
+  })
 })

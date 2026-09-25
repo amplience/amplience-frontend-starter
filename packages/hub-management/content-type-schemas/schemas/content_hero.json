@@ -87,9 +87,10 @@
     },
     "media": {
       "title": "Media",
+      "description": "Image or video. A video in a hero always plays as an ambient background: muted, looping, no controls. The mobile override only applies to images.",
       "allOf": [
         {
-          "$ref": "https://quadratic.amplience.com/v2/partials/media"
+          "$ref": "https://quadratic.amplience.com/v2/partials/rich-media"
         }
       ]
     },

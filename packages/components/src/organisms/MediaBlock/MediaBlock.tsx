@@ -7,6 +7,7 @@ import type { ContainerProps } from '../../atoms/Container/Container'
 import { Link } from '../../atoms/Link/Link'
 import { Typography } from '../../atoms/Typography/Typography'
 import { ContentMedia } from '../../molecules/ContentMedia/ContentMedia'
+import { isVideoMedia } from '../../molecules/ContentMedia/media-guards'
 import { mediaLoadingProps } from '../../molecules/ContentMedia/mediaLoadingProps'
 import styles from './MediaBlock.module.css'
 
@@ -21,8 +22,9 @@ export type MediaBlockBackgroundColor = MediaBlockColorToken
 
 export type MediaBlockProps = {
   /**
-   * Media to render. Accepts either a ManualImage (direct URL) or DynamicImage
-   * (Amplience DAM asset via image-poi extension).
+   * Media to render — an image (ManualImage, DynamicImage) or a video
+   * (DynamicVideo, ExternalVideo). A video plays as authored: a player with
+   * controls, or an ambient loop.
    */
   media: ContentMediaData
   /**
@@ -30,8 +32,11 @@ export type MediaBlockProps = {
    */
   caption?: string
   /**
-   * Optional URL. When provided, the image is wrapped in a link.
+   * Optional URL. When provided, the media is wrapped in a link.
    * External URLs open in a new tab; internal paths use Next.js routing.
+   * A video inside the link is always ambient, so a click follows the link
+   * instead of starting a player, and it plays only while the link is hovered
+   * or focused.
    */
   href?: string
   /**
@@ -99,8 +104,8 @@ export type MediaBlockProps = {
  *   - href     — wraps media in a Link (internal or external)
  *   - fullBleed — image runs edge-to-edge (no Container padding)
  *
- * Supports both ManualImage (direct URL) and DynamicImage (Amplience DAM)
- * via the ContentMediaData discriminated union.
+ * Supports images and video (ManualImage, DynamicImage, DynamicVideo,
+ * ExternalVideo) via the ContentMediaData discriminated union.
  *
  * All visual theming reads from --media-block-* CSS variables; brands
  * override under [data-brand] without touching this file.
@@ -128,9 +133,11 @@ export function MediaBlock({
       {...mediaLoadingProps(loadPriority)}
       sizes={resolvedSizes}
       {...media}
+      videoContext={href ? 'linked' : 'default'}
       {...(styles.image !== undefined && { className: styles.image })}
     />
   )
+  const mediaLabel = isVideoMedia(media) ? 'Video' : 'Image'
 
   const figure = (
     <figure className={clsx(styles.figure, bare && className)}>
@@ -166,7 +173,7 @@ export function MediaBlock({
 
   return (
     <section
-      aria-label={caption ? `Image: ${caption}` : 'Image'}
+      aria-label={caption ? `${mediaLabel}: ${caption}` : mediaLabel}
       className={clsx('MediaBlock', styles.root, className)}
       data-full-bleed={fullBleed ? 'true' : undefined}
       data-background-color={backgroundColor}

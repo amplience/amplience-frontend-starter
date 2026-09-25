@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 
-import type { ContentMediaData } from '@amplience/frontend-starter-types'
+import type { ContentImageData } from '@amplience/frontend-starter-types'
 
 import { Link } from '../../atoms/Link/Link'
 import { ContentMedia } from '../ContentMedia/ContentMedia'
@@ -15,7 +15,7 @@ export type LogoProps = {
    * The logo media — ManualImage (direct URL) or DynamicImage (an asset
    * picked from the Amplience DAM via the image-poi extension).
    */
-  image: ContentMediaData
+  image: ContentImageData
   /**
    * Optional URL the logo links to. Omit when the logo is purely decorative
    * or when a surrounding element already provides the link.

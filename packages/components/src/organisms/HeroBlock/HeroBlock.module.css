@@ -588,6 +588,11 @@
         z-index: 0;
       }
 
+      /* Let an ambient video's pause button escape above the scrim. */
+      & .media:has([data-ambient-toggle]) {
+        z-index: auto;
+      }
+
       & .image {
         width: 100%;
         height: 100%;
@@ -676,6 +681,11 @@
         position: absolute;
         inset: 0;
         z-index: 0;
+      }
+
+      /* Let an ambient video's pause button escape above the scrim. */
+      & .media:has([data-ambient-toggle]) {
+        z-index: auto;
       }
 
       & .image {

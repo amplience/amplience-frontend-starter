@@ -10,7 +10,7 @@
 import { cleanup, render } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import type { ContentMediaData } from '@amplience/frontend-starter-types'
+import type { ContentImageData } from '@amplience/frontend-starter-types'
 
 import { ArtDirectedMedia } from './ArtDirectedMedia'
 
@@ -53,17 +53,17 @@ vi.mock('next/image', () => ({
 
 afterEach(cleanup)
 
-const manualDesktop: ContentMediaData = {
+const manualDesktop: ContentImageData = {
   mediaType: 'ManualImage',
   image: { src: 'https://cdn/desktop.jpg', alt: 'Desktop hero', width: 2752, height: 1536 },
 }
 
-const manualMobile: ContentMediaData = {
+const manualMobile: ContentImageData = {
   mediaType: 'ManualImage',
   image: { src: 'https://cdn/mobile.jpg', alt: 'Mobile hero', width: 2752, height: 1275 },
 }
 
-const dynamicMobile: ContentMediaData = {
+const dynamicMobile: ContentImageData = {
   mediaType: 'DynamicImage',
   image: {
     image: { name: 'hero-mobile', endpoint: 'my-store', defaultHost: 'cdn.media.amplience.net' },
@@ -140,13 +140,13 @@ describe('ArtDirectedMedia', () => {
   })
 
   it('renders nothing when the desktop payload is unresolvable', () => {
-    const legacy = { src: '/x.jpg', alt: 'legacy' } as unknown as ContentMediaData
+    const legacy = { src: '/x.jpg', alt: 'legacy' } as unknown as ContentImageData
     const { container } = render(<ArtDirectedMedia desktop={legacy} mobile={manualMobile} />)
     expect(container.firstChild).toBeNull()
   })
 
   it('falls back to the desktop <img> alone when the mobile payload is unresolvable', () => {
-    const badMobile = { mediaType: 'ManualImage' } as unknown as ContentMediaData
+    const badMobile = { mediaType: 'ManualImage' } as unknown as ContentImageData
     const { container } = render(<ArtDirectedMedia desktop={manualDesktop} mobile={badMobile} />)
     expect(container.querySelector('img')).not.toBeNull()
     expect(container.querySelector('source')).toBeNull()

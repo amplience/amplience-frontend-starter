@@ -24,6 +24,8 @@ import {
   Menu,
   Minus,
   Package,
+  Pause,
+  Play,
   Plus,
   Search,
   Share2,
@@ -76,6 +78,9 @@ const icons = {
   eye: Eye,
   plus: Plus,
   minus: Minus,
+  // Media
+  play: Play,
+  pause: Pause,
   // User & account
   user: User,
   'log-in': LogIn,
