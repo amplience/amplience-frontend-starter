@@ -23,8 +23,8 @@
               "/subtitle",
               "/description",
               "/ctas",
-              "/contentPanelColor",
-              "/textColor"
+              "/textColor",
+              "/contentPanelColor"
             ]
           },
           {
@@ -170,15 +170,15 @@
       "minimum": 0,
       "maximum": 100
     },
-    "contentPanelColor": {
-      "title": "Content panel colour",
-      "description": "Background colour of the content panel (title, subtitle, description, CTAs), drawn from the design token palette. Independent of the section background and the overlay scrim — useful for a contained 'card' look behind the text.",
+    "textColor": {
+      "title": "Text colour",
       "allOf": [
         { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
       ]
     },
-    "textColor": {
-      "title": "Text colour",
+    "contentPanelColor": {
+      "title": "Content panel colour",
+      "description": "Background colour of the content panel (title, subtitle, description, CTAs) for a contained 'card' look behind the text.",
       "allOf": [
         { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
       ]
