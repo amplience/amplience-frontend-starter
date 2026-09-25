@@ -49,9 +49,23 @@ const meta = {
     contentPadding: {
       control: { type: 'range', min: 0, step: 4 },
       description:
-        'Custom content padding (px). Clear the field to use the CSS default (var(--site-gutter)).',
+        'Padding on all four sides of the content panel (px). Overridden per axis by contentPaddingVertical / contentPaddingHorizontal. Clear the field to use the CSS default.',
       table: {
-        defaultValue: { summary: 'unset — uses var(--site-gutter)' },
+        defaultValue: { summary: 'unset — uses CSS default' },
+      },
+    },
+    contentPaddingVertical: {
+      control: { type: 'range', min: 0, step: 4 },
+      description: 'Overrides contentPadding for the top and bottom edges only (px).',
+      table: {
+        defaultValue: { summary: 'unset — falls back to contentPadding' },
+      },
+    },
+    contentPaddingHorizontal: {
+      control: { type: 'range', min: 0, step: 4 },
+      description: 'Overrides contentPadding for the left and right edges only (px).',
+      table: {
+        defaultValue: { summary: 'unset — falls back to contentPadding' },
       },
     },
     overlayStyle: {
@@ -138,6 +152,8 @@ export const Playground: Story = {
     maxWidth: 'default',
     contentWidth: 50,
     contentPadding: undefined,
+    contentPaddingVertical: undefined,
+    contentPaddingHorizontal: undefined,
     overlayIntensity: 50,
     overlayStyle: 'gradient',
     overlayColor: 'black',
