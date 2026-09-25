@@ -29,6 +29,7 @@ export type HeroBlockColorToken =
   'primary' | 'secondary' | 'tertiary' | 'light' | 'dark' | 'black' | 'white'
 export type HeroBlockBackgroundColor = HeroBlockColorToken
 export type HeroBlockOverlayColor = HeroBlockColorToken
+export type HeroBlockContentPanelColor = HeroBlockColorToken
 
 export type HeroBlockCtaProps = {
   label: string
@@ -149,6 +150,14 @@ export type HeroBlockProps = {
    * mode it inherits from the page. Set this to override either.
    * Buttons manage their own colours and are unaffected.
    */
+  /**
+   * Background colour of the content panel (the `.content` wrapper around
+   * title, subtitle, description, and CTAs), drawn from the design token
+   * palette. Independent of `backgroundColor` (whole section) and
+   * `overlayColor` (image scrim) — useful for a contained "card" look
+   * behind the text. Unset by default (no background).
+   */
+  contentPanelColor?: HeroBlockContentPanelColor
   textColor?: HeroBlockTextColor | undefined
   /**
    * Background colour of the hero section, drawn from the design token palette.
@@ -161,7 +170,20 @@ export type HeroBlockProps = {
    */
   backgroundColor?: HeroBlockBackgroundColor
   contentWidth?: number
+  /**
+   * Padding applied to all four sides of the content panel (the `.content`
+   * wrapper around title, subtitle, description, and CTAs). Overridden per
+   * axis by `contentPaddingVertical` / `contentPaddingHorizontal` when set.
+   */
   contentPadding?: number | undefined
+  /**
+   * Overrides `contentPadding` for the top and bottom edges only.
+   */
+  contentPaddingVertical?: number | undefined
+  /**
+   * Overrides `contentPadding` for the left and right edges only.
+   */
+  contentPaddingHorizontal?: number | undefined
   maxWidth?: ContainerProps['maxWidth']
   minHeight?: number
   maxHeight?: number
@@ -254,6 +276,7 @@ export function HeroBlock({
   verticalPosition = 'top',
   horizontalPosition = 'left',
   textAlign = 'left',
+  contentPanelColor,
   textColor,
   overlayStyle = 'gradient',
   overlayColor = 'black',
@@ -262,6 +285,8 @@ export function HeroBlock({
   maxWidth = 'default',
   contentWidth = 50,
   contentPadding,
+  contentPaddingVertical,
+  contentPaddingHorizontal,
   minHeight,
   maxHeight,
   loadPriority = 'lazy',
@@ -296,6 +321,7 @@ export function HeroBlock({
       data-overlay-color={hasMedia ? overlayColor : undefined}
       data-overlay-style={hasMedia ? overlayStyle : undefined}
       data-background-color={backgroundColor}
+      data-content-panel-color={contentPanelColor}
       data-text-color={textColor}
       data-max-height={maxHeight != null ? true : undefined}
       style={(() => {
@@ -359,7 +385,8 @@ export function HeroBlock({
         <div
           className={styles.content}
           style={{
-            paddingBlock: contentPadding ?? undefined,
+            paddingBlock: contentPaddingVertical ?? contentPadding ?? undefined,
+            paddingInline: contentPaddingHorizontal ?? contentPadding ?? undefined,
           }}
         >
           <div>

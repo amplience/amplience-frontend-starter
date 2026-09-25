@@ -173,6 +173,49 @@ describe('HeroBlock', () => {
     })
   })
 
+  describe('content padding', () => {
+    // The content panel (`.content`) is the title's grandparent: title sits
+    // inside a wrapping <div> (alongside preTitle), which sits inside the
+    // padded content panel itself.
+    const contentPanel = () =>
+      screen.getByRole('heading', { level: 1 }).parentElement!.parentElement!
+
+    it('applies contentPadding to all four sides by default', () => {
+      render(<HeroBlock title="Title" contentPadding={24} />)
+      const el = contentPanel()
+      expect(el.style.paddingBlock).toBe('24px')
+      expect(el.style.paddingInline).toBe('24px')
+    })
+
+    it('lets contentPaddingVertical override contentPadding for top/bottom only', () => {
+      render(<HeroBlock title="Title" contentPadding={24} contentPaddingVertical={8} />)
+      const el = contentPanel()
+      expect(el.style.paddingBlock).toBe('8px')
+      expect(el.style.paddingInline).toBe('24px')
+    })
+
+    it('lets contentPaddingHorizontal override contentPadding for left/right only', () => {
+      render(<HeroBlock title="Title" contentPadding={24} contentPaddingHorizontal={4} />)
+      const el = contentPanel()
+      expect(el.style.paddingBlock).toBe('24px')
+      expect(el.style.paddingInline).toBe('4px')
+    })
+
+    it('lets vertical and horizontal overrides combine without contentPadding set', () => {
+      render(<HeroBlock title="Title" contentPaddingVertical={8} contentPaddingHorizontal={4} />)
+      const el = contentPanel()
+      expect(el.style.paddingBlock).toBe('8px')
+      expect(el.style.paddingInline).toBe('4px')
+    })
+
+    it('sets neither padding side when all three props are omitted', () => {
+      render(<HeroBlock title="Title" />)
+      const el = contentPanel()
+      expect(el.style.paddingBlock).toBe('')
+      expect(el.style.paddingInline).toBe('')
+    })
+  })
+
   describe('CTAs', () => {
     it('renders a single CTA link', () => {
       render(<HeroBlock title="Title" ctas={[{ label: 'Get started', href: '/docs' }]} />)
@@ -494,6 +537,21 @@ describe('HeroBlock', () => {
     it('does not set data-overlay-color when image is omitted', () => {
       render(<HeroBlock title="Title" overlayColor="primary" />)
       expect(screen.getByRole('region').getAttribute('data-overlay-color')).toBeNull()
+    })
+
+    it('sets data-content-panel-color when provided', () => {
+      render(<HeroBlock title="Title" contentPanelColor="dark" />)
+      expect(screen.getByRole('region').getAttribute('data-content-panel-color')).toBe('dark')
+    })
+
+    it('does not set data-content-panel-color when omitted', () => {
+      render(<HeroBlock title="Title" />)
+      expect(screen.getByRole('region').getAttribute('data-content-panel-color')).toBeNull()
+    })
+
+    it('sets data-content-panel-color with or without an image', () => {
+      render(<HeroBlock title="Title" media={sampleMedia} contentPanelColor="white" />)
+      expect(screen.getByRole('region').getAttribute('data-content-panel-color')).toBe('white')
     })
   })
 

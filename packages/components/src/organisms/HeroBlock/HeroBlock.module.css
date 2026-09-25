@@ -31,6 +31,10 @@
  *   data-background-color — primary / secondary / tertiary / white / light / dark / black
  *   Sets --hero-background-color and --hero-text-color for automatic contrast.
  *
+ *   data-content-panel-color — same palette; sets only the background of the
+ *   .content wrapper (title/subtitle/description/CTAs), independent of the
+ *   section background above and the overlay scrim.
+ *
  * BRAND OVERRIDES: redefine --hero-* variables under [data-brand].
  */
 
@@ -381,6 +385,35 @@
 }
 .root[data-text-color='black'] {
   --hero-text-color: var(--color-black);
+}
+
+/* ---------------------------------------------------------------------------
+   Content panel colour — background colour of the `.content` wrapper only
+   (title, subtitle, description, CTAs). Independent of the section
+   background (data-background-color) and the overlay scrim
+   (data-overlay-color) — useful for a contained "card" look behind the text.
+   --------------------------------------------------------------------------- */
+
+.root[data-content-panel-color='primary'] .content {
+  background-color: var(--color-primary);
+}
+.root[data-content-panel-color='secondary'] .content {
+  background-color: var(--color-secondary);
+}
+.root[data-content-panel-color='tertiary'] .content {
+  background-color: var(--color-tertiary);
+}
+.root[data-content-panel-color='white'] .content {
+  background-color: var(--color-white);
+}
+.root[data-content-panel-color='light'] .content {
+  background-color: var(--color-gray-100);
+}
+.root[data-content-panel-color='dark'] .content {
+  background-color: var(--color-gray-800);
+}
+.root[data-content-panel-color='black'] .content {
+  background-color: var(--color-black);
 }
 
 /* ---------------------------------------------------------------------------

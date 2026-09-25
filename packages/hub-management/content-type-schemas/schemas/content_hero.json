@@ -17,7 +17,15 @@
         "items": [
           {
             "label": "📝 Foreground",
-            "pointers": ["/preTitle", "/title", "/subtitle", "/description", "/ctas", "/textColor"]
+            "pointers": [
+              "/preTitle",
+              "/title",
+              "/subtitle",
+              "/description",
+              "/ctas",
+              "/contentPanelColor",
+              "/textColor"
+            ]
           },
           {
             "label": "🎨 Overlay",
@@ -38,6 +46,8 @@
               "/textAlign",
               "/contentWidth",
               "/contentPadding",
+              "/contentPaddingVertical",
+              "/contentPaddingHorizontal",
               "/maxWidth",
               "/minHeight",
               "/maxHeight"
@@ -160,6 +170,13 @@
       "minimum": 0,
       "maximum": 100
     },
+    "contentPanelColor": {
+      "title": "Content panel colour",
+      "description": "Background colour of the content panel (title, subtitle, description, CTAs), drawn from the design token palette. Independent of the section background and the overlay scrim — useful for a contained 'card' look behind the text.",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+      ]
+    },
     "textColor": {
       "title": "Text colour",
       "allOf": [
@@ -179,9 +196,21 @@
     },
     "contentPadding": {
       "type": "number",
-      "title": "Foreground Content top+bottom padding (px)",
+      "title": "Foreground Content padding (px)",
       "minimum": 0,
-      "description": "Padding above and below the foreground content"
+      "description": "Padding on all four sides of the foreground content. Overridden per axis by Content padding (vertical) / Content padding (horizontal) when those are set."
+    },
+    "contentPaddingVertical": {
+      "type": "number",
+      "title": "Foreground Content padding — vertical (px)",
+      "minimum": 0,
+      "description": "Overrides Foreground Content padding for the top and bottom edges only."
+    },
+    "contentPaddingHorizontal": {
+      "type": "number",
+      "title": "Foreground Content padding — horizontal (px)",
+      "minimum": 0,
+      "description": "Overrides Foreground Content padding for the left and right edges only."
     },
     "maxWidth": {
       "title": "Max width",
@@ -236,10 +265,13 @@
     "overlayStyle",
     "overlayColor",
     "overlayIntensity",
+    "contentPanelColor",
     "textColor",
     "backgroundColor",
     "contentWidth",
     "contentPadding",
+    "contentPaddingVertical",
+    "contentPaddingHorizontal",
     "maxWidth",
     "minHeight",
     "maxHeight"
