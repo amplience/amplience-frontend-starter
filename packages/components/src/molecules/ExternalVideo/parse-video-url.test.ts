@@ -69,6 +69,40 @@ describe('parseVideoUrl', () => {
   })
 })
 
+describe('parseVideoUrl — start times and limits', () => {
+  const start = (t: string) => {
+    const parsed = parseVideoUrl(`https://youtu.be/dQw4w9WgXcQ?t=${t}`)
+    return parsed?.provider === 'youtube' ? parsed.start : 'unparsed'
+  }
+
+  it.each([
+    ['90', 90],
+    ['1h2m3s', 3723],
+    ['2m', 120],
+    ['45s', 45],
+    ['1h30s', 3630],
+    ['0', undefined],
+    ['1s2m', undefined],
+    ['1m1m', undefined],
+    ['h', undefined],
+    ['12x', undefined],
+    ['1m30', undefined],
+  ])('t=%s → start %s', (t, expected) => {
+    expect(start(t)).toBe(expected)
+  })
+
+  it('rejects over-long input without parsing it', () => {
+    expect(parseVideoUrl(`https://youtu.be/dQw4w9WgXcQ?x=${'a'.repeat(3000)}`)).toBeUndefined()
+  })
+
+  it('stays fast on pathological input', () => {
+    const t0 = performance.now()
+    parseVideoUrl(`https://vimeo.com/${'1/'.repeat(900)}`)
+    parseVideoUrl(`https://youtu.be/dQw4w9WgXcQ?t=${'1'.repeat(15)}h`)
+    expect(performance.now() - t0).toBeLessThan(50)
+  })
+})
+
 describe('embedUrl', () => {
   const youtube = { provider: 'youtube', id: 'dQw4w9WgXcQ' } as const
   const vimeo = { provider: 'vimeo', id: '76979871', hash: 'abc' } as const

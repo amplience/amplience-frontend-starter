@@ -177,6 +177,7 @@
         "url": {
           "type": "string",
           "title": "Video URL",
+          "maxLength": 2048,
           "description": "A YouTube or Vimeo link (any share, watch or embed URL), or a direct link to an .mp4 file.",
           "pattern": "^https://((www\\.|m\\.)?youtube(-nocookie)?\\.com/(watch\\?|embed/|shorts/|live/)|youtu\\.be/|(www\\.)?vimeo\\.com/([^?#]*/)?[0-9]+|player\\.vimeo\\.com/video/[0-9]+|[^?#]+\\.[mM][pP]4([?#].*)?$)"
         },
