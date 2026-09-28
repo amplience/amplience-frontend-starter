@@ -21,7 +21,14 @@
           },
           {
             "label": "⚙️ Options",
-            "pointers": ["/layout", "/headingVariant", "/elevation", "/color"]
+            "pointers": [
+              "/layout",
+              "/imageSize",
+              "/alignment",
+              "/headingVariant",
+              "/elevation",
+              "/color"
+            ]
           }
         ]
       }
@@ -89,6 +96,20 @@
       "description": "Image and body arrangement.",
       "default": "above"
     },
+    "imageSize": {
+      "type": "string",
+      "enum": ["cover", "icon"],
+      "title": "Image size",
+      "description": "Cover: full-bleed image placed by Layout. Icon: small uncropped image above the title (Layout then always stacks).",
+      "default": "cover"
+    },
+    "alignment": {
+      "type": "string",
+      "enum": ["left", "center", "right"],
+      "title": "Alignment",
+      "description": "Horizontal alignment of the icon, text and CTA.",
+      "default": "left"
+    },
     "headingVariant": {
       "type": "string",
       "enum": ["h2", "h3", "h4", "h5", "h6"],
@@ -117,6 +138,8 @@
     "href",
     "cta",
     "layout",
+    "imageSize",
+    "alignment",
     "headingVariant",
     "elevation",
     "color"

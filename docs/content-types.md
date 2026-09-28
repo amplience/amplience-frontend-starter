@@ -149,16 +149,18 @@ A card with an optional cover image, title, body copy, and a CTA. The workhorse 
 - **Components** [`MediaCard`](../packages/components/src/molecules/MediaCard) (molecule) → `Card`, `ContentMedia`, `Typography`, `Button`, `Link`
 - **Storybook** [Molecules/MediaCard](https://quadratic-lite-components.vercel.app/?path=/docs/molecules-mediacard--docs)
 
-| Field            | Label         | Type                                          | Req | Notes                                                       |
-| ---------------- | ------------- | --------------------------------------------- | --- | ----------------------------------------------------------- |
-| `title`          | Title         | [Localized string](#localisation)             | ✅  |                                                             |
-| `description`    | Description   | [Localized string](#localisation)             |     |                                                             |
-| `media`          | Media         | [Rich media](#rich-media)                     |     | A video in a linked or `overlay` card plays as ambient      |
-| `layout`         | Layout        | `above` \| `beside` \| `dynamic` \| `overlay` |     | Image and body arrangement                                  |
-| `headingVariant` | Heading level | `h2`–`h6`                                     |     | Heading element for the card title                          |
-| `elevation`      | Card Type     | `flat` \| `raised` \| `bordered`              |     |                                                             |
-| `color`          | Card colour   | [Palette](#colour)                            |     |                                                             |
-| `links.href`     | Card Link     | string                                        |     | Makes the whole card one link. When set, the CTA is ignored |
+| Field            | Label         | Type                                          | Req | Notes                                                        |
+| ---------------- | ------------- | --------------------------------------------- | --- | ------------------------------------------------------------ |
+| `title`          | Title         | [Localized string](#localisation)             | ✅  |                                                              |
+| `description`    | Description   | [Localized string](#localisation)             |     |                                                              |
+| `media`          | Media         | [Rich media](#rich-media)                     |     | A video in a linked or `overlay` card plays as ambient       |
+| `layout`         | Layout        | `above` \| `beside` \| `dynamic` \| `overlay` |     | Image and body arrangement                                   |
+| `imageSize`      | Image size    | `cover` \| `icon`                             |     | `icon`: small uncropped image above the title; always stacks |
+| `alignment`      | Alignment     | `left` \| `center` \| `right`                 |     | Aligns icon, text and CTA                                    |
+| `headingVariant` | Heading level | `h2`–`h6`                                     |     | Heading element for the card title                           |
+| `elevation`      | Card Type     | `flat` \| `raised` \| `bordered`              |     |                                                              |
+| `color`          | Card colour   | [Palette](#colour)                            |     |                                                              |
+| `links.href`     | Card Link     | string                                        |     | Makes the whole card one link. When set, the CTA is ignored  |
 
 ### Carousel Block
 
