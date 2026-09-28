@@ -59,7 +59,10 @@ export type MediaCardProps = {
   description?: string
   /**
    * Cover media. Renders flush with the card edge (no Card padding).
-   * Accepts ManualImage (direct URL) or DynamicImage (Amplience DAM asset).
+   * An image (ManualImage, DynamicImage) or a video (DynamicVideo,
+   * ExternalVideo). A video in a linked card or an overlay card plays as
+   * ambient — a player would fight the link or the text laid over it. In a
+   * linked card it plays only while the card is hovered or focused.
    */
   media?: ContentMediaData
   /** Card-level link and CTA — see MediaCardLinks. */
@@ -180,10 +183,12 @@ export function MediaCard({
   // themselves (flex-row / overlay / fixed heights in MediaCard.module.css),
   // and DynamicImage carries its own payload-resolved --di-aspect-ratio for
   // any layout that leaves the box height free.
+  const videoContext = isLinked ? 'linked' : layout === 'overlay' ? 'background' : 'default'
   const mediaEl = media != null && (
     <div className={styles.media}>
       <ContentMedia
         {...media}
+        videoContext={videoContext}
         {...mediaLoadingProps(loadPriority)}
         {...(imageSizes !== undefined && { sizes: imageSizes })}
         {...(styles.image !== undefined && { className: styles.image })}

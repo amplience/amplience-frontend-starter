@@ -69,7 +69,7 @@ Four fields recur across blocks, and mean the same thing everywhere: `background
 
 ![Hero Block icon](https://cdn.media.amplience.net/i/quadraticdemo/content_hero?w=48)
 
-A leading banner — title, optional subtitle, image, and CTAs, with overlay and positioning controls.
+A leading banner — title, optional subtitle, image or background video, and CTAs, with overlay and positioning controls.
 
 - **Schema** [`content/hero`](../packages/hub-management/content-type-schemas/schemas/content_hero.json) · **Repository** `content`
 - **Components** [`HeroBlock`](../packages/components/src/organisms/HeroBlock) (organism) → `Container`, `Typography`, `Button`, `ContentMedia`, `ArtDirectedMedia`
@@ -82,8 +82,8 @@ A leading banner — title, optional subtitle, image, and CTAs, with overlay and
 | `title`                   | Title                                      | [Localized string](#localisation)            | ✅  | Drives the `<h1>` and the section's accessible name                                                                                                |
 | `subtitle`                | Subtitle                                   | [Localized string](#localisation)            |     |                                                                                                                                                    |
 | `description`             | Description                                | [Localized string](#localisation)            |     |                                                                                                                                                    |
-| `media`                   | Media                                      | [Media](#media)                              |     |                                                                                                                                                    |
-| `mobileOverride`          | Mobile override                            | boolean                                      |     | Show a different image at ≤768px. Default `false`                                                                                                  |
+| `media`                   | Media                                      | [Rich media](#rich-media)                    |     | A video here always plays as an ambient background                                                                                                 |
+| `mobileOverride`          | Mobile override                            | boolean                                      |     | Show a different image at ≤768px. Images only — ignored when `media` is a video. Default `false`                                                   |
 | `mobileMedia`             | Mobile media                               | [Media](#media)                              |     | Required when `mobileOverride` is on. May use a different aspect ratio — each breakpoint reserves its own box, so only the matched image downloads |
 | `ctas`                    | CTAs                                       | [Call To Action](#call-to-action)[]          |     |                                                                                                                                                    |
 | `textColor`               | Text colour                                | [Palette](#colour)                           |     |                                                                                                                                                    |
@@ -124,20 +124,20 @@ A markdown content section with optional CTAs.
 
 ![Media Block icon](https://cdn.media.amplience.net/i/quadraticdemo/content_media?w=48)
 
-A standalone media section with optional caption and link. Supports DAM-backed (DynamicImage) or manually-authored (ManualImage) media.
+A standalone media section with optional caption and link. Takes an image or a video — from the DAM or from a URL (YouTube, Vimeo, `.mp4`) — and a video can be a player or an ambient loop.
 
 - **Schema** [`content/media`](../packages/hub-management/content-type-schemas/schemas/content_media.json) · **Repository** `content`
-- **Components** [`MediaBlock`](../packages/components/src/organisms/MediaBlock) (organism) → `ContentMedia` (`DynamicImage` / `ManualImage`), `Container`, `Typography`, `Link`
+- **Components** [`MediaBlock`](../packages/components/src/organisms/MediaBlock) (organism) → `ContentMedia` (`DynamicImage` / `ManualImage` / `DynamicVideo` / `ExternalVideo`), `Container`, `Typography`, `Link`
 - **Storybook** [Organisms/MediaBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-mediablock--docs)
 
-| Field             | Label             | Type                              | Req | Notes                                                      |
-| ----------------- | ----------------- | --------------------------------- | --- | ---------------------------------------------------------- |
-| `media`           | Media             | [Media](#media)                   | ✅  |                                                            |
-| `caption`         | Caption           | [Localized string](#localisation) |     |                                                            |
-| `href`            | Link              | string                            |     | Wraps the media in a link. External URLs open in a new tab |
-| `fullBleed`       | Full bleed        | boolean                           |     | Edge-to-edge, ignoring container padding and max-width     |
-| `backgroundColor` | Background colour | [Palette](#colour)                |     |                                                            |
-| `maxWidth`        | Max width         | [Max width](#container)           |     | Ignored when full bleed is on                              |
+| Field             | Label             | Type                              | Req | Notes                                                                                                    |
+| ----------------- | ----------------- | --------------------------------- | --- | -------------------------------------------------------------------------------------------------------- |
+| `media`           | Media             | [Rich media](#rich-media)         | ✅  |                                                                                                          |
+| `caption`         | Caption           | [Localized string](#localisation) |     |                                                                                                          |
+| `href`            | Link              | string                            |     | Wraps the media in a link. External URLs open in a new tab. A linked video is ambient and plays on hover |
+| `fullBleed`       | Full bleed        | boolean                           |     | Edge-to-edge, ignoring container padding and max-width                                                   |
+| `backgroundColor` | Background colour | [Palette](#colour)                |     |                                                                                                          |
+| `maxWidth`        | Max width         | [Max width](#container)           |     | Ignored when full bleed is on                                                                            |
 
 ### Card
 
@@ -153,7 +153,7 @@ A card with an optional cover image, title, body copy, and a CTA. The workhorse 
 | ---------------- | ------------- | --------------------------------------------- | --- | ----------------------------------------------------------- |
 | `title`          | Title         | [Localized string](#localisation)             | ✅  |                                                             |
 | `description`    | Description   | [Localized string](#localisation)             |     |                                                             |
-| `media`          | Media         | [Media](#media)                               |     |                                                             |
+| `media`          | Media         | [Rich media](#rich-media)                     |     | A video in a linked or `overlay` card plays as ambient      |
 | `layout`         | Layout        | `above` \| `beside` \| `dynamic` \| `overlay` |     | Image and body arrangement                                  |
 | `headingVariant` | Heading level | `h2`–`h6`                                     |     | Heading element for the card title                          |
 | `elevation`      | Card Type     | `flat` \| `raised` \| `bordered`              |     |                                                             |
@@ -266,14 +266,14 @@ A blog article page — editorial metadata plus an ordered list of slots the ren
 
 Shares the head-metadata shape with [Page](#page) (`title`, `description`, `keywords`, `social`, `canonicalUrl`, `robots`, `slots`, `_meta`), and adds:
 
-| Field         | Label               | Type            | Req | Notes                                                                                       |
-| ------------- | ------------------- | --------------- | --- | ------------------------------------------------------------------------------------------- |
-| `coverImage`  | Cover Image         | [Media](#media) |     | Article header, and article cards on the archive page                                       |
-| `author`      | Author              | string          |     | Display name                                                                                |
-| `publishDate` | Publish Date        | string (date)   |     | ISO 8601, e.g. `2026-06-29`. Drives the displayed date and archive sort order               |
-| `category`    | Category            | string          |     | Free-text label, e.g. "Getting Started". A managed DC content type is the natural next step |
-| `tags`        | Tags                | string[]        |     | Topic tags — filtering and display                                                          |
-| `readTime`    | Read Time (minutes) | number          |     |                                                                                             |
+| Field         | Label               | Type                      | Req | Notes                                                                                         |
+| ------------- | ------------------- | ------------------------- | --- | --------------------------------------------------------------------------------------------- |
+| `coverImage`  | Cover Image         | [Rich media](#rich-media) |     | Article header, and article cards on the archive page. A video plays as an ambient background |
+| `author`      | Author              | string                    |     | Display name                                                                                  |
+| `publishDate` | Publish Date        | string (date)             |     | ISO 8601, e.g. `2026-06-29`. Drives the displayed date and archive sort order                 |
+| `category`    | Category            | string                    |     | Free-text label, e.g. "Getting Started". A managed DC content type is the natural next step   |
+| `tags`        | Tags                | string[]                  |     | Topic tags — filtering and display                                                            |
+| `readTime`    | Read Time (minutes) | number                    |     |                                                                                               |
 
 `_meta.deliveryKeys` follows the `{site}/blog/{slug}` convention.
 
@@ -532,7 +532,7 @@ Partials are not content types — they are schema fragments referenced by the t
 
 ### Media
 
-[`partials/media`](../packages/hub-management/content-type-schemas/schemas/partials_media.json) — one media field covering both sources, switched by `mediaType`:
+[`partials/media`](../packages/hub-management/content-type-schemas/schemas/partials_media.json) — an image-only media field covering both sources, switched by `mediaType`. Used where a video makes no sense: the Logo, social images and the Hero's mobile override. Fields that also take video use [Rich media](#rich-media).
 
 | `mediaType`              | Fields                                                                                                                                                                                                                                              | Rendered by    |
 | ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
@@ -540,6 +540,26 @@ Partials are not content types — they are schema fragments referenced by the t
 | `ManualImage`            | `image.src`, `image.alt`, `image.width`, `image.height` (all required) plus optional `image.aspectRatio`                                                                                                                                            | `ManualImage`  |
 
 The delivered `width`/`height`/`aspectRatio` are written by the media extension so the frontend can reserve layout space without a second call — which is what keeps images from shifting the page as they load.
+
+### Rich media
+
+[`partials/rich-media`](../packages/hub-management/content-type-schemas/schemas/partials_rich-media.json) — image or video, picked from an object [content palette](https://amplience.com/developers/docs/schema-reference/content-palettes/) of four options (the editor doesn't support switching between more than two field sets with conditionals). `mediaType` is each option's hidden `const`, so the stored value has the same shape as [Media](#media)'s. The two image options are exact copies of Media's fields (a test in `fixtures.test.ts` fails if they drift apart); two video options sit alongside them:
+
+| `mediaType`     | Fields                                                                                                                                                                                     | Rendered by     |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- |
+| `DynamicVideo`  | `video` — DAM `video-link` (required); optional `poster` image (defaults to the video's DAM thumbnail), `title`, `aspectRatio`, `playback`                                                 | `DynamicVideo`  |
+| `ExternalVideo` | `url` — a YouTube or Vimeo link in any form (share, watch, embed, Shorts), or a direct `.mp4` URL; `title` (required, for screen readers); optional `posterUrl`, `aspectRatio`, `playback` | `ExternalVideo` |
+
+`aspectRatio` is one of `16:9` (default), `9:16`, `4:3`, `1:1` or `21:9`, and reserves the video's box before it loads. `playback` is the author's choice of how it plays:
+
+- **`player`** (default) — nothing loads until the visitor presses play; then it plays with controls and sound. YouTube and Vimeo show their thumbnail (or `posterUrl`) with a play button, and only load the provider's player when it's pressed.
+- **`ambient`** — plays automatically, muted and looping, with no controls: movement for the page rather than something to watch. It only plays while on screen, shows a pause button, and doesn't autoplay for visitors who prefer reduced motion.
+
+Where a player can't work, the block overrides the choice. A video in a Hero or an overlay Card is always ambient. So is one inside a link (a linked Card, a Media Block with an `href`), but there it plays only while the link is hovered or focused: a pause button can't sit inside a link, and motion that starts by itself needs one.
+
+YouTube sometimes asks a visitor to "Sign in to confirm you're not a bot" instead of playing, depending on their network, VPN and privacy settings. The site can't switch that check off, but embeds use youtube.com (not youtube-nocookie.com, which can't see a signed-in visitor's session) to make it less likely. An ambient YouTube or Vimeo embed stays hidden behind its poster until the player reports that it's playing, and drops back to the poster if it hasn't after a few seconds, so a check screen that nobody can click through never shows. For ambient video you control end to end, use a DAM video or an `.mp4`.
+
+DAM videos play the account's transcode renditions (`/v/{endpoint}/{name}/{profile}`). The default list tries `mp4_720p` on small screens, then `mp4_1080p`, `mp4_720p` and `mp4_480p`; a missing profile just falls through to the next. If your account uses other profiles, change `DEFAULT_DAM_VIDEO_PROFILES` in [`NativeVideo/video-utils.ts`](../packages/components/src/molecules/NativeVideo/video-utils.ts).
 
 ### Call To Action
 
@@ -574,7 +594,7 @@ The delivered `width`/`height`/`aspectRatio` are written by the media extension 
 
 [`partials/icon`](../packages/hub-management/content-type-schemas/schemas/partials_icon.json) — the curated icon set the `Icon` atom renders; names and order mirror the component's registry. Browse them in [Atoms/Icon](https://quadratic-lite-components.vercel.app/?path=/docs/atoms-icon--docs).
 
-`calendar`, `clock`, `menu`, `x`, `chevron-up`, `chevron-down`, `chevron-left`, `chevron-right`, `arrow-left`, `arrow-right`, `search`, `filter`, `sliders`, `layout-grid`, `list`, `eye`, `plus`, `minus`, `user`, `log-in`, `log-out`, `shopping-cart`, `cart`, `shopping-bag`, `heart`, `tag`, `credit-card`, `package`, `truck`, `map-pin`, `trash`, `share`, `star`, `check`, `check-circle`, `alert-circle`, `info`
+`calendar`, `clock`, `menu`, `x`, `chevron-up`, `chevron-down`, `chevron-left`, `chevron-right`, `arrow-left`, `arrow-right`, `search`, `filter`, `sliders`, `layout-grid`, `list`, `eye`, `plus`, `minus`, `play`, `pause`, `user`, `log-in`, `log-out`, `shopping-cart`, `cart`, `shopping-bag`, `heart`, `tag`, `credit-card`, `package`, `truck`, `map-pin`, `trash`, `share`, `star`, `check`, `check-circle`, `alert-circle`, `info`
 
 ### Section Header
 

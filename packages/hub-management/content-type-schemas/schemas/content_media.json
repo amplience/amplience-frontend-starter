@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://quadratic.amplience.com/v2/content/media",
   "title": "Media Block",
-  "description": "A standalone media section with optional caption and link. Supports DAM-backed (DynamicImage) or manually-authored (ManualImage) media.",
+  "description": "A standalone media section with optional caption and link. Supports DAM-backed images and video (DynamicImage, DynamicVideo) or URL-based ones (ManualImage, ExternalVideo).",
   "allOf": [
     {
       "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
@@ -14,7 +14,7 @@
       "title": "Media",
       "allOf": [
         {
-          "$ref": "https://quadratic.amplience.com/v2/partials/media"
+          "$ref": "https://quadratic.amplience.com/v2/partials/rich-media"
         }
       ]
     },
@@ -27,7 +27,7 @@
     "href": {
       "type": "string",
       "title": "Link",
-      "description": "Optional URL — wraps the media in a link. External URLs open in a new tab."
+      "description": "Optional URL — wraps the media in a link. External URLs open in a new tab. A video inside a link is always ambient, so the click goes to the link, and it plays only while the link is hovered or focused."
     },
     "fullBleed": {
       "type": "boolean",

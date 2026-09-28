@@ -6,7 +6,7 @@
 // not asserted.
 
 import { cleanup, render, screen } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { HeroBlock } from './HeroBlock'
 
@@ -293,6 +293,56 @@ describe('HeroBlock', () => {
       const style = screen.getByRole('region').getAttribute('style') ?? ''
       expect(style).toContain('--media-aspect-ratio: 1200 / 600')
       expect(style).toContain('--media-aspect-ratio-mobile: 600 / 1200')
+    })
+  })
+
+  describe('video media', () => {
+    const video = {
+      mediaType: 'DynamicVideo' as const,
+      video: { name: 'loop', endpoint: 'demo', defaultHost: 'cdn.media.amplience.net' },
+      // Authored as a player — a hero overrides it.
+      playback: 'player' as const,
+      aspectRatio: '21:9' as const,
+    }
+
+    beforeEach(() => {
+      vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue(undefined)
+      vi.spyOn(HTMLMediaElement.prototype, 'pause').mockImplementation(() => undefined)
+    })
+    afterEach(() => vi.restoreAllMocks())
+
+    it('plays a video as an ambient background, whatever was authored', () => {
+      const { container } = render(<HeroBlock title="Title" media={video} />)
+      const el = container.querySelector('video')
+      expect(el?.controls).toBe(false)
+      expect(el?.loop).toBe(true)
+      expect(screen.getByRole('button', { name: 'Pause background video' })).toBeTruthy()
+    })
+
+    it('reserves the video’s frame ratio for the flexible spacer', () => {
+      render(<HeroBlock title="Title" media={video} />)
+      expect(screen.getByRole('region').getAttribute('style')).toContain(
+        '--media-aspect-ratio: 21 / 9',
+      )
+    })
+
+    it('ignores the mobile override when the main media is a video', () => {
+      const { container } = render(
+        <HeroBlock
+          title="Title"
+          media={video}
+          mobileOverride
+          mobileMedia={{
+            mediaType: 'ManualImage',
+            image: { src: '/m.jpg', alt: 'Mobile', width: 600, height: 1200 },
+          }}
+        />,
+      )
+      expect(container.querySelector('picture')).toBeNull()
+      expect(container.querySelector('video')).not.toBeNull()
+      expect(screen.getByRole('region').getAttribute('style')).not.toContain(
+        '--media-aspect-ratio-mobile',
+      )
     })
   })
 

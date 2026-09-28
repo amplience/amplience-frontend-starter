@@ -15,6 +15,8 @@ import {
   Jost,
   Lato,
   Playfair_Display,
+  Poppins,
+  Public_Sans,
   Roboto,
   Roboto_Slab,
 } from 'next/font/google'
@@ -27,7 +29,6 @@ export const ibmPlexSans = IBM_Plex_Sans({
   display: 'swap',
 })
 
-// anyafinn — high-fashion editorial feel
 export const cormorantGaramond = Cormorant_Garamond({
   subsets: ['latin'],
   weight: ['300', '400', '600'],
@@ -36,7 +37,6 @@ export const cormorantGaramond = Cormorant_Garamond({
   display: 'swap',
 })
 
-// azure-harvest — clean tech/SaaS
 export const inter = Inter({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600'],
@@ -65,11 +65,24 @@ export const lato = Lato({
   display: 'swap',
 })
 
-// arbor-harvest — organic, editorial serif
 export const playfairDisplay = Playfair_Display({
   subsets: ['latin'],
   weight: ['400', '600', '700'],
   variable: '--nf-playfair-display',
+  display: 'swap',
+})
+
+export const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  variable: '--nf-poppins',
+  display: 'swap',
+})
+
+export const publicSans = Public_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--nf-public-sans',
   display: 'swap',
 })
 
@@ -80,7 +93,6 @@ export const roboto = Roboto({
   display: 'swap',
 })
 
-// culinary-supply-hub — solid B2B utilitarian
 export const robotoSlab = Roboto_Slab({
   subsets: ['latin'],
   weight: ['400', '600', '700'],
@@ -97,6 +109,8 @@ export const brandFonts = [
   jost,
   lato,
   playfairDisplay,
+  poppins,
+  publicSans,
   roboto,
   robotoSlab,
 ]

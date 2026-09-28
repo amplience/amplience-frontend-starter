@@ -145,10 +145,10 @@
     },
     "coverImage": {
       "title": "Cover Image",
-      "description": "Hero image for the article — shown in the article header and article cards on the archive page.",
+      "description": "Hero image or video for the article — shown in the article header and article cards on the archive page. Video plays as an ambient background.",
       "allOf": [
         {
-          "$ref": "https://quadratic.amplience.com/v2/partials/media"
+          "$ref": "https://quadratic.amplience.com/v2/partials/rich-media"
         }
       ]
     },

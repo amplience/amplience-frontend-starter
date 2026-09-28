@@ -1,7 +1,16 @@
 import type { ContentMediaData } from '@amplience/frontend-starter-types'
 
 import { DynamicImage } from '../DynamicImage/DynamicImage'
+import { DynamicVideo } from '../DynamicVideo/DynamicVideo'
+import { ExternalVideo } from '../ExternalVideo/ExternalVideo'
 import { ManualImage } from '../ManualImage/ManualImage'
+import { loadTierFromProps, resolvePlayback } from '../NativeVideo/video-utils'
+
+/**
+ * Video only. `'linked'` (inside a link): ambient, plays on hover/focus.
+ * `'background'` (content over it): ambient with a pause button. `'default'`: as authored.
+ */
+export type ContentMediaVideoContext = 'default' | 'linked' | 'background'
 
 export type ContentMediaProps = ContentMediaData & {
   priority?: boolean
@@ -13,6 +22,8 @@ export type ContentMediaProps = ContentMediaData & {
    */
   loading?: 'eager' | 'lazy'
   sizes?: string
+  /** Defaults to `'default'`. */
+  videoContext?: ContentMediaVideoContext
   className?: string
 }
 
@@ -21,6 +32,7 @@ export function ContentMedia({
   fetchPriority,
   loading,
   sizes,
+  videoContext = 'default',
   className,
   ...mediaData
 }: ContentMediaProps) {
@@ -36,6 +48,22 @@ export function ContentMedia({
   }
   if (mediaData.mediaType === 'ManualImage' && mediaData.image !== undefined) {
     return <ManualImage {...mediaData} {...optionals} />
+  }
+  if (mediaData.mediaType === 'DynamicVideo' || mediaData.mediaType === 'ExternalVideo') {
+    const videoProps = {
+      playback: resolvePlayback(
+        mediaData.playback,
+        videoContext === 'default' ? undefined : 'ambient',
+      ),
+      ambientTrigger: videoContext === 'linked' ? ('hover' as const) : ('autoplay' as const),
+      loadPriority: loadTierFromProps({ priority, loading }),
+      ...(className !== undefined && { className }),
+    }
+    return mediaData.mediaType === 'DynamicVideo' ? (
+      <DynamicVideo video={mediaData} {...videoProps} />
+    ) : (
+      <ExternalVideo video={mediaData} {...videoProps} {...(sizes !== undefined && { sizes })} />
+    )
   }
   // Unrecognised media shape — a legacy payload (pre-media-partial flat
   // image) or a hub item not yet re-saved. Render nothing rather than crash

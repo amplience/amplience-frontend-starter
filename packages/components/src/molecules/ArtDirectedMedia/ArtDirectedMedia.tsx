@@ -1,6 +1,6 @@
 import { getImageProps } from 'next/image'
 
-import type { ContentMediaData } from '@amplience/frontend-starter-types'
+import type { ContentImageData } from '@amplience/frontend-starter-types'
 
 import {
   amplienceDiLoader,
@@ -16,9 +16,9 @@ import styles from './ArtDirectedMedia.module.css'
 
 export type ArtDirectedMediaProps = {
   /** The default image — the fallback <img> and the >breakpoint source. */
-  desktop: ContentMediaData
+  desktop: ContentImageData
   /** The art-directed override shown at or below `mobileMaxWidth`. */
-  mobile: ContentMediaData
+  mobile: ContentImageData
   /** Max viewport width (px) at which the mobile image is used. Default 768. */
   mobileMaxWidth?: number
   /**
@@ -55,7 +55,7 @@ type ImageArgs = Parameters<typeof getImageProps>[0]
  * degrades rather than crashing the static build.
  */
 function toImageArgs(
-  media: ContentMediaData,
+  media: ContentImageData,
   common: {
     sizes: string
     priority?: boolean

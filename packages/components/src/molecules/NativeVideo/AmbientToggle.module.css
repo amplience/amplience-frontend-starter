@@ -1,0 +1,32 @@
+/* Brand layers restyle via --ambient-toggle-*. */
+.toggle {
+  --ambient-toggle-size: 2.5rem;
+  --ambient-toggle-inset: var(--spacing-3);
+  --ambient-toggle-background: rgb(0 0 0 / 55%);
+  --ambient-toggle-color: var(--color-white);
+
+  position: absolute;
+  inset-inline-end: var(--ambient-toggle-inset);
+  inset-block-end: var(--ambient-toggle-inset);
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: var(--ambient-toggle-size);
+  height: var(--ambient-toggle-size);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--ambient-toggle-background);
+  color: var(--ambient-toggle-color);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: rgb(0 0 0 / 75%);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ambient-toggle-color);
+    outline-offset: 2px;
+  }
+}

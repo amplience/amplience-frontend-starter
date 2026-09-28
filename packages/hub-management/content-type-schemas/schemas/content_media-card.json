@@ -33,7 +33,7 @@
       "title": "Media",
       "allOf": [
         {
-          "$ref": "https://quadratic.amplience.com/v2/partials/media"
+          "$ref": "https://quadratic.amplience.com/v2/partials/rich-media"
         }
       ]
     },

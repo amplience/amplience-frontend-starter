@@ -1,4 +1,4 @@
-import type { ComponentRegistryEntry, ContentMediaData } from '@amplience/frontend-starter-types'
+import type { ComponentRegistryEntry, ContentImageData } from '@amplience/frontend-starter-types'
 
 import { contentMediaUrl } from '../../molecules/DynamicImage/di-utils'
 import { Page, type PageProps } from './Page'
@@ -12,7 +12,7 @@ export const PAGE_SCHEMA = 'https://quadratic.amplience.com/v2/content/page'
  * crop baked into the delivery query). The og:image URL is built at mapping
  * time via `contentMediaUrl`.
  */
-export type PageSocialImage = ContentMediaData
+export type PageSocialImage = ContentImageData
 
 /**
  * The social-card group on a page — feeds og:title / og:description /

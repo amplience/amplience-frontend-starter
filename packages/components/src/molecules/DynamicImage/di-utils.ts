@@ -6,6 +6,9 @@ import type {
   TransformedImageField,
 } from '@amplience/frontend-starter-types'
 
+import { parseVideoUrl, youTubeThumbnailUrl } from '../ExternalVideo/parse-video-url'
+import { damVideoThumbnailUrl, videoAspectRatioCss } from '../NativeVideo/video-utils'
+
 /**
  * QL design system breakpoints — kept here as the canonical reference for
  * the `sizes` prop values used by DynamicImage consumers.
@@ -56,8 +59,10 @@ export function amplienceDiLoader({ src, width }: ImageLoaderProps): string {
  *  - DynamicImage — the DI URL with the pre-baked transform query (crop, POI)
  *    plus an optional width cap. No `fmt` override: DI serves the asset's
  *    stored format (jpg/png), which social scrapers handle universally.
+ *  - DynamicVideo — the poster, else the DAM thumbnail.
+ *  - ExternalVideo — posterUrl, else the YouTube thumbnail.
  *
- * Returns undefined when a DynamicImage link is incomplete.
+ * Returns undefined when a DAM link is incomplete.
  */
 export function contentMediaUrl(
   media: ContentMediaData,
@@ -80,6 +85,23 @@ export function contentMediaUrl(
       .filter(Boolean)
       .join('&')
     return params ? `${base}?${params}` : base
+  }
+
+  if (media.mediaType === 'DynamicVideo') {
+    const poster = media.poster
+    if (poster?.name && poster.endpoint && poster.defaultHost) {
+      const base = buildDiBaseUrl(poster)
+      return opts.width !== undefined ? `${base}?w=${opts.width}` : base
+    }
+    const link = media.video
+    if (!link?.name || !link?.endpoint || !link?.defaultHost) return undefined
+    return damVideoThumbnailUrl(link, opts.width)
+  }
+
+  if (media.mediaType === 'ExternalVideo') {
+    if (media.posterUrl) return media.posterUrl
+    const parsed = parseVideoUrl(media.url)
+    return parsed?.provider === 'youtube' ? youTubeThumbnailUrl(parsed.id) : undefined
   }
 
   // Unknown mediaType — legacy or malformed payload.
@@ -127,6 +149,7 @@ export function resolveDiAspectRatio(field: TransformedImageField): string | und
  *  - ManualImage  — the authored `aspectRatio` override, else intrinsic w/h.
  *  - DynamicImage — delegates to resolveDiAspectRatio (extension-written
  *    aspectRatio → delivered width/height).
+ *  - DynamicVideo / ExternalVideo — the authored frame shape (16:9 default).
  *
  * Defensive on every access: hub content can predate the media partial (a
  * legacy flat image shape). Returns undefined rather than throwing so a stale
@@ -138,6 +161,9 @@ export function resolveContentMediaAspectRatio(media: ContentMediaData): string 
   }
   if (media.mediaType === 'DynamicImage' && media.image !== undefined) {
     return resolveDiAspectRatio(media.image)
+  }
+  if (media.mediaType === 'DynamicVideo' || media.mediaType === 'ExternalVideo') {
+    return videoAspectRatioCss(media.aspectRatio)
   }
   return undefined
 }

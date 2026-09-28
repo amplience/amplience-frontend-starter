@@ -3,7 +3,7 @@
 // Smoke tests for the MediaBlock organism (QL-65).
 
 import { cleanup, render, screen } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { ContentMediaData } from '@amplience/frontend-starter-types'
 
@@ -97,6 +97,42 @@ describe('MediaBlock', () => {
       const link = screen.getByRole('link')
       expect(link.getAttribute('target')).toBe('_blank')
       expect(link.getAttribute('rel')).toContain('noopener')
+    })
+  })
+
+  describe('video media', () => {
+    const video = {
+      mediaType: 'ExternalVideo' as const,
+      url: 'https://cdn.example.com/loop.mp4',
+      title: 'Workshop film',
+    }
+
+    beforeEach(() => {
+      vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue(undefined)
+      vi.spyOn(HTMLMediaElement.prototype, 'pause').mockImplementation(() => undefined)
+    })
+    afterEach(() => vi.restoreAllMocks())
+
+    it('plays as authored — a player with controls by default', () => {
+      const { container } = render(<MediaBlock media={video} />)
+      expect(container.querySelector('video')?.controls).toBe(true)
+    })
+
+    it('plays an ambient loop when authored that way, with its pause button', () => {
+      const { container } = render(<MediaBlock media={{ ...video, playback: 'ambient' }} />)
+      expect(container.querySelector('video')?.controls).toBe(false)
+      expect(screen.getByRole('button', { name: 'Pause background video' })).toBeTruthy()
+    })
+
+    it('goes ambient inside a link — no button, and it waits for a hover', () => {
+      const { container } = render(<MediaBlock media={video} href="/workshops" />)
+      expect(container.querySelector('video')?.controls).toBe(false)
+      expect(screen.queryByRole('button')).toBeNull()
+    })
+
+    it('labels the section as a video', () => {
+      render(<MediaBlock media={video} caption="Behind the scenes" />)
+      expect(screen.getByRole('region', { name: 'Video: Behind the scenes' })).toBeTruthy()
     })
   })
 

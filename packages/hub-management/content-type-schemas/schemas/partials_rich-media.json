@@ -1,0 +1,216 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/partials/rich-media",
+  "title": "Rich media",
+  "description": "Image or video, chosen with a content palette (object). The image options copy partials/media's fields (a test keeps them identical).",
+  "type": "object",
+  "required": ["mediaType"],
+  "oneOf": [
+    {
+      "type": "object",
+      "title": "Image — media library",
+      "description": "Pick from the Amplience media library, with crop and point of interest.",
+      "properties": {
+        "mediaType": { "const": "DynamicImage", "ui:component": "none" },
+        "image": {
+          "title": "Image",
+          "description": "Pick from the Amplience media library. Use the crop and POI handles to set framing.",
+          "type": "object",
+          "properties": {
+            "image": {
+              "title": "Base image",
+              "allOf": [
+                {
+                  "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
+                }
+              ]
+            },
+            "crop": {
+              "title": "Crop",
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "items": { "type": "number", "default": 0 }
+            },
+            "poi": {
+              "title": "Point of interest",
+              "type": "object",
+              "properties": {
+                "x": { "title": "X", "type": "number" },
+                "y": { "title": "Y", "type": "number" }
+              }
+            },
+            "rot": { "title": "Rotate", "type": "number" },
+            "hue": { "title": "Hue", "type": "number" },
+            "sat": { "title": "Saturation", "type": "number" },
+            "bri": { "title": "Brightness", "type": "number" },
+            "fliph": { "title": "Flip horizontal", "type": "boolean" },
+            "flipv": { "title": "Flip vertical", "type": "boolean" },
+            "aspectLock": {
+              "title": "Crop aspect ratio",
+              "description": "Aspect ratio used when resizing the crop rectangle, e.g. \"16:9\". \"none\" unlocks aspect.",
+              "type": "string"
+            },
+            "query": {
+              "title": "DI query string",
+              "description": "Pre-baked DI transform params (crop, POI, smart scaling). Appended to the base URL by the renderer.",
+              "type": "string"
+            },
+            "width": {
+              "title": "Width",
+              "description": "Width of the DELIVERED image in pixels (crop applied when drawn). Written by the extension so consumers can reserve layout space without a second call.",
+              "type": "number"
+            },
+            "height": {
+              "title": "Height",
+              "description": "Height of the DELIVERED image in pixels (crop applied when drawn). Written by the extension so consumers can reserve layout space without a second call.",
+              "type": "number"
+            },
+            "aspectRatio": {
+              "title": "Aspect Ratio",
+              "description": "Aspect ratio (width / height) of the delivered image: the crop rectangle when a crop is active, otherwise the source image. Bind directly to CSS aspect-ratio to avoid layout shift (CLS).",
+              "type": "number"
+            }
+          },
+          "ui:extension": {
+            "name": "image-poi",
+            "params": { "useVSE": true }
+          }
+        },
+        "imageAltText": {
+          "title": "Image Alt Text",
+          "description": "Auto-populated from the media library asset for the current locale. Override here if needed.",
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 200,
+          "ui:extension": {
+            "name": "automated-alt-text",
+            "params": { "image": "/image" }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "title": "Image — URL",
+      "description": "Enter an image URL and its dimensions.",
+      "properties": {
+        "mediaType": { "const": "ManualImage", "ui:component": "none" },
+        "image": {
+          "title": "Image",
+          "type": "object",
+          "properties": {
+            "src": { "type": "string", "title": "Image URL" },
+            "alt": {
+              "type": "string",
+              "title": "Alt text",
+              "description": "Accessible description of the image.",
+              "maxLength": 200
+            },
+            "width": { "type": "integer", "title": "Width (px)", "minimum": 1 },
+            "height": { "type": "integer", "title": "Height (px)", "minimum": 1 },
+            "aspectRatio": {
+              "type": "string",
+              "title": "CSS aspect ratio",
+              "description": "Optional layout override e.g. \"16 / 9\" (CSS slash format)."
+            }
+          },
+          "required": ["src", "alt", "width", "height"]
+        }
+      },
+      "required": ["image"]
+    },
+    {
+      "type": "object",
+      "title": "Video — media library",
+      "description": "Pick a video from the Amplience media library.",
+      "properties": {
+        "mediaType": { "const": "DynamicVideo", "ui:component": "none" },
+        "video": {
+          "title": "Video",
+          "description": "Pick from the Amplience media library.",
+          "allOf": [
+            {
+              "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/video-link"
+            }
+          ]
+        },
+        "poster": {
+          "title": "Poster image",
+          "description": "Optional. Shown before the video plays. Defaults to the video's own thumbnail.",
+          "allOf": [
+            {
+              "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
+            }
+          ]
+        },
+        "title": {
+          "type": "string",
+          "title": "Video title",
+          "description": "Short description for screen readers. Not needed for ambient videos, which are treated as decoration.",
+          "maxLength": 200
+        },
+        "aspectRatio": {
+          "type": "string",
+          "title": "Aspect ratio",
+          "description": "Shape of the video frame. Reserves the space before the video loads, so there is no layout shift.",
+          "enum": ["16:9", "9:16", "4:3", "1:1", "21:9"],
+          "default": "16:9"
+        },
+        "playback": {
+          "type": "string",
+          "title": "Playback",
+          "description": "player — click to play, with controls and sound. ambient — plays automatically, muted and looping, with no controls: for adding movement to a page. Ambient videos show a pause button and don't autoplay for visitors who prefer reduced motion. A video in a hero always plays as ambient; one inside a link is ambient too, and plays only while the link is hovered or focused.",
+          "enum": ["player", "ambient"],
+          "default": "player",
+          "ui:widget": "radio"
+        }
+      },
+      "required": ["video"]
+    },
+    {
+      "type": "object",
+      "title": "Video — YouTube, Vimeo or .mp4",
+      "description": "Paste a YouTube or Vimeo link, or a direct .mp4 URL.",
+      "properties": {
+        "mediaType": { "const": "ExternalVideo", "ui:component": "none" },
+        "url": {
+          "type": "string",
+          "title": "Video URL",
+          "maxLength": 2048,
+          "description": "A YouTube or Vimeo link (any share, watch or embed URL), or a direct link to an .mp4 file.",
+          "pattern": "^https://((www\\.|m\\.)?youtube(-nocookie)?\\.com/(watch\\?|embed/|shorts/|live/)|youtu\\.be/|(www\\.)?vimeo\\.com/([^?#]*/)?[0-9]+|player\\.vimeo\\.com/video/[0-9]+|[^?#]+\\.[mM][pP]4([?#].*)?$)"
+        },
+        "title": {
+          "type": "string",
+          "title": "Video title",
+          "description": "Short description for screen readers — required for embedded players.",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "posterUrl": {
+          "type": "string",
+          "title": "Poster image URL",
+          "description": "Optional. An https image URL shown before the video plays. YouTube thumbnails are used automatically.",
+          "pattern": "^https://"
+        },
+        "aspectRatio": {
+          "type": "string",
+          "title": "Aspect ratio",
+          "description": "Shape of the video frame. Reserves the space before the video loads, so there is no layout shift.",
+          "enum": ["16:9", "9:16", "4:3", "1:1", "21:9"],
+          "default": "16:9"
+        },
+        "playback": {
+          "type": "string",
+          "title": "Playback",
+          "description": "player — click to play, with controls and sound. ambient — plays automatically, muted and looping, with no controls: for adding movement to a page. Ambient videos show a pause button and don't autoplay for visitors who prefer reduced motion. A video in a hero always plays as ambient; one inside a link is ambient too, and plays only while the link is hovered or focused.",
+          "enum": ["player", "ambient"],
+          "default": "player",
+          "ui:widget": "radio"
+        }
+      },
+      "required": ["url", "title"]
+    }
+  ]
+}

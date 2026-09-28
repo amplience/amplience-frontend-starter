@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
+import { damVideo, mp4Video } from '../../molecules/NativeVideo/sample-videos'
 import { HeroBlock } from './HeroBlock'
 
 const meta = {
@@ -380,4 +381,27 @@ export const Bare: Story = {
       <HeroBlock {...args} />
     </div>
   ),
+}
+
+export const BackgroundVideo: Story = {
+  name: 'Background video (DAM)',
+  args: {
+    ...baseCopy,
+    ctas: [...multiCta],
+    media: { ...damVideo },
+    overlayIntensity: 40,
+    heightBehaviour: 'flexible',
+  },
+}
+
+export const BackgroundVideoFitToContent: Story = {
+  name: 'Background video — fit to content (.mp4)',
+  args: {
+    ...baseCopy,
+    media: { ...mp4Video },
+    heightBehaviour: 'fitToContent',
+    minHeight: 480,
+    verticalPosition: 'center',
+    overlayIntensity: 30,
+  },
 }

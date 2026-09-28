@@ -288,11 +288,55 @@ export type DynamicImageData = {
   readonly imageAltText?: string
 }
 
+/** Image-only media (`partials/media`): logos, social images, the hero mobile override. */
+export type ContentImageData = ManualImageData | DynamicImageData
+
+/** Mirrors http://bigcontent.io/cms/schema/v1/core#/definitions/video-link */
+export type AmplienceVideoLink = {
+  readonly name: string
+  readonly endpoint: string
+  readonly defaultHost: string
+  readonly id?: string
+  readonly mimeType?: string
+}
+
+/** Authorable video frame shapes, as stored in content ("16:9"). */
+export type VideoAspectRatio = '16:9' | '9:16' | '4:3' | '1:1' | '21:9'
+
 /**
- * Union of all media modes, discriminated by mediaType.
- * Accepted by <ContentMedia> and used as the media prop type by all blocks.
- *
- * Currently: ManualImage | DynamicImage.
- * Future: DynamicVideo | ExternalVideo | BynderImage | …
+ * `'player'`: controls and sound, loads on play. `'ambient'`: muted decorative loop.
+ * Heroes, overlay cards and links force ambient (ADR-0025).
  */
-export type ContentMediaData = ManualImageData | DynamicImageData
+export type VideoPlayback = 'player' | 'ambient'
+
+type VideoCommon = {
+  /** Accessible name. */
+  readonly title?: string
+  /** Frame shape. Defaults to 16:9. */
+  readonly aspectRatio?: VideoAspectRatio
+  /** Defaults to `'player'`. */
+  readonly playback?: VideoPlayback
+}
+
+/** DynamicVideo mode — a DAM video. Maps to <DynamicVideo>. */
+export type DynamicVideoData = VideoCommon & {
+  readonly mediaType: 'DynamicVideo'
+  readonly video: AmplienceVideoLink
+  /** Optional poster; defaults to the video's own thumbnail. */
+  readonly poster?: AmplienceImageLink
+}
+
+/** ExternalVideo mode — YouTube, Vimeo or `.mp4` URL. Maps to <ExternalVideo>. */
+export type ExternalVideoData = VideoCommon & {
+  readonly mediaType: 'ExternalVideo'
+  readonly url: string
+  readonly title: string
+  /** Defaults to the YouTube thumbnail, where there is one. */
+  readonly posterUrl?: string
+}
+
+/** The video media modes. */
+export type ContentVideoData = DynamicVideoData | ExternalVideoData
+
+/** All media modes (`partials/rich-media`), discriminated by mediaType. */
+export type ContentMediaData = ContentImageData | ContentVideoData

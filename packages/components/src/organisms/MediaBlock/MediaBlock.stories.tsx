@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import type { ContentMediaData } from '@amplience/frontend-starter-types'
 
+import { damVideo, mp4Video, youTubeVideo } from '../../molecules/NativeVideo/sample-videos'
 import { MediaBlock } from './MediaBlock'
 
 const meta = {
@@ -109,4 +110,24 @@ export const BackgroundDark: Story = {
       caption="Caption on a dark background."
     />
   ),
+}
+
+export const VideoPlayer: Story = {
+  name: 'Video — player (YouTube)',
+  render: () => <MediaBlock media={youTubeVideo} caption="Press play to load the player" />,
+}
+
+export const VideoPlayerDam: Story = {
+  name: 'Video — player (DAM)',
+  render: () => <MediaBlock media={{ ...damVideo, playback: 'player' }} />,
+}
+
+export const VideoAmbient: Story = {
+  name: 'Video — ambient loop, full-bleed',
+  render: () => <MediaBlock media={{ ...mp4Video, playback: 'ambient' }} fullBleed />,
+}
+
+export const VideoLinked: Story = {
+  name: 'Video — inside a link (always ambient)',
+  render: () => <MediaBlock media={youTubeVideo} href="/products" />,
 }

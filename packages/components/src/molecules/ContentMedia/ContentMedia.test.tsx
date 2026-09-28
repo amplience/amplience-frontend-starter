@@ -168,3 +168,78 @@ describe('ContentMedia', () => {
     })
   })
 })
+
+// ---------------------------------------------------------------------------
+// Video routing — the video molecules are stubbed to expose the props
+// ContentMedia derives (playback after context override, toggle, load tier).
+// ---------------------------------------------------------------------------
+
+type VideoStubProps = {
+  playback: string
+  ambientTrigger: string
+  loadPriority: string
+  sizes?: string
+}
+// vi.hoisted: vi.mock factories run before the module body.
+const { videoStub } = vi.hoisted(() => ({
+  videoStub:
+    (name: string) =>
+    ({ playback, ambientTrigger, loadPriority, sizes }: VideoStubProps) => (
+      <div
+        data-testid={name}
+        data-playback={playback}
+        data-trigger={ambientTrigger}
+        data-tier={loadPriority}
+        data-sizes={sizes}
+      />
+    ),
+}))
+
+vi.mock('../DynamicVideo/DynamicVideo', () => ({ DynamicVideo: videoStub('DynamicVideo') }))
+vi.mock('../ExternalVideo/ExternalVideo', () => ({ ExternalVideo: videoStub('ExternalVideo') }))
+
+const dynamicVideo: ContentMediaData = {
+  mediaType: 'DynamicVideo',
+  video: { name: 'clip', endpoint: 'demo', defaultHost: 'cdn.media.amplience.net' },
+  playback: 'player',
+}
+const externalVideo: ContentMediaData = {
+  mediaType: 'ExternalVideo',
+  url: 'https://youtu.be/dQw4w9WgXcQ',
+  title: 'Film',
+}
+
+describe('ContentMedia — video', () => {
+  it('routes DynamicVideo and ExternalVideo to their molecules', () => {
+    render(<ContentMedia {...dynamicVideo} />)
+    render(<ContentMedia {...externalVideo} sizes="50vw" />)
+    expect(screen.getByTestId('DynamicVideo')).toBeTruthy()
+    expect(screen.getByTestId('ExternalVideo').getAttribute('data-sizes')).toBe('50vw')
+  })
+
+  it('keeps the authored playback, defaulting to player, in the default context', () => {
+    render(<ContentMedia {...externalVideo} />)
+    expect(screen.getByTestId('ExternalVideo').getAttribute('data-playback')).toBe('player')
+  })
+
+  it('forces autoplaying ambient behind overlaid content', () => {
+    render(<ContentMedia {...dynamicVideo} videoContext="background" />)
+    const el = screen.getByTestId('DynamicVideo')
+    expect(el.getAttribute('data-playback')).toBe('ambient')
+    expect(el.getAttribute('data-trigger')).toBe('autoplay')
+  })
+
+  it('forces hover-to-play ambient inside a link', () => {
+    render(<ContentMedia {...dynamicVideo} videoContext="linked" />)
+    const el = screen.getByTestId('DynamicVideo')
+    expect(el.getAttribute('data-playback')).toBe('ambient')
+    expect(el.getAttribute('data-trigger')).toBe('hover')
+  })
+
+  it('translates the next/image loading props back into a load tier', () => {
+    render(<ContentMedia {...dynamicVideo} priority fetchPriority="high" />)
+    render(<ContentMedia {...externalVideo} loading="eager" />)
+    expect(screen.getByTestId('DynamicVideo').getAttribute('data-tier')).toBe('lcp')
+    expect(screen.getByTestId('ExternalVideo').getAttribute('data-tier')).toBe('eager')
+  })
+})
