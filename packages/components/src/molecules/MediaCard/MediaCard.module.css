@@ -21,6 +21,18 @@
  *   Uses CSS grid stacking (grid-area: stack) rather than absolute
  *   positioning so the image drives the card height naturally.
  *
+ * IMAGE SIZE (data-image-size on .inner):
+ *   cover — the media slot described above (default)
+ *   icon  — the media renders inside .body, above the title, in a fixed
+ *           --media-card-icon-size box with object-fit: contain (never
+ *           cropped). The component resolves data-layout to 'above' for
+ *           icons, so no beside/overlay rule ever applies to one.
+ *
+ * ALIGNMENT (data-align on .inner):
+ *   left (default) / center / right — aligns the body's children (icon,
+ *   title, description, CTA) via text-align + align-items. Works in every
+ *   layout; in beside/dynamic-wide it aligns within the text column.
+ *
  * BRAND OVERRIDES: redefine --media-card-* variables under [data-brand].
  */
 
@@ -33,6 +45,7 @@
   --media-card-beside-image-width: 45%;
   --media-card-overlay-scrim: linear-gradient(to top, rgb(0 0 0 / 0.75) 0%, transparent 60%);
   --media-card-overlay-text-color: var(--color-white);
+  --media-card-icon-size: 56px; /* keep within 48–64px — ICON_IMAGE_SIZES assumes ≤ 64px */
 
   /* Enables @container queries on .inner so 'dynamic' layout is driven
      by the card's own width, not the viewport. */
@@ -135,6 +148,32 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Icon — small, fixed, uncropped image above the title (imageSize='icon')
+   --------------------------------------------------------------------------- */
+
+.iconMedia {
+  flex-shrink: 0;
+  width: var(--media-card-icon-size);
+  height: var(--media-card-icon-size);
+}
+
+/* The inner element is the <img> itself (ManualImage) or DynamicImage's
+   wrapper <div>. Selectors are qualified with .iconMedia so they outrank the
+   Image atom's [data-has-ratio] cover rule and DynamicImage's .img cover rule
+   without relying on stylesheet order. */
+.iconMedia > .icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
+.iconMedia img {
+  object-fit: contain;
+}
+
+/* ---------------------------------------------------------------------------
    Body — padded text content
    --------------------------------------------------------------------------- */
 
@@ -148,6 +187,20 @@
 /* In overlay mode, body padding is reduced — gradient does the legibility work */
 .inner[data-layout='overlay'] > .body {
   padding: calc(var(--media-card-body-padding) * 1.5) var(--media-card-body-padding);
+}
+
+/* ---------------------------------------------------------------------------
+   Alignment — icon, text and CTA move together
+   --------------------------------------------------------------------------- */
+
+.inner[data-align='center'] > .body {
+  text-align: center;
+  align-items: center;
+}
+
+.inner[data-align='right'] > .body {
+  text-align: right;
+  align-items: flex-end;
 }
 
 /* ---------------------------------------------------------------------------

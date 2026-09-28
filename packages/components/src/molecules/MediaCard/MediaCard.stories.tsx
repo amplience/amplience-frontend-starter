@@ -11,6 +11,14 @@ const meta = {
       control: 'radio',
       options: ['above', 'beside', 'dynamic', 'overlay'],
     },
+    imageSize: {
+      control: 'radio',
+      options: ['cover', 'icon'],
+    },
+    alignment: {
+      control: 'radio',
+      options: ['left', 'center', 'right'],
+    },
     headingVariant: {
       control: 'radio',
       options: ['h2', 'h3', 'h4', 'h5', 'h6'],
@@ -75,6 +83,8 @@ export const Playground: Story = {
     ...baseCopy,
     media: { ...landscapeMedia },
     layout: 'above',
+    imageSize: 'cover',
+    alignment: 'left',
     elevation: 'raised',
     color: 'white',
   },
@@ -120,6 +130,100 @@ export const Overlay: Story = {
         description="Lightweight, versatile pieces."
         media={{ ...landscapeMedia }}
         layout="overlay"
+      />
+    </div>
+  ),
+}
+
+// ---------------------------------------------------------------------------
+// Image size — icon
+// ---------------------------------------------------------------------------
+
+const iconMedia = {
+  mediaType: 'ManualImage' as const,
+  image: {
+    // Deliberately non-square: an icon is contained, never cropped.
+    src: 'https://picsum.photos/seed/ql-mc-icon/320/200',
+    alt: 'A sample icon',
+    width: 320,
+    height: 200,
+  },
+}
+
+const iconCopy = {
+  title: 'Free delivery',
+  description: 'On all orders over £50, straight to your door.',
+  links: { cta: { label: 'Find out more', href: '/delivery' } },
+} as const
+
+export const Icon: Story = {
+  name: 'Image size — icon',
+  render: () => (
+    <div style={{ maxWidth: 320 }}>
+      <MediaCard {...iconCopy} media={{ ...iconMedia }} imageSize="icon" elevation="bordered" />
+    </div>
+  ),
+}
+
+export const Alignment: Story = {
+  name: 'Alignment — left / center / right (cover and icon)',
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '1rem' }}>
+      {(['left', 'center', 'right'] as const).map((alignment) => (
+        <MediaCard
+          key={`cover-${alignment}`}
+          {...iconCopy}
+          title={`Cover — ${alignment}`}
+          media={{ ...landscapeMedia }}
+          alignment={alignment}
+          elevation="bordered"
+        />
+      ))}
+      {(['left', 'center', 'right'] as const).map((alignment) => (
+        <MediaCard
+          key={`icon-${alignment}`}
+          {...iconCopy}
+          title={`Icon — ${alignment}`}
+          media={{ ...iconMedia }}
+          imageSize="icon"
+          alignment={alignment}
+          elevation="bordered"
+        />
+      ))}
+    </div>
+  ),
+}
+
+export const IconLayoutMatrix: Story = {
+  name: 'Image size — icon × every layout (all stack)',
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '1rem' }}>
+      {(['above', 'beside', 'dynamic', 'overlay'] as const).map((layout) => (
+        <MediaCard
+          key={layout}
+          {...iconCopy}
+          title={`layout="${layout}"`}
+          media={{ ...iconMedia }}
+          imageSize="icon"
+          layout={layout}
+          alignment="center"
+          elevation="bordered"
+        />
+      ))}
+    </div>
+  ),
+}
+
+export const AlignedOverlay: Story = {
+  name: 'Alignment — overlay, centred',
+  render: () => (
+    <div style={{ maxWidth: 360 }}>
+      <MediaCard
+        title="Spring collection"
+        description="Lightweight, versatile pieces."
+        media={{ ...landscapeMedia }}
+        layout="overlay"
+        alignment="center"
       />
     </div>
   ),

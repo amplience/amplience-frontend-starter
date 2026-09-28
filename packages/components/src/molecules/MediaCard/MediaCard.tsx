@@ -31,6 +31,28 @@ import styles from './MediaCard.module.css'
  */
 export type MediaCardLayout = 'above' | 'beside' | 'dynamic' | 'overlay'
 
+/**
+ * How the media is presented.
+ *
+ *   cover — full-bleed cover image, arranged by `layout` (default)
+ *   icon  — a small, fixed-size, uncropped image sat in the body directly
+ *           above the title, following the body's `alignment`.
+ *
+ * An icon is part of the text flow rather than a slot of its own, so it has
+ * nothing to sit beside or behind: with `imageSize: 'icon'` every `layout`
+ * resolves to the stacked `above` arrangement (see {@link resolveLayout}).
+ * That keeps each layout × size combination well-defined — in particular an
+ * icon never gets the overlay scrim / inverted text meant for a cover image.
+ */
+export type MediaCardImageSize = 'cover' | 'icon'
+
+/**
+ * Horizontal alignment of the body — icon (when `imageSize: 'icon'`), title,
+ * description and CTA together. Applies in every layout; in `beside` it
+ * aligns within the text column.
+ */
+export type MediaCardAlignment = 'left' | 'center' | 'right'
+
 export type MediaCardCtaProps = {
   label: string
   href: string
@@ -72,6 +94,15 @@ export type MediaCardProps = {
    * Defaults to 'above'.
    */
   layout?: MediaCardLayout
+  /**
+   * Cover image or small icon — see MediaCardImageSize. Defaults to 'cover'.
+   */
+  imageSize?: MediaCardImageSize
+  /**
+   * Body alignment (icon, text and CTA) — see MediaCardAlignment.
+   * Defaults to 'left'.
+   */
+  alignment?: MediaCardAlignment
   /**
    * Heading element rendered for the card title.
    * Defaults to 'h3' — adjust to fit the surrounding document outline.
@@ -131,6 +162,19 @@ export const LAYOUT_IMAGE_FRACTION: Record<MediaCardLayout, number> = {
   dynamic: 1,
 }
 
+/**
+ * `sizes` for an icon. The icon box is a fixed CSS size
+ * (`--media-card-icon-size`, 56px by default, brand-overridable up to 64px),
+ * independent of the card's slot width — so the slot hint is ignored and the
+ * srcset is chosen for a 64px box (the browser still applies DPR).
+ */
+export const ICON_IMAGE_SIZES = '64px'
+
+/** The arrangement actually rendered for a layout × image-size combination. */
+export function resolveLayout(layout: MediaCardLayout, imageSize: MediaCardImageSize) {
+  return imageSize === 'icon' ? 'above' : layout
+}
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -148,6 +192,12 @@ export const LAYOUT_IMAGE_FRACTION: Record<MediaCardLayout, number> = {
  *   dynamic — container-query driven: above when narrow, beside when wide
  *   overlay — image fills the card, text overlays with a gradient scrim
  *
+ * Image size:
+ *   cover — full-bleed cover image (default)
+ *   icon  — small uncropped image above the title; layout resolves to above
+ *
+ * Alignment: left (default) / center / right — icon, text and CTA together.
+ *
  * Linking:
  *   href — wraps the whole card in a link (sets Card interactive)
  *   cta  — explicit action inside the body (only when href is absent)
@@ -163,6 +213,8 @@ export function MediaCard({
   media,
   links,
   layout = 'above',
+  imageSize = 'cover',
+  alignment = 'left',
   headingVariant = 'h3',
   elevation = 'flat',
   color = 'white',
@@ -174,30 +226,47 @@ export function MediaCard({
   const { href, cta } = links ?? {}
   const isLinked = href != null
 
+  const isIcon = imageSize === 'icon'
+  const resolvedLayout = resolveLayout(layout, imageSize)
+
   // Scale the card-width hint (if any) down to the image's real width for this
-  // layout. Absent a hint, pass none — next/image falls back to 100vw.
-  const imageSizes =
-    sizes !== undefined ? scaleSizes(sizes, LAYOUT_IMAGE_FRACTION[layout]) : undefined
+  // layout. Absent a hint, pass none — next/image falls back to 100vw. An icon
+  // is a fixed size whatever the slot, so it always gets ICON_IMAGE_SIZES.
+  const imageSizes = isIcon
+    ? ICON_IMAGE_SIZES
+    : sizes !== undefined
+      ? scaleSizes(sizes, LAYOUT_IMAGE_FRACTION[resolvedLayout])
+      : undefined
 
   // No per-image ratio derivation: the card layouts size the media container
   // themselves (flex-row / overlay / fixed heights in MediaCard.module.css),
   // and DynamicImage carries its own payload-resolved --di-aspect-ratio for
   // any layout that leaves the box height free.
-  const videoContext = isLinked ? 'linked' : layout === 'overlay' ? 'background' : 'default'
+  //
+  // A video icon is too small for player controls, so it goes ambient like an
+  // overlay background (keeping its pause button — WCAG 2.2.2).
+  const videoContext = isLinked
+    ? 'linked'
+    : isIcon || resolvedLayout === 'overlay'
+      ? 'background'
+      : 'default'
+  const mediaClassName = isIcon ? styles.icon : styles.image
   const mediaEl = media != null && (
-    <div className={styles.media}>
+    <div className={isIcon ? styles.iconMedia : styles.media}>
       <ContentMedia
         {...media}
         videoContext={videoContext}
         {...mediaLoadingProps(loadPriority)}
         {...(imageSizes !== undefined && { sizes: imageSizes })}
-        {...(styles.image !== undefined && { className: styles.image })}
+        {...(mediaClassName !== undefined && { className: mediaClassName })}
       />
     </div>
   )
 
   const bodyEl = (
     <div className={styles.body}>
+      {isIcon && mediaEl}
+
       <Typography variant={headingVariant} className={clsx(styles.title)}>
         {title}
       </Typography>
@@ -233,8 +302,13 @@ export function MediaCard({
   )
 
   const inner = (
-    <div className={styles.inner} data-layout={layout}>
-      {mediaEl}
+    <div
+      className={styles.inner}
+      data-layout={resolvedLayout}
+      data-image-size={imageSize}
+      data-align={alignment}
+    >
+      {!isIcon && mediaEl}
       {bodyEl}
     </div>
   )

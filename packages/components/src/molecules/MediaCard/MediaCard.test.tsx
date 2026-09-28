@@ -198,6 +198,90 @@ describe('MediaCard', () => {
     })
   })
 
+  describe('image size', () => {
+    const layouts = ['above', 'beside', 'dynamic', 'overlay'] as const
+
+    it('defaults to cover, with the media in its own slot before the body', () => {
+      const { container } = render(<MediaCard title="Title" media={sampleMedia} />)
+      const inner = container.querySelector('[data-layout]')
+      expect(inner?.getAttribute('data-image-size')).toBe('cover')
+      const img = screen.getByAltText('A product photo')
+      expect(img.closest('h3')).toBeNull()
+      expect(
+        img.compareDocumentPosition(screen.getByRole('heading')) & Node.DOCUMENT_POSITION_FOLLOWING,
+      ).toBeTruthy()
+    })
+
+    it('renders an icon inside the body, directly above the title', () => {
+      render(<MediaCard title="Title" media={sampleMedia} imageSize="icon" />)
+      const img = screen.getByAltText('A product photo')
+      const heading = screen.getByRole('heading')
+      // Same parent container (the body) as the heading, immediately before it.
+      expect(img.parentElement?.nextElementSibling).toBe(heading)
+    })
+
+    it.each(layouts)('resolves the %s layout to above for an icon', (layout) => {
+      const { container } = render(
+        <MediaCard title="Title" media={sampleMedia} imageSize="icon" layout={layout} />,
+      )
+      const inner = container.querySelector('[data-layout]')
+      expect(inner?.getAttribute('data-layout')).toBe('above')
+      expect(inner?.getAttribute('data-image-size')).toBe('icon')
+    })
+
+    it('sizes an icon for its fixed box, ignoring the slot-width hint', () => {
+      render(
+        <MediaCard
+          title="Title"
+          media={sampleMedia}
+          imageSize="icon"
+          layout="beside"
+          sizes="(min-width: 992px) 33.34vw, 100vw"
+        />,
+      )
+      expect(screen.getByAltText('A product photo').getAttribute('sizes')).toBe('64px')
+    })
+
+    it('plays a video icon as ambient — too small for player controls', () => {
+      vi.spyOn(HTMLMediaElement.prototype, 'play').mockResolvedValue(undefined)
+      vi.spyOn(HTMLMediaElement.prototype, 'pause').mockImplementation(() => undefined)
+      const { container } = render(
+        <MediaCard
+          title="Card"
+          media={{
+            mediaType: 'ExternalVideo',
+            url: 'https://cdn.example.com/loop.mp4',
+            title: 'Loop',
+          }}
+          imageSize="icon"
+        />,
+      )
+      expect(container.querySelector('video')?.controls).toBe(false)
+      vi.restoreAllMocks()
+    })
+  })
+
+  describe('alignment', () => {
+    it('defaults to left', () => {
+      const { container } = render(<MediaCard title="Title" />)
+      expect(container.querySelector('[data-layout]')?.getAttribute('data-align')).toBe('left')
+    })
+
+    it.each(['center', 'right'] as const)('sets data-align to %s', (alignment) => {
+      const { container } = render(<MediaCard title="Title" alignment={alignment} />)
+      expect(container.querySelector('[data-layout]')?.getAttribute('data-align')).toBe(alignment)
+    })
+
+    it('keeps the authored layout for a cover image', () => {
+      const { container } = render(
+        <MediaCard title="Title" media={sampleMedia} layout="overlay" alignment="center" />,
+      )
+      const inner = container.querySelector('[data-layout]')
+      expect(inner?.getAttribute('data-layout')).toBe('overlay')
+      expect(inner?.getAttribute('data-align')).toBe('center')
+    })
+  })
+
   describe('linking', () => {
     it('wraps content in a link when links.href is provided', () => {
       render(<MediaCard title="Title" links={{ href: '/products' }} />)
