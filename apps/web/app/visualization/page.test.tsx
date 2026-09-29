@@ -83,6 +83,14 @@ describe('Visualization — happy path', () => {
   })
 })
 
+describe('Visualization — thumbnail', () => {
+  it('gives the item a real width, so container-sized media does not collapse', async () => {
+    const markup = await render({ vse: VSE, content: HERO_ID, isThumbnail: 'true' })
+    expect(markup).toContain('width:100%;margin-inline:auto')
+    expect(markup).toContain('<h1')
+  })
+})
+
 describe('Visualization — custom CSS', () => {
   // The returned tree is inspected rather than rendered to markup: the homepage
   // preview includes the header, whose HierarchyMenu renders via an async RSC
