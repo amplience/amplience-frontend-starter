@@ -237,8 +237,10 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
           minHeight: '100vh',
         }}
       >
+        {/* Explicit width: media sized by its container (DynamicImage fill) collapses to 0px in a shrink-to-fit box. */}
         <div
           style={{
+            width: '100%',
             marginInline: 'auto',
           }}
         >
