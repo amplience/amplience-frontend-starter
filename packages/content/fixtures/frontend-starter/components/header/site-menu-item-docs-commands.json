@@ -1,0 +1,13 @@
+{
+  "id": "eab2d6c2-a78d-598f-901f-859d19e7c522",
+  "label": "Menu item: Docs — Command reference",
+  "body": {
+    "_meta": {
+      "name": "Menu item: Docs — Command reference",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "eab2d6c2-a78d-598f-901f-859d19e7c522"
+    },
+    "label": "Command reference",
+    "link": "/docs/commands"
+  }
+}

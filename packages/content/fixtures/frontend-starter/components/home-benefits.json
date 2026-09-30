@@ -1,0 +1,121 @@
+{
+  "id": "a8fa406b-f8b2-53e2-99c7-a3e697c68eff",
+  "label": "Home — Frontend Starter attributes carousel",
+  "body": {
+    "_meta": {
+      "name": "Home — Frontend Starter attributes carousel",
+      "schema": "https://quadratic.amplience.com/v2/content/carousel",
+      "deliveryId": "a8fa406b-f8b2-53e2-99c7-a3e697c68eff"
+    },
+    "sectionHeader": {
+      "title": {
+        "values": [
+          {
+            "locale": "en-US",
+            "value": "Benefits"
+          },
+          {
+            "locale": "en-GB",
+            "value": "Benefits"
+          },
+          {
+            "locale": "es-ES",
+            "value": "Beneficios"
+          },
+          {
+            "locale": "fr-FR",
+            "value": "Avantages"
+          },
+          {
+            "locale": "de-DE",
+            "value": "Vorteile"
+          },
+          {
+            "locale": "it-IT",
+            "value": "Vantaggi"
+          }
+        ],
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      },
+      "description": {
+        "values": [
+          {
+            "locale": "en-US",
+            "value": "A demo-ready frontend accelerator that brings Amplience content to life."
+          },
+          {
+            "locale": "en-GB",
+            "value": "A demo-ready frontend accelerator that brings Amplience content to life."
+          },
+          {
+            "locale": "es-ES",
+            "value": "Un acelerador de frontend listo para demostraciones que da vida al contenido de Amplience."
+          },
+          {
+            "locale": "fr-FR",
+            "value": "Un accélérateur de frontend prêt pour la démonstration qui donne vie au contenu d'Amplience."
+          },
+          {
+            "locale": "de-DE",
+            "value": "Ein demo-bereiter Frontend-Beschleuniger, der Amplience Inhalt zum Leben erweckt."
+          },
+          {
+            "locale": "it-IT",
+            "value": "Un acceleratore frontend pronto per la demo che dà vita ai contenuti di Amplience."
+          }
+        ],
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      }
+    },
+    "items": [
+      {
+        "id": "b87ce563-231e-5037-ab82-aefcc4c9fd65",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "df655d63-058d-5938-979d-3e8b3ccb5170",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "f3b3fe8a-c589-57a5-93c1-c9a2e915f93f",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "c879b466-ce37-5cc8-99a1-5e5fb8d81b30",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "62e0c351-c39f-598e-9a21-4a4bf791a769",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ],
+    "slidesMobile": 1.2,
+    "slidesTablet": 2,
+    "slidesDesktop": 3,
+    "showArrows": true,
+    "showDots": true,
+    "dragToScroll": true,
+    "backgroundColor": "black",
+    "maxWidth": "default",
+    "gutter": true
+  }
+}

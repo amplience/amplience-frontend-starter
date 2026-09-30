@@ -6,16 +6,20 @@ staged_docs=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '^(docs
 if [ -n "$staged_docs" ]; then
   echo "docs source changed — regenerating docs fixtures…"
   pnpm docs:generate || exit 1
-  git add \
-    packages/content/src/mock/docs.generated.ts \
-    packages/content/fixtures/base-site/pages/docs.json \
-    packages/content/fixtures/base-site/slots/docs-main.json \
-    packages/content/fixtures/base-site/components/docs-hero.json \
-    packages/content/fixtures/base-site/components/docs-markdown.json
+  git add packages/content/src/mock/docs.generated.ts
+  # The generator writes into whichever fixture set carries `generatedDocs: true`,
+  # so glob the set rather than naming it — a rename shouldn't break staging.
+  for f in packages/content/fixtures/*/pages/docs.json \
+    packages/content/fixtures/*/slots/docs-main.json \
+    packages/content/fixtures/*/components/docs-hero.json \
+    packages/content/fixtures/*/components/docs-markdown.json; do
+    [ -f "$f" ] && git add "$f"
+  done
   # Sub-page trees only exist when docs/ has nested pages.
-  for d in components pages slots; do
-    dir="packages/content/fixtures/base-site/$d/docs"
-    [ -d "$dir" ] && git add "$dir"
+  for d in packages/content/fixtures/*/components/docs \
+    packages/content/fixtures/*/pages/docs \
+    packages/content/fixtures/*/slots/docs; do
+    [ -d "$d" ] && git add "$d"
   done
 fi
 

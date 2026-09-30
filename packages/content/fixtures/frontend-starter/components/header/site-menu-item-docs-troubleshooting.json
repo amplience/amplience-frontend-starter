@@ -1,0 +1,13 @@
+{
+  "id": "cb810860-0452-54f8-816b-128910c76f37",
+  "label": "Menu item: Docs — Troubleshooting",
+  "body": {
+    "_meta": {
+      "name": "Menu item: Docs — Troubleshooting",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "cb810860-0452-54f8-816b-128910c76f37"
+    },
+    "label": "Troubleshooting",
+    "link": "/docs/troubleshooting"
+  }
+}

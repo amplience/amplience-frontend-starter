@@ -1,0 +1,28 @@
+{
+  "id": "55e43d05-b846-5857-b450-09b5d9e977d9",
+  "label": "Deploying a site page",
+  "body": {
+    "_meta": {
+      "name": "Deploying a site page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/docs/deploying"
+          }
+        ]
+      }
+    },
+    "title": "Deploying a site",
+    "description": "`apps/web` is a standard Next.js app — host it anywhere. (e.g. Vercel)",
+    "slots": [
+      {
+        "id": "7c38173a-9620-595d-9821-658a31cdd8a1",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

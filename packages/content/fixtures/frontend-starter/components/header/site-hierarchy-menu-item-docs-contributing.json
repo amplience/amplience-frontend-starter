@@ -1,0 +1,18 @@
+{
+  "id": "f365cc4b-3452-5ad6-9a48-54d7304b2187",
+  "label": "Hierarchy menu item: Docs — Contributing",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Docs — Contributing",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "f365cc4b-3452-5ad6-9a48-54d7304b2187",
+      "hierarchy": {
+        "parentId": "ead30f78-ac5b-5a4f-9bac-fa4fa518a523",
+        "root": false,
+        "position": "gggggggggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Contributing",
+    "link": "/contributing"
+  }
+}

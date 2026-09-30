@@ -1,0 +1,138 @@
+{
+  "id": "ef2e204e-2a48-5da9-9f74-1d031695dcc9",
+  "label": "Home — guides",
+  "body": {
+    "_meta": {
+      "name": "Home — guides",
+      "schema": "https://quadratic.amplience.com/v2/content/grid",
+      "deliveryId": "ef2e204e-2a48-5da9-9f74-1d031695dcc9"
+    },
+    "sectionHeader": {
+      "title": {
+        "values": [
+          {
+            "locale": "en-US",
+            "value": "Guides"
+          },
+          {
+            "locale": "en-GB",
+            "value": "Guides"
+          },
+          {
+            "locale": "es-ES",
+            "value": "Guías"
+          },
+          {
+            "locale": "fr-FR",
+            "value": "Guides"
+          },
+          {
+            "locale": "de-DE",
+            "value": "Leitfäden"
+          },
+          {
+            "locale": "it-IT",
+            "value": "Guide"
+          }
+        ],
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      },
+      "description": {
+        "values": [
+          {
+            "locale": "en-US",
+            "value": "Everything you need to get from clone to published."
+          },
+          {
+            "locale": "en-GB",
+            "value": "Everything you need to get from clone to published."
+          },
+          {
+            "locale": "es-ES",
+            "value": "Todo lo necesario para pasar de la clonación a la publicación."
+          },
+          {
+            "locale": "fr-FR",
+            "value": "Tout ce qu'il faut pour passer du clone à la publication."
+          },
+          {
+            "locale": "de-DE",
+            "value": "Alles, was Sie vom Klonen bis zur Veröffentlichung brauchen."
+          },
+          {
+            "locale": "it-IT",
+            "value": "Tutto ciò che serve, dal clone alla pubblicazione."
+          }
+        ],
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      }
+    },
+    "items": [
+      {
+        "id": "d6d6027e-925d-5a70-975b-30eb74bc4ce4",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "7267e058-9a85-5d56-bfa0-dee9fc8a75eb",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "31a20bda-9140-53be-b604-304083bbb078",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "5ff172eb-1219-52da-83bb-dc0c905c14dd",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "1f92edbc-016e-5510-a7c7-a03e0d4dedd4",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "f07bca79-38a4-5512-90f7-68a60a1dc5e8",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "02d3c789-d5d5-54d1-bfe6-7c04065f5fa9",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "b92974c1-f454-5786-a201-60f41bd7c876",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ],
+    "sizingMode": "auto",
+    "minItemWidth": 280,
+    "backgroundColor": "light",
+    "maxWidth": "default",
+    "gutter": true
+  }
+}

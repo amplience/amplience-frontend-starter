@@ -1,0 +1,188 @@
+{
+  "id": "4f2687ac-4d27-5ef5-970c-9f839173ecac",
+  "label": "About — hero",
+  "body": {
+    "_meta": {
+      "name": "About — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "4f2687ac-4d27-5ef5-970c-9f839173ecac"
+    },
+    "preTitle": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Amplience Frontend Starter"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "The head for your headless CMS"
+        },
+        {
+          "locale": "en-GB",
+          "value": "The head for your headless CMS"
+        },
+        {
+          "locale": "es-ES",
+          "value": "La cabeza para tu CMS sin cabeza"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "La tête pour votre CMS sans tête"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Der Kopf für Ihr Headless-CMS"
+        },
+        {
+          "locale": "it-IT",
+          "value": "La testa per il tuo CMS headless"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Amplience Frontend Starter is a demo-ready frontend that brings Amplience content to life — publish and go!"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Amplience Frontend Starter is a demo-ready frontend that brings Amplience content to life — publish and go!"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Amplience Frontend Starter es un frontend listo para demostraciones que da vida al contenido de Amplience: publica y listo."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Amplience Frontend Starter est un frontend prêt pour la démonstration qui donne vie au contenu d'Amplience : publiez et partez !"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Amplience Frontend Starter ist ein demo-bereites Frontend, das Amplience Inhalt zum Leben erweckt – veröffentlichen und loslegen!"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Amplience Frontend Starter è un frontend pronto per la demo che dà vita ai contenuti di Amplience: pubblica e vai!"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "/placeholders/about-a-head-for-the-headless-hero.jpeg",
+        "alt": "The top-half of a man's head looking up in amazement at some floating website graphics.",
+        "width": 2752,
+        "height": 1536
+      }
+    },
+    "mobileOverride": true,
+    "mobileMedia": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "/placeholders/about-a-head-for-the-headless-hero-mobile.jpeg",
+        "alt": "The top-half of a man's head looking up in amazement at some floating website graphics.",
+        "width": 2752,
+        "height": 1536
+      }
+    },
+    "contentWidth": 40,
+    "contentPositionMobile": "above",
+    "contentPositionDesktop": "overlay",
+    "heightBehaviour": "flexible",
+    "maxWidth": "default",
+    "maxHeight": 600,
+    "overlayColor": "black",
+    "overlayIntensity": 0,
+    "overlayStyle": "gradient",
+    "verticalPosition": "center",
+    "backgroundColor": "black",
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "← Home"
+            },
+            {
+              "locale": "en-GB",
+              "value": "← Home"
+            },
+            {
+              "locale": "es-ES",
+              "value": "← Inicio"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "← Accueil"
+            },
+            {
+              "locale": "de-DE",
+              "value": "← Startseite"
+            },
+            {
+              "locale": "it-IT",
+              "value": "← Home"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/",
+        "variant": "outlined",
+        "color": "white"
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read the docs"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Read the docs"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la documentación"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lire la documentation"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Dokumentation lesen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Leggi la documentazione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs",
+        "variant": "solid",
+        "color": "primary"
+      }
+    ]
+  }
+}

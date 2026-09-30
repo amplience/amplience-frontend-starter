@@ -1,0 +1,58 @@
+{
+  "id": "884038e8-f8af-59af-bd70-c3f49654c4b3",
+  "label": "Blog — Content Modelling Best Practices in Amplience",
+  "body": {
+    "_meta": {
+      "name": "Blog — Content Modelling Best Practices in Amplience",
+      "schema": "https://quadratic.amplience.com/v2/content/blog-article",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/blog/content-modelling"
+          }
+        ]
+      }
+    },
+    "title": "Content Modelling Best Practices in Amplience",
+    "description": "Five principles for building content models that stay maintainable as your project grows — from separating structure from presentation to designing for the Filter API.",
+    "keywords": ["content-modelling", "amplience", "best-practices", "json-schema", "headless-cms"],
+    "social": {
+      "image": {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/seed/blog-content-modelling/1200/630",
+          "alt": "Content Modelling Best Practices — diagram of content types",
+          "width": 1200,
+          "height": 630
+        }
+      }
+    },
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
+    "coverImage": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/blog-content-modelling/1200/630",
+        "alt": "Content Modelling Best Practices — diagram of content types",
+        "width": 1200,
+        "height": 630
+      }
+    },
+    "author": "Amplience Team",
+    "publishDate": "2026-06-22",
+    "category": "Best Practices",
+    "tags": ["content-modelling", "amplience", "best-practices"],
+    "readTime": 10,
+    "slots": [
+      {
+        "id": "6c85f08c-996e-52b2-a0e0-b6554ed5e74d",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

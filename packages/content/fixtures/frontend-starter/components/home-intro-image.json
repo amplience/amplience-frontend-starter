@@ -1,0 +1,53 @@
+{
+  "id": "f257be92-0526-58d5-96bd-99d47d72a6c8",
+  "label": "Home — columns feature image",
+  "body": {
+    "_meta": {
+      "name": "Home — columns feature image",
+      "schema": "https://quadratic.amplience.com/v2/content/media",
+      "deliveryId": "f257be92-0526-58d5-96bd-99d47d72a6c8"
+    },
+    "fullBleed": false,
+    "maxWidth": "default",
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "/placeholders/whats-in-the-box.png",
+        "alt": "Amplience Frontend Starter — accelerator for composable content sites",
+        "width": 1080,
+        "height": 1080
+      }
+    },
+    "caption": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Built on Amplience. Shipped with mocks."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Built on Amplience. Shipped with mocks."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Construido sobre Amplience. Entregado con mocks."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Conçu sur Amplience. Livré avec des mocks."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Auf Amplience aufgebaut. Mit Mocks ausgeliefert."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Costruito su Amplience. Rilasciato con i mock."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

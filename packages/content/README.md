@@ -48,7 +48,7 @@ configuration at all.
 
 ## Fixtures
 
-Fixtures live under `fixtures/base-site/` in **dc-cli enriched format** —
+Fixtures live under `fixtures/frontend-starter/` in **dc-cli enriched format** —
 the same shape `dc-cli content-item import` consumes. That means the same
 folder doubles as seed data once the hub-setup automation lands
 (ADR-0012). Schema URIs use the `https://quadratic.amplience.com/v2/`
@@ -67,7 +67,7 @@ and graph resolution (`depth: 'all'`).
 
 Adding a fixture is two steps:
 
-1. Drop the JSON file under `fixtures/base-site/` (any nested folder is
+1. Drop the JSON file under `fixtures/frontend-starter/` (any nested folder is
    fine — folder structure is purely organisational).
 2. Add a static import to `src/mock/loader.ts` and append it to the
    `fixtures` array.

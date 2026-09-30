@@ -1,0 +1,28 @@
+{
+  "id": "c2932c2f-913b-544b-a92e-8bfed0202f97",
+  "label": "Theming page",
+  "body": {
+    "_meta": {
+      "name": "Theming page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/docs/theming"
+          }
+        ]
+      }
+    },
+    "title": "Theming",
+    "description": "Every visual decision in Amplience Frontend Starter resolves through a CSS custom property. Brands redefine those properties — in code, in the CMS, or both — and no component file changes.",
+    "slots": [
+      {
+        "id": "45f4f72d-196c-5b09-886b-97f7768bedf0",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

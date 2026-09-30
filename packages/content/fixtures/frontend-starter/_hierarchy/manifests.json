@@ -1,0 +1,26 @@
+{
+  "frontend-starter/site/hierarchy-menu-main": {
+    "root": "5e0d95f4-483f-54d6-860c-932253fc98a8",
+    "children": {
+      "5e0d95f4-483f-54d6-860c-932253fc98a8": [
+        "01fd838b-be88-5000-a9eb-958ea2dd5ded",
+        "ead30f78-ac5b-5a4f-9bac-fa4fa518a523",
+        "9f9f3597-009d-537c-8d83-e1a9eb936c14",
+        "fafba194-3698-50a8-8a55-634ac11426d3",
+        "fb6e1655-2458-58a1-8471-44d7cfe2169c"
+      ],
+      "ead30f78-ac5b-5a4f-9bac-fa4fa518a523": [
+        "758ad095-f2b0-5efd-9a4a-d6c2af7fa1a2",
+        "dd17e688-2780-52f9-9b59-72891c602f60",
+        "70429997-16aa-58f9-a262-dd79f3997aef",
+        "afb4a67c-76fd-5174-86be-6d3fe67d821a",
+        "3dfa2065-cc84-5661-8626-77bc813207ac",
+        "ac0c3a61-bbc9-5d40-b292-b1f81a11fdf9",
+        "fb71cf74-a89d-5a48-9e72-cb197b00051c",
+        "a68da061-ca42-5ffa-a575-113723229ec2",
+        "02bc6cab-4384-5230-8aff-2c7156bf1ca4",
+        "f365cc4b-3452-5ad6-9a48-54d7304b2187"
+      ]
+    }
+  }
+}

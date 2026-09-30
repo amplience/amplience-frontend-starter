@@ -1,0 +1,18 @@
+{
+  "id": "ac0c3a61-bbc9-5d40-b292-b1f81a11fdf9",
+  "label": "Hierarchy menu item: Docs — Deploying a site",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Docs — Deploying a site",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "ac0c3a61-bbc9-5d40-b292-b1f81a11fdf9",
+      "hierarchy": {
+        "parentId": "ead30f78-ac5b-5a4f-9bac-fa4fa518a523",
+        "root": false,
+        "position": "gggggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Deploying a site",
+    "link": "/docs/deploying"
+  }
+}

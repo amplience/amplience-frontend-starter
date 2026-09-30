@@ -9,7 +9,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./mock": "./src/mock/index.ts",
-    "./sdk": "./src/sdk/index.ts"
+    "./sdk": "./src/sdk/index.ts",
+    "./fixture-id": "./scripts/lib/fixture-id.mjs"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

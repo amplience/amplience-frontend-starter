@@ -22,7 +22,7 @@
  *                            name (hub-import seeds under the same default,
  *                            so the two stay in sync without a second
  *                            variable); in mock mode it defaults to the
- *                            fixture site's name ('base-site'), because
+ *                            fixture site's name ('frontend-starter'), because
  *                            running the mock *is* running that site — the
  *                            zero-config contract above extends to it. Set
  *                            it explicitly when the site isn't named after
@@ -53,11 +53,19 @@ export type ContentClientSelection =
     }
 
 /**
- * The fixture site's name — the `SITE_NAME` a zero-config (mock) deployment
- * resolves to, matching the `base-site/` prefix on every fixture delivery
- * key in `../../fixtures/base-site/`.
+ * The fixture set a zero-config (mock) deployment serves, and therefore the
+ * site name it resolves to. For fixtures the set name, the site name and the
+ * delivery-key prefix are one string (ADR-0019), so `SITE_NAME` chooses the
+ * set — there is no second variable.
+ *
+ * Declared here rather than in the set registry so that config stays
+ * dependency-free: the registry imports this, not the other way round, because
+ * importing the registry here would pull every fixture in every set into the
+ * bundle of any deployment that merely reads config — including sdk-mode ones
+ * that never touch a fixture. The registry validates the name when the mock is
+ * composed, and throws naming the sets it does have.
  */
-export const FIXTURE_SITE_NAME = 'base-site'
+export const FIXTURE_SITE_NAME = 'frontend-starter'
 
 /**
  * The shape a site name must have (ADR-0014): lowercase alphanumerics and
@@ -95,8 +103,9 @@ export const resolveContentConfig = (env: EnvSource = processEnv): ContentClient
   const selected = present(env.CONTENT_CLIENT) ? env.CONTENT_CLIENT : inferred
 
   if (selected === 'mock') {
-    // An explicit SITE_NAME still applies (and still has to be well-formed);
-    // absent one, the mock serves the fixture site under its own name.
+    // SITE_NAME picks the fixture set (set name = site name, ADR-0019); absent
+    // one, the mock serves the default set. An unknown set throws when the mock
+    // is composed, naming the sets that do exist.
     const siteName = present(env.SITE_NAME)
       ? validateSiteName(env.SITE_NAME, 'SITE_NAME')
       : FIXTURE_SITE_NAME

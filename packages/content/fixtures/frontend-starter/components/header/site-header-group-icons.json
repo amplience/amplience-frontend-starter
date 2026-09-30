@@ -1,0 +1,48 @@
+{
+  "id": "be4b0455-a1ae-53bb-b9e3-0a3222f28c5f",
+  "label": "Site — header icon group",
+  "body": {
+    "_meta": {
+      "name": "Site — header icon group",
+      "schema": "https://quadratic.amplience.com/v2/content/header-group",
+      "deliveryId": "be4b0455-a1ae-53bb-b9e3-0a3222f28c5f"
+    },
+    "items": [
+      {
+        "id": "b666f38f-efbf-585c-97ea-81b5b04712ee",
+        "contentType": "https://quadratic.amplience.com/v2/content/locale-selector",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "b9f9e93d-a298-5519-ab6a-52c6d83d6ddf",
+        "contentType": "https://quadratic.amplience.com/v2/content/icon-button",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "d9290a64-8678-553f-94ff-79e6e6423075",
+        "contentType": "https://quadratic.amplience.com/v2/content/icon-button",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "52dd453c-98e8-519d-bd3e-f02de089a23a",
+        "contentType": "https://quadratic.amplience.com/v2/content/icon-button",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "40520b3b-9d3c-5a0c-b6a7-b1937ce9009b",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-toggle-button",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

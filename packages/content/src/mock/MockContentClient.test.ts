@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import { fixtureIdFor } from '../../scripts/lib/fixture-id.mjs'
 import type { ContentLink } from '../types'
 import { ContentClientError, isContentLink } from '../types'
 import { makeMockContentClient } from './MockContentClient'
@@ -7,14 +8,14 @@ import { makeMockContentClient } from './MockContentClient'
 describe('MockContentClient', () => {
   it('returns the home page body by delivery key', async () => {
     const client = makeMockContentClient()
-    const home = await client.getByKey<{ title: string }>('base-site/homepage')
+    const home = await client.getByKey<{ title: string }>('frontend-starter/homepage')
     expect(home._meta.schema).toBe('https://quadratic.amplience.com/v2/content/page')
     expect(home.title).toBe('Welcome to Amplience Frontend Starter')
   })
 
   it('returns content-links unresolved by default (depth: root)', async () => {
     const client = makeMockContentClient()
-    const home = await client.getByKey<{ slots: unknown[] }>('base-site/homepage')
+    const home = await client.getByKey<{ slots: unknown[] }>('frontend-starter/homepage')
     expect(home.slots).toHaveLength(1)
     expect(isContentLink(home.slots[0])).toBe(true)
   })
@@ -26,7 +27,7 @@ describe('MockContentClient', () => {
         _meta: { schema: string }
         components: { _meta: { schema: string } }[]
       }[]
-    }>('base-site/homepage', { depth: 'all' })
+    }>('frontend-starter/homepage', { depth: 'all' })
 
     // Slot is now inlined, not a link stub.
     const slot = home.slots[0]
@@ -51,15 +52,15 @@ describe('MockContentClient', () => {
     // Amplience supports multiple delivery keys per item; the about fixture
     // carries 'about' and 'about-us', so both keys return one item.
     const client = makeMockContentClient()
-    const byPrimary = await client.getByKey<{ title: string }>('base-site/about')
-    const byAlias = await client.getByKey<{ title: string }>('base-site/about-us')
+    const byPrimary = await client.getByKey<{ title: string }>('frontend-starter/about')
+    const byAlias = await client.getByKey<{ title: string }>('frontend-starter/about-us')
     expect(byAlias).toEqual(byPrimary)
   })
 
   it('leaves localized fields raw when no locale is requested (matches the Delivery API)', async () => {
     const client = makeMockContentClient()
     const hero = await client.getById<{ title: { values?: unknown } }>(
-      'a1b2c3d4-0001-4000-8000-000000000003',
+      fixtureIdFor('frontend-starter', 'components/home-hero'),
     )
     expect(Array.isArray(hero.title.values)).toBe(true)
   })
@@ -69,9 +70,12 @@ describe('MockContentClient', () => {
     // resolved to a single scalar (the exact text is editable content, covered
     // by the resolveLocalized unit tests).
     const client = makeMockContentClient()
-    const hero = await client.getById<{ title: unknown }>('a1b2c3d4-0001-4000-8000-000000000003', {
-      locale: 'en-US,*',
-    })
+    const hero = await client.getById<{ title: unknown }>(
+      fixtureIdFor('frontend-starter', 'components/home-hero'),
+      {
+        locale: 'en-US,*',
+      },
+    )
     expect(typeof hero.title).toBe('string')
   })
 
@@ -82,7 +86,7 @@ describe('MockContentClient', () => {
     // stub.
     const client = makeMockContentClient()
     const group = await client.getById<{ items: { _meta: { schema: string } }[] }>(
-      'a1b2c3d4-0004-4000-8000-000000000022',
+      fixtureIdFor('frontend-starter', 'components/header/site-header-group-icons'),
       { depth: 'all' },
     )
     const schemas = group.items.map((item) => item._meta.schema)
@@ -113,7 +117,7 @@ describe('MockContentClient', () => {
     // surfaces that, not the client.
     const client = makeMockContentClient()
     const slot = await client.getById<{ components: ContentLink[] }>(
-      'a1b2c3d4-0001-4000-8000-000000000002',
+      fixtureIdFor('frontend-starter', 'slots/home-main'),
       { depth: 'all' },
     )
     // All present in the fixture set — all should resolve.
@@ -157,14 +161,16 @@ describe('MockContentClient', () => {
       const client = makeMockContentClient()
       const menu = await client.getHierarchy<{
         items: { _meta: { deliveryId: string }; children?: unknown[] }[]
-      }>('base-site/site/hierarchy-menu-main')
+      }>('frontend-starter/site/hierarchy-menu-main')
 
       expect(menu._meta.schema).toBe('https://quadratic.amplience.com/v2/content/hierarchy-menu')
       expect(menu.items).toHaveLength(5)
       expect('children' in menu).toBe(false)
 
       const docs = menu.items.find(
-        (i) => i._meta.deliveryId === 'c3d4e5f6-0004-4000-8000-000000000015',
+        (i) =>
+          i._meta.deliveryId ===
+          fixtureIdFor('frontend-starter', 'components/header/site-hierarchy-menu-item-docs'),
       )
       expect(docs?.children).toHaveLength(10)
     })
@@ -174,7 +180,7 @@ describe('MockContentClient', () => {
       // render an empty dropdown rather than a plain link.
       const client = makeMockContentClient()
       const menu = await client.getHierarchy<{ items: Record<string, unknown>[] }>(
-        'base-site/site/hierarchy-menu-main',
+        'frontend-starter/site/hierarchy-menu-main',
       )
       const leaf = menu.items.find((i) => !('children' in i))
       expect(leaf).toBeDefined()
@@ -182,10 +188,12 @@ describe('MockContentClient', () => {
 
     it('throws ContentClientError(not-found) naming the manifest file for an unknown root key', async () => {
       const client = makeMockContentClient()
-      await expect(client.getHierarchy('base-site/site/no-such-menu')).rejects.toMatchObject({
-        kind: 'not-found',
-      })
-      await expect(client.getHierarchy('base-site/site/no-such-menu')).rejects.toThrow(
+      await expect(client.getHierarchy('frontend-starter/site/no-such-menu')).rejects.toMatchObject(
+        {
+          kind: 'not-found',
+        },
+      )
+      await expect(client.getHierarchy('frontend-starter/site/no-such-menu')).rejects.toThrow(
         /manifests\.json/,
       )
     })

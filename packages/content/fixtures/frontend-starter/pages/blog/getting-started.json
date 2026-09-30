@@ -1,0 +1,58 @@
+{
+  "id": "ba2abf60-866c-52c0-ab81-e17d6102ce3a",
+  "label": "Blog — Getting Started with Amplience",
+  "body": {
+    "_meta": {
+      "name": "Blog — Getting Started with Amplience",
+      "schema": "https://quadratic.amplience.com/v2/content/blog-article",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/blog/getting-started"
+          }
+        ]
+      }
+    },
+    "title": "Getting Started with Amplience",
+    "description": "A practical introduction to the Amplience CMS — hubs, schemas, repositories, and the delivery API — to get your first project up and running quickly.",
+    "keywords": ["amplience", "cms", "getting-started", "dynamic-content", "headless"],
+    "social": {
+      "image": {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/seed/blog-getting-started/1200/630",
+          "alt": "Getting Started with Amplience — abstract tech illustration",
+          "width": 1200,
+          "height": 630
+        }
+      }
+    },
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
+    "coverImage": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/blog-getting-started/1200/630",
+        "alt": "Getting Started with Amplience — abstract tech illustration",
+        "width": 1200,
+        "height": 630
+      }
+    },
+    "author": "Amplience Team",
+    "publishDate": "2026-06-01",
+    "category": "Getting Started",
+    "tags": ["amplience", "cms", "getting-started"],
+    "readTime": 5,
+    "slots": [
+      {
+        "id": "c49ddc45-1db8-59e2-ab8c-d60ef1d86e53",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

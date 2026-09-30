@@ -37,10 +37,11 @@
  */
 
 import { spawnSync } from 'node:child_process'
-import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+
+import { fixtureIdFor } from './lib/fixture-id.mjs'
 
 // ---------------------------------------------------------------------------
 // Paths
@@ -49,7 +50,8 @@ import { fileURLToPath } from 'node:url'
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 const repoRoot = path.resolve(scriptDir, '../../..')
 const docsDir = path.join(repoRoot, 'docs')
-const fixturesBase = path.join(repoRoot, 'packages/content/fixtures/base-site')
+const FIXTURE_SET = 'frontend-starter'
+const fixturesBase = path.join(repoRoot, 'packages/content/fixtures', FIXTURE_SET)
 const generatedTsPath = path.join(repoRoot, 'packages/content/src/mock/docs.generated.ts')
 
 // Schema URIs (mirror the hand-authored fixtures exactly).
@@ -70,15 +72,6 @@ const LOCALES = ['en-US', 'en-GB']
 // ---------------------------------------------------------------------------
 // Small helpers
 // ---------------------------------------------------------------------------
-
-/** Deterministic UUID (v5-shaped) from a seed — stable IDs across runs. */
-const uuidFrom = (seed) => {
-  const h = createHash('sha1').update(seed).digest('hex').slice(0, 32).split('')
-  h[12] = '5' // version nibble
-  h[16] = ((parseInt(h[16], 16) & 0x3) | 0x8).toString(16) // variant bits
-  const s = h.join('')
-  return `${s.slice(0, 8)}-${s.slice(8, 12)}-${s.slice(12, 16)}-${s.slice(16, 20)}-${s.slice(20, 32)}`
-}
 
 /** A localized-value field carrying the same value across the emitted locales. */
 const localized = (value) => ({
@@ -348,7 +341,7 @@ const writeFixture = (relFromBase, obj, varName) => {
   writeFileSync(abs, `${JSON.stringify(obj, null, 2)}\n`)
   // importPath is extension-less; the manifest and the prettier targets each
   // append `.json` themselves.
-  const importPath = `../../fixtures/base-site/${relFromBase}`.replace(/\.json$/, '')
+  const importPath = `../../fixtures/frontend-starter/${relFromBase}`.replace(/\.json$/, '')
   generated.push({ varName, importPath })
   fileCount++
 }
@@ -399,10 +392,14 @@ for (const doc of docs) {
   }
 
   // Fully-generated subpage: plain hero + programmatic parent/child CTAs.
-  const pageId = uuidFrom(`${slug}#page`)
-  const slotId = uuidFrom(`${slug}#slot`)
-  const heroId = uuidFrom(`${slug}#hero`)
-  const mdId = uuidFrom(`${slug}#markdown`)
+  // Ids derive from the path each fixture is written to — the same rule
+  // `pnpm fixtures:ids` applies to hand-authored ones, so a regenerate and a
+  // stamp agree instead of overwriting each other (ADR-0019).
+  const idFor = (rel) => fixtureIdFor(FIXTURE_SET, rel)
+  const pageId = idFor(`pages/${slug}`)
+  const slotId = idFor(`slots/${slug}-main`)
+  const heroId = idFor(`components/${slug}-hero`)
+  const mdId = idFor(`components/${slug}-markdown`)
 
   // Hero CTAs: parent (outlined/white) then each child (solid/primary).
   const ctas = []
@@ -463,7 +460,7 @@ for (const doc of docs) {
       _meta: {
         name: `${title} page`,
         schema: SCHEMA.page,
-        deliveryKeys: { values: [{ value: `base-site/${slug}` }] },
+        deliveryKeys: { values: [{ value: `frontend-starter/${slug}` }] },
       },
       title,
       ...(description ? { description } : {}),
@@ -518,7 +515,10 @@ if (existsSync(prettierBin)) {
     .map((rel) => path.join(fixturesBase, rel))
   const targets = [
     ...generated.map((g) =>
-      path.join(fixturesBase, `${g.importPath.replace('../../fixtures/base-site/', '')}.json`),
+      path.join(
+        fixturesBase,
+        `${g.importPath.replace('../../fixtures/frontend-starter/', '')}.json`,
+      ),
     ),
     ...updateOnlyFiles,
     generatedTsPath,

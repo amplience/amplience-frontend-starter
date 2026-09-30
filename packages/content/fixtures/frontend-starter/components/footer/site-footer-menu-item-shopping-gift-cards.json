@@ -1,0 +1,13 @@
+{
+  "id": "187165a1-b9b5-5ce9-b42b-10ce8e96c319",
+  "label": "Footer menu item — Gift cards & vouchers",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Gift cards & vouchers",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "187165a1-b9b5-5ce9-b42b-10ce8e96c319"
+    },
+    "label": "Gift cards & vouchers",
+    "link": "/shopping/gift-cards"
+  }
+}

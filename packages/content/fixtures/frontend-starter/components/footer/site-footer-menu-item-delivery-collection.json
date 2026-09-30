@@ -1,0 +1,13 @@
+{
+  "id": "90dc3b08-0c9b-564e-baab-09997dc43192",
+  "label": "Footer menu item — Delivery & collection",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Delivery & collection",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "90dc3b08-0c9b-564e-baab-09997dc43192"
+    },
+    "label": "Delivery & collection",
+    "link": "/delivery/collection"
+  }
+}

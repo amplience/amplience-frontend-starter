@@ -1,7 +1,7 @@
 /**
  * MockContentClient — the POC implementation of the ContentClient port.
  *
- * Reads from the static fixture set in `../../fixtures/base-site/` (loaded
+ * Reads from the static fixture set in `../../fixtures/frontend-starter/` (loaded
  * via `./loader`), returns the delivery shape (just the `body` portion of
  * the dc-cli enriched envelope), and resolves content-links inline when the
  * caller asks for `depth: 'all'`.
@@ -19,27 +19,18 @@
  * `apps/web`'s composition.
  */
 
-import hierarchyManifests from '../../fixtures/_hierarchy/manifests.json' with { type: 'json' }
 import { resolveLocalized } from '../localized'
 import type { ContentClient } from '../port'
 import type { ContentItem, ContentRequestOptions, EnrichedContentItem } from '../types'
 import { ContentClientError } from '../types'
-import { allFixtures, findById, findByKey } from './loader'
+import { DEFAULT_FIXTURE_SET, resolveFixtureSet } from './loader'
 import { resolveDeep } from './resolver'
-
-/**
- * Shape of a single hierarchy manifest entry.
- * `root` is the delivery ID of the root node.
- * `children` maps each node ID to an ordered list of its direct child IDs.
- */
-type HierarchyManifest = {
-  readonly root: string
-  readonly children: Readonly<Record<string, readonly string[]>>
-}
+import type { HierarchyManifest } from './set'
 
 const toContentItem = <T>(
   item: EnrichedContentItem,
   opts: ContentRequestOptions | undefined,
+  findById: (id: string) => EnrichedContentItem | undefined,
 ): ContentItem<T> => {
   const resolved = opts?.depth === 'all' ? resolveDeep(item.body, findById) : item.body
   // Collapse localized fields only when a locale is requested — matching the
@@ -69,6 +60,7 @@ const assembleHierarchyNode = (
   id: string,
   manifest: HierarchyManifest,
   isRoot: boolean,
+  findById: (id: string) => EnrichedContentItem | undefined,
 ): unknown => {
   const item = findById(id)
   if (!item) return undefined
@@ -77,7 +69,7 @@ const assembleHierarchyNode = (
   if (childIds.length === 0) return item.body
 
   const assembledChildren = childIds
-    .map((childId) => assembleHierarchyNode(childId, manifest, false))
+    .map((childId) => assembleHierarchyNode(childId, manifest, false, findById))
     .filter((c): c is unknown => c !== undefined)
 
   return {
@@ -88,68 +80,79 @@ const assembleHierarchyNode = (
   }
 }
 
-export const makeMockContentClient = (): ContentClient => ({
-  getByKey: <T = unknown>(key: string, opts?: ContentRequestOptions): Promise<ContentItem<T>> => {
-    const item = findByKey(key)
-    if (!item) {
-      return Promise.reject(
-        new ContentClientError('not-found', `No fixture matches delivery key "${key}".`),
-      )
-    }
-    return Promise.resolve(toContentItem<T>(item, opts))
-  },
+/**
+ * @param setName which fixture set to serve — the site name a mock deployment
+ *   resolves to (ADR-0019). Throws at composition on an unknown set.
+ */
+export const makeMockContentClient = (setName: string = DEFAULT_FIXTURE_SET): ContentClient => {
+  const { fixtures, hierarchies, findById, findByKey } = resolveFixtureSet(setName)
 
-  getById: <T = unknown>(id: string, opts?: ContentRequestOptions): Promise<ContentItem<T>> => {
-    const item = findById(id)
-    if (!item) {
-      return Promise.reject(
-        new ContentClientError('not-found', `No fixture matches delivery id "${id}".`),
-      )
-    }
-    return Promise.resolve(toContentItem<T>(item, opts))
-  },
+  return {
+    getByKey: <T = unknown>(key: string, opts?: ContentRequestOptions): Promise<ContentItem<T>> => {
+      const item = findByKey(key)
+      if (!item) {
+        return Promise.reject(
+          new ContentClientError('not-found', `No fixture matches delivery key "${key}".`),
+        )
+      }
+      return Promise.resolve(toContentItem<T>(item, opts, findById))
+    },
 
-  listBySchema: <T = unknown>(
-    schemaId: string,
-    opts?: Pick<ContentRequestOptions, 'locale'>,
-  ): Promise<readonly ContentItem<T>[]> => {
-    // Filter fixtures whose body schema URI matches. Returns bodies at
-    // depth: 'root' (stubs left as-is) — consistent with the SDK adapter
-    // which uses the Filter API's default depth behaviour. Localized fields
-    // collapse only when a locale is requested (as the Delivery API does).
-    const matches = allFixtures()
-      .filter((f) => {
-        const meta = f.body._meta as { schema?: string } | undefined
-        return meta?.schema === schemaId
-      })
-      .map((f) =>
-        opts?.locale !== undefined
-          ? (resolveLocalized(f.body, opts.locale) as ContentItem<T>)
-          : (f.body as ContentItem<T>),
-      )
-    return Promise.resolve(matches)
-  },
+    getById: <T = unknown>(id: string, opts?: ContentRequestOptions): Promise<ContentItem<T>> => {
+      const item = findById(id)
+      if (!item) {
+        return Promise.reject(
+          new ContentClientError('not-found', `No fixture matches delivery id "${id}".`),
+        )
+      }
+      return Promise.resolve(toContentItem<T>(item, opts, findById))
+    },
 
-  getHierarchy: <T = unknown>(rootKey: string): Promise<ContentItem<T>> => {
-    const manifest = (hierarchyManifests as Record<string, HierarchyManifest>)[rootKey]
-    if (!manifest) {
-      return Promise.reject(
-        new ContentClientError(
-          'not-found',
-          `No hierarchy manifest for delivery key "${rootKey}". ` +
-            `Add an entry to packages/content/fixtures/_hierarchy/manifests.json.`,
-        ),
-      )
-    }
-    const assembled = assembleHierarchyNode(manifest.root, manifest, true)
-    if (!assembled) {
-      return Promise.reject(
-        new ContentClientError(
-          'not-found',
-          `Hierarchy manifest root ID "${manifest.root}" has no matching fixture.`,
-        ),
-      )
-    }
-    return Promise.resolve(assembled as ContentItem<T>)
-  },
-})
+    listBySchema: <T = unknown>(
+      schemaId: string,
+      opts?: Pick<ContentRequestOptions, 'locale'>,
+    ): Promise<readonly ContentItem<T>[]> => {
+      // Filter fixtures whose body schema URI matches. Returns bodies at
+      // depth: 'root' (stubs left as-is) — consistent with the SDK adapter
+      // which uses the Filter API's default depth behaviour. Localized fields
+      // collapse only when a locale is requested (as the Delivery API does).
+      // Scoped to this set: a hub serving two sites doesn't leak one's blog
+      // posts into the other's archive.
+      const matches = fixtures
+        .filter((f) => {
+          const meta = f.body._meta as { schema?: string } | undefined
+          return meta?.schema === schemaId
+        })
+        .map((f) =>
+          opts?.locale !== undefined
+            ? (resolveLocalized(f.body, opts.locale) as ContentItem<T>)
+            : (f.body as ContentItem<T>),
+        )
+      return Promise.resolve(matches)
+    },
+
+    getHierarchy: <T = unknown>(rootKey: string): Promise<ContentItem<T>> => {
+      const manifest = hierarchies[rootKey]
+      if (!manifest) {
+        return Promise.reject(
+          new ContentClientError(
+            'not-found',
+            `No hierarchy manifest for delivery key "${rootKey}" in fixture set ` +
+              `"${setName}". Add an entry to packages/content/fixtures/${setName}/` +
+              '_hierarchy/manifests.json.',
+          ),
+        )
+      }
+      const assembled = assembleHierarchyNode(manifest.root, manifest, true, findById)
+      if (!assembled) {
+        return Promise.reject(
+          new ContentClientError(
+            'not-found',
+            `Hierarchy manifest root ID "${manifest.root}" has no matching fixture.`,
+          ),
+        )
+      }
+      return Promise.resolve(assembled as ContentItem<T>)
+    },
+  }
+}

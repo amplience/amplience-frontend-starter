@@ -1,0 +1,13 @@
+{
+  "id": "7ddc7888-7de4-54aa-9363-fe086cdf0fb4",
+  "label": "Menu item: Docs — Theming",
+  "body": {
+    "_meta": {
+      "name": "Menu item: Docs — Theming",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "7ddc7888-7de4-54aa-9363-fe086cdf0fb4"
+    },
+    "label": "Theming",
+    "link": "/docs/theming"
+  }
+}

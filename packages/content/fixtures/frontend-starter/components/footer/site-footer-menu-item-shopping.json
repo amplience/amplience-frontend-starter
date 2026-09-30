@@ -1,0 +1,71 @@
+{
+  "id": "e666cc36-16ec-509d-9da2-b09fa89ac5a1",
+  "label": "Footer menu item — Shopping",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Shopping",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "e666cc36-16ec-509d-9da2-b09fa89ac5a1"
+    },
+    "label": "Shopping",
+    "link": "/shopping",
+    "children": [
+      {
+        "id": "187165a1-b9b5-5ce9-b42b-10ce8e96c319",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "2d46dd43-1b4a-54de-b80b-26711f203717",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "ea51ecd2-2240-5fde-adac-d5f57aa13fd8",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "52be46f1-717c-5c09-8532-958b7aa383e9",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "8306aa1c-f0d4-5e8c-a733-23cc86f149b2",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "c47d815d-5ebc-5909-80c6-59cfd993ea3a",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "e1df620c-5f84-5058-9504-2155c3cb812b",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "10a48b31-fcb3-5adb-a492-e21f214d992b",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

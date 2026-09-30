@@ -1,0 +1,208 @@
+{
+  "id": "f170cec7-7497-5d68-b63b-6fbbe7b5d3e8",
+  "label": "Home — hero",
+  "body": {
+    "_meta": {
+      "name": "Home — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "f170cec7-7497-5d68-b63b-6fbbe7b5d3e8"
+    },
+    "preTitle": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Introducing..."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Introducing..."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Presentamos..."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Présentation..."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Einführung..."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Presentazione..."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Amplience Frontend Starter"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Amplience Frontend Starter"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Amplience Frontend Starter"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Amplience Frontend Starter"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Amplience Frontend Starter"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Amplience Frontend Starter"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "The open-source accelerator for Amplience-backed projects!"
+        },
+        {
+          "locale": "en-GB",
+          "value": "The open-source accelerator for Amplience-backed projects!"
+        },
+        {
+          "locale": "es-ES",
+          "value": "¡El acelerador de código abierto para proyectos respaldados por Amplience!"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "L'accélérateur open-source pour les projets soutenus par Amplience !"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Der Open-Source-Beschleuniger für Amplience-gestützte Projekte!"
+        },
+        {
+          "locale": "it-IT",
+          "value": "L'acceleratore open-source per i progetti basati su Amplience!"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "/placeholders/introducing-amplience-frontend-starter-dynamic-hero.jpg",
+        "alt": "The Amplience Frontend Starter logo",
+        "width": 2752,
+        "height": 1536
+      }
+    },
+    "mobileOverride": true,
+    "mobileMedia": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "/placeholders/introducing-amplience-frontend-starter-dynamic-hero-mobile.jpg",
+        "alt": "The Amplience Frontend Starter logo",
+        "width": 2752,
+        "height": 1275
+      }
+    },
+    "contentWidth": 40,
+    "contentPositionMobile": "above",
+    "contentPositionDesktop": "overlay",
+    "heightBehaviour": "flexible",
+    "maxWidth": "default",
+    "maxHeight": 600,
+    "overlayColor": "black",
+    "overlayIntensity": 50,
+    "overlayStyle": "gradient",
+    "verticalPosition": "center",
+    "backgroundColor": "black",
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "About"
+            },
+            {
+              "locale": "en-GB",
+              "value": "About"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Acerca de"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "À propos"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Über"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Informazioni"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/about",
+        "variant": "solid",
+        "color": "primary"
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read the docs"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Read the docs"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la documentación"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lire la documentation"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Dokumentation lesen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Leggi la documentazione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs",
+        "variant": "outlined",
+        "color": "white"
+      }
+    ]
+  }
+}

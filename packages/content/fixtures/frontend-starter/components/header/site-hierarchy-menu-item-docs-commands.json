@@ -1,0 +1,18 @@
+{
+  "id": "3dfa2065-cc84-5661-8626-77bc813207ac",
+  "label": "Hierarchy menu item: Docs — Command reference",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Docs — Command reference",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "3dfa2065-cc84-5661-8626-77bc813207ac",
+      "hierarchy": {
+        "parentId": "ead30f78-ac5b-5a4f-9bac-fa4fa518a523",
+        "root": false,
+        "position": "ggggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Command reference",
+    "link": "/docs/commands"
+  }
+}

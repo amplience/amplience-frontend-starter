@@ -1,0 +1,22 @@
+{
+  "id": "bf77eef8-7e5b-57fa-89ca-df0fab5557a4",
+  "label": "Footer menu — Delivery",
+  "body": {
+    "_meta": {
+      "name": "Footer menu — Delivery",
+      "schema": "https://quadratic.amplience.com/v2/content/menu",
+      "deliveryId": "bf77eef8-7e5b-57fa-89ca-df0fab5557a4"
+    },
+    "display": "megaMenu",
+    "useMobileLayout": false,
+    "items": [
+      {
+        "id": "3ca8c801-4e26-5931-82a5-878982a99bc2",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

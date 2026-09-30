@@ -1,0 +1,13 @@
+{
+  "id": "e02ca878-e218-5fdb-82c3-face2ca9e2dc",
+  "label": "Footer menu item — Contact us",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Contact us",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "e02ca878-e218-5fdb-82c3-face2ca9e2dc"
+    },
+    "label": "Contact us",
+    "link": "/help/contact"
+  }
+}

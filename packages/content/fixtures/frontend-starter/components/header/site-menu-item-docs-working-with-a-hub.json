@@ -1,0 +1,13 @@
+{
+  "id": "b5ed1647-1480-5964-9592-11c65ab644c4",
+  "label": "Menu item: Docs — Working with a hub",
+  "body": {
+    "_meta": {
+      "name": "Menu item: Docs — Working with a hub",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "b5ed1647-1480-5964-9592-11c65ab644c4"
+    },
+    "label": "Working with a hub",
+    "link": "/docs/working-with-a-hub"
+  }
+}

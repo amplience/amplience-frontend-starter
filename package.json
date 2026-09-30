@@ -37,6 +37,7 @@
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "docs:generate": "node packages/content/scripts/generate-docs.mjs",
+    "fixtures:ids": "node packages/content/scripts/stamp-fixture-ids.mjs",
     "storybook": "pnpm --filter @amplience/frontend-starter-components storybook",
     "sb": "pnpm storybook",
     "hub:import": "pnpm --filter @amplience/frontend-starter-hub-management hub:import",

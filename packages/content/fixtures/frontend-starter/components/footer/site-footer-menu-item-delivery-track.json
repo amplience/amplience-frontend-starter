@@ -1,0 +1,13 @@
+{
+  "id": "6de0527e-63dc-5a39-baa1-bef9a757bf10",
+  "label": "Footer menu item — Track your order",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Track your order",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "6de0527e-63dc-5a39-baa1-bef9a757bf10"
+    },
+    "label": "Track your order",
+    "link": "/delivery/track"
+  }
+}

@@ -1,7 +1,7 @@
 /**
  * Fixture ↔ schema drift guard (QL-92).
  *
- * Every base-site fixture body must validate against the schema its
+ * Every frontend-starter fixture body must validate against the schema its
  * `_meta.schema` names. The fixtures are the seed corpus the hub is
  * populated from *and* the mock client's data, so this test is what makes
  * "fixtures and schemas agree" a property CI enforces rather than a thing

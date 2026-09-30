@@ -1,0 +1,121 @@
+{
+  "id": "31a20bda-9140-53be-b604-304083bbb078",
+  "label": "Home — guide card: deploying",
+  "body": {
+    "_meta": {
+      "name": "Home — guide card: deploying",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "31a20bda-9140-53be-b604-304083bbb078"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Deploying"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Deploying"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Despliegue"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Déploiement"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Deployment"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Deploy"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Ship and configure a hosted frontend e.g. on Vercel."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Ship and configure a hosted frontend e.g. on Vercel."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Publica y configura un frontend alojado, por ejemplo en Vercel."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Déployez et configurez un frontend hébergé, par exemple sur Vercel."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Veröffentlichen und konfigurieren Sie ein gehostetes Frontend, z. B. auf Vercel."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Pubblica e configura un frontend ospitato, ad esempio su Vercel."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "/docs-covers/deploying.png",
+        "alt": "A freshly deployed site in a browser window",
+        "width": 800,
+        "height": 450
+      }
+    },
+    "links": {
+      "href": "/docs/deploying",
+      "cta": {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la guía"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lire le guide"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zum Leitfaden"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Leggi la guida"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs/deploying",
+        "variant": "text",
+        "color": "black"
+      }
+    }
+  }
+}

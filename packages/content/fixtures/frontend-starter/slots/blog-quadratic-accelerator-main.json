@@ -1,0 +1,19 @@
+{
+  "id": "a64e54d4-5ef1-5e64-a13b-f0e2f6c81908",
+  "label": "Blog — Frontend Starter Accelerator — main slot",
+  "body": {
+    "_meta": {
+      "name": "Blog — Frontend Starter Accelerator — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot"
+    },
+    "components": [
+      {
+        "id": "bc2d8e50-61a2-5d48-8deb-a3918199905c",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

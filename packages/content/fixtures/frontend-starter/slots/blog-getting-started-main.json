@@ -1,0 +1,19 @@
+{
+  "id": "c49ddc45-1db8-59e2-ab8c-d60ef1d86e53",
+  "label": "Blog — Getting Started — main slot",
+  "body": {
+    "_meta": {
+      "name": "Blog — Getting Started — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot"
+    },
+    "components": [
+      {
+        "id": "21f3a4e7-974f-59b8-989d-4067d2f4ff10",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

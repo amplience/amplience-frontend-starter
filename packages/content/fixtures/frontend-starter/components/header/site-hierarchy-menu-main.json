@@ -1,0 +1,23 @@
+{
+  "id": "5e0d95f4-483f-54d6-860c-932253fc98a8",
+  "label": "Site — main navigation menu (hierarchy)",
+  "body": {
+    "_meta": {
+      "name": "Site — main navigation menu (hierarchy)",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu",
+      "deliveryId": "5e0d95f4-483f-54d6-860c-932253fc98a8",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/site/hierarchy-menu-main"
+          }
+        ]
+      },
+      "hierarchy": {
+        "root": true
+      }
+    },
+    "useMobileLayout": true,
+    "display": "dropdownOnHover"
+  }
+}

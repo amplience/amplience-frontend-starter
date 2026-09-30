@@ -1,0 +1,19 @@
+{
+  "id": "6c85f08c-996e-52b2-a0e0-b6554ed5e74d",
+  "label": "Blog — Content Modelling — main slot",
+  "body": {
+    "_meta": {
+      "name": "Blog — Content Modelling — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot"
+    },
+    "components": [
+      {
+        "id": "c19a1d27-521d-57a0-b325-e6d977d6b0a5",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

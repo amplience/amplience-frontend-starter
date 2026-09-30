@@ -1,0 +1,59 @@
+{
+  "id": "2fa919b1-0bc3-5a0a-912e-f62c5da9315d",
+  "label": "Contributing Guide — hero",
+  "body": {
+    "_meta": {
+      "name": "Contributing Guide — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "2fa919b1-0bc3-5a0a-912e-f62c5da9315d"
+    },
+    "title": "Contributing Guide",
+    "description": "Thank you for your interest in contributing to this project.",
+    "backgroundColor": "dark",
+    "textColor": "white",
+    "contentPositionMobile": "beneath",
+    "verticalPosition": "center",
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "← Home"
+            },
+            {
+              "locale": "en-GB",
+              "value": "← Home"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/",
+        "variant": "outlined",
+        "color": "white"
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "GitHub Repo →"
+            },
+            {
+              "locale": "en-GB",
+              "value": "GitHub Repo →"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "https://github.com/amplience/amplience-frontend-starter",
+        "variant": "solid",
+        "color": "primary"
+      }
+    ]
+  }
+}

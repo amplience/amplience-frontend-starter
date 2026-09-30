@@ -2,4 +2,11 @@
 
 export { makeFailingContentClient } from './FailingContentClient'
 export { makeMockContentClient } from './MockContentClient'
-export { allFixtures, findById, findByKey } from './loader'
+export {
+  DEFAULT_FIXTURE_SET,
+  allFixtureSets,
+  allFixtures,
+  fixtureSetNames,
+  resolveFixtureSet,
+} from './loader'
+export type { FixtureSet, HierarchyManifest, IndexedFixtureSet } from './set'

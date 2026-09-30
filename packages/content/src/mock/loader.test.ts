@@ -1,4 +1,4 @@
-// Loader unit tests — the fixture manifest and its lookup maps.
+// Loader unit tests — the set registry, and each set's lookup maps.
 //
 // The interesting structural cases live in the fixture set itself: items
 // with one key, several keys (about), and none at all (component blocks like
@@ -7,7 +7,50 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { allFixtures, findById, findByKey } from './loader'
+import { FIXTURE_SITE_NAME } from '../config'
+import {
+  allFixtures,
+  allFixtureSets,
+  DEFAULT_FIXTURE_SET,
+  fixtureSetNames,
+  resolveFixtureSet,
+} from './loader'
+
+const { findById, findByKey } = resolveFixtureSet(DEFAULT_FIXTURE_SET)
+
+describe('registry', () => {
+  it('serves the set the zero-config deployment resolves to', () => {
+    // config.ts can't import the registry (it would drag every fixture into
+    // sdk-mode bundles), so the default it hands out has to name a real set.
+    expect(fixtureSetNames()).toContain(FIXTURE_SITE_NAME)
+    expect(DEFAULT_FIXTURE_SET).toBe(FIXTURE_SITE_NAME)
+  })
+
+  it('throws on an unknown set, naming the ones it has', () => {
+    expect(() => resolveFixtureSet('no-such-set')).toThrow(/Unknown fixture set "no-such-set"/)
+    // The message has to name the sets that do exist, or it isn't actionable.
+    expect(() => resolveFixtureSet('no-such-set')).toThrow(FIXTURE_SITE_NAME)
+  })
+
+  it('names every set after its own delivery-key prefix', () => {
+    // The set name, the site name and the key prefix are one string (ADR-0019);
+    // a set whose keys disagree would resolve nothing at runtime.
+    for (const set of allFixtureSets()) {
+      for (const fixture of set.fixtures) {
+        for (const k of fixture.body._meta.deliveryKeys?.values ?? []) {
+          expect(k.value.startsWith(`${set.name}/`), `${set.name}: ${k.value}`).toBe(true)
+        }
+      }
+    }
+  })
+
+  it('gives every fixture in the corpus a unique id', () => {
+    // Across sets, not just within one: they share a dc-cli import map per hub,
+    // so a collision would make two sets overwrite each other on seed.
+    const ids = allFixtures().map((f) => f.id)
+    expect(new Set(ids).size).toBe(ids.length)
+  })
+})
 
 describe('loader', () => {
   it('exposes a non-empty fixture set with unique ids', () => {

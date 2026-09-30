@@ -1,0 +1,18 @@
+{
+  "id": "9f9f3597-009d-537c-8d83-e1a9eb936c14",
+  "label": "Hierarchy menu item: Blog",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Blog",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "9f9f3597-009d-537c-8d83-e1a9eb936c14",
+      "hierarchy": {
+        "parentId": "5e0d95f4-483f-54d6-860c-932253fc98a8",
+        "root": false,
+        "position": "ggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Blog",
+    "link": "/blog"
+  }
+}

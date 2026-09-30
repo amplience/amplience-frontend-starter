@@ -6,7 +6,7 @@ How a fresh Amplience CMS hub comes to carry the Amplience Frontend Starter cont
 model and starter content. Everything the hub needs lives in this repo —
 settings, schemas, content types and extensions in `packages/hub-management/`,
 starter content in
-`packages/content/fixtures/base-site/` (the same files the mock client
+`packages/content/fixtures/frontend-starter/` (the same files the mock client
 serves, so the hub and local dev never drift) — and one command pushes it
 all. Running it against a second hub is the same procedure with different
 environment values.
@@ -92,7 +92,7 @@ Environment Manager lists resources in; each is also runnable on its own from
 | 3    | `pnpm hub:import:types`      | Stages `content-types/` with `${hub}` and `${appUrl}` substituted, imports with `--sync` so visualization changes reach already-registered types                                                                                                                                                                                                                                                                                                                                                                |
 | 4    | `pnpm hub:import:extensions` | Stages `extensions/*.json` with hub-independent tokens resolved — `${repo:content}` → the content repo, `${status:Label}` → the workflow-state id the settings step created for that label — then imports. Depends on step 1                                                                                                                                                                                                                                                                                    |
 | 5    | `pnpm hub:import:webhooks`   | Creates one webhook per web app registered against this hub, from `webhooks/*.json`, with `${site:url}` / `${site:label}` / `${secret:…}` resolved per deployment. Skipped when the hub has no web apps, or when a definition's secret isn't set — never seeded unauthenticated. Needs `AMPLIENCE_CLIENT_ID` / `_SECRET` / `AMPLIENCE_HUB_ID` explicitly. Before content, so the seed's own publishes exercise the webhooks it just created — a wrong secret shows up in the hub's delivery log during the seed |
-| 6    | `pnpm hub:import:content`    | Stages fixtures with delivery keys re-prefixed from `base-site/` to the site namespace (`SITE_NAME`, default: hub name — ADR-0014), then imports leaf-first — components → slots → pages — each into its repository, with `--publish`                                                                                                                                                                                                                                                                           |
+| 6    | `pnpm hub:import:content`    | Stages fixtures with delivery keys re-prefixed from `frontend-starter/` to the site namespace (`SITE_NAME`, default: hub name — ADR-0014), then imports leaf-first — components → slots → pages — each into its repository, with `--publish`                                                                                                                                                                                                                                                                    |
 
 Step 5 is the one step that doesn't wrap dc-cli. `dc-cli webhook import`
 discards the top-level `secret` and filters out every header marked

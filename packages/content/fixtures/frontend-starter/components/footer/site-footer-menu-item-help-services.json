@@ -1,0 +1,13 @@
+{
+  "id": "fd890606-6abb-5295-ba43-e8ce1e734aa1",
+  "label": "Footer menu item — Our services",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Our services",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "fd890606-6abb-5295-ba43-e8ce1e734aa1"
+    },
+    "label": "Our services",
+    "link": "/help/services"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "dd17e688-2780-52f9-9b59-72891c602f60",
+  "label": "Hierarchy menu item: Docs — Storybook",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Docs — Storybook",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "dd17e688-2780-52f9-9b59-72891c602f60",
+      "hierarchy": {
+        "parentId": "ead30f78-ac5b-5a4f-9bac-fa4fa518a523",
+        "root": false,
+        "position": "gO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Storybook",
+    "link": "/docs/storybook"
+  }
+}

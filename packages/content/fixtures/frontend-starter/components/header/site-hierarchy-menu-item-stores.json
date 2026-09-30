@@ -1,0 +1,20 @@
+{
+  "id": "fafba194-3698-50a8-8a55-634ac11426d3",
+  "label": "Hierarchy menu item: Find a store",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Find a store",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "fafba194-3698-50a8-8a55-634ac11426d3",
+      "hierarchy": {
+        "parentId": "5e0d95f4-483f-54d6-860c-932253fc98a8",
+        "root": false,
+        "position": "gggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Find a store",
+    "link": "/stores",
+    "icon": "map-pin",
+    "visibility": "mobileOnly"
+  }
+}

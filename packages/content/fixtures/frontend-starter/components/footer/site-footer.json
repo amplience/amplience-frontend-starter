@@ -1,0 +1,29 @@
+{
+  "id": "4dcffe66-fdd6-5494-8371-a9530f634626",
+  "label": "Site — footer",
+  "body": {
+    "_meta": {
+      "name": "Site — footer",
+      "schema": "https://quadratic.amplience.com/v2/content/footer",
+      "deliveryId": "4dcffe66-fdd6-5494-8371-a9530f634626",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/site/footer"
+          }
+        ]
+      }
+    },
+    "sticky": false,
+    "maxWidth": "default",
+    "rows": [
+      {
+        "id": "ffde6630-3372-50ad-bc4d-d25fe4bfe6d6",
+        "contentType": "https://quadratic.amplience.com/v2/content/footer-row",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

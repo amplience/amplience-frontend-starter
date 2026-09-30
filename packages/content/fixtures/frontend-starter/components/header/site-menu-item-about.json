@@ -1,0 +1,13 @@
+{
+  "id": "021dda00-c158-58a9-b416-470d77da514f",
+  "label": "Menu item: About",
+  "body": {
+    "_meta": {
+      "name": "Menu item: About",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "021dda00-c158-58a9-b416-470d77da514f"
+    },
+    "label": "About",
+    "link": "/about"
+  }
+}

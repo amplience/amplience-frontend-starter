@@ -1,0 +1,121 @@
+{
+  "id": "b92974c1-f454-5786-a201-60f41bd7c876",
+  "label": "Home — guide card: contributing",
+  "body": {
+    "_meta": {
+      "name": "Home — guide card: contributing",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "b92974c1-f454-5786-a201-60f41bd7c876"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Contributing"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Contributing"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Contribuir"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Contribuer"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Mitwirken"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Contribuire"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Workflow, conventions, and how to open a pull request."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Workflow, conventions, and how to open a pull request."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Flujo de trabajo, convenciones y cómo abrir una pull request."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Workflow, conventions et comment ouvrir une pull request."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Workflow, Konventionen und wie Sie einen Pull Request eröffnen."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Workflow, convenzioni e come aprire una pull request."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "/docs-covers/contributing.png",
+        "alt": "A branch merging back, beside the diff under review",
+        "width": 800,
+        "height": 450
+      }
+    },
+    "links": {
+      "href": "/contributing",
+      "cta": {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la guía"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lire le guide"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zum Leitfaden"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Leggi la guida"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/contributing",
+        "variant": "text",
+        "color": "black"
+      }
+    }
+  }
+}

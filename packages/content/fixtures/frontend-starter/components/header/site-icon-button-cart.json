@@ -1,0 +1,14 @@
+{
+  "id": "b9f9e93d-a298-5519-ab6a-52c6d83d6ddf",
+  "label": "Site — icon button: cart",
+  "body": {
+    "_meta": {
+      "name": "Site — icon button: cart",
+      "schema": "https://quadratic.amplience.com/v2/content/icon-button",
+      "deliveryId": "b9f9e93d-a298-5519-ab6a-52c6d83d6ddf"
+    },
+    "icon": "cart",
+    "label": "Shopping cart",
+    "link": "/cart"
+  }
+}

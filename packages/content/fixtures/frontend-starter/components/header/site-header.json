@@ -1,0 +1,29 @@
+{
+  "id": "3deef260-46a2-56e1-baff-1e9a5785b4f9",
+  "label": "Site — header",
+  "body": {
+    "_meta": {
+      "name": "Site — header",
+      "schema": "https://quadratic.amplience.com/v2/content/header",
+      "deliveryId": "3deef260-46a2-56e1-baff-1e9a5785b4f9",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/site/header"
+          }
+        ]
+      }
+    },
+    "sticky": true,
+    "maxWidth": "default",
+    "rows": [
+      {
+        "id": "0e8c336b-f8d3-5de7-94dd-777333106f47",
+        "contentType": "https://quadratic.amplience.com/v2/content/header-row",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

@@ -69,7 +69,7 @@
  *   AMPLIENCE_HUB_NAME       hub name — visualization URIs + map-file name
  *   SITE_NAME                the site namespace the seeded keys live under
  *                            (ADR-0014) — fixtures are authored under the
- *                            fixture site's own name (base-site/…) and the
+ *                            fixture site's own name (frontend-starter/…) and the
  *                            content step re-prefixes them to
  *                            <SITE_NAME>/… while staging, the same way the
  *                            types step fills ${hub}. Defaults to
@@ -129,7 +129,7 @@ import {
 
 const packageRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 const repoRoot = path.join(packageRoot, '..', '..')
-const fixturesDir = path.join(packageRoot, '..', 'content', 'fixtures', 'base-site')
+const fixturesDir = path.join(packageRoot, '..', 'content', 'fixtures', 'frontend-starter')
 const stagingDir = path.join(packageRoot, '.import')
 
 /**
@@ -407,12 +407,12 @@ const markStagedItemsPublishable = (dir) => {
 
 /**
  * Fixtures are authored under the fixture site's own namespace
- * (`base-site/…`, ADR-0014). Seeding a hub re-prefixes every delivery key
+ * (`frontend-starter/…`, ADR-0014). Seeding a hub re-prefixes every delivery key
  * to the chosen SITE_NAME while staging, so the hub's keys match what the
  * deployment (whose SITE_NAME must be the same value) will ask for. Seeding
- * with SITE_NAME=base-site is simply the identity case.
+ * with SITE_NAME=frontend-starter is simply the identity case.
  */
-const FIXTURE_SITE_PREFIX = 'base-site/'
+const FIXTURE_SITE_PREFIX = 'frontend-starter/'
 
 const namespaceStagedDeliveryKeys = (dir, siteName) => {
   for (const entry of readdirSync(dir, { recursive: true, withFileTypes: true })) {
