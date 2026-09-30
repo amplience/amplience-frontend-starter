@@ -65,6 +65,8 @@ Blocks are the renderable sections of a page. All seven are members of the [Cont
 
 Four fields recur across blocks, and mean the same thing everywhere: `backgroundColor` ([palette](#colour)), `maxWidth` and `gutter` ([container](#container)), and `sectionHeader` ([section header](#section-header)).
 
+Every block also carries an optional `customCss` field — **Custom CSS (advanced)**, the last field on its Options (or Layout) tab. It is omitted from the tables below because it behaves identically on all seven: CSS scoped to that block and whatever is nested inside it. See [Per-block custom CSS](theming.md#per-block-custom-css) and [Block CSS](#block-css).
+
 ### Hero Block
 
 ![Hero Block icon](https://cdn.media.amplience.net/i/quadraticdemo/content_hero?w=48)
@@ -591,6 +593,10 @@ DAM videos play the account's transcode renditions (`/v/{endpoint}/{name}/{profi
 | ----------- | ----------------------------------- |
 | `max-width` | `narrow`, `default`, `wide`, `none` |
 | `gutter`    | boolean                             |
+
+### Block CSS
+
+[`partials/block-css`](../packages/hub-management/content-type-schemas/schemas/partials_block-css.json) — the value contract for every block's optional `customCss`: a string capped at 4,000 characters, the same limit the renderer enforces. The field's label, help text and CSS-editor extension are repeated on each block rather than held here, because an extension behind a cross-schema `$ref` hasn't been shown to render in the Dynamic Content form (ADR-0025, ADR-0026).
 
 ### Icon
 

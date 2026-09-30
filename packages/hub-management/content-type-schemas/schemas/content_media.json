@@ -47,8 +47,25 @@
       "allOf": [
         { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width" }
       ]
+    },
+    "customCss": {
+      "title": "Custom CSS (advanced)",
+      "description": "Optional. CSS for this block only — it also reaches any blocks nested inside it. Bare declarations style the block itself (background: …); nested rules style what's inside (h2 { … }, &:hover { … }, @media … { … }); custom properties (--color-primary: …) flow down to child blocks. Leave blank for none.",
+      "type": "string",
+      "ui:extension": { "name": "css-editor" },
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/block-css#/definitions/css" }
+      ]
     }
   },
-  "propertyOrder": ["media", "caption", "href", "fullBleed", "backgroundColor", "maxWidth"],
+  "propertyOrder": [
+    "media",
+    "caption",
+    "href",
+    "fullBleed",
+    "backgroundColor",
+    "maxWidth",
+    "customCss"
+  ],
   "required": ["media"]
 }

@@ -335,3 +335,83 @@ describe('media partials', () => {
     expect(validates(RICH_MEDIA, { ...externalVideo, url })).toBe(false)
   })
 })
+
+describe('block CSS (ADR-0026)', () => {
+  const PARTIAL = 'https://quadratic.amplience.com/v2/partials/block-css'
+  const REF = `${PARTIAL}#/definitions/css`
+
+  /**
+   * The content types offering `customCss`. A deliberate tripwire, like the
+   * content-type count above: adding the field to another block is a decision,
+   * and that block's component must pass `className` to its root (checked in
+   * apps/web/src/renderer/dispatch.block-css.test.tsx — keep the two in step).
+   */
+  const BLOCKS = [
+    'https://quadratic.amplience.com/v2/content/carousel',
+    'https://quadratic.amplience.com/v2/content/columns',
+    'https://quadratic.amplience.com/v2/content/grid',
+    'https://quadratic.amplience.com/v2/content/hero',
+    'https://quadratic.amplience.com/v2/content/markdown-block',
+    'https://quadratic.amplience.com/v2/content/media',
+    'https://quadratic.amplience.com/v2/content/media-card',
+  ]
+
+  type Tab = { label: string; pointers: string[] }
+  type BlockSchema = {
+    properties: Record<string, Record<string, unknown>>
+    propertyOrder?: string[]
+    'ui:component'?: { params: { tabs: { items: Tab[] } } }
+  }
+  const schemaOf = (id: string) => findSchema(id)?.schema as unknown as BlockSchema
+
+  it('registers the partial', () => {
+    expect(findSchema(PARTIAL)?.validationLevel).toBe('PARTIAL')
+  })
+
+  it('caps the value at the renderer limit', () => {
+    // Must equal BLOCK_CSS_MAX_LENGTH in apps/web/src/renderer/block-css.ts —
+    // the schema stops the editor saving what the renderer would reject.
+    const partial = findSchema(PARTIAL)?.schema as {
+      definitions: { css: { maxLength: number } }
+    }
+    expect(partial.definitions.css.maxLength).toBe(4000)
+  })
+
+  it('is offered by exactly the expected blocks', () => {
+    const offering = contentTypeSchemas
+      .filter((e) => 'customCss' in ((e.schema as unknown as BlockSchema).properties ?? {}))
+      .map((e) => e.schemaId)
+      .sort()
+    expect(offering).toEqual([...BLOCKS].sort())
+  })
+
+  it('uses one identical property definition everywhere', () => {
+    // The title, description and ui:extension are copied per block rather than
+    // living in the partial (see its description), so hold the copies together.
+    const [first, ...rest] = BLOCKS.map((id) => schemaOf(id).properties.customCss)
+    expect(first).toMatchObject({
+      type: 'string',
+      'ui:extension': { name: 'css-editor' },
+      allOf: [{ $ref: REF }],
+    })
+    for (const prop of rest) expect(prop).toEqual(first)
+  })
+
+  it.each(BLOCKS)('%s lists the field last — tucked away at the end of its tab', (id) => {
+    const schema = schemaOf(id)
+    if (schema.propertyOrder !== undefined) expect(schema.propertyOrder.at(-1)).toBe('customCss')
+    const tabs = schema['ui:component']?.params.tabs.items
+    if (tabs !== undefined) {
+      const holding = tabs.filter((t) => t.pointers.includes('/customCss'))
+      expect(holding).toHaveLength(1)
+      expect(holding[0]?.pointers.at(-1)).toBe('/customCss')
+    }
+  })
+
+  it('validates a body with CSS, and rejects one over the cap', () => {
+    const validate = ajv.getSchema('https://quadratic.amplience.com/v2/content/markdown-block')
+    const body = { _meta: { schema: 'x' }, content: 'Hello' }
+    expect(validate?.({ ...body, customCss: 'h2 { color: red; }' })).toBe(true)
+    expect(validate?.({ ...body, customCss: 'x'.repeat(4001) })).toBe(false)
+  })
+})

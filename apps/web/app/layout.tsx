@@ -65,6 +65,8 @@ export const viewport: Viewport = {
  * at the top of this module, React encounters their precedence group first and
  * orders this style *after* them — so it still overrides the token defaults at
  * equal specificity without !important.
+ *
+ * It renders before `{children}` so block CSS (ADR-0026) is ordered after it.
  */
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const customCss = await getCustomCss()
@@ -75,7 +77,6 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       data-brand={process.env.NEXT_PUBLIC_BRAND ?? 'default'}
     >
       <body>
-        {children}
         {/* Gated, permissioned, </style>-escaped CSS (see getCustomCss). */}
         {customCss !== null && (
           <style
@@ -84,6 +85,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             dangerouslySetInnerHTML={{ __html: customCss }}
           />
         )}
+        {children}
       </body>
     </html>
   )

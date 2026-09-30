@@ -191,6 +191,56 @@ Delivery keys pick which sites see an item; `[data-brand]` picks which brands wi
 }
 ```
 
+## Per-block custom CSS
+
+The site-wide item above styles everything. Sometimes an editor needs one block to look different — a hero with a tighter heading, a single card in a campaign colour — without a code change and without touching every other block of that type. Each block has an optional **Custom CSS (advanced)** field for that, the last field on its ⚙️ Options tab (⚙️ Layout on the Hero Block).
+
+There's no extra CMS read: the CSS arrives with the block it belongs to. A block with the field blank renders exactly as it would without the feature, and nothing runs in the browser.
+
+### Writing it
+
+The CSS you write is wrapped in a class unique to that block, using native CSS nesting, so it reads like the inside of a rule:
+
+```css
+/* Styles the block itself */
+background: var(--color-tertiary);
+border-radius: calc(var(--radius) * 4);
+
+/* Reaches anything inside it — including nested blocks */
+h2 {
+  text-transform: uppercase;
+}
+
+&:hover {
+  box-shadow: var(--interactive-hover-shadow);
+}
+
+@media (min-width: 992px) {
+  padding: var(--spacing-8);
+}
+
+/* Custom properties flow down into every child block */
+--color-primary: #ff6a00;
+```
+
+It can't reach outside its block: `:root`, `html` and `body` rules match nothing from inside the wrapper. Rules that only make sense at the top of a stylesheet — `@import`, `@font-face`, `@keyframes`, `@property` and the like — belong in the [site-wide custom CSS](#custom-css-from-the-cms).
+
+### How it cascades
+
+The wrapper adds one class of specificity to everything you write, and block stylesheets are emitted after the site-wide one. So a block's rules beat the component's own styles, the site-wide custom CSS, and the token defaults at equal specificity, with no `!important`. When a container and a block nested inside it both have CSS, the inner block's is emitted later and wins a tie.
+
+Two blocks with identical CSS share one stylesheet.
+
+### When it's ignored
+
+The whole value is dropped — the block still renders, and the console says why — if it:
+
+- is over 4,000 characters (the editor also stops you saving that)
+- has unbalanced braces, or an unclosed comment or string — anything that could close the wrapper early and style the rest of the page
+- uses one of the top-of-stylesheet at-rules listed above
+
+It's a containment check rather than a sandbox. `position: fixed` or a large negative margin can still move a block over its neighbours, so treat the field like any other CSS: something to review before publishing.
+
 ## Next steps
 
 - [Deploying a site](deploying.md) — `NEXT_PUBLIC_BRAND`, `SITE_NAME`, and the rest of the environment

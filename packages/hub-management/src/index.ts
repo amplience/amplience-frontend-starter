@@ -36,6 +36,7 @@ import contentMenuItem from '../content-type-schemas/schemas/content_menu-item.j
 import contentMenuToggleButton from '../content-type-schemas/schemas/content_menu-toggle-button.json'
 import contentMenu from '../content-type-schemas/schemas/content_menu.json'
 import contentPage from '../content-type-schemas/schemas/content_page.json'
+import partialsBlockCss from '../content-type-schemas/schemas/partials_block-css.json'
 import partialsCarouselItems from '../content-type-schemas/schemas/partials_carousel-items.json'
 import partialsCarouselOptions from '../content-type-schemas/schemas/partials_carousel-options.json'
 import partialsColour from '../content-type-schemas/schemas/partials_colour.json'
@@ -86,6 +87,7 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(partialsContainer, 'PARTIAL'),
   entry(partialsSectionHeader, 'PARTIAL'),
   entry(partialsIcon, 'PARTIAL'),
+  entry(partialsBlockCss, 'PARTIAL'),
   entry(contentPage, 'CONTENT_TYPE'),
   entry(contentBlogArticle, 'CONTENT_TYPE'),
   entry(contentHero, 'CONTENT_TYPE'),
