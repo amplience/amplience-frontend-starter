@@ -1,11 +1,11 @@
 {
-  "id": "d9290a64-8678-553f-94ff-79e6e6423075",
+  "id": "66546bfe-8771-5b54-a9c6-11cc6766aa27",
   "label": "Site — icon button: store locator",
   "body": {
     "_meta": {
       "name": "Site — icon button: store locator",
       "schema": "https://quadratic.amplience.com/v2/content/icon-button",
-      "deliveryId": "d9290a64-8678-553f-94ff-79e6e6423075"
+      "deliveryId": "66546bfe-8771-5b54-a9c6-11cc6766aa27"
     },
     "icon": "map-pin",
     "label": "Find a store",

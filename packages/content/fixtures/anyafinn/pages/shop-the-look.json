@@ -1,5 +1,5 @@
 {
-  "id": "9006ce2c-efc1-58ac-a2f1-9243ddf8b1b7",
+  "id": "a57c021c-65d2-574d-8dba-71d5ab1a1300",
   "label": "Shop the Look page",
   "body": {
     "_meta": {
@@ -22,7 +22,7 @@
     },
     "slots": [
       {
-        "id": "0bdcf67e-1d4b-585e-89d1-9caed5d8e91e",
+        "id": "545c4a5b-0892-58f1-bdc7-60c1a0dba658",
         "contentType": "https://quadratic.amplience.com/v2/slots/slot",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

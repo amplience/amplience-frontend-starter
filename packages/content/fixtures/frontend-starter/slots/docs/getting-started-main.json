@@ -1,5 +1,5 @@
 {
-  "id": "a88cd59c-3434-59f8-a0c7-c8868b5407ee",
+  "id": "88330daf-0fa1-595a-a1d6-6836665c8728",
   "label": "Getting started — main slot",
   "body": {
     "_meta": {
@@ -8,14 +8,14 @@
     },
     "components": [
       {
-        "id": "ab6ea0d4-edbc-5db9-afbb-e76296fc4073",
+        "id": "5efe80a7-280b-5de1-a03e-e6f0f1ccfbec",
         "contentType": "https://quadratic.amplience.com/v2/content/hero",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "30780f0e-c49e-51b6-8178-39f0c90edf0c",
+        "id": "32b30f35-1f23-5d77-aadc-7839e05a7dae",
         "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

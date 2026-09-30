@@ -1,5 +1,5 @@
 {
-  "id": "25ec6325-c577-5da6-acba-44e2fdf8d11a",
+  "id": "7ddc9cbb-0d71-598b-ad75-58c729c4491d",
   "label": "Storybook page",
   "body": {
     "_meta": {
@@ -17,7 +17,7 @@
     "description": "The shared component library has its own Storybook for browsing or building components in isolation from the app.",
     "slots": [
       {
-        "id": "4f569848-f5b4-58f5-800c-6ad598e5c53b",
+        "id": "a2b57da6-3581-5d82-b0ac-8c374892f77e",
         "contentType": "https://quadratic.amplience.com/v2/slots/slot",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

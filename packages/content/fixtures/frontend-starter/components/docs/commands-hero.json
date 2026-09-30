@@ -1,11 +1,11 @@
 {
-  "id": "65df1be1-7753-5ad0-a013-eb35a226644c",
+  "id": "89d79b1a-33b1-5468-9093-8bab2f054bf9",
   "label": "Command reference — hero",
   "body": {
     "_meta": {
       "name": "Command reference — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "65df1be1-7753-5ad0-a013-eb35a226644c"
+      "deliveryId": "89d79b1a-33b1-5468-9093-8bab2f054bf9"
     },
     "title": "Command reference",
     "description": "Everything Amplience Frontend Starter can do from the command line, and where the same operation lives in the Environment Manager GUI.",

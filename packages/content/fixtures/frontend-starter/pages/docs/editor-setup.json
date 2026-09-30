@@ -1,5 +1,5 @@
 {
-  "id": "b6f36a54-13ab-59ed-9874-82e54aa20be3",
+  "id": "38dbd296-5f86-5625-adb3-fcbadab9a973",
   "label": "Editor setup page",
   "body": {
     "_meta": {
@@ -17,7 +17,7 @@
     "description": "Amplience Frontend Starter is editor-agnostic. The repo enforces output (formatting, lint rules) but never the editor — `.vscode/` is gitignored, and there is no mandated IDE. Anyone cloning the repo gets the same outcome on macOS, Linux, or Windows because of three repo-level mechanisms:",
     "slots": [
       {
-        "id": "7dc31376-63eb-5622-9d32-d43f6eff1705",
+        "id": "924be8f1-6690-55d8-8b18-f0ec431fc20e",
         "contentType": "https://quadratic.amplience.com/v2/slots/slot",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

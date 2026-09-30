@@ -13,9 +13,21 @@
 
 import { createHash } from 'node:crypto'
 
-/** SHA-1 seeded, shaped as a v5 UUID. Not a true v5 — the namespace is the seed. */
+/**
+ * A UUID-shaped string derived from a seed.
+ *
+ * SHA-256 rather than SHA-1: nothing here rests on collision resistance — the
+ * seeds are our own file paths, not attacker-controlled input — but SHA-1 trips
+ * every SAST scanner, and "it's fine, read the argument" is a judgement each
+ * reviewer would have to make again. The stronger hash costs nothing.
+ *
+ * The version nibble stays 5 even though a real v5 is SHA-1 by definition. The
+ * shape is what dc-cli and DC have accepted for months; a v8 would be the more
+ * honest label but an unproven one, and the id is an opaque source key either
+ * way.
+ */
 export const uuidFrom = (seed) => {
-  const h = createHash('sha1').update(seed).digest('hex').slice(0, 32).split('')
+  const h = createHash('sha256').update(seed).digest('hex').slice(0, 32).split('')
   h[12] = '5' // version nibble
   h[16] = ((parseInt(h[16], 16) & 0x3) | 0x8).toString(16) // variant bits
   const s = h.join('')

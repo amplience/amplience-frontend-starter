@@ -1,11 +1,11 @@
 {
-  "id": "c61fb5c5-f7b6-5608-a061-6766712a7d54",
+  "id": "b45e4d71-8895-5bb5-b8ee-d060d372831e",
   "label": "Footer menu item — Storybook",
   "body": {
     "_meta": {
       "name": "Footer menu item — Storybook",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "c61fb5c5-f7b6-5608-a061-6766712a7d54"
+      "deliveryId": "b45e4d71-8895-5bb5-b8ee-d060d372831e"
     },
     "label": "Storybook",
     "link": "/docs/storybook"

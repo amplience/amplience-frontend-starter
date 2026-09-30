@@ -1,11 +1,11 @@
 {
-  "id": "f0bae21b-57b3-5fda-af6a-d4c05b8ef3a4",
+  "id": "90e68513-06fa-5b4d-87d3-a8397e17bb86",
   "label": "Footer menu item — Content types",
   "body": {
     "_meta": {
       "name": "Footer menu item — Content types",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "f0bae21b-57b3-5fda-af6a-d4c05b8ef3a4"
+      "deliveryId": "90e68513-06fa-5b4d-87d3-a8397e17bb86"
     },
     "label": "Content types",
     "link": "/docs/content-types"

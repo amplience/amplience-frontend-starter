@@ -1,11 +1,11 @@
 {
-  "id": "d6b4c86f-65e2-5130-b4bb-ccc722ad01a3",
+  "id": "99a726b0-b180-5b1c-a5bd-e34fe023ae03",
   "label": "Site — logo",
   "body": {
     "_meta": {
       "name": "Site — logo",
       "schema": "https://quadratic.amplience.com/v2/content/logo",
-      "deliveryId": "d6b4c86f-65e2-5130-b4bb-ccc722ad01a3"
+      "deliveryId": "99a726b0-b180-5b1c-a5bd-e34fe023ae03"
     },
     "image": {
       "mediaType": "ManualImage",

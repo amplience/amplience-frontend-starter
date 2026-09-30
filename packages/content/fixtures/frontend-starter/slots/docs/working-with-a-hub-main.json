@@ -1,5 +1,5 @@
 {
-  "id": "fc42678b-96ae-5588-a36e-a2111f803b2c",
+  "id": "4fff4975-041c-5f25-a1aa-943e63b4d698",
   "label": "Working with a hub — main slot",
   "body": {
     "_meta": {
@@ -8,14 +8,14 @@
     },
     "components": [
       {
-        "id": "66259880-8a9e-54a7-b432-98bd02b8e160",
+        "id": "af9bdf35-60c5-5fa7-9d7d-6cb35495924e",
         "contentType": "https://quadratic.amplience.com/v2/content/hero",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "ca160cfc-5369-5056-a7fd-2fe451beeb06",
+        "id": "4ccac681-beef-5d26-828e-c7d01bb3ee5d",
         "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

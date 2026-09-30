@@ -1,11 +1,11 @@
 {
-  "id": "21d25534-8682-5561-ad16-c3de15668f58",
+  "id": "5557a58e-14ef-5952-b798-88b66024c533",
   "label": "Site — not-found hero",
   "body": {
     "_meta": {
       "name": "Site — not-found hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "21d25534-8682-5561-ad16-c3de15668f58"
+      "deliveryId": "5557a58e-14ef-5952-b798-88b66024c533"
     },
     "title": {
       "values": [

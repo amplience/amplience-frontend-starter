@@ -1,11 +1,11 @@
 {
-  "id": "f23f8a9e-9158-508d-8d37-f6caf2132f9a",
+  "id": "82624205-09aa-53bd-b226-bc2b341debf2",
   "label": "Footer menu item — Shop by brand",
   "body": {
     "_meta": {
       "name": "Footer menu item — Shop by brand",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "f23f8a9e-9158-508d-8d37-f6caf2132f9a"
+      "deliveryId": "82624205-09aa-53bd-b226-bc2b341debf2"
     },
     "label": "Shop by brand",
     "link": "/shopping/brands"

@@ -1,5 +1,5 @@
 {
-  "id": "d4ea8889-1e67-540c-8a61-01e04807ee7b",
+  "id": "90e54f3d-c40e-5832-8ce2-8d7970a6d594",
   "label": "Home page",
   "body": {
     "_meta": {
@@ -35,7 +35,7 @@
     },
     "slots": [
       {
-        "id": "c64b67fd-9393-5e79-ade1-8f6a26a67b53",
+        "id": "c12a03a4-7646-500d-8296-9d5f8ecef88b",
         "contentType": "https://quadratic.amplience.com/v2/slots/slot",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

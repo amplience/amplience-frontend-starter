@@ -1,5 +1,5 @@
 {
-  "id": "b6284db2-f47f-5bb6-8f35-ef8c34853b19",
+  "id": "521e658e-9952-5ab3-b06c-9bfd17cc4bc3",
   "label": "Docs — main slot",
   "body": {
     "_meta": {
@@ -8,14 +8,14 @@
     },
     "components": [
       {
-        "id": "f4905e0e-672f-583c-b79e-684ef34845e8",
+        "id": "a1a02497-ab8f-565f-b7eb-35121b09865e",
         "contentType": "https://quadratic.amplience.com/v2/content/hero",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "9fa77458-bc99-54c2-bcdb-2d6ecdd46b75",
+        "id": "3360cfd1-de35-5bae-89d0-b6bdaf07c7c1",
         "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

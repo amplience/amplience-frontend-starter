@@ -1,11 +1,11 @@
 {
-  "id": "245bb49c-98c8-5bd3-a0cf-a1cb1dc0f9a1",
+  "id": "cd8eb4a0-5143-5f2f-a7ac-ac5911c0c6b6",
   "label": "Runbook — seeding an Amplience hub — hero",
   "body": {
     "_meta": {
       "name": "Runbook — seeding an Amplience hub — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "245bb49c-98c8-5bd3-a0cf-a1cb1dc0f9a1"
+      "deliveryId": "cd8eb4a0-5143-5f2f-a7ac-ac5911c0c6b6"
     },
     "title": "Runbook — seeding an Amplience hub",
     "description": "How a fresh Amplience CMS hub comes to carry the Amplience Frontend Starter content model and starter content. Everything the hub needs lives in this repo — settings, schemas, content types and extensions in `packages/hub-management/`, starter content in `packages/content/fixtures/frontend-starter/` (the same files the mock client serves, so the hub and local dev never drift) — and one command pushes it all. Running it against a second hub is the same procedure with different environment values.",

@@ -1,5 +1,5 @@
 {
-  "id": "ba2abf60-866c-52c0-ab81-e17d6102ce3a",
+  "id": "a1122d5d-3415-5498-be2c-1bbdf2e67c1c",
   "label": "Blog — Getting Started with Amplience",
   "body": {
     "_meta": {
@@ -47,7 +47,7 @@
     "readTime": 5,
     "slots": [
       {
-        "id": "c49ddc45-1db8-59e2-ab8c-d60ef1d86e53",
+        "id": "d5d3cbc2-32fd-5e04-94eb-56073ff0c5ab",
         "contentType": "https://quadratic.amplience.com/v2/slots/slot",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

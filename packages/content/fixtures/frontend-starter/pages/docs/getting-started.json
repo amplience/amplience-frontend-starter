@@ -1,5 +1,5 @@
 {
-  "id": "1866b920-442a-5a77-b7c1-1ad6951bd377",
+  "id": "995d5c04-b13b-5d18-a7eb-bd11de1bbbe2",
   "label": "Getting started page",
   "body": {
     "_meta": {
@@ -17,7 +17,7 @@
     "description": "Everything you need to clone Amplience Frontend Starter and get it running locally on the bundled fixture data — no Amplience hub required.",
     "slots": [
       {
-        "id": "a88cd59c-3434-59f8-a0c7-c8868b5407ee",
+        "id": "88330daf-0fa1-595a-a1d6-6836665c8728",
         "contentType": "https://quadratic.amplience.com/v2/slots/slot",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

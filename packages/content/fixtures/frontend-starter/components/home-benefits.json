@@ -1,11 +1,11 @@
 {
-  "id": "a8fa406b-f8b2-53e2-99c7-a3e697c68eff",
+  "id": "217bb023-89b8-5cfe-b36e-432f19126431",
   "label": "Home — Frontend Starter attributes carousel",
   "body": {
     "_meta": {
       "name": "Home — Frontend Starter attributes carousel",
       "schema": "https://quadratic.amplience.com/v2/content/carousel",
-      "deliveryId": "a8fa406b-f8b2-53e2-99c7-a3e697c68eff"
+      "deliveryId": "217bb023-89b8-5cfe-b36e-432f19126431"
     },
     "sectionHeader": {
       "title": {
@@ -73,35 +73,35 @@
     },
     "items": [
       {
-        "id": "b87ce563-231e-5037-ab82-aefcc4c9fd65",
+        "id": "db5c1a4c-1119-5c6a-a0ad-3a5e0e38bd65",
         "contentType": "https://quadratic.amplience.com/v2/content/media-card",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "df655d63-058d-5938-979d-3e8b3ccb5170",
+        "id": "2c4c8b2a-862c-56a9-93fd-6132ba34e2a8",
         "contentType": "https://quadratic.amplience.com/v2/content/media-card",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "f3b3fe8a-c589-57a5-93c1-c9a2e915f93f",
+        "id": "8ed0f963-08f6-5b64-a716-97ef620a6090",
         "contentType": "https://quadratic.amplience.com/v2/content/media-card",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "c879b466-ce37-5cc8-99a1-5e5fb8d81b30",
+        "id": "e38d3737-37b2-5106-a6da-487ab0a53348",
         "contentType": "https://quadratic.amplience.com/v2/content/media-card",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "62e0c351-c39f-598e-9a21-4a4bf791a769",
+        "id": "f0717d7c-c3b6-54c0-8f32-bdc8ca70acdb",
         "contentType": "https://quadratic.amplience.com/v2/content/media-card",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

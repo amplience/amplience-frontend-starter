@@ -1,5 +1,5 @@
 {
-  "id": "77308a9e-0ddc-57c0-b7ee-a84d19cb4560",
+  "id": "7989f54e-bbc0-558d-bbef-831310d093de",
   "label": "Runbook — seeding an Amplience hub — main slot",
   "body": {
     "_meta": {
@@ -8,14 +8,14 @@
     },
     "components": [
       {
-        "id": "245bb49c-98c8-5bd3-a0cf-a1cb1dc0f9a1",
+        "id": "cd8eb4a0-5143-5f2f-a7ac-ac5911c0c6b6",
         "contentType": "https://quadratic.amplience.com/v2/content/hero",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "a0b7f58a-0426-5301-977e-09bf93d8e8d1",
+        "id": "e1340a03-d8fc-5edb-9b43-3610455c6c02",
         "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

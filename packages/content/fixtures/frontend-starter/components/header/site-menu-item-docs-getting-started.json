@@ -1,11 +1,11 @@
 {
-  "id": "45c9512f-0066-50ee-b4a9-eda07acb278d",
+  "id": "7e7f72ea-f0c2-5f4b-b497-1eeb04b8d5e1",
   "label": "Menu item: Docs — Getting started",
   "body": {
     "_meta": {
       "name": "Menu item: Docs — Getting started",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "45c9512f-0066-50ee-b4a9-eda07acb278d"
+      "deliveryId": "7e7f72ea-f0c2-5f4b-b497-1eeb04b8d5e1"
     },
     "label": "Getting started",
     "link": "/docs/getting-started"

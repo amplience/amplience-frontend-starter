@@ -1,11 +1,11 @@
 {
-  "id": "6bc5ac57-c68a-5288-9d5e-f823da1aecaf",
+  "id": "8781780b-1a09-58e4-ac22-fecbbb6af568",
   "label": "Footer menu item — Contact us",
   "body": {
     "_meta": {
       "name": "Footer menu item — Contact us",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "6bc5ac57-c68a-5288-9d5e-f823da1aecaf"
+      "deliveryId": "8781780b-1a09-58e4-ac22-fecbbb6af568"
     },
     "label": "Contact us",
     "link": "/help/contact"

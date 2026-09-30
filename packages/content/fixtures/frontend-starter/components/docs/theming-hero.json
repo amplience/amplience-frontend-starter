@@ -1,11 +1,11 @@
 {
-  "id": "a5a49253-54c1-5fd1-ae94-9370d122a7aa",
+  "id": "b6cf11b8-ad38-5201-b8b6-ebc9e7d53977",
   "label": "Theming — hero",
   "body": {
     "_meta": {
       "name": "Theming — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "a5a49253-54c1-5fd1-ae94-9370d122a7aa"
+      "deliveryId": "b6cf11b8-ad38-5201-b8b6-ebc9e7d53977"
     },
     "title": "Theming",
     "description": "Every visual decision in Amplience Frontend Starter resolves through a CSS custom property. Brands redefine those properties — in code, in the CMS, or both — and no component file changes.",

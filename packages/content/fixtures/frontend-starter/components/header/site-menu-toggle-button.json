@@ -1,11 +1,11 @@
 {
-  "id": "40520b3b-9d3c-5a0c-b6a7-b1937ce9009b",
+  "id": "95f7d570-7178-5914-997d-e4927a005e1f",
   "label": "Site — menu toggle button",
   "body": {
     "_meta": {
       "name": "Site — menu toggle button",
       "schema": "https://quadratic.amplience.com/v2/content/menu-toggle-button",
-      "deliveryId": "40520b3b-9d3c-5a0c-b6a7-b1937ce9009b"
+      "deliveryId": "95f7d570-7178-5914-997d-e4927a005e1f"
     },
     "label": "Toggle menu"
   }

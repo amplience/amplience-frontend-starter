@@ -1,5 +1,5 @@
 {
-  "id": "45f4f72d-196c-5b09-886b-97f7768bedf0",
+  "id": "5cb66a0c-d11d-5b3e-b0ae-e6f7eed342d1",
   "label": "Theming — main slot",
   "body": {
     "_meta": {
@@ -8,14 +8,14 @@
     },
     "components": [
       {
-        "id": "a5a49253-54c1-5fd1-ae94-9370d122a7aa",
+        "id": "b6cf11b8-ad38-5201-b8b6-ebc9e7d53977",
         "contentType": "https://quadratic.amplience.com/v2/content/hero",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "007396aa-16fb-5636-9122-0c0a31df71a8",
+        "id": "0ace6962-eb18-5f39-8aef-1ff65ed2a277",
         "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

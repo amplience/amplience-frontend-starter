@@ -1,30 +1,30 @@
 {
-  "id": "0e8c336b-f8d3-5de7-94dd-777333106f47",
+  "id": "104545e5-49d3-522e-a01d-79e03e86a18d",
   "label": "Site — header row 1 (logo + icons)",
   "body": {
     "_meta": {
       "name": "Site — header row 1",
       "schema": "https://quadratic.amplience.com/v2/content/header-row",
-      "deliveryId": "0e8c336b-f8d3-5de7-94dd-777333106f47"
+      "deliveryId": "104545e5-49d3-522e-a01d-79e03e86a18d"
     },
     "backgroundColor": "black",
     "items": [
       {
-        "id": "0f2b5468-4a23-5822-a9a3-047441f8577b",
+        "id": "564a9225-7370-5b42-9319-cb4f0a0371d4",
         "contentType": "https://quadratic.amplience.com/v2/content/logo",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "5e0d95f4-483f-54d6-860c-932253fc98a8",
+        "id": "49472391-481a-5d27-9551-d28886c96060",
         "contentType": "https://quadratic.amplience.com/v2/content/hierarchy-menu",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "be4b0455-a1ae-53bb-b9e3-0a3222f28c5f",
+        "id": "ee77a786-ac24-554c-b335-028b6f03e95c",
         "contentType": "https://quadratic.amplience.com/v2/content/header-group",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

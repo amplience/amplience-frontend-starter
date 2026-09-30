@@ -1,11 +1,11 @@
 {
-  "id": "c6045d71-8c5c-59b6-b2f8-0617acb835c2",
+  "id": "1a9e7657-d729-5938-ba0b-ee5d7fd2748b",
   "label": "Troubleshooting — hero",
   "body": {
     "_meta": {
       "name": "Troubleshooting — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "c6045d71-8c5c-59b6-b2f8-0617acb835c2"
+      "deliveryId": "1a9e7657-d729-5938-ba0b-ee5d7fd2748b"
     },
     "title": "Troubleshooting",
     "description": "Common gotchas and how to resolve them. This page grows as issues surface.",

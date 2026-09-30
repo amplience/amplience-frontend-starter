@@ -1,11 +1,11 @@
 {
-  "id": "62e0c351-c39f-598e-9a21-4a4bf791a769",
+  "id": "f0717d7c-c3b6-54c0-8f32-bdc8ca70acdb",
   "label": "Home — card: time to value",
   "body": {
     "_meta": {
       "name": "Home — card: time to value",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
-      "deliveryId": "62e0c351-c39f-598e-9a21-4a4bf791a769"
+      "deliveryId": "f0717d7c-c3b6-54c0-8f32-bdc8ca70acdb"
     },
     "title": {
       "values": [

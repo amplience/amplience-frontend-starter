@@ -1,5 +1,5 @@
 {
-  "id": "fcf912ee-1215-5ed6-a89f-0d3657f784eb",
+  "id": "eeb24dea-c77c-5503-9c82-36d0f1745f86",
   "label": "Working with a hub page",
   "body": {
     "_meta": {
@@ -17,7 +17,7 @@
     "description": "By default Amplience Frontend Starter serves the bundled fixtures offline. When you're ready to use real content, you can point local dev at an Amplience hub and push the content model and starter content to it.",
     "slots": [
       {
-        "id": "fc42678b-96ae-5588-a36e-a2111f803b2c",
+        "id": "4fff4975-041c-5f25-a1aa-943e63b4d698",
         "contentType": "https://quadratic.amplience.com/v2/slots/slot",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

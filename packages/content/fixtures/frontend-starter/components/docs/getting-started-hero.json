@@ -1,11 +1,11 @@
 {
-  "id": "ab6ea0d4-edbc-5db9-afbb-e76296fc4073",
+  "id": "5efe80a7-280b-5de1-a03e-e6f0f1ccfbec",
   "label": "Getting started — hero",
   "body": {
     "_meta": {
       "name": "Getting started — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "ab6ea0d4-edbc-5db9-afbb-e76296fc4073"
+      "deliveryId": "5efe80a7-280b-5de1-a03e-e6f0f1ccfbec"
     },
     "title": "Getting started",
     "description": "Everything you need to clone Amplience Frontend Starter and get it running locally on the bundled fixture data — no Amplience hub required.",

@@ -1,11 +1,11 @@
 {
-  "id": "4681ea27-78c3-5a6a-9feb-416653f9402b",
+  "id": "c55564e8-e081-55c3-880d-4b42f602f29f",
   "label": "Footer menu item — Cookies",
   "body": {
     "_meta": {
       "name": "Footer menu item — Cookies",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "4681ea27-78c3-5a6a-9feb-416653f9402b"
+      "deliveryId": "c55564e8-e081-55c3-880d-4b42f602f29f"
     },
     "label": "Cookies",
     "link": "/shopping/cookies"

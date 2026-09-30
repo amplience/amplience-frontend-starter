@@ -1,11 +1,11 @@
 {
-  "id": "52dd453c-98e8-519d-bd3e-f02de089a23a",
+  "id": "30fa826a-affd-51ea-bdc5-23e2a013303a",
   "label": "Site — icon button: account",
   "body": {
     "_meta": {
       "name": "Site — icon button: account",
       "schema": "https://quadratic.amplience.com/v2/content/icon-button",
-      "deliveryId": "52dd453c-98e8-519d-bd3e-f02de089a23a"
+      "deliveryId": "30fa826a-affd-51ea-bdc5-23e2a013303a"
     },
     "icon": "user",
     "label": "My account",

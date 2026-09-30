@@ -1,11 +1,11 @@
 {
-  "id": "2d0e9288-35ba-5233-9fbd-3671fc050c43",
+  "id": "30df1440-fb04-505d-bb0d-4f7f1d329d0f",
   "label": "Storybook — hero",
   "body": {
     "_meta": {
       "name": "Storybook — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "2d0e9288-35ba-5233-9fbd-3671fc050c43"
+      "deliveryId": "30df1440-fb04-505d-bb0d-4f7f1d329d0f"
     },
     "title": "Storybook",
     "description": "The shared component library has its own Storybook for browsing or building components in isolation from the app.",

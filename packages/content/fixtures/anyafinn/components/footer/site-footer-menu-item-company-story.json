@@ -1,11 +1,11 @@
 {
-  "id": "16608e5c-c88b-50ce-998a-af52248361df",
+  "id": "4a936b91-824f-5469-905e-deb28be661d7",
   "label": "Footer menu item — Our story",
   "body": {
     "_meta": {
       "name": "Footer menu item — Our story",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "16608e5c-c88b-50ce-998a-af52248361df"
+      "deliveryId": "4a936b91-824f-5469-905e-deb28be661d7"
     },
     "label": "Our story",
     "link": "/company/story"

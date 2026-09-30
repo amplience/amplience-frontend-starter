@@ -1,5 +1,5 @@
 {
-  "id": "c64b67fd-9393-5e79-ade1-8f6a26a67b53",
+  "id": "c12a03a4-7646-500d-8296-9d5f8ecef88b",
   "label": "Home — main slot",
   "body": {
     "_meta": {
@@ -8,14 +8,14 @@
     },
     "components": [
       {
-        "id": "df25499a-ba76-56f1-b7d8-6db41b786116",
+        "id": "c4bcd6c3-ad26-5109-baef-61ad5e45239a",
         "contentType": "https://quadratic.amplience.com/v2/content/hero",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "cdd95423-4b39-50ec-8a6c-ec8c3d261c24",
+        "id": "66c8434f-c6a5-572c-b11b-5560ad9f23b7",
         "contentType": "https://quadratic.amplience.com/v2/content/grid",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

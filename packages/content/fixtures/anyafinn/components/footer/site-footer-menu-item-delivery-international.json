@@ -1,11 +1,11 @@
 {
-  "id": "945a44bb-2f32-5e37-87ed-cc7236c532f7",
+  "id": "a9510b9e-3603-5afd-b2fe-94d0d6358528",
   "label": "Footer menu item — International orders",
   "body": {
     "_meta": {
       "name": "Footer menu item — International orders",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "945a44bb-2f32-5e37-87ed-cc7236c532f7"
+      "deliveryId": "a9510b9e-3603-5afd-b2fe-94d0d6358528"
     },
     "label": "International orders",
     "link": "/delivery/international"

@@ -1,43 +1,43 @@
 {
-  "id": "be4b0455-a1ae-53bb-b9e3-0a3222f28c5f",
+  "id": "ee77a786-ac24-554c-b335-028b6f03e95c",
   "label": "Site — header icon group",
   "body": {
     "_meta": {
       "name": "Site — header icon group",
       "schema": "https://quadratic.amplience.com/v2/content/header-group",
-      "deliveryId": "be4b0455-a1ae-53bb-b9e3-0a3222f28c5f"
+      "deliveryId": "ee77a786-ac24-554c-b335-028b6f03e95c"
     },
     "items": [
       {
-        "id": "b666f38f-efbf-585c-97ea-81b5b04712ee",
+        "id": "d410dce1-5489-5d27-91ee-0d47c1748402",
         "contentType": "https://quadratic.amplience.com/v2/content/locale-selector",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "b9f9e93d-a298-5519-ab6a-52c6d83d6ddf",
+        "id": "0dc6886d-ea4a-5b9d-86aa-2f25bdf0f3f0",
         "contentType": "https://quadratic.amplience.com/v2/content/icon-button",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "d9290a64-8678-553f-94ff-79e6e6423075",
+        "id": "66546bfe-8771-5b54-a9c6-11cc6766aa27",
         "contentType": "https://quadratic.amplience.com/v2/content/icon-button",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "52dd453c-98e8-519d-bd3e-f02de089a23a",
+        "id": "30fa826a-affd-51ea-bdc5-23e2a013303a",
         "contentType": "https://quadratic.amplience.com/v2/content/icon-button",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "40520b3b-9d3c-5a0c-b6a7-b1937ce9009b",
+        "id": "95f7d570-7178-5914-997d-e4927a005e1f",
         "contentType": "https://quadratic.amplience.com/v2/content/menu-toggle-button",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

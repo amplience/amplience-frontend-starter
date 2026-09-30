@@ -1,11 +1,11 @@
 {
-  "id": "b2c9d7da-7dc0-584a-b582-cddada79a50c",
+  "id": "f3a90fb2-f19c-5ec8-97a1-2eeab9d60a80",
   "label": "Home — columns feature image",
   "body": {
     "_meta": {
       "name": "Home — columns feature image",
       "schema": "https://quadratic.amplience.com/v2/content/media",
-      "deliveryId": "b2c9d7da-7dc0-584a-b582-cddada79a50c"
+      "deliveryId": "f3a90fb2-f19c-5ec8-97a1-2eeab9d60a80"
     },
     "fullBleed": false,
     "maxWidth": "default",

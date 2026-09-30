@@ -1,11 +1,11 @@
 {
-  "id": "b597a8e6-59c0-529e-a21c-722d6968ece3",
+  "id": "09edceb9-4452-5611-8b5f-5b4ae08e841e",
   "label": "Footer menu item — Privacy notice",
   "body": {
     "_meta": {
       "name": "Footer menu item — Privacy notice",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "b597a8e6-59c0-529e-a21c-722d6968ece3"
+      "deliveryId": "09edceb9-4452-5611-8b5f-5b4ae08e841e"
     },
     "label": "Privacy notice",
     "link": "/shopping/privacy"

@@ -1,11 +1,11 @@
 {
-  "id": "1d5f460f-ae0f-5670-8327-94539e3c5ef9",
+  "id": "c70b5ee0-af49-55ce-970b-b71f23a2dc3b",
   "label": "Menu item: Docs — Contributing",
   "body": {
     "_meta": {
       "name": "Menu item: Docs — Contributing",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "1d5f460f-ae0f-5670-8327-94539e3c5ef9"
+      "deliveryId": "c70b5ee0-af49-55ce-970b-b71f23a2dc3b"
     },
     "label": "Contributing",
     "link": "/contributing"

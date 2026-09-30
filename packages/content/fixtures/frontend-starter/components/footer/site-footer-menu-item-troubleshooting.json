@@ -1,11 +1,11 @@
 {
-  "id": "eb9cc39f-e1da-5092-beb0-90303b664528",
+  "id": "66a68fae-e3b2-59ac-a6c6-040ebf8bb194",
   "label": "Footer menu item — Troubleshooting",
   "body": {
     "_meta": {
       "name": "Footer menu item — Troubleshooting",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "eb9cc39f-e1da-5092-beb0-90303b664528"
+      "deliveryId": "66a68fae-e3b2-59ac-a6c6-040ebf8bb194"
     },
     "label": "Troubleshooting",
     "link": "/docs/troubleshooting"

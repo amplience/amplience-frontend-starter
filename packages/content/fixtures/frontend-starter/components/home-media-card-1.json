@@ -1,11 +1,11 @@
 {
-  "id": "b87ce563-231e-5037-ab82-aefcc4c9fd65",
+  "id": "db5c1a4c-1119-5c6a-a0ad-3a5e0e38bd65",
   "label": "Home — card: content rendering",
   "body": {
     "_meta": {
       "name": "Home — card: content rendering",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
-      "deliveryId": "b87ce563-231e-5037-ab82-aefcc4c9fd65"
+      "deliveryId": "db5c1a4c-1119-5c6a-a0ad-3a5e0e38bd65"
     },
     "title": {
       "values": [

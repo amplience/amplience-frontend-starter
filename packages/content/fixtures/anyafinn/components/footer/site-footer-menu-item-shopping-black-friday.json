@@ -1,11 +1,11 @@
 {
-  "id": "f38119c3-0ef9-5de2-8d62-bc262d9f4bc5",
+  "id": "ea295510-673c-50cd-885e-448970b973fa",
   "label": "Footer menu item — Black Friday",
   "body": {
     "_meta": {
       "name": "Footer menu item — Black Friday",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "f38119c3-0ef9-5de2-8d62-bc262d9f4bc5"
+      "deliveryId": "ea295510-673c-50cd-885e-448970b973fa"
     },
     "label": "Black Friday",
     "link": "/shopping/black-friday"

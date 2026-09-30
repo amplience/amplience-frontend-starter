@@ -1,13 +1,13 @@
 {
-  "id": "afb4a67c-76fd-5174-86be-6d3fe67d821a",
+  "id": "188de4cb-0ca0-5dbc-a152-9035f6f31925",
   "label": "Hierarchy menu item: Docs — Working with a hub",
   "body": {
     "_meta": {
       "name": "Hierarchy menu item: Docs — Working with a hub",
       "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
-      "deliveryId": "afb4a67c-76fd-5174-86be-6d3fe67d821a",
+      "deliveryId": "188de4cb-0ca0-5dbc-a152-9035f6f31925",
       "hierarchy": {
-        "parentId": "ead30f78-ac5b-5a4f-9bac-fa4fa518a523",
+        "parentId": "2b991992-210f-5bb6-99c0-cb6bd663ee9c",
         "root": false,
         "position": "gggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
       }

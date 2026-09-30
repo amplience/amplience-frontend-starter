@@ -1,5 +1,5 @@
 {
-  "id": "7c38173a-9620-595d-9821-658a31cdd8a1",
+  "id": "3368967c-2292-5c4c-a87e-be376be8c3bf",
   "label": "Deploying a site — main slot",
   "body": {
     "_meta": {
@@ -8,14 +8,14 @@
     },
     "components": [
       {
-        "id": "eec61d5c-68f4-5d70-bc39-a093b155ea66",
+        "id": "1ac911d2-2613-5b5e-9020-b6a5c254afdd",
         "contentType": "https://quadratic.amplience.com/v2/content/hero",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "375ddd12-cd89-5d8f-9003-a60902df207e",
+        "id": "146a95cd-19ab-51b9-b829-96fb41112e49",
         "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

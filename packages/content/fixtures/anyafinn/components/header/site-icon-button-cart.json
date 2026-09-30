@@ -1,11 +1,11 @@
 {
-  "id": "98d16131-d6e2-5d67-8988-c778bb553046",
+  "id": "f7a9d538-ec75-5ac8-ad21-92702990dde4",
   "label": "Site — icon button: cart",
   "body": {
     "_meta": {
       "name": "Site — icon button: cart",
       "schema": "https://quadratic.amplience.com/v2/content/icon-button",
-      "deliveryId": "98d16131-d6e2-5d67-8988-c778bb553046"
+      "deliveryId": "f7a9d538-ec75-5ac8-ad21-92702990dde4"
     },
     "icon": "cart",
     "label": "Shopping bag",

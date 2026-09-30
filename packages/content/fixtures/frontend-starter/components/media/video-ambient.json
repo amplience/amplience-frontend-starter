@@ -1,11 +1,11 @@
 {
-  "id": "321104a4-ff8c-55de-af12-09dcea42c1df",
+  "id": "e24fa03f-9571-5795-a72b-e58c69024616",
   "label": "Media — ambient video loop (.mp4)",
   "body": {
     "_meta": {
       "name": "Media — ambient video loop (.mp4)",
       "schema": "https://quadratic.amplience.com/v2/content/media",
-      "deliveryId": "321104a4-ff8c-55de-af12-09dcea42c1df"
+      "deliveryId": "e24fa03f-9571-5795-a72b-e58c69024616"
     },
     "media": {
       "mediaType": "ExternalVideo",

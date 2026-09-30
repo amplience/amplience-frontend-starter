@@ -1,11 +1,11 @@
 {
-  "id": "75907bd9-ac9b-5a62-950f-340b8bc9d233",
+  "id": "a7ac6593-430c-5d01-bd70-41245e64f329",
   "label": "Content types — markdown",
   "body": {
     "_meta": {
       "name": "Content types — markdown",
       "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
-      "deliveryId": "75907bd9-ac9b-5a62-950f-340b8bc9d233"
+      "deliveryId": "a7ac6593-430c-5d01-bd70-41245e64f329"
     },
     "content": {
       "values": [

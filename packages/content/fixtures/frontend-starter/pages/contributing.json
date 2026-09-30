@@ -1,5 +1,5 @@
 {
-  "id": "41e4c9b5-cec2-55f2-8851-29a1ac338d67",
+  "id": "e747dfbb-f5f0-5e0e-aaab-34dda63ebede",
   "label": "Contributing Guide page",
   "body": {
     "_meta": {
@@ -17,7 +17,7 @@
     "description": "Thank you for your interest in contributing to this project.",
     "slots": [
       {
-        "id": "9b2f2990-035f-5f9b-98d1-f1be55bb865f",
+        "id": "0f8e9a05-ef39-5542-99b3-5fe4850ad19f",
         "contentType": "https://quadratic.amplience.com/v2/slots/slot",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

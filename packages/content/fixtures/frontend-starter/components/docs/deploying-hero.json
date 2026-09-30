@@ -1,11 +1,11 @@
 {
-  "id": "eec61d5c-68f4-5d70-bc39-a093b155ea66",
+  "id": "1ac911d2-2613-5b5e-9020-b6a5c254afdd",
   "label": "Deploying a site — hero",
   "body": {
     "_meta": {
       "name": "Deploying a site — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "eec61d5c-68f4-5d70-bc39-a093b155ea66"
+      "deliveryId": "1ac911d2-2613-5b5e-9020-b6a5c254afdd"
     },
     "title": "Deploying a site",
     "description": "`apps/web` is a standard Next.js app — host it anywhere. (e.g. Vercel)",

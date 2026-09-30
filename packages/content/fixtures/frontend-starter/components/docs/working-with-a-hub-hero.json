@@ -1,11 +1,11 @@
 {
-  "id": "66259880-8a9e-54a7-b432-98bd02b8e160",
+  "id": "af9bdf35-60c5-5fa7-9d7d-6cb35495924e",
   "label": "Working with a hub — hero",
   "body": {
     "_meta": {
       "name": "Working with a hub — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "66259880-8a9e-54a7-b432-98bd02b8e160"
+      "deliveryId": "af9bdf35-60c5-5fa7-9d7d-6cb35495924e"
     },
     "title": "Working with a hub",
     "description": "By default Amplience Frontend Starter serves the bundled fixtures offline. When you're ready to use real content, you can point local dev at an Amplience hub and push the content model and starter content to it.",

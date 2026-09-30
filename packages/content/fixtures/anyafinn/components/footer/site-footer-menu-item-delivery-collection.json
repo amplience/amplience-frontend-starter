@@ -1,11 +1,11 @@
 {
-  "id": "f72cea8c-8f28-53e2-90a3-910a7ea5bb54",
+  "id": "3f6b8463-fa1e-5745-a422-c274b64ab222",
   "label": "Footer menu item — Delivery & collection",
   "body": {
     "_meta": {
       "name": "Footer menu item — Delivery & collection",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "f72cea8c-8f28-53e2-90a3-910a7ea5bb54"
+      "deliveryId": "3f6b8463-fa1e-5745-a422-c274b64ab222"
     },
     "label": "Delivery & collection",
     "link": "/delivery/collection"

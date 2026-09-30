@@ -1,11 +1,11 @@
 {
-  "id": "f170cec7-7497-5d68-b63b-6fbbe7b5d3e8",
+  "id": "7d66e9cd-775b-5b29-9247-6ab29a59e624",
   "label": "Home — hero",
   "body": {
     "_meta": {
       "name": "Home — hero",
       "schema": "https://quadratic.amplience.com/v2/content/hero",
-      "deliveryId": "f170cec7-7497-5d68-b63b-6fbbe7b5d3e8"
+      "deliveryId": "7d66e9cd-775b-5b29-9247-6ab29a59e624"
     },
     "preTitle": {
       "values": [

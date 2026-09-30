@@ -1,11 +1,11 @@
 {
-  "id": "7512be42-eb1a-52e6-88d6-fd3cbd924b0a",
+  "id": "444bb5b9-c1d0-51be-8e86-abb8c1a0e741",
   "label": "Footer menu item — Our services",
   "body": {
     "_meta": {
       "name": "Footer menu item — Our services",
       "schema": "https://quadratic.amplience.com/v2/content/menu-item",
-      "deliveryId": "7512be42-eb1a-52e6-88d6-fd3cbd924b0a"
+      "deliveryId": "444bb5b9-c1d0-51be-8e86-abb8c1a0e741"
     },
     "label": "Our services",
     "link": "/help/services"

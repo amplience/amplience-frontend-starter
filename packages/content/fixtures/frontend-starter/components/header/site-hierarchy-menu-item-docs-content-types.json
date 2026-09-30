@@ -1,13 +1,13 @@
 {
-  "id": "70429997-16aa-58f9-a262-dd79f3997aef",
+  "id": "abe84489-16d1-5023-a27b-09d9ddb81c12",
   "label": "Hierarchy menu item: Docs — Content types",
   "body": {
     "_meta": {
       "name": "Hierarchy menu item: Docs — Content types",
       "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
-      "deliveryId": "70429997-16aa-58f9-a262-dd79f3997aef",
+      "deliveryId": "abe84489-16d1-5023-a27b-09d9ddb81c12",
       "hierarchy": {
-        "parentId": "ead30f78-ac5b-5a4f-9bac-fa4fa518a523",
+        "parentId": "2b991992-210f-5bb6-99c0-cb6bd663ee9c",
         "root": false,
         "position": "ggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
       }
