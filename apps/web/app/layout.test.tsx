@@ -83,11 +83,9 @@ describe('RootLayout custom-CSS injection', () => {
     const html = renderToStaticMarkup(
       await RootLayout({
         children: (
-          <style
-            href="block-css-abc"
-            precedence="amplience-block-css"
-            dangerouslySetInnerHTML={{ __html: '.block-css-abc{color:blue}' }}
-          />
+          <style href="block-css-abc" precedence="amplience-block-css">
+            {'.block-css-abc{color:blue}'}
+          </style>
         ),
       }),
     )

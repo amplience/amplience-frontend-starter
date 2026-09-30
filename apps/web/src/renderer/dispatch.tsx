@@ -167,11 +167,10 @@ const createBlock = (
 
   return (
     <>
-      <style
-        href={blockCss.href}
-        precedence={BLOCK_CSS_PRECEDENCE}
-        dangerouslySetInnerHTML={{ __html: blockCss.css }}
-      />
+      {/* Text child, so React escapes `<style` in it too. */}
+      <style href={blockCss.href} precedence={BLOCK_CSS_PRECEDENCE}>
+        {blockCss.css}
+      </style>
       {element}
     </>
   )

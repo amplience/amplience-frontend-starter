@@ -218,3 +218,17 @@ describe('block CSS — real blocks', () => {
     expect(classTokens(out)).toContain(scopeOf(CSS))
   })
 })
+
+describe('block CSS — markup safety', () => {
+  it('cannot break out of the <style> element', () => {
+    const out = html(
+      node(CARD_SCHEMA, {
+        label: 'x',
+        customCss: 'h2::after { content: "</style><script>alert(1)</script>"; }',
+      }),
+    )
+    // Exactly one closing tag, and the script text sits before it — inert CSS text.
+    expect(count(out.toLowerCase(), '</style')).toBe(1)
+    expect(out.indexOf('<script')).toBeLessThan(out.toLowerCase().indexOf('</style'))
+  })
+})
