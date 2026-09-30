@@ -1,0 +1,46 @@
+{
+  "id": "d4ea8889-1e67-540c-8a61-01e04807ee7b",
+  "label": "Home page",
+  "body": {
+    "_meta": {
+      "name": "Home page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/homepage"
+          }
+        ]
+      }
+    },
+    "title": "Anya Finn — Autumn / Winter 2026",
+    "description": "Leather, lambswool and everything you reach for when the light goes early.",
+    "keywords": ["anya finn", "fashion", "autumn winter 2026"],
+    "social": {
+      "title": "Anya Finn — Autumn / Winter 2026",
+      "description": "Layers for the long way round.",
+      "image": {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/quadraticdemo/pexels-justinas-stanislovaitis-3999202",
+          "alt": "Anya Finn Autumn / Winter 2026",
+          "width": 2752,
+          "height": 1536
+        }
+      }
+    },
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
+    "slots": [
+      {
+        "id": "c64b67fd-9393-5e79-ade1-8f6a26a67b53",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

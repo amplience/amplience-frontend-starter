@@ -1,0 +1,13 @@
+{
+  "id": "088ede78-90e4-5215-a73e-de338b939375",
+  "label": "Footer menu item — Working with a hub",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Working with a hub",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "088ede78-90e4-5215-a73e-de338b939375"
+    },
+    "label": "Working with a hub",
+    "link": "/docs/working-with-a-hub"
+  }
+}

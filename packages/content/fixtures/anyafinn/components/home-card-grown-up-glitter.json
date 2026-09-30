@@ -1,0 +1,32 @@
+{
+  "id": "1a7349b0-cac2-5a30-8d38-45f37385bd40",
+  "label": "Home — card: Grown-up glitter",
+  "body": {
+    "_meta": {
+      "name": "Home — card: Grown-up glitter",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "1a7349b0-cac2-5a30-8d38-45f37385bd40"
+    },
+    "title": "Grown-up glitter",
+    "description": "A radiant, second-skin base with a grippy shimmer primer and champagne liquid sparkle, finished with tubing mascara.",
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/Grown-Up%20Glitter_hero_1",
+        "alt": "Champagne shimmer make-up close-up",
+        "width": 1000,
+        "height": 1250
+      }
+    },
+    "links": {
+      "href": "/shop-the-look",
+      "cta": {
+        "label": "Read more",
+        "href": "/shop-the-look",
+        "variant": "text",
+        "color": "black"
+      }
+    },
+    "color": "light"
+  }
+}

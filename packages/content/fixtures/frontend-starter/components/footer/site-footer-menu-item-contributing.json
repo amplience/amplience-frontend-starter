@@ -1,0 +1,13 @@
+{
+  "id": "99eccbec-807e-551f-8e46-c38a0a12c2f7",
+  "label": "Footer menu item — Contributing",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Contributing",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "99eccbec-807e-551f-8e46-c38a0a12c2f7"
+    },
+    "label": "Contributing",
+    "link": "/contributing"
+  }
+}

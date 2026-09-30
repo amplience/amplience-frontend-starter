@@ -15,16 +15,17 @@
 import { describe, expect, it } from 'vitest'
 
 import { fixtureIdFor } from '../../scripts/lib/fixture-id.mjs'
-import { allFixtures, DEFAULT_FIXTURE_SET, makeMockContentClient, resolveFixtureSet } from '../mock'
+import { DEFAULT_FIXTURE_SET, makeMockContentClient, resolveFixtureSet } from '../mock'
 import { resolveDeep } from '../mock/resolver'
 import type { ContentRequestOptions } from '../types'
 import { isContentClientError } from '../types'
 import { makeSdkContentClient } from './SdkContentClient'
 import type { SdkContentClientConfig } from './SdkContentClient'
 
-// The adapter is checked against the mock's own set, so both sides of every
-// parity assertion read the same fixtures.
-const { findById, findByKey } = resolveFixtureSet(DEFAULT_FIXTURE_SET)
+// Parity is per site: the adapter and the mock are both pointed at the default
+// set, so every assertion reads the same fixtures. The whole corpus would drag in
+// the other set's content, which a client for this one is meant not to see.
+const { fixtures: setFixtures, findById, findByKey } = resolveFixtureSet(DEFAULT_FIXTURE_SET)
 
 type FetchPayload = {
   requests: ({ key: string } | { id: string })[]
@@ -60,7 +61,7 @@ const positionOf = (f: { body: unknown }): string =>
  * order it returns would be an artefact of fixture-load order.
  */
 const hierarchyDescendants = () =>
-  allFixtures()
+  setFixtures
     .filter((f) => (f.body as HierarchyMeta)._meta?.hierarchy?.parentId !== undefined)
     .sort((a, b) => {
       // Code-unit order, not localeCompare: the position strings are a
@@ -111,7 +112,7 @@ const fixtureBackedAdaptor = (capture?: { configs: AxiosishConfig[] }) =>
       const wanted = body.filterBy?.find((f) => f.path === '/_meta/schema')?.value
       return Promise.resolve(
         okResponse(config, {
-          responses: allFixtures()
+          responses: setFixtures
             .filter((f) => schemaOf(f.body) === wanted)
             .map((f) => ({ content: f.body })),
           page: {},
@@ -159,7 +160,7 @@ describe('SdkContentClient ↔ MockContentClient parity', () => {
   const mock = makeMockContentClient()
   const depths: ContentRequestOptions[] = [{ depth: 'root' }, { depth: 'all' }]
 
-  for (const fixture of allFixtures()) {
+  for (const fixture of setFixtures) {
     const key = firstKey(fixture.body)
     if (key === undefined) continue
     for (const opts of depths) {
@@ -170,7 +171,7 @@ describe('SdkContentClient ↔ MockContentClient parity', () => {
   }
 
   it('getById matches the mock at both depths', async () => {
-    const fixture = first(allFixtures())
+    const fixture = first(setFixtures)
     for (const opts of depths) {
       await expect(sdk.getById(fixture.id, opts)).resolves.toEqual(
         await mock.getById(fixture.id, opts),

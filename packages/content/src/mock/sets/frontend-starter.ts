@@ -20,35 +20,16 @@ import contributingHero from '../../../fixtures/frontend-starter/components/cont
 import contributingMarkdown from '../../../fixtures/frontend-starter/components/contributing-markdown.json' with { type: 'json' }
 import docsHero from '../../../fixtures/frontend-starter/components/docs-hero.json' with { type: 'json' }
 import docsMarkdown from '../../../fixtures/frontend-starter/components/docs-markdown.json' with { type: 'json' }
-import siteFooterMenuCompany from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-company.json' with { type: 'json' }
-import siteFooterMenuDelivery from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-delivery.json' with { type: 'json' }
-import siteFooterMenuHelp from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-help.json' with { type: 'json' }
-import siteFooterMenuItemCompanyCareers from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-company-careers.json' with { type: 'json' }
-import siteFooterMenuItemCompanyFaqs from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-company-faqs.json' with { type: 'json' }
-import siteFooterMenuItemCompanyModernSlavery from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-company-modern-slavery.json' with { type: 'json' }
-import siteFooterMenuItemCompanyStory from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-company-story.json' with { type: 'json' }
-import siteFooterMenuItemCompanySustainability from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-company-sustainability.json' with { type: 'json' }
-import siteFooterMenuItemCompany from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-company.json' with { type: 'json' }
-import siteFooterMenuItemDeliveryCollection from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-delivery-collection.json' with { type: 'json' }
-import siteFooterMenuItemDeliveryInternational from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-delivery-international.json' with { type: 'json' }
-import siteFooterMenuItemDeliveryReturns from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-delivery-returns.json' with { type: 'json' }
-import siteFooterMenuItemDeliveryTrack from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-delivery-track.json' with { type: 'json' }
-import siteFooterMenuItemDelivery from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-delivery.json' with { type: 'json' }
-import siteFooterMenuItemHelpContact from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-help-contact.json' with { type: 'json' }
-import siteFooterMenuItemHelpCustomerServices from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-help-customer-services.json' with { type: 'json' }
-import siteFooterMenuItemHelpServices from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-help-services.json' with { type: 'json' }
-import siteFooterMenuItemHelpStores from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-help-stores.json' with { type: 'json' }
-import siteFooterMenuItemHelp from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-help.json' with { type: 'json' }
-import siteFooterMenuItemShoppingApps from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-shopping-apps.json' with { type: 'json' }
-import siteFooterMenuItemShoppingBlackFriday from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-shopping-black-friday.json' with { type: 'json' }
-import siteFooterMenuItemShoppingBrands from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-shopping-brands.json' with { type: 'json' }
-import siteFooterMenuItemShoppingCookies from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-shopping-cookies.json' with { type: 'json' }
-import siteFooterMenuItemShoppingGiftCards from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-shopping-gift-cards.json' with { type: 'json' }
-import siteFooterMenuItemShoppingPrivacy from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-shopping-privacy.json' with { type: 'json' }
-import siteFooterMenuItemShoppingSecure from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-shopping-secure.json' with { type: 'json' }
-import siteFooterMenuItemShoppingTerms from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-shopping-terms.json' with { type: 'json' }
-import siteFooterMenuItemShopping from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-shopping.json' with { type: 'json' }
-import siteFooterMenuShopping from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-shopping.json' with { type: 'json' }
+import siteFooterMenuDocumentation from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-documentation.json' with { type: 'json' }
+import siteFooterMenuItemCommands from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-commands.json' with { type: 'json' }
+import siteFooterMenuItemContentTypes from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-content-types.json' with { type: 'json' }
+import siteFooterMenuItemContributing from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-contributing.json' with { type: 'json' }
+import siteFooterMenuItemDeploying from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-deploying.json' with { type: 'json' }
+import siteFooterMenuItemGettingStarted from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-getting-started.json' with { type: 'json' }
+import siteFooterMenuItemStorybook from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-storybook.json' with { type: 'json' }
+import siteFooterMenuItemTroubleshooting from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-troubleshooting.json' with { type: 'json' }
+import siteFooterMenuItemWorkingWithAHub from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-item-working-with-a-hub.json' with { type: 'json' }
+import siteFooterMenuProject from '../../../fixtures/frontend-starter/components/footer/site-footer-menu-project.json' with { type: 'json' }
 import siteFooterRow1 from '../../../fixtures/frontend-starter/components/footer/site-footer-row-1.json' with { type: 'json' }
 import siteFooter from '../../../fixtures/frontend-starter/components/footer/site-footer.json' with { type: 'json' }
 import siteHeaderGroupIcons from '../../../fixtures/frontend-starter/components/header/site-header-group-icons.json' with { type: 'json' }
@@ -185,36 +166,17 @@ const fixtures: readonly EnrichedContentItem[] = [
   siteMenuItemDocsTroubleshooting,
   siteMenuItemDocsContributing,
   siteFooter,
+  siteFooterMenuDocumentation,
+  siteFooterMenuProject,
+  siteFooterMenuItemGettingStarted,
+  siteFooterMenuItemWorkingWithAHub,
+  siteFooterMenuItemCommands,
+  siteFooterMenuItemDeploying,
+  siteFooterMenuItemContributing,
+  siteFooterMenuItemContentTypes,
+  siteFooterMenuItemStorybook,
+  siteFooterMenuItemTroubleshooting,
   siteFooterRow1,
-  siteFooterMenuDelivery,
-  siteFooterMenuHelp,
-  siteFooterMenuShopping,
-  siteFooterMenuCompany,
-  siteFooterMenuItemDelivery,
-  siteFooterMenuItemDeliveryTrack,
-  siteFooterMenuItemDeliveryCollection,
-  siteFooterMenuItemDeliveryReturns,
-  siteFooterMenuItemDeliveryInternational,
-  siteFooterMenuItemHelp,
-  siteFooterMenuItemHelpCustomerServices,
-  siteFooterMenuItemHelpContact,
-  siteFooterMenuItemHelpStores,
-  siteFooterMenuItemHelpServices,
-  siteFooterMenuItemShopping,
-  siteFooterMenuItemShoppingGiftCards,
-  siteFooterMenuItemShoppingBrands,
-  siteFooterMenuItemShoppingTerms,
-  siteFooterMenuItemShoppingSecure,
-  siteFooterMenuItemShoppingPrivacy,
-  siteFooterMenuItemShoppingCookies,
-  siteFooterMenuItemShoppingApps,
-  siteFooterMenuItemShoppingBlackFriday,
-  siteFooterMenuItemCompany,
-  siteFooterMenuItemCompanyStory,
-  siteFooterMenuItemCompanyCareers,
-  siteFooterMenuItemCompanySustainability,
-  siteFooterMenuItemCompanyModernSlavery,
-  siteFooterMenuItemCompanyFaqs,
   siteCustomCss,
   notFoundMainSlot,
   notFoundHero,

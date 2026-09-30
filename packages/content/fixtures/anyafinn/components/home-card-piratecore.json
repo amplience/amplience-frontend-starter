@@ -1,0 +1,32 @@
+{
+  "id": "e7d0b4b1-928b-5f93-8649-f2d67d5ead82",
+  "label": "Home — card: Trending: Piratecore",
+  "body": {
+    "_meta": {
+      "name": "Home — card: Trending: Piratecore",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "e7d0b4b1-928b-5f93-8649-f2d67d5ead82"
+    },
+    "title": "Trending: Piratecore",
+    "description": "Ruffled white poplin under a black lace corset, grounded with a leather-look mini and chocolate knee-high boots.",
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/piratecore_hero",
+        "alt": "Ruffled poplin shirt layered under a black lace corset",
+        "width": 1000,
+        "height": 1250
+      }
+    },
+    "links": {
+      "href": "/shop-the-look",
+      "cta": {
+        "label": "Read more",
+        "href": "/shop-the-look",
+        "variant": "text",
+        "color": "black"
+      }
+    },
+    "color": "primary"
+  }
+}

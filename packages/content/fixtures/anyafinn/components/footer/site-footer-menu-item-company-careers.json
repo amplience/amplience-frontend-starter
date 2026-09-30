@@ -1,0 +1,13 @@
+{
+  "id": "66f12de2-3074-5334-837e-ab5a271ad98a",
+  "label": "Footer menu item — Careers",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Careers",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "66f12de2-3074-5334-837e-ab5a271ad98a"
+    },
+    "label": "Careers",
+    "link": "/company/careers"
+  }
+}

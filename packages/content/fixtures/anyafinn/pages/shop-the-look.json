@@ -1,0 +1,33 @@
+{
+  "id": "9006ce2c-efc1-58ac-a2f1-9243ddf8b1b7",
+  "label": "Shop the Look page",
+  "body": {
+    "_meta": {
+      "name": "Shop the Look page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/shop-the-look"
+          }
+        ]
+      }
+    },
+    "title": "Shop the look — Anya Finn",
+    "description": "Three ways to wear the season, styled end to end.",
+    "keywords": ["anya finn", "shop the look", "styling"],
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
+    "slots": [
+      {
+        "id": "0bdcf67e-1d4b-585e-89d1-9caed5d8e91e",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

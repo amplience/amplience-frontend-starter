@@ -1,0 +1,21 @@
+{
+  "id": "d6b4c86f-65e2-5130-b4bb-ccc722ad01a3",
+  "label": "Site — logo",
+  "body": {
+    "_meta": {
+      "name": "Site — logo",
+      "schema": "https://quadratic.amplience.com/v2/content/logo",
+      "deliveryId": "d6b4c86f-65e2-5130-b4bb-ccc722ad01a3"
+    },
+    "image": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://cdn.media.amplience.net/i/mattdemo/anya-finn-logo@2x",
+        "alt": "Anya Finn",
+        "width": 130,
+        "height": 30
+      }
+    },
+    "link": "/"
+  }
+}

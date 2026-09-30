@@ -1,0 +1,13 @@
+{
+  "id": "b597a8e6-59c0-529e-a21c-722d6968ece3",
+  "label": "Footer menu item — Privacy notice",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Privacy notice",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "b597a8e6-59c0-529e-a21c-722d6968ece3"
+    },
+    "label": "Privacy notice",
+    "link": "/shopping/privacy"
+  }
+}

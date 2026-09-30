@@ -10,28 +10,14 @@
     "backgroundColor": "dark",
     "items": [
       {
-        "id": "bf77eef8-7e5b-57fa-89ca-df0fab5557a4",
+        "id": "f7584e01-5eb7-51a5-9a79-b5bbbc4e9b6b",
         "contentType": "https://quadratic.amplience.com/v2/content/menu",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "6fd1cd0f-82d7-5c01-89f4-26a22d6e5085",
-        "contentType": "https://quadratic.amplience.com/v2/content/menu",
-        "_meta": {
-          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
-        }
-      },
-      {
-        "id": "24654fe8-e9a6-5dc0-96fe-4e1e4ac74eb5",
-        "contentType": "https://quadratic.amplience.com/v2/content/menu",
-        "_meta": {
-          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
-        }
-      },
-      {
-        "id": "fb24970f-972d-55d7-8e96-780deee8557c",
+        "id": "0f5fde90-00d5-5030-90b4-45498a80a0e4",
         "contentType": "https://quadratic.amplience.com/v2/content/menu",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

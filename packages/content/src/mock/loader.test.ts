@@ -16,8 +16,6 @@ import {
   resolveFixtureSet,
 } from './loader'
 
-const { findById, findByKey } = resolveFixtureSet(DEFAULT_FIXTURE_SET)
-
 describe('registry', () => {
   it('serves the set the zero-config deployment resolves to', () => {
     // config.ts can't import the registry (it would drag every fixture into
@@ -52,25 +50,26 @@ describe('registry', () => {
   })
 })
 
-describe('loader', () => {
+// Lookups belong to a set, so these run against each one — a set's map must
+// resolve its own fixtures and nothing else.
+describe.each(allFixtureSets())('loader — $name', (set) => {
   it('exposes a non-empty fixture set with unique ids', () => {
-    const fixtures = allFixtures()
-    expect(fixtures.length).toBeGreaterThan(0)
-    const ids = fixtures.map((f) => f.id)
+    expect(set.fixtures.length).toBeGreaterThan(0)
+    const ids = set.fixtures.map((f) => f.id)
     expect(new Set(ids).size).toBe(ids.length)
   })
 
   it('finds every fixture by its id', () => {
-    for (const fixture of allFixtures()) {
-      expect(findById(fixture.id)).toBe(fixture)
+    for (const fixture of set.fixtures) {
+      expect(set.findById(fixture.id)).toBe(fixture)
     }
   })
 
   it('maps every declared delivery key back to its item', () => {
-    for (const fixture of allFixtures()) {
+    for (const fixture of set.fixtures) {
       const keys = fixture.body._meta.deliveryKeys?.values ?? []
       for (const k of keys) {
-        expect(findByKey(k.value)).toBe(fixture)
+        expect(set.findByKey(k.value)).toBe(fixture)
       }
     }
   })
@@ -80,15 +79,15 @@ describe('loader', () => {
     // through their slot's content-link (by ID), absent from the key map. Pick
     // one from the set rather than hard-coding an ID (docs fixtures are
     // generated, so their IDs aren't stable to reference here).
-    const keyless = allFixtures().find((f) => f.body._meta.deliveryKeys === undefined)
+    const keyless = set.fixtures.find((f) => f.body._meta.deliveryKeys === undefined)
     expect(keyless).toBeDefined()
     if (!keyless) return
-    expect(findById(keyless.id)).toBe(keyless)
-    expect(findByKey(keyless.id)).toBeUndefined()
+    expect(set.findById(keyless.id)).toBe(keyless)
+    expect(set.findByKey(keyless.id)).toBeUndefined()
   })
 
   it('returns undefined for unknown ids and keys', () => {
-    expect(findById('00000000-0000-4000-8000-00000000dead')).toBeUndefined()
-    expect(findByKey('no-such-key')).toBeUndefined()
+    expect(set.findById('00000000-0000-4000-8000-00000000dead')).toBeUndefined()
+    expect(set.findByKey('no-such-key')).toBeUndefined()
   })
 })

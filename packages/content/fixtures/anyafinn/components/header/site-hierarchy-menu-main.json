@@ -1,0 +1,23 @@
+{
+  "id": "e62a44c2-3ccf-5a1f-9aa5-a0fd53ad5041",
+  "label": "Site — main navigation menu (hierarchy)",
+  "body": {
+    "_meta": {
+      "name": "Site — main navigation menu (hierarchy)",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu",
+      "deliveryId": "e62a44c2-3ccf-5a1f-9aa5-a0fd53ad5041",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/site/hierarchy-menu-main"
+          }
+        ]
+      },
+      "hierarchy": {
+        "root": true
+      }
+    },
+    "useMobileLayout": true,
+    "display": "dropdownOnHover"
+  }
+}

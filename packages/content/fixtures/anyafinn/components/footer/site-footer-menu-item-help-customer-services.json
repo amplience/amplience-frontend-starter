@@ -1,0 +1,13 @@
+{
+  "id": "261e3189-fc16-5bbb-8c5a-2303c6ad7558",
+  "label": "Footer menu item — Customer services",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Customer services",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "261e3189-fc16-5bbb-8c5a-2303c6ad7558"
+    },
+    "label": "Customer services",
+    "link": "/help/customer-services"
+  }
+}

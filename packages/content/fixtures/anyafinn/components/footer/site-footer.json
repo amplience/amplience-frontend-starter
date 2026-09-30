@@ -1,0 +1,29 @@
+{
+  "id": "70ca08b9-94cc-559f-8ece-c2a003c62eb8",
+  "label": "Site — footer",
+  "body": {
+    "_meta": {
+      "name": "Site — footer",
+      "schema": "https://quadratic.amplience.com/v2/content/footer",
+      "deliveryId": "70ca08b9-94cc-559f-8ece-c2a003c62eb8",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/site/footer"
+          }
+        ]
+      }
+    },
+    "sticky": false,
+    "maxWidth": "default",
+    "rows": [
+      {
+        "id": "fbc293d1-9c8d-551a-8688-3cc4cb350976",
+        "contentType": "https://quadratic.amplience.com/v2/content/footer-row",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "cdd5c044-35d3-5b47-8321-9b97cabf129a",
+  "label": "Footer menu item — Modern slavery",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Modern slavery",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "cdd5c044-35d3-5b47-8321-9b97cabf129a"
+    },
+    "label": "Modern slavery",
+    "link": "/company/modern-slavery"
+  }
+}

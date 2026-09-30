@@ -1,0 +1,26 @@
+{
+  "id": "c64b67fd-9393-5e79-ade1-8f6a26a67b53",
+  "label": "Home — main slot",
+  "body": {
+    "_meta": {
+      "name": "Home — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot"
+    },
+    "components": [
+      {
+        "id": "df25499a-ba76-56f1-b7d8-6db41b786116",
+        "contentType": "https://quadratic.amplience.com/v2/content/hero",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "cdd95423-4b39-50ec-8a6c-ec8c3d261c24",
+        "contentType": "https://quadratic.amplience.com/v2/content/grid",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

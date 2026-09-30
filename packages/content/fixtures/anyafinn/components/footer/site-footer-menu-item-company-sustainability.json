@@ -1,0 +1,13 @@
+{
+  "id": "36c4bb40-8ce9-58ae-9a7c-06ff9f21081f",
+  "label": "Footer menu item — Sustainability",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Sustainability",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "36c4bb40-8ce9-58ae-9a7c-06ff9f21081f"
+    },
+    "label": "Sustainability",
+    "link": "/company/sustainability"
+  }
+}

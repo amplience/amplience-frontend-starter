@@ -1,0 +1,13 @@
+{
+  "id": "c218ab6f-2679-553d-a403-e3da41f1888c",
+  "label": "Footer menu item — Secure shopping",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Secure shopping",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "c218ab6f-2679-553d-a403-e3da41f1888c"
+    },
+    "label": "Secure shopping",
+    "link": "/shopping/secure"
+  }
+}

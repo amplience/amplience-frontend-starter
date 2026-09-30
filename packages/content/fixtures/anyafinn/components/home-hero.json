@@ -1,0 +1,42 @@
+{
+  "id": "df25499a-ba76-56f1-b7d8-6db41b786116",
+  "label": "Home — hero",
+  "body": {
+    "_meta": {
+      "name": "Home — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "df25499a-ba76-56f1-b7d8-6db41b786116"
+    },
+    "preTitle": "Autumn / Winter 2026",
+    "title": "Layers for the long way round",
+    "description": "Leather, lambswool and everything you reach for when the light goes early.",
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/pexels-justinas-stanislovaitis-3999202",
+        "alt": "Model in a wool coat on a city street at dusk",
+        "width": 2752,
+        "height": 1536
+      }
+    },
+    "contentWidth": 40,
+    "contentPositionMobile": "beneath",
+    "contentPositionDesktop": "overlay",
+    "heightBehaviour": "flexible",
+    "maxWidth": "default",
+    "maxHeight": 600,
+    "overlayColor": "black",
+    "overlayIntensity": 40,
+    "overlayStyle": "gradient",
+    "verticalPosition": "center",
+    "backgroundColor": "black",
+    "ctas": [
+      {
+        "label": "Shop the edit",
+        "href": "/shop-the-look",
+        "variant": "solid",
+        "color": "primary"
+      }
+    ]
+  }
+}

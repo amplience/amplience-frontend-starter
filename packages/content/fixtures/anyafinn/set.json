@@ -1,0 +1,9 @@
+{
+  "name": "anyafinn",
+  "label": "Anya Finn",
+  "description": "Fashion retail demo brand — a second set, to prove one hub can carry several.",
+  "defaultBrand": "anyafinn",
+  "defaultLocale": "en-US",
+  "authoredLocales": ["en-US"],
+  "generatedDocs": false
+}

@@ -1,0 +1,26 @@
+{
+  "id": "0bdcf67e-1d4b-585e-89d1-9caed5d8e91e",
+  "label": "Shop the Look — main slot",
+  "body": {
+    "_meta": {
+      "name": "Shop the Look — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot"
+    },
+    "components": [
+      {
+        "id": "ac74b4ee-2deb-5139-9072-f7240e54a858",
+        "contentType": "https://quadratic.amplience.com/v2/content/hero",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "6fbdb079-8637-58f5-a89c-f364e2c1585d",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

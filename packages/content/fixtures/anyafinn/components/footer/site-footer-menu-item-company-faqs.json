@@ -1,0 +1,13 @@
+{
+  "id": "d475bd6a-f537-51ed-9e67-6961260207d4",
+  "label": "Footer menu item — FAQs",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — FAQs",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "d475bd6a-f537-51ed-9e67-6961260207d4"
+    },
+    "label": "FAQs",
+    "link": "/company/faqs"
+  }
+}
