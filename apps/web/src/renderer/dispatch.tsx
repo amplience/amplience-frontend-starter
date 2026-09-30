@@ -17,6 +17,8 @@
  *
  * Every failure exit renders a card in place (§5B) — the rest of the page
  * renders normally — and emits a structured console signal (§8).
+ *
+ * The dispatcher is also the sole consumer of a node's `customCss` (ADR-0026).
  */
 
 import { createElement, Fragment, type ComponentType, type ReactNode } from 'react'
@@ -30,7 +32,8 @@ import type {
   SchemaURI,
 } from '@amplience/frontend-starter-types'
 
-import { emitRendererFailure } from './console'
+import { BLOCK_CSS_PRECEDENCE, prepareBlockCss, type PreparedBlockCss } from './block-css'
+import { emitBlockCssRejected, emitRendererFailure } from './console'
 import { ComponentUnregisteredCard } from './failure/ComponentUnregisteredCard'
 import { PropsValidationFailureCard } from './failure/PropsValidationFailureCard'
 import { SchemaUnknownCard } from './failure/SchemaUnknownCard'
@@ -120,6 +123,60 @@ const fail = (failure: RendererFailure, content: unknown): ReactNode => {
 }
 
 // ---------------------------------------------------------------------------
+// Per-block custom CSS (ADR-0026)
+// ---------------------------------------------------------------------------
+
+type AppliedBlockCss = Extract<PreparedBlockCss, { ok: true }>
+
+/** Always strips `customCss` (adapters spread bodies into props); untouched nodes cost nothing. */
+const extractBlockCss = (
+  content: object,
+  schemaUri: SchemaURI,
+): { node: object; blockCss: AppliedBlockCss | undefined } => {
+  if (!('customCss' in content)) return { node: content, blockCss: undefined }
+
+  const { customCss, ...node } = content as { customCss?: unknown }
+  const prepared = prepareBlockCss(customCss)
+  if (prepared === null) return { node, blockCss: undefined }
+  if (!prepared.ok) {
+    emitBlockCssRejected(prepared, schemaUri, customCss)
+    return { node, blockCss: undefined }
+  }
+  return { node, blockCss: prepared }
+}
+
+/** Joins the scope class onto `className` and emits a hoisted, href-deduped `<style>`. */
+const createBlock = (
+  component: ComponentType<Record<string, unknown>>,
+  props: Record<string, unknown>,
+  blockCss: AppliedBlockCss | undefined,
+  children?: ReactNode,
+): ReactNode => {
+  if (blockCss === undefined) {
+    return children === undefined
+      ? createElement(component, props)
+      : createElement(component, props, children)
+  }
+
+  const existing = typeof props.className === 'string' ? props.className : ''
+  const className = existing === '' ? blockCss.className : `${existing} ${blockCss.className}`
+  const element =
+    children === undefined
+      ? createElement(component, { ...props, className })
+      : createElement(component, { ...props, className }, children)
+
+  return (
+    <>
+      {/* Text child, so React escapes `<style` in it too. */}
+      <style href={blockCss.href} precedence={BLOCK_CSS_PRECEDENCE}>
+        {blockCss.css}
+      </style>
+      {element}
+    </>
+  )
+}
+
+// ---------------------------------------------------------------------------
 // Dispatcher
 // ---------------------------------------------------------------------------
 
@@ -196,7 +253,9 @@ export function renderContent(
     return fail({ failureClass: 'ComponentUnregistered', schemaUri }, content)
   }
 
-  if (validate !== undefined && !validate(content)) {
+  const { node, blockCss } = extractBlockCss(content, schemaUri)
+
+  if (validate !== undefined && !validate(node)) {
     return fail(
       { failureClass: 'PropsValidationFailure', schemaUri, reason: 'validate-returned-false' },
       content,
@@ -206,8 +265,8 @@ export function renderContent(
   // Happy path: adapt props (identity when no adapter, §4), render children
   // for container entries, dispatch.
   try {
-    const props = (adapt === undefined ? content : adapt(content, ctx)) as Record<string, unknown>
-    if (getChildren === undefined) return createElement(component, props)
+    const props = (adapt === undefined ? node : adapt(node, ctx)) as Record<string, unknown>
+    if (getChildren === undefined) return createBlock(component, props, blockCss)
 
     // A container near the page's leading edge passes its `loadPriority` down
     // into its children (the array branch above then demotes it per sibling),
@@ -226,14 +285,14 @@ export function renderContent(
       ...(entry.childContext ?? {}),
       ...(forwardedTier !== undefined &&
         forwardedTier !== 'lazy' && { loadPriority: forwardedTier }),
-      ...(childContextFromSchema?.(content, ctx) ?? {}),
+      ...(childContextFromSchema?.(node, ctx) ?? {}),
       // Locale is a whole-tree property (ADR-0015), so it always flows to
       // children — unlike `loadPriority`, which decays with distance from the
       // top of the page.
       ...(ctx.localeBasePath !== undefined && { localeBasePath: ctx.localeBasePath }),
     }
-    const children = renderContent(getChildren(content), registry, childCtx)
-    return createElement(component, props, children)
+    const children = renderContent(getChildren(node), registry, childCtx)
+    return createBlock(component, props, blockCss, children)
   } catch (error) {
     return fail(
       { failureClass: 'PropsValidationFailure', schemaUri, reason: 'adapter-threw', error },

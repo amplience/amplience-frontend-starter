@@ -59,12 +59,14 @@ export const viewport: Viewport = {
  * CMS I/O, keeping default deployments pure-static.
  *
  * The <style> carries `href` + `precedence`: React 19 only reliably emits a
- * `dangerouslySetInnerHTML` style rendered in <body> during streaming SSR when
- * it is a managed style resource (a plain one is dropped), so it is hoisted
+ * style rendered in <body> during streaming SSR when it is a managed style
+ * resource (a plain one is dropped), so it is hoisted
  * into <head> and deduped by href. Because the token stylesheets are imported
  * at the top of this module, React encounters their precedence group first and
  * orders this style *after* them — so it still overrides the token defaults at
  * equal specificity without !important.
+ *
+ * It renders before `{children}` so block CSS (ADR-0026) is ordered after it.
  */
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const customCss = await getCustomCss()
@@ -75,15 +77,13 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       data-brand={process.env.NEXT_PUBLIC_BRAND ?? 'default'}
     >
       <body>
-        {children}
         {/* Gated, permissioned, </style>-escaped CSS (see getCustomCss). */}
         {customCss !== null && (
-          <style
-            href={CUSTOM_CSS_STYLE_ID}
-            precedence={CUSTOM_CSS_STYLE_ID}
-            dangerouslySetInnerHTML={{ __html: customCss }}
-          />
+          <style href={CUSTOM_CSS_STYLE_ID} precedence={CUSTOM_CSS_STYLE_ID}>
+            {customCss}
+          </style>
         )}
+        {children}
       </body>
     </html>
   )

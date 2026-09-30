@@ -83,7 +83,7 @@ export function CustomCssVisualization({ initialCss, children }: Props) {
   return (
     <>
       {children}
-      {css !== '' && <style id={CUSTOM_CSS_STYLE_ID} dangerouslySetInnerHTML={{ __html: css }} />}
+      {css !== '' && <style id={CUSTOM_CSS_STYLE_ID}>{css}</style>}
     </>
   )
 }

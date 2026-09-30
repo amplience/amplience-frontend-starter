@@ -14,6 +14,8 @@
 
 import type { RendererFailure, SchemaURI } from '@amplience/frontend-starter-types'
 
+import type { BlockCssRejection } from './block-css'
+
 const isDev = process.env.NODE_ENV === 'development'
 
 /**
@@ -92,3 +94,21 @@ export function emitContentFailure(error: ContentClientErrorLike, resource: stri
 
 /** Structural view of ContentClientError — avoids a runtime import cycle. */
 type ContentClientErrorLike = { readonly kind: string; readonly message: string }
+
+/** Warn that a block's custom CSS was dropped (ADR-0026); the CSS text is dev-only. */
+export function emitBlockCssRejected(
+  rejection: BlockCssRejection,
+  schemaUri: SchemaURI,
+  css?: unknown,
+): void {
+  if (isDev) {
+    console.warn(
+      `[renderer] BlockCssRejected — ${schemaUri} (${rejection.reason})`,
+      'The block rendered without its custom CSS.',
+      { rejection, css },
+    )
+    return
+  }
+
+  console.warn('[renderer]', { failureClass: 'BlockCssRejected', schemaUri, ...rejection })
+}

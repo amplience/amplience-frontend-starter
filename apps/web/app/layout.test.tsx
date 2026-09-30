@@ -76,6 +76,25 @@ describe('RootLayout custom-CSS injection', () => {
     // Emitted with href+precedence so React 19 hoists/dedupes it (see layout.tsx).
     expect(html).toContain('amplience-custom-css')
   })
+
+  it('orders the site-wide CSS before any per-block CSS (ADR-0026)', async () => {
+    // React orders precedence groups by first discovery.
+    getCustomCss.mockResolvedValue('.HeroBlock{color:red}')
+    const html = renderToStaticMarkup(
+      await RootLayout({
+        children: (
+          <style href="block-css-abc" precedence="amplience-block-css">
+            {'.block-css-abc{color:blue}'}
+          </style>
+        ),
+      }),
+    )
+    const site = html.indexOf('.HeroBlock{color:red}')
+    const block = html.indexOf('.block-css-abc{color:blue}')
+    expect(site).toBeGreaterThan(-1)
+    expect(block).toBeGreaterThan(-1)
+    expect(site).toBeLessThan(block)
+  })
 })
 
 describe('design token contract', () => {
