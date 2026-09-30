@@ -1,0 +1,306 @@
+{
+  "id": "18c25e59-ac98-5888-bafa-c2cce18eca38",
+  "label": "Product — Oreline Leather Tote",
+  "body": {
+    "_meta": {
+      "name": "Oreline Leather Tote",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "18c25e59-ac98-5888-bafa-c2cce18eca38",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "base-site/products/leather-tote"
+          }
+        ]
+      }
+    },
+    "sku": "ORE-ACC-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Leather Tote"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Leather Tote"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Bolso shopper de piel"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Cabas en cuir"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ledershopper"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Borsa tote in pelle"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Oreline",
+    "prices": [
+      {
+        "amount": 295,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 339,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 369,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "An unlined full-grain tote that softens with carrying and holds its shape."
+        },
+        {
+          "locale": "en-GB",
+          "value": "An unlined full-grain tote that softens with carrying and holds its shape."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Un shopper sin forro de cuero flor entera que se ablanda con el uso."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un cabas non doublé en cuir pleine fleur qui s’assouplit à l’usage."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein ungefütterter Shopper aus Vollnarbenleder, der mit dem Tragen weicher wird."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Una tote sfoderata in pelle pieno fiore che si ammorbidisce con l’uso."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/id/7/1200/1200",
+          "alt": "Oreline Leather Tote",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matériau"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Full-grain leather"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Full-grain leather"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuero flor entera"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Cuir pleine fleur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Vollnarbenleder"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Pelle pieno fiore"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Lining"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Lining"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Forro"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Doublure"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Futter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Fodera"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Unlined"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Unlined"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Sin forro"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Non doublé"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Ungefüttert"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Sfoderato"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Strap"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Strap"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Asa"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Anse"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Trageriemen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manico"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Shoulder"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Shoulder"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Al hombro"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Portée épaule"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Schulter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "A spalla"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["womens", "womens-accessories"],
+    "tags": ["accessories", "oreline"],
+    "title": "Oreline Leather Tote | Amplience Frontend Starter",
+    "description": "An unlined full-grain tote that softens with carrying and holds its shape."
+  }
+}

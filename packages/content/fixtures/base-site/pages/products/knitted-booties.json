@@ -1,0 +1,242 @@
+{
+  "id": "defe2841-d730-5276-a3ef-1e9dd3ffa222",
+  "label": "Product — Pip & Row Knitted Booties",
+  "body": {
+    "_meta": {
+      "name": "Pip & Row Knitted Booties",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "defe2841-d730-5276-a3ef-1e9dd3ffa222",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "base-site/products/knitted-booties"
+          }
+        ]
+      }
+    },
+    "sku": "PIP-BABY-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Knitted Booties"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Knitted Booties"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Patucos de punto"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Chaussons tricotés"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Gestrickte Schühchen"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Scarpine in maglia"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Pip & Row",
+    "prices": [
+      {
+        "amount": 18,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 21,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 22,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Merino booties with a ribbed ankle that actually stays on."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Merino booties with a ribbed ankle that actually stays on."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Patucos de merino con tobillo acanalado que de verdad se quedan puestos."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Chaussons en mérinos à cheville côtelée qui tiennent vraiment."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Merino-Schühchen mit geripptem Bündchen, das tatsächlich hält."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Scarpine in merino con caviglia a costine che restano davvero su."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/id/156/1200/1200",
+          "alt": "Pip & Row Knitted Booties",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matériau"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Merino wool"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Merino wool"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lana merino"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Laine mérinos"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Merinowolle"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lana merino"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Age"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Age"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Edad"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Âge"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Alter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Età"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "0–24 months"
+            },
+            {
+              "locale": "en-GB",
+              "value": "0–24 months"
+            },
+            {
+              "locale": "es-ES",
+              "value": "0–24 meses"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "0–24 mois"
+            },
+            {
+              "locale": "de-DE",
+              "value": "0–24 Monate"
+            },
+            {
+              "locale": "it-IT",
+              "value": "0–24 mesi"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["kids", "kids-baby"],
+    "tags": ["baby", "pip-row"],
+    "title": "Pip & Row Knitted Booties | Amplience Frontend Starter",
+    "description": "Merino booties with a ribbed ankle that actually stays on."
+  }
+}

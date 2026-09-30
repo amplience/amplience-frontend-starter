@@ -1,0 +1,87 @@
+{
+  "id": "4a4f9164-c75c-5664-9eb5-8b4756ef5717",
+  "label": "Product — Aurora Shelving",
+  "body": {
+    "_meta": {
+      "name": "Aurora Shelving",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "4a4f9164-c75c-5664-9eb5-8b4756ef5717",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "base-site/products/aurora-shelving"
+          }
+        ]
+      }
+    },
+    "sku": "AUR-SHELF-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Shelving"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Shelving"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Estantería"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Étagère"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Regal"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Scaffalatura"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Aurora",
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Coming soon. Deliberately has no image and no price — the empty-state product."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Coming soon. Deliberately has no image and no price — the empty-state product."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Próximamente. Deliberadamente sin imagen ni precio: el producto de estado vacío."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Bientôt disponible. Volontairement sans image ni prix : le produit à état vide."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Demnächst. Bewusst ohne Bild und ohne Preis — das Leerzustand-Produkt."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Prossimamente. Volutamente senza immagine né prezzo: il prodotto per lo stato vuoto."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "coming-soon",
+    "tags": ["oak", "shelving"],
+    "title": "Aurora Shelving | Amplience Frontend Starter",
+    "description": "Coming soon. Deliberately has no image and no price — the empty-state product.",
+    "categories": ["home", "home-storage"]
+  }
+}

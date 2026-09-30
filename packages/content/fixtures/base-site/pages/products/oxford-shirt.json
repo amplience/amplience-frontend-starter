@@ -1,0 +1,306 @@
+{
+  "id": "0f52858e-e03c-57db-ba54-3a38301bdcc0",
+  "label": "Product — Halden Oxford Shirt",
+  "body": {
+    "_meta": {
+      "name": "Halden Oxford Shirt",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "0f52858e-e03c-57db-ba54-3a38301bdcc0",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "base-site/products/oxford-shirt"
+          }
+        ]
+      }
+    },
+    "sku": "HAL-SHIRT-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Oxford Shirt"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Oxford Shirt"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Camisa Oxford"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Chemise Oxford"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Oxfordhemd"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Camicia Oxford"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Halden",
+    "prices": [
+      {
+        "amount": 75,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 89,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 95,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A button-down Oxford in soft-washed cotton, cut for everyday wear."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A button-down Oxford in soft-washed cotton, cut for everyday wear."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Una camisa Oxford con cuello abotonado en algodón lavado, para el día a día."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Une chemise Oxford à col boutonné en coton lavé, pensée pour tous les jours."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein Button-down-Oxfordhemd aus weich gewaschener Baumwolle für jeden Tag."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Una camicia Oxford button-down in cotone lavato, pensata per ogni giorno."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/id/602/1200/1200",
+          "alt": "Halden Oxford Shirt",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matériau"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "100% cotton"
+            },
+            {
+              "locale": "en-GB",
+              "value": "100% cotton"
+            },
+            {
+              "locale": "es-ES",
+              "value": "100% algodón"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "100% coton"
+            },
+            {
+              "locale": "de-DE",
+              "value": "100% Baumwolle"
+            },
+            {
+              "locale": "it-IT",
+              "value": "100% cotone"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Regular fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Regular fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte regular"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe droite"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Normale Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità regolare"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Cura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine wash at 30°"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine wash at 30°"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavar a máquina a 30°"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavage en machine à 30°"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwäsche bei 30°"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavaggio in lavatrice a 30°"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["mens", "mens-shirts"],
+    "tags": ["shirts", "halden"],
+    "title": "Halden Oxford Shirt | Amplience Frontend Starter",
+    "description": "A button-down Oxford in soft-washed cotton, cut for everyday wear."
+  }
+}

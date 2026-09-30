@@ -1,0 +1,242 @@
+{
+  "id": "49490292-4607-5ec2-9439-700825626ce3",
+  "label": "Product — Oreline Midi Wrap Dress",
+  "body": {
+    "_meta": {
+      "name": "Oreline Midi Wrap Dress",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "49490292-4607-5ec2-9439-700825626ce3",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "base-site/products/midi-wrap-dress"
+          }
+        ]
+      }
+    },
+    "sku": "ORE-DRES-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Midi Wrap Dress"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Midi Wrap Dress"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Vestido midi cruzado"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Robe portefeuille midi"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Midi-Wickelkleid"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Abito midi a portafoglio"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Oreline",
+    "prices": [
+      {
+        "amount": 165,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 189,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 209,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A true wrap in crepe, tied at the waist and cut to fall mid-calf."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A true wrap in crepe, tied at the waist and cut to fall mid-calf."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Un cruzado auténtico en crepé, atado a la cintura y cortado a media pantorrilla."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un vrai portefeuille en crêpe, noué à la taille, tombant à mi-mollet."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein echtes Wickelkleid aus Krepp, in der Taille gebunden, wadenlang."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Un vero portafoglio in crêpe, annodato in vita, lunghezza a metà polpaccio."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/id/656/1200/1200",
+          "alt": "Oreline Midi Wrap Dress",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Length"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Length"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Largo"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Longueur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Länge"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lunghezza"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Midi"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Midi"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Midi"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Midi"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Midi"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Midi"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Cura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Dry clean only"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Dry clean only"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Solo limpieza en seco"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Nettoyage à sec uniquement"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Nur chemische Reinigung"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Solo lavaggio a secco"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["womens", "womens-dresses"],
+    "tags": ["dresses", "oreline"],
+    "title": "Oreline Midi Wrap Dress | Amplience Frontend Starter",
+    "description": "A true wrap in crepe, tied at the waist and cut to fall mid-calf."
+  }
+}

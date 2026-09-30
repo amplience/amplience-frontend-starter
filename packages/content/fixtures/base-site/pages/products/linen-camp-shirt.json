@@ -1,0 +1,242 @@
+{
+  "id": "7a11ef58-70d2-52d9-8c32-b330469f6bf4",
+  "label": "Product — Brackish Linen Camp Shirt",
+  "body": {
+    "_meta": {
+      "name": "Brackish Linen Camp Shirt",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "7a11ef58-70d2-52d9-8c32-b330469f6bf4",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "base-site/products/linen-camp-shirt"
+          }
+        ]
+      }
+    },
+    "sku": "BRK-SHIRT-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Linen Camp Shirt"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Linen Camp Shirt"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Camisa de lino"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Chemise en lin"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Leinenhemd"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Camicia in lino"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Brackish",
+    "prices": [
+      {
+        "amount": 68,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 79,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 85,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "An open-collar linen shirt that creases honestly and cools in the heat."
+        },
+        {
+          "locale": "en-GB",
+          "value": "An open-collar linen shirt that creases honestly and cools in the heat."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Una camisa de lino con cuello abierto que se arruga con honestidad y refresca."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Une chemise en lin à col ouvert, qui se froisse franchement et tient au frais."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein Leinenhemd mit offenem Kragen, das ehrlich knittert und kühl hält."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Una camicia in lino con collo aperto, che si sgualcisce con onestà e rinfresca."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/id/453/1200/1200",
+          "alt": "Brackish Linen Camp Shirt",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matériau"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "100% linen"
+            },
+            {
+              "locale": "en-GB",
+              "value": "100% linen"
+            },
+            {
+              "locale": "es-ES",
+              "value": "100% lino"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "100% lin"
+            },
+            {
+              "locale": "de-DE",
+              "value": "100% Leinen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "100% lino"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Relaxed fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Relaxed fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte holgado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe ample"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Lockere Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità comoda"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["mens", "mens-shirts"],
+    "tags": ["shirts", "brackish"],
+    "title": "Brackish Linen Camp Shirt | Amplience Frontend Starter",
+    "description": "An open-collar linen shirt that creases honestly and cools in the heat."
+  }
+}

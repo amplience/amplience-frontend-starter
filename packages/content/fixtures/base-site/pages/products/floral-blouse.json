@@ -1,0 +1,306 @@
+{
+  "id": "a246676d-64e8-5c7b-bf32-89161ac99e07",
+  "label": "Product — Pip & Row Floral Blouse",
+  "body": {
+    "_meta": {
+      "name": "Pip & Row Floral Blouse",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "a246676d-64e8-5c7b-bf32-89161ac99e07",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "base-site/products/floral-blouse"
+          }
+        ]
+      }
+    },
+    "sku": "PIP-GIRL-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Floral Blouse"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Floral Blouse"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Blusa de flores"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Blouse fleurie"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Geblümte Bluse"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Camicetta a fiori"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Pip & Row",
+    "prices": [
+      {
+        "amount": 32,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 37,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 39,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A soft cotton blouse in a small ditsy print, with buttons down the front."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A soft cotton blouse in a small ditsy print, with buttons down the front."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Una blusa suave de algodón con estampado menudo y botones delanteros."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Une blouse en coton doux à petit imprimé fleuri, boutonnée devant."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Eine weiche Baumwollbluse mit kleinem Blumendruck und Knopfleiste."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Una camicetta di cotone morbido a fiorellini, con bottoni davanti."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/id/822/1200/1200",
+          "alt": "Pip & Row Floral Blouse",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matériau"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "100% cotton"
+            },
+            {
+              "locale": "en-GB",
+              "value": "100% cotton"
+            },
+            {
+              "locale": "es-ES",
+              "value": "100% algodón"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "100% coton"
+            },
+            {
+              "locale": "de-DE",
+              "value": "100% Baumwolle"
+            },
+            {
+              "locale": "it-IT",
+              "value": "100% cotone"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Closure"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Closure"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cierre"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Fermeture"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Verschluss"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Chiusura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Button front"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Button front"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Botones delanteros"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Boutonnage devant"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Knopfleiste"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Bottoni davanti"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Age"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Age"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Edad"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Âge"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Alter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Età"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "2–8 years"
+            },
+            {
+              "locale": "en-GB",
+              "value": "2–8 years"
+            },
+            {
+              "locale": "es-ES",
+              "value": "2–8 años"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "2–8 ans"
+            },
+            {
+              "locale": "de-DE",
+              "value": "2–8 Jahre"
+            },
+            {
+              "locale": "it-IT",
+              "value": "2–8 anni"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["kids", "kids-girls"],
+    "tags": ["girls", "pip-row"],
+    "title": "Pip & Row Floral Blouse | Amplience Frontend Starter",
+    "description": "A soft cotton blouse in a small ditsy print, with buttons down the front."
+  }
+}

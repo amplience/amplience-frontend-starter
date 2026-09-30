@@ -160,13 +160,19 @@ describe('MockContentClient', () => {
       }>('base-site/site/hierarchy-menu-main')
 
       expect(menu._meta.schema).toBe('https://quadratic.amplience.com/v2/content/hierarchy-menu')
-      expect(menu.items).toHaveLength(5)
+      expect(menu.items).toHaveLength(9)
       expect('children' in menu).toBe(false)
 
       const docs = menu.items.find(
         (i) => i._meta.deliveryId === 'c3d4e5f6-0004-4000-8000-000000000015',
       )
       expect(docs?.children).toHaveLength(10)
+
+      // The restored commerce tree (ADR-0024) — three subcategories under Mens.
+      const mens = menu.items.find(
+        (i) => i._meta.deliveryId === 'c3d4e5f6-0004-4000-8000-000000000002',
+      )
+      expect(mens?.children).toHaveLength(3)
     })
 
     it('returns leaf nodes with no children key at all', async () => {
