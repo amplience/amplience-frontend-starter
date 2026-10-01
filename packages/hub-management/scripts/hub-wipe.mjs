@@ -167,6 +167,21 @@ const listAll = async (repo, status) => {
 const unpublishing = { enabled: true, blockedBy: undefined }
 
 /**
+ * Whether to send `ignoreSchemaValidation` on key-stripping updates, and
+ * whether the hub has already told us it won't accept it.
+ *
+ * Set from the environment at startup. The hub is the authority, not the
+ * config: an environment can claim the setting is on when it isn't, so the
+ * first rejection turns it off for the rest of the run rather than failing
+ * every remaining item the same way.
+ */
+const schemaOverride = { enabled: false, rejected: false }
+
+/** Does this error carry a specific Amplience error code? */
+const hasErrorCode = (error, code) =>
+  (error?.response?.data?.errors ?? []).some((e) => e?.code === code)
+
+/**
  * Retract one item from Delivery. Returns true when a snapshot was withdrawn.
  *
  * A per-item failure (an edition assignment, a transient 5xx, a rate limit) is
@@ -203,6 +218,46 @@ const unpublishActiveItems = async (client, repoId, repoLabel) => {
   console.log(`✓ Unpublished ${unpublished} active item(s) in ${repoLabel} repo`)
 }
 
+/** Best-effort message from an SDK error. */
+const messageOf = (error) =>
+  (error?.response?.data?.errors ?? [])
+    .map((e) => e?.message)
+    .filter(Boolean)
+    .join('; ') || (error instanceof Error ? error.message : String(error))
+
+/**
+ * Save an item whose delivery keys have just been nulled.
+ *
+ * `ignoreSchemaValidation` is what lets a key be stripped from an item whose
+ * body no longer conforms to a schema this hub registers — exactly the legacy
+ * content a long-lived sandbox accumulates. The API only accepts the parameter
+ * when the hub's "Ignore schema validation" setting is on (org/hub admin, DC →
+ * hub → Properties), and an environment's config can claim that when it isn't
+ * true. So the rejection is handled rather than trusted: say so once, stop
+ * sending it, and retry. The retry may still fail validation, which is the
+ * caller's problem to tolerate.
+ */
+const stripKeys = async (item) => {
+  if (!schemaOverride.enabled) return item.related.update(item)
+  try {
+    return await item.related.update(item, { ignoreSchemaValidation: true })
+  } catch (error) {
+    if (!hasErrorCode(error, 'IGNORE_SCHEMA_VALIDATION_NOT_ENABLED')) throw error
+    if (!schemaOverride.rejected) {
+      schemaOverride.rejected = true
+      console.warn(
+        '\n  ⚠ This hub does not have "Ignore schema validation" enabled, though the\n' +
+          '    environment asks for it. Continuing without it — items whose body no\n' +
+          '    longer matches a registered schema will keep their delivery keys.\n' +
+          '    Enable it in DC → hub → Properties, or clear\n' +
+          '    AMPLIENCE_IGNORE_SCHEMA_VALIDATION to stop asking.\n',
+      )
+    }
+    schemaOverride.enabled = false
+    return item.related.update(item)
+  }
+}
+
 /**
  * Reclaim *archived* items: unarchive, retract any live snapshot, strip
  * delivery keys (the same body mutation dc-cli's archive applies to active
@@ -215,12 +270,13 @@ const unpublishActiveItems = async (client, repoId, repoLabel) => {
  * pessimistic and each run re-checks (the HAL gate keeps that to one list call
  * per item, not one POST).
  */
-const reclaimArchivedItems = async (client, repoId, repoLabel, ignoreSchemaValidation) => {
+const reclaimArchivedItems = async (client, repoId, repoLabel) => {
   const repo = await client.contentRepositories.get(repoId)
   const archived = await listAll(repo, 'ARCHIVED')
 
   let freed = 0
   let unpublished = 0
+  const stranded = []
   for (const item of archived) {
     // Belt and braces: trust the item's own status over the list filter.
     if (item.status !== 'ARCHIVED') continue
@@ -230,38 +286,50 @@ const reclaimArchivedItems = async (client, repoId, repoLabel, ignoreSchemaValid
 
     let current = await item.related.unarchive()
 
-    if (needsKeyStrip) {
-      current.body._meta.deliveryKey = null
-      current.body._meta.deliveryKeys = null
-      // ignoreSchemaValidation lets us strip keys from items whose body no
-      // longer conforms to a since-drifted schema. It requires the hub's
-      // "Ignore schema validation" setting to be ON (org/hub admin, DC
-      // Properties) — otherwise the API rejects the param with
-      // IGNORE_SCHEMA_VALIDATION_NOT_ENABLED, so it's opt-in via env.
-      const updateParams = ignoreSchemaValidation ? { ignoreSchemaValidation: true } : {}
-      current = await current.related.update(current, updateParams)
-      freed += 1
+    try {
+      if (needsKeyStrip) {
+        current.body._meta.deliveryKey = null
+        current.body._meta.deliveryKeys = null
+        current = await stripKeys(current)
+        freed += 1
+      }
+
+      // Unpublish last of the two, on whichever resource is freshest: the
+      // update above is the version-checked call, so it goes first and hands
+      // back the version the archive below needs. Stripping the key doesn't
+      // affect the retraction — unpublish addresses the item, and the
+      // published snapshot still holds the key it was published with until
+      // it's withdrawn.
+      if (mightBeLive && (await unpublishItem(current))) unpublished += 1
+    } catch (error) {
+      // One unreclaimable item must not abort the teardown — the same stance
+      // unpublishItem takes, and what the dc-cli passes get from --ignoreError.
+      // Legacy content authored under a schema this hub no longer registers is
+      // the usual cause, and it is exactly what a sandbox accumulates.
+      stranded.push(`${item.label ?? item.id}: ${messageOf(error)}`)
+    } finally {
+      // Always put it back: an item left unarchived is a worse outcome than
+      // one that kept its delivery key.
+      try {
+        await current.related.archive()
+      } catch {
+        /* already archived, or archiving is what failed — nothing left to do */
+      }
     }
-
-    // Unpublish last of the two, on whichever resource is freshest: the update
-    // above is the version-checked call, so it goes first and hands back the
-    // version the archive below needs. Stripping the key doesn't affect the
-    // retraction — unpublish addresses the item, and the published snapshot
-    // still holds the key it was published with until it's withdrawn.
-    if (mightBeLive && (await unpublishItem(current))) unpublished += 1
-
-    await current.related.archive()
   }
   console.log(
     `✓ Reclaimed archived items in ${repoLabel} repo — ` +
-      `unpublished ${unpublished}, freed delivery keys on ${freed}`,
+      `unpublished ${unpublished}, freed delivery keys on ${freed}` +
+      (stranded.length > 0 ? `, ${stranded.length} left alone` : ''),
   )
+  for (const line of stranded) console.warn(`  ⚠ ${line}`)
+  return stranded.length
 }
 
 /** Run both management-SDK passes over one repository. */
-const reclaimRepo = async (client, repoId, repoLabel, ignoreSchemaValidation) => {
+const reclaimRepo = async (client, repoId, repoLabel) => {
   await unpublishActiveItems(client, repoId, repoLabel)
-  await reclaimArchivedItems(client, repoId, repoLabel, ignoreSchemaValidation)
+  await reclaimArchivedItems(client, repoId, repoLabel)
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────────
@@ -364,7 +432,7 @@ if (scope === 'webhooks') {
 // (org/hub admin, DC → hub → Properties). Opt in per environment once that
 // setting is enabled; leave it off and the wipe still completes thanks to
 // --ignoreError below, just skipping any items it can't strip.
-const ignoreSchemaValidation = ['1', 'true', 'yes'].includes(
+schemaOverride.enabled = ['1', 'true', 'yes'].includes(
   (env('AMPLIENCE_IGNORE_SCHEMA_VALIDATION') ?? '').toLowerCase(),
 )
 
@@ -386,10 +454,10 @@ const clientSecret = env('AMPLIENCE_CLIENT_SECRET')
 if (clientId !== undefined && clientSecret !== undefined) {
   console.log('\nRetracting published content and checking for stranded delivery keys…')
   const client = new DynamicContent({ client_id: clientId, client_secret: clientSecret })
-  await reclaimRepo(client, contentRepo, 'content', ignoreSchemaValidation)
-  await reclaimRepo(client, slotsRepo, 'slots', ignoreSchemaValidation)
+  await reclaimRepo(client, contentRepo, 'content')
+  await reclaimRepo(client, slotsRepo, 'slots')
   if (siteComponentsRepo !== undefined) {
-    await reclaimRepo(client, siteComponentsRepo, 'site-components', ignoreSchemaValidation)
+    await reclaimRepo(client, siteComponentsRepo, 'site-components')
   }
   if (!unpublishing.enabled) {
     console.warn(
@@ -420,7 +488,7 @@ if (clientId !== undefined && clientSecret !== undefined) {
 const archiveFlags = [
   '-f',
   '--ignoreError',
-  ...(ignoreSchemaValidation ? ['--ignoreSchemaValidation'] : []),
+  ...(schemaOverride.enabled ? ['--ignoreSchemaValidation'] : []),
 ]
 
 console.log(`\nArchiving all content in content repo (${contentRepo})…`)
