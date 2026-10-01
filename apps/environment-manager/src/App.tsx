@@ -7,8 +7,7 @@ import { FixturesCard } from './components/FixturesCard.js'
 import { ListFilter } from './components/ListFilter.js'
 import { SiteCard } from './components/SiteCard.js'
 import { FILTER_MIN_ITEMS, filterEnvironments } from './filter-environments.js'
-import type { Config, Environment } from './types.js'
-import { FIXTURES_NAME } from './types.js'
+import type { Config, Environment, FixtureSetInfo } from './types.js'
 
 type Modal = { mode: 'add' } | { mode: 'edit'; env: Environment } | null
 
@@ -24,6 +23,9 @@ const isLocalhostUrl = (url: string) => /(?:localhost|127\.0\.0\.1|\[::1\])/i.te
 
 export function App() {
   const [config, setConfig] = useState<Config | null>(null)
+  // Read once: a set appearing or disappearing is someone editing the repo,
+  // which restarts the API server anyway.
+  const [fixtureSets, setFixtureSets] = useState<FixtureSetInfo[]>([])
   const [modal, setModal] = useState<Modal>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [tab, setTab] = useState<Tab>('sources')
@@ -43,6 +45,12 @@ export function App() {
 
   useEffect(() => {
     load()
+    // A failure here leaves the list empty, which the card reads as "no set
+    // resolved" — the hubs still work, so it isn't worth a second error banner.
+    void api
+      .fixtureSets()
+      .then(setFixtureSets)
+      .catch(() => setFixtureSets([]))
   }, [load])
 
   async function handleSave(env: Environment) {
@@ -64,11 +72,10 @@ export function App() {
     setConfig(await api.remove(name))
   }
 
-  async function handleSaveFixturesBrand(brand: string) {
-    setConfig(await api.setFixturesBrand(brand))
-  }
-
   const hubs = config?.environments ?? []
+  // Exactly one thing is active across the panel, so "offline" is simply
+  // "whatever is active isn't one of the hubs" (ADR-0019).
+  const isOffline = config !== null && !hubs.some((e) => e.name === config.active)
   const showHubFilter = hubs.length >= FILTER_MIN_ITEMS
   // Hiding the input must never leave a filter silently applied — deleting hubs
   // can drop the count back below the threshold while a query is still set.
@@ -128,15 +135,25 @@ export function App() {
             {/* Content Sources — hubs + fixtures */}
             {tab === 'sources' && (
               <div className="env-list">
-                <h3 className="env-list__title">Fixtures</h3>
-                <FixturesCard
-                  isActive={config.active === FIXTURES_NAME}
-                  brand={config.fixturesBrand ?? ''}
-                  onActivate={() => {
-                    void handleActivate(FIXTURES_NAME)
-                  }}
-                  onSaveBrand={handleSaveFixturesBrand}
-                />
+                <h3 className="env-list__title">Fixture sets</h3>
+                {fixtureSets.map((set) => (
+                  <FixturesCard
+                    key={set.name}
+                    set={set}
+                    // Exactly one thing is active across the panel, so a set is
+                    // active only when no hub is — never both (ADR-0019).
+                    isActive={isOffline && config.active === set.name}
+                    onActivate={() => {
+                      void handleActivate(set.name)
+                    }}
+                  />
+                ))}
+                {fixtureSets.length === 0 && (
+                  <p className="env-card__description">
+                    No fixture sets found under <code>packages/content/fixtures/</code>. Each set is
+                    a directory with a <code>set.json</code>.
+                  </p>
+                )}
                 <div className="env-list__header">
                   <h3 className="env-list__title">Hubs</h3>
                   {showHubFilter && (

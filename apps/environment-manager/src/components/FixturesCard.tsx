@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { resolveFixturesBrand } from '../fixtures-brand.js'
+import type { FixtureSetInfo } from '../types.js'
 
 /** Droplet — used for 'brand' fields/badges. */
 const ThemeIcon = () => (
@@ -17,45 +17,20 @@ const ThemeIcon = () => (
 )
 
 type Props = {
+  set: FixtureSetInfo
   isActive: boolean
-  brand: string
   onActivate: () => void
-  onSaveBrand: (brand: string) => Promise<void>
 }
 
-export function FixturesCard({ isActive, brand, onActivate, onSaveBrand }: Props) {
+/**
+ * One fixture set — an offline content source.
+ *
+ * A set's brand and namespace are its own, declared in its `set.json`, so there
+ * is nothing to edit here: activating a different set switches both. The list is
+ * code-bound to what's on disk, so there is no add or remove either.
+ */
+export function FixturesCard({ set, isActive, onActivate }: Props) {
   const [collapsed, setCollapsed] = useState(true)
-  const [draft, setDraft] = useState(brand)
-  const [saved, setSaved] = useState(brand)
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  // Saved config wins over an in-flight draft; adjusted during render rather
-  // than in an effect, which would cascade an extra render.
-  if (brand !== saved) {
-    setSaved(brand)
-    setDraft(brand)
-    setError(null)
-  }
-
-  const dirty = draft.trim() !== brand.trim()
-
-  function revert() {
-    setDraft(brand)
-    setError(null)
-  }
-
-  async function save() {
-    setBusy(true)
-    setError(null)
-    try {
-      await onSaveBrand(draft.trim())
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not save the brand.')
-    } finally {
-      setBusy(false)
-    }
-  }
 
   return (
     <div
@@ -72,10 +47,13 @@ export function FixturesCard({ isActive, brand, onActivate, onSaveBrand }: Props
         }}
       >
         <div className="env-card__header-labels">
-          <span className="env-card__label">Local Fixtures</span>
+          <span className="env-card__label">{set.label}</span>
+          <span className="badge badge--brand badge--sm" title="Site name (delivery-key namespace)">
+            # {set.name}
+          </span>
           <span className="badge badge--brand" title="Brand">
             <ThemeIcon />
-            {resolveFixturesBrand(brand)}
+            {set.defaultBrand === '' ? 'default' : set.defaultBrand}
           </span>
         </div>
         <div className="env-card__header-actions">
@@ -112,61 +90,9 @@ export function FixturesCard({ isActive, brand, onActivate, onSaveBrand }: Props
       {!collapsed && (
         <div className="env-card__body">
           <p className="env-card__description">
-            Serves content from bundled fixture files — no hub connection or credentials needed. The
-            default for local development.
+            {set.description} Served from bundled fixture files — no hub connection or credentials
+            needed.
           </p>
-
-          <div className="fixtures-brand-wrapper">
-            <div className="fixtures-brand">
-              <label className="site-field" title="Brand (e.g. acme)">
-                <ThemeIcon />
-                <span className="site-card__source-label">Brand</span>
-                <input
-                  className="site-row__input"
-                  placeholder="Brand (blank = default)"
-                  value={draft}
-                  onChange={(e) => setDraft(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && dirty && !busy) {
-                      e.preventDefault()
-                      void save()
-                    }
-                    if (e.key === 'Escape') revert()
-                  }}
-                  disabled={busy}
-                />
-              </label>
-
-              {dirty && (
-                <div className="site-card__actions">
-                  <button
-                    className="btn btn--sm btn--primary"
-                    onClick={() => {
-                      void save()
-                    }}
-                    disabled={busy}
-                  >
-                    {busy ? 'Saving…' : 'Save'}
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn--sm btn--ghost"
-                    onClick={revert}
-                    disabled={busy}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              )}
-            </div>
-
-            <p className="env-card__description">
-              Written to <code>NEXT_PUBLIC_BRAND</code> in <code>apps/web/.env</code> whenever
-              fixtures are the active content source.
-            </p>
-
-            {error !== null && <p className="site-card__error">{error}</p>}
-          </div>
         </div>
       )}
     </div>

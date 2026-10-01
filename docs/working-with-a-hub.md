@@ -32,7 +32,11 @@ _Under the hood this stores the details in an untracked `amplience.config.json` 
 > [!TIP] Checking permissions
 > If you hit permission errors — or just want to check before you start — use the **Check credentials** button.
 
-Use the **Set active** buttons to switch the local dev server between the fixtures (default) and any hub you've added.
+Use the **Set active** buttons to switch the local dev server between a fixture
+set (the default, offline) and any hub you've added. Exactly one thing is active
+at a time, and activating it writes both `.env` files — so the pages you see and
+the hub the `hub:*` commands target can't drift apart. See
+[Fixture sets](commands.md#fixture-sets) for what a set is.
 
 ## Seeding & syncing content
 

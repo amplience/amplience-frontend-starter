@@ -1,5 +1,23 @@
 /** Sentinel name for the built-in "Local Fixtures" entry — never stored in config.json. */
+/**
+ * The pre-set-aware name for the offline source. The server migrates it to the
+ * default set's name on read, and still accepts it when activating.
+ */
 export const FIXTURES_NAME = 'fixtures'
+
+/**
+ * A fixture set as the server reports it, read from its `set.json` (ADR-0019).
+ * The name is both the set's identity and its delivery-key namespace.
+ */
+export type FixtureSetInfo = {
+  name: string
+  label: string
+  description: string
+  defaultBrand: string
+  defaultLocale: string
+  authoredLocales: string[]
+  generatedDocs: boolean
+}
 
 export type Environment = {
   name: string
@@ -30,6 +48,12 @@ export type Environment = {
   stagingHost: string
   defaultBrand: string
   defaultSite: string
+  /**
+   * Which fixture set this hub's sites carry when their own names don't say
+   * (ADR-0019) — the partner path, where starter content is seeded under
+   * another namespace. A site named after a set serves that set regardless.
+   */
+  defaultFixtureSet?: string
   webApps: WebApp[]
   republish: boolean
   /**
