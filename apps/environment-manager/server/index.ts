@@ -115,16 +115,6 @@ type Config = {
   /** A hub's name, or a fixture set's. The hubs are enumerable, so the two tell apart. */
   active: string
   environments: Environment[]
-  /**
-   * Legacy: a single brand for "the fixtures", from when there was one set.
-   *
-   * No longer read. With several sets, one override applied to whichever is
-   * active means switching set never changes the brand — the set's own
-   * `defaultBrand` becomes unreachable, which is the originating bug wearing a
-   * different hat. Each set now carries its own. Kept in the type so existing
-   * configs parse and the value survives a round-trip; QL-140 retires the input.
-   */
-  fixturesBrand?: string
 }
 
 // ── Config helpers ────────────────────────────────────────────────────────────
@@ -138,13 +128,22 @@ const DEFAULT_ACTIVE = migrateActive(LEGACY_FIXTURES_NAME, FIXTURE_SETS)
  * hand-editable and a checkout can predate any given change. It is a no-op on an
  * already-migrated config, and nothing is written back — the next write persists
  * it, so simply looking at the panel doesn't rewrite someone's file.
+ *
+ * Two migrations so far: the `fixtures` sentinel becomes the name of the set it
+ * meant, and `fixturesBrand` is dropped. That field was a single brand for "the
+ * fixtures", from when there was one set; with several, one override applied to
+ * whichever is active meant switching set never changed the brand, and each set
+ * now declares its own in `set.json`. Dropped on read rather than left to rot,
+ * so it doesn't sit in people's files looking like it still does something.
  */
 async function readConfig(): Promise<Config> {
   if (!existsSync(CONFIG_PATH)) {
-    return { active: DEFAULT_ACTIVE, environments: [], fixturesBrand: '' }
+    return { active: DEFAULT_ACTIVE, environments: [] }
   }
   const raw = await readFile(CONFIG_PATH, 'utf-8')
-  const config = JSON.parse(raw) as Config
+  const { fixturesBrand: _dropped, ...config } = JSON.parse(raw) as Config & {
+    fixturesBrand?: string
+  }
   return { ...config, active: migrateActive(config.active, FIXTURE_SETS) }
 }
 

@@ -67,14 +67,9 @@ export type Environment = {
 }
 
 export type Config = {
+  /** A hub's name, or a fixture set's. The hubs are enumerable, so the two tell apart. */
   active: string
   environments: Environment[]
-  /**
-   * Brand the built-in Local Fixtures source renders under — the fixtures
-   * equivalent of an environment's defaultBrand. Optional so configs written
-   * before fixtures carried a brand still parse; absent means the base theme.
-   */
-  fixturesBrand?: string
 }
 
 export type EnvironmentStats = {

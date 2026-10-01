@@ -1,6 +1,5 @@
 {
   "active": "frontend-starter",
-  "fixturesBrand": "",
   "environments": [
     {
       "name": "my-hub",
