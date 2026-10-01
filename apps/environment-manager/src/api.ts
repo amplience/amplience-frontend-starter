@@ -1,3 +1,4 @@
+import type { ContentBreakdown } from './content-rows.js'
 import type {
   Config,
   DiscoverResult,
@@ -43,6 +44,8 @@ export const api = {
     request<Config>(`/environments/${encodeURIComponent(name)}`, { method: 'DELETE' }),
   stats: (name: string) =>
     request<EnvironmentStats>(`/environments/${encodeURIComponent(name)}/stats`),
+  contentBreakdown: (name: string) =>
+    request<ContentBreakdown>(`/environments/${encodeURIComponent(name)}/content-breakdown`),
   permissions: (env: {
     clientId: string
     clientSecret: string

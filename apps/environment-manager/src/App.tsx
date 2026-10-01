@@ -173,6 +173,7 @@ export function App() {
                   <EnvironmentCard
                     key={env.name}
                     env={env}
+                    fixtureSets={fixtureSets}
                     isActive={env.name === config.active}
                     onActivate={() => {
                       void handleActivate(env.name)

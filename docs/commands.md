@@ -141,6 +141,17 @@ hand-authored, and the script refuses rather than guess. `--set` is the only one
 that runs unprompted, because the repository can put it back; `--orphaned` and
 `--custom` print what they would remove and need `--apply` to go ahead.
 
+In the Environment Manager the same three appear as child rows under **Content
+items**, one per set plus _Orphaned_ and _Custom_ when the hub holds any. A
+control that can't act isn't rendered rather than greyed out, so those two rows
+carry no **Sync** — there is no source on disk to sync from — and their **Wipe**
+reports what it found before a second click removes it.
+
+With no import map on this machine, every scoped control disappears and the row
+breakdown says why. The wholesale **Wipe** on the parent row and **Wipe all**
+stay, because they enumerate the hub and need no provenance at all — so wiping
+and re-seeding remains a way out, and rebuilds the map as it goes.
+
 ### Fixture sets
 
 Starter content lives in named sets under `packages/content/fixtures/`, one
@@ -214,7 +225,7 @@ Deliberately deferred, so you don't go looking for them:
 
 | Environment Manager                               | Terminal                                        |
 | ------------------------------------------------- | ----------------------------------------------- |
-| **Set active** on _Local Fixtures_                | — (default with no hub configured)              |
+| **Set active** on a fixture set                   | — (default with no hub configured)              |
 | **+ Add hub** → **Fetch hub details**             | — (GUI only; writes `amplience.config.json`)    |
 | **Check credentials**                             | — (GUI only)                                    |
 | Settings row → **Seed** / **Sync**                | `pnpm hub:import:settings`                      |
@@ -229,6 +240,10 @@ Deliberately deferred, so you don't go looking for them:
 | Content items row → **Seed**                      | `AMPLIENCE_REPUBLISH=1 pnpm hub:import:content` |
 | Content items row → **Sync**                      | `pnpm hub:import:content`                       |
 | Content items row → **Wipe**                      | `pnpm hub:wipe:content`                         |
+| A set's child row → **Seed** / **Sync**           | `pnpm hub:import:content --set <name>`          |
+| A set's child row → **Wipe**                      | `pnpm hub:wipe content --set <name>`            |
+| _Orphaned_ child row → **Wipe**                   | `pnpm hub:wipe content --orphaned [--apply]`    |
+| _Custom_ child row → **Wipe**                     | `pnpm hub:wipe content --custom [--apply]`      |
 | All resources → **Seed all**                      | `AMPLIENCE_REPUBLISH=1 pnpm hub:import`         |
 | All resources → **Sync all**                      | `pnpm hub:import`                               |
 | All resources → **Wipe all**                      | `pnpm hub:wipe`                                 |

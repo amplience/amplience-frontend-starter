@@ -222,6 +222,30 @@ async function fetchCount(token: string, url: string): Promise<number> {
   return data.page.totalElements
 }
 
+/**
+ * The hub's configured locales — the same list the seed reconciles against
+ * (ADR-0019 §6.6), read the same way `probeHubLocales` in hub-import.mjs does.
+ *
+ * Support configures these per hub on request, so they vary, and a set's
+ * authored locales are reconciled against them at seed time. Returns an empty
+ * list rather than throwing: the panel's other counts are still worth showing
+ * when only this one call fails.
+ */
+async function fetchHubLocales(token: string, hubId: string): Promise<string[]> {
+  try {
+    const res = await fetch(`${AMPLIENCE_API}/hubs/${hubId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (!res.ok) return []
+    const hub = (await res.json()) as {
+      settings?: { localization?: { locales?: string[] } }
+    }
+    return hub.settings?.localization?.locales ?? []
+  } catch {
+    return []
+  }
+}
+
 // ── Hub discovery ─────────────────────────────────────────────────────────────
 
 type DiscoveredRepo = { id: string; name: string; label: string; features: string[] }
@@ -1458,7 +1482,7 @@ app.get('/api/environments/:name/stats', async (c) => {
     const token = await getAmplienceToken(env.clientId, env.clientSecret)
     // Ordered as the GUI lists them: settings → schemas → types → extensions
     // → webhooks → content items.
-    const [workflowStates, schemas, types, extensions, webhooks, contentItems, slotItems] =
+    const [workflowStates, schemas, types, extensions, webhooks, contentItems, slotItems, locales] =
       await Promise.all([
         fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/workflow-states`),
         fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/content-type-schemas?status=ACTIVE`),
@@ -1473,6 +1497,7 @@ app.get('/api/environments/:name/stats', async (c) => {
           token,
           `${AMPLIENCE_API}/content-repositories/${env.repoSlots}/content-items?status=ACTIVE`,
         ),
+        fetchHubLocales(token, env.hubId),
       ])
     return c.json({
       workflowStates,
@@ -1481,6 +1506,7 @@ app.get('/api/environments/:name/stats', async (c) => {
       extensions,
       webhooks,
       items: contentItems + slotItems,
+      locales,
     })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
@@ -1491,20 +1517,28 @@ app.get('/api/environments/:name/stats', async (c) => {
 
 // ── Content provenance ────────────────────────────────────────────────────────
 
-/** Every content item in a repository, active and archived, as `{ id, label }`. */
+/**
+ * Every content item in a repository, active and archived.
+ *
+ * Both statuses, because the classifier needs to see archived items to attribute
+ * them — but `summarise` counts only the live ones. A wipe archives rather than
+ * deletes and prunes the map entries for what it removed, so the archived
+ * remains match no map entry; counting them would file a completed wipe's output
+ * under `custom` and make the wipe look like it had failed.
+ */
 async function listRepoItems(token: string, repoId: string) {
-  const items: { id: string; label: string }[] = []
+  const items: { id: string; label: string; status: string }[] = []
   for (const status of ['ACTIVE', 'ARCHIVED']) {
     for (let page = 0; ; page++) {
       const url = `${AMPLIENCE_API}/content-repositories/${repoId}/content-items?status=${status}&size=100&page=${page}`
       const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } })
       if (!res.ok) throw new Error(`HTTP ${res.status} listing ${status} items`)
       const body = (await res.json()) as {
-        _embedded?: { 'content-items'?: { id: string; label?: string }[] }
+        _embedded?: { 'content-items'?: { id: string; label?: string; status?: string }[] }
         page?: { totalPages?: number }
       }
       for (const item of body._embedded?.['content-items'] ?? []) {
-        items.push({ id: item.id, label: item.label ?? item.id })
+        items.push({ id: item.id, label: item.label ?? item.id, status: item.status ?? status })
       }
       if (page + 1 >= (body.page?.totalPages ?? 1)) break
     }
@@ -1582,9 +1616,17 @@ app.get('/api/environments/:name/content-breakdown', async (c) => {
 // POST /api/environments/:name/:op[?set=<fixture set>]
 //
 // :op must be a key in OP_CONFIG — see the table above for the full list.
-// `set` scopes a content operation to one fixture set, as `--set` does on the
-// terminal; it is ignored by ops that don't touch content, which have no set to
-// be about. All operations stream their output as plain text.
+//
+// Query parameters, all of which mirror a flag on the terminal and apply only to
+// content operations, which are the only ones a fixture set is about:
+//
+//   set=<name>              --set <name>     one set's items
+//   provenance=custom       --custom         items the import map never saw
+//   provenance=orphaned     --orphaned       items whose source left the repo
+//   apply=1                 --apply          go ahead; without it the two
+//                                            provenance wipes only report
+//
+// All operations stream their output as plain text.
 
 app.post('/api/environments/:name/:op', async (c) => {
   const { name, op } = c.req.param()
@@ -1600,13 +1642,33 @@ app.post('/api/environments/:name/:op', async (c) => {
     const sets = FIXTURE_SETS.map((s) => s.name).join(', ')
     return c.json({ error: `Unknown fixture set "${requestedSet}" — available: ${sets}.` }, 400)
   }
+  const provenance = c.req.query('provenance')
+  if (provenance !== undefined && provenance !== 'custom' && provenance !== 'orphaned') {
+    return c.json({ error: `Unknown provenance "${provenance}" — custom or orphaned.` }, 400)
+  }
+  if (provenance !== undefined && requestedSet !== undefined) {
+    return c.json({ error: 'A set and a provenance select different things — pass one.' }, 400)
+  }
+
   // Only the content steps vary by set; the model is shared, so passing --set to
   // a schema or type step would read as if it were seeding a per-set model.
-  const setName = opCfg.perSet === true ? requestedSet : undefined
-  const args = setName === undefined ? opCfg.args : [...opCfg.args, '--set', setName]
+  const perSet = opCfg.perSet === true
+  const setName = perSet ? requestedSet : undefined
+  const scopeFlag = perSet && provenance !== undefined ? `--${provenance}` : undefined
+
+  const args = [
+    ...opCfg.args,
+    ...(setName === undefined ? [] : ['--set', setName]),
+    ...(scopeFlag === undefined ? [] : [scopeFlag]),
+    // Neither `custom` nor `orphaned` can be put back from the repository, so
+    // the script reports what it would remove and stops unless told to proceed.
+    // The panel asks first, then repeats the call with apply=1.
+    ...(scopeFlag !== undefined && c.req.query('apply') === '1' ? ['--apply'] : []),
+  ]
 
   return streamText(c, async (stream) => {
-    const scope = setName === undefined ? '' : ` · ${setName}`
+    const scope =
+      provenance !== undefined ? ` · ${provenance}` : setName === undefined ? '' : ` · ${setName}`
     await stream.writeln(`▶ ${opCfg.label}${scope} — "${env.label || env.name}"…\n`)
     try {
       await runScript(stream, opCfg.script, args, buildEnv(env, opCfg.republish, setName), name)

@@ -84,6 +84,12 @@ export type EnvironmentStats = {
   extensions: number
   webhooks: number
   items: number
+  /**
+   * The hub's configured locales (ADR-0019 §6.6). Support sets these per hub, so
+   * they vary; a set's authored locales are reconciled against them at seed
+   * time. Empty when the probe failed or the hub has none configured.
+   */
+  locales: string[]
 }
 
 export type WebApp = {
