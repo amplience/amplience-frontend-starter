@@ -112,6 +112,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { DynamicContent, Webhook } from 'dc-management-sdk-js'
 
+import { describeLocaleFilter, filterLocales } from './lib/locales.mjs'
 import {
   buildStatusMap,
   EXTENSION_INSTANCE_FIELDS,
@@ -129,8 +130,23 @@ import {
 
 const packageRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 const repoRoot = path.join(packageRoot, '..', '..')
-const fixturesDir = path.join(packageRoot, '..', 'content', 'fixtures', 'frontend-starter')
-const stagingDir = path.join(packageRoot, '.import')
+const fixturesRoot = path.join(packageRoot, '..', 'content', 'fixtures')
+const stagingRoot = path.join(packageRoot, '.import')
+
+/**
+ * The set seeded when nothing says otherwise — the twin of FIXTURE_SITE_NAME in
+ * packages/content/src/config.ts, which is what a zero-config deployment reads.
+ * Duplicated rather than imported because this script is plain ESM and that is
+ * TypeScript; a mismatch is caught the moment the set doesn't exist on disk.
+ */
+const DEFAULT_FIXTURE_SET = 'frontend-starter'
+
+/** Set directories on disk — a directory is a set when it holds a set.json. */
+const availableSets = () =>
+  readdirSync(fixturesRoot, { withFileTypes: true })
+    .filter((e) => e.isDirectory() && existsSync(path.join(fixturesRoot, e.name, 'set.json')))
+    .map((e) => e.name)
+    .sort()
 
 /**
  * Load webApps for a given hub name from amplience.config.json.
@@ -151,12 +167,46 @@ function loadWebApps(hubName) {
   }
 }
 
-const step = process.argv[2] ?? 'all'
+const argv = process.argv.slice(2)
+
+/** `--set <name>` or `--set=<name>`, anywhere in the arguments. */
+const flagValue = (name) => {
+  const i = argv.indexOf(name)
+  if (i !== -1) return argv[i + 1]
+  const inline = argv.find((a) => a.startsWith(`${name}=`))
+  return inline?.slice(name.length + 1)
+}
+
+/** The first bare argument, skipping flags and the value that follows `--set`. */
+const positional = () => {
+  for (let i = 0; i < argv.length; i++) {
+    const arg = argv[i]
+    if (arg.startsWith('--')) {
+      if (arg === '--set') i++ // its value, not a step
+      continue
+    }
+    return arg
+  }
+  return undefined
+}
+
+const step = positional() ?? 'all'
 const steps = ['settings', 'schemas', 'types', 'extensions', 'webhooks', 'content', 'all']
 if (!steps.includes(step)) {
   console.error(`Unknown step "${step}" — expected one of: ${steps.join(', ')}`)
   process.exit(1)
 }
+
+const setName = flagValue('--set') ?? process.env.FIXTURE_SET ?? DEFAULT_FIXTURE_SET
+if (!availableSets().includes(setName)) {
+  console.error(
+    `Unknown fixture set "${setName}" — available: ${availableSets().join(', ')}.\n` +
+      'Pass --set <name>, or set FIXTURE_SET.',
+  )
+  process.exit(1)
+}
+const fixturesDir = path.join(fixturesRoot, setName)
+const fixtureSet = JSON.parse(readFileSync(path.join(fixturesDir, 'set.json'), 'utf8'))
 
 const env = (name) => {
   const value = process.env[name]
@@ -286,7 +336,7 @@ const importExtensions = async () => {
   const statusMap = buildStatusMap(settingsJson, settingsMap)
 
   const source = path.join(packageRoot, 'extensions')
-  const staged = path.join(stagingDir, 'extensions')
+  const staged = path.join(stagingRoot, 'extensions')
   rmSync(staged, { recursive: true, force: true })
   mkdirSync(staged, { recursive: true })
 
@@ -339,7 +389,7 @@ const importTypes = async () => {
   }
 
   const source = path.join(packageRoot, 'content-types')
-  const staged = path.join(stagingDir, 'content-types')
+  const staged = path.join(stagingRoot, 'content-types')
   rmSync(staged, { recursive: true, force: true })
   mkdirSync(staged, { recursive: true })
 
@@ -406,15 +456,17 @@ const markStagedItemsPublishable = (dir) => {
 }
 
 /**
- * Fixtures are authored under the fixture site's own namespace
- * (`frontend-starter/…`, ADR-0014). Seeding a hub re-prefixes every delivery key
- * to the chosen SITE_NAME while staging, so the hub's keys match what the
- * deployment (whose SITE_NAME must be the same value) will ask for. Seeding
- * with SITE_NAME=frontend-starter is simply the identity case.
+ * Fixtures are authored under their own set's namespace (`<set>/…`, ADR-0014),
+ * and seeding re-prefixes every delivery key to the chosen SITE_NAME while
+ * staging, so the hub's keys match what the deployment will ask for. Seeding
+ * with SITE_NAME equal to the set name is the identity case.
+ *
+ * A key that doesn't carry the set's prefix throws rather than being skipped.
+ * The old silent skip was how a second set could seed half-namespaced: its keys
+ * would land unprefixed, collide across sites, and only show up as a 404 much
+ * later.
  */
-const FIXTURE_SITE_PREFIX = 'frontend-starter/'
-
-const namespaceStagedDeliveryKeys = (dir, siteName) => {
+const namespaceStagedDeliveryKeys = (dir, fromPrefix, siteName) => {
   for (const entry of readdirSync(dir, { recursive: true, withFileTypes: true })) {
     if (!entry.isFile() || !entry.name.endsWith('.json')) continue
     const file = path.join(entry.parentPath ?? entry.path, entry.name)
@@ -423,21 +475,98 @@ const namespaceStagedDeliveryKeys = (dir, siteName) => {
     if (!Array.isArray(values)) continue
     let changed = false
     for (const v of values) {
-      if (typeof v.value === 'string' && v.value.startsWith(FIXTURE_SITE_PREFIX)) {
-        v.value = `${siteName}/${v.value.slice(FIXTURE_SITE_PREFIX.length)}`
-        changed = true
+      if (typeof v.value !== 'string') continue
+      if (!v.value.startsWith(fromPrefix)) {
+        console.error(
+          `\n✗ ${path.relative(stagingRoot, file)} has delivery key "${v.value}", which is ` +
+            `not under "${fromPrefix}".\n` +
+            `  Every key in the "${setName}" set must start with that prefix, or it can't be ` +
+            're-namespaced and would seed into the wrong site.',
+        )
+        process.exit(1)
       }
+      v.value = `${siteName}/${v.value.slice(fromPrefix.length)}`
+      changed = true
     }
     if (changed) writeFileSync(file, JSON.stringify(item, null, 2))
   }
 }
 
+/**
+ * The hub's configured locales, or undefined when we can't ask.
+ *
+ * Locales are a property of the hub (ADR-0019), so the seed reads them rather
+ * than assuming. The probe needs Management API credentials, which the content
+ * step doesn't otherwise require — without them we seed unfiltered, which is
+ * exactly the old behaviour, so a partial credential set is never worse than
+ * before.
+ */
+const probeHubLocales = async () => {
+  const clientId = env('AMPLIENCE_CLIENT_ID')
+  const clientSecret = env('AMPLIENCE_CLIENT_SECRET')
+  const hubId = env('AMPLIENCE_HUB_ID')
+  if (!clientId || !clientSecret || !hubId) return undefined
+  try {
+    const client = new DynamicContent({ client_id: clientId, client_secret: clientSecret })
+    const hub = await client.hubs.get(hubId)
+    const locales = hub.settings?.localization?.locales
+    return Array.isArray(locales) && locales.length > 0 ? locales : undefined
+  } catch (err) {
+    console.warn(
+      `  ! Could not read the hub's locales (${err instanceof Error ? err.message : String(err)}) — ` +
+        'seeding every authored locale.',
+    )
+    return undefined
+  }
+}
+
+/** Drop authored locales the hub doesn't have, across a staged phase. */
+const filterStagedLocales = (dir, hubLocales) => {
+  const kept = new Set()
+  const dropped = new Set()
+  for (const entry of readdirSync(dir, { recursive: true, withFileTypes: true })) {
+    if (!entry.isFile() || !entry.name.endsWith('.json')) continue
+    const file = path.join(entry.parentPath ?? entry.path, entry.name)
+    const item = JSON.parse(readFileSync(file, 'utf8'))
+    const result = filterLocales(item, hubLocales)
+    for (const l of result.kept) kept.add(l)
+    for (const l of result.dropped) dropped.add(l)
+    if (result.emptied.length > 0) {
+      console.error(
+        `\n✗ ${path.relative(stagingRoot, file)} would seed with empty localized ` +
+          `field(s): ${result.emptied.join(', ')}.\n` +
+          `  None of its authored locales are on this hub (${hubLocales.join(', ')}), so the ` +
+          'item would exist with nothing to render.',
+      )
+      process.exit(1)
+    }
+    if (result.changed) writeFileSync(file, JSON.stringify(item, null, 2))
+  }
+  return { kept, dropped }
+}
+
 const importContent = async () => {
   const hubName = require_('AMPLIENCE_HUB_NAME', 'name the shared mapping file')
-  // Same default the web app's resolveContentConfig applies (ADR-0014) —
-  // seed and deployment agree on the namespace without a second variable.
-  const siteName = env('SITE_NAME') ?? hubName
-  console.log(`\n→ Seeding delivery keys under the "${siteName}/" site namespace`)
+  // The set name, not the hub name (ADR-0019, amending ADR-0014): a hub can
+  // carry several sets, so defaulting to the hub would have them all claim one
+  // namespace. The deployment's resolveContentConfig applies the same default.
+  const siteName = env('SITE_NAME') ?? setName
+
+  // Seeding a set into a namespace that belongs to *another set* is almost
+  // always a stale SITE_NAME rather than an intention: the keys collide and the
+  // hub rejects the import partway through, which reads as a bug in the fixture
+  // rather than a configuration mistake. Naming a site after no set at all
+  // (a partner's own name) is the normal override and passes through.
+  if (siteName !== setName && availableSets().includes(siteName)) {
+    console.error(
+      `\n✗ SITE_NAME is "${siteName}", which is another fixture set's own namespace.\n` +
+        `  Seeding "${setName}" there would collide with "${siteName}"'s delivery keys.\n` +
+        `  Unset SITE_NAME to seed "${setName}" into "${setName}/", or choose a name that\n` +
+        "  isn't a set (e.g. a partner's site name).",
+    )
+    process.exit(1)
+  }
+
   const contentRepo = require_('AMPLIENCE_REPO_CONTENT', 'target the content repository')
   const slotsRepo = require_('AMPLIENCE_REPO_SLOTS', 'target the slots repository')
   // Optional — only seeded when the deployment uses CMS-managed site config.
@@ -467,12 +596,45 @@ const importContent = async () => {
   if (siteComponentsRepo && existsSync(path.join(fixturesDir, 'site-components'))) {
     phases.push({ dir: 'site-components', repo: siteComponentsRepo })
   }
+  // A mis-targeted seed is expensive to undo, so say what this run is about to
+  // do before it does any of it.
+  console.log(
+    `\n→ Seeding the "${setName}" fixture set into "${siteName}/" on hub "${hubName}"` +
+      `${siteName === setName ? '' : ' [SITE_NAME override]'}` +
+      `${siteComponentsRepo ? ' (with site components)' : ''}`,
+  )
+
+  const hubLocales = await probeHubLocales()
+  if (hubLocales === undefined) {
+    console.log('  locales: not read (no Management API credentials) — seeding all authored')
+  } else {
+    console.log(`  locales: ${hubLocales.join(', ')} (from the hub)`)
+    if (!hubLocales.includes(fixtureSet.defaultLocale)) {
+      console.error(
+        `\n✗ This hub has no "${fixtureSet.defaultLocale}", the locale every field in the ` +
+          `"${setName}" set is authored in.\n` +
+          `  Seeding would produce a site of empty fields. Add it to the hub, or seed a set ` +
+          'whose default locale it has.',
+      )
+      process.exit(1)
+    }
+  }
+
+  const localeTally = { kept: new Set(), dropped: new Set() }
+
   for (const { dir, repo } of phases) {
-    const staged = path.join(stagingDir, `items-${dir}`)
+    // Staged per set, so seeding a second set doesn't clobber the first's
+    // staging directory mid-run.
+    const staged = path.join(stagingRoot, setName, `items-${dir}`)
     rmSync(staged, { recursive: true, force: true })
     mkdirSync(staged, { recursive: true })
     cpSync(path.join(fixturesDir, dir), staged, { recursive: true })
-    namespaceStagedDeliveryKeys(staged, siteName)
+    namespaceStagedDeliveryKeys(staged, `${setName}/`, siteName)
+    if (hubLocales !== undefined) {
+      const { kept, dropped } = filterStagedLocales(staged, hubLocales)
+      for (const l of kept) localeTally.kept.add(l)
+      for (const l of dropped) localeTally.dropped.add(l)
+    }
     markStagedItemsPublishable(staged)
     await dcCli(
       'content-item',
@@ -486,6 +648,9 @@ const importContent = async () => {
       ...publishFlags,
     )
   }
+
+  const summary = describeLocaleFilter(localeTally, fixtureSet.authoredLocales?.length ?? 0)
+  if (summary) console.log(`\n  ${summary}`)
 }
 
 /**
