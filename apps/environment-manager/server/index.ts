@@ -507,7 +507,8 @@ type OpConfig = { script: string; args: string[]; republish: boolean; label: str
  * Maps the URL :op segment to the underlying script + arguments.
  * "seed-*" variants force-republish everything (REPUBLISH=1).
  * "sync-*" variants publish only new/changed items.
- * "wipe-*" archives all content items and clears the import mapping.
+ * "wipe-*" removes the named resource; "wipe-items"/"wipe-all" also clear the
+ * import mapping. The per-resource wipes refuse while a dependant still exists.
  * Note: schemas and types don't have a distinct seed/sync command — both run
  * hub-import.mjs with the relevant step. The naming difference is cosmetic,
  * reflecting the user's intent (first run vs update).
@@ -596,9 +597,30 @@ const OP_CONFIG: Record<string, OpConfig> = {
   },
   'wipe-items': {
     script: HUB_WIPE_SCRIPT,
-    args: ['items'],
+    args: ['content'],
     republish: false,
     label: 'Wipe content items',
+  },
+  // The per-resource teardowns mirror the seed operations above. Each refuses
+  // when something still depends on it — types while items use them, schemas
+  // while types reference them — naming the step to run first.
+  'wipe-types': {
+    script: HUB_WIPE_SCRIPT,
+    args: ['types'],
+    republish: false,
+    label: 'Wipe content types',
+  },
+  'wipe-schemas': {
+    script: HUB_WIPE_SCRIPT,
+    args: ['schemas'],
+    republish: false,
+    label: 'Wipe schemas',
+  },
+  'wipe-extensions': {
+    script: HUB_WIPE_SCRIPT,
+    args: ['extensions'],
+    republish: false,
+    label: 'Wipe extensions',
   },
   'seed-all': { script: HUB_IMPORT_SCRIPT, args: ['all'], republish: true, label: 'Seed all' },
   'sync-all': { script: HUB_IMPORT_SCRIPT, args: ['all'], republish: false, label: 'Sync all' },

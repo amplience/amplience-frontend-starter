@@ -112,6 +112,14 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { DynamicContent, Webhook } from 'dc-management-sdk-js'
 
+import {
+  availableSets,
+  chooseSet,
+  fixturesRoot,
+  flagValue,
+  positional,
+  resolveSetName,
+} from './lib/fixture-sets.mjs'
 import { describeLocaleFilter, filterLocales } from './lib/locales.mjs'
 import {
   buildStatusMap,
@@ -130,23 +138,7 @@ import {
 
 const packageRoot = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
 const repoRoot = path.join(packageRoot, '..', '..')
-const fixturesRoot = path.join(packageRoot, '..', 'content', 'fixtures')
 const stagingRoot = path.join(packageRoot, '.import')
-
-/**
- * The set seeded when nothing says otherwise — the twin of FIXTURE_SITE_NAME in
- * packages/content/src/config.ts, which is what a zero-config deployment reads.
- * Duplicated rather than imported because this script is plain ESM and that is
- * TypeScript; a mismatch is caught the moment the set doesn't exist on disk.
- */
-const DEFAULT_FIXTURE_SET = 'frontend-starter'
-
-/** Set directories on disk — a directory is a set when it holds a set.json. */
-const availableSets = () =>
-  readdirSync(fixturesRoot, { withFileTypes: true })
-    .filter((e) => e.isDirectory() && existsSync(path.join(fixturesRoot, e.name, 'set.json')))
-    .map((e) => e.name)
-    .sort()
 
 /**
  * Load webApps for a given hub name from amplience.config.json.
@@ -168,41 +160,25 @@ function loadWebApps(hubName) {
 }
 
 const argv = process.argv.slice(2)
-
-/** `--set <name>` or `--set=<name>`, anywhere in the arguments. */
-const flagValue = (name) => {
-  const i = argv.indexOf(name)
-  if (i !== -1) return argv[i + 1]
-  const inline = argv.find((a) => a.startsWith(`${name}=`))
-  return inline?.slice(name.length + 1)
-}
-
-/** The first bare argument, skipping flags and the value that follows `--set`. */
-const positional = () => {
-  for (let i = 0; i < argv.length; i++) {
-    const arg = argv[i]
-    if (arg.startsWith('--')) {
-      if (arg === '--set') i++ // its value, not a step
-      continue
-    }
-    return arg
-  }
-  return undefined
-}
-
-const step = positional() ?? 'all'
+const step = positional(argv) ?? 'all'
 const steps = ['settings', 'schemas', 'types', 'extensions', 'webhooks', 'content', 'all']
 if (!steps.includes(step)) {
   console.error(`Unknown step "${step}" — expected one of: ${steps.join(', ')}`)
   process.exit(1)
 }
 
-const setName = flagValue('--set') ?? process.env.FIXTURE_SET ?? DEFAULT_FIXTURE_SET
-if (!availableSets().includes(setName)) {
-  console.error(
-    `Unknown fixture set "${setName}" — available: ${availableSets().join(', ')}.\n` +
-      'Pass --set <name>, or set FIXTURE_SET.',
-  )
+// Only the content step is per-set, so only it is worth asking about — and the
+// question comes now, before any work, rather than minutes in at the content
+// phase. `chooseSet` stays quiet unless a person is actually at a terminal.
+const seedsContent = step === 'content' || step === 'all'
+const requestedSet = flagValue(argv, '--set') ?? process.env.FIXTURE_SET
+let setName
+try {
+  // Only a content seed is worth asking about; the other steps are set-agnostic
+  // and must never block on a question.
+  setName = seedsContent ? await chooseSet(requestedSet) : resolveSetName(requestedSet)
+} catch (error) {
+  console.error(error instanceof Error ? error.message : String(error))
   process.exit(1)
 }
 const fixturesDir = path.join(fixturesRoot, setName)

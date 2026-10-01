@@ -340,10 +340,14 @@ const reclaimRepo = async (client, repoId, repoLabel) => {
 // `webhooks` removes only the seeded webhooks; `all` (default) does both and
 // also archives content types and content type schemas. Mirrors
 // hub-import.mjs's step argument so the two scripts pair up.
-const scopes = ['items', 'webhooks', 'all']
-const scope = positional(process.argv.slice(2)) ?? 'all'
+const scopes = ['all', 'content', 'types', 'schemas', 'extensions', 'webhooks']
+// `items` is what this script called the content scope before the per-resource
+// split; the runbooks and the Environment Manager still say it.
+const ALIASES = { items: 'content' }
+const requestedScope = positional(process.argv.slice(2)) ?? 'all'
+const scope = ALIASES[requestedScope] ?? requestedScope
 if (!scopes.includes(scope)) {
-  console.error(`Unknown scope "${scope}" — expected one of: ${scopes.join(', ')}`)
+  console.error(`Unknown scope "${requestedScope}" — expected one of: ${scopes.join(', ')}`)
   process.exit(1)
 }
 
@@ -364,11 +368,21 @@ if (chosen.length > 1) {
   process.exit(1)
 }
 const isScoped = chosen.length === 1
+// A selector only has meaning over content items — types and schemas are shared
+// by every set on the hub, so there is no per-set subset of them to remove.
+// Naming another scope alongside one asks for two different things at once.
+if (isScoped && requestedScope !== 'all' && scope !== 'content') {
+  console.error(
+    `${chosen[0]} selects content items, so it can't be combined with the "${requestedScope}" scope.\n` +
+      `  Run \`hub:wipe content ${chosen[0]} …\`, or drop the flag to wipe ${requestedScope} outright.`,
+  )
+  process.exit(1)
+}
 
 console.log(`\n▶ hub-wipe scope: ${isScoped ? `content (${chosen[0]})` : scope}`)
 
-// A webhooks-only wipe touches no repository, so it doesn't ask for repo ids.
-const wipesContent = scope !== 'webhooks'
+// Only the content scope touches repositories, so only it asks for repo ids.
+const wipesContent = scope === 'content' || scope === 'all'
 
 const hubName = require_('AMPLIENCE_HUB_NAME', 'identify the hub mapping file')
 const contentRepo = wipesContent
@@ -447,13 +461,6 @@ const wipeWebhooks = async () => {
 // Webhooks go first on a full wipe: removing them before the content churn
 // means the teardown can't trigger the very integrations it is dismantling,
 // and it matches the resource order the Environment Manager lists.
-// A scoped wipe is content-only — webhooks belong to the hub, not to a set.
-if (!isScoped && scope !== 'items') await wipeWebhooks()
-if (scope === 'webhooks') {
-  console.log('\n✓ Webhook wipe complete.')
-  process.exit(0)
-}
-
 // Whether to pass --ignoreSchemaValidation. dc-cli archives by NULLing
 // delivery keys via a schema-validated update, so an item authored under a
 // since-drifted schema (e.g. `Site — logo`) fails with CONTENT_TYPE_INVALID
@@ -630,82 +637,132 @@ const runScopedWipe = async (selector) => {
 
 if (isScoped) await runScopedWipe(selector)
 
-// 1. Delete mapping file
-if (existsSync(mapFile)) {
-  rmSync(mapFile)
-  console.log(`✓ Deleted mapping file: ${mapFile}`)
-} else {
-  console.log(`  Mapping file not present (already clean): ${mapFile}`)
-}
-
-// 2. Retract live snapshots from Delivery and free stranded delivery keys
-// (see module doc). Both run before the dc-cli archive passes below, because
-// archived items offer neither action.
-const clientId = env('AMPLIENCE_CLIENT_ID')
-const clientSecret = env('AMPLIENCE_CLIENT_SECRET')
-if (clientId !== undefined && clientSecret !== undefined) {
-  console.log('\nRetracting published content and checking for stranded delivery keys…')
-  const client = new DynamicContent({ client_id: clientId, client_secret: clientSecret })
-  await reclaimRepo(client, contentRepo, 'content')
-  await reclaimRepo(client, slotsRepo, 'slots')
-  if (siteComponentsRepo !== undefined) {
-    await reclaimRepo(client, siteComponentsRepo, 'site-components')
+/** Everything that makes content items go away, and frees their delivery keys. */
+const wipeContent = async () => {
+  // 1. Delete mapping file
+  if (existsSync(mapFile)) {
+    rmSync(mapFile)
+    console.log(`✓ Deleted mapping file: ${mapFile}`)
+  } else {
+    console.log(`  Mapping file not present (already clean): ${mapFile}`)
   }
-  if (!unpublishing.enabled) {
+
+  // 2. Retract live snapshots from Delivery and free stranded delivery keys
+  // (see module doc). Both run before the dc-cli archive passes below, because
+  // archived items offer neither action.
+  const clientId = env('AMPLIENCE_CLIENT_ID')
+  const clientSecret = env('AMPLIENCE_CLIENT_SECRET')
+  if (clientId !== undefined && clientSecret !== undefined) {
+    console.log('\nRetracting published content and checking for stranded delivery keys…')
+    const client = new DynamicContent({ client_id: clientId, client_secret: clientSecret })
+    await reclaimRepo(client, contentRepo, 'content')
+    await reclaimRepo(client, slotsRepo, 'slots')
+    if (siteComponentsRepo !== undefined) {
+      await reclaimRepo(client, siteComponentsRepo, 'site-components')
+    }
+    if (!unpublishing.enabled) {
+      console.warn(
+        `\n⚠ Unpublishing stopped after: ${unpublishing.blockedBy}\n` +
+          '  Either the credentials lack the permission or the hub does not have\n' +
+          '  unpublish enabled (ask Amplience support). Archiving alone does NOT\n' +
+          '  remove content from Delivery, so the seeded generation this wipe is\n' +
+          '  tearing down will stay live on the CDN and the next seed will add\n' +
+          '  another alongside it — schema-wide reads will return both.',
+      )
+    }
+  } else {
     console.warn(
-      `\n⚠ Unpublishing stopped after: ${unpublishing.blockedBy}\n` +
-        '  Either the credentials lack the permission or the hub does not have\n' +
-        '  unpublish enabled (ask Amplience support). Archiving alone does NOT\n' +
-        '  remove content from Delivery, so the seeded generation this wipe is\n' +
-        '  tearing down will stay live on the CDN and the next seed will add\n' +
-        '  another alongside it — schema-wide reads will return both.',
+      '\n⚠ AMPLIENCE_CLIENT_ID/SECRET not set — cannot retract published content ' +
+        'or check archived items for stranded delivery keys. Archived-but-published ' +
+        'items stay live in Delivery, and if a previous archive kept keys (DC UI, ' +
+        'older dc-cli) the next seed may fail with CONTENT_ITEM_DELIVERY_KEYS_DUPLICATE.',
     )
   }
-} else {
-  console.warn(
-    '\n⚠ AMPLIENCE_CLIENT_ID/SECRET not set — cannot retract published content ' +
-      'or check archived items for stranded delivery keys. Archived-but-published ' +
-      'items stay live in Delivery, and if a previous archive kept keys (DC UI, ' +
-      'older dc-cli) the next seed may fail with CONTENT_ITEM_DELIVERY_KEYS_DUPLICATE.',
-  )
+
+  // 3. Archive all content items in both repos.
+  // Omitting the id positional archives all items in scope (dc-cli behaviour).
+  // --repoId scopes to the target repo; -f skips the confirmation prompt.
+  // --ignoreError: one item that can't be archived (e.g. a drifted body whose
+  // key-strip update fails) must not abort the whole teardown. --ignoreSchemaValidation
+  // (opt-in, see above) additionally lets those drifted items be stripped and
+  // archived cleanly rather than skipped.
+  const archiveFlags = [
+    '-f',
+    '--ignoreError',
+    ...(schemaOverride.enabled ? ['--ignoreSchemaValidation'] : []),
+  ]
+
+  console.log(`\nArchiving all content in content repo (${contentRepo})…`)
+  await dcCli('content-item', 'archive', '--repoId', contentRepo, ...archiveFlags)
+
+  console.log(`\nArchiving all content in slots repo (${slotsRepo})…`)
+  await dcCli('content-item', 'archive', '--repoId', slotsRepo, ...archiveFlags)
+
+  if (siteComponentsRepo !== undefined) {
+    console.log(`\nArchiving all content in Site Components repo (${siteComponentsRepo})…`)
+    await dcCli('content-item', 'archive', '--repoId', siteComponentsRepo, ...archiveFlags)
+  }
 }
 
-// 3. Archive all content items in both repos.
-// Omitting the id positional archives all items in scope (dc-cli behaviour).
-// --repoId scopes to the target repo; -f skips the confirmation prompt.
-// --ignoreError: one item that can't be archived (e.g. a drifted body whose
-// key-strip update fails) must not abort the whole teardown. --ignoreSchemaValidation
-// (opt-in, see above) additionally lets those drifted items be stripped and
-// archived cleanly rather than skipped.
-const archiveFlags = [
-  '-f',
-  '--ignoreError',
-  ...(schemaOverride.enabled ? ['--ignoreSchemaValidation'] : []),
-]
-
-console.log(`\nArchiving all content in content repo (${contentRepo})…`)
-await dcCli('content-item', 'archive', '--repoId', contentRepo, ...archiveFlags)
-
-console.log(`\nArchiving all content in slots repo (${slotsRepo})…`)
-await dcCli('content-item', 'archive', '--repoId', slotsRepo, ...archiveFlags)
-
-if (siteComponentsRepo !== undefined) {
-  console.log(`\nArchiving all content in Site Components repo (${siteComponentsRepo})…`)
-  await dcCli('content-item', 'archive', '--repoId', siteComponentsRepo, ...archiveFlags)
-}
-
-if (scope === 'all') {
-  // 4. Archive all content types in the hub.
-  // Omitting the id positional archives all types; --hubId is required and
-  // is injected via credentialFlags() when AMPLIENCE_HUB_ID is set.
+/**
+ * Archive every content type.
+ *
+ * DC refuses while content items still reference a type, so the failure is
+ * translated rather than passed through raw — the fix is always the same and
+ * dc-cli's own message doesn't name it.
+ */
+const wipeTypes = async () => {
   console.log('\nArchiving all content types…')
-  await dcCli('content-type', 'archive', '-f')
-
-  // 5. Archive all content type schemas in the hub.
-  console.log('\nArchiving all content type schemas…')
-  await dcCli('content-type-schema', 'archive', '-f')
-} else {
-  console.log('\n(scope=items) Leaving content types and schemas in place.')
+  try {
+    await dcCli('content-type', 'archive', '-f')
+  } catch (error) {
+    console.error(
+      `\n✗ Could not archive the content types: ${messageOf(error)}\n` +
+        '  Content types cannot be archived while content items still use them.\n' +
+        '  Run `pnpm hub:wipe:content` first, or `pnpm hub:wipe` to do the lot in order.',
+    )
+    process.exit(1)
+  }
 }
 
-console.log('\n✓ Hub wipe complete — run Seed to repopulate from fixtures.')
+/** Archive every content-type schema. Blocked by any surviving content type. */
+const wipeSchemas = async () => {
+  console.log('\nArchiving all content type schemas…')
+  try {
+    await dcCli('content-type-schema', 'archive', '-f')
+  } catch (error) {
+    console.error(
+      `\n✗ Could not archive the content type schemas: ${messageOf(error)}\n` +
+        '  Schemas cannot be archived while content types still reference them.\n' +
+        '  Run `pnpm hub:wipe:types` first, or `pnpm hub:wipe` to do the lot in order.',
+    )
+    process.exit(1)
+  }
+}
+
+/** Delete every extension. Nothing references them by id, so order is free. */
+const wipeExtensions = async () => {
+  console.log('\nDeleting all extensions…')
+  await dcCli('extension', 'delete', '-f')
+}
+
+// Teardown runs in the reverse of the seed order, because DC enforces the
+// dependency both ways: an item needs its type, a type needs its schema.
+const STEPS = {
+  webhooks: wipeWebhooks,
+  content: wipeContent,
+  types: wipeTypes,
+  schemas: wipeSchemas,
+  extensions: wipeExtensions,
+}
+const ALL_STEPS = ['webhooks', 'content', 'types', 'schemas', 'extensions']
+
+for (const name of scope === 'all' ? ALL_STEPS : [scope]) {
+  await STEPS[name]()
+}
+
+console.log(
+  scope === 'all'
+    ? '\n✓ Hub wipe complete — run Seed to repopulate from fixtures.'
+    : `\n✓ Wiped ${scope}.`,
+)

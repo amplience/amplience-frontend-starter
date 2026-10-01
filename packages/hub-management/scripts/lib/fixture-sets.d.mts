@@ -42,6 +42,21 @@ export declare const resolveSetName: (
   options?: { fallback?: string; root?: string },
 ) => string
 
+/**
+ * Ask which set to use — only with a TTY, more than one set, and none named.
+ * Resolves to undefined when it declines to ask, or the user takes the default.
+ */
+export declare const promptForSet: (
+  available: readonly string[],
+  fallback: string,
+) => Promise<string | undefined>
+
+/** What was asked for, else the environment, else a prompt, else the default. */
+export declare const chooseSet: (
+  requested: string | undefined,
+  options?: { fallback?: string; root?: string },
+) => Promise<string>
+
 /** `--flag value` or `--flag=value`, anywhere in `argv`. */
 export declare const flagValue: (argv: readonly string[], name: string) => string | undefined
 

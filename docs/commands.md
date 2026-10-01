@@ -86,10 +86,18 @@ pnpm hub:import:types         # content-type registrations (+ visualizations)
 pnpm hub:import:extensions    # UI and dashboard extensions
 pnpm hub:import:webhooks      # publish → cache-invalidation webhooks, one per registered site
 pnpm hub:import:content       # fixture content items
+pnpm hub:import --set <name>  # seed one fixture set's content (see Fixture sets)
 
 pnpm hub:wipe                 # reset the hub to empty, webhooks included (~45s)
-pnpm hub:wipe items           # content items only, leaving the model in place
-pnpm hub:wipe webhooks        # just the seeded webhooks
+pnpm hub:wipe:content         # content items only, leaving the model in place
+pnpm hub:wipe:types           # content types (content must be gone first)
+pnpm hub:wipe:schemas         # schemas (content and types must be gone first)
+pnpm hub:wipe:extensions      # UI and dashboard extensions
+pnpm hub:wipe:webhooks        # just the seeded webhooks
+
+pnpm hub:wipe content --set <name>  # one fixture set's items, leaving the others
+pnpm hub:wipe content --orphaned    # items seeded from a set that has left the repo
+pnpm hub:wipe content --custom      # items authored on the hub, never seeded
 ```
 
 Four things about `hub:import` that aren't obvious from the name:
@@ -114,10 +122,37 @@ Four things about `hub:import` that aren't obvious from the name:
 `hub:wipe` is destructive and has no confirmation prompt in the terminal — the
 GUI equivalent does prompt. It frees delivery keys, retracts published content
 where the hub allows unpublish, then archives content, types and schemas. A full
-wipe also deletes the webhooks the seed created; `pnpm hub:wipe webhooks` does
+wipe also deletes the webhooks the seed created; `pnpm hub:wipe:webhooks` does
 only that. Only webhooks labelled `Quadratic — …` are ever touched, so anything
 hand-made or belonging to another integration survives both a wipe and a
 re-seed.
+
+The per-resource wipes run in the same dependency order as the seed, in reverse:
+a type in use by a content item can't be removed, and a schema can't be removed
+while a type references it. Each refuses rather than half-completing, naming the
+step to run first. `pnpm hub:wipe items` still works as an alias for
+`hub:wipe content`.
+
+The three selectors — `--set`, `--orphaned`, `--custom` — act on content items
+only, so they can't be combined with another scope. They read the dc-cli mapping
+file to tell seeded items from hand-authored ones, which makes them specific to
+the machine that did the seeding: on any other machine everything looks
+hand-authored, and the script refuses rather than guess. `--set` is the only one
+that runs unprompted, because the repository can put it back; `--orphaned` and
+`--custom` print what they would remove and need `--apply` to go ahead.
+
+### Fixture sets
+
+Starter content lives in named sets under `packages/content/fixtures/`, one
+directory each. A set's name is also its delivery-key prefix, so several can be
+seeded onto one hub side by side and each deployment reads only its own
+(ADR-0019). `frontend-starter` is the one a zero-config deployment gets.
+
+`--set <name>` picks which set a content command acts on; `FIXTURE_SET` in the
+environment does the same. With neither, `pnpm hub:import` asks at a terminal
+when more than one set exists, and takes the default when there is nothing to
+ask (the Environment Manager, CI). Only the content step varies by set — the
+schemas, types and extensions are shared, and are seeded once.
 
 ### Configuration
 
@@ -133,7 +168,8 @@ precedence.
 | `AMPLIENCE_REPO_SLOTS`                                 | Slots repository ID                                                                                                                                                                                                   |
 | `AMPLIENCE_REPO_SITE_COMPONENTS`                       | Site Components repository ID (custom CSS — ADR-0016)                                                                                                                                                                 |
 | `AMPLIENCE_CLIENT_ID` / `_SECRET` / `AMPLIENCE_HUB_ID` | Credentials. All three together, or omit all three to use your active dc-cli configuration                                                                                                                            |
-| `SITE_NAME`                                            | Delivery-key namespace override (ADR-0014); defaults to the hub name                                                                                                                                                  |
+| `SITE_NAME`                                            | Delivery-key namespace override (ADR-0014); defaults to the fixture set's name                                                                                                                                        |
+| `FIXTURE_SET`                                          | Which fixture set the content step seeds; same as `--set`                                                                                                                                                             |
 | `AMPLIENCE_REVALIDATE_SECRET`                          | Shared secret seeded into webhook headers, and checked by the deployment's `/api/revalidate-*` routes. Must match the value set on the deployment; unset means those webhooks are skipped, not seeded unauthenticated |
 | `AMPLIENCE_REPUBLISH=1`                                | Force-publish every item, not just changed ones                                                                                                                                                                       |
 | `AMPLIENCE_IGNORE_SCHEMA_VALIDATION=1`                 | Skip the pre-import fixture/schema validation. Diagnostic only                                                                                                                                                        |
@@ -186,10 +222,13 @@ Deliberately deferred, so you don't go looking for them:
 | Content types row → **Seed** / **Sync**           | `pnpm hub:import:types`                         |
 | Extensions row → **Seed** / **Sync**              | `pnpm hub:import:extensions`                    |
 | Webhooks row → **Seed** / **Sync**                | `pnpm hub:import:webhooks`                      |
-| Webhooks row → **Wipe**                           | `pnpm hub:wipe webhooks`                        |
+| Webhooks row → **Wipe**                           | `pnpm hub:wipe:webhooks`                        |
+| Schemas row → **Wipe**                            | `pnpm hub:wipe:schemas`                         |
+| Content types row → **Wipe**                      | `pnpm hub:wipe:types`                           |
+| Extensions row → **Wipe**                         | `pnpm hub:wipe:extensions`                      |
 | Content items row → **Seed**                      | `AMPLIENCE_REPUBLISH=1 pnpm hub:import:content` |
 | Content items row → **Sync**                      | `pnpm hub:import:content`                       |
-| Content items row → **Wipe**                      | `pnpm hub:wipe items`                           |
+| Content items row → **Wipe**                      | `pnpm hub:wipe:content`                         |
 | All resources → **Seed all**                      | `AMPLIENCE_REPUBLISH=1 pnpm hub:import`         |
 | All resources → **Sync all**                      | `pnpm hub:import`                               |
 | All resources → **Wipe all**                      | `pnpm hub:wipe`                                 |

@@ -103,10 +103,13 @@ const OP_LABELS: Record<OpKey, string> = {
   'sync-settings': 'Sync settings',
   'seed-schemas': 'Seed schemas',
   'sync-schemas': 'Sync schemas',
+  'wipe-schemas': 'Wipe schemas',
   'seed-types': 'Seed content types',
   'sync-types': 'Sync content types',
+  'wipe-types': 'Wipe content types',
   'seed-extensions': 'Seed extensions',
   'sync-extensions': 'Sync extensions',
+  'wipe-extensions': 'Wipe extensions',
   'seed-webhooks': 'Seed webhooks',
   'sync-webhooks': 'Sync webhooks',
   'wipe-webhooks': 'Remove webhooks',
@@ -596,6 +599,20 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
       )
         return
     }
+    // The per-resource teardowns refuse while anything still depends on them, so
+    // the worst case is a message naming the step to run first — but they are
+    // still destructive, and the order they have to run in is worth stating.
+    if (key === 'wipe-types' || key === 'wipe-schemas' || key === 'wipe-extensions') {
+      const what = {
+        'wipe-types': [
+          'content types',
+          'Wipe content items first — types in use can’t be removed.',
+        ],
+        'wipe-schemas': ['schemas', 'Wipe content items, then content types, first.'],
+        'wipe-extensions': ['extensions', 'Nothing else depends on these.'],
+      }[key]
+      if (!confirm(`Wipe ${what[0]} from "${env.label || env.name}"?\n\n${what[1]}`)) return
+    }
     if (key === 'wipe-items' || key === 'wipe-all') {
       const label = env.label || env.name
       const what = key === 'wipe-all' ? 'all content items' : 'content items'
@@ -775,6 +792,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                 count={statsError !== null ? -1 : (stats?.schemas ?? null)}
                 seedKey="seed-schemas"
                 syncKey="sync-schemas"
+                wipeKey="wipe-schemas"
                 isRunning={isRunning}
                 activeOpKey={op?.key ?? null}
                 onRun={(key) => {
@@ -786,6 +804,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                 count={statsError !== null ? -1 : (stats?.types ?? null)}
                 seedKey="seed-types"
                 syncKey="sync-types"
+                wipeKey="wipe-types"
                 isRunning={isRunning}
                 activeOpKey={op?.key ?? null}
                 onRun={(key) => {
@@ -797,6 +816,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                 count={statsError !== null ? -1 : (stats?.extensions ?? null)}
                 seedKey="seed-extensions"
                 syncKey="sync-extensions"
+                wipeKey="wipe-extensions"
                 isRunning={isRunning}
                 activeOpKey={op?.key ?? null}
                 onRun={(key) => {

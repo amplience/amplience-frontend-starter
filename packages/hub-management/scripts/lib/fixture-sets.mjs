@@ -112,6 +112,48 @@ export const resolveSetName = (requested, { fallback = DEFAULT_FIXTURE_SET, root
   return name
 }
 
+/**
+ * Ask which set to use, when there is genuinely a choice to make.
+ *
+ * Stays quiet unless all three hold: a terminal is attached, more than one set
+ * exists, and none was named. The Environment Manager spawns these scripts and
+ * CI runs them, and a prompt neither can answer hangs forever — so the absence
+ * of a TTY is treated as "take the default", not "wait".
+ */
+export const promptForSet = async (available, fallback) => {
+  if (!process.stdin.isTTY || available.length < 2) return undefined
+
+  const { createInterface } = await import('node:readline/promises')
+  const rl = createInterface({ input: process.stdin, output: process.stdout })
+  try {
+    console.log('\nWhich fixture set do you want to use for the content?')
+    available.forEach((name, i) => {
+      console.log(`  ${i + 1}) ${name}${name === fallback ? '  (default)' : ''}`)
+    })
+    const answer = (await rl.question(`Choose 1-${available.length}, or Enter for the default: `))
+      .trim()
+      .toLowerCase()
+    if (answer === '') return undefined
+    const byNumber = available[Number(answer) - 1]
+    if (byNumber !== undefined) return byNumber
+    if (available.includes(answer)) return answer
+    console.log(`  "${answer}" isn't one of those — using the default.`)
+    return undefined
+  } finally {
+    rl.close()
+  }
+}
+
+/**
+ * The set a command will act on: what was asked for, else what the environment
+ * says, else what a person at a terminal picks, else the default.
+ */
+export const chooseSet = async (requested, { fallback = DEFAULT_FIXTURE_SET, root } = {}) => {
+  if (requested !== undefined) return resolveSetName(requested, { fallback, root })
+  const picked = await promptForSet(availableSets(root), fallback)
+  return resolveSetName(picked, { fallback, root })
+}
+
 /** `--flag value` or `--flag=value`, anywhere in `argv`. */
 export const flagValue = (argv, name) => {
   const i = argv.indexOf(name)
