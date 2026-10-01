@@ -6,13 +6,15 @@
 
 ## Environment Variables
 
-All environment variables are optional with sensible accelerator defaults. However, you will likely want `AMPLIENCE_HUB_NAME` in order to point it at a real hub instead of the bundled fixtures.
+All environment variables are optional with sensible accelerator defaults. However, you will likely want `AMPLIENCE_HUB_NAME` in order to point it at a real hub instead of a bundled fixture set.
 
 | Variable                 | Purpose                                                                                                          | e.g.                                               | Default when not set                                   |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------ |
-| `AMPLIENCE_HUB_NAME`     | Which hub to read content from                                                                                   | `quadraticdemo`                                    | Use fixture data, no hub required.                     |
+| `AMPLIENCE_HUB_NAME`     | Which hub to read content from                                                                                   | `quadraticdemo`                                    | Use a fixture set, no hub required.                    |
 | `AMPLIENCE_LOCALES`      | Which locales are supported.                                                                                     | `en-GB,en-US,fr-FR,de-DE,es-ES`                    | Single-locale only                                     |
-| `SITE_NAME`              | The [namespace](#site-namespacing) used in delivery keys                                                         | `acme`                                             | Use `AMPLIENCE_HUB_NAME`                               |
+| `SITE_NAME`              | The [namespace](#site-namespacing) used in delivery keys                                                         | `acme`                                             | `AMPLIENCE_HUB_NAME`, or the fixture set's own name    |
+| `FIXTURE_SET`            | Which bundled fixture set to serve when there's no hub. Only read offline.                                       | `anyafinn`                                         | `frontend-starter`                                     |
+| `CONTENT_CLIENT`         | Force the offline mock while a hub name is set — for debugging fixture data against live hub config.             | `mock`                                             | Hub if named, fixtures otherwise                       |
 | `NEXT_PUBLIC_BRAND`      | Selects the brand theme (`data-brand`, scoping the CSS-variable overrides).                                      | `acme`                                             | 'Default' base theme (Minimal CSS)                     |
 | `FAVICON_BASE_URL`       | Base path for a custom favicon set. (Can even be external)                                                       | `https://www.acme.com/favicon`                     | '/favicon'                                             |
 | `SITE_TITLE`             | Default site title (also feeds the `"<page title> \| SITE_TITLE"` template across the site).                     | `ACME Corp`                                        | 'Amplience Frontend Starter'                           |
@@ -26,7 +28,9 @@ See [`apps/web/.env.example`](../apps/web/.env.example) for the full list, defau
 
 Delivery keys are namespaced by site: keys on the hub are `<site>/<path>`, so the `acme` site's `/about` page is the item keyed `acme/about` (the name never appears in URLs).
 
-If you don't specify any namespace in the env vars, it defaults to the hub name — the same default `pnpm hub:import` seeds under, so hub and deployment agree out of the box.
+If you don't specify any namespace in the env vars, it defaults to the hub name when there is a hub, and to the fixture set's own name when there isn't. `pnpm hub:import` defaults to the set's name too, so a hub carrying a single set agrees with its deployment out of the box.
+
+Set it explicitly where the two would otherwise disagree — a hub carrying several sets, or a partner serving the starter set under their own name. The Environment Manager writes `SITE_NAME` and `FIXTURE_SET` together for exactly that reason: one says which namespace, the other which content, and a stale value in one silently re-targets the other.
 
 Set `SITE_NAME` explicitly for a site not named after its hub (lowercase letters, digits, single hyphens — and pick it once: it's baked into every delivery key, so changing it later means re-keying all content).
 

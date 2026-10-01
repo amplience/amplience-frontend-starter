@@ -29,7 +29,7 @@ pnpm i
 pnpm dev
 ```
 
-Then open [http://localhost:3000](http://localhost:3000) — it serves the bundled fixture data, fully offline.
+Then open [http://localhost:3000](http://localhost:3000) — it serves a bundled fixture set, fully offline.
 
 Your next steps will likely be to use:
 

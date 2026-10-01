@@ -1,10 +1,16 @@
 /**
  * MockContentClient — the POC implementation of the ContentClient port.
  *
- * Reads from the static fixture set in `../../fixtures/frontend-starter/` (loaded
- * via `./loader`), returns the delivery shape (just the `body` portion of
- * the dc-cli enriched envelope), and resolves content-links inline when the
- * caller asks for `depth: 'all'`.
+ * Reads from one fixture set — the one it was built with, defaulting to
+ * `DEFAULT_FIXTURE_SET` (`FIXTURE_SET`) and resolved through `./loader`. It
+ * returns the delivery shape (just the `body` portion of the dc-cli enriched
+ * envelope), and resolves content-links inline when the caller asks for
+ * `depth: 'all'`.
+ *
+ * One set, not all of them: a set's name is its delivery-key prefix
+ * (ADR-0019), so a client built for one answers only for that namespace and
+ * misses a key belonging to another — which is the same thing a hub carrying
+ * several sets does.
  *
  * What the real SDK adapter (QL-43) will do differently:
  *  - Hit `dc-delivery-sdk-js` instead of the local fixture map.

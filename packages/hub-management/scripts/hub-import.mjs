@@ -6,6 +6,10 @@
  * script changes the verb, not the content.
  *
  * Usage:  node scripts/hub-import.mjs [settings|schemas|types|extensions|content|webhooks|all]
+ *                                     [--set <fixture set>]
+ *
+ * Only the content step varies by fixture set; the model is shared, so the
+ * other steps run once however many sets a hub carries.
  *
  * Import order matters and the script owns it — it mirrors dc-cli's own
  * `hub clone` pipeline (settings → schema → type → extension → content):
@@ -68,16 +72,22 @@
  *
  *   AMPLIENCE_HUB_NAME       hub name — visualization URIs + map-file name
  *   SITE_NAME                the site namespace the seeded keys live under
- *                            (ADR-0014) — fixtures are authored under the
- *                            fixture site's own name (frontend-starter/…) and the
- *                            content step re-prefixes them to
- *                            <SITE_NAME>/… while staging, the same way the
- *                            types step fills ${hub}. Defaults to
- *                            AMPLIENCE_HUB_NAME — the same default the web
- *                            app's resolveContentConfig applies, so a hub
- *                            and its deployment agree without either
- *                            setting it. Set it explicitly for a site not
- *                            named after its hub.
+ *                            (ADR-0014) — fixtures are authored under their
+ *                            own set's name (<set>/…) and the content step
+ *                            re-prefixes them to <SITE_NAME>/… while staging,
+ *                            the same way the types step fills ${hub}.
+ *                            Defaults to the set's own name (ADR-0019 amends
+ *                            ADR-0014), which the web app applies too — so a
+ *                            hub carrying one set agrees with its deployment
+ *                            without either being set. Set it explicitly to
+ *                            seed a set under a different name, which is how
+ *                            a partner gets the starter content under theirs.
+ *   FIXTURE_SET              which set the content step seeds (ADR-0019).
+ *                            `--set` wins over it. With neither, and more
+ *                            than one set on disk, a terminal is asked and
+ *                            anything else takes the default. Separate from
+ *                            SITE_NAME on purpose: one says which content,
+ *                            the other says which namespace it lands in.
  *   LOCALHOST_URL            localhost origin — fills ${localhostUrl} in viz URIs (default: http://localhost:3000)
  *   AMPLIENCE_REPO_CONTENT   repository id for pages + components (content step)
  *   AMPLIENCE_REPO_SLOTS     repository id for slots (content step)

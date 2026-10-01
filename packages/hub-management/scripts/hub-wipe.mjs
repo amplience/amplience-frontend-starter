@@ -67,6 +67,19 @@
  * deletes, precisely so the source→target status ids survive a wipe and the
  * extensions that reference them keep resolving after a re-seed).
  *
+ * Usage:  node scripts/hub-wipe.mjs [all|content|types|schemas|extensions|webhooks]
+ *                                   [--set <fixture set> | --orphaned | --custom]
+ *                                   [--apply]
+ *
+ * The scope defaults to `all`, and runs the teardown in the reverse of the
+ * seed order, each step refusing while a dependant still exists rather than
+ * half-completing. `items` is accepted as a back-compat alias for `content`.
+ *
+ * The three selectors act on content items only, so they can't be combined
+ * with another scope. `--set` runs unprompted, because the repository can put
+ * that content back; `--orphaned` and `--custom` report what they would remove
+ * and need `--apply`, because nothing can.
+ *
  * Configuration is read from environment variables (same set as
  * hub-import.mjs). Run via the environment-manager GUI which injects
  * the selected environment's credentials directly, or manually:

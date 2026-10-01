@@ -142,7 +142,10 @@ that runs unprompted, because the repository can put it back; `--orphaned` and
 `--custom` print what they would remove and need `--apply` to go ahead.
 
 In the Environment Manager the same three appear as child rows under **Content
-items**, one per set plus _Orphaned_ and _Custom_ when the hub holds any. A
+items** — one per set the hub is carrying, plus _Orphaned_ and _Custom_ when it
+holds any. Sets the repository has that this hub doesn't are offered together on
+a **+ Seed a fixture set** row rather than a row each, so the table stays a
+description of the hub as more sets are added. A
 control that can't act isn't rendered rather than greyed out, so those two rows
 carry no **Sync** — there is no source on disk to sync from — and their **Wipe**
 reports what it found before a second click removes it.
@@ -240,7 +243,8 @@ Deliberately deferred, so you don't go looking for them:
 | Content items row → **Seed**                      | `AMPLIENCE_REPUBLISH=1 pnpm hub:import:content` |
 | Content items row → **Sync**                      | `pnpm hub:import:content`                       |
 | Content items row → **Wipe**                      | `pnpm hub:wipe:content`                         |
-| A set's child row → **Seed** / **Sync**           | `pnpm hub:import:content --set <name>`          |
+| A set's child row → **Sync**                      | `pnpm hub:import:content --set <name>`          |
+| **+ Seed a fixture set** → **Seed**               | `pnpm hub:import:content --set <name>`          |
 | A set's child row → **Wipe**                      | `pnpm hub:wipe content --set <name>`            |
 | _Orphaned_ child row → **Wipe**                   | `pnpm hub:wipe content --orphaned [--apply]`    |
 | _Custom_ child row → **Wipe**                     | `pnpm hub:wipe content --custom [--apply]`      |

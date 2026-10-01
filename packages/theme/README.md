@@ -45,7 +45,7 @@ A brand is a block of variable redefinitions scoped under a `[data-brand]` selec
 
 Because CSS variables cascade by tree position, the overrides apply to everything inside the element carrying the attribute — the renderer sets it on `<html>`, Storybook sets it on a story wrapper, and both get identical results from the same CSS.
 
-The stub brands currently live alongside the defaults in [`src/tokens.css`](src/tokens.css) (`anyafinn`, `arbor-harvest`, `azure-harvest`, `culinary-supply-hub`); each doubles as a further worked example. Client-specific themes belong in the private repo (ADR-0004 — Public/private split) and are never committed here.
+The brands currently live alongside the defaults in [`src/tokens.css`](src/tokens.css): `amplience` and `anyafinn` are the ones the bundled fixture sets ship under (each set declares its own in `set.json`, so switching set switches the theme), and `arbor-harvest`, `azure-harvest` and `culinary-supply-hub` are stubs. Each doubles as a further worked example. Client-specific themes belong in the private repo (ADR-0004 — Public/private split) and are never committed here.
 
 ## Where the brand gets activated
 

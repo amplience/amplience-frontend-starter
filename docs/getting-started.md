@@ -49,7 +49,7 @@ Local setup takes about 40 seconds, and needs no Amplience hub:
 2. See the results in a browser at\
    [http://localhost:3000](http://localhost:3000)
 
-By default it serves content from the bundled fixture data (`packages/content/fixtures/`), so it runs fully offline.
+By default it serves the `frontend-starter` fixture set (`packages/content/fixtures/frontend-starter/`), so it runs fully offline. There are several sets — set `FIXTURE_SET`, or pick one in the Environment Manager, to serve another.
 
 > [!NOTE] Building a production build
 > To build a _production_ build, run `pnpm build` to build, then `pnpm start` to serve it. This won't live-update as you change code, so `pnpm dev` is usually preferred for local development.
