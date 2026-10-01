@@ -70,10 +70,13 @@ export function localeNote(
 /**
  * The rows to render, in the order they should appear.
  *
- * Every registered set gets a row even at zero, so a set that has never been
- * seeded is visibly available rather than missing. `orphaned` and `custom`
- * appear only when they hold something: they are residue, and a permanent pair
- * of zeroes would read as categories someone is meant to maintain.
+ * Only what the hub actually holds. A row per registered set regardless would
+ * turn the panel into a catalogue of the repository rather than a description
+ * of this hub, and it grows with every set added — the sets not seeded here are
+ * offered through {@link seedableSets} instead, as one action rather than a row
+ * each. `orphaned` and `custom` follow the same rule for the same reason: they
+ * are residue, and a permanent pair of zeroes would read as categories someone
+ * is meant to maintain.
  */
 export function contentRows(
   breakdown: ContentBreakdown | null,
@@ -82,16 +85,18 @@ export function contentRows(
 ): ContentRow[] {
   if (breakdown?.available !== true) return []
 
-  const rows: ContentRow[] = sets.map((set) => ({
-    kind: 'set',
-    key: set.name,
-    label: set.label,
-    count: breakdown.bySet[set.name] ?? 0,
-    canSync: true,
-    canWipe: true,
-    regenerable: true,
-    localeNote: localeNote(set, hubLocales),
-  }))
+  const rows: ContentRow[] = sets
+    .filter((set) => (breakdown.bySet[set.name] ?? 0) > 0)
+    .map((set) => ({
+      kind: 'set',
+      key: set.name,
+      label: set.label,
+      count: breakdown.bySet[set.name] ?? 0,
+      canSync: true,
+      canWipe: true,
+      regenerable: true,
+      localeNote: localeNote(set, hubLocales),
+    }))
 
   if (breakdown.orphaned > 0) {
     rows.push({
@@ -116,6 +121,29 @@ export function contentRows(
     })
   }
   return rows
+}
+
+/**
+ * The sets in the repository that this hub isn't carrying yet.
+ *
+ * The other half of {@link contentRows}: between them every registered set is
+ * either a row or an offer, so nothing is unreachable.
+ *
+ * Deliberately outside the provenance gate. Seeding a named set doesn't need to
+ * know where anything came from — it is `hub:import:content --set <name>`, which
+ * the terminal runs with no map at all — and a hub that has never been seeded
+ * has no map by definition, so gating this would lock the first seed behind the
+ * artefact that only seeding produces. With no breakdown every set is offered,
+ * because nothing is known to be present; the gate note alongside says why the
+ * counts are missing.
+ */
+export function seedableSets(
+  breakdown: ContentBreakdown | null,
+  sets: readonly FixtureSetInfo[],
+): FixtureSetInfo[] {
+  if (breakdown === null) return []
+  if (!breakdown.available) return [...sets]
+  return sets.filter((set) => (breakdown.bySet[set.name] ?? 0) === 0)
 }
 
 /** Why a row holds what it holds — shown as its title, so the buckets explain themselves. */

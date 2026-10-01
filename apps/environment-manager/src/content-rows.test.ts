@@ -5,6 +5,7 @@ import {
   contentRows,
   gateReason,
   localeNote,
+  seedableSets,
   type ContentBreakdown,
 } from './content-rows.js'
 import type { FixtureSetInfo } from './types.js'
@@ -31,17 +32,18 @@ const available = (over: Partial<Extract<ContentBreakdown, { available: true }>>
   }) satisfies ContentBreakdown
 
 describe('contentRows', () => {
-  it('gives every registered set a row, in the order the sets are listed', () => {
+  it('lists the sets this hub holds, in the order the sets are listed', () => {
     expect(contentRows(available(), SETS).map((r) => r.key)).toEqual([
       'frontend-starter',
       'anyafinn',
     ])
   })
 
-  it('shows a set that has never been seeded at zero rather than omitting it', () => {
-    // Missing would read as unavailable; zero reads as "nothing here yet".
+  it('omits a set the hub isn’t carrying', () => {
+    // The rows describe this hub, not the repository's catalogue — which would
+    // otherwise grow a line with every set anyone ever adds.
     const rows = contentRows(available({ bySet: { 'frontend-starter': 142 } }), SETS)
-    expect(rows.find((r) => r.key === 'anyafinn')).toMatchObject({ count: 0, canSync: true })
+    expect(rows.map((r) => r.key)).toEqual(['frontend-starter'])
   })
 
   it('lets a set row both sync and wipe, because the repository can put it back', () => {
@@ -80,6 +82,43 @@ describe('contentRows', () => {
 
   it('renders no rows before the breakdown has loaded', () => {
     expect(contentRows(null, SETS)).toEqual([])
+  })
+})
+
+describe('seedableSets', () => {
+  it('offers the sets the hub isn’t carrying yet', () => {
+    expect(
+      seedableSets(available({ bySet: { 'frontend-starter': 142 } }), SETS).map((s) => s.name),
+    ).toEqual(['anyafinn'])
+  })
+
+  it('offers nothing once every set is on the hub', () => {
+    expect(seedableSets(available(), SETS)).toEqual([])
+  })
+
+  it('accounts for every set — each one is either a row or an offer', () => {
+    // The pair has to be exhaustive, or a set becomes unreachable from the panel.
+    const breakdown = available({ bySet: { anyafinn: 53 } })
+    const shown = [
+      ...contentRows(breakdown, SETS)
+        .filter((r) => r.kind === 'set')
+        .map((r) => r.key),
+      ...seedableSets(breakdown, SETS).map((s) => s.name),
+    ]
+    expect(shown.sort()).toEqual(SETS.map((s) => s.name).sort())
+  })
+
+  it('offers every set when there is no breakdown, so a fresh hub can be seeded', () => {
+    // A hub that has never been seeded has no import map by definition, so
+    // gating this would lock the first seed behind the artefact only seeding
+    // produces. Seeding a named set needs no provenance anyway.
+    expect(seedableSets({ available: false, reason: 'No map.' }, SETS)).toEqual(SETS)
+  })
+
+  it('offers nothing until the breakdown has loaded', () => {
+    // Briefly, on open. Offering everything here would flash a full list and
+    // then collapse to one.
+    expect(seedableSets(null, SETS)).toEqual([])
   })
 })
 

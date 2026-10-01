@@ -596,6 +596,43 @@ body {
   font-style: italic;
 }
 
+/* The sets the repository has that this hub doesn't — one offer, not a row
+   each, so the table describes the hub rather than the catalogue. The picker
+   stays folded away until asked for, so the row reads as one action. */
+.content-row--seed .site-card__select {
+  max-width: 14rem;
+}
+
+/* The second step of a wipe that can't be undone — sits under the log, so the
+   list it acts on has just been read. */
+.log-apply {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.6rem 0.75rem;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.825rem;
+  color: var(--color-text-muted);
+}
+
+.link-button {
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.link-button:hover,
+.link-button:focus-visible {
+  color: var(--color-text);
+  text-decoration: underline;
+}
+
 .content-row--gated td {
   padding-bottom: 0.4rem;
   font-size: 0.925em;

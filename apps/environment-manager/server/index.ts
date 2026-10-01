@@ -1672,7 +1672,11 @@ app.post('/api/environments/:name/:op', async (c) => {
     await stream.writeln(`▶ ${opCfg.label}${scope} — "${env.label || env.name}"…\n`)
     try {
       await runScript(stream, opCfg.script, args, buildEnv(env, opCfg.republish, setName), name)
-      await stream.writeln('\n✓ Done.')
+      // A provenance wipe without --apply only reported. Saying "Done" there
+      // reads as the work having happened, which is how a dry run gets mistaken
+      // for a wipe that refused.
+      const reportedOnly = scopeFlag !== undefined && c.req.query('apply') !== '1'
+      await stream.writeln(reportedOnly ? '\n✓ Reported — nothing has changed.' : '\n✓ Done.')
     } catch (err) {
       const msg =
         err instanceof Error && err.message === 'Aborted'

@@ -26,7 +26,7 @@ export function NotFoundContent() {
           label: 'Back to the home page',
         },
       ]}
-      contentPadding={100}
+      contentPaddingVertical={100}
       contentPositionMobile="beneath"
       minHeight={600}
       textColor="black"
