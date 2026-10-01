@@ -78,11 +78,13 @@
  *   node packages/hub-management/scripts/hub-wipe.mjs
  */
 import { spawn } from 'node:child_process'
-import { existsSync, rmSync } from 'node:fs'
+import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { DynamicContent } from 'dc-management-sdk-js'
 
+import { availableSets, flagValue, hasFlag, positional, readAllSets } from './lib/fixture-sets.mjs'
+import { classifyHubItems, isRegenerable, selectForWipe, summarise } from './lib/provenance.mjs'
 import { canUnpublish, isEnvironmentalFailure, mayBePublished } from './lib/publishing.mjs'
 import { MANAGED_LABEL_PREFIX } from './lib/webhooks.mjs'
 
@@ -339,12 +341,31 @@ const reclaimRepo = async (client, repoId, repoLabel) => {
 // also archives content types and content type schemas. Mirrors
 // hub-import.mjs's step argument so the two scripts pair up.
 const scopes = ['items', 'webhooks', 'all']
-const scope = process.argv[2] ?? 'all'
+const scope = positional(process.argv.slice(2)) ?? 'all'
 if (!scopes.includes(scope)) {
   console.error(`Unknown scope "${scope}" — expected one of: ${scopes.join(', ')}`)
   process.exit(1)
 }
-console.log(`\n▶ hub-wipe scope: ${scope}`)
+
+// Provenance selectors. All three scope the wipe to content items only, so they
+// never reach the type/schema passes below; at most one may be given.
+const selector = {
+  set: flagValue(process.argv.slice(2), '--set'),
+  custom: hasFlag(process.argv, '--custom'),
+  orphaned: hasFlag(process.argv, '--orphaned'),
+}
+const chosen = [
+  selector.set !== undefined && '--set',
+  selector.custom && '--custom',
+  selector.orphaned && '--orphaned',
+].filter(Boolean)
+if (chosen.length > 1) {
+  console.error(`${chosen.join(' and ')} select different things — pass one.`)
+  process.exit(1)
+}
+const isScoped = chosen.length === 1
+
+console.log(`\n▶ hub-wipe scope: ${isScoped ? `content (${chosen[0]})` : scope}`)
 
 // A webhooks-only wipe touches no repository, so it doesn't ask for repo ids.
 const wipesContent = scope !== 'webhooks'
@@ -358,12 +379,20 @@ const slotsRepo = wipesContent
   : undefined
 // Optional — only wiped when the deployment uses CMS-managed site config.
 const siteComponentsRepo = env('AMPLIENCE_REPO_SITE_COMPONENTS')
-require_(
-  'AMPLIENCE_HUB_ID',
-  wipesContent
-    ? 'archive content type schemas (--hubId is required by dc-cli)'
-    : 'identify the hub whose webhooks are being removed',
-)
+
+// Filename keeps the `quadratic-` prefix: renaming it orphans every existing
+// hub's map, so dc-cli would re-import the whole model as duplicates.
+const mapFile = path.join(os.homedir(), '.amplience', 'imports', `quadratic-${hubName}.json`)
+// A scoped wipe talks to the Management API directly and never reaches the
+// dc-cli schema pass, so it has no use for a hub id.
+if (!isScoped) {
+  require_(
+    'AMPLIENCE_HUB_ID',
+    wipesContent
+      ? 'archive content type schemas (--hubId is required by dc-cli)'
+      : 'identify the hub whose webhooks are being removed',
+  )
+}
 
 /**
  * Delete every webhook the seed owns, leaving anything else alone.
@@ -418,7 +447,8 @@ const wipeWebhooks = async () => {
 // Webhooks go first on a full wipe: removing them before the content churn
 // means the teardown can't trigger the very integrations it is dismantling,
 // and it matches the resource order the Environment Manager lists.
-if (scope !== 'items') await wipeWebhooks()
+// A scoped wipe is content-only — webhooks belong to the hub, not to a set.
+if (!isScoped && scope !== 'items') await wipeWebhooks()
 if (scope === 'webhooks') {
   console.log('\n✓ Webhook wipe complete.')
   process.exit(0)
@@ -436,9 +466,171 @@ schemaOverride.enabled = ['1', 'true', 'yes'].includes(
   (env('AMPLIENCE_IGNORE_SCHEMA_VALIDATION') ?? '').toLowerCase(),
 )
 
+/**
+ * A wipe scoped by provenance — one set, or the items no set claims.
+ *
+ * Separate from the blanket teardown below because almost nothing is shared:
+ * this one must leave the map file, the content types and the schemas alone,
+ * since the other sets on the hub are still using them. What it does share is
+ * the per-item mechanics — unpublish, strip keys, archive.
+ */
+
+/** Hub items across every configured repository, active and archived. */
+const listEveryItem = async (client, repos) => {
+  const all = []
+  for (const { id, label } of repos) {
+    if (id === undefined) continue
+    const repo = await client.contentRepositories.get(id)
+    for (const status of ['ACTIVE', 'ARCHIVED']) {
+      for (const item of await listAll(repo, status)) all.push({ item, repoLabel: label })
+    }
+  }
+  return all
+}
+
+/**
+ * Take one item out of service: unpublish it, drop its delivery keys, archive it.
+ *
+ * The key strip is the part that matters for a later reseed — an archived item
+ * goes on reserving its delivery key hub-wide, so a set wiped without stripping
+ * can't be seeded again (409).
+ */
+const retireItem = async (item) => {
+  let current = item
+  if (current.status === 'ARCHIVED') current = await current.related.unarchive()
+
+  if (hasDeliveryKeys(current.body)) {
+    current.body._meta.deliveryKey = null
+    current.body._meta.deliveryKeys = null
+    current = await stripKeys(current)
+  }
+  if (mayBePublished(current)) await unpublishItem(current)
+  await current.related.archive()
+}
+
+const readMap = (file) => {
+  try {
+    return JSON.parse(readFileSync(file, 'utf8'))
+  } catch {
+    return undefined
+  }
+}
+
+const runScopedWipe = async (selector) => {
+  const clientId = env('AMPLIENCE_CLIENT_ID')
+  const clientSecret = env('AMPLIENCE_CLIENT_SECRET')
+  if (clientId === undefined || clientSecret === undefined) {
+    console.error(
+      '\n✗ A scoped wipe needs AMPLIENCE_CLIENT_ID and AMPLIENCE_CLIENT_SECRET — it has to\n' +
+        '  ask the hub what is on it before it can tell one set from another.',
+    )
+    process.exit(1)
+  }
+
+  // The map is the only evidence of where an item came from, and it is
+  // machine-local. Without it everything looks hand-authored, so a `--custom`
+  // wipe would delete the lot. Refusing is the only safe reading.
+  const map = readMap(mapFile)
+  if (map === undefined) {
+    console.error(
+      `\n✗ No import map for "${hubName}" on this machine.\n` +
+        `  ${mapFile}\n` +
+        '  Without it nothing can be attributed to a set, and every item would look\n' +
+        '  hand-authored. Seed from this machine first, or use a blanket wipe.',
+    )
+    process.exit(1)
+  }
+
+  const sets = readAllSets().map((s) => ({ name: s.name, ids: s.ids }))
+  if (typeof selector.set === 'string' && !availableSets().includes(selector.set)) {
+    console.error(
+      `\n✗ Unknown fixture set "${selector.set}" — available: ${availableSets().join(', ')}.`,
+    )
+    process.exit(1)
+  }
+
+  const client = new DynamicContent({ client_id: clientId, client_secret: clientSecret })
+  const found = await listEveryItem(client, [
+    { id: contentRepo, label: 'content' },
+    { id: slotsRepo, label: 'slots' },
+    { id: siteComponentsRepo, label: 'site-components' },
+  ])
+
+  const classified = classifyHubItems(
+    found.map(({ item }) => item),
+    map.contentItems ?? [],
+    sets,
+  )
+  const counts = summarise(classified)
+  console.log(
+    `\n  On this hub: ${counts.total} item(s) — ` +
+      Object.entries(counts.bySet)
+        .map(([name, n]) => `${name} ${n}`)
+        .join(', ') +
+      `, orphaned ${counts.orphaned}, custom ${counts.custom}`,
+  )
+
+  const selected = selectForWipe(classified, selector)
+  const describe = selector.custom
+    ? 'custom (authored in the DC UI)'
+    : selector.orphaned
+      ? 'orphaned (seeded from a set no longer on disk)'
+      : `the "${selector.set}" set`
+
+  if (selected === undefined || selected.length === 0) {
+    console.log(`\n✓ Nothing to wipe in ${describe}.`)
+    process.exit(0)
+  }
+
+  // Anything that can't be put back from the repository is listed and left
+  // alone until it's asked for a second time. A set is reseedable; `custom` may
+  // be the only copy of someone's work, and `orphaned`'s fixtures are gone.
+  if (!isRegenerable(selector) && !hasFlag(process.argv, '--apply')) {
+    console.log(`\n  Would wipe ${selected.length} item(s) from ${describe}:\n`)
+    for (const i of selected) console.log(`    ${i.label ?? '(no label)'}  ${i.id}`)
+    console.log(
+      '\n  Nothing has been changed. These cannot be restored from the repository —\n' +
+        '  re-run with --apply to remove them.',
+    )
+    process.exit(0)
+  }
+
+  console.log(`\nWiping ${selected.length} item(s) from ${describe}…`)
+  const byId = new Map(found.map(({ item }) => [item.id, item]))
+  const failed = []
+  let done = 0
+  for (const { id, label } of selected) {
+    const live = byId.get(id)
+    if (live === undefined) continue
+    try {
+      await retireItem(live)
+      done += 1
+    } catch (error) {
+      failed.push(`${label ?? id}: ${messageOf(error)}`)
+    }
+  }
+
+  // Prune what we removed from the map. Left behind, a reseed would try to
+  // update items that are no longer there.
+  const removed = new Set(selected.map((i) => i.id))
+  const kept = (map.contentItems ?? []).filter(([, hubId]) => !removed.has(hubId))
+  writeFileSync(mapFile, JSON.stringify({ ...map, contentItems: kept }))
+
+  console.log(`✓ Wiped ${done} item(s); map entries pruned`)
+  for (const line of failed) console.warn(`  ⚠ ${line}`)
+  if (failed.length > 0) {
+    console.warn(
+      `\n  ${failed.length} item(s) kept their delivery keys — a later reseed of that set\n` +
+        '  may fail with CONTENT_ITEM_DELIVERY_KEYS_DUPLICATE.',
+    )
+  }
+  console.log('\n✓ Scoped wipe complete.')
+  process.exit(failed.length > 0 ? 1 : 0)
+}
+
+if (isScoped) await runScopedWipe(selector)
+
 // 1. Delete mapping file
-// Filename keeps the `quadratic-` prefix: renaming it orphans every existing hub's map, so dc-cli would re-import the whole model as duplicates.
-const mapFile = path.join(os.homedir(), '.amplience', 'imports', `quadratic-${hubName}.json`)
 if (existsSync(mapFile)) {
   rmSync(mapFile)
   console.log(`✓ Deleted mapping file: ${mapFile}`)
