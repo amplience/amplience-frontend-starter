@@ -85,7 +85,7 @@ import { DynamicContent } from 'dc-management-sdk-js'
 
 import { availableSets, flagValue, hasFlag, positional, readAllSets } from './lib/fixture-sets.mjs'
 import { classifyHubItems, isRegenerable, selectForWipe, summarise } from './lib/provenance.mjs'
-import { canUnpublish, isEnvironmentalFailure, mayBePublished } from './lib/publishing.mjs'
+import { isEnvironmentalFailure, mayBePublished } from './lib/publishing.mjs'
 import { MANAGED_LABEL_PREFIX } from './lib/webhooks.mjs'
 
 const env = (name) => {
@@ -166,7 +166,7 @@ const listAll = async (repo, status) => {
  * out — a wipe that cannot unpublish leaves the old generation live, which is
  * the bug this pass exists to prevent, and the operator needs to know.
  */
-const unpublishing = { enabled: true, blockedBy: undefined }
+const unpublishing = { enabled: true, blockedBy: undefined, done: 0, skipped: 0, failed: [] }
 
 /**
  * Whether to send `ignoreSchemaValidation` on key-stripping updates, and
@@ -191,19 +191,57 @@ const hasErrorCode = (error, code) =>
  * the `--ignoreError` posture of the dc-cli passes below.
  */
 const unpublishItem = async (item) => {
-  if (!unpublishing.enabled) return false
-  if (!mayBePublished(item) || !canUnpublish(item)) return false
+  if (!unpublishing.enabled) {
+    unpublishing.skipped += 1
+    return false
+  }
+  if (!mayBePublished(item)) return false
+  // Attempted even when the HAL link is absent. The link is missing from an
+  // update response, which is what the caller holds after stripping delivery
+  // keys — gating on it skipped every unpublish in a scoped wipe without a
+  // word, leaving the content readable on CD2 (1 Oct 2026). A needless attempt
+  // costs one rejection, which classifies itself below.
   try {
     await item.related.unpublish()
+    unpublishing.done += 1
     return true
   } catch (error) {
     if (isEnvironmentalFailure(error)) {
       unpublishing.enabled = false
       unpublishing.blockedBy = error
+      unpublishing.skipped += 1
       return false
     }
-    console.warn(`  ⚠ Could not unpublish "${item.label ?? item.id}": ${error}`)
+    unpublishing.failed.push(`${item.label ?? item.id}: ${messageOf(error)}`)
     return false
+  }
+}
+
+/**
+ * What the unpublish pass managed, said out loud.
+ *
+ * Silence was the actual bug: a run that unpublished nothing printed exactly
+ * what a run that unpublished everything printed, so content left live on the
+ * CDN looked like a clean wipe. Archive is a management-side lifecycle change
+ * and only `unpublish` retracts the published copy, so this is the line that
+ * says whether the content is really gone.
+ */
+const reportUnpublishing = () => {
+  if (unpublishing.done > 0) console.log(`  ✓ Unpublished ${unpublishing.done} item(s)`)
+  if (unpublishing.blockedBy !== undefined) {
+    console.warn(
+      `\n  ⚠ Unpublishing stopped after: ${messageOf(unpublishing.blockedBy)}\n` +
+        `    ${unpublishing.skipped} item(s) were archived while still published, so Delivery\n` +
+        '    will go on serving them. Check the hub allows unpublish and the API client has\n' +
+        '    the permission, then re-run.',
+    )
+  }
+  for (const line of unpublishing.failed) console.warn(`  ⚠ Could not unpublish ${line}`)
+  if (unpublishing.failed.length > 0) {
+    console.warn(
+      `    Those ${unpublishing.failed.length} item(s) stay live on the CDN until they are\n` +
+        '    unpublished — archiving alone does not retract them.',
+    )
   }
 }
 
@@ -332,6 +370,7 @@ const reclaimArchivedItems = async (client, repoId, repoLabel) => {
 const reclaimRepo = async (client, repoId, repoLabel) => {
   await unpublishActiveItems(client, repoId, repoLabel)
   await reclaimArchivedItems(client, repoId, repoLabel)
+  reportUnpublishing()
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────────
@@ -498,7 +537,13 @@ const listEveryItem = async (client, repos) => {
 /**
  * Take one item out of service: unpublish it, drop its delivery keys, archive it.
  *
- * The key strip is the part that matters for a later reseed — an archived item
+ * In that order. Unpublishing is what actually retracts the content from
+ * Delivery — archiving is a management-side lifecycle change that leaves the
+ * published copy serving — so it goes first, against the resource as the API
+ * handed it over, before any update has had a chance to change what the
+ * resource advertises about itself.
+ *
+ * The key strip is the part that matters for a later reseed: an archived item
  * goes on reserving its delivery key hub-wide, so a set wiped without stripping
  * can't be seeded again (409).
  */
@@ -506,12 +551,13 @@ const retireItem = async (item) => {
   let current = item
   if (current.status === 'ARCHIVED') current = await current.related.unarchive()
 
+  if (mayBePublished(current)) await unpublishItem(current)
+
   if (hasDeliveryKeys(current.body)) {
     current.body._meta.deliveryKey = null
     current.body._meta.deliveryKeys = null
     current = await stripKeys(current)
   }
-  if (mayBePublished(current)) await unpublishItem(current)
   await current.related.archive()
 }
 
@@ -574,20 +620,33 @@ const runScopedWipe = async (selector) => {
       Object.entries(counts.bySet)
         .map(([name, n]) => `${name} ${n}`)
         .join(', ') +
-      `, orphaned ${counts.orphaned}, custom ${counts.custom}`,
+      `, orphaned ${counts.orphaned}, custom ${counts.custom}` +
+      // Counted apart: archived items serve nothing, and a previous wipe pruned
+      // their map entries, so counting them would file them under `custom`.
+      (counts.archived > 0 ? `\n  Plus ${counts.archived} archived, serving nothing.` : ''),
   )
 
-  const selected = selectForWipe(classified, selector)
+  const matched = selectForWipe(classified, selector)
   const describe = selector.custom
     ? 'custom (authored in the DC UI)'
     : selector.orphaned
       ? 'orphaned (seeded from a set no longer on disk)'
       : `the "${selector.set}" set`
 
+  // An item already archived with no delivery keys has been through this
+  // before: it serves nothing and reserves nothing, so retiring it again would
+  // be churn. One still holding keys has not — an older wipe, or the DC UI,
+  // archived it without stripping them, and they stay reserved hub-wide until
+  // something takes them off. That one is still worth acting on.
+  const selected = matched?.filter((i) => i.status !== 'ARCHIVED' || hasDeliveryKeys(i.body))
+  const inert = (matched?.length ?? 0) - (selected?.length ?? 0)
+
   if (selected === undefined || selected.length === 0) {
     console.log(`\n✓ Nothing to wipe in ${describe}.`)
+    if (inert > 0) console.log(`  (${inert} already archived and key-free.)`)
     process.exit(0)
   }
+  if (inert > 0) console.log(`\n  Skipping ${inert} already archived and key-free.`)
 
   // Anything that can't be put back from the repository is listed and left
   // alone until it's asked for a second time. A set is reseedable; `custom` may
@@ -624,6 +683,7 @@ const runScopedWipe = async (selector) => {
   writeFileSync(mapFile, JSON.stringify({ ...map, contentItems: kept }))
 
   console.log(`✓ Wiped ${done} item(s); map entries pruned`)
+  reportUnpublishing()
   for (const line of failed) console.warn(`  ⚠ ${line}`)
   if (failed.length > 0) {
     console.warn(

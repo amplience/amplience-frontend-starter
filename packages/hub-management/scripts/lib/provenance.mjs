@@ -58,14 +58,36 @@ export const classifyHubItems = (hubItems, contentItemPairs, sets) => {
   return { bySet, orphaned, custom }
 }
 
-/** Counts only — what a UI needs without carrying every item across the wire. */
-export const summarise = ({ bySet, orphaned, custom }) => ({
-  bySet: Object.fromEntries([...bySet].map(([name, items]) => [name, items.length])),
-  orphaned: orphaned.length,
-  custom: custom.length,
-  total:
-    [...bySet.values()].reduce((n, items) => n + items.length, 0) + orphaned.length + custom.length,
-})
+/** An item still on the hub in the sense that matters — not archived. */
+const isLive = (item) => item.status !== 'ARCHIVED'
+
+/**
+ * Counts only — what a UI needs without carrying every item across the wire.
+ *
+ * **Archived items are not counted.** A wipe archives rather than deletes, and
+ * prunes the map entries for what it wiped so the set can be seeded again
+ * cleanly — which leaves the archived remains matching no map entry at all, the
+ * literal definition of `custom`. Counting them would show a wipe of 142 items
+ * moving 142 items into `custom` rather than removing them, which reads as the
+ * wipe having failed. They are reported separately instead: inert, key-stripped,
+ * and not part of what the hub is serving.
+ *
+ * Classification still sees them, because a wipe has to reach archived items —
+ * an older one archived without stripping delivery keys still holds them hub-wide
+ * and will 409 the next seed.
+ */
+export const summarise = ({ bySet, orphaned, custom }) => {
+  const live = (items) => items.filter(isLive).length
+  const all = [...bySet.values(), orphaned, custom]
+  return {
+    bySet: Object.fromEntries([...bySet].map(([name, items]) => [name, live(items)])),
+    orphaned: live(orphaned),
+    custom: live(custom),
+    total: all.reduce((n, items) => n + live(items), 0),
+    /** Wiped or retired previously; still on the hub, serving nothing. */
+    archived: all.reduce((n, items) => n + items.filter((i) => !isLive(i)).length, 0),
+  }
+}
 
 /**
  * The items a `--set` / `--custom` / `--orphaned` wipe would act on.

@@ -44,8 +44,14 @@ export function mayBePublished(item) {
  *
  * HAL links are the same "can I write?" signal the environment-manager
  * preflight uses: the API only offers the action when the item is live, the
- * hub has unpublish enabled, and the credentials carry the permission. Asking
- * the link is cheaper and more honest than inferring from state.
+ * hub has unpublish enabled, and the credentials carry the permission.
+ *
+ * ⚠️ Not a gate. A resource returned by an *update* — which is what the wipe
+ * holds after stripping delivery keys — does not carry the same links as one
+ * returned by a `get`, so treating a missing link as "can't" silently skipped
+ * every unpublish in a scoped wipe and left the content live on CD2 (1 Oct
+ * 2026). Callers attempt the unpublish regardless and let the failure classify
+ * itself; this is only used to explain what happened afterwards.
  *
  * `_links` is documented as a `Map` but the SDK builds resources with
  * `Object.assign`, so in practice it is a plain object. Both are read.

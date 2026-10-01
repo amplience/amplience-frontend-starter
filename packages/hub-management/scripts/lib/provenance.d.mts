@@ -2,8 +2,12 @@
 // ESM (.mjs) so `node scripts/hub-wipe.mjs` can import it without a TS loader.
 // This lets the .ts test and typecheck see real types for the import.
 
-/** The parts of a hub item this module needs. */
-export type HubItem = { id: string; label?: string }
+/**
+ * The parts of a hub item this module needs. `status` is absent on an item that
+ * was never asked for one, which counts as live — the common case, and the safe
+ * reading when the caller didn't say.
+ */
+export type HubItem = { id: string; label?: string; status?: string }
 
 /** A fixture set on disk, and the ids of the items in it. */
 export type SetOnDisk = { name: string; ids: ReadonlySet<string> }
@@ -29,11 +33,13 @@ export declare const classifyHubItems: (
   sets: readonly SetOnDisk[],
 ) => Classified
 
+/** Counts of live items only; archived ones are reported apart, never bucketed. */
 export declare const summarise: (classified: Classified) => {
   bySet: Record<string, number>
   orphaned: number
   custom: number
   total: number
+  archived: number
 }
 
 /** The items a selection would act on, or undefined for an unknown set. */

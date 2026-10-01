@@ -55,6 +55,38 @@ describe('classifyHubItems', () => {
     expect(summarise(c).total).toBe(hubItems.length)
   })
 
+  it('counts archived items apart rather than in a bucket', () => {
+    // A wipe archives and prunes its map entries, so what it removed matches no
+    // map entry — the definition of `custom`. Counted there, a completed wipe of
+    // 142 items would read as 142 items moving into `custom` rather than going.
+    const hubItems = [
+      { id: 'hub-fs-1', label: 'live', status: 'ACTIVE' },
+      { id: 'hub-wiped-1', label: 'archived by an earlier wipe', status: 'ARCHIVED' },
+    ]
+    const sets = [{ name: 'frontend-starter', ids: new Set(['src-fs-1']) }]
+    const counts = summarise(classifyHubItems(hubItems, [['src-fs-1', 'hub-fs-1']], sets))
+
+    expect(counts.bySet['frontend-starter']).toBe(1)
+    expect(counts.custom).toBe(0)
+    expect(counts.total).toBe(1)
+    expect(counts.archived).toBe(1)
+  })
+
+  it('treats an item with no status as live', () => {
+    // The common case, and the safe reading when the caller didn't say.
+    const { hubItems, pairs, sets } = scenario()
+    expect(summarise(classifyHubItems(hubItems, pairs, sets)).archived).toBe(0)
+  })
+
+  it('still classifies archived items, because a wipe has to reach them', () => {
+    // An older wipe (or the DC UI) archived without stripping delivery keys, and
+    // those stay reserved hub-wide until something takes them off.
+    const hubItems = [{ id: 'hub-af-1', status: 'ARCHIVED' }]
+    const sets = [{ name: 'anyafinn', ids: new Set(['src-af-1']) }]
+    const c = classifyHubItems(hubItems, [['src-af-1', 'hub-af-1']], sets)
+    expect(c.bySet.get('anyafinn')?.map((i) => i.id)).toEqual(['hub-af-1'])
+  })
+
   it('lists a set with nothing on the hub as empty, not missing', () => {
     const { hubItems, pairs } = scenario()
     const sets = [
