@@ -603,6 +603,37 @@ body {
   max-width: 14rem;
 }
 
+/* ── Empty hub ───────────────────────────────────────────────────────────────
+   Replaces the resource table when a hub holds nothing at all. The table is
+   accurate there but reads as six broken rows; this reads as a starting point. */
+.env-card__empty {
+  padding: 1rem 0.75rem 1.1rem;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm, 4px);
+  text-align: center;
+}
+
+.env-card__empty-title {
+  margin: 0 0 0.35rem;
+  font-weight: 600;
+}
+
+.env-card__empty-detail {
+  margin: 0 auto 0.9rem;
+  max-width: 46ch;
+  font-size: 0.825rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.env-card__empty-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
 /* The second step of a wipe that can't be undone — sits under the log, so the
    list it acts on has just been read. */
 .log-apply {
