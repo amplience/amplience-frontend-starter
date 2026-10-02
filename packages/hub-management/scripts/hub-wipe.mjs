@@ -102,7 +102,14 @@ import os from 'node:os'
 import path from 'node:path'
 import { DynamicContent } from 'dc-management-sdk-js'
 
-import { availableSets, flagValue, hasFlag, positional, readAllSets } from './lib/fixture-sets.mjs'
+import {
+  availableSets,
+  hasFlag,
+  positional,
+  readAllSets,
+  readFlag,
+  setFromArgv,
+} from './lib/fixture-sets.mjs'
 import { classifyHubItems, isRegenerable, selectForWipe, summarise } from './lib/provenance.mjs'
 import { isEnvironmentalFailure, mayBePublished } from './lib/publishing.mjs'
 import { MANAGED_LABEL_PREFIX } from './lib/webhooks.mjs'
@@ -411,13 +418,19 @@ if (!scopes.includes(scope)) {
 
 // Provenance selectors. All three scope the wipe to content items only, so they
 // never reach the type/schema passes below; at most one may be given.
+//
+// `--set` counts as given even when it's bare: read as absent, a forgotten name
+// would turn `hub:wipe content --set` into a blanket content wipe and
+// `hub:wipe --set` into a wipe of the whole hub.
+const argv = process.argv.slice(2)
+const setGiven = readFlag(argv, '--set').present
 const selector = {
-  set: flagValue(process.argv.slice(2), '--set'),
-  custom: hasFlag(process.argv, '--custom'),
-  orphaned: hasFlag(process.argv, '--orphaned'),
+  set: undefined,
+  custom: hasFlag(argv, '--custom'),
+  orphaned: hasFlag(argv, '--orphaned'),
 }
 const chosen = [
-  selector.set !== undefined && '--set',
+  setGiven && '--set',
   selector.custom && '--custom',
   selector.orphaned && '--orphaned',
 ].filter(Boolean)
@@ -437,7 +450,23 @@ if (isScoped && requestedScope !== 'all' && scope !== 'content') {
   process.exit(1)
 }
 
-console.log(`\n▶ hub-wipe scope: ${isScoped ? `content (${chosen[0]})` : scope}`)
+// Only now, once the flags are known to make sense together, ask for a missing
+// set name — at a terminal; anywhere else this throws with the sets to pick from.
+// No default is offered: for a wipe, "the default set" is never a safe guess.
+if (setGiven) {
+  try {
+    selector.set = await setFromArgv(argv, {
+      question: 'Which fixture set do you want to wipe?',
+      example: 'pnpm hub:wipe content --set <set>',
+    })
+  } catch (error) {
+    console.error(`\n✗ ${error instanceof Error ? error.message : String(error)}`)
+    process.exit(1)
+  }
+}
+
+const scopeLabel = selector.set === undefined ? chosen[0] : `--set ${selector.set}`
+console.log(`\n▶ hub-wipe scope: ${isScoped ? `content (${scopeLabel})` : scope}`)
 
 // Only the content scope touches repositories, so only it asks for repo ids.
 const wipesContent = scope === 'content' || scope === 'all'

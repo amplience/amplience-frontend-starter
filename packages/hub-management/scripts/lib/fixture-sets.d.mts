@@ -48,7 +48,8 @@ export declare const resolveSetName: (
  */
 export declare const promptForSet: (
   available: readonly string[],
-  fallback: string,
+  fallback: string | undefined,
+  options?: { question?: string; always?: boolean },
 ) => Promise<string | undefined>
 
 /** What was asked for, else the environment, else a prompt, else the default. */
@@ -57,8 +58,23 @@ export declare const chooseSet: (
   options?: { fallback?: string; root?: string },
 ) => Promise<string>
 
-/** `--flag value` or `--flag=value`, anywhere in `argv`. */
+/** A `--flag value` option, telling "absent" apart from "given bare". */
+export declare const readFlag: (
+  argv: readonly string[],
+  name: string,
+) => { present: boolean; value: string | undefined }
+
+/** `--flag value` or `--flag=value`, anywhere in `argv`; undefined if absent or bare. */
 export declare const flagValue: (argv: readonly string[], name: string) => string | undefined
+
+/**
+ * The set `--set` names; undefined only when `--set` is absent. A bare `--set`
+ * prompts at a terminal and throws elsewhere — it never falls through silently.
+ */
+export declare const setFromArgv: (
+  argv: readonly string[],
+  options?: { example?: string; question?: string; fallback?: string; root?: string },
+) => Promise<string | undefined>
 
 /** Is a bare `--flag` present? */
 export declare const hasFlag: (argv: readonly string[], name: string) => boolean

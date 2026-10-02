@@ -120,24 +120,34 @@ export const resolveSetName = (requested, { fallback = DEFAULT_FIXTURE_SET, root
  * CI runs them, and a prompt neither can answer hangs forever — so the absence
  * of a TTY is treated as "take the default", not "wait".
  */
-export const promptForSet = async (available, fallback) => {
-  if (!process.stdin.isTTY || available.length < 2) return undefined
+export const promptForSet = async (
+  available,
+  fallback,
+  { question = 'Which fixture set do you want to use for the content?', always = false } = {},
+) => {
+  if (!process.stdin.isTTY) return undefined
+  // A lone set is only worth asking about when the person explicitly asked to
+  // choose (a bare `--set`) — otherwise there is nothing to choose between.
+  if (!always && available.length < 2) return undefined
 
   const { createInterface } = await import('node:readline/promises')
   const rl = createInterface({ input: process.stdin, output: process.stdout })
   try {
-    console.log('\nWhich fixture set do you want to use for the content?')
+    console.log(`\n${question}`)
     available.forEach((name, i) => {
       console.log(`  ${i + 1}) ${name}${name === fallback ? '  (default)' : ''}`)
     })
-    const answer = (await rl.question(`Choose 1-${available.length}, or Enter for the default: `))
-      .trim()
-      .toLowerCase()
+    const range = `1-${available.length}`
+    const hint =
+      fallback === undefined ? `Choose ${range}: ` : `Choose ${range}, or Enter for the default: `
+    const answer = (await rl.question(hint)).trim().toLowerCase()
     if (answer === '') return undefined
     const byNumber = available[Number(answer) - 1]
     if (byNumber !== undefined) return byNumber
     if (available.includes(answer)) return answer
-    console.log(`  "${answer}" isn't one of those — using the default.`)
+    console.log(
+      `  "${answer}" isn't one of those` + (fallback === undefined ? '.' : ' — using the default.'),
+    )
     return undefined
   } finally {
     rl.close()
@@ -154,12 +164,57 @@ export const chooseSet = async (requested, { fallback = DEFAULT_FIXTURE_SET, roo
   return resolveSetName(picked, { fallback, root })
 }
 
-/** `--flag value` or `--flag=value`, anywhere in `argv`. */
-export const flagValue = (argv, name) => {
+/**
+ * A `--flag value` / `--flag=value` option, telling "absent" apart from "given
+ * with no value". A bare `--set` (last argument, followed by another `--flag`,
+ * or `--set=`) has to be caught: read as absent, `hub:wipe content --set` would
+ * be a blanket content wipe, and `hub:wipe --set` a wipe of the whole hub.
+ */
+export const readFlag = (argv, name) => {
   const i = argv.indexOf(name)
-  if (i !== -1) return argv[i + 1]
+  if (i !== -1) {
+    const next = argv[i + 1]
+    const value = next === undefined || next.startsWith('--') || next === '' ? undefined : next
+    return { present: true, value }
+  }
   const inline = argv.find((a) => a.startsWith(`${name}=`))
-  return inline?.slice(name.length + 1)
+  if (inline === undefined) return { present: false, value: undefined }
+  const value = inline.slice(name.length + 1)
+  return { present: true, value: value === '' ? undefined : value }
+}
+
+/** `--flag value` or `--flag=value`, anywhere in `argv`; undefined if absent or bare. */
+export const flagValue = (argv, name) => readFlag(argv, name).value
+
+/**
+ * The set a `--set` flag names — asking for one when it was given bare.
+ *
+ * Resolves to undefined only when `--set` wasn't passed at all, so the caller
+ * keeps its own fallback for that case. A bare `--set` is someone asking to
+ * choose: at a terminal they're asked (with `fallback` offered as the Enter
+ * default, when there is one); anywhere else — CI, the Environment Manager —
+ * there's no one to ask, so it throws naming the sets and an example. It never
+ * silently falls back, because for a wipe "no set" means "everything".
+ */
+export const setFromArgv = async (argv, { example, question, fallback, root } = {}) => {
+  const flag = readFlag(argv, '--set')
+  if (!flag.present) return undefined
+  if (flag.value !== undefined) return flag.value
+
+  const available = availableSets(root)
+  const picked = await promptForSet(available, fallback, { question, always: true })
+  if (picked !== undefined) return picked
+  if (fallback !== undefined && process.stdin.isTTY) return fallback
+
+  throw new Error(
+    `--set needs the name of a fixture set — available: ${available.join(', ')}.\n` +
+      (example === undefined
+        ? ''
+        : `  e.g. ${example.replace('<set>', available[0] ?? '<set>')}\n`) +
+      (process.stdin.isTTY
+        ? '  Nothing was chosen, so nothing has been done.'
+        : '  Nothing has been done.'),
+  )
 }
 
 /** Is a bare `--flag` present? */
@@ -170,7 +225,8 @@ export const positional = (argv) => {
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i]
     if (arg.startsWith('--')) {
-      if (arg === '--set') i++ // its value, not a scope
+      // Its value, not a scope — unless it's bare, and the next word is a flag.
+      if (arg === '--set' && argv[i + 1] !== undefined && !argv[i + 1].startsWith('--')) i++
       continue
     }
     return arg

@@ -125,10 +125,11 @@ import { DynamicContent, Webhook } from 'dc-management-sdk-js'
 import {
   availableSets,
   chooseSet,
+  DEFAULT_FIXTURE_SET,
   fixturesRoot,
-  flagValue,
   positional,
   resolveSetName,
+  setFromArgv,
 } from './lib/fixture-sets.mjs'
 import { describeLocaleFilter, filterLocales } from './lib/locales.mjs'
 import {
@@ -181,9 +182,17 @@ if (!steps.includes(step)) {
 // question comes now, before any work, rather than minutes in at the content
 // phase. `chooseSet` stays quiet unless a person is actually at a terminal.
 const seedsContent = step === 'content' || step === 'all'
-const requestedSet = flagValue(argv, '--set') ?? process.env.FIXTURE_SET
 let setName
 try {
+  // A bare `--set` asks to choose, so it prompts (or, with no terminal, fails
+  // naming the sets) rather than quietly taking FIXTURE_SET or the default.
+  const requestedSet =
+    (await setFromArgv(argv, {
+      example: 'pnpm hub:import content --set <set>',
+      fallback: DEFAULT_FIXTURE_SET,
+    })) ??
+    // Blank is unset, as everywhere else in these scripts.
+    (process.env.FIXTURE_SET || undefined)
   // Only a content seed is worth asking about; the other steps are set-agnostic
   // and must never block on a question.
   setName = seedsContent ? await chooseSet(requestedSet) : resolveSetName(requestedSet)

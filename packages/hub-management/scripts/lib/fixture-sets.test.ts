@@ -5,7 +5,16 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 // Plain ESM (.mjs), shared with the import and wipe scripts; import it directly
 // so these exercise the exact code a destructive run uses.
-import { availableSets, readAllSets, readSet, resolveSetName } from './fixture-sets.mjs'
+import {
+  availableSets,
+  flagValue,
+  positional,
+  readAllSets,
+  readFlag,
+  readSet,
+  resolveSetName,
+  setFromArgv,
+} from './fixture-sets.mjs'
 
 let root: string
 
@@ -91,5 +100,63 @@ describe('resolveSetName', () => {
     writeSet('alpha', { one: 'id-1' })
     writeSet('beta', { one: 'id-2' })
     expect(() => resolveSetName('gamma', { root })).toThrow(/available: alpha, beta/)
+  })
+})
+
+describe('readFlag', () => {
+  it('tells an absent flag from a bare one', () => {
+    expect(readFlag(['content'], '--set')).toEqual({ present: false, value: undefined })
+    expect(readFlag(['--set'], '--set')).toEqual({ present: true, value: undefined })
+    expect(readFlag(['content', '--set'], '--set')).toEqual({ present: true, value: undefined })
+    expect(readFlag(['--set='], '--set')).toEqual({ present: true, value: undefined })
+  })
+
+  it("doesn't take the next flag as the value", () => {
+    expect(readFlag(['--set', '--apply'], '--set')).toEqual({ present: true, value: undefined })
+  })
+
+  it('reads both spellings', () => {
+    expect(flagValue(['--set', 'alpha'], '--set')).toBe('alpha')
+    expect(flagValue(['--set=alpha'], '--set')).toBe('alpha')
+  })
+})
+
+describe('positional', () => {
+  it('skips the value after --set, but not a flag after a bare one', () => {
+    expect(positional(['--set', 'alpha', 'content'])).toBe('content')
+    expect(positional(['--set'])).toBeUndefined()
+    expect(positional(['--set', '--custom', 'content'])).toBe('content')
+  })
+})
+
+describe('setFromArgv', () => {
+  // vitest's stdin is not a TTY, which is the Environment Manager / CI case.
+  it('is undefined only when --set is absent, so callers keep their fallback', async () => {
+    expect(await setFromArgv(['content'], { root })).toBeUndefined()
+  })
+
+  it('returns the named set', async () => {
+    writeSet('alpha', { one: 'id-1' })
+    expect(await setFromArgv(['--set', 'alpha'], { root })).toBe('alpha')
+  })
+
+  it('refuses a bare --set without a terminal, naming the sets and an example', async () => {
+    writeSet('alpha', { one: 'id-1' })
+    writeSet('beta', { one: 'id-2' })
+    const run = setFromArgv(['content', '--set'], {
+      root,
+      example: 'pnpm hub:wipe content --set <set>',
+    })
+    await expect(run).rejects.toThrow(
+      /--set needs the name of a fixture set — available: alpha, beta/,
+    )
+    await expect(
+      setFromArgv(['--set'], { root, example: 'pnpm hub:wipe content --set <set>' }),
+    ).rejects.toThrow(/pnpm hub:wipe content --set alpha/)
+  })
+
+  it('never falls back to a default for a bare --set without a terminal', async () => {
+    writeSet('alpha', { one: 'id-1' })
+    await expect(setFromArgv(['--set'], { root, fallback: 'alpha' })).rejects.toThrow(/--set needs/)
   })
 })
