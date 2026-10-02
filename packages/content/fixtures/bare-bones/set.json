@@ -1,0 +1,9 @@
+{
+  "name": "bare-bones",
+  "label": "Bare Bones",
+  "description": "The minimum a site needs \u2014 a header, a footer and a homepage with one block. A blank canvas to build on.",
+  "defaultBrand": "default",
+  "defaultLocale": "en-US",
+  "authoredLocales": ["en-US"],
+  "generatedDocs": false
+}

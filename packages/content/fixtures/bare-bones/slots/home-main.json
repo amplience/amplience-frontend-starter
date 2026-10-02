@@ -1,0 +1,19 @@
+{
+  "id": "d342aa6c-8729-5016-b6f9-f4ce7302a5ec",
+  "label": "Home — main slot",
+  "body": {
+    "_meta": {
+      "name": "Home — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot"
+    },
+    "components": [
+      {
+        "id": "ff7d4496-a383-5868-822b-25db6dd1f8ca",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

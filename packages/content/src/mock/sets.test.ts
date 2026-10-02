@@ -66,9 +66,14 @@ describe('two sets on one registry', () => {
   })
 
   it('gives each set its own hierarchy, addressed under its own prefix', async () => {
-    for (const name of fixtureSetNames()) {
+    // A set may have none (bare-bones), but the check is vacuous unless two do.
+    const withHierarchies = fixtureSetNames().filter(
+      (n) => Object.keys(resolveFixtureSet(n).hierarchies).length > 0,
+    )
+    expect(withHierarchies.length).toBeGreaterThan(1)
+
+    for (const name of withHierarchies) {
       const keys = Object.keys(resolveFixtureSet(name).hierarchies)
-      expect(keys.length).toBeGreaterThan(0)
       for (const key of keys) expect(key.startsWith(`${name}/`)).toBe(true)
 
       // And the other set's client can't reach it.

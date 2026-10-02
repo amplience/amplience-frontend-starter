@@ -1,0 +1,21 @@
+{
+  "id": "f65f552f-d3d7-5dbd-a9df-8da02ff0cba3",
+  "label": "Site — logo",
+  "body": {
+    "_meta": {
+      "name": "Site — logo",
+      "schema": "https://quadratic.amplience.com/v2/content/logo",
+      "deliveryId": "f65f552f-d3d7-5dbd-a9df-8da02ff0cba3"
+    },
+    "image": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "/amplience-logo-light.svg",
+        "alt": "Home",
+        "width": 160,
+        "height": 30
+      }
+    },
+    "link": "/"
+  }
+}
