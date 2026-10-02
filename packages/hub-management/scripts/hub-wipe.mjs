@@ -22,6 +22,10 @@
  *   5. Archives every content type schema in the hub so the next
  *      hub:import:schemas registers them fresh.
  *
+ *   6. Deletes every extension on the hub — all of them, not only the ones
+ *      the seed created. Extensions are hub configuration like types and
+ *      schemas, and re-seeding recreates them by name.
+ *
  * Step 2 covers two failures that both come from archive being a
  * management-side lifecycle change rather than a Delivery operation:
  *
@@ -51,21 +55,23 @@
  *
  * Webhooks created by the seed (labelled `Quadratic — …`) are removed first on
  * a full wipe, and on the standalone `webhooks` scope. First, so the teardown
- * below can't fire the integrations it is in the middle of removing. Unlike extensions and
- * workflow states, a stale webhook isn't inert: it keeps firing on every
- * publish and failing against a deployment that no longer exists, which shows
- * up in the hub's webhook log as a permanently broken integration. Only the
- * managed label prefix is touched — a hand-made or third-party webhook on a
- * shared hub survives.
+ * below can't fire the integrations it is in the middle of removing. Webhooks
+ * are the one resource filtered by ownership, because a stale one isn't inert:
+ * it keeps firing on every publish and failing against a deployment that no
+ * longer exists, which shows up in the hub's webhook log as a permanently
+ * broken integration. Only the managed label prefix is touched — a hand-made or
+ * third-party webhook on a shared hub survives.
  *
- * Extensions and workflow states are deliberately left in place. Both are
- * hub-wide configuration that a hub may share with things other than
- * Amplience Frontend Starter, so a content wipe is the wrong place to destroy them — and it
- * isn't necessary: re-seeding updates each extension in place by name, and
- * updates each workflow state through the settings mapping file (kept at
- * quadratic-settings-<hub>.json, separate from the content map this script
+ * Everything else is wiped wholesale, extensions included: the starter assumes
+ * it owns the hub's model. A hub shared with other sites would lose their types,
+ * schemas and extensions too — a use case too small to cater for yet, and the
+ * place to add an ownership filter (like the webhooks one) if it ever isn't.
+ *
+ * Workflow states are left in place. Nothing removes them cleanly, and nothing
+ * needs to: re-seeding updates each one through the settings mapping file (kept
+ * at quadratic-settings-<hub>.json, separate from the content map this script
  * deletes, precisely so the source→target status ids survive a wipe and the
- * extensions that reference them keep resolving after a re-seed).
+ * extensions that reference them resolve again after a re-seed).
  *
  * Usage:  node scripts/hub-wipe.mjs [all|content|types|schemas|extensions|webhooks]
  *                                   [--set <fixture set> | --orphaned | --custom]
@@ -813,7 +819,13 @@ const wipeSchemas = async () => {
   }
 }
 
-/** Delete every extension. Nothing references them by id, so order is free. */
+/**
+ * Delete every extension on the hub, seeded or not.
+ *
+ * Nothing references an extension by id, so DC doesn't block this the way it
+ * blocks types and schemas — but content types do reference extensions by
+ * name, so until a re-seed any type using one shows a broken editor field.
+ */
 const wipeExtensions = async () => {
   console.log('\nDeleting all extensions…')
   await dcCli('extension', 'delete', '-f')

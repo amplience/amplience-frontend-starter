@@ -88,11 +88,11 @@ pnpm hub:import:webhooks      # publish → cache-invalidation webhooks, one per
 pnpm hub:import:content       # fixture content items
 pnpm hub:import --set <name>  # seed one fixture set's content (see Fixture sets)
 
-pnpm hub:wipe                 # reset the hub to empty, webhooks included (~45s)
+pnpm hub:wipe                 # reset the hub to empty, extensions and webhooks included (~45s)
 pnpm hub:wipe:content         # content items only, leaving the model in place
 pnpm hub:wipe:types           # content types (content must be gone first)
 pnpm hub:wipe:schemas         # schemas (content and types must be gone first)
-pnpm hub:wipe:extensions      # UI and dashboard extensions
+pnpm hub:wipe:extensions      # every extension on the hub, seeded or not
 pnpm hub:wipe:webhooks        # just the seeded webhooks
 
 pnpm hub:wipe content --set <name>  # one fixture set's items, leaving the others
@@ -121,11 +121,15 @@ Four things about `hub:import` that aren't obvious from the name:
 
 `hub:wipe` is destructive and has no confirmation prompt in the terminal — the
 GUI equivalent does prompt. It frees delivery keys, retracts published content
-where the hub allows unpublish, then archives content, types and schemas. A full
-wipe also deletes the webhooks the seed created; `pnpm hub:wipe:webhooks` does
-only that. Only webhooks labelled `Quadratic — …` are ever touched, so anything
-hand-made or belonging to another integration survives both a wipe and a
-re-seed.
+where the hub allows unpublish, then archives content, types and schemas, and
+deletes every extension. Those are wiped wholesale — the starter assumes it owns
+the hub's model, so a hub shared with other sites loses theirs too. Workflow
+states are kept.
+
+Webhooks are the exception. A full wipe deletes the webhooks the seed created;
+`pnpm hub:wipe:webhooks` does only that. Only webhooks labelled `Quadratic — …`
+are ever touched, so anything hand-made or belonging to another integration
+survives both a wipe and a re-seed.
 
 The per-resource wipes run in the same dependency order as the seed, in reverse:
 a type in use by a content item can't be removed, and a schema can't be removed

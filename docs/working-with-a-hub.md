@@ -46,7 +46,7 @@ Once a hub is added, push the content model and starter content to it (typically
 pnpm hub:import                 # settings, schemas, content types, extensions, webhooks, then fixture content (~1m45s end to end)
 pnpm hub:import --set anyafinn  # seed a second fixture set alongside the first
 
-pnpm hub:wipe                   # removes seeded webhooks, frees delivery keys, then clears content, content-types, schemas (~45s end to end)
+pnpm hub:wipe                   # removes seeded webhooks, frees delivery keys, then clears content, content-types, schemas and every extension (~45s end to end)
 pnpm hub:wipe:content           # content items only, leaving the model in place
 
 pnpm hub:import:schemas         # only imports the schemas

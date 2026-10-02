@@ -714,21 +714,27 @@ export function EnvironmentCard({
           'Wipe content items first — types in use can’t be removed.',
         ],
         'wipe-schemas': ['schemas', 'Wipe content items, then content types, first.'],
-        'wipe-extensions': ['extensions', 'Nothing else depends on these.'],
+        'wipe-extensions': [
+          'every extension',
+          'All extensions on the hub are deleted, not only the seeded ones. Content types ' +
+            'that use one show a broken field in the editor until you seed extensions again.',
+        ],
       }[key]
       if (!confirm(`Wipe ${what[0]} from "${env.label || env.name}"?\n\n${what[1]}`)) return
     }
     if (!scoped && (key === 'wipe-items' || key === 'wipe-all')) {
       const label = env.label || env.name
-      const what = key === 'wipe-all' ? 'all content items' : 'content items'
-      if (
-        !confirm(
-          `Wipe ${what} from "${label}"?\n\n` +
+      const message =
+        key === 'wipe-all'
+          ? `Wipe everything from "${label}"?\n\n` +
+            'This unpublishes and archives all content, deletes the import mapping, ' +
+            'archives every content type and schema, deletes every extension on the hub, ' +
+            'and removes the seeded webhooks. Workflow states are kept. ' +
+            'Run Seed all afterwards to repopulate.'
+          : `Wipe content items from "${label}"?\n\n` +
             'This archives all published content and deletes the import mapping. ' +
-            'Run Seed afterwards to repopulate.',
-        )
-      )
-        return
+            'Run Seed afterwards to repopulate.'
+      if (!confirm(message)) return
     }
     // Wiping one set is reversible — the repository still holds it — so it asks
     // once and acts. The two provenance buckets are not, so they report what

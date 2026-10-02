@@ -185,7 +185,7 @@ or the Environment Manager).
 ### Wiping
 
 ```sh
-pnpm hub:wipe                      # everything, webhooks included (~45s)
+pnpm hub:wipe                      # everything — extensions and seeded webhooks included (~45s)
 pnpm hub:wipe:content              # content items only, model left in place
 pnpm hub:wipe content --set anyafinn   # one set, leaving the others
 pnpm hub:wipe content --orphaned       # reports; add --apply to act
