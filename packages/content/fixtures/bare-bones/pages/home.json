@@ -1,0 +1,32 @@
+{
+  "id": "40d71d03-f25f-597a-a1d9-e41728b0880f",
+  "label": "Home page",
+  "body": {
+    "_meta": {
+      "name": "Home page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "bare-bones/homepage"
+          }
+        ]
+      }
+    },
+    "title": "Home",
+    "description": "Content coming soon.",
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
+    "slots": [
+      {
+        "id": "d342aa6c-8729-5016-b6f9-f4ce7302a5ec",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

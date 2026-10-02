@@ -1,0 +1,24 @@
+{
+  "id": "ff7d4496-a383-5868-822b-25db6dd1f8ca",
+  "label": "Home — coming soon",
+  "body": {
+    "_meta": {
+      "name": "Home — coming soon",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "ff7d4496-a383-5868-822b-25db6dd1f8ca"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "# Content coming soon"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "maxWidth": "default",
+    "gutter": true
+  }
+}

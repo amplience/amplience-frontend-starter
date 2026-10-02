@@ -13,13 +13,14 @@ import { FIXTURE_SITE_NAME } from '../config'
 import type { EnrichedContentItem } from '../types'
 import { indexSet, type IndexedFixtureSet } from './set'
 import { anyafinnSet } from './sets/anyafinn'
+import { bareBonesSet } from './sets/bare-bones'
 import { frontendStarterSet } from './sets/frontend-starter'
 
 /** The set a zero-config (mock) deployment serves. Defined in `../config`. */
 export const DEFAULT_FIXTURE_SET = FIXTURE_SITE_NAME
 
 const REGISTRY = new Map<string, IndexedFixtureSet>(
-  [frontendStarterSet, anyafinnSet].map((set) => [set.name, indexSet(set)]),
+  [frontendStarterSet, anyafinnSet, bareBonesSet].map((set) => [set.name, indexSet(set)]),
 )
 
 /** Every registered set name, sorted. */

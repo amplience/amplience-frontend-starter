@@ -1,0 +1,21 @@
+{
+  "id": "e4b69338-a295-583e-8731-81819c164f81",
+  "label": "Site — footer row 1 (logo)",
+  "body": {
+    "_meta": {
+      "name": "Site — footer row 1 (logo)",
+      "schema": "https://quadratic.amplience.com/v2/content/footer-row",
+      "deliveryId": "e4b69338-a295-583e-8731-81819c164f81"
+    },
+    "backgroundColor": "dark",
+    "items": [
+      {
+        "id": "f65f552f-d3d7-5dbd-a9df-8da02ff0cba3",
+        "contentType": "https://quadratic.amplience.com/v2/content/logo",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}
