@@ -822,8 +822,12 @@ export function EnvironmentCard({
   const allEmpty = stats !== null && stats.schemas === 0 && stats.types === 0 && stats.items === 0
   const gate = gateReason(breakdown)
   const toSeed = seedableSets(breakdown, fixtureSets)
-  // The select starts blank, so an untouched row still seeds the first offer.
+  // Both pickers start blank, so an untouched one still seeds its first option.
+  // They share the state deliberately: picking a set is one decision, wherever
+  // it's made. The offer row narrows to sets the hub lacks; "Seed all" offers
+  // every set, since an empty hub could take any of them.
   const nextSet = setToSeed !== '' ? setToSeed : (toSeed[0]?.name ?? '')
+  const allRowSet = setToSeed !== '' ? setToSeed : (fixtureSets[0]?.name ?? '')
 
   // The site currently being edited (if any), and whether saving it will force
   // a redeploy — i.e. a provisioned site whose brand or site name changed
@@ -1070,7 +1074,11 @@ export function EnvironmentCard({
                   </td>
                 </tr>
               )}
-              {gate !== null && (
+              {/* Only worth saying when there is content it could have scoped.
+                  On an empty hub there is nothing to sync or wipe, so explaining
+                  the absence of per-set controls is noise on the one screen that
+                  should read as "ready to seed". */}
+              {gate !== null && (stats?.items ?? 0) > 0 && (
                 <tr className="content-row content-row--gated">
                   <td className="col-resource" colSpan={3}>
                     <span className="dim">
@@ -1126,18 +1134,38 @@ export function EnvironmentCard({
                 </div>
               </>
             ) : allEmpty ? (
-              <button
-                className={`btn btn--sm btn--op btn--op-seed${isRunning && op?.key === 'seed-all' ? ' btn--op-running' : ''}`}
-                onClick={() => {
-                  void runOp('seed-all')
-                }}
-                disabled={isRunning}
-              >
-                {isRunning && op?.key === 'seed-all' ? (
-                  <span className="spinner" aria-hidden="true" />
-                ) : null}
-                Seed all
-              </button>
+              <>
+                {/* The model is shared, but the content step needs a set — and
+                    on an empty hub any of them will do, so the choice is offered
+                    here rather than guessed at. One set means nothing to pick. */}
+                {fixtureSets.length > 1 && (
+                  <select
+                    className="site-card__select"
+                    aria-label="Fixture set to seed"
+                    value={allRowSet}
+                    onChange={(e) => setSetToSeed(e.target.value)}
+                    disabled={isRunning}
+                  >
+                    {fixtureSets.map((s) => (
+                      <option key={s.name} value={s.name}>
+                        {s.label}
+                      </option>
+                    ))}
+                  </select>
+                )}
+                <button
+                  className={`btn btn--sm btn--op btn--op-seed${isRunning && op?.key === 'seed-all' ? ' btn--op-running' : ''}`}
+                  onClick={() => {
+                    void runOp('seed-all', allRowSet === '' ? {} : { set: allRowSet })
+                  }}
+                  disabled={isRunning}
+                >
+                  {isRunning && op?.key === 'seed-all' ? (
+                    <span className="spinner" aria-hidden="true" />
+                  ) : null}
+                  Seed all
+                </button>
+              </>
             ) : (
               <>
                 <button
