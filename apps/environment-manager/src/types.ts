@@ -1,5 +1,23 @@
 /** Sentinel name for the built-in "Local Fixtures" entry — never stored in config.json. */
+/**
+ * The pre-set-aware name for the offline source. The server migrates it to the
+ * default set's name on read, and still accepts it when activating.
+ */
 export const FIXTURES_NAME = 'fixtures'
+
+/**
+ * A fixture set as the server reports it, read from its `set.json` (ADR-0019).
+ * The name is both the set's identity and its delivery-key namespace.
+ */
+export type FixtureSetInfo = {
+  name: string
+  label: string
+  description: string
+  defaultBrand: string
+  defaultLocale: string
+  authoredLocales: string[]
+  generatedDocs: boolean
+}
 
 export type Environment = {
   name: string
@@ -30,6 +48,12 @@ export type Environment = {
   stagingHost: string
   defaultBrand: string
   defaultSite: string
+  /**
+   * Which fixture set this hub's sites carry when their own names don't say
+   * (ADR-0019) — the partner path, where starter content is seeded under
+   * another namespace. A site named after a set serves that set regardless.
+   */
+  defaultFixtureSet?: string
   webApps: WebApp[]
   republish: boolean
   /**
@@ -43,14 +67,9 @@ export type Environment = {
 }
 
 export type Config = {
+  /** A hub's name, or a fixture set's. The hubs are enumerable, so the two tell apart. */
   active: string
   environments: Environment[]
-  /**
-   * Brand the built-in Local Fixtures source renders under — the fixtures
-   * equivalent of an environment's defaultBrand. Optional so configs written
-   * before fixtures carried a brand still parse; absent means the base theme.
-   */
-  fixturesBrand?: string
 }
 
 export type EnvironmentStats = {
@@ -60,6 +79,12 @@ export type EnvironmentStats = {
   extensions: number
   webhooks: number
   items: number
+  /**
+   * The hub's configured locales (ADR-0019 §6.6). Support sets these per hub, so
+   * they vary; a set's authored locales are reconciled against them at seed
+   * time. Empty when the probe failed or the hub has none configured.
+   */
+  locales: string[]
 }
 
 export type WebApp = {
@@ -119,10 +144,13 @@ export type OpKey =
   | 'sync-settings'
   | 'seed-schemas'
   | 'sync-schemas'
+  | 'wipe-schemas'
   | 'seed-types'
   | 'sync-types'
+  | 'wipe-types'
   | 'seed-extensions'
   | 'sync-extensions'
+  | 'wipe-extensions'
   | 'seed-webhooks'
   | 'sync-webhooks'
   | 'wipe-webhooks'

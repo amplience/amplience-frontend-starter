@@ -1,0 +1,19 @@
+{
+  "id": "dc84d489-257a-552e-a5d8-7815c24c8fef",
+  "label": "Site — custom CSS",
+  "body": {
+    "_meta": {
+      "name": "Site — custom CSS",
+      "schema": "https://quadratic.amplience.com/v2/sitestructure/custom-css",
+      "deliveryId": "dc84d489-257a-552e-a5d8-7815c24c8fef",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/site/custom-css"
+          }
+        ]
+      }
+    },
+    "css": "/* Optional site-wide custom CSS, applied on top of the design tokens.\n   Everything here is commented out by default, so it injects nothing until\n   an editor adds rules. Example — override the primary colour:\n\n   :root { --color-primary: #6b4eff; }\n\n   NOTE: Managing initial CSS in the CMS rather than the codebase can be more flexible but makes the site slightly less performant.\n\n   This is a trade-off you make, opting-in & enabling the CMS management by adding `AMPLIENCE_CUSTOM_CSS=\"TRUE\"` to the host env-vars*/\n"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "id": "66c8434f-c6a5-572c-b11b-5560ad9f23b7",
+  "label": "Home — shop the look",
+  "body": {
+    "_meta": {
+      "name": "Home — shop the look",
+      "schema": "https://quadratic.amplience.com/v2/content/grid",
+      "deliveryId": "66c8434f-c6a5-572c-b11b-5560ad9f23b7"
+    },
+    "sectionHeader": {
+      "title": "Shop the look",
+      "description": "Three ways to wear the season, styled end to end."
+    },
+    "items": [
+      {
+        "id": "eb678b43-cabd-526a-b427-bd6d2789970d",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "acd46085-1834-5991-b560-7f17219c2439",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "26beeebe-3ab6-53f3-addf-c216afea6979",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ],
+    "gutter": true
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "id": "abe84489-16d1-5023-a27b-09d9ddb81c12",
+  "label": "Hierarchy menu item: Docs — Content types",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Docs — Content types",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "abe84489-16d1-5023-a27b-09d9ddb81c12",
+      "hierarchy": {
+        "parentId": "2b991992-210f-5bb6-99c0-cb6bd663ee9c",
+        "root": false,
+        "position": "ggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Content types",
+    "link": "/docs/content-types"
+  }
+}

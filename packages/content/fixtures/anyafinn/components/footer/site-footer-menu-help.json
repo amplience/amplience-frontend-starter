@@ -1,0 +1,22 @@
+{
+  "id": "19a1b4e9-85d4-5f65-b497-e2702f87e17b",
+  "label": "Footer menu — Help",
+  "body": {
+    "_meta": {
+      "name": "Footer menu — Help",
+      "schema": "https://quadratic.amplience.com/v2/content/menu",
+      "deliveryId": "19a1b4e9-85d4-5f65-b497-e2702f87e17b"
+    },
+    "display": "megaMenu",
+    "useMobileLayout": false,
+    "items": [
+      {
+        "id": "99b2caa9-31be-5da5-a05c-03dab745eb43",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

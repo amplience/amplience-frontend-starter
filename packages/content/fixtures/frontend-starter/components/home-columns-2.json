@@ -1,0 +1,31 @@
+{
+  "id": "4cf77247-71d6-5137-9fbe-93c04e6d2d50",
+  "label": "Home — side-by-side columns",
+  "body": {
+    "_meta": {
+      "name": "Home — side-by-side columns",
+      "schema": "https://quadratic.amplience.com/v2/content/columns",
+      "deliveryId": "4cf77247-71d6-5137-9fbe-93c04e6d2d50"
+    },
+    "gap": 24,
+    "gutter": true,
+    "maxWidth": "default",
+    "alignItems": "center",
+    "items": [
+      {
+        "id": "f3a90fb2-f19c-5ec8-97a1-2eeab9d60a80",
+        "contentType": "https://quadratic.amplience.com/v2/content/media",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "ef68dd1c-4d4a-59ae-ab01-edc1faf67613",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

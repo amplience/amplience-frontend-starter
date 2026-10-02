@@ -1,0 +1,18 @@
+{
+  "id": "c4d63722-ed29-5248-8b32-3dddb485df27",
+  "label": "Hierarchy menu item: Docs — Theming",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Docs — Theming",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "c4d63722-ed29-5248-8b32-3dddb485df27",
+      "hierarchy": {
+        "parentId": "2b991992-210f-5bb6-99c0-cb6bd663ee9c",
+        "root": false,
+        "position": "ggggggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Theming",
+    "link": "/docs/theming"
+  }
+}

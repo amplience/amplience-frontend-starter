@@ -1,0 +1,13 @@
+{
+  "id": "bae4cd54-e21b-5a37-bdb2-6557460d34f8",
+  "label": "Menu item: Docs — Troubleshooting",
+  "body": {
+    "_meta": {
+      "name": "Menu item: Docs — Troubleshooting",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "bae4cd54-e21b-5a37-bdb2-6557460d34f8"
+    },
+    "label": "Troubleshooting",
+    "link": "/docs/troubleshooting"
+  }
+}

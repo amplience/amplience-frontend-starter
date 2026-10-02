@@ -1,0 +1,13 @@
+{
+  "id": "69af6765-12af-5e38-b7ec-2b3d9754b498",
+  "label": "Footer menu item — Getting started",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Getting started",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "69af6765-12af-5e38-b7ec-2b3d9754b498"
+    },
+    "label": "Getting started",
+    "link": "/docs/getting-started"
+  }
+}

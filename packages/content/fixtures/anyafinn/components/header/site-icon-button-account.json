@@ -1,0 +1,14 @@
+{
+  "id": "6b633423-b516-585a-b06d-3784f473061e",
+  "label": "Site — icon button: account",
+  "body": {
+    "_meta": {
+      "name": "Site — icon button: account",
+      "schema": "https://quadratic.amplience.com/v2/content/icon-button",
+      "deliveryId": "6b633423-b516-585a-b06d-3784f473061e"
+    },
+    "icon": "user",
+    "label": "My account",
+    "link": "/account"
+  }
+}

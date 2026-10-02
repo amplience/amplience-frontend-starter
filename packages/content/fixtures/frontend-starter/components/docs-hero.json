@@ -1,0 +1,178 @@
+{
+  "id": "a1a02497-ab8f-565f-b7eb-35121b09865e",
+  "label": "Docs — hero",
+  "body": {
+    "_meta": {
+      "name": "Docs — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "a1a02497-ab8f-565f-b7eb-35121b09865e"
+    },
+    "preTitle": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Help & Support"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Help & Support"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Ayuda y soporte"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Aide et support"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Hilfe & Support"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Aiuto e supporto"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Documentation"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Documentation"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Documentación"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Documentation"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Dokumentation"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Documentazione"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "/placeholders/docs-hero.jpg",
+        "alt": "A fanned stack of document sheets, neon-framed on a glowing gradient disc",
+        "width": 2752,
+        "height": 1536
+      }
+    },
+    "contentPositionMobile": "above",
+    "contentPositionDesktop": "overlay",
+    "contentWidth": 40,
+    "heightBehaviour": "flexible",
+    "maxWidth": "default",
+    "maxHeight": 600,
+    "overlayColor": "black",
+    "overlayIntensity": 50,
+    "overlayStyle": "gradient",
+    "verticalPosition": "center",
+    "backgroundColor": "black",
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "← Home"
+            },
+            {
+              "locale": "en-GB",
+              "value": "← Home"
+            },
+            {
+              "locale": "es-ES",
+              "value": "← Inicio"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "← Accueil"
+            },
+            {
+              "locale": "de-DE",
+              "value": "← Startseite"
+            },
+            {
+              "locale": "it-IT",
+              "value": "← Home"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/",
+        "variant": "outlined",
+        "color": "white"
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "About"
+            },
+            {
+              "locale": "en-GB",
+              "value": "About"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Acerca de"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "À propos"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Über"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Informazioni"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/about",
+        "variant": "solid",
+        "color": "primary"
+      }
+    ],
+    "description": "Helpful information for installing & using Amplience Frontend Starter",
+    "mobileOverride": true,
+    "mobileMedia": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "/placeholders/docs-hero-mobile.jpg",
+        "alt": "A fanned stack of document sheets, neon-framed on a glowing gradient disc",
+        "width": 2752,
+        "height": 1275
+      }
+    }
+  }
+}

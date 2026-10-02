@@ -1,0 +1,15 @@
+{
+  "id": "30fa826a-affd-51ea-bdc5-23e2a013303a",
+  "label": "Site — icon button: account",
+  "body": {
+    "_meta": {
+      "name": "Site — icon button: account",
+      "schema": "https://quadratic.amplience.com/v2/content/icon-button",
+      "deliveryId": "30fa826a-affd-51ea-bdc5-23e2a013303a"
+    },
+    "icon": "user",
+    "label": "My account",
+    "link": "/account",
+    "visibility": "desktopOnly"
+  }
+}

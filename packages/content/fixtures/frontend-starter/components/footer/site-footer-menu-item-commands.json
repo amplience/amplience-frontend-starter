@@ -1,0 +1,13 @@
+{
+  "id": "17ad2206-b8ba-5092-bf81-29ac3d0f68c3",
+  "label": "Footer menu item — Commands",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Commands",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "17ad2206-b8ba-5092-bf81-29ac3d0f68c3"
+    },
+    "label": "Commands",
+    "link": "/docs/commands"
+  }
+}

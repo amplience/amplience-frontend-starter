@@ -37,6 +37,7 @@
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "docs:generate": "node packages/content/scripts/generate-docs.mjs",
+    "fixtures:ids": "node packages/content/scripts/stamp-fixture-ids.mjs",
     "storybook": "pnpm --filter @amplience/frontend-starter-components storybook",
     "sb": "pnpm storybook",
     "hub:import": "pnpm --filter @amplience/frontend-starter-hub-management hub:import",
@@ -44,8 +45,14 @@
     "hub:import:schemas": "pnpm --filter @amplience/frontend-starter-hub-management hub:import:schemas",
     "hub:import:types": "pnpm --filter @amplience/frontend-starter-hub-management hub:import:types",
     "hub:import:extensions": "pnpm --filter @amplience/frontend-starter-hub-management hub:import:extensions",
+    "hub:import:webhooks": "pnpm --filter @amplience/frontend-starter-hub-management hub:import:webhooks",
     "hub:import:content": "pnpm --filter @amplience/frontend-starter-hub-management hub:import:content",
     "hub:wipe": "pnpm --filter @amplience/frontend-starter-hub-management hub:wipe",
+    "hub:wipe:content": "pnpm --filter @amplience/frontend-starter-hub-management hub:wipe:content",
+    "hub:wipe:types": "pnpm --filter @amplience/frontend-starter-hub-management hub:wipe:types",
+    "hub:wipe:schemas": "pnpm --filter @amplience/frontend-starter-hub-management hub:wipe:schemas",
+    "hub:wipe:extensions": "pnpm --filter @amplience/frontend-starter-hub-management hub:wipe:extensions",
+    "hub:wipe:webhooks": "pnpm --filter @amplience/frontend-starter-hub-management hub:wipe:webhooks",
     "env-manager": "pnpm --filter @amplience/environment-manager dev"
   },
   "devDependencies": {

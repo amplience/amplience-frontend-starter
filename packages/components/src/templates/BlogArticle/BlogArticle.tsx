@@ -89,7 +89,7 @@ export function BlogArticle({
           title={title ?? ''}
           subtitle={category ?? ''}
           heightBehaviour="fitToContent"
-          contentPadding={120}
+          contentPaddingVertical={120}
           backgroundColor="black"
           overlayColor="black"
           overlayIntensity={100}

@@ -1,0 +1,12 @@
+{
+  "id": "6d7e67fc-22b3-5257-b5d9-a47fcfd11926",
+  "label": "Site — locale selector",
+  "body": {
+    "_meta": {
+      "name": "Site — locale selector",
+      "schema": "https://quadratic.amplience.com/v2/content/locale-selector",
+      "deliveryId": "6d7e67fc-22b3-5257-b5d9-a47fcfd11926"
+    },
+    "label": "Language"
+  }
+}

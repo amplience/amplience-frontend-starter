@@ -1,0 +1,13 @@
+{
+  "id": "4a936b91-824f-5469-905e-deb28be661d7",
+  "label": "Footer menu item — Our story",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Our story",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "4a936b91-824f-5469-905e-deb28be661d7"
+    },
+    "label": "Our story",
+    "link": "/company/story"
+  }
+}

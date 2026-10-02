@@ -1,0 +1,28 @@
+{
+  "id": "e747dfbb-f5f0-5e0e-aaab-34dda63ebede",
+  "label": "Contributing Guide page",
+  "body": {
+    "_meta": {
+      "name": "Contributing Guide page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/contributing"
+          }
+        ]
+      }
+    },
+    "title": "Contributing Guide",
+    "description": "Thank you for your interest in contributing to this project.",
+    "slots": [
+      {
+        "id": "0f8e9a05-ef39-5542-99b3-5fe4850ad19f",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

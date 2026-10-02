@@ -1,0 +1,12 @@
+{
+  "id": "95f7d570-7178-5914-997d-e4927a005e1f",
+  "label": "Site — menu toggle button",
+  "body": {
+    "_meta": {
+      "name": "Site — menu toggle button",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-toggle-button",
+      "deliveryId": "95f7d570-7178-5914-997d-e4927a005e1f"
+    },
+    "label": "Toggle menu"
+  }
+}

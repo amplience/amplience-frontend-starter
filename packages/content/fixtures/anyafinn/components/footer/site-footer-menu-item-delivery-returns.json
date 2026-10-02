@@ -1,0 +1,13 @@
+{
+  "id": "3f3ffa62-f355-56bc-8ede-37f0b1dfc406",
+  "label": "Footer menu item — Returns & refunds",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Returns & refunds",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "3f3ffa62-f355-56bc-8ede-37f0b1dfc406"
+    },
+    "label": "Returns & refunds",
+    "link": "/delivery/returns"
+  }
+}

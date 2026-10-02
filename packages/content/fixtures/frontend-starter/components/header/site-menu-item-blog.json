@@ -1,0 +1,13 @@
+{
+  "id": "a0f866be-3538-5cc4-b08c-0ba17784413d",
+  "label": "Menu item: Blog",
+  "body": {
+    "_meta": {
+      "name": "Menu item: Blog",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "a0f866be-3538-5cc4-b08c-0ba17784413d"
+    },
+    "label": "Blog",
+    "link": "/blog"
+  }
+}

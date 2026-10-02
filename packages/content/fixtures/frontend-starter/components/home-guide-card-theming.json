@@ -1,0 +1,121 @@
+{
+  "id": "9f61717b-bdd1-5a08-ade4-97d951805604",
+  "label": "Home — guide card: theming",
+  "body": {
+    "_meta": {
+      "name": "Home — guide card: theming",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "9f61717b-bdd1-5a08-ade4-97d951805604"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Theming"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Theming"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Temas"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Thèmes"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Theming"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Temi"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Brand it with design tokens, or let editors own the CSS."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Brand it with design tokens, or let editors own the CSS."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Personalízalo con tokens de diseño, o deja el CSS en manos de los editores."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Habillez-le avec des tokens de design, ou confiez le CSS aux éditeurs."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Gestalten Sie es mit Design-Tokens – oder überlassen Sie das CSS den Redakteuren."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Personalizzalo con i design token, o lascia il CSS agli editor."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "/docs-covers/theming.png",
+        "alt": "The same component rendered in three different brands",
+        "width": 800,
+        "height": 450
+      }
+    },
+    "links": {
+      "href": "/docs/theming",
+      "cta": {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la guía"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lire le guide"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zum Leitfaden"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Leggi la guida"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs/theming",
+        "variant": "text",
+        "color": "black"
+      }
+    }
+  }
+}

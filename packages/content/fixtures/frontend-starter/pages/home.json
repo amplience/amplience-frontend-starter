@@ -1,0 +1,46 @@
+{
+  "id": "8df2c1a3-8b31-5e34-896a-424c65a478c0",
+  "label": "Home page",
+  "body": {
+    "_meta": {
+      "name": "Home page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/homepage"
+          }
+        ]
+      }
+    },
+    "title": "Welcome to Amplience Frontend Starter",
+    "description": "A clean starting point for an Amplience-backed site.",
+    "keywords": ["amplience", "accelerator", "next.js", "composable content"],
+    "social": {
+      "title": "Amplience Frontend Starter — composable sites without the boilerplate",
+      "description": "An open-source Amplience accelerator: recursive renderer, atomic component library, automation CLI.",
+      "image": {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/quadraticdemo/introducing-amplience-frontend-starter-dynamic-hero?fmt=webp&w=2752",
+          "alt": "Hero — Amplience Frontend Starter accelerator",
+          "width": 2752,
+          "height": 1536
+        }
+      }
+    },
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
+    "slots": [
+      {
+        "id": "63c48c51-4d24-56aa-8ca4-e13aa0780893",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

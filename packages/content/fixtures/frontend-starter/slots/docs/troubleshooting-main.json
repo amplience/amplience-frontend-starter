@@ -1,0 +1,26 @@
+{
+  "id": "e943a583-fc73-5a8c-9505-175c599b9c48",
+  "label": "Troubleshooting — main slot",
+  "body": {
+    "_meta": {
+      "name": "Troubleshooting — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot"
+    },
+    "components": [
+      {
+        "id": "1a9e7657-d729-5938-ba0b-ee5d7fd2748b",
+        "contentType": "https://quadratic.amplience.com/v2/content/hero",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "abc91163-4a32-59cd-9ca5-96325b1f2cc2",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

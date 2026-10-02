@@ -1,0 +1,13 @@
+{
+  "id": "da4be63c-9a1b-5945-bb51-afe8064c7917",
+  "label": "Menu item: Docs — Content types",
+  "body": {
+    "_meta": {
+      "name": "Menu item: Docs — Content types",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "da4be63c-9a1b-5945-bb51-afe8064c7917"
+    },
+    "label": "Content types",
+    "link": "/docs/content-types"
+  }
+}

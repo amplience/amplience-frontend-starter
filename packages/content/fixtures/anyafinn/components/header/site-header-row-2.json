@@ -1,0 +1,21 @@
+{
+  "id": "c164abdc-6c83-55d4-894e-3cb8afb0a50d",
+  "label": "Site — header row 2 (navigation)",
+  "body": {
+    "_meta": {
+      "name": "Site — header row 2 (navigation)",
+      "schema": "https://quadratic.amplience.com/v2/content/header-row",
+      "deliveryId": "c164abdc-6c83-55d4-894e-3cb8afb0a50d"
+    },
+    "backgroundColor": "white",
+    "items": [
+      {
+        "id": "9f138dcb-634b-5135-9c06-f365b1504264",
+        "contentType": "https://quadratic.amplience.com/v2/content/hierarchy-menu",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

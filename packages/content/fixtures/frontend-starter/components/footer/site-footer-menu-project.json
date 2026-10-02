@@ -1,0 +1,43 @@
+{
+  "id": "1334e702-4a5d-5f8c-bfb1-bda3ca5e4319",
+  "label": "Footer menu — Project",
+  "body": {
+    "_meta": {
+      "name": "Footer menu — Project",
+      "schema": "https://quadratic.amplience.com/v2/content/menu",
+      "deliveryId": "1334e702-4a5d-5f8c-bfb1-bda3ca5e4319"
+    },
+    "display": "megaMenu",
+    "useMobileLayout": false,
+    "items": [
+      {
+        "id": "62ff1214-d16c-57fb-b3f4-6f7c594069e5",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "90e68513-06fa-5b4d-87d3-a8397e17bb86",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "b45e4d71-8895-5bb5-b8ee-d060d372831e",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "66a68fae-e3b2-59ac-a6c6-040ebf8bb194",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

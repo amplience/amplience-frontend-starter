@@ -1,0 +1,28 @@
+{
+  "id": "1c51cef8-ea1e-5b5d-90e5-25c2be943b71",
+  "label": "Command reference page",
+  "body": {
+    "_meta": {
+      "name": "Command reference page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/docs/commands"
+          }
+        ]
+      }
+    },
+    "title": "Command reference",
+    "description": "Everything Amplience Frontend Starter can do from the command line, and where the same operation lives in the Environment Manager GUI.",
+    "slots": [
+      {
+        "id": "6b4bbe49-4004-58ad-99c9-099e4d058f92",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

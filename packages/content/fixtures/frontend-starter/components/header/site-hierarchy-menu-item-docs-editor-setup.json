@@ -1,0 +1,18 @@
+{
+  "id": "eef71aed-227a-5173-a900-600711eef9ef",
+  "label": "Hierarchy menu item: Docs — Editor setup",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Docs — Editor setup",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "eef71aed-227a-5173-a900-600711eef9ef",
+      "hierarchy": {
+        "parentId": "2b991992-210f-5bb6-99c0-cb6bd663ee9c",
+        "root": false,
+        "position": "gggggggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Editor setup",
+    "link": "/docs/editor-setup"
+  }
+}

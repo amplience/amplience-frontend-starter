@@ -11,6 +11,10 @@
 export type SiteEnvSource = {
   hubName: string
   defaultBrand: string
+  /**
+   * The hub's fallback site name, already resolved — callers pass
+   * `defaultSiteName(env, sets)`, never the raw (possibly blank) config field.
+   */
   defaultSite: string
   /** Opt-in CMS custom-CSS (ADR-0016) — pushed only when the env uses it. */
   customCss?: boolean
@@ -20,7 +24,7 @@ export type SiteEnvSource = {
 export type VercelSiteInput = {
   /** Brand theme selector → NEXT_PUBLIC_BRAND. Blank = env default. */
   brand: string
-  /** Delivery-key namespace → SITE_NAME (ADR-0014). Blank = hub-name default. */
+  /** Delivery-key namespace → SITE_NAME (ADR-0014). Blank = the hub's default site. */
   sitename: string
   /** Optional explicit Vercel project name; blank = derived (see deriveProjectName). */
   projectName?: string
@@ -43,8 +47,11 @@ const RUNTIME_TARGETS = ['production', 'preview'] as const
  * behaviour away from its own defaults are pushed, so the Vercel project stays
  * clean. Specifically —
  *  - AMPLIENCE_HUB_NAME is always set: the one switch from fixtures to a hub.
- *  - SITE_NAME is set only when it differs from the hub name (it defaults to
- *    the hub name, ADR-0014), so same-name sites push nothing.
+ *  - SITE_NAME is always set. It's the one exception to "minimal": the
+ *    namespace is baked into every delivery key on the hub, so a deployment
+ *    mustn't depend on the app's default for it — that default has already
+ *    moved once (hub name → set name, ADR-0019), and a site relying on it
+ *    would have started 404ing on upgrade without its config changing.
  *  - NEXT_PUBLIC_BRAND is set only for a real, non-"default" brand ("default"
  *    is the app's own fallback, so setting it would be redundant).
  *  - AMPLIENCE_STAGING_HOST is never set: VSE/staging is for local dev and the
@@ -62,10 +69,8 @@ export function runtimeEnvVars(env: SiteEnvSource, site: VercelSiteInput): Verce
   const candidates: { key: string; value: string }[] = [
     { key: 'AMPLIENCE_HUB_NAME', value: hubName },
   ]
-  // Only when it actually overrides the hub-name default (ADR-0014).
-  if (sitename !== '' && sitename !== hubName) {
-    candidates.push({ key: 'SITE_NAME', value: sitename })
-  }
+  // Always, even when it matches today's runtime default — see above.
+  candidates.push({ key: 'SITE_NAME', value: sitename })
   // Only for a real brand — blank or "default" is the app's own default.
   if (brand !== '' && brand !== 'default') {
     candidates.push({ key: 'NEXT_PUBLIC_BRAND', value: brand })

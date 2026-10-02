@@ -1,8 +1,10 @@
+import type { ContentBreakdown } from './content-rows.js'
 import type {
   Config,
   DiscoverResult,
   Environment,
   EnvironmentStats,
+  FixtureSetInfo,
   PermissionsReport,
   VercelPreflight,
 } from './types.js'
@@ -34,14 +36,16 @@ export const api = {
       method: 'PUT',
       body: JSON.stringify(env),
     }),
-  setFixturesBrand: (brand: string) =>
-    request<Config>('/fixtures', { method: 'PUT', body: JSON.stringify({ brand }) }),
+  fixtureSets: () => request<FixtureSetInfo[]>('/fixture-sets'),
+  /** `name` is a hub's identifier or a fixture set's — one of each is never active at once. */
   activate: (name: string) =>
     request<Config>(`/environments/${encodeURIComponent(name)}/activate`, { method: 'PATCH' }),
   remove: (name: string) =>
     request<Config>(`/environments/${encodeURIComponent(name)}`, { method: 'DELETE' }),
   stats: (name: string) =>
     request<EnvironmentStats>(`/environments/${encodeURIComponent(name)}/stats`),
+  contentBreakdown: (name: string) =>
+    request<ContentBreakdown>(`/environments/${encodeURIComponent(name)}/content-breakdown`),
   permissions: (env: {
     clientId: string
     clientSecret: string

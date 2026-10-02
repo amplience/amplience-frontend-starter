@@ -28,14 +28,19 @@ import { makeSdkContentClient } from '@amplience/frontend-starter-content/sdk'
 const config = resolveContentConfig() // env-driven; no config → mock
 const client = config.kind === 'sdk' ? makeSdkContentClient(config) : makeMockContentClient()
 
-const home = await client.getByKey('home', { depth: 'all' })
+const home = await client.getByKey('frontend-starter/homepage', { depth: 'all' })
 //             ↑ ContentItem with all content-links resolved inline
 ```
 
 With `CONTENT_CLIENT=sdk` and `AMPLIENCE_HUB_NAME` set, the same call serves
 the real hub (optionally via `AMPLIENCE_STAGING_HOST` for latest-saved
-content). Unset, it's the offline fixture site — a fresh clone needs no
+content). Unset, it's an offline fixture set — a fresh clone needs no
 configuration at all.
+
+`makeMockContentClient()` serves the default set. There are several (see
+[Fixture sets](#fixture-sets)); `FIXTURE_SET` picks one, or pass a name:
+`makeMockContentClient('anyafinn')`. Each set is its own namespace, so a client
+built for one refuses keys belonging to another rather than quietly missing.
 
 `depth` mirrors the Amplience delivery API:
 
@@ -48,30 +53,55 @@ configuration at all.
 
 ## Fixtures
 
-Fixtures live under `fixtures/base-site/` in **dc-cli enriched format** —
-the same shape `dc-cli content-item import` consumes. That means the same
-folder doubles as seed data once the hub-setup automation lands
-(ADR-0012). Schema URIs use the `https://quadratic.amplience.com/v2/`
-namespace; content is deliberately unbranded.
+Fixtures live under `fixtures/<set>/` in **dc-cli enriched format** — the same
+shape `dc-cli content-item import` consumes, so the same folder doubles as seed
+data (ADR-0012). Schema URIs use the `https://quadratic.amplience.com/v2/`
+namespace.
 
-| File                        | Schema URI                | Delivery key |
-| --------------------------- | ------------------------- | ------------ |
-| `pages/home.json`           | `…/v2/content/page`       | `home`       |
-| `slots/home-main.json`      | `…/v2/slots/slot`         | `home/main`  |
-| `components/home-hero.json` | `…/v2/content/banner`     | `home/hero`  |
-| `components/home-text.json` | `…/v2/content/text-block` | `home/intro` |
+### Fixture sets
 
-The home page references the slot; the slot references the hero and the
-text block. Together they exercise both flat lookup (`getByKey('home')`)
-and graph resolution (`depth: 'all'`).
+There is more than one body of content (ADR-0019). Each directory under
+`fixtures/` holding a `set.json` is a **fixture set**, and its directory name is
+also its delivery-key prefix — so several sets can be seeded onto one hub side by
+side, and each deployment reads only its own.
 
-Adding a fixture is two steps:
+| Set                | `set.json` says                | What it is                                             |
+| ------------------ | ------------------------------ | ------------------------------------------------------ |
+| `frontend-starter` | brand `amplience`, 6 locales   | The default. Introductory content mirroring the docs.  |
+| `anyafinn`         | brand `anyafinn`, `en-US` only | A fashion-retail demo — proof one hub carries several. |
 
-1. Drop the JSON file under `fixtures/base-site/` (any nested folder is
-   fine — folder structure is purely organisational).
-2. Add a static import to `src/mock/loader.ts` and append it to the
-   `fixtures` array.
+`set.json` carries the set's label, description, `defaultBrand`, `defaultLocale`
+and `authoredLocales`. The brand is the set's own, which is why switching set
+switches the theme with nothing else to configure.
 
-The manual loader list keeps the mock runtime-portable (browser, edge, Node
-all work the same). When the fixture count grows past "you can read them
-all in a coffee", we may revisit with a build-time generator.
+### A worked path through one set
+
+Taking `frontend-starter`'s home page — the page references a slot, the slot
+references the components, and only the page carries a delivery key:
+
+| File                            | Schema URI                    | Delivery key                |
+| ------------------------------- | ----------------------------- | --------------------------- |
+| `pages/home.json`               | `…/v2/content/page`           | `frontend-starter/homepage` |
+| `slots/home-main.json`          | `…/v2/slots/slot`             | —                           |
+| `components/home-hero.json`     | `…/v2/content/hero`           | —                           |
+| `components/home-markdown.json` | `…/v2/content/markdown-block` | —                           |
+
+Together they exercise both flat lookup
+(`getByKey('frontend-starter/homepage')`) and graph resolution (`depth: 'all'`).
+Components are reached through the graph rather than by key, which is why they
+need none of their own.
+
+### Adding a fixture
+
+1. Drop the JSON file under `fixtures/<set>/` — any nested folder is fine, since
+   the structure is purely organisational.
+2. Add a static import to that set's module, `src/mock/sets/<set>.ts`, and append
+   it to the set's `fixtures` array. A brand-new set is also registered in
+   `src/mock/loader.ts`, which is the registry rather than a fixture list.
+3. Run `pnpm fixtures:ids` to stamp its id. Ids are derived from
+   `uuidFrom("<set>/<path>")`, so they're globally unique across sets — which is
+   what makes a per-set wipe computable from disk alone.
+
+The manual import list keeps the mock runtime-portable (browser, edge and Node
+all work the same). When the fixture count grows past "you can read them all in a
+coffee", we may revisit with a build-time generator.

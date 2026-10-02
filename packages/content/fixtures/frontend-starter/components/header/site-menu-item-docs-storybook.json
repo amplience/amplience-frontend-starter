@@ -1,0 +1,13 @@
+{
+  "id": "110f5352-d7c7-5589-8d2e-84e0ec7f0107",
+  "label": "Menu item: Docs — Storybook",
+  "body": {
+    "_meta": {
+      "name": "Menu item: Docs — Storybook",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "110f5352-d7c7-5589-8d2e-84e0ec7f0107"
+    },
+    "label": "Storybook",
+    "link": "/docs/storybook"
+  }
+}

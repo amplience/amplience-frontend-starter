@@ -565,6 +565,87 @@ body {
   gap: 0.4rem;
 }
 
+/* ── Content-item provenance rows (ADR-0019) ─────────────────────────────────
+   Children of the "Content items" row: one per fixture set, plus `orphaned`
+   and `custom` when the hub holds any. Indented and lighter, so the parent
+   stays the thing you read first and these read as its breakdown. */
+.env-card__stats .content-row td {
+  border-bottom: none;
+  padding-top: 0.15rem;
+  padding-bottom: 0.15rem;
+}
+
+.env-card__stats .content-row:last-of-type td {
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.col-resource--child {
+  padding-left: 1.1rem;
+  color: var(--color-text-muted);
+}
+
+.content-row__note {
+  font-size: 0.925em;
+}
+
+/* The two buckets the repository can't restore. A tint rather than a warning
+   colour: they are normal states to be in, and only the wipe is consequential. */
+.content-row--orphaned .content-row__label,
+.content-row--custom .content-row__label {
+  font-style: italic;
+}
+
+/* The sets the repository has that this hub doesn't — one offer, not a row
+   each, so the table describes the hub rather than the catalogue. The picker
+   stays folded away until asked for, so the row reads as one action. */
+.content-row--seed .site-card__select {
+  max-width: 14rem;
+}
+
+/* The second step of a wipe that can't be undone — sits under the log, so the
+   list it acts on has just been read. */
+.log-apply {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.6rem 0.75rem;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.825rem;
+  color: var(--color-text-muted);
+}
+
+.link-button {
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.link-button:hover,
+.link-button:focus-visible {
+  color: var(--color-text);
+  text-decoration: underline;
+}
+
+.content-row--gated td {
+  padding-bottom: 0.4rem;
+  font-size: 0.925em;
+  line-height: 1.4;
+}
+
+.log-header__right {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
 /* Invisible placeholder that reserves the same height as a btn--sm so the
    actions column doesn't collapse and cause CLS while stats are loading.
    Uses the same font-size and padding as btn--sm so it computes identically. */

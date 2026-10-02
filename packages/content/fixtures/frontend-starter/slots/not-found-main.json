@@ -1,0 +1,27 @@
+{
+  "id": "ae2b7fd6-f84a-5488-8470-2eed59313960",
+  "label": "Site — not-found slot",
+  "body": {
+    "_meta": {
+      "name": "Site — not-found slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot",
+      "deliveryId": "ae2b7fd6-f84a-5488-8470-2eed59313960",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/site/not-found"
+          }
+        ]
+      }
+    },
+    "components": [
+      {
+        "id": "5557a58e-14ef-5952-b798-88b66024c533",
+        "contentType": "https://quadratic.amplience.com/v2/content/hero",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

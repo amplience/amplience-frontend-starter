@@ -1,12 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { api } from '../api.js'
+import {
+  contentRows,
+  gateReason,
+  ROW_EXPLANATION,
+  seedableSets,
+  type ContentBreakdown,
+  type ContentRow,
+} from '../content-rows.js'
 import { hubBrands } from '../hub-brands.js'
+import { defaultBrandName, defaultSiteName } from '../site-defaults.js'
 import type {
   Config,
   CreateVercelSiteInput,
   Environment,
   EnvironmentStats,
+  FixtureSetInfo,
   OpKey,
   VercelPreflight,
   WebApp,
@@ -14,10 +24,32 @@ import type {
 
 type Props = {
   env: Environment
+  /** The sets on disk, so content items can be broken down by the one each came from. */
+  fixtureSets: readonly FixtureSetInfo[]
   isActive: boolean
   onActivate: () => void
   onEdit: () => void
   onUpdate: (updated: Config) => void
+}
+
+/** How a content operation is scoped — the query the op route turns into flags. */
+type OpScope = { set?: string; provenance?: 'custom' | 'orphaned'; apply?: boolean }
+
+/**
+ * The second confirmation, after the dry run has listed what it found.
+ *
+ * Both name what is about to go rather than counting it: "942 items" says how
+ * much, not what, and these are the two buckets the repository can't put back.
+ */
+const CONFIRM_APPLY: Record<'custom' | 'orphaned', string> = {
+  custom:
+    'Remove the content listed above?\n\n' +
+    'These items were authored on the hub, not seeded, so the repository has no copy ' +
+    'and nothing can restore them. On a shared or partner hub this is someone’s work.',
+  orphaned:
+    'Remove the content listed above?\n\n' +
+    'These items were seeded from fixtures that have since left the repository, so ' +
+    'there is nothing on disk to seed them from again.',
 }
 
 const EMPTY_SITE: WebApp = { label: '', url: '', brand: '', name: '' }
@@ -90,6 +122,12 @@ type OpStatus = 'running' | 'done' | 'error'
 
 type ActiveOp = {
   key: OpKey
+  /**
+   * Which row started it. A set's Wipe and the whole-hub Wipe are both
+   * `wipe-items`, so the key alone can't say which button to spin — it lit the
+   * parent row while a child row's work was running.
+   */
+  scopeKey: string
   log: string
   status: OpStatus
   /** Epoch ms when the operation started — drives the elapsed counter. */
@@ -98,15 +136,21 @@ type ActiveOp = {
   endedAt?: number
 }
 
+/** Identifies the row an operation belongs to; `''` is the whole-hub row. */
+const scopeKeyOf = (scope: OpScope) => scope.set ?? scope.provenance ?? ''
+
 const OP_LABELS: Record<OpKey, string> = {
   'seed-settings': 'Seed settings',
   'sync-settings': 'Sync settings',
   'seed-schemas': 'Seed schemas',
   'sync-schemas': 'Sync schemas',
+  'wipe-schemas': 'Wipe schemas',
   'seed-types': 'Seed content types',
   'sync-types': 'Sync content types',
+  'wipe-types': 'Wipe content types',
   'seed-extensions': 'Seed extensions',
   'sync-extensions': 'Sync extensions',
+  'wipe-extensions': 'Wipe extensions',
   'seed-webhooks': 'Seed webhooks',
   'sync-webhooks': 'Sync webhooks',
   'wipe-webhooks': 'Remove webhooks',
@@ -118,10 +162,25 @@ const OP_LABELS: Record<OpKey, string> = {
   'wipe-all': 'Wipe all',
 }
 
-export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }: Props) {
+export function EnvironmentCard({
+  env,
+  fixtureSets,
+  isActive,
+  onActivate,
+  onEdit,
+  onUpdate,
+}: Props) {
   const [collapsed, setCollapsed] = useState(true)
   const [stats, setStats] = useState<EnvironmentStats | null>(null)
   const [statsError, setStatsError] = useState<string | null>(null)
+  const [breakdown, setBreakdown] = useState<ContentBreakdown | null>(null)
+  // A wipe of content that can't be re-seeded reports first and acts second, so
+  // this holds which bucket is awaiting confirmation after its dry run.
+  const [pendingApply, setPendingApply] = useState<'custom' | 'orphaned' | null>(null)
+  // Which set the "+ Seed a fixture set" row will add. Blank means the first
+  // one offered, so the row works without touching the select.
+  const [setToSeed, setSetToSeed] = useState('')
+  const [showSeedPicker, setShowSeedPicker] = useState(false)
   const [op, setOp] = useState<ActiveOp | null>(null)
   const [logExpanded, setLogExpanded] = useState(false)
   const logRef = useRef<HTMLPreElement>(null)
@@ -308,11 +367,34 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
     setEditingLocalhost(false)
   }
 
+  // What a blank site name / brand falls back to on this hub — shown in the add
+  // forms' placeholders, and recorded by both of them, so a site's record always
+  // says which namespace and brand it uses rather than leaving it to a default.
+  const fallbackSite = defaultSiteName(env, fixtureSets)
+  const fallbackBrand = defaultBrandName(env)
+  // The localhost row's own blank resolves past `defaultSite`, since it *is* it.
+  const localhostFallbackSite = defaultSiteName({ ...env, defaultSite: '' }, fixtureSets)
+  // Locally a blank brand falls to the served set's own (siteIdentity on the
+  // server), which a deployed site never sees — hence its own fallback.
+  const localhostSet =
+    fixtureSets.find((s) => s.name === (env.defaultSite ?? '').trim()) ??
+    fixtureSets.find((s) => s.name === localhostFallbackSite)
+  const localhostFallbackBrand =
+    (localhostSet?.defaultBrand ?? '').trim() !== ''
+      ? (localhostSet?.defaultBrand ?? '')
+      : 'default'
+
   async function handleAddSite(e: React.FormEvent) {
     e.preventDefault()
     setSitesBusy(true)
     try {
-      const updated = await api.update(env.name, { ...env, webApps: [...env.webApps, siteForm] })
+      // Same fallback "Create Vercel site" records server-side.
+      const site: WebApp = {
+        ...siteForm,
+        name: (siteForm.name ?? '').trim() || fallbackSite,
+        brand: siteForm.brand.trim() || env.defaultBrand,
+      }
+      const updated = await api.update(env.name, { ...env, webApps: [...env.webApps, site] })
       onUpdate(updated)
       setSiteForm(EMPTY_SITE)
       setShowAddSite(false)
@@ -517,15 +599,38 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
       })
   }, [env.name])
 
+  /**
+   * Which set each item on the hub came from.
+   *
+   * Separate from the counts because it can legitimately be unavailable — the
+   * evidence is the machine-local dc-cli import map — while the counts are not.
+   * A failure is kept as an unavailable breakdown rather than an error, so the
+   * panel explains the gate instead of showing a stack trace.
+   */
+  const loadBreakdown = useCallback(() => {
+    void api
+      .contentBreakdown(env.name)
+      .then(setBreakdown)
+      .catch((err: unknown) =>
+        setBreakdown({
+          available: false,
+          reason: err instanceof Error ? err.message : 'Could not classify the hub’s content.',
+        }),
+      )
+  }, [env.name])
+
   function refreshStats() {
     setStats(null)
     setStatsError(null)
+    setBreakdown(null)
     loadStats()
+    loadBreakdown()
   }
 
   useEffect(() => {
     loadStats()
-  }, [loadStats])
+    loadBreakdown()
+  }, [loadStats, loadBreakdown])
 
   // Auto-scroll the log panel as new output arrives
   useEffect(() => {
@@ -584,7 +689,10 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
     }
   }
 
-  async function runOp(key: OpKey) {
+  async function runOp(key: OpKey, scope: OpScope = {}) {
+    // A scoped content operation carries its own confirmations, below; the
+    // blanket ones here would misdescribe it.
+    const scoped = scope.set !== undefined || scope.provenance !== undefined
     if (key === 'wipe-webhooks') {
       if (
         !confirm(
@@ -596,24 +704,68 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
       )
         return
     }
-    if (key === 'wipe-items' || key === 'wipe-all') {
+    // The per-resource teardowns refuse while anything still depends on them, so
+    // the worst case is a message naming the step to run first — but they are
+    // still destructive, and the order they have to run in is worth stating.
+    if (key === 'wipe-types' || key === 'wipe-schemas' || key === 'wipe-extensions') {
+      const what = {
+        'wipe-types': [
+          'content types',
+          'Wipe content items first — types in use can’t be removed.',
+        ],
+        'wipe-schemas': ['schemas', 'Wipe content items, then content types, first.'],
+        'wipe-extensions': [
+          'every extension',
+          'All extensions on the hub are deleted, not only the seeded ones. Content types ' +
+            'that use one show a broken field in the editor until you seed extensions again.',
+        ],
+      }[key]
+      if (!confirm(`Wipe ${what[0]} from "${env.label || env.name}"?\n\n${what[1]}`)) return
+    }
+    if (!scoped && (key === 'wipe-items' || key === 'wipe-all')) {
       const label = env.label || env.name
-      const what = key === 'wipe-all' ? 'all content items' : 'content items'
+      const message =
+        key === 'wipe-all'
+          ? `Wipe everything from "${label}"?\n\n` +
+            'This unpublishes and archives all content, deletes the import mapping, ' +
+            'archives every content type and schema, deletes every extension on the hub, ' +
+            'and removes the seeded webhooks. Workflow states are kept. ' +
+            'Run Seed all afterwards to repopulate.'
+          : `Wipe content items from "${label}"?\n\n` +
+            'This archives all published content and deletes the import mapping. ' +
+            'Run Seed afterwards to repopulate.'
+      if (!confirm(message)) return
+    }
+    // Wiping one set is reversible — the repository still holds it — so it asks
+    // once and acts. The two provenance buckets are not, so they report what
+    // they would remove and the Apply button below is what actually removes it.
+    if (scope.set !== undefined && key === 'wipe-items') {
       if (
         !confirm(
-          `Wipe ${what} from "${label}"?\n\n` +
-            'This archives all published content and deletes the import mapping. ' +
-            'Run Seed afterwards to repopulate.',
+          `Wipe the "${scope.set}" content from "${env.label || env.name}"?\n\n` +
+            'The other sets on this hub, and anything authored on it, are left alone. ' +
+            'Seed this set again to put it back.',
         )
       )
         return
     }
+    if (scope.provenance !== undefined && scope.apply === true) {
+      // Named, not counted: a number says how much is going, not what.
+      if (!confirm(CONFIRM_APPLY[scope.provenance])) return
+    }
 
-    setOp({ key, log: '', status: 'running', startedAt: Date.now() })
+    setOp({ key, scopeKey: scopeKeyOf(scope), log: '', status: 'running', startedAt: Date.now() })
     setLogExpanded(false)
+    setPendingApply(null)
 
     try {
-      const res = await fetch(`/api/environments/${encodeURIComponent(env.name)}/${key}`, {
+      const query = new URLSearchParams()
+      if (scope.set !== undefined) query.set('set', scope.set)
+      if (scope.provenance !== undefined) query.set('provenance', scope.provenance)
+      if (scope.apply === true) query.set('apply', '1')
+      const suffix = query.size === 0 ? '' : `?${query.toString()}`
+
+      const res = await fetch(`/api/environments/${encodeURIComponent(env.name)}/${key}${suffix}`, {
         method: 'POST',
       })
 
@@ -638,8 +790,16 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
         return { ...prev, status: hasError ? 'error' : 'done', endedAt: Date.now() }
       })
 
+      // A provenance wipe that hasn't been applied has only reported what it
+      // would remove; the log says what, and Apply is what acts on it.
+      if (scope.provenance !== undefined && scope.apply !== true) {
+        setPendingApply(scope.provenance)
+        setLogExpanded(true)
+      }
+
       // Refresh counts after the operation settles
       loadStats()
+      loadBreakdown()
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error'
       setOp((prev) =>
@@ -660,6 +820,10 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
   }
 
   const allEmpty = stats !== null && stats.schemas === 0 && stats.types === 0 && stats.items === 0
+  const gate = gateReason(breakdown)
+  const toSeed = seedableSets(breakdown, fixtureSets)
+  // The select starts blank, so an untouched row still seeds the first offer.
+  const nextSet = setToSeed !== '' ? setToSeed : (toSeed[0]?.name ?? '')
 
   // The site currently being edited (if any), and whether saving it will force
   // a redeploy — i.e. a provisioned site whose brand or site name changed
@@ -775,6 +939,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                 count={statsError !== null ? -1 : (stats?.schemas ?? null)}
                 seedKey="seed-schemas"
                 syncKey="sync-schemas"
+                wipeKey="wipe-schemas"
                 isRunning={isRunning}
                 activeOpKey={op?.key ?? null}
                 onRun={(key) => {
@@ -786,6 +951,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                 count={statsError !== null ? -1 : (stats?.types ?? null)}
                 seedKey="seed-types"
                 syncKey="sync-types"
+                wipeKey="wipe-types"
                 isRunning={isRunning}
                 activeOpKey={op?.key ?? null}
                 onRun={(key) => {
@@ -797,6 +963,7 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                 count={statsError !== null ? -1 : (stats?.extensions ?? null)}
                 seedKey="seed-extensions"
                 syncKey="sync-extensions"
+                wipeKey="wipe-extensions"
                 isRunning={isRunning}
                 activeOpKey={op?.key ?? null}
                 onRun={(key) => {
@@ -815,25 +982,132 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                   void runOp(key)
                 }}
               />
+              {/* Wipe only. Seeding and syncing are inherently per-set — the
+                  script takes one `--set` — so a Seed here would quietly pick
+                  one and look like it had done the lot. Both live on the child
+                  rows and the offer row below, where the set is named. */}
               <ResourceRow
                 label="Content items"
                 count={statsError !== null ? -1 : (stats?.items ?? null)}
-                seedKey="seed-items"
-                syncKey="sync-items"
                 wipeKey="wipe-items"
                 isRunning={isRunning}
                 activeOpKey={op?.key ?? null}
+                isThisRow={op?.scopeKey === ''}
                 onRun={(key) => {
                   void runOp(key)
                 }}
               />
+              {/* Where each of those items came from. The parent row's Seed,
+                  Sync and Wipe act on everything and need no provenance; these
+                  do, so they are absent when the import map can't supply it. */}
+              {contentRows(breakdown, fixtureSets, stats?.locales ?? []).map((row) => (
+                <ContentChildRow
+                  key={row.key}
+                  row={row}
+                  isRunning={isRunning}
+                  activeScopeKey={op?.scopeKey ?? null}
+                  onRun={(scope) => {
+                    void runOp(scope.provenance !== undefined ? 'wipe-items' : scope.op, scope)
+                  }}
+                />
+              ))}
+              {/* The sets the repository has that this hub doesn't. One offer
+                  rather than a row each, so the table stays a description of
+                  the hub as more sets are added. */}
+              {toSeed.length > 0 && (
+                <tr className="content-row content-row--seed">
+                  <td
+                    className="col-resource col-resource--child"
+                    colSpan={3}
+                    style={{ textAlign: 'right' }}
+                  >
+                    {showSeedPicker ? (
+                      <div className="btn-group">
+                        <select
+                          className="site-card__select"
+                          aria-label="Fixture set to seed"
+                          value={nextSet}
+                          onChange={(e) => setSetToSeed(e.target.value)}
+                          disabled={isRunning}
+                        >
+                          {toSeed.map((s) => (
+                            <option key={s.name} value={s.name}>
+                              {s.label}
+                            </option>
+                          ))}
+                        </select>
+
+                        <button
+                          className="btn btn--sm btn--primary"
+                          onClick={() => {
+                            void runOp('seed-items', { set: nextSet })
+                          }}
+                          disabled={isRunning}
+                        >
+                          {isRunning && op?.scopeKey === nextSet ? (
+                            <span className="spinner" aria-hidden="true" />
+                          ) : null}
+                          Seed
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn--sm btn--ghost"
+                          aria-expanded={showSeedPicker}
+                          onClick={() => setShowSeedPicker((v) => !v)}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        className="btn btn--sm btn--ghost"
+                        aria-expanded={showSeedPicker}
+                        onClick={() => setShowSeedPicker((v) => !v)}
+                      >
+                        + Seed from fixture
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              )}
+              {gate !== null && (
+                <tr className="content-row content-row--gated">
+                  <td className="col-resource" colSpan={3}>
+                    <span className="dim">
+                      Per-set sync and wipe are unavailable: {gate} Wiping everything and seeding
+                      again builds a map and brings them back.
+                    </span>
+                  </td>
+                </tr>
+              )}
+              <tr>
+                <td className="col-resource" title="Configured by Amplience Support, per hub">
+                  Locales
+                </td>
+                <td className="col-count">
+                  {stats === null && statsError === null ? (
+                    <span className="spinner spinner--sm" aria-label="Loading" />
+                  ) : (stats?.locales.length ?? 0) === 0 ? (
+                    <span className="dim" title="None configured, or the probe failed">
+                      —
+                    </span>
+                  ) : (
+                    stats?.locales.length
+                  )}
+                </td>
+                <td className="col-actions">
+                  {/* Nothing to do here: locale lists are set by Amplience
+                      Support per hub, and the seed reconciles against them. */}
+                  <span className="dim">{stats?.locales.join(', ')}</span>
+                </td>
+              </tr>
             </tbody>
           </table>
 
           {statsError !== null && (
             <p className="env-card__stats-error">
               Could not load stats: {statsError}{' '}
-              <button className="btn btn--sm btn--ghost" onClick={loadStats}>
+              <button className="btn btn--sm btn--ghost" onClick={refreshStats}>
                 Retry
               </button>
             </p>
@@ -942,16 +1216,19 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                     ■ Stop
                   </button>
                 ) : (
-                  <button
-                    className="log-close"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setOp(null)
-                    }}
-                    aria-label="Dismiss log"
-                  >
-                    ✕ Dismiss
-                  </button>
+                  <span className="log-header__right">
+                    <button
+                      className="log-close"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setOp(null)
+                        setPendingApply(null)
+                      }}
+                      aria-label="Dismiss log"
+                    >
+                      ✕ Dismiss
+                    </button>
+                  </span>
                 )}
               </div>
               <div className="log-body-wrapper">
@@ -961,6 +1238,27 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                   </pre>
                 </div>
               </div>
+
+              {/* The dry run listed what it would remove and changed nothing;
+                  this is what acts on it. Below the log, where the list it
+                  refers to has just been read — in the header it sat next to
+                  Dismiss and read as a finished operation. */}
+              {pendingApply !== null && op.status === 'done' && (
+                <div className="log-apply">
+                  <span>
+                    Nothing has been removed yet. These items can’t be restored from the repository.
+                  </span>
+                  <button
+                    className="btn btn--sm btn--op btn--op-wipe"
+                    onClick={() => {
+                      void runOp('wipe-items', { provenance: pendingApply, apply: true })
+                    }}
+                    disabled={isRunning}
+                  >
+                    Remove the {pendingApply} content listed above
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -994,11 +1292,11 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                       disabled={sitesBusy}
                     />
                   </label>
-                  <label title="Site name (blank = hub name)">
+                  <label title={`Site name (blank = ${localhostFallbackSite})`}>
                     #
                     <input
                       className="site-row__input"
-                      placeholder="Site name (blank = hub name)"
+                      placeholder={`Site name (blank = ${localhostFallbackSite})`}
                       value={editLocalhostForm.defaultSite}
                       onChange={(e) =>
                         setEditLocalhostForm((p) => ({ ...p, defaultSite: e.target.value }))
@@ -1009,12 +1307,12 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                       disabled={sitesBusy}
                     />
                   </label>
-                  <label title="Brand (e.g. acme)">
+                  <label title={`Brand (blank = ${localhostFallbackBrand})`}>
                     <ThemeIcon />
                     <span className="visually-hidden">Brand</span>
                     <input
                       className="site-row__input"
-                      placeholder="Brand (e.g. acme)"
+                      placeholder={`Brand (blank = ${localhostFallbackBrand})`}
                       value={editLocalhostForm.defaultBrand}
                       onChange={(e) =>
                         setEditLocalhostForm((p) => ({ ...p, defaultBrand: e.target.value }))
@@ -1284,11 +1582,11 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                       required
                     />
                   </label>
-                  <label title="Site name (e.g. acme-store)">
+                  <label title={`Site name (blank = ${fallbackSite})`}>
                     #
                     <input
                       className="add-site-form__input"
-                      placeholder="Site name (e.g. acme-store)"
+                      placeholder={`Site name (blank = ${fallbackSite})`}
                       value={siteForm.name}
                       onChange={(e) => setSiteForm((p) => ({ ...p, name: e.target.value }))}
                       onKeyDown={(e) => {
@@ -1299,12 +1597,12 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                       }}
                     />
                   </label>
-                  <label title="Brand (blank = env default)">
+                  <label title={`Brand (blank = ${fallbackBrand})`}>
                     <ThemeIcon />
                     <span className="visually-hidden">Brand</span>
                     <input
                       className="add-site-form__input"
-                      placeholder="Brand (e.g. acme)"
+                      placeholder={`Brand (blank = ${fallbackBrand})`}
                       value={siteForm.brand}
                       onChange={(e) => setSiteForm((p) => ({ ...p, brand: e.target.value }))}
                       onKeyDown={(e) => {
@@ -1368,22 +1666,22 @@ export function EnvironmentCard({ env, isActive, onActivate, onEdit, onUpdate }:
                       disabled={sitesBusy}
                     />
                   </label>
-                  <label title="Site name (blank = hub default)">
+                  <label title={`Site name (blank = ${fallbackSite})`}>
                     #
                     <input
                       className="add-site-form__input"
-                      placeholder="Site name (blank = hub default)"
+                      placeholder={`Site name (blank = ${fallbackSite})`}
                       value={vercelForm.sitename}
                       onChange={(e) => setVercelForm((p) => ({ ...p, sitename: e.target.value }))}
                       disabled={sitesBusy}
                     />
                   </label>
-                  <label title="Brand (blank = env default)">
+                  <label title={`Brand (blank = ${fallbackBrand})`}>
                     <ThemeIcon />
                     <span className="visually-hidden">Brand</span>
                     <input
                       className="add-site-form__input"
-                      placeholder="Brand (blank = env default)"
+                      placeholder={`Brand (blank = ${fallbackBrand})`}
                       value={vercelForm.brand}
                       onChange={(e) => setVercelForm((p) => ({ ...p, brand: e.target.value }))}
                       disabled={sitesBusy}
@@ -1631,12 +1929,76 @@ type ResourceRowProps = {
   label: string
   /** null = loading, -1 = error, ≥0 = actual count */
   count: number | null
-  seedKey: OpKey
-  syncKey: OpKey
+  seedKey?: OpKey
+  syncKey?: OpKey
   wipeKey?: OpKey
   isRunning: boolean
   activeOpKey: OpKey | null
+  /** True only while the op running belongs to this row — see ActiveOp.scopeKey. */
+  isThisRow?: boolean
   onRun: (key: OpKey) => void
+}
+
+/**
+ * One row under "Content items": a fixture set, or a provenance bucket.
+ *
+ * A control that can't act isn't rendered, rather than rendered disabled — the
+ * button group is flex-end within a single cell, so the columns still line up.
+ * `orphaned` and `custom` therefore show only Wipe, because there is no source
+ * on disk for them to sync from.
+ */
+function ContentChildRow({
+  row,
+  isRunning,
+  activeScopeKey,
+  onRun,
+}: {
+  row: ContentRow
+  isRunning: boolean
+  /** Which row the running operation belongs to — see ActiveOp.scopeKey. */
+  activeScopeKey: string | null
+  onRun: (scope: OpScope & { op: OpKey }) => void
+}) {
+  const scope: OpScope = row.kind === 'set' ? { set: row.key } : { provenance: row.kind }
+  // Every row here shares `wipe-items`, so the spinner follows the scope.
+  const running = isRunning && activeScopeKey === row.key
+
+  return (
+    <tr className={`content-row content-row--${row.kind}`}>
+      <td className="col-resource col-resource--child" title={ROW_EXPLANATION[row.kind]}>
+        <span className="content-row__label">{row.label}</span>
+        {row.localeNote !== undefined && (
+          <span className="dim content-row__note"> · {row.localeNote}</span>
+        )}
+      </td>
+      <td className="col-count">{row.count.toLocaleString()}</td>
+      <td className="col-actions">
+        <div className="btn-group">
+          {row.canSync && (
+            <button
+              className={`btn btn--sm btn--op btn--op-sync${running ? ' btn--op-running' : ''}`}
+              onClick={() => onRun({ ...scope, op: 'sync-items' })}
+              disabled={isRunning}
+            >
+              {running ? <span className="spinner" aria-hidden="true" /> : null}
+              Sync
+            </button>
+          )}
+          {row.canWipe && row.count > 0 && (
+            <button
+              className={`btn btn--sm btn--op btn--op-wipe${running ? ' btn--op-running' : ''}`}
+              onClick={() => onRun({ ...scope, op: 'wipe-items' })}
+              disabled={isRunning}
+              title={row.regenerable ? undefined : 'Reports what it would remove first'}
+            >
+              {running ? <span className="spinner" aria-hidden="true" /> : null}
+              Wipe
+            </button>
+          )}
+        </div>
+      </td>
+    </tr>
+  )
 }
 
 function ResourceRow({
@@ -1647,8 +2009,13 @@ function ResourceRow({
   wipeKey,
   isRunning,
   activeOpKey,
+  isThisRow = true,
   onRun,
 }: ResourceRowProps) {
+  // Spin only for work this row started. Several rows share an OpKey, so the
+  // key alone would light the wrong button.
+  const running = (key: OpKey | undefined) =>
+    isRunning && isThisRow && key !== undefined && activeOpKey === key
   return (
     <tr>
       <td className="col-resource">{label}</td>
@@ -1671,42 +2038,35 @@ function ResourceRow({
         )}
         {count !== null && count !== -1 && (
           <div className="btn-group">
-            {count === 0 ? (
+            {count === 0 && seedKey !== undefined && (
               <button
-                className={`btn btn--sm btn--op btn--op-seed${isRunning && activeOpKey === seedKey ? ' btn--op-running' : ''}`}
+                className={`btn btn--sm btn--op btn--op-seed${running(seedKey) ? ' btn--op-running' : ''}`}
                 onClick={() => onRun(seedKey)}
                 disabled={isRunning}
               >
-                {isRunning && activeOpKey === seedKey ? (
-                  <span className="spinner" aria-hidden="true" />
-                ) : null}
+                {running(seedKey) ? <span className="spinner" aria-hidden="true" /> : null}
                 Seed
               </button>
-            ) : (
-              <>
-                <button
-                  className={`btn btn--sm btn--op btn--op-sync${isRunning && activeOpKey === syncKey ? ' btn--op-running' : ''}`}
-                  onClick={() => onRun(syncKey)}
-                  disabled={isRunning}
-                >
-                  {isRunning && activeOpKey === syncKey ? (
-                    <span className="spinner" aria-hidden="true" />
-                  ) : null}
-                  Sync
-                </button>
-                {wipeKey !== undefined && (
-                  <button
-                    className={`btn btn--sm btn--op btn--op-wipe${isRunning && activeOpKey === wipeKey ? ' btn--op-running' : ''}`}
-                    onClick={() => onRun(wipeKey)}
-                    disabled={isRunning}
-                  >
-                    {isRunning && activeOpKey === wipeKey ? (
-                      <span className="spinner" aria-hidden="true" />
-                    ) : null}
-                    Wipe
-                  </button>
-                )}
-              </>
+            )}
+            {count > 0 && syncKey !== undefined && (
+              <button
+                className={`btn btn--sm btn--op btn--op-sync${running(syncKey) ? ' btn--op-running' : ''}`}
+                onClick={() => onRun(syncKey)}
+                disabled={isRunning}
+              >
+                {running(syncKey) ? <span className="spinner" aria-hidden="true" /> : null}
+                Sync
+              </button>
+            )}
+            {count > 0 && wipeKey !== undefined && (
+              <button
+                className={`btn btn--sm btn--op btn--op-wipe${running(wipeKey) ? ' btn--op-running' : ''}`}
+                onClick={() => onRun(wipeKey)}
+                disabled={isRunning}
+              >
+                {running(wipeKey) ? <span className="spinner" aria-hidden="true" /> : null}
+                Wipe
+              </button>
             )}
           </div>
         )}

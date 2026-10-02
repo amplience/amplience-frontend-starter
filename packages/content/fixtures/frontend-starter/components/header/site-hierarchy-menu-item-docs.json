@@ -1,0 +1,18 @@
+{
+  "id": "2b991992-210f-5bb6-99c0-cb6bd663ee9c",
+  "label": "Hierarchy menu item: Docs",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Docs",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "2b991992-210f-5bb6-99c0-cb6bd663ee9c",
+      "hierarchy": {
+        "parentId": "49472391-481a-5d27-9551-d28886c96060",
+        "root": false,
+        "position": "gO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Docs",
+    "link": "/docs"
+  }
+}

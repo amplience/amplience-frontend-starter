@@ -1,0 +1,58 @@
+{
+  "id": "cca2775a-a7ac-5a29-89ee-c647cc3f70d1",
+  "label": "Blog — Accelerating Your Amplience Project with Frontend Starter",
+  "body": {
+    "_meta": {
+      "name": "Blog — Accelerating Your Amplience Project with Frontend Starter",
+      "schema": "https://quadratic.amplience.com/v2/content/blog-article",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/blog/quadratic-accelerator"
+          }
+        ]
+      }
+    },
+    "title": "Accelerating Your Amplience Project with Frontend Starter",
+    "description": "Amplience Frontend Starter is an open-source accelerator that ships a recursive renderer, hub import pipeline, and schema-validated fixtures — cutting two sprints of boilerplate down to a 15-minute clone.",
+    "keywords": ["frontend-starter", "accelerator", "amplience", "next.js", "open-source"],
+    "social": {
+      "image": {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/seed/blog-quadratic/1200/630",
+          "alt": "Amplience Frontend Starter accelerator — rocket launch illustration",
+          "width": 1200,
+          "height": 630
+        }
+      }
+    },
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
+    "coverImage": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/seed/blog-quadratic/1200/630",
+        "alt": "Amplience Frontend Starter accelerator — rocket launch illustration",
+        "width": 1200,
+        "height": 630
+      }
+    },
+    "author": "Amplience Team",
+    "publishDate": "2026-06-15",
+    "category": "Accelerators",
+    "tags": ["frontend-starter", "accelerator", "amplience", "next.js"],
+    "readTime": 8,
+    "slots": [
+      {
+        "id": "467b535f-2f82-579a-9a37-ee9e047207a4",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

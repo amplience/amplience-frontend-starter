@@ -1,0 +1,32 @@
+{
+  "id": "26beeebe-3ab6-53f3-addf-c216afea6979",
+  "label": "Home — card: Opulent decadence",
+  "body": {
+    "_meta": {
+      "name": "Home — card: Opulent decadence",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "26beeebe-3ab6-53f3-addf-c216afea6979"
+    },
+    "title": "Opulent decadence",
+    "description": "Candlelit skin with a champagne-pearl glow, blush draped high, a crisp graphic eye and a plush glossy lip.",
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/Opulent%20Decadence_hero",
+        "alt": "Party make-up with a graphic eye and glossy lip",
+        "width": 1000,
+        "height": 1250
+      }
+    },
+    "links": {
+      "href": "/shop-the-look",
+      "cta": {
+        "label": "Read more",
+        "href": "/shop-the-look",
+        "variant": "text",
+        "color": "black"
+      }
+    },
+    "color": "light"
+  }
+}

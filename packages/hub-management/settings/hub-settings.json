@@ -11,11 +11,6 @@
     "applications": [],
     "localization": {
       "locales": ["en-US", "de-DE", "fr-FR"]
-    },
-    "contentItems": {
-      "validation": {
-        "ignoreSchemaValidation": false
-      }
     }
   },
   "workflowStates": [

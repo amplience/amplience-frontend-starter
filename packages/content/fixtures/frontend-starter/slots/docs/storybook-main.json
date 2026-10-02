@@ -1,0 +1,26 @@
+{
+  "id": "a2b57da6-3581-5d82-b0ac-8c374892f77e",
+  "label": "Storybook — main slot",
+  "body": {
+    "_meta": {
+      "name": "Storybook — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot"
+    },
+    "components": [
+      {
+        "id": "30df1440-fb04-505d-bb0d-4f7f1d329d0f",
+        "contentType": "https://quadratic.amplience.com/v2/content/hero",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "a59dd5e5-28c3-5cb3-af76-4707f61212dd",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "eebf8468-ca4f-56f7-8908-e3e2c1f3c5d3",
+  "label": "Footer menu item — Deploying",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Deploying",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "eebf8468-ca4f-56f7-8908-e3e2c1f3c5d3"
+    },
+    "label": "Deploying",
+    "link": "/docs/deploying"
+  }
+}

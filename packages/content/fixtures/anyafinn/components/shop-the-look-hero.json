@@ -1,0 +1,33 @@
+{
+  "id": "68a36106-cd66-5b3a-a5ad-d44e1118ae20",
+  "label": "Shop the Look — hero",
+  "body": {
+    "_meta": {
+      "name": "Shop the Look — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "68a36106-cd66-5b3a-a5ad-d44e1118ae20"
+    },
+    "title": "Shop the look",
+    "description": "Three ways to wear the season, styled end to end.",
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/piratecore_hero",
+        "alt": "Styled autumn/winter looks",
+        "width": 2752,
+        "height": 1536
+      }
+    },
+    "contentWidth": 45,
+    "contentPositionMobile": "beneath",
+    "contentPositionDesktop": "overlay",
+    "heightBehaviour": "flexible",
+    "maxWidth": "default",
+    "maxHeight": 420,
+    "overlayColor": "black",
+    "overlayIntensity": 45,
+    "overlayStyle": "gradient",
+    "verticalPosition": "center",
+    "backgroundColor": "black"
+  }
+}

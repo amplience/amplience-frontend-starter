@@ -1,0 +1,28 @@
+{
+  "id": "995d5c04-b13b-5d18-a7eb-bd11de1bbbe2",
+  "label": "Getting started page",
+  "body": {
+    "_meta": {
+      "name": "Getting started page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/docs/getting-started"
+          }
+        ]
+      }
+    },
+    "title": "Getting started",
+    "description": "Everything you need to clone Amplience Frontend Starter and get it running locally on the bundled fixture data — no Amplience hub required.",
+    "slots": [
+      {
+        "id": "88330daf-0fa1-595a-a1d6-6836665c8728",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

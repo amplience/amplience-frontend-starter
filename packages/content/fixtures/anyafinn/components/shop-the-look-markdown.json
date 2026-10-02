@@ -1,0 +1,14 @@
+{
+  "id": "49124b75-a998-5d41-9549-3fd707b63c95",
+  "label": "Shop the Look — markdown",
+  "body": {
+    "_meta": {
+      "name": "Shop the Look — markdown",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "49124b75-a998-5d41-9549-3fd707b63c95"
+    },
+    "content": "## Piratecore\n\nRuffled white poplin under a black lace corset, grounded with a leather-look mini\nand chocolate knee-high boots. Stormy, and more wearable than it sounds.\n\n## Grown-up glitter\n\nA radiant, second-skin base plus a grippy shimmer primer and champagne liquid\nsparkle, finished with a clean tubing mascara for polished, low-mess shine.\n\n## Opulent decadence\n\nCandlelit skin with a champagne-pearl glow, blush draped high and bold, a crisp\ngraphic eye and a plush glossy lip.",
+    "maxWidth": "default",
+    "gutter": true
+  }
+}

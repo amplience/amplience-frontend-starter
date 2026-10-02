@@ -23,14 +23,15 @@ const ESC = String.fromCharCode(27)
 const ENV: SiteEnvSource = {
   hubName: 'quadraticlite',
   defaultBrand: 'default',
-  defaultSite: 'quadraticlite',
+  // Already resolved by defaultSiteName — the set's name when the hub sets none.
+  defaultSite: 'frontend-starter',
 }
 
 describe('runtimeEnvVars', () => {
   it('pushes only the non-default vars, for both production and preview', () => {
     const vars = runtimeEnvVars(ENV, { brand: 'acme', sitename: 'acme-store' })
     const keys = vars.map((v) => v.key)
-    // SITE_NAME differs from the hub name; brand is non-default; no staging host.
+    // SITE_NAME always; brand is non-default; no staging host.
     expect(keys).toEqual(['AMPLIENCE_HUB_NAME', 'SITE_NAME', 'NEXT_PUBLIC_BRAND'])
     for (const v of vars) expect(v.targets).toEqual(['production', 'preview'])
     expect(vars.find((v) => v.key === 'SITE_NAME')?.value).toBe('acme-store')
@@ -45,13 +46,13 @@ describe('runtimeEnvVars', () => {
     expect(keys).not.toContain('SITE_URL') // Vercel injects the production URL
   })
 
-  it('omits SITE_NAME when it equals the hub name', () => {
-    // Blank site → defaults to the hub name → nothing to override, so dropped.
+  it('always pushes SITE_NAME, so a deployment never leans on a default that can move', () => {
+    // Blank → the hub's resolved default site.
     const blank = runtimeEnvVars(ENV, { brand: 'acme', sitename: '' })
-    expect(blank.map((v) => v.key)).not.toContain('SITE_NAME')
-    // Explicitly naming the hub is likewise a no-op.
+    expect(blank.find((v) => v.key === 'SITE_NAME')?.value).toBe('frontend-starter')
+    // Matching the hub name is no longer a no-op: the runtime default is the set, not the hub.
     const same = runtimeEnvVars(ENV, { brand: 'acme', sitename: 'quadraticlite' })
-    expect(same.map((v) => v.key)).not.toContain('SITE_NAME')
+    expect(same.find((v) => v.key === 'SITE_NAME')?.value).toBe('quadraticlite')
   })
 
   it('omits NEXT_PUBLIC_BRAND when the brand is blank or "default"', () => {
@@ -63,9 +64,10 @@ describe('runtimeEnvVars', () => {
     )
   })
 
-  it('pushes only the hub name when nothing overrides the defaults', () => {
+  it('pushes only the hub and site names when nothing overrides the defaults', () => {
     expect(runtimeEnvVars(ENV, { brand: '', sitename: '' }).map((v) => v.key)).toEqual([
       'AMPLIENCE_HUB_NAME',
+      'SITE_NAME',
     ])
   })
 

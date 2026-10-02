@@ -1,0 +1,36 @@
+{
+  "id": "d4d3b815-20f3-5cfd-aefe-827c07231779",
+  "label": "Site — header",
+  "body": {
+    "_meta": {
+      "name": "Site — header",
+      "schema": "https://quadratic.amplience.com/v2/content/header",
+      "deliveryId": "d4d3b815-20f3-5cfd-aefe-827c07231779",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/site/header"
+          }
+        ]
+      }
+    },
+    "sticky": true,
+    "maxWidth": "default",
+    "rows": [
+      {
+        "id": "99bae2ae-3ee6-55e2-9487-ef1a838c524f",
+        "contentType": "https://quadratic.amplience.com/v2/content/header-row",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "c164abdc-6c83-55d4-894e-3cb8afb0a50d",
+        "contentType": "https://quadratic.amplience.com/v2/content/header-row",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

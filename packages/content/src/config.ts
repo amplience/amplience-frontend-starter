@@ -16,18 +16,22 @@
  *   AMPLIENCE_HUB_NAME       set → sdk; unset → mock (the zero-config default)
  *   CONTENT_CLIENT           optional override: 'mock' | 'sdk'; wins over
  *                            hub-name inference when present
- *   SITE_NAME                the deployment's delivery-key namespace
- *                            (ADR-0014) — every key is `<site>/<relative>`.
- *                            Optional: in sdk mode it defaults to the hub
- *                            name (hub-import seeds under the same default,
- *                            so the two stay in sync without a second
- *                            variable); in mock mode it defaults to the
- *                            fixture site's name ('base-site'), because
- *                            running the mock *is* running that site — the
- *                            zero-config contract above extends to it. Set
- *                            it explicitly when the site isn't named after
- *                            the hub (e.g. a second site on one hub).
+ *   SITE_NAME                sdk mode only: the deployment's delivery-key
+ *                            namespace (ADR-0014) — every key is
+ *                            `<site>/<relative>`. Optional: defaults to the
+ *                            fixture set's name (ADR-0019), the same default
+ *                            hub-import seeds under, so a hub carrying one
+ *                            set and its deployment agree without either
+ *                            setting it. Set it for a site whose namespace
+ *                            isn't a set's name (a partner's own name, or a
+ *                            second site on one hub). Ignored by the mock,
+ *                            which has no re-prefixing step to honour it.
  *                            Lowercase alphanumerics and hyphens.
+ *   FIXTURE_SET              which fixture set (ADR-0019). Mock mode: the set
+ *                            served, and so the site name. Sdk mode: the
+ *                            default for SITE_NAME, mirroring hub-import's
+ *                            `SITE_NAME ?? FIXTURE_SET ?? 'frontend-starter'`.
+ *                            Defaults to 'frontend-starter'.
  *   AMPLIENCE_STAGING_HOST   optional VSE host; serves latest saved versions
  *   AMPLIENCE_LOCALE         optional locale passed to the delivery API
  *
@@ -53,11 +57,19 @@ export type ContentClientSelection =
     }
 
 /**
- * The fixture site's name — the `SITE_NAME` a zero-config (mock) deployment
- * resolves to, matching the `base-site/` prefix on every fixture delivery
- * key in `../../fixtures/base-site/`.
+ * The fixture set used when `FIXTURE_SET` isn't given — the set a zero-config
+ * mock serves, and the namespace a zero-config hub deployment reads, because
+ * that's where a zero-config `hub:import` seeds it (ADR-0019). For fixtures the
+ * set name, the site name and the delivery-key prefix are one string.
+ *
+ * Declared here rather than in the set registry so that config stays
+ * dependency-free: the registry imports this, not the other way round, because
+ * importing the registry here would pull every fixture in every set into the
+ * bundle of any deployment that merely reads config — including sdk-mode ones
+ * that never touch a fixture. The registry validates the name when the mock is
+ * composed, and throws naming the sets it does have.
  */
-export const FIXTURE_SITE_NAME = 'base-site'
+export const FIXTURE_SITE_NAME = 'frontend-starter'
 
 /**
  * The shape a site name must have (ADR-0014): lowercase alphanumerics and
@@ -73,7 +85,7 @@ const validateSiteName = (siteName: string, source: string): string => {
       `${source} "${siteName}" is not a usable site name — lowercase letters, ` +
         'digits, and single hyphens only (e.g. "acme" or "acme-store"). It is ' +
         'the first segment of every delivery key on the hub (ADR-0014). ' +
-        'Set SITE_NAME explicitly to choose one.',
+        'Set SITE_NAME (with a hub) or FIXTURE_SET (offline) to choose one.',
     )
   }
   return siteName
@@ -94,13 +106,18 @@ export const resolveContentConfig = (env: EnvSource = processEnv): ContentClient
   const inferred = present(hubName) ? 'sdk' : 'mock'
   const selected = present(env.CONTENT_CLIENT) ? env.CONTENT_CLIENT : inferred
 
+  // The set in play, and the namespace default that follows from it — the same
+  // `FIXTURE_SET ?? 'frontend-starter'` hub-import resolves (ADR-0019).
+  const fixtureSet = present(env.FIXTURE_SET)
+    ? validateSiteName(env.FIXTURE_SET, 'FIXTURE_SET')
+    : FIXTURE_SITE_NAME
+
   if (selected === 'mock') {
-    // An explicit SITE_NAME still applies (and still has to be well-formed);
-    // absent one, the mock serves the fixture site under its own name.
-    const siteName = present(env.SITE_NAME)
-      ? validateSiteName(env.SITE_NAME, 'SITE_NAME')
-      : FIXTURE_SITE_NAME
-    return { kind: 'mock', siteName }
+    // The mock's site name *is* its set's name (ADR-0019). SITE_NAME is not
+    // read here: the mock has no re-prefixing step, so honouring a partner
+    // namespace offline would address keys no fixture carries. An unknown set
+    // throws when the mock is composed, naming the sets that do exist.
+    return { kind: 'mock', siteName: fixtureSet }
   }
 
   if (selected !== 'sdk') {
@@ -116,15 +133,14 @@ export const resolveContentConfig = (env: EnvSource = processEnv): ContentClient
     )
   }
 
-  // The site name defaults to the hub name: hub-import seeds keys under the
-  // same default, so a hub and its deployment agree without either setting
-  // SITE_NAME. This is deployment-specific config the operator chose, not a
-  // guessed constant (contrast v1's fixed fallback brand) — and a mismatch
-  // is loud anyway: every page 404s. An explicit SITE_NAME wins, for sites
-  // not named after their hub.
+  // The site name defaults to the fixture set's name (ADR-0019, amending
+  // ADR-0014's hub-name default): hub-import seeds under exactly this default,
+  // so a hub carrying one set and its deployment agree without either setting
+  // SITE_NAME — and a mismatch is loud anyway: every page 404s. An explicit
+  // SITE_NAME wins, for a namespace that isn't a set's name.
   const siteName = present(env.SITE_NAME)
     ? validateSiteName(env.SITE_NAME, 'SITE_NAME')
-    : validateSiteName(hubName, 'AMPLIENCE_HUB_NAME (the SITE_NAME default)')
+    : fixtureSet
 
   return {
     kind: 'sdk',

@@ -4,7 +4,7 @@ The recursive dispatcher from ADR-0010 — Renderer pattern (see the project arc
 
 ## The flow, end to end
 
-A content tree (here, what the mock client returns for `getByKey('home', { depth: 'all' })`):
+A content tree (here, what the mock client returns for `getByKey('frontend-starter/homepage', { depth: 'all' })`):
 
 ```jsonc
 {
@@ -48,7 +48,7 @@ import { registry } from '@/lib/registry'
 import { renderContent } from '@/src/renderer'
 
 export default async function HomePage() {
-  const page = await client.getByKey('home', { depth: 'all' })
+  const page = await client.getByKey('frontend-starter/homepage', { depth: 'all' })
   return renderContent(page, registry)
 }
 ```

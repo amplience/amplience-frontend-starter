@@ -8,3 +8,7 @@ coverage
 pnpm-lock.yaml
 *.tsbuildinfo
 LICENCE
+
+# Holds hub credentials and is gitignored — `pnpm format` has no business
+# rewriting it, and a formatter crash mid-write would take the catalogue with it.
+amplience.config.json

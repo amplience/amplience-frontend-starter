@@ -1,0 +1,20 @@
+{
+  "id": "4f69f7b6-a025-546d-9a04-605062a17b24",
+  "label": "Hierarchy menu item: My account",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: My account",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "4f69f7b6-a025-546d-9a04-605062a17b24",
+      "hierarchy": {
+        "parentId": "49472391-481a-5d27-9551-d28886c96060",
+        "root": false,
+        "position": "ggggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "My account",
+    "link": "/account",
+    "icon": "user",
+    "visibility": "mobileOnly"
+  }
+}

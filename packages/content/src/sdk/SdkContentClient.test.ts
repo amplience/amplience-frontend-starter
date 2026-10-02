@@ -14,12 +14,18 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { allFixtures, findById, findByKey, makeMockContentClient } from '../mock'
+import { fixtureIdFor } from '../../scripts/lib/fixture-id.mjs'
+import { DEFAULT_FIXTURE_SET, makeMockContentClient, resolveFixtureSet } from '../mock'
 import { resolveDeep } from '../mock/resolver'
 import type { ContentRequestOptions } from '../types'
 import { isContentClientError } from '../types'
 import { makeSdkContentClient } from './SdkContentClient'
 import type { SdkContentClientConfig } from './SdkContentClient'
+
+// Parity is per site: the adapter and the mock are both pointed at the default
+// set, so every assertion reads the same fixtures. The whole corpus would drag in
+// the other set's content, which a client for this one is meant not to see.
+const { fixtures: setFixtures, findById, findByKey } = resolveFixtureSet(DEFAULT_FIXTURE_SET)
 
 type FetchPayload = {
   requests: ({ key: string } | { id: string })[]
@@ -55,7 +61,7 @@ const positionOf = (f: { body: unknown }): string =>
  * order it returns would be an artefact of fixture-load order.
  */
 const hierarchyDescendants = () =>
-  allFixtures()
+  setFixtures
     .filter((f) => (f.body as HierarchyMeta)._meta?.hierarchy?.parentId !== undefined)
     .sort((a, b) => {
       // Code-unit order, not localeCompare: the position strings are a
@@ -106,7 +112,7 @@ const fixtureBackedAdaptor = (capture?: { configs: AxiosishConfig[] }) =>
       const wanted = body.filterBy?.find((f) => f.path === '/_meta/schema')?.value
       return Promise.resolve(
         okResponse(config, {
-          responses: allFixtures()
+          responses: setFixtures
             .filter((f) => schemaOf(f.body) === wanted)
             .map((f) => ({ content: f.body })),
           page: {},
@@ -154,7 +160,7 @@ describe('SdkContentClient ↔ MockContentClient parity', () => {
   const mock = makeMockContentClient()
   const depths: ContentRequestOptions[] = [{ depth: 'root' }, { depth: 'all' }]
 
-  for (const fixture of allFixtures()) {
+  for (const fixture of setFixtures) {
     const key = firstKey(fixture.body)
     if (key === undefined) continue
     for (const opts of depths) {
@@ -165,7 +171,7 @@ describe('SdkContentClient ↔ MockContentClient parity', () => {
   }
 
   it('getById matches the mock at both depths', async () => {
-    const fixture = first(allFixtures())
+    const fixture = first(setFixtures)
     for (const opts of depths) {
       await expect(sdk.getById(fixture.id, opts)).resolves.toEqual(
         await mock.getById(fixture.id, opts),
@@ -178,27 +184,27 @@ describe('request shaping', () => {
   it('defaults depth to root and always asks for inlined format', async () => {
     const capture = { configs: [] as AxiosishConfig[] }
     const client = makeClient({}, capture)
-    await client.getByKey('base-site/homepage')
+    await client.getByKey('frontend-starter/homepage')
     const payload = parsePayload(first(capture.configs))
     expect(payload.parameters).toMatchObject({ depth: 'root', format: 'inlined' })
-    expect(payload.requests).toEqual([{ key: 'base-site/homepage' }])
+    expect(payload.requests).toEqual([{ key: 'frontend-starter/homepage' }])
   })
 
   it('omits locale when none is configured', async () => {
     const capture = { configs: [] as AxiosishConfig[] }
-    await makeClient({}, capture).getByKey('base-site/homepage')
+    await makeClient({}, capture).getByKey('frontend-starter/homepage')
     expect(parsePayload(first(capture.configs)).parameters).not.toHaveProperty('locale')
   })
 
   it('forwards the configured deployment locale', async () => {
     const capture = { configs: [] as AxiosishConfig[] }
-    await makeClient({ locale: 'en-GB,*' }, capture).getByKey('base-site/homepage')
+    await makeClient({ locale: 'en-GB,*' }, capture).getByKey('frontend-starter/homepage')
     expect(parsePayload(first(capture.configs)).parameters?.locale).toBe('en-GB,*')
   })
 
   it('lets a per-request locale override the deployment default', async () => {
     const capture = { configs: [] as AxiosishConfig[] }
-    await makeClient({ locale: 'en-GB,*' }, capture).getByKey('base-site/homepage', {
+    await makeClient({ locale: 'en-GB,*' }, capture).getByKey('frontend-starter/homepage', {
       locale: 'fr-FR,*',
     })
     expect(parsePayload(first(capture.configs)).parameters?.locale).toBe('fr-FR,*')
@@ -206,12 +212,12 @@ describe('request shaping', () => {
 
   it('targets the hub CDN host by default and the VSE when stagingHost is set', async () => {
     const cdnCapture = { configs: [] as AxiosishConfig[] }
-    await makeClient({}, cdnCapture).getByKey('base-site/homepage')
+    await makeClient({}, cdnCapture).getByKey('frontend-starter/homepage')
     expect(first(cdnCapture.configs).baseURL).toContain('fixturehub')
 
     const vseCapture = { configs: [] as AxiosishConfig[] }
     await makeClient({ stagingHost: 'abc.staging.bigcontent.io' }, vseCapture).getByKey(
-      'base-site/homepage',
+      'frontend-starter/homepage',
     )
     expect(first(vseCapture.configs).baseURL).toContain('abc.staging.bigcontent.io')
   })
@@ -365,7 +371,7 @@ describe('getHierarchy', () => {
   it('assembles the same tree as the mock', async () => {
     // Both implementations flatten the SDK/manifest tree into the `items` +
     // `children` shape the HierarchyMenu registry entries read.
-    const key = 'base-site/site/hierarchy-menu-main'
+    const key = 'frontend-starter/site/hierarchy-menu-main'
     const fromSdk = await makeClient().getHierarchy<Record<string, unknown>>(key)
     const fromMock = await makeMockContentClient().getHierarchy<Record<string, unknown>>(key)
 
@@ -382,7 +388,7 @@ describe('getHierarchy', () => {
     // class, keep theirs). Nothing reads delivery keys off a menu root today,
     // so this is pinned rather than worked around — if a future registry entry
     // needs them on a hierarchy root, this test says where they went.
-    const key = 'base-site/site/hierarchy-menu-main'
+    const key = 'frontend-starter/site/hierarchy-menu-main'
     const fromSdk = await makeClient().getHierarchy<Record<string, unknown>>(key)
     const fromMock = await makeMockContentClient().getHierarchy<Record<string, unknown>>(key)
 
@@ -391,14 +397,14 @@ describe('getHierarchy', () => {
     // Everything else identifying the root still survives the round trip.
     expect(fromSdk._meta).toMatchObject({
       schema: 'https://quadratic.amplience.com/v2/content/hierarchy-menu',
-      deliveryId: 'c3d4e5f6-0004-4000-8000-000000000001',
+      deliveryId: fixtureIdFor('frontend-starter', 'components/header/site-hierarchy-menu-main'),
     })
   })
 
   it('nests the root under `items` and descendants under `children`', async () => {
     const menu = await makeClient().getHierarchy<{
       items: { children?: unknown[] }[]
-    }>('base-site/site/hierarchy-menu-main')
+    }>('frontend-starter/site/hierarchy-menu-main')
     expect('children' in menu).toBe(false)
     expect(menu.items.length).toBeGreaterThan(0)
     expect(menu.items.some((i) => Array.isArray(i.children))).toBe(true)

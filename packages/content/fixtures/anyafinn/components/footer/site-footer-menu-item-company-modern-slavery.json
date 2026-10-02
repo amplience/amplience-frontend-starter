@@ -1,0 +1,13 @@
+{
+  "id": "4c2f2316-4f03-5e37-a10b-d84948bb77db",
+  "label": "Footer menu item — Modern slavery",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Modern slavery",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "4c2f2316-4f03-5e37-a10b-d84948bb77db"
+    },
+    "label": "Modern slavery",
+    "link": "/company/modern-slavery"
+  }
+}

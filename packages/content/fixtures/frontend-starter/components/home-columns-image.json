@@ -1,0 +1,22 @@
+{
+  "id": "f3a90fb2-f19c-5ec8-97a1-2eeab9d60a80",
+  "label": "Home — columns feature image",
+  "body": {
+    "_meta": {
+      "name": "Home — columns feature image",
+      "schema": "https://quadratic.amplience.com/v2/content/media",
+      "deliveryId": "f3a90fb2-f19c-5ec8-97a1-2eeab9d60a80"
+    },
+    "fullBleed": false,
+    "maxWidth": "default",
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "/placeholders/cheetah.png",
+        "alt": "Amplience Frontend Starter — accelerator for composable content sites",
+        "width": 1080,
+        "height": 1080
+      }
+    }
+  }
+}

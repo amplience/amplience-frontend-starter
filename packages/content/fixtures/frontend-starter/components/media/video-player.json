@@ -1,0 +1,19 @@
+{
+  "id": "90db51dc-aaac-5b1a-be82-986333aa5636",
+  "label": "Media — video player (YouTube)",
+  "body": {
+    "_meta": {
+      "name": "Media — video player (YouTube)",
+      "schema": "https://quadratic.amplience.com/v2/content/media",
+      "deliveryId": "90db51dc-aaac-5b1a-be82-986333aa5636"
+    },
+    "media": {
+      "mediaType": "ExternalVideo",
+      "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+      "title": "Big Buck Bunny — Blender Foundation open movie",
+      "aspectRatio": "16:9",
+      "playback": "player"
+    },
+    "maxWidth": "default"
+  }
+}

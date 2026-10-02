@@ -3,14 +3,24 @@ import { existsSync, readFileSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { streamText } from 'hono/streaming'
 
+import {
+  defaultSiteName,
+  LEGACY_FIXTURES_NAME,
+  migrateActive,
+  namespaceForSet,
+  resolveActiveSource,
+  siteIdentity,
+  type ActiveSource,
+} from './active-source.ts'
 import { buildDamCheck, liveGqlFetch } from './dam-permissions.ts'
 import { hubManagementEnvVars, updateEnvVars, webEnvVars } from './env-files.ts'
+import { readFixtureSets, resolveFixtureSet, type FixtureSetInfo } from './fixture-sets.ts'
 import { deriveIdentifier } from './hub-identifier.ts'
 import { buildPermissionsReport, type FetchJson } from './permissions.ts'
 import {
@@ -43,8 +53,14 @@ const WEB_ENV = path.join(WEB_APP_ROOT, '.env')
 const HUB_MANAGEMENT_ENV = path.join(HUB_MANAGEMENT_ROOT, '.env')
 const PORT = 3099
 
-/** Sentinel name for the built-in "Local Fixtures" entry — never stored in config.json. */
-const FIXTURES_NAME = 'fixtures'
+/**
+ * The fixture sets on disk.
+ *
+ * Read once at startup: a set appearing or disappearing is someone editing the
+ * repository, which restarts this server anyway, and re-reading on every request
+ * would put a directory scan behind the panel's polling.
+ */
+const FIXTURE_SETS: FixtureSetInfo[] = readFixtureSets(REPO_ROOT)
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -82,8 +98,18 @@ type Environment = {
   clientSecret: string
   stagingHost: string
   defaultBrand: string
-  /** SITE_NAME for the hub's main frontend (ADR-0014); blank = hub-name default. */
+  /**
+   * SITE_NAME for the hub's `Web (localhost)` row (ADR-0014), and the fallback
+   * for any site added with a blank site name. Blank = the set's name
+   * (`defaultFixtureSet`, else the default set — ADR-0019); see `defaultSiteName`.
+   */
   defaultSite: string
+  /**
+   * Which fixture set this hub's sites carry when their own names don't say
+   * (ADR-0019). A site named after a set serves that set; this is for the
+   * partner path, where `frontend-starter` content is seeded under `acme/`.
+   */
+  defaultFixtureSet?: string
   webApps: WebApp[]
   republish: boolean
   /** Opt-in per environment: allow dc-cli's --ignoreSchemaValidation (see src/types.ts). */
@@ -91,24 +117,44 @@ type Environment = {
 }
 
 type Config = {
+  /** A hub's name, or a fixture set's. The hubs are enumerable, so the two tell apart. */
   active: string
   environments: Environment[]
-  /**
-   * Brand the built-in Local Fixtures source renders under — the fixtures
-   * equivalent of an environment's defaultBrand. Optional so configs written
-   * before fixtures carried a brand still parse; absent means the base theme.
-   */
-  fixturesBrand?: string
 }
 
 // ── Config helpers ────────────────────────────────────────────────────────────
 
+const DEFAULT_ACTIVE = migrateActive(LEGACY_FIXTURES_NAME, FIXTURE_SETS)
+
+/**
+ * Read the config, migrating the shape on the way through.
+ *
+ * Migration runs on every read rather than once, because the file is
+ * hand-editable and a checkout can predate any given change. It is a no-op on an
+ * already-migrated config, and nothing is written back — the next write persists
+ * it, so simply looking at the panel doesn't rewrite someone's file.
+ *
+ * Two migrations so far: the `fixtures` sentinel becomes the name of the set it
+ * meant, and `fixturesBrand` is dropped. That field was a single brand for "the
+ * fixtures", from when there was one set; with several, one override applied to
+ * whichever is active meant switching set never changed the brand, and each set
+ * now declares its own in `set.json`. Dropped on read rather than left to rot,
+ * so it doesn't sit in people's files looking like it still does something.
+ */
 async function readConfig(): Promise<Config> {
   if (!existsSync(CONFIG_PATH)) {
-    return { active: FIXTURES_NAME, environments: [], fixturesBrand: '' }
+    return { active: DEFAULT_ACTIVE, environments: [] }
   }
   const raw = await readFile(CONFIG_PATH, 'utf-8')
-  return JSON.parse(raw) as Config
+  const { fixturesBrand: _dropped, ...config } = JSON.parse(raw) as Config & {
+    fixturesBrand?: string
+  }
+  return { ...config, active: migrateActive(config.active, FIXTURE_SETS) }
+}
+
+/** What the config says is live, and the site identity that follows from it. */
+function activeSourceOf(config: Config): ActiveSource {
+  return resolveActiveSource(config.active, config.environments, FIXTURE_SETS)
 }
 
 async function writeConfig(config: Config): Promise<void> {
@@ -122,15 +168,22 @@ async function writeConfig(config: Config): Promise<void> {
  * so that both the web app and the CLI scripts (`pnpm hub:import` etc.) stay in sync
  * with the active environment. Both read a plain `.env` — Next.js ranks an
  * `.env.local` above it, so a stray one would silently outrank what's written here.
- * Pass null (for Fixtures) to comment the connection vars out; the web app falls back to
- * bundled fixture data and CLI commands will have no hub to target. Fixtures still carry
- * a brand, so `fixturesBrand` is what NEXT_PUBLIC_BRAND becomes in that case.
- * The key-by-key mapping lives in ./env-files.ts.
+ * With a fixture set active there is no hub, so the connection vars are commented
+ * out, `CONTENT_CLIENT` pins the app to the mock, and the set supplies the site
+ * identity instead.
+ *
+ * Both files take `SITE_NAME` and `FIXTURE_SET` from the same resolved identity,
+ * so no action can set one without the other — which is the failure this is
+ * built to prevent. The key-by-key mapping lives in ./env-files.ts.
  */
-async function writeActiveEnvFiles(env: Environment | null, fixturesBrand: string): Promise<void> {
+async function writeActiveEnvFiles(config: Config): Promise<void> {
+  const source = activeSourceOf(config)
+  const env = source.kind === 'hub' ? source.env : null
+  const site = siteIdentity(source)
+
   // apps/web/.env — only the vars the web app needs
   const existingWeb = existsSync(WEB_ENV) ? await readFile(WEB_ENV, 'utf-8') : ''
-  await writeFile(WEB_ENV, updateEnvVars(existingWeb, webEnvVars(env, fixturesBrand)), 'utf-8')
+  await writeFile(WEB_ENV, updateEnvVars(existingWeb, webEnvVars(env, site)), 'utf-8')
 
   // packages/hub-management/.env — full set of vars consumed by hub:import / hub:wipe scripts
   const existingHubEnv = existsSync(HUB_MANAGEMENT_ENV)
@@ -138,7 +191,7 @@ async function writeActiveEnvFiles(env: Environment | null, fixturesBrand: strin
     : ''
   await writeFile(
     HUB_MANAGEMENT_ENV,
-    updateEnvVars(existingHubEnv, hubManagementEnvVars(env)),
+    updateEnvVars(existingHubEnv, hubManagementEnvVars(env, site)),
     'utf-8',
   )
 }
@@ -171,6 +224,30 @@ async function fetchCount(token: string, url: string): Promise<number> {
   if (!res.ok) throw new Error(`Amplience API ${res.status}: ${url}`)
   const data = (await res.json()) as { page: { totalElements: number } }
   return data.page.totalElements
+}
+
+/**
+ * The hub's configured locales — the same list the seed reconciles against
+ * (ADR-0019 §6.6), read the same way `probeHubLocales` in hub-import.mjs does.
+ *
+ * Support configures these per hub on request, so they vary, and a set's
+ * authored locales are reconciled against them at seed time. Returns an empty
+ * list rather than throwing: the panel's other counts are still worth showing
+ * when only this one call fails.
+ */
+async function fetchHubLocales(token: string, hubId: string): Promise<string[]> {
+  try {
+    const res = await fetch(`${AMPLIENCE_API}/hubs/${hubId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (!res.ok) return []
+    const hub = (await res.json()) as {
+      settings?: { localization?: { locales?: string[] } }
+    }
+    return hub.settings?.localization?.locales ?? []
+  } catch {
+    return []
+  }
 }
 
 // ── Hub discovery ─────────────────────────────────────────────────────────────
@@ -277,7 +354,27 @@ async function discoverHubs(clientId: string, clientSecret: string): Promise<Dis
  * dc-cli is a devDependency of packages/hub-management — prepend its bin dir to PATH
  * so node_modules/.bin/dc-cli is found when running scripts directly.
  */
-function buildEnv(env: Environment, republish = false): NodeJS.ProcessEnv {
+function buildEnv(env: Environment, republish = false, setName?: string): NodeJS.ProcessEnv {
+  // Which content this run is about, and the namespace it lands in. An op naming
+  // a set is asking for that set specifically, so it brings its own namespace —
+  // the hub's localhost row describes a different site and must not re-target it.
+  // Without one, both come from the localhost row, as the .env files already say.
+  const site =
+    setName === undefined
+      ? siteIdentity({
+          kind: 'hub',
+          env,
+          set: resolveFixtureSet(env.defaultSite, env.defaultFixtureSet, FIXTURE_SETS),
+        })
+      : {
+          siteName: namespaceForSet(
+            setName,
+            env,
+            env.webApps.map((w) => w.name ?? ''),
+            FIXTURE_SETS,
+          ),
+          fixtureSet: setName,
+        }
   const dcCliBin = path.join(HUB_MANAGEMENT_ROOT, 'node_modules', '.bin')
   const rootBin = path.join(REPO_ROOT, 'node_modules', '.bin')
   return {
@@ -296,8 +393,10 @@ function buildEnv(env: Environment, republish = false): NodeJS.ProcessEnv {
     // Per-environment opt-in; set explicitly (not inherited from a stray shell
     // var) so behaviour is deterministic per hub. Read by hub-wipe.mjs.
     AMPLIENCE_IGNORE_SCHEMA_VALIDATION: env.ignoreSchemaValidation ? '1' : '',
-    // Blank = let hub-import apply its own default (the hub name, ADR-0014).
-    ...((env.defaultSite ?? '') !== '' && { SITE_NAME: env.defaultSite }),
+    // Written as a pair, always, so a stale value in one can't re-target the
+    // other. Blank falls through to the script's own default (ADR-0014).
+    ...((site?.siteName ?? '') !== '' && { SITE_NAME: site?.siteName }),
+    ...((site?.fixtureSet ?? '') !== '' && { FIXTURE_SET: site?.fixtureSet }),
     // Fills ${secret:revalidate} in webhook definitions. Absent (not empty)
     // when unset, so the webhooks step skips those definitions with a warning
     // instead of seeding a webhook that would 401 on every delivery.
@@ -501,13 +600,21 @@ async function configureVercelProject(
 const HUB_IMPORT_SCRIPT = path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'hub-import.mjs')
 const HUB_WIPE_SCRIPT = path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'hub-wipe.mjs')
 
-type OpConfig = { script: string; args: string[]; republish: boolean; label: string }
+type OpConfig = {
+  script: string
+  args: string[]
+  republish: boolean
+  label: string
+  /** Acts on content items, so a `set` query scopes it. The model is shared. */
+  perSet?: boolean
+}
 
 /**
  * Maps the URL :op segment to the underlying script + arguments.
  * "seed-*" variants force-republish everything (REPUBLISH=1).
  * "sync-*" variants publish only new/changed items.
- * "wipe-*" archives all content items and clears the import mapping.
+ * "wipe-*" removes the named resource; "wipe-items"/"wipe-all" also clear the
+ * import mapping. The per-resource wipes refuse while a dependant still exists.
  * Note: schemas and types don't have a distinct seed/sync command — both run
  * hub-import.mjs with the relevant step. The naming difference is cosmetic,
  * reflecting the user's intent (first run vs update).
@@ -587,21 +694,58 @@ const OP_CONFIG: Record<string, OpConfig> = {
     args: ['content'],
     republish: true,
     label: 'Seed content items',
+    perSet: true,
   },
   'sync-items': {
     script: HUB_IMPORT_SCRIPT,
     args: ['content'],
     republish: false,
     label: 'Sync content items',
+    perSet: true,
   },
   'wipe-items': {
     script: HUB_WIPE_SCRIPT,
-    args: ['items'],
+    args: ['content'],
     republish: false,
     label: 'Wipe content items',
+    perSet: true,
   },
-  'seed-all': { script: HUB_IMPORT_SCRIPT, args: ['all'], republish: true, label: 'Seed all' },
-  'sync-all': { script: HUB_IMPORT_SCRIPT, args: ['all'], republish: false, label: 'Sync all' },
+  // The per-resource teardowns mirror the seed operations above. Each refuses
+  // when something still depends on it — types while items use them, schemas
+  // while types reference them — naming the step to run first.
+  'wipe-types': {
+    script: HUB_WIPE_SCRIPT,
+    args: ['types'],
+    republish: false,
+    label: 'Wipe content types',
+  },
+  'wipe-schemas': {
+    script: HUB_WIPE_SCRIPT,
+    args: ['schemas'],
+    republish: false,
+    label: 'Wipe schemas',
+  },
+  'wipe-extensions': {
+    script: HUB_WIPE_SCRIPT,
+    args: ['extensions'],
+    republish: false,
+    label: 'Wipe extensions',
+  },
+  // A set scopes the content step of a full run; the model steps ignore it.
+  'seed-all': {
+    script: HUB_IMPORT_SCRIPT,
+    args: ['all'],
+    republish: true,
+    label: 'Seed all',
+    perSet: true,
+  },
+  'sync-all': {
+    script: HUB_IMPORT_SCRIPT,
+    args: ['all'],
+    republish: false,
+    label: 'Sync all',
+    perSet: true,
+  },
   'wipe-all': { script: HUB_WIPE_SCRIPT, args: ['all'], republish: false, label: 'Wipe all' },
 }
 
@@ -626,7 +770,13 @@ app.post('/api/environments', async (c) => {
   // (an explicit name from an API caller or an older client still wins).
   const name =
     (body.name ?? '').trim() ||
-    deriveIdentifier(body.label ?? '', [FIXTURES_NAME, ...config.environments.map((e) => e.name)])
+    deriveIdentifier(body.label ?? '', [
+      // A hub can't take a set's name: `active` is one field, and a hub wins the
+      // tie, so the set would become unreachable from the panel.
+      ...FIXTURE_SETS.map((s) => s.name),
+      LEGACY_FIXTURES_NAME,
+      ...config.environments.map((e) => e.name),
+    ])
 
   if (config.environments.some((e) => e.name === name)) {
     return c.json({ error: `A hub with the identifier "${name}" already exists.` }, 409)
@@ -639,7 +789,7 @@ app.post('/api/environments', async (c) => {
   // the web app picks up the new hub immediately without a manual activate.
   if (config.environments.length === 1) {
     config.active = name
-    await writeActiveEnvFiles(env, config.fixturesBrand ?? '')
+    await writeActiveEnvFiles(config)
   }
 
   await writeConfig(config)
@@ -666,47 +816,47 @@ app.put('/api/environments/:name', async (c) => {
 
   // If the updated environment is currently active, keep the env files in sync.
   if (config.active === body.name) {
-    await writeActiveEnvFiles(body, config.fixturesBrand ?? '')
+    await writeActiveEnvFiles(config)
   }
 
   return c.json(config)
 })
 
-// PUT /api/fixtures  — update the built-in Local Fixtures source (brand only)
-app.put('/api/fixtures', async (c) => {
-  const body = await c.req.json<{ brand?: string }>()
-  const config = await readConfig()
+// PUT /api/fixtures is gone: a set's brand is declared in its own `set.json`,
+// so there is nothing per-deployment left to edit. One override applied to
+// whichever set was active meant switching set never changed the brand.
 
-  config.fixturesBrand = (body.brand ?? '').trim()
-  await writeConfig(config)
+// GET /api/fixture-sets  — the sets on disk, for the panel's Fixture Sets list
+app.get('/api/fixture-sets', (c) => c.json(FIXTURE_SETS))
 
-  // Only reaches the running app while fixtures are the active source.
-  if (config.active === FIXTURES_NAME) {
-    await writeActiveEnvFiles(null, config.fixturesBrand)
-  }
-
-  return c.json(config)
-})
-
-// PATCH /api/environments/:name/activate  — set as active + write apps/web/.env
+/**
+ * PATCH /api/environments/:name/activate
+ *
+ * `:name` is a hub's identifier or a fixture set's name — exactly one thing is
+ * active across the panel, so one endpoint sets it either way. The legacy
+ * `fixtures` sentinel still resolves, for a config or a client that predates the
+ * sets having names of their own.
+ */
 app.patch('/api/environments/:name/activate', async (c) => {
   const { name } = c.req.param()
   const config = await readConfig()
-  const isFixtures = name === FIXTURES_NAME
+  const requested = migrateActive(name, FIXTURE_SETS)
 
-  if (!isFixtures && !config.environments.some((e) => e.name === name)) {
-    return c.json({ error: `Environment "${name}" not found.` }, 404)
+  const known =
+    config.environments.some((e) => e.name === requested) ||
+    FIXTURE_SETS.some((s) => s.name === requested)
+  if (!known) {
+    const sets = FIXTURE_SETS.map((s) => s.name).join(', ')
+    return c.json({ error: `No hub or fixture set named "${name}". Sets on disk: ${sets}.` }, 404)
   }
 
-  config.active = name
+  config.active = requested
   await writeConfig(config)
 
-  // Write connection vars to apps/web/.env so `pnpm dev` in apps/web
-  // picks up the right hub without any manual .env editing.
-  // Fixtures → clears the connection vars (web app falls back to fixture data)
-  // and applies the fixtures brand.
-  const env = isFixtures ? null : (config.environments.find((e) => e.name === name) ?? null)
-  await writeActiveEnvFiles(env, config.fixturesBrand ?? '')
+  // Write the connection and site vars to both .env files, so `pnpm dev` and the
+  // hub:* scripts agree on what is live without any manual editing. A fixture
+  // set clears the connection vars and pins the app to the mock.
+  await writeActiveEnvFiles(config)
 
   return c.json(config)
 })
@@ -723,11 +873,16 @@ app.delete('/api/environments/:name', async (c) => {
     return c.json({ error: `Environment "${name}" not found.` }, 404)
   }
 
-  if (config.active === name) {
-    config.active = config.environments[0]?.name ?? ''
+  // Deleting the active hub leaves the env files pointing at credentials that
+  // no longer exist, so fall back to a fixture set — which always works offline
+  // — and rewrite them, rather than leaving the app aimed at nothing.
+  const wasActive = config.active === name
+  if (wasActive) {
+    config.active = config.environments[0]?.name ?? DEFAULT_ACTIVE
   }
 
   await writeConfig(config)
+  if (wasActive) await writeActiveEnvFiles(config)
   return c.json(config)
 })
 
@@ -874,7 +1029,8 @@ app.post('/api/environments/:name/vercel/create-site', async (c) => {
     ...(body.token ? { token: body.token } : {}),
     ...(body.scope ? { scope: body.scope } : {}),
   }
-  const envVars = runtimeEnvVars(env, site)
+  const fallbackSite = defaultSiteName(env, FIXTURE_SETS)
+  const envVars = runtimeEnvVars({ ...env, defaultSite: fallbackSite }, site)
   const cmdEnv = vercelEnv()
 
   return streamText(c, async (stream) => {
@@ -1018,7 +1174,7 @@ app.post('/api/environments/:name/vercel/create-site', async (c) => {
             label: (body.label ?? '').trim(),
             url,
             brand: site.brand.trim() || env.defaultBrand,
-            name: site.sitename.trim() || env.defaultSite,
+            name: site.sitename.trim() || fallbackSite,
             vercelProjectName: targetName,
             ...(cliOpts.scope ? { vercelScope: cliOpts.scope } : {}),
           })
@@ -1099,10 +1255,11 @@ app.post('/api/environments/:name/vercel/redeploy-site', async (c) => {
     sitename: body.sitename ?? site.name,
   }
   // Env vars computed against the TARGET hub — this is what re-points the build.
-  const envVars = runtimeEnvVars(targetEnv, siteInput)
+  const targetFallbackSite = defaultSiteName(targetEnv, FIXTURE_SETS)
+  const envVars = runtimeEnvVars({ ...targetEnv, defaultSite: targetFallbackSite }, siteInput)
   // Reset every hub-determining key first (both runtime targets), so a var that
-  // no longer applies after the move (e.g. a SITE_NAME that now equals the hub
-  // name, or a brand that reverted to default) doesn't linger from the old hub.
+  // no longer applies after the move (e.g. a brand that reverted to default, or
+  // a custom-CSS flag the target hub doesn't use) doesn't linger from the old hub.
   const KNOWN_KEYS = [
     'AMPLIENCE_HUB_NAME',
     'SITE_NAME',
@@ -1200,7 +1357,7 @@ app.post('/api/environments/:name/vercel/redeploy-site', async (c) => {
         label: (body.label ?? site.label).trim(),
         url: url ?? site.url,
         brand: siteInput.brand.trim() || targetEnv.defaultBrand,
-        name: siteInput.sitename.trim() || targetEnv.defaultSite,
+        name: siteInput.sitename.trim() || targetFallbackSite,
         vercelProjectName: projectName,
         ...(site.vercelScope ? { vercelScope: site.vercelScope } : {}),
       }
@@ -1331,7 +1488,7 @@ app.get('/api/environments/:name/stats', async (c) => {
     const token = await getAmplienceToken(env.clientId, env.clientSecret)
     // Ordered as the GUI lists them: settings → schemas → types → extensions
     // → webhooks → content items.
-    const [workflowStates, schemas, types, extensions, webhooks, contentItems, slotItems] =
+    const [workflowStates, schemas, types, extensions, webhooks, contentItems, slotItems, locales] =
       await Promise.all([
         fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/workflow-states`),
         fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/content-type-schemas?status=ACTIVE`),
@@ -1346,6 +1503,7 @@ app.get('/api/environments/:name/stats', async (c) => {
           token,
           `${AMPLIENCE_API}/content-repositories/${env.repoSlots}/content-items?status=ACTIVE`,
         ),
+        fetchHubLocales(token, env.hubId),
       ])
     return c.json({
       workflowStates,
@@ -1354,6 +1512,7 @@ app.get('/api/environments/:name/stats', async (c) => {
       extensions,
       webhooks,
       items: contentItems + slotItems,
+      locales,
     })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
@@ -1362,11 +1521,117 @@ app.get('/api/environments/:name/stats', async (c) => {
   }
 })
 
+// ── Content provenance ────────────────────────────────────────────────────────
+
+/**
+ * Every content item in a repository, active and archived.
+ *
+ * Both statuses, because the classifier needs to see archived items to attribute
+ * them — but `summarise` counts only the live ones. A wipe archives rather than
+ * deletes and prunes the map entries for what it removed, so the archived
+ * remains match no map entry; counting them would file a completed wipe's output
+ * under `custom` and make the wipe look like it had failed.
+ */
+async function listRepoItems(token: string, repoId: string) {
+  const items: { id: string; label: string; status: string }[] = []
+  for (const status of ['ACTIVE', 'ARCHIVED']) {
+    for (let page = 0; ; page++) {
+      const url = `${AMPLIENCE_API}/content-repositories/${repoId}/content-items?status=${status}&size=100&page=${page}`
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } })
+      if (!res.ok) throw new Error(`HTTP ${res.status} listing ${status} items`)
+      const body = (await res.json()) as {
+        _embedded?: { 'content-items'?: { id: string; label?: string; status?: string }[] }
+        page?: { totalPages?: number }
+      }
+      for (const item of body._embedded?.['content-items'] ?? []) {
+        items.push({ id: item.id, label: item.label ?? item.id, status: item.status ?? status })
+      }
+      if (page + 1 >= (body.page?.totalPages ?? 1)) break
+    }
+  }
+  return items
+}
+
+/**
+ * GET /api/environments/:name/content-breakdown
+ *
+ * Which fixture set each item on the hub came from, as counts (ADR-0019 §6.7).
+ *
+ * The classifier and the set reader are the ones the wipe script uses, imported
+ * rather than reimplemented — a panel that disagreed with the command about what
+ * `custom` means would be worse than no panel at all.
+ *
+ * The evidence is dc-cli's import map, which is machine-local. With no map
+ * nothing can be attributed, and every item would look hand-authored, so this
+ * reports unavailable rather than guessing. The caller's rule is: anything that
+ * needs to know where an item came from needs the map; anything that acts on
+ * everything doesn't.
+ */
+app.get('/api/environments/:name/content-breakdown', async (c) => {
+  const { name } = c.req.param()
+  const config = await readConfig()
+  const env = config.environments.find((e) => e.name === name)
+  if (!env) return c.json({ error: `Environment "${name}" not found.` }, 404)
+
+  if (!env.clientId || !env.clientSecret || !env.repoContent || !env.repoSlots) {
+    return c.json({ error: 'Environment is missing credentials or repository IDs.' }, 400)
+  }
+
+  const mapFile = path.join(homedir(), '.amplience', 'imports', `quadratic-${env.hubName}.json`)
+  if (!existsSync(mapFile)) {
+    return c.json({
+      available: false,
+      reason:
+        `No dc-cli import map for "${env.hubName}" on this machine, so no item can be traced ` +
+        'back to the set it came from. Seeding from here builds one.',
+      mapFile,
+    })
+  }
+
+  try {
+    const [{ classifyHubItems, summarise }, { readAllSets }] = await Promise.all([
+      import(
+        pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'provenance.mjs')).href
+      ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/provenance.mjs')>,
+      import(
+        pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'fixture-sets.mjs')).href
+      ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/fixture-sets.mjs')>,
+    ])
+
+    const map = JSON.parse(readFileSync(mapFile, 'utf-8')) as {
+      contentItems?: [string, string][]
+    }
+    const token = await getAmplienceToken(env.clientId, env.clientSecret)
+    const repos = [env.repoContent, env.repoSlots, env.repoSiteComponents].filter(
+      (id): id is string => (id ?? '') !== '',
+    )
+    const items = (await Promise.all(repos.map((id) => listRepoItems(token, id)))).flat()
+
+    const sets = readAllSets().map((s) => ({ name: s.name, ids: s.ids }))
+    const summary = summarise(classifyHubItems(items, map.contentItems ?? [], sets))
+    return c.json({ available: true, ...summary })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error'
+    console.error(`Failed to classify content for "${env.name}":`, err)
+    return c.json({ error: `Content breakdown failed: ${message}` }, 500)
+  }
+})
+
 // ── Operations (streaming) ────────────────────────────────────────────────────
 //
-// POST /api/environments/:name/:op
+// POST /api/environments/:name/:op[?set=<fixture set>]
 //
 // :op must be a key in OP_CONFIG — see the table above for the full list.
+//
+// Query parameters, all of which mirror a flag on the terminal and apply only to
+// content operations, which are the only ones a fixture set is about:
+//
+//   set=<name>              --set <name>     one set's items
+//   provenance=custom       --custom         items the import map never saw
+//   provenance=orphaned     --orphaned       items whose source left the repo
+//   apply=1                 --apply          go ahead; without it the two
+//                                            provenance wipes only report
+//
 // All operations stream their output as plain text.
 
 app.post('/api/environments/:name/:op', async (c) => {
@@ -1378,11 +1643,46 @@ app.post('/api/environments/:name/:op', async (c) => {
   const env = config.environments.find((e) => e.name === name)
   if (!env) return c.json({ error: `Environment "${name}" not found.` }, 404)
 
+  const requestedSet = c.req.query('set')
+  if (requestedSet !== undefined && !FIXTURE_SETS.some((s) => s.name === requestedSet)) {
+    const sets = FIXTURE_SETS.map((s) => s.name).join(', ')
+    return c.json({ error: `Unknown fixture set "${requestedSet}" — available: ${sets}.` }, 400)
+  }
+  const provenance = c.req.query('provenance')
+  if (provenance !== undefined && provenance !== 'custom' && provenance !== 'orphaned') {
+    return c.json({ error: `Unknown provenance "${provenance}" — custom or orphaned.` }, 400)
+  }
+  if (provenance !== undefined && requestedSet !== undefined) {
+    return c.json({ error: 'A set and a provenance select different things — pass one.' }, 400)
+  }
+
+  // Only the content steps vary by set; the model is shared, so passing --set to
+  // a schema or type step would read as if it were seeding a per-set model.
+  const perSet = opCfg.perSet === true
+  const setName = perSet ? requestedSet : undefined
+  const scopeFlag = perSet && provenance !== undefined ? `--${provenance}` : undefined
+
+  const args = [
+    ...opCfg.args,
+    ...(setName === undefined ? [] : ['--set', setName]),
+    ...(scopeFlag === undefined ? [] : [scopeFlag]),
+    // Neither `custom` nor `orphaned` can be put back from the repository, so
+    // the script reports what it would remove and stops unless told to proceed.
+    // The panel asks first, then repeats the call with apply=1.
+    ...(scopeFlag !== undefined && c.req.query('apply') === '1' ? ['--apply'] : []),
+  ]
+
   return streamText(c, async (stream) => {
-    await stream.writeln(`▶ ${opCfg.label} — "${env.label || env.name}"…\n`)
+    const scope =
+      provenance !== undefined ? ` · ${provenance}` : setName === undefined ? '' : ` · ${setName}`
+    await stream.writeln(`▶ ${opCfg.label}${scope} — "${env.label || env.name}"…\n`)
     try {
-      await runScript(stream, opCfg.script, opCfg.args, buildEnv(env, opCfg.republish), name)
-      await stream.writeln('\n✓ Done.')
+      await runScript(stream, opCfg.script, args, buildEnv(env, opCfg.republish, setName), name)
+      // A provenance wipe without --apply only reported. Saying "Done" there
+      // reads as the work having happened, which is how a dry run gets mistaken
+      // for a wipe that refused.
+      const reportedOnly = scopeFlag !== undefined && c.req.query('apply') !== '1'
+      await stream.writeln(reportedOnly ? '\n✓ Reported — nothing has changed.' : '\n✓ Done.')
     } catch (err) {
       const msg =
         err instanceof Error && err.message === 'Aborted'

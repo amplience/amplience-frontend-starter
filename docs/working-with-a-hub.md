@@ -32,19 +32,30 @@ _Under the hood this stores the details in an untracked `amplience.config.json` 
 > [!TIP] Checking permissions
 > If you hit permission errors — or just want to check before you start — use the **Check credentials** button.
 
-Use the **Set active** buttons to switch the local dev server between the fixtures (default) and any hub you've added.
+Use the **Set active** buttons to switch the local dev server between a fixture
+set (the default, offline) and any hub you've added. Exactly one thing is active
+at a time, and activating it writes both `.env` files — so the pages you see and
+the hub the `hub:*` commands target can't drift apart. See
+[Fixture sets](commands.md#fixture-sets) for what a set is.
 
 ## Seeding & syncing content
 
 Once a hub is added, push the content model and starter content to it (typically ~1 min 45 sec for a full set). You can do this from the Environment Manager GUI, or from the terminal:
 
 ```sh
-pnpm hub:import          # imports settings, schemas, content types, extensions, webhooks, then fixture content (~1m45s end to end)
+pnpm hub:import                 # settings, schemas, content types, extensions, webhooks, then fixture content (~1m45s end to end)
+pnpm hub:import --set anyafinn  # seed a second fixture set alongside the first
 
-pnpm hub:wipe            # removes seeded webhooks, frees delivery keys, then clears content, content-types, schemas (~45s end to end)
+pnpm hub:wipe                   # removes seeded webhooks, frees delivery keys, then clears content, content-types, schemas and every extension (~45s end to end)
+pnpm hub:wipe:content           # content items only, leaving the model in place
 
-pnpm hub:import:schemas  # only imports the schemas
+pnpm hub:import:schemas         # only imports the schemas
 ```
+
+Each layer can be seeded on its own, and each can be wiped on its own too —
+`hub:wipe:content`, `:types`, `:schemas`, `:extensions`, `:webhooks`. The wipes
+run in the reverse of the seed order and refuse while anything still depends on
+them, naming the step to run first.
 
 `pnpm hub:import` is also how you push local changes to a hub you've already seeded — it updates in place rather than duplicating. There is no separate `push` command.
 

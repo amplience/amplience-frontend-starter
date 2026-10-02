@@ -1,0 +1,22 @@
+{
+  "id": "ceb03b61-5101-5a5f-9d37-92cab1ccd5f3",
+  "label": "Footer menu — Company",
+  "body": {
+    "_meta": {
+      "name": "Footer menu — Company",
+      "schema": "https://quadratic.amplience.com/v2/content/menu",
+      "deliveryId": "ceb03b61-5101-5a5f-9d37-92cab1ccd5f3"
+    },
+    "display": "megaMenu",
+    "useMobileLayout": false,
+    "items": [
+      {
+        "id": "8b7e19d2-09d9-57e7-802f-1fe77ca49a94",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

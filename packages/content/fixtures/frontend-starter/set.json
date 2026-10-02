@@ -1,0 +1,9 @@
+{
+  "name": "frontend-starter",
+  "label": "Amplience Frontend Starter",
+  "description": "Introductory content that mirrors the repo docs. The set a partner clones as a starting point.",
+  "defaultBrand": "amplience",
+  "defaultLocale": "en-US",
+  "authoredLocales": ["en-US", "en-GB", "fr-FR", "de-DE", "es-ES", "it-IT"],
+  "generatedDocs": true
+}

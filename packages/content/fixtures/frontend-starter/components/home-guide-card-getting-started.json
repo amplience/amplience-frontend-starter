@@ -1,0 +1,121 @@
+{
+  "id": "ddcf584a-f33b-565b-b026-1f8ce59cd5bc",
+  "label": "Home — guide card: getting-started",
+  "body": {
+    "_meta": {
+      "name": "Home — guide card: getting-started",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "ddcf584a-f33b-565b-b026-1f8ce59cd5bc"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Getting started"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Getting started"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Primeros pasos"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Premiers pas"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Erste Schritte"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Per iniziare"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Clone the repo and render some fixture content."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Clone the repo and render some fixture content."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Clona el repositorio y renderiza algo de contenido de ejemplo."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Clonez le dépôt et affichez du contenu factice."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Klonen Sie das Repository und rendern Sie einige Beispieldaten."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Clona il repository e renderizza dei contenuti di esempio."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "/docs-covers/getting-started.png",
+        "alt": "A terminal beside the page it just rendered",
+        "width": 800,
+        "height": 450
+      }
+    },
+    "links": {
+      "href": "/docs/getting-started",
+      "cta": {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Read the guide"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Leer la guía"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lire le guide"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zum Leitfaden"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Leggi la guida"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs/getting-started",
+        "variant": "text",
+        "color": "black"
+      }
+    }
+  }
+}

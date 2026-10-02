@@ -1,0 +1,39 @@
+{
+  "id": "1a9e7657-d729-5938-ba0b-ee5d7fd2748b",
+  "label": "Troubleshooting — hero",
+  "body": {
+    "_meta": {
+      "name": "Troubleshooting — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "1a9e7657-d729-5938-ba0b-ee5d7fd2748b"
+    },
+    "title": "Troubleshooting",
+    "description": "Common gotchas and how to resolve them. This page grows as issues surface.",
+    "backgroundColor": "dark",
+    "textColor": "white",
+    "contentPositionMobile": "beneath",
+    "verticalPosition": "center",
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "← Documentation"
+            },
+            {
+              "locale": "en-GB",
+              "value": "← Documentation"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/docs",
+        "variant": "outlined",
+        "color": "white"
+      }
+    ]
+  }
+}

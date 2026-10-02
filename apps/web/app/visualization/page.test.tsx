@@ -11,6 +11,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { ContentClient } from '@amplience/frontend-starter-content'
+import { fixtureIdFor } from '@amplience/frontend-starter-content/fixture-id'
 
 let sdkConfigs: unknown[] = []
 let stubClient: ContentClient | undefined
@@ -42,9 +43,9 @@ const routeProps = (params: Record<string, string | string[]>) => ({
 
 const VSE = 'g8tgyy0etx3f1hv243pqc24ci.staging.bigcontent.io'
 /** The home hero fixture's id — a real, resolvable delivery ID. */
-const HERO_ID = 'a1b2c3d4-0001-4000-8000-000000000003'
+const HERO_ID = fixtureIdFor('frontend-starter', 'components/home-hero')
 /** The custom-CSS fixture's id — resolves to the Site — custom CSS item. */
-const CUSTOM_CSS_ID = 'a1b2c3d4-00c5-4000-8000-000000000001'
+const CUSTOM_CSS_ID = fixtureIdFor('frontend-starter', 'site-components/custom-css')
 
 const render = async (params: Record<string, string | string[]>) => {
   const route = await loadRoute()

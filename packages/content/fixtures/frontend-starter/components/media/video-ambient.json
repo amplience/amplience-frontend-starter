@@ -1,0 +1,19 @@
+{
+  "id": "e24fa03f-9571-5795-a72b-e58c69024616",
+  "label": "Media — ambient video loop (.mp4)",
+  "body": {
+    "_meta": {
+      "name": "Media — ambient video loop (.mp4)",
+      "schema": "https://quadratic.amplience.com/v2/content/media",
+      "deliveryId": "e24fa03f-9571-5795-a72b-e58c69024616"
+    },
+    "media": {
+      "mediaType": "ExternalVideo",
+      "url": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+      "title": "A flower opening",
+      "aspectRatio": "16:9",
+      "playback": "ambient"
+    },
+    "fullBleed": true
+  }
+}

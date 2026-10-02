@@ -1,0 +1,54 @@
+{
+  "id": "63c48c51-4d24-56aa-8ca4-e13aa0780893",
+  "label": "Home — main slot",
+  "body": {
+    "_meta": {
+      "name": "Home — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot"
+    },
+    "components": [
+      {
+        "id": "7d66e9cd-775b-5b29-9247-6ab29a59e624",
+        "contentType": "https://quadratic.amplience.com/v2/content/hero",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "039ee11f-25ee-560d-942d-4756c97698d7",
+        "contentType": "https://quadratic.amplience.com/v2/content/columns",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "217bb023-89b8-5cfe-b36e-432f19126431",
+        "contentType": "https://quadratic.amplience.com/v2/content/carousel",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "ddaa2b2b-45e2-5a13-a3da-1a9e59fe1699",
+        "contentType": "https://quadratic.amplience.com/v2/content/grid",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "acadcd92-aded-55ad-8964-65f21a032611",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "4cf77247-71d6-5137-9fbe-93c04e6d2d50",
+        "contentType": "https://quadratic.amplience.com/v2/content/columns",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

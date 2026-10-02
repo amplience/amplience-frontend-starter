@@ -1,0 +1,13 @@
+{
+  "id": "9e5a7243-2e36-573f-b719-ffe8f8becdbc",
+  "label": "Footer menu item — Terms & conditions",
+  "body": {
+    "_meta": {
+      "name": "Footer menu item — Terms & conditions",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "9e5a7243-2e36-573f-b719-ffe8f8becdbc"
+    },
+    "label": "Terms & conditions",
+    "link": "/shopping/terms"
+  }
+}

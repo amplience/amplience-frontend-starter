@@ -1,6 +1,5 @@
 {
-  "active": "fixtures",
-  "fixturesBrand": "",
+  "active": "frontend-starter",
   "environments": [
     {
       "name": "my-hub",
@@ -17,6 +16,7 @@
       "revalidateSecret": "",
       "defaultBrand": "",
       "defaultSite": "",
+      "defaultFixtureSet": "",
       "webApps": [],
       "republish": false
     }

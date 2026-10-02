@@ -1,0 +1,26 @@
+{
+  "id": "924be8f1-6690-55d8-8b18-f0ec431fc20e",
+  "label": "Editor setup — main slot",
+  "body": {
+    "_meta": {
+      "name": "Editor setup — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot"
+    },
+    "components": [
+      {
+        "id": "a77ea82d-8263-50ab-b227-f0ea0151d8f1",
+        "contentType": "https://quadratic.amplience.com/v2/content/hero",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "9e551b4b-1cd5-55e9-aea2-305e9e09d437",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

@@ -113,7 +113,7 @@ export default async function BlogArchivePage({ params }: RouteProps) {
           title="Blog"
           description="Articles, guides, and updates from the Amplience team."
           backgroundColor="black"
-          contentPadding={30}
+          contentPaddingVertical={30}
         />
       </header>
       {articles.length === 0 ? (

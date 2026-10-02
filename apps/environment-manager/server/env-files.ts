@@ -5,6 +5,8 @@
  * unit-testable without touching the filesystem.
  */
 
+import type { SiteIdentity } from './active-source.ts'
+
 /** A set of env keys to write; `undefined` means "no value" (the key is commented out). */
 export type EnvVarMap = Record<string, string | undefined>
 
@@ -23,9 +25,22 @@ export type EnvSource = {
   clientId: string
   clientSecret: string
   stagingHost: string
-  defaultBrand: string
-  defaultSite: string
 }
+
+/**
+ * The two vars that must never be written apart.
+ *
+ * `SITE_NAME` is the delivery-key namespace and `FIXTURE_SET` is the content
+ * that goes into it. Set one without the other and a stale value silently
+ * re-targets a seed — the import writes `frontend-starter/…` while the app reads
+ * `anyafinn/…`, and every page 404s with nothing in either file looking wrong.
+ * Both files take them from the same `SiteIdentity`, through this one helper, so
+ * there is no route by which they can disagree.
+ */
+const siteVars = (site: SiteIdentity | undefined): EnvVarMap => ({
+  SITE_NAME: present(site?.siteName),
+  FIXTURE_SET: present(site?.fixtureSet),
+})
 
 /** Blank (or whitespace-only) is no value — we never want KEY="" in an env file. */
 function present(raw: string | undefined): string | undefined {
@@ -75,18 +90,26 @@ export function updateEnvVars(content: string, vars: EnvVarMap): string {
 /**
  * Vars for apps/web/.env — only what the web app itself reads.
  *
- * `env` is null when Local Fixtures is the active source: there is no hub, so
- * every connection var is cleared. NEXT_PUBLIC_BRAND is the exception — brand
- * is a presentation choice rather than a connection detail, so fixtures carry
- * their own, and a blank one leaves the app on its `default` theme.
+ * `env` is null when a fixture set is the active source: there is no hub, so
+ * every connection var is cleared and `CONTENT_CLIENT` pins the app to the mock.
+ * The site identity survives either way — brand, namespace and set are
+ * presentation and addressing rather than connection details, and the app needs
+ * them whichever side the content is coming from.
+ *
+ * `SITE_TITLE` is written but never cleared. Only a fixture set brings a title
+ * of its own; on a hub the deployment's own value is the better answer, and
+ * blanking it would replace a working title with nothing.
  */
-export function webEnvVars(env: EnvSource | null, fixturesBrand: string): EnvVarMap {
+export function webEnvVars(env: EnvSource | null, site: SiteIdentity | undefined): EnvVarMap {
   return {
     AMPLIENCE_HUB_NAME: env === null ? undefined : present(env.hubName),
     AMPLIENCE_STAGING_HOST: env === null ? undefined : present(env.stagingHost),
-    NEXT_PUBLIC_BRAND: env === null ? present(fixturesBrand) : present(env.defaultBrand),
-    // Blank default site means "use the runtime default" (the hub name, ADR-0014).
-    SITE_NAME: env === null ? undefined : present(env.defaultSite),
+    // Pin the mock offline; clear it on a hub, or the app would quietly keep
+    // serving fixtures while every other var says it is talking to Amplience.
+    CONTENT_CLIENT: env === null ? 'mock' : undefined,
+    NEXT_PUBLIC_BRAND: present(site?.brand),
+    ...siteVars(site),
+    ...(present(site?.title) !== undefined && { SITE_TITLE: present(site?.title) }),
     // The local dev server accepts revalidate calls with the same secret the
     // seeded webhooks carry, so a webhook can be pointed at a tunnel while
     // debugging without a second value to keep in step.
@@ -95,7 +118,10 @@ export function webEnvVars(env: EnvSource | null, fixturesBrand: string): EnvVar
 }
 
 /** Vars for packages/hub-management/.env — the full set the hub:* scripts consume. */
-export function hubManagementEnvVars(env: EnvSource | null): EnvVarMap {
+export function hubManagementEnvVars(
+  env: EnvSource | null,
+  site: SiteIdentity | undefined,
+): EnvVarMap {
   return {
     AMPLIENCE_HUB_NAME: env === null ? undefined : present(env.hubName),
     AMPLIENCE_HUB_ID: env === null ? undefined : present(env.hubId),
@@ -106,7 +132,7 @@ export function hubManagementEnvVars(env: EnvSource | null): EnvVarMap {
     AMPLIENCE_CLIENT_ID: env === null ? undefined : present(env.clientId),
     AMPLIENCE_CLIENT_SECRET: env === null ? undefined : present(env.clientSecret),
     AMPLIENCE_STAGING_HOST: env === null ? undefined : present(env.stagingHost),
-    SITE_NAME: env === null ? undefined : present(env.defaultSite),
+    ...siteVars(site),
     AMPLIENCE_REVALIDATE_SECRET: env === null ? undefined : present(env.revalidateSecret),
   }
 }
