@@ -617,24 +617,32 @@ const importContent = async () => {
 
   const localeTally = { kept: new Set(), dropped: new Set() }
 
-  for (const { dir, repo } of phases) {
+  // Stage and check every phase before importing any of them. Both checks
+  // (namespacing, locale filtering) exit non-zero, and an exit after the
+  // components phase had imported would leave a half-seeded hub — so they all
+  // run while the hub is still untouched.
+  const staged = phases.map(({ dir, repo }) => {
     // Staged per set, so seeding a second set doesn't clobber the first's
     // staging directory mid-run.
-    const staged = path.join(stagingRoot, setName, `items-${dir}`)
-    rmSync(staged, { recursive: true, force: true })
-    mkdirSync(staged, { recursive: true })
-    cpSync(path.join(fixturesDir, dir), staged, { recursive: true })
-    namespaceStagedDeliveryKeys(staged, `${setName}/`, siteName)
+    const stagedDir = path.join(stagingRoot, setName, `items-${dir}`)
+    rmSync(stagedDir, { recursive: true, force: true })
+    mkdirSync(stagedDir, { recursive: true })
+    cpSync(path.join(fixturesDir, dir), stagedDir, { recursive: true })
+    namespaceStagedDeliveryKeys(stagedDir, `${setName}/`, siteName)
     if (hubLocales !== undefined) {
-      const { kept, dropped } = filterStagedLocales(staged, hubLocales)
+      const { kept, dropped } = filterStagedLocales(stagedDir, hubLocales)
       for (const l of kept) localeTally.kept.add(l)
       for (const l of dropped) localeTally.dropped.add(l)
     }
-    markStagedItemsPublishable(staged)
+    markStagedItemsPublishable(stagedDir)
+    return { stagedDir, repo }
+  })
+
+  for (const { stagedDir, repo } of staged) {
     await dcCli(
       'content-item',
       'import',
-      staged,
+      stagedDir,
       '--baseRepo',
       repo,
       '--mapFile',

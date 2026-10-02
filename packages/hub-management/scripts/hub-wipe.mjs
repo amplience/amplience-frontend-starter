@@ -258,8 +258,10 @@ const reportUnpublishing = () => {
     console.warn(
       `\n  ⚠ Unpublishing stopped after: ${messageOf(unpublishing.blockedBy)}\n` +
         `    ${unpublishing.skipped} item(s) were archived while still published, so Delivery\n` +
-        '    will go on serving them. Check the hub allows unpublish and the API client has\n' +
-        '    the permission, then re-run.',
+        '    will go on serving them — and the next seed adds a new copy alongside, so\n' +
+        '    schema-wide reads (blog listings) return both. Either the API client lacks\n' +
+        "    the permission or the hub doesn't have unpublish enabled (ask Amplience\n" +
+        '    support); fix that, then re-run.',
     )
   }
   for (const line of unpublishing.failed) console.warn(`  ⚠ Could not unpublish ${line}`)
@@ -343,6 +345,7 @@ const reclaimArchivedItems = async (client, repoId, repoLabel) => {
   let freed = 0
   let unpublished = 0
   const stranded = []
+  const leftActive = []
   for (const item of archived) {
     // Belt and braces: trust the item's own status over the list filter.
     if (item.status !== 'ARCHIVED') continue
@@ -350,7 +353,16 @@ const reclaimArchivedItems = async (client, repoId, repoLabel) => {
     const mightBeLive = unpublishing.enabled && mayBePublished(item)
     if (!needsKeyStrip && !mightBeLive) continue
 
-    let current = await item.related.unarchive()
+    // Inside its own guard: an item that won't unarchive is skipped, not fatal —
+    // the same per-item stance as everything below. Nothing to put back, since
+    // it never left the archive.
+    let current
+    try {
+      current = await item.related.unarchive()
+    } catch (error) {
+      stranded.push(`${item.label ?? item.id}: could not unarchive — ${messageOf(error)}`)
+      continue
+    }
 
     try {
       if (needsKeyStrip) {
@@ -376,27 +388,35 @@ const reclaimArchivedItems = async (client, repoId, repoLabel) => {
     } finally {
       // Always put it back: an item left unarchived is a worse outcome than
       // one that kept its delivery key.
+      // It was unarchived above, so a failure here really does leave it active —
+      // which needs saying, not swallowing.
       try {
         await current.related.archive()
-      } catch {
-        /* already archived, or archiving is what failed — nothing left to do */
+      } catch (error) {
+        leftActive.push(`${item.label ?? item.id}: ${messageOf(error)}`)
       }
     }
   }
   console.log(
     `✓ Reclaimed archived items in ${repoLabel} repo — ` +
       `unpublished ${unpublished}, freed delivery keys on ${freed}` +
-      (stranded.length > 0 ? `, ${stranded.length} left alone` : ''),
+      (stranded.length > 0 ? `, ${stranded.length} left alone` : '') +
+      (leftActive.length > 0 ? `, ${leftActive.length} left ACTIVE` : ''),
   )
   for (const line of stranded) console.warn(`  ⚠ ${line}`)
-  return stranded.length
+  for (const line of leftActive) {
+    console.warn(`  ⚠ Left ACTIVE — couldn't re-archive ${line}. Archive it in DC, or re-run.`)
+  }
+  return stranded.length + leftActive.length
 }
 
-/** Run both management-SDK passes over one repository. */
+/**
+ * Run both management-SDK passes over one repository. The unpublish tally runs
+ * across every repository, so the caller reports it once, after the last.
+ */
 const reclaimRepo = async (client, repoId, repoLabel) => {
   await unpublishActiveItems(client, repoId, repoLabel)
   await reclaimArchivedItems(client, repoId, repoLabel)
-  reportUnpublishing()
 }
 
 // ── Main ─────────────────────────────────────────────────────────────────────
@@ -596,17 +616,21 @@ const listEveryItem = async (client, repos) => {
  * can't be seeded again (409).
  */
 const retireItem = async (item) => {
-  let current = item
-  if (current.status === 'ARCHIVED') current = await current.related.unarchive()
-
-  if (mayBePublished(current)) await unpublishItem(current)
-
-  if (hasDeliveryKeys(current.body)) {
-    current.body._meta.deliveryKey = null
-    current.body._meta.deliveryKeys = null
-    current = await stripKeys(current)
+  let current = item.status === 'ARCHIVED' ? await item.related.unarchive() : item
+  try {
+    if (mayBePublished(current)) await unpublishItem(current)
+    if (hasDeliveryKeys(current.body)) {
+      current.body._meta.deliveryKey = null
+      current.body._meta.deliveryKeys = null
+      current = await stripKeys(current)
+    }
+  } finally {
+    // Archive whatever happened above: an item unarchived here and then left
+    // active is worse than one that kept its delivery key. A failed strip still
+    // throws once this has run, so the caller counts the item as failed and
+    // keeps its map entry — the same outcome the blanket wipe's --ignoreError gives.
+    await current.related.archive()
   }
-  await current.related.archive()
 }
 
 const readMap = (file) => {
@@ -712,31 +736,32 @@ const runScopedWipe = async (selector) => {
   console.log(`\nWiping ${selected.length} item(s) from ${describe}…`)
   const byId = new Map(found.map(({ item }) => [item.id, item]))
   const failed = []
-  let done = 0
+  const retired = new Set()
   for (const { id, label } of selected) {
     const live = byId.get(id)
     if (live === undefined) continue
     try {
       await retireItem(live)
-      done += 1
+      retired.add(id)
     } catch (error) {
       failed.push(`${label ?? id}: ${messageOf(error)}`)
     }
   }
 
-  // Prune what we removed from the map. Left behind, a reseed would try to
-  // update items that are no longer there.
-  const removed = new Set(selected.map((i) => i.id))
-  const kept = (map.contentItems ?? []).filter(([, hubId]) => !removed.has(hubId))
+  // Prune only what was actually retired. Left behind, those entries would have
+  // a reseed try to update items that are gone. A failed item is the opposite:
+  // it still holds its delivery keys, and its map entry is what lets the next
+  // seed update it in place rather than create a duplicate that 409s.
+  const kept = (map.contentItems ?? []).filter(([, hubId]) => !retired.has(hubId))
   writeFileSync(mapFile, JSON.stringify({ ...map, contentItems: kept }))
 
-  console.log(`✓ Wiped ${done} item(s); map entries pruned`)
+  console.log(`✓ Wiped ${retired.size} item(s); their map entries pruned`)
   reportUnpublishing()
   for (const line of failed) console.warn(`  ⚠ ${line}`)
   if (failed.length > 0) {
     console.warn(
-      `\n  ${failed.length} item(s) kept their delivery keys — a later reseed of that set\n` +
-        '  may fail with CONTENT_ITEM_DELIVERY_KEYS_DUPLICATE.',
+      `\n  ${failed.length} item(s) kept their delivery keys and their map entries, so\n` +
+        '  re-running this wipe retries them, and a reseed updates them in place.',
     )
   }
   console.log('\n✓ Scoped wipe complete.')
@@ -768,16 +793,7 @@ const wipeContent = async () => {
     if (siteComponentsRepo !== undefined) {
       await reclaimRepo(client, siteComponentsRepo, 'site-components')
     }
-    if (!unpublishing.enabled) {
-      console.warn(
-        `\n⚠ Unpublishing stopped after: ${unpublishing.blockedBy}\n` +
-          '  Either the credentials lack the permission or the hub does not have\n' +
-          '  unpublish enabled (ask Amplience support). Archiving alone does NOT\n' +
-          '  remove content from Delivery, so the seeded generation this wipe is\n' +
-          '  tearing down will stay live on the CDN and the next seed will add\n' +
-          '  another alongside it — schema-wide reads will return both.',
-      )
-    }
+    reportUnpublishing()
   } else {
     console.warn(
       '\n⚠ AMPLIENCE_CLIENT_ID/SECRET not set — cannot retract published content ' +
