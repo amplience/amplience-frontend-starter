@@ -230,12 +230,24 @@ Full reference: [Commands](../commands.md).
 A failed step exits non-zero with dc-cli's own output — fix and re-run that step;
 the mapping file makes repeats safe.
 
-> **Known platform issue (raised with Amplience, 1 Oct 2026).** After content is
-> unpublished, archived and its delivery key removed, CD2 can go on serving it
-> **by delivery key** while correctly returning `CONTENT_NOT_FOUND` **by delivery
-> id** — on fresh origin reads, not cached ones. So a wiped hub may keep serving
-> its old content by key until something republishes over it. Re-seeding clears
-> it, since publishing new content under the same key overwrites the index.
+> **⚠️ Orphaned delivery keys.** Removing a delivery key from a **published**
+> item orphans it: the key goes on serving that item's last published snapshot
+> indefinitely, even once the item is unpublished and archived. Retraction
+> matches on the key the item still holds, so the order has to be unpublish →
+> remove or change the key → publish.
+>
+> Unpublishing on its own is unaffected — a page taken down with its key intact
+> stops serving immediately, which is the behaviour routing by delivery key
+> depends on. It is specifically editing or clearing the key of a **published**
+> item that strands it.
+>
+> The wipe does this correctly, but a hub wiped by a version before 2 Oct 2026
+> may carry orphaned keys — a lookup by delivery key serves content that the
+> same lookup by delivery id reports as gone.
+>
+> To reclaim one: add the orphaned key to another content item, publish that
+> item, then unpublish it. Re-seeding clears it too, since publishing new
+> content under the same key overwrites the entry.
 
 ### Why the order matters
 

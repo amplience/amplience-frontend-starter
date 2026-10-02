@@ -230,32 +230,32 @@ Deliberately deferred, so you don't go looking for them:
 
 ## GUI ↔ terminal equivalence
 
-| Environment Manager                               | Terminal                                        |
-| ------------------------------------------------- | ----------------------------------------------- |
-| **Set active** on a fixture set                   | — (default with no hub configured)              |
-| **+ Add hub** → **Fetch hub details**             | — (GUI only; writes `amplience.config.json`)    |
-| **Check credentials**                             | — (GUI only)                                    |
-| Settings row → **Seed** / **Sync**                | `pnpm hub:import:settings`                      |
-| Content type schemas row → **Seed** / **Sync**    | `pnpm hub:import:schemas`                       |
-| Content types row → **Seed** / **Sync**           | `pnpm hub:import:types`                         |
-| Extensions row → **Seed** / **Sync**              | `pnpm hub:import:extensions`                    |
-| Webhooks row → **Seed** / **Sync**                | `pnpm hub:import:webhooks`                      |
-| Webhooks row → **Wipe**                           | `pnpm hub:wipe:webhooks`                        |
-| Schemas row → **Wipe**                            | `pnpm hub:wipe:schemas`                         |
-| Content types row → **Wipe**                      | `pnpm hub:wipe:types`                           |
-| Extensions row → **Wipe**                         | `pnpm hub:wipe:extensions`                      |
-| Content items row → **Seed**                      | `AMPLIENCE_REPUBLISH=1 pnpm hub:import:content` |
-| Content items row → **Sync**                      | `pnpm hub:import:content`                       |
-| Content items row → **Wipe**                      | `pnpm hub:wipe:content`                         |
-| A set's child row → **Sync**                      | `pnpm hub:import:content --set <name>`          |
-| **+ Seed a fixture set** → **Seed**               | `pnpm hub:import:content --set <name>`          |
-| A set's child row → **Wipe**                      | `pnpm hub:wipe content --set <name>`            |
-| _Orphaned_ child row → **Wipe**                   | `pnpm hub:wipe content --orphaned [--apply]`    |
-| _Custom_ child row → **Wipe**                     | `pnpm hub:wipe content --custom [--apply]`      |
-| All resources → **Seed all**                      | `AMPLIENCE_REPUBLISH=1 pnpm hub:import`         |
-| All resources → **Sync all**                      | `pnpm hub:import`                               |
-| All resources → **Wipe all**                      | `pnpm hub:wipe`                                 |
-| Site row → **Deploy** / **Redeploy** / **Remove** | — (GUI only)                                    |
+| Environment Manager                               | Terminal                                             |
+| ------------------------------------------------- | ---------------------------------------------------- |
+| **Set active** on a fixture set                   | — (default with no hub configured)                   |
+| **+ Add hub** → **Fetch hub details**             | — (GUI only; writes `amplience.config.json`)         |
+| **Check credentials**                             | — (GUI only)                                         |
+| Settings row → **Seed** / **Sync**                | `pnpm hub:import:settings`                           |
+| Content type schemas row → **Seed** / **Sync**    | `pnpm hub:import:schemas`                            |
+| Content types row → **Seed** / **Sync**           | `pnpm hub:import:types`                              |
+| Extensions row → **Seed** / **Sync**              | `pnpm hub:import:extensions`                         |
+| Webhooks row → **Seed** / **Sync**                | `pnpm hub:import:webhooks`                           |
+| Webhooks row → **Wipe**                           | `pnpm hub:wipe:webhooks`                             |
+| Schemas row → **Wipe**                            | `pnpm hub:wipe:schemas`                              |
+| Content types row → **Wipe**                      | `pnpm hub:wipe:types`                                |
+| Extensions row → **Wipe**                         | `pnpm hub:wipe:extensions`                           |
+| Content items row → **Seed**                      | `AMPLIENCE_REPUBLISH=1 pnpm hub:import:content`      |
+| Content items row → **Sync**                      | `pnpm hub:import:content`                            |
+| Content items row → **Wipe**                      | `pnpm hub:wipe:content`                              |
+| A set's child row → **Sync**                      | `pnpm hub:import:content --set <name>`               |
+| **+ Seed a fixture set** → **Seed**               | `pnpm hub:import:content --set <name>`               |
+| A set's child row → **Wipe**                      | `pnpm hub:wipe content --set <name>`                 |
+| _Orphaned_ child row → **Wipe**                   | `pnpm hub:wipe content --orphaned [--apply]`         |
+| _Custom_ child row → **Wipe**                     | `pnpm hub:wipe content --custom [--apply]`           |
+| All resources → **Seed all** (+ set picker)       | `AMPLIENCE_REPUBLISH=1 pnpm hub:import --set <name>` |
+| All resources → **Sync all**                      | `pnpm hub:import`                                    |
+| All resources → **Wipe all**                      | `pnpm hub:wipe`                                      |
+| Site row → **Deploy** / **Redeploy** / **Remove** | — (GUI only)                                         |
 
 Seed and Sync differ only for content items, where Seed force-republishes
 everything and Sync publishes new and changed items only. For settings, schemas,

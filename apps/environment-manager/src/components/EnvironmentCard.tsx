@@ -820,10 +820,32 @@ export function EnvironmentCard({
   }
 
   const allEmpty = stats !== null && stats.schemas === 0 && stats.types === 0 && stats.items === 0
+  /**
+   * Nothing on the hub at all — a brand-new one, or a just-wiped one.
+   *
+   * Stricter than `allEmpty`, which ignores workflow states, extensions and
+   * webhooks: a table of six zeroes is worth replacing with one sentence, but
+   * only when every one of them really is zero. Locales are excluded because
+   * Amplience Support configures them, so a fresh hub has them already and they
+   * aren't something seeding provides.
+   */
+  const isEmptyHub =
+    stats !== null &&
+    statsError === null &&
+    stats.workflowStates === 0 &&
+    stats.schemas === 0 &&
+    stats.types === 0 &&
+    stats.extensions === 0 &&
+    stats.webhooks === 0 &&
+    stats.items === 0
   const gate = gateReason(breakdown)
   const toSeed = seedableSets(breakdown, fixtureSets)
-  // The select starts blank, so an untouched row still seeds the first offer.
+  // Both pickers start blank, so an untouched one still seeds its first option.
+  // They share the state deliberately: picking a set is one decision, wherever
+  // it's made. The offer row narrows to sets the hub lacks; "Seed all" offers
+  // every set, since an empty hub could take any of them.
   const nextSet = setToSeed !== '' ? setToSeed : (toSeed[0]?.name ?? '')
+  const allRowSet = setToSeed !== '' ? setToSeed : (fixtureSets[0]?.name ?? '')
 
   // The site currently being edited (if any), and whether saving it will force
   // a redeploy — i.e. a provisioned site whose brand or site name changed
@@ -894,215 +916,284 @@ export function EnvironmentCard({
       {/* Collapsible body */}
       {!collapsed && (
         <div className="env-card__body">
-          {/* Resource stats table */}
-          <table className="env-card__stats">
-            <thead>
-              <tr>
-                <th className="col-resource">Resource</th>
-                <th className="col-count">Count</th>
-                <th className="col-actions">
-                  <button
-                    className="btn--icon-only"
-                    onClick={refreshStats}
-                    disabled={isRunning || stats === null}
-                    aria-label="Refresh stats"
-                    title="Refresh counts"
-                  >
-                    ↻
-                  </button>
-                  <button
-                    className="btn--icon-only"
-                    onClick={onEdit}
+          {/* A hub with nothing on it. Six zeroes and a column of greyed-out
+              buttons describe that accurately but unhelpfully; there is exactly
+              one thing to do here, so the card says so and offers it. Only the
+              table and its footer are replaced — the log, the sites and
+              everything below stay, since they still apply. */}
+          {isEmptyHub && (
+            <div className="env-card__empty">
+              <p className="env-card__empty-title">This hub is empty.</p>
+              <p className="env-card__empty-detail">
+                {stats.locales.length > 0 ? (
+                  <>
+                    <strong>
+                      {stats.locales.length} locale{stats.locales.length === 1 ? '' : 's'}
+                    </strong>
+                    : {stats.locales.join(', ')}
+                  </>
+                ) : (
+                  <>No locales</>
+                )}
+              </p>
+              <p className="env-card__empty-detail">
+                No schemas, content types, extensions, webhooks or content items yet.
+              </p>
+
+              <div className="env-card__empty-actions">
+                {fixtureSets.length > 1 && (
+                  <select
+                    className="site-card__select"
+                    aria-label="Fixture set to seed"
+                    value={allRowSet}
+                    onChange={(e) => setSetToSeed(e.target.value)}
                     disabled={isRunning}
-                    aria-label="Environment settings"
-                    title="Settings"
                   >
-                    ⚙
-                  </button>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <ResourceRow
-                label="Settings"
-                count={statsError !== null ? -1 : (stats?.workflowStates ?? null)}
-                seedKey="seed-settings"
-                syncKey="sync-settings"
-                isRunning={isRunning}
-                activeOpKey={op?.key ?? null}
-                onRun={(key) => {
-                  void runOp(key)
-                }}
-              />
-              <ResourceRow
-                label="Content type schemas"
-                count={statsError !== null ? -1 : (stats?.schemas ?? null)}
-                seedKey="seed-schemas"
-                syncKey="sync-schemas"
-                wipeKey="wipe-schemas"
-                isRunning={isRunning}
-                activeOpKey={op?.key ?? null}
-                onRun={(key) => {
-                  void runOp(key)
-                }}
-              />
-              <ResourceRow
-                label="Content types"
-                count={statsError !== null ? -1 : (stats?.types ?? null)}
-                seedKey="seed-types"
-                syncKey="sync-types"
-                wipeKey="wipe-types"
-                isRunning={isRunning}
-                activeOpKey={op?.key ?? null}
-                onRun={(key) => {
-                  void runOp(key)
-                }}
-              />
-              <ResourceRow
-                label="Extensions"
-                count={statsError !== null ? -1 : (stats?.extensions ?? null)}
-                seedKey="seed-extensions"
-                syncKey="sync-extensions"
-                wipeKey="wipe-extensions"
-                isRunning={isRunning}
-                activeOpKey={op?.key ?? null}
-                onRun={(key) => {
-                  void runOp(key)
-                }}
-              />
-              <ResourceRow
-                label="Webhooks"
-                count={statsError !== null ? -1 : (stats?.webhooks ?? null)}
-                seedKey="seed-webhooks"
-                syncKey="sync-webhooks"
-                wipeKey="wipe-webhooks"
-                isRunning={isRunning}
-                activeOpKey={op?.key ?? null}
-                onRun={(key) => {
-                  void runOp(key)
-                }}
-              />
-              {/* Wipe only. Seeding and syncing are inherently per-set — the
+                    {fixtureSets.map((s) => (
+                      <option key={s.name} value={s.name}>
+                        {s.label}
+                      </option>
+                    ))}
+                  </select>
+                )}
+                <button
+                  className={`btn btn--sm btn--primary${isRunning && op?.key === 'seed-all' ? ' btn--op-running' : ''}`}
+                  onClick={() => {
+                    void runOp('seed-all', allRowSet === '' ? {} : { set: allRowSet })
+                  }}
+                  disabled={isRunning}
+                >
+                  {isRunning && op?.key === 'seed-all' ? (
+                    <span className="spinner" aria-hidden="true" />
+                  ) : null}
+                  Seed
+                </button>
+                <button
+                  className="btn btn--sm btn--ghost"
+                  onClick={refreshStats}
+                  disabled={isRunning}
+                >
+                  Refresh
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Resource stats table */}
+          {!isEmptyHub && (
+            <table className="env-card__stats">
+              <thead>
+                <tr>
+                  <th className="col-resource">Resource</th>
+                  <th className="col-count">Count</th>
+                  <th className="col-actions">
+                    <button
+                      className="btn--icon-only"
+                      onClick={refreshStats}
+                      disabled={isRunning || stats === null}
+                      aria-label="Refresh stats"
+                      title="Refresh counts"
+                    >
+                      ↻
+                    </button>
+                    <button
+                      className="btn--icon-only"
+                      onClick={onEdit}
+                      disabled={isRunning}
+                      aria-label="Environment settings"
+                      title="Settings"
+                    >
+                      ⚙
+                    </button>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <ResourceRow
+                  label="Settings"
+                  count={statsError !== null ? -1 : (stats?.workflowStates ?? null)}
+                  seedKey="seed-settings"
+                  syncKey="sync-settings"
+                  isRunning={isRunning}
+                  activeOpKey={op?.key ?? null}
+                  onRun={(key) => {
+                    void runOp(key)
+                  }}
+                />
+                <ResourceRow
+                  label="Content type schemas"
+                  count={statsError !== null ? -1 : (stats?.schemas ?? null)}
+                  seedKey="seed-schemas"
+                  syncKey="sync-schemas"
+                  wipeKey="wipe-schemas"
+                  isRunning={isRunning}
+                  activeOpKey={op?.key ?? null}
+                  onRun={(key) => {
+                    void runOp(key)
+                  }}
+                />
+                <ResourceRow
+                  label="Content types"
+                  count={statsError !== null ? -1 : (stats?.types ?? null)}
+                  seedKey="seed-types"
+                  syncKey="sync-types"
+                  wipeKey="wipe-types"
+                  isRunning={isRunning}
+                  activeOpKey={op?.key ?? null}
+                  onRun={(key) => {
+                    void runOp(key)
+                  }}
+                />
+                <ResourceRow
+                  label="Extensions"
+                  count={statsError !== null ? -1 : (stats?.extensions ?? null)}
+                  seedKey="seed-extensions"
+                  syncKey="sync-extensions"
+                  wipeKey="wipe-extensions"
+                  isRunning={isRunning}
+                  activeOpKey={op?.key ?? null}
+                  onRun={(key) => {
+                    void runOp(key)
+                  }}
+                />
+                <ResourceRow
+                  label="Webhooks"
+                  count={statsError !== null ? -1 : (stats?.webhooks ?? null)}
+                  seedKey="seed-webhooks"
+                  syncKey="sync-webhooks"
+                  wipeKey="wipe-webhooks"
+                  isRunning={isRunning}
+                  activeOpKey={op?.key ?? null}
+                  onRun={(key) => {
+                    void runOp(key)
+                  }}
+                />
+                {/* Wipe only. Seeding and syncing are inherently per-set — the
                   script takes one `--set` — so a Seed here would quietly pick
                   one and look like it had done the lot. Both live on the child
                   rows and the offer row below, where the set is named. */}
-              <ResourceRow
-                label="Content items"
-                count={statsError !== null ? -1 : (stats?.items ?? null)}
-                wipeKey="wipe-items"
-                isRunning={isRunning}
-                activeOpKey={op?.key ?? null}
-                isThisRow={op?.scopeKey === ''}
-                onRun={(key) => {
-                  void runOp(key)
-                }}
-              />
-              {/* Where each of those items came from. The parent row's Seed,
-                  Sync and Wipe act on everything and need no provenance; these
-                  do, so they are absent when the import map can't supply it. */}
-              {contentRows(breakdown, fixtureSets, stats?.locales ?? []).map((row) => (
-                <ContentChildRow
-                  key={row.key}
-                  row={row}
+                <ResourceRow
+                  label="Content items"
+                  count={statsError !== null ? -1 : (stats?.items ?? null)}
+                  wipeKey="wipe-items"
                   isRunning={isRunning}
-                  activeScopeKey={op?.scopeKey ?? null}
-                  onRun={(scope) => {
-                    void runOp(scope.provenance !== undefined ? 'wipe-items' : scope.op, scope)
+                  activeOpKey={op?.key ?? null}
+                  isThisRow={op?.scopeKey === ''}
+                  onRun={(key) => {
+                    void runOp(key)
                   }}
                 />
-              ))}
-              {/* The sets the repository has that this hub doesn't. One offer
+                {/* Where each of those items came from. The parent row's Seed,
+                  Sync and Wipe act on everything and need no provenance; these
+                  do, so they are absent when the import map can't supply it. */}
+                {contentRows(breakdown, fixtureSets, stats?.locales ?? []).map((row) => (
+                  <ContentChildRow
+                    key={row.key}
+                    row={row}
+                    isRunning={isRunning}
+                    activeScopeKey={op?.scopeKey ?? null}
+                    onRun={(scope) => {
+                      void runOp(scope.provenance !== undefined ? 'wipe-items' : scope.op, scope)
+                    }}
+                  />
+                ))}
+                {/* The sets the repository has that this hub doesn't. One offer
                   rather than a row each, so the table stays a description of
                   the hub as more sets are added. */}
-              {toSeed.length > 0 && (
-                <tr className="content-row content-row--seed">
-                  <td
-                    className="col-resource col-resource--child"
-                    colSpan={3}
-                    style={{ textAlign: 'right' }}
-                  >
-                    {showSeedPicker ? (
-                      <div className="btn-group">
-                        <select
-                          className="site-card__select"
-                          aria-label="Fixture set to seed"
-                          value={nextSet}
-                          onChange={(e) => setSetToSeed(e.target.value)}
-                          disabled={isRunning}
-                        >
-                          {toSeed.map((s) => (
-                            <option key={s.name} value={s.name}>
-                              {s.label}
-                            </option>
-                          ))}
-                        </select>
+                {toSeed.length > 0 && (
+                  <tr className="content-row content-row--seed">
+                    <td
+                      className="col-resource col-resource--child"
+                      colSpan={3}
+                      style={{ textAlign: 'right' }}
+                    >
+                      {showSeedPicker ? (
+                        <div className="btn-group">
+                          <select
+                            className="site-card__select"
+                            aria-label="Fixture set to seed"
+                            value={nextSet}
+                            onChange={(e) => setSetToSeed(e.target.value)}
+                            disabled={isRunning}
+                          >
+                            {toSeed.map((s) => (
+                              <option key={s.name} value={s.name}>
+                                {s.label}
+                              </option>
+                            ))}
+                          </select>
 
+                          <button
+                            className="btn btn--sm btn--primary"
+                            onClick={() => {
+                              void runOp('seed-items', { set: nextSet })
+                            }}
+                            disabled={isRunning}
+                          >
+                            {isRunning && op?.scopeKey === nextSet ? (
+                              <span className="spinner" aria-hidden="true" />
+                            ) : null}
+                            Seed
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn--sm btn--ghost"
+                            aria-expanded={showSeedPicker}
+                            onClick={() => setShowSeedPicker((v) => !v)}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
                         <button
-                          className="btn btn--sm btn--primary"
-                          onClick={() => {
-                            void runOp('seed-items', { set: nextSet })
-                          }}
-                          disabled={isRunning}
-                        >
-                          {isRunning && op?.scopeKey === nextSet ? (
-                            <span className="spinner" aria-hidden="true" />
-                          ) : null}
-                          Seed
-                        </button>
-                        <button
-                          type="button"
                           className="btn btn--sm btn--ghost"
                           aria-expanded={showSeedPicker}
                           onClick={() => setShowSeedPicker((v) => !v)}
                         >
-                          Cancel
+                          + Seed from fixture
                         </button>
-                      </div>
+                      )}
+                    </td>
+                  </tr>
+                )}
+                {/* Only worth saying when there is content it could have scoped.
+                  On an empty hub there is nothing to sync or wipe, so explaining
+                  the absence of per-set controls is noise on the one screen that
+                  should read as "ready to seed". */}
+                {gate !== null && (stats?.items ?? 0) > 0 && (
+                  <tr className="content-row content-row--gated">
+                    <td className="col-resource" colSpan={3}>
+                      <span className="dim">
+                        Per-set sync and wipe are unavailable: {gate} Wiping everything and seeding
+                        again builds a map and brings them back.
+                      </span>
+                    </td>
+                  </tr>
+                )}
+                <tr>
+                  <td className="col-resource" title="Configured by Amplience Support, per hub">
+                    Locales
+                  </td>
+                  <td className="col-count">
+                    {stats === null && statsError === null ? (
+                      <span className="spinner spinner--sm" aria-label="Loading" />
+                    ) : (stats?.locales.length ?? 0) === 0 ? (
+                      <span className="dim" title="None configured, or the probe failed">
+                        —
+                      </span>
                     ) : (
-                      <button
-                        className="btn btn--sm btn--ghost"
-                        aria-expanded={showSeedPicker}
-                        onClick={() => setShowSeedPicker((v) => !v)}
-                      >
-                        + Seed from fixture
-                      </button>
+                      stats?.locales.length
                     )}
                   </td>
-                </tr>
-              )}
-              {gate !== null && (
-                <tr className="content-row content-row--gated">
-                  <td className="col-resource" colSpan={3}>
-                    <span className="dim">
-                      Per-set sync and wipe are unavailable: {gate} Wiping everything and seeding
-                      again builds a map and brings them back.
-                    </span>
+                  <td className="col-actions">
+                    {/* Nothing to do here: locale lists are set by Amplience
+                      Support per hub, and the seed reconciles against them. */}
+                    <span className="dim">{stats?.locales.join(', ')}</span>
                   </td>
                 </tr>
-              )}
-              <tr>
-                <td className="col-resource" title="Configured by Amplience Support, per hub">
-                  Locales
-                </td>
-                <td className="col-count">
-                  {stats === null && statsError === null ? (
-                    <span className="spinner spinner--sm" aria-label="Loading" />
-                  ) : (stats?.locales.length ?? 0) === 0 ? (
-                    <span className="dim" title="None configured, or the probe failed">
-                      —
-                    </span>
-                  ) : (
-                    stats?.locales.length
-                  )}
-                </td>
-                <td className="col-actions">
-                  {/* Nothing to do here: locale lists are set by Amplience
-                      Support per hub, and the seed reconciles against them. */}
-                  <span className="dim">{stats?.locales.join(', ')}</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          )}
 
           {statsError !== null && (
             <p className="env-card__stats-error">
@@ -1114,59 +1205,81 @@ export function EnvironmentCard({
           )}
 
           {/* Footer: all-resources operations */}
-          <div className="env-card__ops">
-            <span className="env-card__ops-label">All resources</span>
-            {stats === null && statsError === null ? (
-              <>
-                <div className="btn-skeleton btn-skeleton--wide" aria-hidden="true">
-                  &nbsp;
-                </div>
-                <div className="btn-skeleton btn-skeleton--wide" aria-hidden="true">
-                  &nbsp;
-                </div>
-              </>
-            ) : allEmpty ? (
-              <button
-                className={`btn btn--sm btn--op btn--op-seed${isRunning && op?.key === 'seed-all' ? ' btn--op-running' : ''}`}
-                onClick={() => {
-                  void runOp('seed-all')
-                }}
-                disabled={isRunning}
-              >
-                {isRunning && op?.key === 'seed-all' ? (
-                  <span className="spinner" aria-hidden="true" />
-                ) : null}
-                Seed all
-              </button>
-            ) : (
-              <>
-                <button
-                  className={`btn btn--sm btn--op btn--op-sync${isRunning && op?.key === 'sync-all' ? ' btn--op-running' : ''}`}
-                  onClick={() => {
-                    void runOp('sync-all')
-                  }}
-                  disabled={isRunning}
-                >
-                  {isRunning && op?.key === 'sync-all' ? (
-                    <span className="spinner" aria-hidden="true" />
-                  ) : null}
-                  Sync all
-                </button>
-                <button
-                  className={`btn btn--sm btn--op btn--op-wipe${isRunning && op?.key === 'wipe-all' ? ' btn--op-running' : ''}`}
-                  onClick={() => {
-                    void runOp('wipe-all')
-                  }}
-                  disabled={isRunning}
-                >
-                  {isRunning && op?.key === 'wipe-all' ? (
-                    <span className="spinner" aria-hidden="true" />
-                  ) : null}
-                  Wipe all
-                </button>
-              </>
-            )}
-          </div>
+          {!isEmptyHub && (
+            <div className="env-card__ops">
+              <span className="env-card__ops-label">All resources</span>
+              {stats === null && statsError === null ? (
+                <>
+                  <div className="btn-skeleton btn-skeleton--wide" aria-hidden="true">
+                    &nbsp;
+                  </div>
+                  <div className="btn-skeleton btn-skeleton--wide" aria-hidden="true">
+                    &nbsp;
+                  </div>
+                </>
+              ) : allEmpty ? (
+                <>
+                  {/* The model is shared, but the content step needs a set — and
+                    on an empty hub any of them will do, so the choice is offered
+                    here rather than guessed at. One set means nothing to pick. */}
+                  {fixtureSets.length > 1 && (
+                    <select
+                      className="site-card__select"
+                      aria-label="Fixture set to seed"
+                      value={allRowSet}
+                      onChange={(e) => setSetToSeed(e.target.value)}
+                      disabled={isRunning}
+                    >
+                      {fixtureSets.map((s) => (
+                        <option key={s.name} value={s.name}>
+                          {s.label}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  <button
+                    className={`btn btn--sm btn--op btn--op-seed${isRunning && op?.key === 'seed-all' ? ' btn--op-running' : ''}`}
+                    onClick={() => {
+                      void runOp('seed-all', allRowSet === '' ? {} : { set: allRowSet })
+                    }}
+                    disabled={isRunning}
+                  >
+                    {isRunning && op?.key === 'seed-all' ? (
+                      <span className="spinner" aria-hidden="true" />
+                    ) : null}
+                    Seed all
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className={`btn btn--sm btn--op btn--op-sync${isRunning && op?.key === 'sync-all' ? ' btn--op-running' : ''}`}
+                    onClick={() => {
+                      void runOp('sync-all')
+                    }}
+                    disabled={isRunning}
+                  >
+                    {isRunning && op?.key === 'sync-all' ? (
+                      <span className="spinner" aria-hidden="true" />
+                    ) : null}
+                    Sync all
+                  </button>
+                  <button
+                    className={`btn btn--sm btn--op btn--op-wipe${isRunning && op?.key === 'wipe-all' ? ' btn--op-running' : ''}`}
+                    onClick={() => {
+                      void runOp('wipe-all')
+                    }}
+                    disabled={isRunning}
+                  >
+                    {isRunning && op?.key === 'wipe-all' ? (
+                      <span className="spinner" aria-hidden="true" />
+                    ) : null}
+                    Wipe all
+                  </button>
+                </>
+              )}
+            </div>
+          )}
 
           {/* Live log panel */}
           {op && (
