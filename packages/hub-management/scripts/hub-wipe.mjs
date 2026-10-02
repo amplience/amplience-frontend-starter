@@ -365,20 +365,23 @@ const reclaimArchivedItems = async (client, repoId, repoLabel) => {
     }
 
     try {
+      // 🔴 Unpublish BEFORE stripping the key, never after. Removing a key from
+      // a published item orphans it: the key→content entry is retracted by the
+      // unpublish, matched on the key the item still holds, so an item stripped
+      // first is unpublished under no key and the old one goes on serving the
+      // last published snapshot indefinitely. Confirmed by Amplience support
+      // (2 Oct 2026) as the documented order — unpublish, then change or remove
+      // the key, then publish — and reproduced here before they confirmed it.
+      // An orphaned key can only be reclaimed by putting it on another item,
+      // publishing that, and unpublishing it again.
+      if (mightBeLive && (await unpublishItem(current))) unpublished += 1
+
       if (needsKeyStrip) {
         current.body._meta.deliveryKey = null
         current.body._meta.deliveryKeys = null
         current = await stripKeys(current)
         freed += 1
       }
-
-      // Unpublish last of the two, on whichever resource is freshest: the
-      // update above is the version-checked call, so it goes first and hands
-      // back the version the archive below needs. Stripping the key doesn't
-      // affect the retraction — unpublish addresses the item, and the
-      // published snapshot still holds the key it was published with until
-      // it's withdrawn.
-      if (mightBeLive && (await unpublishItem(current))) unpublished += 1
     } catch (error) {
       // One unreclaimable item must not abort the teardown — the same stance
       // unpublishItem takes, and what the dc-cli passes get from --ignoreError.
@@ -605,11 +608,15 @@ const listEveryItem = async (client, repos) => {
 /**
  * Take one item out of service: unpublish it, drop its delivery keys, archive it.
  *
- * In that order. Unpublishing is what actually retracts the content from
- * Delivery — archiving is a management-side lifecycle change that leaves the
- * published copy serving — so it goes first, against the resource as the API
- * handed it over, before any update has had a chance to change what the
- * resource advertises about itself.
+ * 🔴 In that order, and the order is load-bearing. Unpublishing is what
+ * retracts the content from Delivery — archiving is a management-side
+ * lifecycle change that leaves the published copy serving — and it retracts
+ * the key→content entry by matching the key the item still holds. Strip the
+ * key first and the item is unpublished under no key, leaving the old one
+ * serving its last published snapshot indefinitely: an orphaned key,
+ * reclaimable only by putting it on another item, publishing that, and
+ * unpublishing it again. Confirmed by Amplience support (2 Oct 2026) as the
+ * documented sequence — unpublish, then change or remove the key, then publish.
  *
  * The key strip is the part that matters for a later reseed: an archived item
  * goes on reserving its delivery key hub-wide, so a set wiped without stripping
