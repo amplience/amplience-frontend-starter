@@ -10,6 +10,7 @@ import {
   type ContentRow,
 } from '../content-rows.js'
 import { hubBrands } from '../hub-brands.js'
+import { defaultBrandName, defaultSiteName } from '../site-defaults.js'
 import type {
   Config,
   CreateVercelSiteInput,
@@ -366,11 +367,34 @@ export function EnvironmentCard({
     setEditingLocalhost(false)
   }
 
+  // What a blank site name / brand falls back to on this hub — shown in the add
+  // forms' placeholders, and recorded by both of them, so a site's record always
+  // says which namespace and brand it uses rather than leaving it to a default.
+  const fallbackSite = defaultSiteName(env, fixtureSets)
+  const fallbackBrand = defaultBrandName(env)
+  // The localhost row's own blank resolves past `defaultSite`, since it *is* it.
+  const localhostFallbackSite = defaultSiteName({ ...env, defaultSite: '' }, fixtureSets)
+  // Locally a blank brand falls to the served set's own (siteIdentity on the
+  // server), which a deployed site never sees — hence its own fallback.
+  const localhostSet =
+    fixtureSets.find((s) => s.name === (env.defaultSite ?? '').trim()) ??
+    fixtureSets.find((s) => s.name === localhostFallbackSite)
+  const localhostFallbackBrand =
+    (localhostSet?.defaultBrand ?? '').trim() !== ''
+      ? (localhostSet?.defaultBrand ?? '')
+      : 'default'
+
   async function handleAddSite(e: React.FormEvent) {
     e.preventDefault()
     setSitesBusy(true)
     try {
-      const updated = await api.update(env.name, { ...env, webApps: [...env.webApps, siteForm] })
+      // Same fallback "Create Vercel site" records server-side.
+      const site: WebApp = {
+        ...siteForm,
+        name: (siteForm.name ?? '').trim() || fallbackSite,
+        brand: siteForm.brand.trim() || env.defaultBrand,
+      }
+      const updated = await api.update(env.name, { ...env, webApps: [...env.webApps, site] })
       onUpdate(updated)
       setSiteForm(EMPTY_SITE)
       setShowAddSite(false)
@@ -1262,11 +1286,11 @@ export function EnvironmentCard({
                       disabled={sitesBusy}
                     />
                   </label>
-                  <label title="Site name (blank = hub name)">
+                  <label title={`Site name (blank = ${localhostFallbackSite})`}>
                     #
                     <input
                       className="site-row__input"
-                      placeholder="Site name (blank = hub name)"
+                      placeholder={`Site name (blank = ${localhostFallbackSite})`}
                       value={editLocalhostForm.defaultSite}
                       onChange={(e) =>
                         setEditLocalhostForm((p) => ({ ...p, defaultSite: e.target.value }))
@@ -1277,12 +1301,12 @@ export function EnvironmentCard({
                       disabled={sitesBusy}
                     />
                   </label>
-                  <label title="Brand (e.g. acme)">
+                  <label title={`Brand (blank = ${localhostFallbackBrand})`}>
                     <ThemeIcon />
                     <span className="visually-hidden">Brand</span>
                     <input
                       className="site-row__input"
-                      placeholder="Brand (e.g. acme)"
+                      placeholder={`Brand (blank = ${localhostFallbackBrand})`}
                       value={editLocalhostForm.defaultBrand}
                       onChange={(e) =>
                         setEditLocalhostForm((p) => ({ ...p, defaultBrand: e.target.value }))
@@ -1552,11 +1576,11 @@ export function EnvironmentCard({
                       required
                     />
                   </label>
-                  <label title="Site name (e.g. acme-store)">
+                  <label title={`Site name (blank = ${fallbackSite})`}>
                     #
                     <input
                       className="add-site-form__input"
-                      placeholder="Site name (e.g. acme-store)"
+                      placeholder={`Site name (blank = ${fallbackSite})`}
                       value={siteForm.name}
                       onChange={(e) => setSiteForm((p) => ({ ...p, name: e.target.value }))}
                       onKeyDown={(e) => {
@@ -1567,12 +1591,12 @@ export function EnvironmentCard({
                       }}
                     />
                   </label>
-                  <label title="Brand (blank = env default)">
+                  <label title={`Brand (blank = ${fallbackBrand})`}>
                     <ThemeIcon />
                     <span className="visually-hidden">Brand</span>
                     <input
                       className="add-site-form__input"
-                      placeholder="Brand (e.g. acme)"
+                      placeholder={`Brand (blank = ${fallbackBrand})`}
                       value={siteForm.brand}
                       onChange={(e) => setSiteForm((p) => ({ ...p, brand: e.target.value }))}
                       onKeyDown={(e) => {
@@ -1636,22 +1660,22 @@ export function EnvironmentCard({
                       disabled={sitesBusy}
                     />
                   </label>
-                  <label title="Site name (blank = hub default)">
+                  <label title={`Site name (blank = ${fallbackSite})`}>
                     #
                     <input
                       className="add-site-form__input"
-                      placeholder="Site name (blank = hub default)"
+                      placeholder={`Site name (blank = ${fallbackSite})`}
                       value={vercelForm.sitename}
                       onChange={(e) => setVercelForm((p) => ({ ...p, sitename: e.target.value }))}
                       disabled={sitesBusy}
                     />
                   </label>
-                  <label title="Brand (blank = env default)">
+                  <label title={`Brand (blank = ${fallbackBrand})`}>
                     <ThemeIcon />
                     <span className="visually-hidden">Brand</span>
                     <input
                       className="add-site-form__input"
-                      placeholder="Brand (blank = env default)"
+                      placeholder={`Brand (blank = ${fallbackBrand})`}
                       value={vercelForm.brand}
                       onChange={(e) => setVercelForm((p) => ({ ...p, brand: e.target.value }))}
                       disabled={sitesBusy}

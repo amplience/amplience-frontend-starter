@@ -22,8 +22,8 @@ import { makeSdkContentClient } from '@amplience/frontend-starter-content/sdk'
 
 const config = resolveContentConfig()
 
-// In mock mode the site name *is* the fixture set (ADR-0019), so one value
-// selects both the content and the namespace it's addressed under.
+// In mock mode the site name *is* the fixture set (ADR-0019) — FIXTURE_SET —
+// so one value selects both the content and the namespace it's addressed under.
 export const client: ContentClient =
   config.kind === 'sdk' ? makeSdkContentClient(config) : makeMockContentClient(config.siteName)
 

@@ -10,6 +10,7 @@ import { cors } from 'hono/cors'
 import { streamText } from 'hono/streaming'
 
 import {
+  defaultSiteName,
   LEGACY_FIXTURES_NAME,
   migrateActive,
   namespaceForSet,
@@ -97,7 +98,11 @@ type Environment = {
   clientSecret: string
   stagingHost: string
   defaultBrand: string
-  /** SITE_NAME for the hub's main frontend (ADR-0014); blank = hub-name default. */
+  /**
+   * SITE_NAME for the hub's `Web (localhost)` row (ADR-0014), and the fallback
+   * for any site added with a blank site name. Blank = the set's name
+   * (`defaultFixtureSet`, else the default set — ADR-0019); see `defaultSiteName`.
+   */
   defaultSite: string
   /**
    * Which fixture set this hub's sites carry when their own names don't say
@@ -1024,7 +1029,8 @@ app.post('/api/environments/:name/vercel/create-site', async (c) => {
     ...(body.token ? { token: body.token } : {}),
     ...(body.scope ? { scope: body.scope } : {}),
   }
-  const envVars = runtimeEnvVars(env, site)
+  const fallbackSite = defaultSiteName(env, FIXTURE_SETS)
+  const envVars = runtimeEnvVars({ ...env, defaultSite: fallbackSite }, site)
   const cmdEnv = vercelEnv()
 
   return streamText(c, async (stream) => {
@@ -1168,7 +1174,7 @@ app.post('/api/environments/:name/vercel/create-site', async (c) => {
             label: (body.label ?? '').trim(),
             url,
             brand: site.brand.trim() || env.defaultBrand,
-            name: site.sitename.trim() || env.defaultSite,
+            name: site.sitename.trim() || fallbackSite,
             vercelProjectName: targetName,
             ...(cliOpts.scope ? { vercelScope: cliOpts.scope } : {}),
           })
@@ -1249,10 +1255,11 @@ app.post('/api/environments/:name/vercel/redeploy-site', async (c) => {
     sitename: body.sitename ?? site.name,
   }
   // Env vars computed against the TARGET hub — this is what re-points the build.
-  const envVars = runtimeEnvVars(targetEnv, siteInput)
+  const targetFallbackSite = defaultSiteName(targetEnv, FIXTURE_SETS)
+  const envVars = runtimeEnvVars({ ...targetEnv, defaultSite: targetFallbackSite }, siteInput)
   // Reset every hub-determining key first (both runtime targets), so a var that
-  // no longer applies after the move (e.g. a SITE_NAME that now equals the hub
-  // name, or a brand that reverted to default) doesn't linger from the old hub.
+  // no longer applies after the move (e.g. a brand that reverted to default, or
+  // a custom-CSS flag the target hub doesn't use) doesn't linger from the old hub.
   const KNOWN_KEYS = [
     'AMPLIENCE_HUB_NAME',
     'SITE_NAME',
@@ -1350,7 +1357,7 @@ app.post('/api/environments/:name/vercel/redeploy-site', async (c) => {
         label: (body.label ?? site.label).trim(),
         url: url ?? site.url,
         brand: siteInput.brand.trim() || targetEnv.defaultBrand,
-        name: siteInput.sitename.trim() || targetEnv.defaultSite,
+        name: siteInput.sitename.trim() || targetFallbackSite,
         vercelProjectName: projectName,
         ...(site.vercelScope ? { vercelScope: site.vercelScope } : {}),
       }

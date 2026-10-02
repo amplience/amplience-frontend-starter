@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  defaultSiteName,
   LEGACY_FIXTURES_NAME,
   migrateActive,
   namespaceForSet,
@@ -98,9 +99,10 @@ describe('namespaceForSet', () => {
     expect(namespaceForSet(DEFAULT_FIXTURE_SET, env, [], SETS)).toBe('acme')
   })
 
-  it('falls back to the hub name when the localhost row names no site', () => {
+  it("falls back to the set's name, not the hub's, when the localhost row names no site", () => {
+    // ADR-0019: the same default hub-import and resolveContentConfig apply.
     const env = hub({ hubName: 'mattdemo', defaultFixtureSet: DEFAULT_FIXTURE_SET })
-    expect(namespaceForSet(DEFAULT_FIXTURE_SET, env, [], SETS)).toBe('mattdemo')
+    expect(namespaceForSet(DEFAULT_FIXTURE_SET, env, [], SETS)).toBe(DEFAULT_FIXTURE_SET)
   })
 
   it('falls back to the set name when no site on the hub serves it', () => {
@@ -112,6 +114,21 @@ describe('namespaceForSet', () => {
   it('ignores blank site names', () => {
     const env = hub({ defaultSite: 'frontend-starter' })
     expect(namespaceForSet('anyafinn', env, ['', '  ', 'anyafinn'], SETS)).toBe('anyafinn')
+  })
+})
+
+describe('defaultSiteName', () => {
+  it('uses the localhost row when it names a site', () => {
+    expect(defaultSiteName(hub({ defaultSite: 'acme' }), SETS)).toBe('acme')
+  })
+
+  it("falls back to the hub's default set, then the default set — never the hub name", () => {
+    expect(defaultSiteName(hub({ defaultFixtureSet: 'anyafinn' }), SETS)).toBe('anyafinn')
+    expect(defaultSiteName(hub({ hubName: 'mattdemo' }), SETS)).toBe(DEFAULT_FIXTURE_SET)
+  })
+
+  it('only falls back to the hub name in a checkout with no sets at all', () => {
+    expect(defaultSiteName(hub({ hubName: 'mattdemo' }), [])).toBe('mattdemo')
   })
 })
 
@@ -134,9 +151,9 @@ describe('siteIdentity', () => {
     expect(id).toMatchObject({ siteName: 'anyafinn', fixtureSet: 'anyafinn' })
   })
 
-  it('falls a blank site name back to the hub name, per ADR-0014', () => {
+  it("falls a blank site name back to the set's name, per ADR-0019", () => {
     const id = siteIdentity(resolveActiveSource('mattdemo', [hub({ hubName: 'mattdemo' })], SETS))
-    expect(id?.siteName).toBe('mattdemo')
+    expect(id).toMatchObject({ siteName: DEFAULT_FIXTURE_SET, fixtureSet: DEFAULT_FIXTURE_SET })
   })
 
   it('serves the hub default set to a site named after no set — the partner path', () => {

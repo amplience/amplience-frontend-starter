@@ -76,6 +76,27 @@ export function resolveActiveSource(
 }
 
 /**
+ * The namespace a hub's `Web (localhost)` row uses, and the fallback for any
+ * site added to the hub with its site name left blank.
+ *
+ * `defaultSite` when it's set; otherwise the name of the set this hub's sites
+ * carry (`defaultFixtureSet`, else the default set) — the same
+ * `SITE_NAME ?? FIXTURE_SET ?? 'frontend-starter'` that hub-import and the web
+ * app's `resolveContentConfig` both apply (ADR-0019, amending ADR-0014's
+ * hub-name default). Resolved here rather than left blank so every site record
+ * and every deployment's env vars say what they mean.
+ */
+export function defaultSiteName(
+  env: Pick<ActiveSourceEnv, 'hubName' | 'defaultSite' | 'defaultFixtureSet'>,
+  sets: readonly FixtureSetInfo[],
+): string {
+  const explicit = env.defaultSite.trim()
+  if (explicit !== '') return explicit
+  // Only an empty checkout has no sets; the hub name is then the least-bad guess.
+  return resolveFixtureSet(undefined, env.defaultFixtureSet, sets)?.name ?? env.hubName
+}
+
+/**
  * The namespace a given set's content belongs in, on a given hub.
  *
  * An operation that names a set is asking for that set specifically, so it can't
@@ -97,7 +118,7 @@ export function namespaceForSet(
   siteNames: readonly string[],
   sets: readonly FixtureSetInfo[],
 ): string {
-  const localhost = env.defaultSite.trim() !== '' ? env.defaultSite.trim() : env.hubName
+  const localhost = defaultSiteName(env, sets)
   const candidates = [localhost, ...siteNames].map((s) => s.trim()).filter((s) => s !== '')
   const serving = candidates.find(
     (name) => resolveFixtureSet(name, env.defaultFixtureSet, sets)?.name === setName,
@@ -148,8 +169,9 @@ export function siteIdentity(source: ActiveSource): SiteIdentity | undefined {
 
   const { env, set } = source
   return {
-    // Blank falls through to the runtime default — the hub name (ADR-0014).
-    siteName: env.defaultSite.trim() !== '' ? env.defaultSite.trim() : env.hubName,
+    // Blank resolves to the set's name — the runtime's own default (ADR-0019),
+    // written out so the .env files say what they mean.
+    siteName: env.defaultSite.trim() !== '' ? env.defaultSite.trim() : (set?.name ?? env.hubName),
     fixtureSet: set?.name,
     brand: env.defaultBrand.trim() !== '' ? env.defaultBrand.trim() : (set?.defaultBrand ?? ''),
     // A hub's pages are titled by whatever the deployment sets; only a fixture

@@ -68,7 +68,7 @@ const CONFIG_FIELDS: FieldMeta[] = [
   {
     key: 'defaultSite',
     label: 'Default site',
-    placeholder: 'e.g. acme — defaults to hub name if empty',
+    placeholder: 'e.g. acme — defaults to the fixture set name if empty',
   },
 ]
 
@@ -178,16 +178,11 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
       updates.stagingHost = hub.stagingHost
       filled.add('stagingHost')
     }
-    setForm((prev) => {
-      // Default site defaults to the hub name (ADR-0014) — prefill it so the
-      // convention is visible and editable, but never clobber a custom value.
-      const next = { ...prev, ...updates }
-      if ((prev.defaultSite ?? '') === '' || prev.defaultSite === prev.hubName) {
-        next.defaultSite = hub.name
-        filled.add('defaultSite')
-      }
-      return next
-    })
+    // Default site is deliberately not prefilled from the hub name: blank means
+    // the fixture set's name (ADR-0019, amending ADR-0014), the same default
+    // hub-import seeds under, so prefilling the hub name would seed and serve
+    // a namespace no set is named after.
+    setForm((prev) => ({ ...prev, ...updates }))
     setAutoFilled(filled)
     setRevealed(true)
   }
