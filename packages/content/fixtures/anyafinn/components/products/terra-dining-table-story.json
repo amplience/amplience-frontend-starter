@@ -16,6 +16,14 @@
         {
           "locale": "en-GB",
           "value": "## Reclaimed, not reproduced\n\nEvery Terra top is milled from elm salvaged from farm buildings in the Welsh borders. No two are the same colour, and the nail-holes are left in.\n\n## Care\n\nHand-wax twice a year. Avoid standing water — reclaimed elm drinks."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "## Récupéré, pas reproduit\n\nChaque plateau Terra est usiné dans de l'orme récupéré sur des bâtiments agricoles de la frontière galloise. Aucun n'a la même couleur, et les trous de clous sont conservés.\n\n## Entretien\n\nCirez à la main deux fois par an. Évitez l'eau stagnante : l'orme de récupération boit."
+        },
+        {
+          "locale": "de-DE",
+          "value": "## Wiederverwendet, nicht nachgemacht\n\nJede Terra-Platte wird aus Ulmenholz gefertigt, das aus Scheunen im walisischen Grenzland geborgen wurde. Keine gleicht farblich der anderen, und die Nagellöcher bleiben erhalten.\n\n## Pflege\n\nZweimal im Jahr von Hand wachsen. Stehendes Wasser vermeiden – Altholz aus Ulme saugt."
         }
       ],
       "_meta": {

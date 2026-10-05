@@ -7,8 +7,44 @@
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "68a36106-cd66-5b3a-a5ad-d44e1118ae20"
     },
-    "title": "Shop the look",
-    "description": "Three ways to wear the season, styled end to end.",
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Shop the look"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Shoppez le look"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Den Look shoppen"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Three ways to wear the season, styled end to end."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Trois façons de porter la saison, stylées de la tête aux pieds."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Drei Arten, die Saison zu tragen – von Kopf bis Fuß gestylt."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "media": {
       "mediaType": "ManualImage",
       "image": {

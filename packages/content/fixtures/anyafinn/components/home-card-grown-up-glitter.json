@@ -7,8 +7,44 @@
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
       "deliveryId": "acd46085-1834-5991-b560-7f17219c2439"
     },
-    "title": "Grown-up glitter",
-    "description": "A radiant, second-skin base with a grippy shimmer primer and champagne liquid sparkle, finished with tubing mascara.",
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Grown-up glitter"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Paillettes, version adulte"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Glitzer für Erwachsene"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A radiant, second-skin base with a grippy shimmer primer and champagne liquid sparkle, finished with tubing mascara."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un teint lumineux effet seconde peau, une base irisée qui accroche et des paillettes liquides champagne, le tout sublimé par un mascara tubing."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein strahlender Second-Skin-Teint mit haftendem Schimmer-Primer und flüssigem Glitzer in Champagner, vollendet mit Tubing-Mascara."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "media": {
       "mediaType": "ManualImage",
       "image": {
@@ -21,7 +57,25 @@
     "links": {
       "href": "/shop-the-look",
       "cta": {
-        "label": "Read more",
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read more"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "En savoir plus"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Mehr erfahren"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
         "href": "/shop-the-look",
         "variant": "text",
         "color": "black"

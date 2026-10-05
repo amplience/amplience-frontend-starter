@@ -16,6 +16,14 @@
         {
           "locale": "en-GB",
           "value": "## Made to be sat in\n\nThe Aurora frame is cut from a single oiled oak billet, steam-bent rather than jointed, so the arm and the rear leg are one continuous piece. It takes four days to set.\n\n## Care\n\nWipe the frame with a barely-damp cloth. Re-oil once a year. The bouclé is removable and dry-clean only."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "## Fait pour qu'on s'y assoie\n\nLe cadre Aurora est taillé dans un seul bloc de chêne huilé, cintré à la vapeur plutôt qu'assemblé : l'accoudoir et le pied arrière ne forment qu'une seule pièce continue. Il faut quatre jours pour qu'il prenne sa forme.\n\n## Entretien\n\nEssuyez le cadre avec un chiffon à peine humide. Huilez-le de nouveau une fois par an. La bouclette est déhoussable et se nettoie uniquement à sec."
+        },
+        {
+          "locale": "de-DE",
+          "value": "## Zum Sitzen gemacht\n\nDer Aurora-Rahmen wird aus einem einzigen geölten Eichenkantholz geschnitten und dampfgebogen statt verleimt, sodass Armlehne und Hinterbein ein durchgehendes Stück bilden. Bis er seine Form hält, vergehen vier Tage.\n\n## Pflege\n\nDen Rahmen mit einem kaum feuchten Tuch abwischen. Einmal im Jahr nachölen. Der Bouclé-Bezug ist abnehmbar und nur chemisch zu reinigen."
         }
       ],
       "_meta": {

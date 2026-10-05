@@ -7,9 +7,63 @@
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "c4bcd6c3-ad26-5109-baef-61ad5e45239a"
     },
-    "preTitle": "Autumn / Winter 2026",
-    "title": "Layers for the long way round",
-    "description": "Leather, lambswool and everything you reach for when the light goes early.",
+    "preTitle": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Autumn / Winter 2026"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Automne / Hiver 2026"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Herbst / Winter 2026"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Layers for the long way round"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Des couches pour le chemin des écoliers"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Lagen für den langen Umweg"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Leather, lambswool and everything you reach for when the light goes early."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Cuir, laine d'agneau et tout ce que l'on attrape quand la nuit tombe tôt."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Leder, Lammwolle und alles, wonach man greift, wenn es früh dunkel wird."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "media": {
       "mediaType": "ManualImage",
       "image": {
@@ -32,7 +86,25 @@
     "backgroundColor": "black",
     "ctas": [
       {
-        "label": "Shop the edit",
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Shop the edit"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Découvrir la sélection"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zur Auswahl"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
         "href": "/shop-the-look",
         "variant": "solid",
         "color": "primary"
