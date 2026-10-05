@@ -1,0 +1,49 @@
+{
+  "id": "8b06afb1-51bc-520e-a961-2f4b7b42e18d",
+  "label": "Blog — Opulent Decadence — more looks",
+  "body": {
+    "_meta": {
+      "name": "Blog — Opulent Decadence — more looks",
+      "schema": "https://quadratic.amplience.com/v2/content/grid",
+      "deliveryId": "8b06afb1-51bc-520e-a961-2f4b7b42e18d"
+    },
+    "sectionHeader": {
+      "title": {
+        "values": [
+          {
+            "locale": "en-US",
+            "value": "More looks"
+          },
+          {
+            "locale": "fr-FR",
+            "value": "Plus de looks"
+          },
+          {
+            "locale": "de-DE",
+            "value": "Weitere Looks"
+          }
+        ],
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      }
+    },
+    "items": [
+      {
+        "id": "eb678b43-cabd-526a-b427-bd6d2789970d",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "acd46085-1834-5991-b560-7f17219c2439",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ],
+    "gutter": true
+  }
+}

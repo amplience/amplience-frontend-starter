@@ -225,7 +225,7 @@
 
 [data-brand='anyafinn'] {
   --font-heading: var(--nf-cormorant-garamond), Georgia, 'Times New Roman', serif;
-  --font-body: var(--nf-jost), 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-body: var(--nf-montserrat), 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --color-primary: #a34a1e;
   --color-primary-contrast: var(--color-white);
   --color-secondary: #e2b76a;
@@ -236,37 +236,73 @@
      Suits a fashion/lifestyle brand where motion feels heavy-handed. */
   --interactive-hover-opacity: 0.8;
 
-  .preTitle {
-    color: var(--color-secondary);
-    text-transform: uppercase;
-  }
+  --color-line: #e0d3bd;
+  --color-off-white: #fdf8f0;
 
   .HeaderRow {
-    border-bottom: solid 1px var(--color-secondary);
+    border-bottom: solid 1px var(--color-line);
   }
 
-  [data-brand='anyafinn'] .carouselDots {
-    position: absolute;
-    bottom: var(--spacing-2);
-    left: 50%;
-    max-width: 100%;
-    gap: 0;
-    margin: 0;
-    transform: translateX(-50%);
+  .HeroBlock {
+    .preTitle {
+      margin-bottom: 0.6em;
+      color: var(--color-secondary);
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
 
-    button:hover {
-      --carousel-dot-color: var(--color-white);
+    .title,
+    .description {
+      color: var(--color-off-white);
+    }
+
+    .description {
+      opacity: 0.8;
     }
   }
 
-  .ProductDetail > .Container {
-    padding-inline: 0;
+  .Carousel {
+    .IconButton {
+      transition: all 0.15s;
 
-    > div {
-      padding-block: 0;
+      &[disabled] {
+        transform: translateY(-50%) scale(0);
+      }
+    }
 
-      > div:last-child {
-        padding-block: var(--spacing-10);
+    .carouselDots {
+      position: absolute;
+      bottom: var(--spacing-2);
+      left: 50%;
+      max-width: 100%;
+      gap: 0;
+      margin: 0;
+      transform: translateX(-50%);
+
+      button:hover {
+        --carousel-dot-color: var(--color-white);
+        transform: scale(1.2);
+      }
+    }
+  }
+
+  .ProductDetail {
+    > .Container {
+      padding-inline: 0;
+
+      > div {
+        padding: 0;
+        gap: 0;
+
+        > div:last-child {
+          padding: var(--site-gutter);
+        }
+      }
+    }
+
+    h1 {
+      @media (min-width: 576px) {
+        font-size: 3rem;
       }
     }
   }

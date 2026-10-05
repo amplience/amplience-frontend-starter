@@ -13,6 +13,7 @@
       }
     },
     "label": "Shop the Look",
-    "link": "/shop-the-look"
+    "link": "/shop-the-look",
+    "customCss": "color: var(--color-primary);"
   }
 }

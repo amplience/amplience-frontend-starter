@@ -1,0 +1,58 @@
+{
+  "id": "51698822-c55e-5be6-9ee3-8078f52edca2",
+  "label": "Our story — home: from wardrobe to living room",
+  "body": {
+    "_meta": {
+      "name": "Our story — home: from wardrobe to living room",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "51698822-c55e-5be6-9ee3-8078f52edca2"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "## From wardrobe to living room\n\nIn 2022 we brought the same thinking home: undyed wool throws, solid-oak tables and a lounge chair upholstered in the bouclé left over from our coats. Same mills, same makers, same promise."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "## De la garde-robe au salon\n\nEn 2022, nous avons appliqué la même philosophie à la maison : des plaids en laine non teinte, des tables en chêne massif et un fauteuil tapissé de la bouclette restée de nos manteaux. Mêmes filatures, mêmes artisans, même promesse."
+        },
+        {
+          "locale": "de-DE",
+          "value": "## Vom Kleiderschrank ins Wohnzimmer\n\n2022 haben wir dasselbe Denken auf das Zuhause übertragen: Plaids aus ungefärbter Wolle, Tische aus massiver Eiche und ein Loungesessel, bezogen mit dem Bouclé, das von unseren Mänteln übrig blieb. Dieselben Webereien, dieselben Handwerker, dasselbe Versprechen."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Shop home"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Voir la maison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Wohnen entdecken"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/home",
+        "variant": "outlined",
+        "color": "black"
+      }
+    ],
+    "maxWidth": "default",
+    "gutter": false
+  }
+}

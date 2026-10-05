@@ -1,0 +1,31 @@
+{
+  "id": "0655cd1e-ea72-5ea4-bff2-0a3bf78eb850",
+  "label": "Home — editorial",
+  "body": {
+    "_meta": {
+      "name": "Home — editorial",
+      "schema": "https://quadratic.amplience.com/v2/content/columns",
+      "deliveryId": "0655cd1e-ea72-5ea4-bff2-0a3bf78eb850"
+    },
+    "items": [
+      {
+        "id": "f27ebd7c-db76-5dce-8718-b6e25598ee7c",
+        "contentType": "https://quadratic.amplience.com/v2/content/media",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "6917d042-42ab-5ebc-836f-fc1b45aa9824",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ],
+    "gap": 32,
+    "alignItems": "center",
+    "maxWidth": "default",
+    "gutter": true
+  }
+}

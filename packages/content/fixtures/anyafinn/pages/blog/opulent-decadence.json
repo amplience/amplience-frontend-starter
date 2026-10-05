@@ -1,0 +1,58 @@
+{
+  "id": "c4f982c7-9efe-5464-9eb5-274f75ae4e19",
+  "label": "Blog — Opulent Decadence",
+  "body": {
+    "_meta": {
+      "name": "Blog — Opulent Decadence",
+      "schema": "https://quadratic.amplience.com/v2/content/blog-article",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/blog/opulent-decadence"
+          }
+        ]
+      }
+    },
+    "title": "Opulent decadence",
+    "description": "Candlelit skin with a champagne-pearl glow, blush draped high and bold, a crisp graphic eye and a plush glossy lip.",
+    "keywords": ["anya finn", "shop the look", "autumn-winter", "beauty", "party"],
+    "social": {
+      "image": {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/quadraticdemo/Opulent%20Decadence_hero",
+          "alt": "Woman with a pearl-glow complexion, high draped blush and a glossy berry lip",
+          "width": 2752,
+          "height": 1536
+        }
+      }
+    },
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
+    "coverImage": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/Opulent%20Decadence_hero",
+        "alt": "Woman with a pearl-glow complexion, high draped blush and a glossy berry lip",
+        "width": 2752,
+        "height": 1536
+      }
+    },
+    "author": "Anya Finn Style Desk",
+    "publishDate": "2026-10-02",
+    "category": "Shop the look",
+    "tags": ["shop-the-look", "autumn-winter", "beauty", "party"],
+    "readTime": 3,
+    "slots": [
+      {
+        "id": "39f97cfc-962f-5d8f-a795-6df83d5f2cec",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

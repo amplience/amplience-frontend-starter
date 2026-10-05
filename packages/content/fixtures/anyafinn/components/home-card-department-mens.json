@@ -1,0 +1,65 @@
+{
+  "id": "79a247ed-e498-5324-b2fc-1ac3c40a8b5f",
+  "label": "Home — department card: Men",
+  "body": {
+    "_meta": {
+      "name": "Home — department card: Men",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "79a247ed-e498-5324-b2fc-1ac3c40a8b5f"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Men"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Homme"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Herren"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Waxed cotton, cord and a proper parka."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Coton ciré, velours côtelé et une vraie parka."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Gewachste Baumwolle, Cord und ein richtiger Parka."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/pexels-monstera-production-6311623",
+        "alt": "Man in a cream hoodie and matching joggers",
+        "width": 3840,
+        "height": 5760
+      }
+    },
+    "links": {
+      "href": "/mens"
+    },
+    "layout": "overlay",
+    "headingVariant": "h3",
+    "elevation": "flat",
+    "color": "black"
+  }
+}

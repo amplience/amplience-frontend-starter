@@ -16,6 +16,7 @@
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       }
-    ]
+    ],
+    "customCss": ".Menu, .Menu[data-display='dropdownOnHover'] > ul > li > ul { color: var(--color-gray-600);}"
   }
 }

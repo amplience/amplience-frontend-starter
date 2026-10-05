@@ -55,7 +55,7 @@
       }
     },
     "links": {
-      "href": "/shop-the-look",
+      "href": "/blog/grown-up-glitter",
       "cta": {
         "label": {
           "values": [
@@ -76,7 +76,7 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/shop-the-look",
+        "href": "/blog/grown-up-glitter",
         "variant": "text",
         "color": "black"
       }

@@ -1,0 +1,58 @@
+{
+  "id": "f1ab30fc-85d1-5d5a-bcf7-cb3153d3e956",
+  "label": "Our story — see what's new",
+  "body": {
+    "_meta": {
+      "name": "Our story — see what's new",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "f1ab30fc-85d1-5d5a-bcf7-cb3153d3e956"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "## See what's new\n\nThe autumn/winter edit is in store and online now."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "## Découvrez les nouveautés\n\nLa sélection automne-hiver est disponible en boutique et en ligne."
+        },
+        {
+          "locale": "de-DE",
+          "value": "## Entdecken Sie die Neuheiten\n\nDie Herbst/Winter-Auswahl ist jetzt im Store und online erhältlich."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Shop the edit"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Découvrir la sélection"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zur Auswahl"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/shop-the-look",
+        "variant": "solid",
+        "color": "primary"
+      }
+    ],
+    "maxWidth": "narrow",
+    "gutter": true
+  }
+}

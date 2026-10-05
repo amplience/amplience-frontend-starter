@@ -1,0 +1,32 @@
+{
+  "id": "0499c39d-bd9c-55e0-b4fb-b5d05a27cfdc",
+  "label": "Our story — where it started",
+  "body": {
+    "_meta": {
+      "name": "Our story — where it started",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "0499c39d-bd9c-55e0-b4fb-b5d05a27cfdc"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "## Where it started\n\nAnya Finn began in 2014 as a single rail of second-hand coats at a Saturday market. People didn't just buy them. They came back to ask where they could find more like them: heavy, well cut and built to be worn for years.\n\nWe couldn't find enough, so we started making our own. A decade on, that rail has grown into womenswear, menswear, kidswear and a small home line, but the brief hasn't changed. Make things worth keeping."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "## Les débuts\n\nAnya Finn a commencé en 2014 avec un seul portant de manteaux de seconde main, sur un marché du samedi. Les clients ne se contentaient pas de les acheter. Ils revenaient demander où en trouver d'autres : lourds, bien coupés et faits pour être portés des années.\n\nFaute d'en trouver assez, nous avons commencé à fabriquer les nôtres. Dix ans plus tard, ce portant est devenu une offre femme, homme, enfant et une petite ligne maison, mais le cahier des charges n'a pas changé. Faire des choses qui valent la peine d'être gardées."
+        },
+        {
+          "locale": "de-DE",
+          "value": "## Wie alles begann\n\nAnya Finn begann 2014 mit einer einzigen Kleiderstange voller Second-Hand-Mäntel auf einem Samstagsmarkt. Die Leute kauften sie nicht nur. Sie kamen zurück und fragten, wo sie mehr davon finden könnten: schwer, gut geschnitten und gemacht, um jahrelang getragen zu werden.\n\nWir fanden nicht genug, also begannen wir, unsere eigenen zu machen. Zehn Jahre später ist aus der Stange Damen-, Herren- und Kindermode und eine kleine Wohnlinie geworden, aber der Auftrag ist derselbe geblieben. Dinge machen, die es wert sind, behalten zu werden."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "maxWidth": "narrow",
+    "gutter": true
+  }
+}

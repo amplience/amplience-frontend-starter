@@ -1,0 +1,58 @@
+{
+  "id": "83e3ab76-b47d-5f18-bcbe-99b9e080ea5c",
+  "label": "Blog — Grown-up Glitter — body",
+  "body": {
+    "_meta": {
+      "name": "Blog — Grown-up Glitter — body",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "83e3ab76-b47d-5f18-bcbe-99b9e080ea5c"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Glitter doesn't have to mean teenage. Kept to the right places, it reads as polished rather than party-bag.\n\n## The look\n\n- A radiant, second-skin base\n- A grippy shimmer primer on the lids\n- Champagne liquid sparkle, pressed on with a fingertip\n- A clean tubing mascara\n\n## Why it works\n\nShimmer looks grown-up when everything around it is quiet. A sheer base lets skin show through, so the sparkle sits on skin rather than on foundation. Tubing mascara won't flake or smudge, so the eye stays crisp all night.\n\n## What to wear with it\n\nLet the face do the talking. An ivory silk blouse tucked into wide trousers, with a leather tote standing in as an oversized evening bag. No sequins required."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Les paillettes ne sont pas réservées aux adolescentes. Posées aux bons endroits, elles paraissent soignées plutôt que festives.\n\n## Le look\n\n- Un teint lumineux effet seconde peau\n- Une base irisée qui accroche, sur les paupières\n- Des paillettes liquides champagne, appliquées du bout du doigt\n- Un mascara tubing net\n\n## Pourquoi ça marche\n\nLe scintillement fait adulte quand tout le reste est sobre. Une base légère laisse la peau transparaître, si bien que l'éclat se pose sur la peau et non sur le fond de teint. Le mascara tubing ne s'effrite pas et ne bave pas : le regard reste net toute la soirée.\n\n## Que porter avec\n\nLaissez le visage parler. Une blouse en soie ivoire rentrée dans un pantalon large, et un cabas en cuir en guise de grand sac du soir. Inutile d'ajouter des sequins."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Glitzer muss nicht nach Teenager aussehen. An den richtigen Stellen eingesetzt, wirkt er gepflegt statt nach Kindergeburtstag.\n\n## Der Look\n\n- Ein strahlender Second-Skin-Teint\n- Ein haftender Schimmer-Primer auf den Lidern\n- Flüssiger Glitzer in Champagner, mit der Fingerkuppe aufgetupft\n- Eine saubere Tubing-Mascara\n\n## Warum es funktioniert\n\nSchimmer wirkt erwachsen, wenn alles drumherum ruhig bleibt. Eine leichte Basis lässt die Haut durchscheinen, sodass der Glanz auf der Haut sitzt und nicht auf der Foundation. Tubing-Mascara bröselt und verschmiert nicht – die Augen bleiben den ganzen Abend klar.\n\n## Was man dazu trägt\n\nDas Gesicht soll sprechen. Eine elfenbeinfarbene Seidenbluse, in eine weite Hose gesteckt, dazu ein Leder-Shopper als übergroße Abendtasche. Pailletten überflüssig."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Shop the Silk Blouse"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Voir la blouse en soie"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zur Seidenbluse"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/products/silk-blouse",
+        "variant": "outlined",
+        "color": "black"
+      }
+    ],
+    "maxWidth": "narrow",
+    "gutter": true
+  }
+}

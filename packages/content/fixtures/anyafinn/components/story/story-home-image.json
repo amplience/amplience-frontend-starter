@@ -1,0 +1,22 @@
+{
+  "id": "5212bf0c-d353-5f24-9c8b-167b11e49355",
+  "label": "Our story — home: image",
+  "body": {
+    "_meta": {
+      "name": "Our story — home: image",
+      "schema": "https://quadratic.amplience.com/v2/content/media",
+      "deliveryId": "5212bf0c-d353-5f24-9c8b-167b11e49355"
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/wk31-hp-cat-b1f-210825",
+        "alt": "Cream bouclé armchair beside a small wooden side table",
+        "width": 1200,
+        "height": 1600
+      }
+    },
+    "fullBleed": false,
+    "maxWidth": "default"
+  }
+}

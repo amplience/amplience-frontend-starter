@@ -1,28 +1,21 @@
 {
-  "id": "545c4a5b-0892-58f1-bdc7-60c1a0dba658",
-  "label": "Shop the Look — main slot",
+  "id": "d563aa8d-67f3-52c5-9c38-9fd22bf629c1",
+  "label": "Blog — Grown-up Glitter — main slot",
   "body": {
     "_meta": {
-      "name": "Shop the Look — main slot",
+      "name": "Blog — Grown-up Glitter — main slot",
       "schema": "https://quadratic.amplience.com/v2/slots/slot"
     },
     "components": [
       {
-        "id": "68a36106-cd66-5b3a-a5ad-d44e1118ae20",
-        "contentType": "https://quadratic.amplience.com/v2/content/hero",
-        "_meta": {
-          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
-        }
-      },
-      {
-        "id": "49124b75-a998-5d41-9549-3fd707b63c95",
+        "id": "83e3ab76-b47d-5f18-bcbe-99b9e080ea5c",
         "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "38ce5641-5f65-5f2f-846b-0e2a224bfbab",
+        "id": "87ed200c-7c13-5eb2-886f-d6e91e0c29b2",
         "contentType": "https://quadratic.amplience.com/v2/content/grid",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

@@ -1,0 +1,32 @@
+{
+  "id": "0dafc909-b0b2-5c48-afc3-6ee2fa7ac1a7",
+  "label": "Our story — value: Made to be mended",
+  "body": {
+    "_meta": {
+      "name": "Our story — value: Made to be mended",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "0dafc909-b0b2-5c48-afc3-6ee2fa7ac1a7"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "### Made to be mended\n\nSpare buttons, replacement zips and free repairs for life. If it breaks, bring it back."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "### Faits pour être réparés\n\nBoutons de rechange, fermetures éclair de remplacement et réparations gratuites à vie. Si ça casse, rapportez-le."
+        },
+        {
+          "locale": "de-DE",
+          "value": "### Gemacht, um repariert zu werden\n\nErsatzknöpfe, neue Reißverschlüsse und kostenlose Reparaturen ein Leben lang. Wenn etwas kaputtgeht, bringen Sie es zurück."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "maxWidth": "default",
+    "gutter": false
+  }
+}

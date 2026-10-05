@@ -1,0 +1,49 @@
+{
+  "id": "adefa434-8120-5fa8-932e-01c2322574e3",
+  "label": "Blog — Trending: Piratecore — more looks",
+  "body": {
+    "_meta": {
+      "name": "Blog — Trending: Piratecore — more looks",
+      "schema": "https://quadratic.amplience.com/v2/content/grid",
+      "deliveryId": "adefa434-8120-5fa8-932e-01c2322574e3"
+    },
+    "sectionHeader": {
+      "title": {
+        "values": [
+          {
+            "locale": "en-US",
+            "value": "More looks"
+          },
+          {
+            "locale": "fr-FR",
+            "value": "Plus de looks"
+          },
+          {
+            "locale": "de-DE",
+            "value": "Weitere Looks"
+          }
+        ],
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      }
+    },
+    "items": [
+      {
+        "id": "acd46085-1834-5991-b560-7f17219c2439",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "26beeebe-3ab6-53f3-addf-c216afea6979",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ],
+    "gutter": true
+  }
+}

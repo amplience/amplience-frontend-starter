@@ -16,11 +16,12 @@ const font = (): { className: string; variable: string; style: string } => ({
 
 export const Cormorant_Garamond = font
 export const IBM_Plex_Sans = font
+export const Inter = font
 export const Jost = font
+export const Lato = font
+export const Montserrat = font
 export const Playfair_Display = font
 export const Poppins = font
 export const Public_Sans = font
-export const Lato = font
-export const Inter = font
 export const Roboto_Slab = font
 export const Roboto = font

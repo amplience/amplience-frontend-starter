@@ -1,0 +1,64 @@
+{
+  "id": "916cb313-7f95-51df-bb20-eb8bd0ccb11b",
+  "label": "Home — new in: Leather Tote",
+  "body": {
+    "_meta": {
+      "name": "Home — new in: Leather Tote",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "916cb313-7f95-51df-bb20-eb8bd0ccb11b"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Leather Tote"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Cabas en cuir"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ledershopper"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "$369"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "339 €"
+        },
+        {
+          "locale": "de-DE",
+          "value": "339 €"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/id/7/1200/1200",
+        "alt": "Oreline Leather Tote",
+        "width": 1200,
+        "height": 1200
+      }
+    },
+    "links": {
+      "href": "/products/leather-tote"
+    },
+    "layout": "above",
+    "headingVariant": "h3",
+    "elevation": "flat"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "id": "a255cc7e-49b8-52ab-a8c1-fa29af9f48d6",
+  "label": "Our story — hero",
+  "body": {
+    "_meta": {
+      "name": "Our story — hero",
+      "schema": "https://quadratic.amplience.com/v2/content/hero",
+      "deliveryId": "a255cc7e-49b8-52ab-a8c1-fa29af9f48d6"
+    },
+    "preTitle": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Our story"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Notre histoire"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Unsere Geschichte"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Made for the long way round"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Conçus pour durer"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Gemacht für den langen Weg"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Fewer, better things, and the patience to make them properly."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Moins de choses, mais de meilleures, et la patience de bien les faire."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Weniger, aber bessere Dinge – und die Geduld, sie richtig zu machen."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/chocolate-brown-is-the-new-black-quiet-luxury-pieces-to-build-a-tonal-wardrobe_hero",
+        "alt": "Designer arranging garments on a rail in a sunlit studio",
+        "width": 1376,
+        "height": 768
+      }
+    },
+    "contentWidth": 45,
+    "contentPositionMobile": "beneath",
+    "contentPositionDesktop": "overlay",
+    "heightBehaviour": "flexible",
+    "verticalPosition": "center",
+    "maxWidth": "default",
+    "maxHeight": 480,
+    "overlayColor": "black",
+    "overlayIntensity": 45,
+    "overlayStyle": "gradient",
+    "backgroundColor": "black"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "7ea6428d-afb0-521e-a5f8-90fc7e7f1b74",
+  "label": "Home — service: Delivery",
+  "body": {
+    "_meta": {
+      "name": "Home — service: Delivery",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "7ea6428d-afb0-521e-a5f8-90fc7e7f1b74"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "**Free delivery over $75**\n\nOn every order, every day."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "**Livraison offerte dès 75 €**\n\nSur toutes les commandes, tous les jours."
+        },
+        {
+          "locale": "de-DE",
+          "value": "**Kostenloser Versand ab 75 €**\n\nAuf jede Bestellung, jeden Tag."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "maxWidth": "default",
+    "gutter": false
+  }
+}

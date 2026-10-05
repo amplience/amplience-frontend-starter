@@ -1,0 +1,58 @@
+{
+  "id": "a31a4e51-c340-5d99-b16f-64271c970bfa",
+  "label": "Blog — Trending: Piratecore",
+  "body": {
+    "_meta": {
+      "name": "Blog — Trending: Piratecore",
+      "schema": "https://quadratic.amplience.com/v2/content/blog-article",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/blog/piratecore"
+          }
+        ]
+      }
+    },
+    "title": "Trending: Piratecore",
+    "description": "Ruffled white poplin under a black lace corset, grounded with a leather-look mini and chocolate knee-high boots.",
+    "keywords": ["anya finn", "shop the look", "autumn-winter", "trend"],
+    "social": {
+      "image": {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/quadraticdemo/piratecore_hero",
+          "alt": "Model in a ruffled white blouse, black lace corset, leather-look mini and knee-high boots",
+          "width": 2752,
+          "height": 1536
+        }
+      }
+    },
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
+    "coverImage": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/piratecore_hero",
+        "alt": "Model in a ruffled white blouse, black lace corset, leather-look mini and knee-high boots",
+        "width": 2752,
+        "height": 1536
+      }
+    },
+    "author": "Anya Finn Style Desk",
+    "publishDate": "2026-09-18",
+    "category": "Shop the look",
+    "tags": ["shop-the-look", "autumn-winter", "trend"],
+    "readTime": 3,
+    "slots": [
+      {
+        "id": "4c98adaf-2cde-5f8e-9d3c-4a50e8eb67af",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "id": "fea9b46c-5a08-5456-9562-1e868b21d4d4",
+  "label": "Home — department card: Kids",
+  "body": {
+    "_meta": {
+      "name": "Home — department card: Kids",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "fea9b46c-5a08-5456-9562-1e868b21d4d4"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Kids"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Enfant"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Kinder"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Built for puddles, playgrounds and growth spurts."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pensé pour les flaques, les cours de récré et les poussées de croissance."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Gemacht für Pfützen, Spielplätze und Wachstumsschübe."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/wk31-hp-cat-b4a-210825",
+        "alt": "Children's feet in bright socks and shoes around an orange ball",
+        "width": 1200,
+        "height": 1600
+      }
+    },
+    "links": {
+      "href": "/kids"
+    },
+    "layout": "overlay",
+    "headingVariant": "h3",
+    "elevation": "flat",
+    "color": "black"
+  }
+}

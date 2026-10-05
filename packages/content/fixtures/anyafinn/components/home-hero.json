@@ -108,6 +108,30 @@
         "href": "/shop-the-look",
         "variant": "solid",
         "color": "primary"
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Shop coats"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Voir les manteaux"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Mäntel entdecken"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/mens-jackets",
+        "variant": "outlined",
+        "color": "white"
       }
     ]
   }

@@ -1,0 +1,64 @@
+{
+  "id": "551ac835-463d-5fda-be6f-c181a0fc2386",
+  "label": "Home — new in: Corduroy Trousers",
+  "body": {
+    "_meta": {
+      "name": "Home — new in: Corduroy Trousers",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "551ac835-463d-5fda-be6f-c181a0fc2386"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Corduroy Trousers"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pantalon en velours côtelé"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Cordhose"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "$119"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "110 €"
+        },
+        {
+          "locale": "de-DE",
+          "value": "110 €"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/id/473/1200/1200",
+        "alt": "Brackish Corduroy Trousers",
+        "width": 1200,
+        "height": 1200
+      }
+    },
+    "links": {
+      "href": "/products/corduroy-trousers"
+    },
+    "layout": "above",
+    "headingVariant": "h3",
+    "elevation": "flat"
+  }
+}

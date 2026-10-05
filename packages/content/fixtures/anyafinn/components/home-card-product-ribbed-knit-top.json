@@ -1,0 +1,64 @@
+{
+  "id": "eb9d9c9d-c48c-5124-accf-aef8946e28a9",
+  "label": "Home — new in: Ribbed Knit Top",
+  "body": {
+    "_meta": {
+      "name": "Home — new in: Ribbed Knit Top",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "eb9d9c9d-c48c-5124-accf-aef8946e28a9"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Ribbed Knit Top"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Haut en maille côtelée"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Geripptes Stricktop"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "$99"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "89 €"
+        },
+        {
+          "locale": "de-DE",
+          "value": "89 €"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/id/660/1200/1200",
+        "alt": "Marisol Ribbed Knit Top",
+        "width": 1200,
+        "height": 1200
+      }
+    },
+    "links": {
+      "href": "/products/ribbed-knit-top"
+    },
+    "layout": "above",
+    "headingVariant": "h3",
+    "elevation": "flat"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "8c67f10b-1659-575a-8de6-ce8a0782a1cb",
+  "label": "Our story — value: Fewer, better",
+  "body": {
+    "_meta": {
+      "name": "Our story — value: Fewer, better",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "8c67f10b-1659-575a-8de6-ce8a0782a1cb"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "### Fewer, better\n\nTwo collections a year, not twelve. Everything we make is meant to outlast the season it launched in."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "### Moins, mais mieux\n\nDeux collections par an, pas douze. Tout ce que nous fabriquons est fait pour survivre à la saison de son lancement."
+        },
+        {
+          "locale": "de-DE",
+          "value": "### Weniger, aber besser\n\nZwei Kollektionen im Jahr, nicht zwölf. Alles, was wir machen, soll die Saison überdauern, in der es erschienen ist."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "maxWidth": "default",
+    "gutter": false
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "id": "55efd71f-a841-59da-aa36-d2f3f710751d",
+  "label": "Blog — Grown-up Glitter",
+  "body": {
+    "_meta": {
+      "name": "Blog — Grown-up Glitter",
+      "schema": "https://quadratic.amplience.com/v2/content/blog-article",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/blog/grown-up-glitter"
+          }
+        ]
+      }
+    },
+    "title": "Grown-up glitter",
+    "description": "A radiant, second-skin base plus a grippy shimmer primer and champagne liquid sparkle, finished with a clean tubing mascara.",
+    "keywords": ["anya finn", "shop the look", "autumn-winter", "beauty"],
+    "social": {
+      "image": {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/quadraticdemo/Grown-Up%20Glitter_hero_1",
+          "alt": "Close-up of champagne shimmer eye make-up on radiant skin",
+          "width": 2752,
+          "height": 1536
+        }
+      }
+    },
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
+    "coverImage": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/Grown-Up%20Glitter_hero_1",
+        "alt": "Close-up of champagne shimmer eye make-up on radiant skin",
+        "width": 2752,
+        "height": 1536
+      }
+    },
+    "author": "Anya Finn Style Desk",
+    "publishDate": "2026-09-25",
+    "category": "Shop the look",
+    "tags": ["shop-the-look", "autumn-winter", "beauty"],
+    "readTime": 3,
+    "slots": [
+      {
+        "id": "d563aa8d-67f3-52c5-9c38-9fd22bf629c1",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}
