@@ -24,10 +24,11 @@ vi.mock('@amplience/frontend-starter-content/mock', async (importOriginal) => {
   const original = await importOriginal<typeof import('@amplience/frontend-starter-content/mock')>()
   return {
     ...original,
-    makeMockContentClient: () =>
+    // Forward the set name so FIXTURE_SET (via lib/content-client) still selects it.
+    makeMockContentClient: (setName?: string) =>
       stubClient ??
       (failKind === undefined
-        ? original.makeMockContentClient()
+        ? original.makeMockContentClient(setName)
         : original.makeFailingContentClient(failKind)),
   }
 })
@@ -188,6 +189,15 @@ describe('ContentPage — content-fetch failures (QL-37)', () => {
 describe('ContentPage — category listings (ADR-0024)', () => {
   // The fixtures put every product in a top-level category and a leaf one,
   // so `/home` exercises ancestor matching and `/home-tables` a leaf.
+  // Products live in the anyafinn set (ADR-0019); the default set has none.
+  // lib/content-client reads FIXTURE_SET when loadRoute() re-imports it.
+  beforeEach(() => {
+    vi.stubEnv('FIXTURE_SET', 'anyafinn')
+  })
+
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
 
   it('renders a category listing for a path with no page behind it', async () => {
     const { default: ContentPage } = await loadRoute()

@@ -15,6 +15,8 @@ import {
   COLUMNS_BLOCK_SCHEMA,
   defaultRegistry,
   GRID_BLOCK_SCHEMA,
+  HEADER_BLOCK_SCHEMA,
+  HEADER_ROW_SCHEMA,
   HERO_BLOCK_SCHEMA,
   MARKDOWN_BLOCK_SCHEMA,
   MEDIA_BLOCK_SCHEMA,
@@ -208,6 +210,8 @@ const REAL_BLOCKS: readonly [string, Record<string, unknown>][] = [
   [MARKDOWN_BLOCK_SCHEMA, { content: 'Hello' }],
   [MEDIA_CARD_SCHEMA, { title: 'Card', media: image }],
   [MEDIA_BLOCK_SCHEMA, { media: image }],
+  [HEADER_BLOCK_SCHEMA, { rows: [] }],
+  [HEADER_ROW_SCHEMA, { items: [] }],
 ]
 
 describe('block CSS — real blocks', () => {

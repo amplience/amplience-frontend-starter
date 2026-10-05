@@ -350,6 +350,8 @@ describe('block CSS (ADR-0026)', () => {
     'https://quadratic.amplience.com/v2/content/carousel',
     'https://quadratic.amplience.com/v2/content/columns',
     'https://quadratic.amplience.com/v2/content/grid',
+    'https://quadratic.amplience.com/v2/content/header',
+    'https://quadratic.amplience.com/v2/content/header-row',
     'https://quadratic.amplience.com/v2/content/hero',
     'https://quadratic.amplience.com/v2/content/markdown-block',
     'https://quadratic.amplience.com/v2/content/media',
