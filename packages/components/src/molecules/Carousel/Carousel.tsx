@@ -688,7 +688,11 @@ export function Carousel({
       {dotsReserved && <div className={styles.dots} aria-hidden="true" />}
 
       {showDots && scrollable && (
-        <div className={styles.dots} role="group" aria-label="Choose a slide to show">
+        <div
+          className={clsx('carouselDots', styles.dots)}
+          role="group"
+          aria-label="Choose a slide to show"
+        >
           {Array.from({ length: state.snapCount }, (_, index) => (
             <button
               key={index}

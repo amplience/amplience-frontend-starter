@@ -36,6 +36,7 @@ import contentMenuItem from '../content-type-schemas/schemas/content_menu-item.j
 import contentMenuToggleButton from '../content-type-schemas/schemas/content_menu-toggle-button.json'
 import contentMenu from '../content-type-schemas/schemas/content_menu.json'
 import contentPage from '../content-type-schemas/schemas/content_page.json'
+import contentProduct from '../content-type-schemas/schemas/content_product.json'
 import partialsBlockCss from '../content-type-schemas/schemas/partials_block-css.json'
 import partialsCarouselItems from '../content-type-schemas/schemas/partials_carousel-items.json'
 import partialsCarouselOptions from '../content-type-schemas/schemas/partials_carousel-options.json'
@@ -47,6 +48,7 @@ import partialsIcon from '../content-type-schemas/schemas/partials_icon.json'
 import partialsMedia from '../content-type-schemas/schemas/partials_media.json'
 import partialsRichMedia from '../content-type-schemas/schemas/partials_rich-media.json'
 import partialsSectionHeader from '../content-type-schemas/schemas/partials_section-header.json'
+import partialsSeo from '../content-type-schemas/schemas/partials_seo.json'
 import sitestructureCustomCss from '../content-type-schemas/schemas/sitestructure_custom-css.json'
 import slotsSlot from '../content-type-schemas/schemas/slots_slot.json'
 
@@ -88,8 +90,10 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(partialsSectionHeader, 'PARTIAL'),
   entry(partialsIcon, 'PARTIAL'),
   entry(partialsBlockCss, 'PARTIAL'),
+  entry(partialsSeo, 'PARTIAL'),
   entry(contentPage, 'CONTENT_TYPE'),
   entry(contentBlogArticle, 'CONTENT_TYPE'),
+  entry(contentProduct, 'CONTENT_TYPE'),
   entry(contentHero, 'CONTENT_TYPE'),
   entry(contentMarkdownBlock, 'CONTENT_TYPE'),
   entry(contentColumns, 'CONTENT_TYPE'),

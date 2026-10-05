@@ -1,0 +1,18 @@
+{
+  "id": "efeaeac4-1227-508a-a8ed-d87c0bb3a400",
+  "label": "Hierarchy menu item: Homeware",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Homeware",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "efeaeac4-1227-508a-a8ed-d87c0bb3a400",
+      "hierarchy": {
+        "parentId": "9f138dcb-634b-5135-9c06-f365b1504264",
+        "root": false,
+        "position": "gggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Homeware",
+    "link": "/home"
+  }
+}

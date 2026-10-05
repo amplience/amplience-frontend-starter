@@ -1,0 +1,242 @@
+{
+  "id": "4f7465a5-7f2b-5090-9707-982d57c1bedb",
+  "label": "Product — Brackish Quilted Bomber",
+  "body": {
+    "_meta": {
+      "name": "Brackish Quilted Bomber",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "4f7465a5-7f2b-5090-9707-982d57c1bedb",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/quilted-bomber"
+          }
+        ]
+      }
+    },
+    "sku": "BRK-JACK-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Quilted Bomber"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Quilted Bomber"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Bómber acolchado"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Blouson matelassé"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Gesteppte Bomberjacke"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Bomber trapuntato"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Brackish",
+    "prices": [
+      {
+        "amount": 189,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 219,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 239,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A lightly quilted bomber with a ribbed collar and a zip that runs both ways."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A lightly quilted bomber with a ribbed collar and a zip that runs both ways."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Un bómber ligeramente acolchado con cuello de canalé y cremallera doble."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un blouson légèrement matelassé, col côtelé et fermeture à double curseur."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Eine leicht gesteppte Bomberjacke mit Rippkragen und Zweiwege-Reißverschluss."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Un bomber leggermente trapuntato con collo a coste e cerniera bidirezionale."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/id/338/1200/1200",
+          "alt": "Brackish Quilted Bomber",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Lining"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Lining"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Forro"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Doublure"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Futter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Fodera"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Quilted lining"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Quilted lining"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Forro acolchado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Doublure matelassée"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Steppfutter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Fodera trapuntata"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Closure"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Closure"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cierre"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Fermeture"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Verschluss"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Chiusura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Two-way zip"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Two-way zip"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cremallera doble"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Fermeture à double curseur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zweiwege-Reißverschluss"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Cerniera bidirezionale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["mens", "mens-jackets"],
+    "tags": ["jackets", "brackish"],
+    "title": "Brackish Quilted Bomber | Amplience Frontend Starter",
+    "description": "A lightly quilted bomber with a ribbed collar and a zip that runs both ways."
+  }
+}

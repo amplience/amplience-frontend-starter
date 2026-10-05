@@ -175,6 +175,23 @@ describe('MockContentClient', () => {
       expect(docs?.children).toHaveLength(10)
     })
 
+    it('assembles the anyafinn commerce tree (ADR-0024)', async () => {
+      // Mens, Womens, Kids, Homeware, Shop the Look — three subcategories under Mens.
+      // The commerce tree lives in its own set (ADR-0019), not the default one.
+      const client = makeMockContentClient('anyafinn')
+      const menu = await client.getHierarchy<{
+        items: { _meta: { deliveryId: string }; children?: unknown[] }[]
+      }>('anyafinn/site/hierarchy-menu-main')
+
+      expect(menu.items).toHaveLength(5)
+      const mens = menu.items.find(
+        (i) =>
+          i._meta.deliveryId ===
+          fixtureIdFor('anyafinn', 'components/header/site-hierarchy-menu-item-mens'),
+      )
+      expect(mens?.children).toHaveLength(3)
+    })
+
     it('returns leaf nodes with no children key at all', async () => {
       // A leaf must not carry `children: []` — HierarchyMenuItem would then
       // render an empty dropdown rather than a plain link.

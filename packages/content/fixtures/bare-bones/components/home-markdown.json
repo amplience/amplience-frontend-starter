@@ -11,7 +11,15 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "# Content coming soon"
+          "value": "Content coming soon"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Contenu à venir"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Inhalte folgen in Kürze"
         }
       ],
       "_meta": {

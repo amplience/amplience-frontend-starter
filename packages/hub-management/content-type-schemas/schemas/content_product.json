@@ -1,0 +1,277 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/product",
+  "title": "Product",
+  "description": "A product page — presentation-grade commerce fields plus optional slots for editorial content. Deliberately a brochure, not a catalogue: no variants, no inventory, no pricing rules (ADR-0018). A field belongs here only if a real PIM would overwrite it; a field a PIM would have to be reconciled with — a category taxonomy, a variant graph, a product-type schema — does not.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    },
+    {
+      "$ref": "https://quadratic.amplience.com/v2/partials/seo"
+    }
+  ],
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "🛍️ Product",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "🛍️ Product",
+            "pointers": ["/sku", "/name", "/brand", "/prices", "/shortDescription", "/status"]
+          },
+          {
+            "label": "🖼️ Media",
+            "pointers": ["/images"]
+          },
+          {
+            "label": "📋 Details",
+            "pointers": ["/attributes", "/categories", "/tags"]
+          },
+          {
+            "label": "📝 Content",
+            "pointers": ["/slots"]
+          },
+          {
+            "label": "🔗 URL",
+            "pointers": ["/_meta/deliveryKeys/values"]
+          },
+          {
+            "label": "⚙️ Metadata",
+            "pointers": [
+              "/title",
+              "/description",
+              "/keywords",
+              "/canonicalUrl",
+              "/robots",
+              "/social"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "_meta": {
+      "title": "Delivery",
+      "type": "object",
+      "properties": {
+        "deliveryKeys": {
+          "title": "Delivery keys",
+          "description": "Variant delivery keys for this item. Use the {site}/products/{slug} convention (ADR-0014) — e.g. acme/products/aurora-lounge-chair.",
+          "type": "object",
+          "properties": {
+            "values": {
+              "title": "URL",
+              "description": "Serve the product at this URL",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "description": "Use the format {siteKey}/products/{slug}\n(e.g. acme site would have acme/products/aurora-lounge-chair)",
+                    "title": "Delivery Key",
+                    "minLength": 1,
+                    "maxLength": 150
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "title": {
+      "description": "Product page title — <title> and SEO. Falls back to the product name when unset."
+    },
+    "social": {
+      "description": "Open Graph overrides. Unset fields fall back to the product's own name and description."
+    },
+    "canonicalUrl": {
+      "description": "Rarely set — when absent, the canonical defaults to the product's /products/{slug} path."
+    },
+    "sku": {
+      "type": "string",
+      "title": "SKU",
+      "description": "The product's identifier in your commerce or PIM system. Nothing renders it today — it is the join key to a PIM record or a search index later, and backfilling it across authored content is far more expensive than typing it now.",
+      "minLength": 1
+    },
+    "name": {
+      "title": "Product Name",
+      "description": "The product's display name.",
+      "minLength": 1,
+      "allOf": [
+        {
+          "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+        }
+      ]
+    },
+    "shortDescription": {
+      "title": "Short Description",
+      "description": "A sentence or two shown on the product page and in cards. Longer copy belongs in the Content tab.",
+      "allOf": [
+        {
+          "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      ],
+      "properties": {
+        "values": {
+          "items": {
+            "properties": {
+              "value": {
+                "type": "string",
+                "title": "Short Description",
+                "description": "A sentence or two shown on the product page and in cards.",
+                "ui:component": "text-area"
+              }
+            }
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "description": "Editorial lifecycle, not stock. Availability is owned by your commerce system and changes by the hour; what the CMS knows is whether this page is live, teasing, or retired.",
+      "enum": ["active", "coming-soon", "discontinued"],
+      "default": "active"
+    },
+    "images": {
+      "type": "array",
+      "title": "Images",
+      "description": "Product imagery. The first image is the primary one — used on cards and as the lead image on the product page. Add more to turn the product page's image area into a gallery; one image renders as a single image, and none renders nothing at all.",
+      "items": {
+        "title": "Image",
+        "allOf": [
+          {
+            "$ref": "https://quadratic.amplience.com/v2/partials/media"
+          }
+        ]
+      }
+    },
+    "attributes": {
+      "type": "array",
+      "title": "Attributes",
+      "description": "Display-only spec rows — label and value, rendered as a definition list. Not a typed attribute system; a PIM owns that.",
+      "items": {
+        "type": "object",
+        "title": "Attribute",
+        "properties": {
+          "label": {
+            "title": "Label",
+            "description": "e.g. Material, Dimensions, Weight.",
+            "minLength": 1,
+            "allOf": [
+              {
+                "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+              }
+            ]
+          },
+          "value": {
+            "title": "Value",
+            "minLength": 1,
+            "allOf": [
+              {
+                "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+              }
+            ]
+          }
+        },
+        "propertyOrder": ["label", "value"],
+        "required": ["label", "value"]
+      }
+    },
+    "tags": {
+      "type": "array",
+      "title": "Tags",
+      "description": "Topic tags — used for filtering and display.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "slots": {
+      "title": "Slots",
+      "description": "Ordered slots composing editorial content below the product detail — same pattern as Page and Blog Article. Optional: a product with none renders just its commerce fields.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+          },
+          {
+            "properties": {
+              "contentType": {
+                "enum": ["https://quadratic.amplience.com/v2/slots/slot"]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "prices": {
+      "type": "array",
+      "title": "Prices",
+      "description": "One price per currency. Display only — this is not a pricing engine: no tax, no promotions, no conversion between currencies. Most catalogues need a single entry. Which of these a visitor sees is a deployment setting (PRODUCT_CURRENCIES), not a property of the product, which is why prices are keyed by currency and not localized: a currency can serve several locales, and a locale can offer several currencies. A product with no price in the requested currency shows no price — prices are never substituted across currencies.",
+      "items": {
+        "type": "object",
+        "title": "Price",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "title": "Amount",
+            "description": "In major units — 19.99, not 1999.",
+            "minimum": 0
+          },
+          "currencyCode": {
+            "type": "string",
+            "title": "Currency",
+            "description": "ISO 4217 code, e.g. GBP, USD, EUR.",
+            "pattern": "^[A-Z]{3}$"
+          }
+        },
+        "propertyOrder": ["amount", "currencyCode"],
+        "required": ["amount", "currencyCode"]
+      }
+    },
+    "brand": {
+      "type": "string",
+      "title": "Brand",
+      "description": "Brand or vendor name, as displayed — not a reference. Every commerce platform carries one, though they model it differently (BigCommerce has a Brand resource, Shopify a `vendor` string, commercetools and SFCC a product attribute), so a plain name is what they can all supply. Shown above the product name."
+    },
+    "categories": {
+      "type": "array",
+      "title": "Categories",
+      "description": "Category identifiers this product belongs to. These are opaque to the frontend — nothing parses them, and they need not match any URL. Hierarchy, labels and URLs live with your navigation or your commerce system, not here.\n\nInclude the ancestors as well as the leaf: a shirt in mens-clothes-shirts should also list mens-clothes and mens. That is what commercetools itself recommends, and it is what makes category filtering a simple exact match — asking for mens returns everything beneath it without the site needing to know the tree.",
+      "items": {
+        "type": "string",
+        "title": "Category ID",
+        "minLength": 1
+      }
+    }
+  },
+  "propertyOrder": [
+    "sku",
+    "name",
+    "brand",
+    "prices",
+    "shortDescription",
+    "status",
+    "images",
+    "attributes",
+    "categories",
+    "tags",
+    "slots",
+    "title",
+    "description",
+    "keywords",
+    "social",
+    "canonicalUrl",
+    "robots"
+  ],
+  "required": ["sku", "name"]
+}

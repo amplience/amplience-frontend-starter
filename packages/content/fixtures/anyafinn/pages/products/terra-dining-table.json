@@ -1,0 +1,315 @@
+{
+  "id": "e9581329-e75a-58bb-844b-8bb05d2b66ec",
+  "label": "Product — Terra Dining Table",
+  "body": {
+    "_meta": {
+      "name": "Terra Dining Table",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "e9581329-e75a-58bb-844b-8bb05d2b66ec",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/terra-dining-table"
+          }
+        ]
+      }
+    },
+    "sku": "TER-TABLE-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Dining Table"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Dining Table"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Mesa de comedor"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Table à manger"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Esstisch"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Tavolo da pranzo"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Terra",
+    "prices": [
+      {
+        "amount": 1290,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 1490,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 1649,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A six-seat dining table in reclaimed elm with a hand-waxed finish."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A six-seat dining table in reclaimed elm with a hand-waxed finish."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Una mesa de comedor para seis en olmo recuperado con acabado encerado a mano."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Une table à manger six places en orme récupéré, finition cirée à la main."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein sechssitziger Esstisch aus wiederverwendeter Ulme mit handgewachster Oberfläche."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Un tavolo da pranzo per sei in olmo di recupero con finitura cerata a mano."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/id/42/1200/1200",
+          "alt": "Terra Dining Table — main view",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matériau"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Reclaimed elm"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Reclaimed elm"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Olmo recuperado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Orme récupéré"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Wiederverwendete Ulme"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Olmo di recupero"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Seats"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Seats"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Plazas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Places"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Sitzplätze"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Posti"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "6"
+            },
+            {
+              "locale": "en-GB",
+              "value": "6"
+            },
+            {
+              "locale": "es-ES",
+              "value": "6"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "6"
+            },
+            {
+              "locale": "de-DE",
+              "value": "6"
+            },
+            {
+              "locale": "it-IT",
+              "value": "6"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Dimensiones"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maße"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Dimensioni"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "200 × 95 × 75 cm"
+            },
+            {
+              "locale": "en-GB",
+              "value": "200 × 95 × 75 cm"
+            },
+            {
+              "locale": "es-ES",
+              "value": "200 × 95 × 75 cm"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "200 × 95 × 75 cm"
+            },
+            {
+              "locale": "de-DE",
+              "value": "200 × 95 × 75 cm"
+            },
+            {
+              "locale": "it-IT",
+              "value": "200 × 95 × 75 cm"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "tags": ["elm", "dining", "reclaimed"],
+    "title": "Terra Dining Table | Amplience Frontend Starter",
+    "description": "A six-seat dining table in reclaimed elm with a hand-waxed finish.",
+    "slots": [
+      {
+        "id": "3d88a30c-88da-55cb-97ee-f53eb395c2b9",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ],
+    "categories": ["home", "home-tables"]
+  }
+}

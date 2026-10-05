@@ -65,11 +65,11 @@ There is more than one body of content (ADR-0019). Each directory under
 also its delivery-key prefix — so several sets can be seeded onto one hub side by
 side, and each deployment reads only its own.
 
-| Set                | `set.json` says                | What it is                                                |
-| ------------------ | ------------------------------ | --------------------------------------------------------- |
-| `frontend-starter` | brand `amplience`, 6 locales   | The default. Introductory content mirroring the docs.     |
-| `anyafinn`         | brand `anyafinn`, `en-US` only | A fashion-retail demo — proof one hub carries several.    |
-| `bare-bones`       | brand `default`, `en-US` only  | Header, footer and a one-block homepage — a blank canvas. |
+| Set                | `set.json` says              | What it is                                                |
+| ------------------ | ---------------------------- | --------------------------------------------------------- |
+| `frontend-starter` | brand `amplience`, 6 locales | The default. Introductory content mirroring the docs.     |
+| `anyafinn`         | brand `anyafinn`, 3 locales  | A fashion-retail demo.                                    |
+| `bare-bones`       | brand `default`, 3 locales   | Header, footer and a one-block homepage — a blank canvas. |
 
 `set.json` carries the set's label, description, `defaultBrand`, `defaultLocale`
 and `authoredLocales`. The brand is the set's own, which is why switching set

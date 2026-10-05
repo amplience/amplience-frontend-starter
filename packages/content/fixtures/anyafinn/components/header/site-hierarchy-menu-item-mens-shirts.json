@@ -1,0 +1,18 @@
+{
+  "id": "dba7fd3c-e094-548c-8be5-fca95649f68c",
+  "label": "Hierarchy menu item: Mens — Shirts",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Mens — Shirts",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "dba7fd3c-e094-548c-8be5-fca95649f68c",
+      "hierarchy": {
+        "parentId": "5c76289c-d092-5c6b-810f-05a5da4ff054",
+        "root": false,
+        "position": "O~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Shirts",
+    "link": "/mens-shirts"
+  }
+}

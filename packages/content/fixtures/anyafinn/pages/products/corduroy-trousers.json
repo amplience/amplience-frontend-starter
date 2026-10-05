@@ -1,0 +1,242 @@
+{
+  "id": "4e085c9d-080c-52fe-be0b-b356c0210c5c",
+  "label": "Product — Brackish Corduroy Trousers",
+  "body": {
+    "_meta": {
+      "name": "Brackish Corduroy Trousers",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "4e085c9d-080c-52fe-be0b-b356c0210c5c",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/corduroy-trousers"
+          }
+        ]
+      }
+    },
+    "sku": "BRK-TROU-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Corduroy Trousers"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Corduroy Trousers"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Pantalones de pana"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pantalon en velours côtelé"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Cordhose"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Pantaloni in velluto"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Brackish",
+    "prices": [
+      {
+        "amount": 95,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 110,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 119,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Eight-wale corduroy, cut straight and softened in the wash."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Eight-wale corduroy, cut straight and softened in the wash."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Pana de ocho canales, corte recto y suavizada al lavado."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Velours côtelé huit côtes, coupe droite, adouci au lavage."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Achtfach-Cord, gerader Schnitt, in der Wäsche weich gemacht."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Velluto a otto coste, taglio dritto, ammorbidito in lavaggio."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/id/473/1200/1200",
+          "alt": "Brackish Corduroy Trousers",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matériau"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Cotton corduroy"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Cotton corduroy"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Pana de algodón"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Velours côtelé"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Baumwollcord"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Velluto a coste"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Regular fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Regular fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte regular"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe droite"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Normale Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità regolare"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["mens", "mens-trousers"],
+    "tags": ["trousers", "brackish"],
+    "title": "Brackish Corduroy Trousers | Amplience Frontend Starter",
+    "description": "Eight-wale corduroy, cut straight and softened in the wash."
+  }
+}

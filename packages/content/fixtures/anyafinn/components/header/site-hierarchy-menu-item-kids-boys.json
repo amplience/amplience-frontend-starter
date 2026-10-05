@@ -1,0 +1,18 @@
+{
+  "id": "73e7724e-28e8-5d3e-ac5f-a72757dc9c6e",
+  "label": "Hierarchy menu item: Kids — Boys",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Kids — Boys",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "73e7724e-28e8-5d3e-ac5f-a72757dc9c6e",
+      "hierarchy": {
+        "parentId": "2cc4871a-4a82-5605-adce-3a70f4fa6cd1",
+        "root": false,
+        "position": "O~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Boys",
+    "link": "/kids-boys"
+  }
+}

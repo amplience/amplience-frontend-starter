@@ -4,6 +4,6 @@
   "description": "Fashion retail demo brand — a second set, to prove one hub can carry several.",
   "defaultBrand": "anyafinn",
   "defaultLocale": "en-US",
-  "authoredLocales": ["en-US"],
+  "authoredLocales": ["en-US", "fr-FR", "de-DE"],
   "generatedDocs": false
 }

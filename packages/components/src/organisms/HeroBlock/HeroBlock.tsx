@@ -403,24 +403,24 @@ export function HeroBlock({
         >
           <div>
             {preTitle && (
-              <Typography variant="p" className={styles.preTitle ?? ''}>
+              <Typography variant="p" className={clsx('preTitle', styles.preTitle ?? '')}>
                 {preTitle}
               </Typography>
             )}
 
-            <Typography id={titleId} variant="h1" className={styles.title ?? ''}>
+            <Typography id={titleId} variant="h1" className={clsx('title', styles.title)}>
               {title}
             </Typography>
           </div>
 
           {subtitle && (
-            <Typography variant="h2" className={styles.subtitle ?? ''}>
+            <Typography variant="h2" className={clsx('subtitle', styles.subtitle ?? '')}>
               {subtitle}
             </Typography>
           )}
 
           {description && (
-            <Typography variant="p" className={styles.description ?? ''}>
+            <Typography variant="p" className={clsx('description', styles.description ?? '')}>
               {description}
             </Typography>
           )}

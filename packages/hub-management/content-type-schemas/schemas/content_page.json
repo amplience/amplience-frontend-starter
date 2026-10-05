@@ -6,6 +6,9 @@
   "allOf": [
     {
       "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    },
+    {
+      "$ref": "https://quadratic.amplience.com/v2/partials/seo"
     }
   ],
   "ui:component": {
@@ -71,68 +74,13 @@
       }
     },
     "title": {
-      "type": "string",
-      "title": "Title",
       "description": "Document title — <title> and SEO."
     },
-    "description": {
-      "type": "string",
-      "title": "Description",
-      "description": "Meta description — search snippets and social previews.",
-      "ui:component": "text-area"
-    },
-    "keywords": {
-      "type": "array",
-      "title": "Keywords",
-      "description": "Meta keywords. Low SEO weight today, but cheap to carry.",
-      "items": {
-        "type": "string"
-      }
-    },
     "social": {
-      "type": "object",
-      "title": "Social card",
-      "description": "Open Graph overrides. Unset fields fall back to the page's own title and description.",
-      "properties": {
-        "title": {
-          "type": "string",
-          "title": "Social title"
-        },
-        "description": {
-          "type": "string",
-          "title": "Social description",
-          "ui:component": "text-area"
-        },
-        "image": {
-          "title": "Social image",
-          "allOf": [
-            {
-              "$ref": "https://quadratic.amplience.com/v2/partials/media"
-            }
-          ]
-        }
-      },
-      "propertyOrder": ["title", "description", "image"]
+      "description": "Open Graph overrides. Unset fields fall back to the page's own title and description."
     },
     "canonicalUrl": {
-      "type": "string",
-      "title": "Canonical URL",
       "description": "Rarely set — when absent, the canonical defaults to the page's own route path."
-    },
-    "robots": {
-      "type": "object",
-      "title": "Robots",
-      "description": "Absent flags mean indexable and followable — editors opt out, never in.",
-      "properties": {
-        "noindex": {
-          "type": "boolean",
-          "title": "No index"
-        },
-        "nofollow": {
-          "type": "boolean",
-          "title": "No follow"
-        }
-      }
     },
     "slots": {
       "title": "Slots",

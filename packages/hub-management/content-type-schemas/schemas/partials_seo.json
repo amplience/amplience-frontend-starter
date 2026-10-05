@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/partials/seo",
+  "title": "SEO Metadata",
+  "description": "The shared SEO block — <title>, meta description, keywords, Open Graph overrides, canonical URL and robots flags. Mixed into any content type that owns a URL (page, blog article, product) via a root-level allOf, so a new SEO field lands in one place. Copy here is deliberately type-agnostic: a consuming type overrides an individual field's title or description alongside the $ref where it has something more specific to say.",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "title": "Title",
+      "description": "Title used for <title> and SEO."
+    },
+    "description": {
+      "type": "string",
+      "title": "Description",
+      "description": "Meta description — search snippets and social previews.",
+      "ui:component": "text-area"
+    },
+    "keywords": {
+      "type": "array",
+      "title": "Keywords",
+      "description": "Meta keywords. Low SEO weight today, but cheap to carry.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "social": {
+      "type": "object",
+      "title": "Social card",
+      "description": "Open Graph overrides. Unset fields fall back to this item's own title and description.",
+      "properties": {
+        "title": {
+          "type": "string",
+          "title": "Social title"
+        },
+        "description": {
+          "type": "string",
+          "title": "Social description",
+          "ui:component": "text-area"
+        },
+        "image": {
+          "title": "Social image",
+          "allOf": [
+            {
+              "$ref": "https://quadratic.amplience.com/v2/partials/media"
+            }
+          ]
+        }
+      },
+      "propertyOrder": ["title", "description", "image"]
+    },
+    "canonicalUrl": {
+      "type": "string",
+      "title": "Canonical URL",
+      "description": "Rarely set — when absent, the canonical defaults to this item's own route."
+    },
+    "robots": {
+      "type": "object",
+      "title": "Robots",
+      "description": "Absent flags mean indexable and followable — editors opt out, never in.",
+      "properties": {
+        "noindex": {
+          "type": "boolean",
+          "title": "No index"
+        },
+        "nofollow": {
+          "type": "boolean",
+          "title": "No follow"
+        }
+      }
+    }
+  },
+  "propertyOrder": ["title", "description", "keywords", "social", "canonicalUrl", "robots"]
+}

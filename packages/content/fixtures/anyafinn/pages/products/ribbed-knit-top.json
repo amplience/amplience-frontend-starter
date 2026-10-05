@@ -1,0 +1,306 @@
+{
+  "id": "62b852c3-6caa-5790-a299-c7bf04603252",
+  "label": "Product — Marisol Ribbed Knit Top",
+  "body": {
+    "_meta": {
+      "name": "Marisol Ribbed Knit Top",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "62b852c3-6caa-5790-a299-c7bf04603252",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/ribbed-knit-top"
+          }
+        ]
+      }
+    },
+    "sku": "MAR-TOP-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Ribbed Knit Top"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Ribbed Knit Top"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Top de punto acanalado"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Haut en maille côtelée"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Geripptes Stricktop"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Top a costine"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Marisol",
+    "prices": [
+      {
+        "amount": 78,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 89,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A fine-gauge merino rib that holds its shape and layers under everything."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A fine-gauge merino rib that holds its shape and layers under everything."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Un punto fino de merino acanalado que mantiene la forma y sirve de capa base."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Une côte fine en mérinos qui garde sa forme et se superpose à tout."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein feiner Merinorippstrick, der die Form hält und sich unterschichten lässt."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Una costina fine in merino che tiene la forma e si porta sotto a tutto."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/id/660/1200/1200",
+          "alt": "Marisol Ribbed Knit Top",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matériau"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Merino wool"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Merino wool"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lana merino"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Laine mérinos"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Merinowolle"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lana merino"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Slim fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Slim fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte ajustado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe ajustée"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Schmale Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità slim"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Cura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine wash at 30°"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine wash at 30°"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavar a máquina a 30°"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavage en machine à 30°"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwäsche bei 30°"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavaggio in lavatrice a 30°"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["womens", "womens-tops"],
+    "tags": ["tops", "marisol"],
+    "title": "Marisol Ribbed Knit Top | Amplience Frontend Starter",
+    "description": "A fine-gauge merino rib that holds its shape and layers under everything."
+  }
+}

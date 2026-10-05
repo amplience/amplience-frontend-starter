@@ -1,0 +1,18 @@
+{
+  "id": "1ca1054d-ed46-57aa-82e3-ed4fd6e8871d",
+  "label": "Hierarchy menu item: Womens — Accessories",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Womens — Accessories",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "1ca1054d-ed46-57aa-82e3-ed4fd6e8871d",
+      "hierarchy": {
+        "parentId": "32722372-7a57-5d8e-b95b-0ae3124ca58c",
+        "root": false,
+        "position": "ggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Accessories",
+    "link": "/womens-accessories"
+  }
+}

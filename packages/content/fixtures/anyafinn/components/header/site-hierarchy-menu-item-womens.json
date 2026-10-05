@@ -1,0 +1,18 @@
+{
+  "id": "32722372-7a57-5d8e-b95b-0ae3124ca58c",
+  "label": "Hierarchy menu item: Womens",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Womens",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "32722372-7a57-5d8e-b95b-0ae3124ca58c",
+      "hierarchy": {
+        "parentId": "9f138dcb-634b-5135-9c06-f365b1504264",
+        "root": false,
+        "position": "gO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Womens",
+    "link": "/womens"
+  }
+}

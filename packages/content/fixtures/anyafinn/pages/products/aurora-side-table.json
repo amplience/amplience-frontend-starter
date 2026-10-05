@@ -1,0 +1,242 @@
+{
+  "id": "03b8d71c-2729-547d-9348-ed2a7d5ac43c",
+  "label": "Product — Aurora Side Table",
+  "body": {
+    "_meta": {
+      "name": "Aurora Side Table",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "03b8d71c-2729-547d-9348-ed2a7d5ac43c",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/aurora-side-table"
+          }
+        ]
+      }
+    },
+    "sku": "AUR-TABLE-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Side Table"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Side Table"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Mesa auxiliar"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Table d’appoint"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Beistelltisch"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Tavolino"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Aurora",
+    "prices": [
+      {
+        "amount": 229,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 265,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 289,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A small oak side table that pairs with the Aurora chair."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A small oak side table that pairs with the Aurora chair."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Una pequeña mesa auxiliar de roble que combina con el sillón Aurora."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Une petite table d’appoint en chêne assortie au fauteuil Aurora."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein kleiner Beistelltisch aus Eiche, passend zum Aurora Sessel."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Un piccolo tavolino in rovere abbinato alla poltrona Aurora."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/id/445/1200/1200",
+          "alt": "Aurora Side Table — main view",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matériau"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Solid oak"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Solid oak"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Roble macizo"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Chêne massif"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Massive Eiche"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Rovere massello"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Diameter"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Diameter"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Diámetro"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Diamètre"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Durchmesser"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Diametro"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "45 cm"
+            },
+            {
+              "locale": "en-GB",
+              "value": "45 cm"
+            },
+            {
+              "locale": "es-ES",
+              "value": "45 cm"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "45 cm"
+            },
+            {
+              "locale": "de-DE",
+              "value": "45 cm"
+            },
+            {
+              "locale": "it-IT",
+              "value": "45 cm"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "tags": ["oak", "side-table"],
+    "title": "Aurora Side Table | Amplience Frontend Starter",
+    "description": "A small oak side table that pairs with the Aurora chair.",
+    "categories": ["home", "home-tables"]
+  }
+}

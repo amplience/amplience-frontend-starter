@@ -1,0 +1,306 @@
+{
+  "id": "78acd22d-bccc-557a-bd9e-cff5afad9a92",
+  "label": "Product — Halden Tapered Chinos",
+  "body": {
+    "_meta": {
+      "name": "Halden Tapered Chinos",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "78acd22d-bccc-557a-bd9e-cff5afad9a92",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/tapered-chinos"
+          }
+        ]
+      }
+    },
+    "sku": "HAL-TROU-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Tapered Chinos"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Tapered Chinos"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chinos ajustados"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Chino fuselé"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Verjüngte Chinos"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Chino affusolati"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Halden",
+    "prices": [
+      {
+        "amount": 85,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 99,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 109,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Cotton twill chinos with a clean taper from knee to hem."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Cotton twill chinos with a clean taper from knee to hem."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chinos de sarga de algodón con un estrechamiento limpio de rodilla a bajo."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un chino en sergé de coton, fuselé nettement du genou à l’ourlet."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Chinos aus Baumwollköper mit sauberer Verjüngung vom Knie zum Saum."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Chino in twill di cotone, affusolati dal ginocchio all’orlo."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/id/447/1200/1200",
+          "alt": "Halden Tapered Chinos",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matériau"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "100% cotton"
+            },
+            {
+              "locale": "en-GB",
+              "value": "100% cotton"
+            },
+            {
+              "locale": "es-ES",
+              "value": "100% algodón"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "100% coton"
+            },
+            {
+              "locale": "de-DE",
+              "value": "100% Baumwolle"
+            },
+            {
+              "locale": "it-IT",
+              "value": "100% cotone"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Slim fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Slim fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte ajustado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe ajustée"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Schmale Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità slim"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Cura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine wash at 30°"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine wash at 30°"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavar a máquina a 30°"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavage en machine à 30°"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwäsche bei 30°"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavaggio in lavatrice a 30°"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["mens", "mens-trousers"],
+    "tags": ["trousers", "halden"],
+    "title": "Halden Tapered Chinos | Amplience Frontend Starter",
+    "description": "Cotton twill chinos with a clean taper from knee to hem."
+  }
+}

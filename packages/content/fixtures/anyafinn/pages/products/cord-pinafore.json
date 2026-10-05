@@ -1,0 +1,242 @@
+{
+  "id": "0cc7d809-1b25-5a08-a6c1-21568b7d826a",
+  "label": "Product — Fieldnote Cord Pinafore",
+  "body": {
+    "_meta": {
+      "name": "Fieldnote Cord Pinafore",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "0cc7d809-1b25-5a08-a6c1-21568b7d826a",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/cord-pinafore"
+          }
+        ]
+      }
+    },
+    "sku": "FLD-GIRL-01",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Cord Pinafore"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Cord Pinafore"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Pichi de pana"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Robe-chasuble en velours"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Cord-Trägerkleid"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Scamiciato in velluto"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Fieldnote",
+    "prices": [
+      {
+        "amount": 42,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 48,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 52,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A corduroy pinafore with adjustable straps and a pocket on the front."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A corduroy pinafore with adjustable straps and a pocket on the front."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Un pichi de pana con tirantes ajustables y un bolsillo delantero."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Une robe-chasuble en velours côtelé, bretelles réglables et poche devant."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein Cord-Trägerkleid mit verstellbaren Trägern und Tasche vorn."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Uno scamiciato in velluto con spalline regolabili e tasca davanti."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://picsum.photos/id/838/1200/1200",
+          "alt": "Fieldnote Cord Pinafore",
+          "width": 1200,
+          "height": 1200
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matériau"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Cotton corduroy"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Cotton corduroy"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Pana de algodón"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Velours côtelé"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Baumwollcord"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Velluto a coste"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Age"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Age"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Edad"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Âge"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Alter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Età"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "2–8 years"
+            },
+            {
+              "locale": "en-GB",
+              "value": "2–8 years"
+            },
+            {
+              "locale": "es-ES",
+              "value": "2–8 años"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "2–8 ans"
+            },
+            {
+              "locale": "de-DE",
+              "value": "2–8 Jahre"
+            },
+            {
+              "locale": "it-IT",
+              "value": "2–8 anni"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["kids", "kids-girls"],
+    "tags": ["girls", "fieldnote"],
+    "title": "Fieldnote Cord Pinafore | Amplience Frontend Starter",
+    "description": "A corduroy pinafore with adjustable straps and a pocket on the front."
+  }
+}
