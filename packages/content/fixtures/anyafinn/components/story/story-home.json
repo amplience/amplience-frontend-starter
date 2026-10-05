@@ -1,0 +1,31 @@
+{
+  "id": "c78fad22-4c76-542a-8365-4b9475bb282b",
+  "label": "Our story — home line",
+  "body": {
+    "_meta": {
+      "name": "Our story — home line",
+      "schema": "https://quadratic.amplience.com/v2/content/columns",
+      "deliveryId": "c78fad22-4c76-542a-8365-4b9475bb282b"
+    },
+    "items": [
+      {
+        "id": "5212bf0c-d353-5f24-9c8b-167b11e49355",
+        "contentType": "https://quadratic.amplience.com/v2/content/media",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "51698822-c55e-5be6-9ee3-8078f52edca2",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ],
+    "gap": 32,
+    "alignItems": "center",
+    "maxWidth": "default",
+    "gutter": true
+  }
+}

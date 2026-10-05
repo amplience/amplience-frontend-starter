@@ -1,0 +1,32 @@
+{
+  "id": "4e4e5d9f-a4c8-5a3e-bf7e-f52ec9667697",
+  "label": "Home — service: Click & collect",
+  "body": {
+    "_meta": {
+      "name": "Home — service: Click & collect",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "4e4e5d9f-a4c8-5a3e-bf7e-f52ec9667697"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "**Click & collect in 2 hours**\n\nOrder online, pick up in store."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "**Retrait en magasin en 2 heures**\n\nCommandez en ligne, récupérez en boutique."
+        },
+        {
+          "locale": "de-DE",
+          "value": "**Click & Collect in 2 Stunden**\n\nOnline bestellen, im Store abholen."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "maxWidth": "default",
+    "gutter": false
+  }
+}

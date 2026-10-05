@@ -1,0 +1,58 @@
+{
+  "id": "6917d042-42ab-5ebc-836f-fc1b45aa9824",
+  "label": "Home — editorial: one good coat",
+  "body": {
+    "_meta": {
+      "name": "Home — editorial: one good coat",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "6917d042-42ab-5ebc-836f-fc1b45aa9824"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "## One good coat\n\nWe'd rather you bought one coat this decade than one a season. So we cut ours generously, line them properly and keep spare buttons for every style we've ever made.\n\nIf it needs mending in ten years, bring it back. We'll fix it."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "## Un bon manteau\n\nNous préférons que vous achetiez un manteau par décennie plutôt qu'un par saison. Alors nous les coupons amples, les doublons avec soin et gardons des boutons de rechange pour chaque modèle que nous avons fabriqué.\n\nS'il a besoin d'une réparation dans dix ans, rapportez-le. Nous nous en chargeons."
+        },
+        {
+          "locale": "de-DE",
+          "value": "## Ein guter Mantel\n\nUns ist lieber, Sie kaufen einen Mantel pro Jahrzehnt als einen pro Saison. Deshalb schneiden wir unsere großzügig, füttern sie ordentlich und heben Ersatzknöpfe für jedes Modell auf, das wir je gemacht haben.\n\nWenn er in zehn Jahren repariert werden muss, bringen Sie ihn vorbei. Wir kümmern uns darum."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Read our story"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Découvrir notre histoire"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Unsere Geschichte"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/company/story",
+        "variant": "outlined",
+        "color": "black"
+      }
+    ],
+    "maxWidth": "default",
+    "gutter": false
+  }
+}

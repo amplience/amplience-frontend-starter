@@ -1,0 +1,58 @@
+{
+  "id": "665eee6b-ab0d-59e8-96de-9a6e161cda14",
+  "label": "Blog — Trending: Piratecore — body",
+  "body": {
+    "_meta": {
+      "name": "Blog — Trending: Piratecore — body",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "665eee6b-ab0d-59e8-96de-9a6e161cda14"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Piratecore is romantic, a little rebellious and easier to wear than it sounds. The trick is contrast: something soft and billowy on top, something structured at the waist, then a tougher base and tall boots to hold it all down.\n\n## The look\n\n- A ruffled white poplin blouse\n- A black lace corset top, worn over it\n- A leather-look mini skirt\n- Chocolate knee-high boots\n\n## Why it works\n\nThe blouse brings the poet-shirt volume. The corset adds waist shape without tipping into fancy dress. The leather-look mini stops the lace and ruffles feeling too sweet, and the chocolate boots do a lot of quiet work: that tobacco tone reads weathered and romantic rather than black-on-black.\n\n## How to wear it\n\nBy day, throw an oversized jacket over the top and keep jewellery to one layered chain. By night, sharpen the lip, zip the boots up and let the corset be the statement. A silk scarf, knotted loose at the neck, is the only extra it needs."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Le piratecore est romantique, un brin rebelle, et plus facile à porter qu'il n'y paraît. Le secret, c'est le contraste : quelque chose de doux et ample en haut, quelque chose de structuré à la taille, puis une base plus brute et des bottes hautes pour ancrer le tout.\n\n## Le look\n\n- Une blouse en popeline blanche à volants\n- Un corset en dentelle noire, porté par-dessus\n- Une mini-jupe effet cuir\n- Des bottes hautes couleur chocolat\n\n## Pourquoi ça marche\n\nLa blouse apporte le volume de la chemise de poète. Le corset dessine la taille sans basculer dans le déguisement. La mini effet cuir empêche la dentelle et les volants d'être trop sages, et les bottes chocolat font beaucoup, discrètement : ce ton tabac paraît patiné et romantique plutôt que noir sur noir.\n\n## Comment le porter\n\nLe jour, ajoutez une veste oversize et limitez les bijoux à une seule chaîne superposée. Le soir, intensifiez la bouche, remontez les bottes et laissez le corset faire sensation. Un foulard en soie, noué lâchement au cou, est le seul accessoire dont il a besoin."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Piratecore ist romantisch, ein bisschen rebellisch und leichter zu tragen, als es klingt. Der Trick ist der Kontrast: oben etwas Weiches, Bauschiges, in der Taille etwas Strukturiertes, darunter eine robustere Basis und hohe Stiefel, die alles erden.\n\n## Der Look\n\n- Eine weiße Popelinbluse mit Rüschen\n- Ein schwarzes Spitzenkorsett, darüber getragen\n- Ein Minirock in Lederoptik\n- Kniehohe Stiefel in Schokobraun\n\n## Warum es funktioniert\n\nDie Bluse bringt das Volumen eines Poetenhemds. Das Korsett formt die Taille, ohne nach Kostüm auszusehen. Der Mini in Lederoptik verhindert, dass Spitze und Rüschen zu lieblich wirken, und die schokobraunen Stiefel leisten viel im Stillen: Der Tabakton wirkt verwittert und romantisch statt Schwarz auf Schwarz.\n\n## So tragen Sie es\n\nTagsüber eine Oversize-Jacke darüber und beim Schmuck bei einer einzigen Lagenkette bleiben. Abends die Lippen betonen, die Stiefel hochziehen und das Korsett zum Statement machen. Ein locker um den Hals geknotetes Seidentuch ist das einzige Extra, das es braucht."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Shop the Silk Scarf"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Voir le foulard en soie"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zum Seidentuch"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/products/silk-scarf",
+        "variant": "outlined",
+        "color": "black"
+      }
+    ],
+    "maxWidth": "narrow",
+    "gutter": true
+  }
+}

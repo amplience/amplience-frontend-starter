@@ -1,28 +1,21 @@
 {
-  "id": "545c4a5b-0892-58f1-bdc7-60c1a0dba658",
-  "label": "Shop the Look — main slot",
+  "id": "39f97cfc-962f-5d8f-a795-6df83d5f2cec",
+  "label": "Blog — Opulent Decadence — main slot",
   "body": {
     "_meta": {
-      "name": "Shop the Look — main slot",
+      "name": "Blog — Opulent Decadence — main slot",
       "schema": "https://quadratic.amplience.com/v2/slots/slot"
     },
     "components": [
       {
-        "id": "68a36106-cd66-5b3a-a5ad-d44e1118ae20",
-        "contentType": "https://quadratic.amplience.com/v2/content/hero",
-        "_meta": {
-          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
-        }
-      },
-      {
-        "id": "49124b75-a998-5d41-9549-3fd707b63c95",
+        "id": "05a1c688-1bc7-595b-bdd3-2ad87baed65c",
         "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "38ce5641-5f65-5f2f-846b-0e2a224bfbab",
+        "id": "8b06afb1-51bc-520e-a961-2f4b7b42e18d",
         "contentType": "https://quadratic.amplience.com/v2/content/grid",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

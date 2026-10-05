@@ -1,0 +1,39 @@
+{
+  "id": "5e1daa33-78a5-5367-a8ad-7b01e4d372e0",
+  "label": "Home — service strip",
+  "body": {
+    "_meta": {
+      "name": "Home — service strip",
+      "schema": "https://quadratic.amplience.com/v2/content/columns",
+      "deliveryId": "5e1daa33-78a5-5367-a8ad-7b01e4d372e0"
+    },
+    "items": [
+      {
+        "id": "7ea6428d-afb0-521e-a5f8-90fc7e7f1b74",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "88525b4c-6cfa-5d24-be34-62a3f760dc1d",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "4e4e5d9f-a4c8-5a3e-bf7e-f52ec9667697",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ],
+    "gap": 16,
+    "alignItems": "top",
+    "backgroundColor": "light",
+    "maxWidth": "default",
+    "gutter": true
+  }
+}

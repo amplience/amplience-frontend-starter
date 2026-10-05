@@ -1,0 +1,47 @@
+{
+  "id": "d72506a9-d632-5350-b171-b98c01720402",
+  "label": "Our story — main slot",
+  "body": {
+    "_meta": {
+      "name": "Our story — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot"
+    },
+    "components": [
+      {
+        "id": "a255cc7e-49b8-52ab-a8c1-fa29af9f48d6",
+        "contentType": "https://quadratic.amplience.com/v2/content/hero",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "0499c39d-bd9c-55e0-b4fb-b5d05a27cfdc",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "308de51a-b386-53b6-8316-3b8f779fe5de",
+        "contentType": "https://quadratic.amplience.com/v2/content/columns",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "c78fad22-4c76-542a-8365-4b9475bb282b",
+        "contentType": "https://quadratic.amplience.com/v2/content/columns",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "f1ab30fc-85d1-5d5a-bcf7-cb3153d3e956",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

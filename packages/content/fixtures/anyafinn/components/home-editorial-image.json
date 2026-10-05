@@ -1,0 +1,22 @@
+{
+  "id": "f27ebd7c-db76-5dce-8718-b6e25598ee7c",
+  "label": "Home — editorial: image",
+  "body": {
+    "_meta": {
+      "name": "Home — editorial: image",
+      "schema": "https://quadratic.amplience.com/v2/content/media",
+      "deliveryId": "f27ebd7c-db76-5dce-8718-b6e25598ee7c"
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/pexels-evg-kowalievska-1040173",
+        "alt": "Woman in a deep-green faux-fur coat holding a small black bag",
+        "width": 3648,
+        "height": 5472
+      }
+    },
+    "fullBleed": false,
+    "maxWidth": "default"
+  }
+}

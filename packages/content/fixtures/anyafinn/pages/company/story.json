@@ -1,0 +1,33 @@
+{
+  "id": "020583d4-f129-5971-baa4-ed6f7ee4f614",
+  "label": "Our story page",
+  "body": {
+    "_meta": {
+      "name": "Our story page",
+      "schema": "https://quadratic.amplience.com/v2/content/page",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/company/story"
+          }
+        ]
+      }
+    },
+    "title": "Our story",
+    "description": "How a rail of second-hand coats at a Saturday market became a brand built to last.",
+    "keywords": ["anya finn", "our story", "about", "sustainability"],
+    "robots": {
+      "nofollow": false,
+      "noindex": false
+    },
+    "slots": [
+      {
+        "id": "d72506a9-d632-5350-b171-b98c01720402",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

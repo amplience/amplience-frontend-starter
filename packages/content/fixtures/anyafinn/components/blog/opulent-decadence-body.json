@@ -1,0 +1,58 @@
+{
+  "id": "05a1c688-1bc7-595b-bdd3-2ad87baed65c",
+  "label": "Blog — Opulent Decadence — body",
+  "body": {
+    "_meta": {
+      "name": "Blog — Opulent Decadence — body",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "05a1c688-1bc7-595b-bdd3-2ad87baed65c"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Think candlelight: a champagne-pearl glow, blush draped high, a crisp graphic eye and a plush, glossy lip. It's the most dramatic of our three looks, so it wants the simplest clothes.\n\n## The look\n\n- Luminous skin, with a pearl highlighter on the cheekbones\n- Blush swept up towards the temples\n- A sharp graphic liner, winged out\n- A full, glossy lip in deep berry\n\n## Why it works\n\nEvery element is bold, but they all share a temperature: warm golds and berry reds. Keeping to one colour family stops a full face from looking busy.\n\n## What to wear with it\n\nA midi wrap dress in a dark jewel tone, with a coat thrown over the shoulders on the way out. Swap the tote for something small, and keep jewellery to a single pair of earrings."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pensez lumière de bougie : un éclat nacré champagne, un blush posé haut, un œil graphique net et des lèvres pulpeuses et brillantes. C'est le plus spectaculaire de nos trois looks, il appelle donc les vêtements les plus simples.\n\n## Le look\n\n- Un teint lumineux, avec un enlumineur nacré sur les pommettes\n- Un blush étiré vers les tempes\n- Un trait d'eye-liner graphique, étiré en virgule\n- Des lèvres pleines et brillantes, couleur baie profonde\n\n## Pourquoi ça marche\n\nChaque élément est affirmé, mais tous partagent la même température : des ors chauds et des rouges baie. Rester dans une seule famille de couleurs évite qu'un maquillage complet paraisse chargé.\n\n## Que porter avec\n\nUne robe portefeuille midi dans un ton pierre précieuse sombre, un manteau jeté sur les épaules pour sortir. Remplacez le cabas par un petit sac et limitez les bijoux à une seule paire de boucles d'oreilles."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Denken Sie an Kerzenschein: champagnerfarbener Perlglanz, hoch gesetztes Rouge, ein klarer grafischer Lidstrich und volle, glänzende Lippen. Es ist der dramatischste unserer drei Looks – deshalb verlangt er die schlichteste Kleidung.\n\n## Der Look\n\n- Strahlende Haut mit perlmuttfarbenem Highlighter auf den Wangenknochen\n- Rouge, zu den Schläfen hin ausgestrichen\n- Ein präziser grafischer Lidstrich mit Schwung\n- Volle, glänzende Lippen in tiefem Beerenrot\n\n## Warum es funktioniert\n\nJedes Element ist kräftig, aber alle haben dieselbe Temperatur: warme Goldtöne und Beerenrot. Wer bei einer Farbfamilie bleibt, verhindert, dass ein volles Make-up überladen wirkt.\n\n## Was man dazu trägt\n\nEin Midi-Wickelkleid in einem dunklen Edelsteinton, für den Weg nach draußen einen Mantel über die Schultern gelegt. Den Shopper gegen eine kleine Tasche tauschen und beim Schmuck bei einem einzigen Paar Ohrringe bleiben."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "ctas": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Shop the Midi Wrap Dress"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Voir la robe portefeuille midi"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zum Midi-Wickelkleid"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "href": "/products/midi-wrap-dress",
+        "variant": "outlined",
+        "color": "black"
+      }
+    ],
+    "maxWidth": "narrow",
+    "gutter": true
+  }
+}

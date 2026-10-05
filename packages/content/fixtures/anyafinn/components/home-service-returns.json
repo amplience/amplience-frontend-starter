@@ -1,0 +1,32 @@
+{
+  "id": "88525b4c-6cfa-5d24-be34-62a3f760dc1d",
+  "label": "Home — service: Returns",
+  "body": {
+    "_meta": {
+      "name": "Home — service: Returns",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "88525b4c-6cfa-5d24-be34-62a3f760dc1d"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "**30-day returns**\n\nChanged your mind? Sending it back is free."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "**Retours sous 30 jours**\n\nVous avez changé d'avis ? Le retour est gratuit."
+        },
+        {
+          "locale": "de-DE",
+          "value": "**30 Tage Rückgabe**\n\nDoch nicht das Richtige? Die Rücksendung ist kostenlos."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "maxWidth": "default",
+    "gutter": false
+  }
+}

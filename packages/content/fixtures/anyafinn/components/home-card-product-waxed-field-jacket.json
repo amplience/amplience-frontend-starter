@@ -1,0 +1,64 @@
+{
+  "id": "f3fad4d2-0711-5c23-8047-dea13c62a30d",
+  "label": "Home — new in: Waxed Field Jacket",
+  "body": {
+    "_meta": {
+      "name": "Home — new in: Waxed Field Jacket",
+      "schema": "https://quadratic.amplience.com/v2/content/media-card",
+      "deliveryId": "f3fad4d2-0711-5c23-8047-dea13c62a30d"
+    },
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Waxed Field Jacket"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Veste de terrain huilée"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Gewachste Feldjacke"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "$309"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "285 €"
+        },
+        {
+          "locale": "de-DE",
+          "value": "285 €"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "media": {
+      "mediaType": "ManualImage",
+      "image": {
+        "src": "https://picsum.photos/id/1005/1200/1200",
+        "alt": "Halden Waxed Field Jacket",
+        "width": 1200,
+        "height": 1200
+      }
+    },
+    "links": {
+      "href": "/products/waxed-field-jacket"
+    },
+    "layout": "above",
+    "headingVariant": "h3",
+    "elevation": "flat"
+  }
+}

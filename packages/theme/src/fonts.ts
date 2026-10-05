@@ -14,6 +14,7 @@ import {
   Inter,
   Jost,
   Lato,
+  Montserrat,
   Playfair_Display,
   Poppins,
   Public_Sans,
@@ -65,6 +66,13 @@ export const lato = Lato({
   display: 'swap',
 })
 
+export const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  variable: '--nf-montserrat',
+  display: 'swap',
+})
+
 export const playfairDisplay = Playfair_Display({
   subsets: ['latin'],
   weight: ['400', '600', '700'],
@@ -108,6 +116,7 @@ export const brandFonts = [
   jetbrainsMono,
   jost,
   lato,
+  montserrat,
   playfairDisplay,
   poppins,
   publicSans,

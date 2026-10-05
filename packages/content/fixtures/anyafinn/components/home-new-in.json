@@ -1,0 +1,117 @@
+{
+  "id": "18fa7b7a-ef73-5235-a38a-614a62b428eb",
+  "label": "Home — new in",
+  "body": {
+    "_meta": {
+      "name": "Home — new in",
+      "schema": "https://quadratic.amplience.com/v2/content/carousel",
+      "deliveryId": "18fa7b7a-ef73-5235-a38a-614a62b428eb"
+    },
+    "sectionHeader": {
+      "title": {
+        "values": [
+          {
+            "locale": "en-US",
+            "value": "New in"
+          },
+          {
+            "locale": "fr-FR",
+            "value": "Nouveautés"
+          },
+          {
+            "locale": "de-DE",
+            "value": "Neuheiten"
+          }
+        ],
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      },
+      "description": {
+        "values": [
+          {
+            "locale": "en-US",
+            "value": "Just landed for autumn."
+          },
+          {
+            "locale": "fr-FR",
+            "value": "Tout juste arrivé pour l'automne."
+          },
+          {
+            "locale": "de-DE",
+            "value": "Frisch eingetroffen für den Herbst."
+          }
+        ],
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      }
+    },
+    "items": [
+      {
+        "id": "f3fad4d2-0711-5c23-8047-dea13c62a30d",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "eb9d9c9d-c48c-5124-accf-aef8946e28a9",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "916cb313-7f95-51df-bb20-eb8bd0ccb11b",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "551ac835-463d-5fda-be6f-c181a0fc2386",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "679e8adb-0a18-58f0-8c37-71b53c641168",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "3296a6f9-9317-5b7b-b1e5-99fa85ba6f31",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "ae96389a-d6f9-5a32-8422-47b6e4649a10",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
+        "id": "45b61d63-75d4-5191-b857-f520cfa20b93",
+        "contentType": "https://quadratic.amplience.com/v2/content/media-card",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ],
+    "slidesMobile": 1.5,
+    "slidesTablet": 3,
+    "slidesDesktop": 4,
+    "showArrows": true,
+    "showDots": false,
+    "dragToScroll": true,
+    "maxWidth": "default",
+    "gutter": true
+  }
+}
