@@ -1,12 +1,8 @@
 /**
- * Blog archive assembly — the shared step between `/blog` and `/blog/[slug]`.
- *
- * Both routes start from the same `listBySchema(BLOG_ARTICLE_SCHEMA)` read and
- * need the same thing from it: the articles that belong to *this* site, keyed
- * by the slug their URL uses. The archive page renders them; the article page
- * enumerates their slugs for `generateStaticParams`. Deriving that once here
- * keeps the two routes from drifting — a slug the archive links to and a slug
- * the router prerenders should never disagree.
+ * Blog archive assembly — turns the `listBySchema(BLOG_ARTICLE_SCHEMA)` read
+ * behind `/blog` into the articles that belong to *this* site, keyed by the
+ * slug their URL uses. (`/blog/[slug]` used to share it for
+ * `generateStaticParams`; see that route for why it no longer enumerates.)
  *
  * Two properties fall out of doing it in one pure function:
  *

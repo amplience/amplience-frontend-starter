@@ -15,13 +15,10 @@
  * `generateMetadata` structured so a `use cache` directive is a one-line
  * addition, and no route segment config at all.
  *
- * `generateStaticParams` prerenders nothing today — `cacheComponents` is
- * unset, the `(site)` 404 boundary reads `headers()`, and `[locale]` is
- * unenumerated, so it is as unreachable here as it is on `/blog/[slug]`. It
- * ships because it is the port consumer ADR-0018 §2 wants and the
- * enumeration source ADR-0022 open question #5 needs. Note the live trap
- * recorded as ADR-0018 open question #11: under `cacheComponents` an empty
- * return errors, and a hub with no products returns exactly that.
+ * No `generateStaticParams` (ADR-0018 open question #11): returning
+ * `{ locale, slug }` makes the route SSG, and a `notFound()` on an unlisted
+ * slug then reaches the `(site)` 404 boundary's `headers()` → a 500, not a 404.
+ * `ProductSource.listSlugs()` stays on the port for ADR-0022 to enumerate with.
  */
 
 import type { Metadata } from 'next'
@@ -32,7 +29,7 @@ import { ProductDetail } from '@amplience/frontend-starter-components/product-de
 import { isContentClientError } from '@amplience/frontend-starter-content'
 
 import { resolveCurrency } from '../../../../../lib/currency'
-import { localeBasePath, localeForSlug, locales, publicPath } from '../../../../../lib/locales'
+import { localeBasePath, localeForSlug, publicPath } from '../../../../../lib/locales'
 import { productMediaList } from '../../../../../lib/product-media'
 import { productSource } from '../../../../../lib/product-source'
 import { registry } from '../../../../../lib/registry'
@@ -44,16 +41,6 @@ import {
 
 type RouteProps = {
   params: Promise<{ locale: string; slug: string }>
-}
-
-export async function generateStaticParams() {
-  // `listSlugs` rather than `list`: route enumeration needs slugs and nothing
-  // else, and a PIM adapter can serve that from a cheap endpoint instead of
-  // paging a whole catalogue. Delivery keys aren't localized, so one call
-  // yields the slug set; the cross-product with the supported locales covers
-  // every product in every language.
-  const slugs = await productSource.listSlugs()
-  return locales.flatMap((locale) => slugs.map((slug) => ({ locale: locale.slug, slug })))
 }
 
 export async function generateMetadata({ params }: RouteProps): Promise<Metadata> {

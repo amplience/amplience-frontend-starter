@@ -9,9 +9,9 @@
  * The `[locale]` segment carries the active locale (ADR-0015): the article is
  * fetched at that locale so its fields arrive as single values, and the
  * canonical folds the locale prefix in (unprefixed for the default locale).
- * `generateStaticParams` enumerates the cross-product of supported locales
- * and published articles — the delivery keys themselves are not localized, so
- * one `listBySchema` call yields the slug set, expanded across locales here.
+ * No `generateStaticParams`, for the same reason as the product page: an SSG
+ * route turns an unlisted slug's `notFound()` into a 500 via the 404
+ * boundary's `headers()` (ADR-0018 open question #11).
  *
  * Failure handling mirrors the catch-all:
  *  - `not-found` → branded 404 (app/not-found.tsx)
@@ -22,16 +22,12 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import {
-  BLOG_ARTICLE_SCHEMA,
-  blogArticleMetadataFromSchema,
-} from '@amplience/frontend-starter-components/registry'
+import { blogArticleMetadataFromSchema } from '@amplience/frontend-starter-components/registry'
 import type { BlogArticleSchema } from '@amplience/frontend-starter-components/registry'
 import { isContentClientError } from '@amplience/frontend-starter-content'
 
-import { blogArchiveFromItems } from '../../../../../lib/blog-archive'
 import { client, siteName } from '../../../../../lib/content-client'
-import { localeBasePath, localeForSlug, locales, publicPath } from '../../../../../lib/locales'
+import { localeBasePath, localeForSlug, publicPath } from '../../../../../lib/locales'
 import { registry } from '../../../../../lib/registry'
 import {
   ContentUnavailableCard,
@@ -41,19 +37,6 @@ import {
 
 type RouteProps = {
   params: Promise<{ locale: string; slug: string }>
-}
-
-export async function generateStaticParams() {
-  // Enumerate only this site's articles (ADR-0014) — the schema is shared
-  // hub-wide, the `<site>/blog/` namespace is not. `blogArchiveFromItems` does
-  // that scoping, and yields one entry per slug: a slug is a route, so a
-  // duplicate published claim on one must not become a duplicate param. The
-  // archive page derives its links from the same call. Delivery keys aren't
-  // localized, so one fetch yields the slug set; the cross-product with the
-  // supported locales prerenders every article in every language.
-  const articles = await client.listBySchema(BLOG_ARTICLE_SCHEMA)
-  const { entries } = blogArchiveFromItems(articles, siteName)
-  return locales.flatMap((locale) => entries.map(({ slug }) => ({ locale: locale.slug, slug })))
 }
 
 export async function generateMetadata({ params }: RouteProps): Promise<Metadata> {

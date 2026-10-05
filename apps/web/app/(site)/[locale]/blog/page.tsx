@@ -5,9 +5,7 @@
  * `publishDate`, one card per slug. Fetches via `listBySchema` (DC Filter API
  * in production, in-memory fixture filter in development) so no separate
  * "BlogArchive" content type is needed — the blog article schema *is* the
- * catalogue. Turning that read into the archive is `lib/blog-archive`, shared
- * with `/blog/[slug]` so the links here and the prerendered routes there are
- * derived from one function.
+ * catalogue. Turning that read into the archive is `lib/blog-archive`.
  *
  * The `[locale]` segment carries the active locale: cards fetch at that
  * locale so titles and descriptions arrive as single values, and card links
@@ -15,9 +13,7 @@
  * within the reader's language. The default locale is unprefixed.
  *
  * At POC scope (3 articles) pagination is out of scope; the full article
- * list fits on one page. The `generateStaticParams` call lives in
- * `/blog/[slug]` — this page itself has no dynamic segment of its own, so
- * Next.js generates it per locale automatically.
+ * list fits on one page.
  *
  * `BlogArticleCard` is a local component: it only ever renders here. If a
  * richer card design lands (image grid, featured article, etc.) it can be
@@ -102,7 +98,7 @@ export default async function BlogArchivePage({ params }: RouteProps) {
   })
 
   // Site scoping (ADR-0014), newest-first ordering and one-entry-per-slug all
-  // live in `blogArchiveFromItems`, shared with `/blog/[slug]`.
+  // live in `blogArchiveFromItems`.
   const { entries: articles, duplicateSlugs } = blogArchiveFromItems(all, siteName)
   warnOnDuplicateSlugs(duplicateSlugs)
 
