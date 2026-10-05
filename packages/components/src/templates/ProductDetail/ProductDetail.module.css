@@ -44,7 +44,7 @@
 .image {
   width: 100%;
   height: auto;
-  border-radius: var(--product-detail-image-radius, var(--radius-md, 0.5rem));
+  border-radius: var(--product-detail-image-radius, var(--radius, 0));
   aspect-ratio: var(--product-detail-image-ratio, 1 / 1);
   object-fit: var(--product-detail-image-fit, cover);
 }

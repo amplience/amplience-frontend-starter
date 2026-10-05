@@ -21,7 +21,7 @@
           },
           {
             "label": "⚙️ Options",
-            "pointers": ["/backgroundColor"]
+            "pointers": ["/backgroundColor", "/customCss"]
           }
         ]
       }
@@ -62,7 +62,16 @@
       "allOf": [
         { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
       ]
+    },
+    "customCss": {
+      "title": "Custom CSS (advanced)",
+      "description": "Optional. This CSS applies to this particular header row and its children, nowhere else.",
+      "type": "string",
+      "ui:extension": { "name": "css-editor" },
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/block-css#/definitions/css" }
+      ]
     }
   },
-  "propertyOrder": ["items", "backgroundColor", "foregroundColor"]
+  "propertyOrder": ["items", "backgroundColor", "customCss", "foregroundColor"]
 }

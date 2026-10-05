@@ -226,15 +226,50 @@
 [data-brand='anyafinn'] {
   --font-heading: var(--nf-cormorant-garamond), Georgia, 'Times New Roman', serif;
   --font-body: var(--nf-jost), 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --color-primary: #ffa900;
-  --color-primary-contrast: var(--color-black);
-  --color-secondary: #886443;
-  --color-secondary-contrast: var(--color-white);
-  --color-tertiary: #00e4b3;
-  --color-tertiary-contrast: var(--color-black);
+  --color-primary: #a34a1e;
+  --color-primary-contrast: var(--color-white);
+  --color-secondary: #e2b76a;
+  --color-secondary-contrast: var(--color-black);
+  --color-tertiary: #886443;
+  --color-tertiary-contrast: var(--color-white);
   /* Soft fade — elegant, minimal. No movement, just a gentle opacity dip.
      Suits a fashion/lifestyle brand where motion feels heavy-handed. */
   --interactive-hover-opacity: 0.8;
+
+  .preTitle {
+    color: var(--color-secondary);
+    text-transform: uppercase;
+  }
+
+  .HeaderRow {
+    border-bottom: solid 1px var(--color-secondary);
+  }
+
+  [data-brand='anyafinn'] .carouselDots {
+    position: absolute;
+    bottom: var(--spacing-2);
+    left: 50%;
+    max-width: 100%;
+    gap: 0;
+    margin: 0;
+    transform: translateX(-50%);
+
+    button:hover {
+      --carousel-dot-color: var(--color-white);
+    }
+  }
+
+  .ProductDetail > .Container {
+    padding-inline: 0;
+
+    > div {
+      padding-block: 0;
+
+      > div:last-child {
+        padding-block: var(--spacing-10);
+      }
+    }
+  }
 }
 
 [data-brand='arbor-harvest'] {
