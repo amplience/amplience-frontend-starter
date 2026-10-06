@@ -1,17 +1,11 @@
 /*
- * ProductCarousel organism styles.
+ * ProductCarousel styles.
  *
- * The section owns only its vertical rhythm and the header gap — the track
- * itself is the Carousel molecule's, and the tiles are ProductCard's. Keeping
- * this file thin is the point: anything visual here would be a second place
- * to change when a card or a track changes.
+ * The track is the Carousel molecule's and the tiles are ProductCard's, so
+ * there is almost nothing to own here. Anything visual added to this file
+ * becomes a second place to change when a card or a track changes.
  */
 
 .root {
   display: block;
-  padding-block: var(--product-carousel-padding-block, var(--spacing-6));
-}
-
-.header {
-  margin-bottom: var(--product-carousel-header-gap, var(--spacing-4));
 }

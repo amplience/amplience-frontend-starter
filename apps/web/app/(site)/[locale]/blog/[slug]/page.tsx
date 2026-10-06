@@ -30,6 +30,7 @@ import { isContentClientError } from '@amplience/frontend-starter-content'
 import { client, siteName } from '../../../../../lib/content-client'
 import { localeBasePath, localeForSlug, publicPath } from '../../../../../lib/locales'
 import { registry } from '../../../../../lib/registry'
+import { resolveProducts } from '../../../../../lib/resolve-products'
 import {
   ContentUnavailableCard,
   emitContentFailure,
@@ -74,8 +75,12 @@ export default async function BlogArticlePage({ params }: RouteProps) {
     emitContentFailure(error, key)
     return <ContentUnavailableCard error={error} resource={key} />
   }
+  const products = await resolveProducts(article, registry, locale)
+
   return renderContent(article, registry, {
     loadPriority: 'lcp',
     localeBasePath: localeBasePath(locale),
+    locale: locale.code,
+    products,
   })
 }

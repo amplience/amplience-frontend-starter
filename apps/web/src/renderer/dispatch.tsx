@@ -290,6 +290,10 @@ export function renderContent(
       // children — unlike `loadPriority`, which decays with distance from the
       // top of the page.
       ...(ctx.localeBasePath !== undefined && { localeBasePath: ctx.localeBasePath }),
+      ...(ctx.locale !== undefined && { locale: ctx.locale }),
+      // Resolved products are whole-tree too (ADR-0027): the pre-pass collects
+      // from the entire tree, so a rail at any depth reads the same map.
+      ...(ctx.products !== undefined && { products: ctx.products }),
     }
     const children = renderContent(getChildren(node), registry, childCtx)
     return createBlock(component, props, blockCss, children)

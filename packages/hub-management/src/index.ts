@@ -36,6 +36,7 @@ import contentMenuItem from '../content-type-schemas/schemas/content_menu-item.j
 import contentMenuToggleButton from '../content-type-schemas/schemas/content_menu-toggle-button.json'
 import contentMenu from '../content-type-schemas/schemas/content_menu.json'
 import contentPage from '../content-type-schemas/schemas/content_page.json'
+import contentProductCarousel from '../content-type-schemas/schemas/content_product-carousel.json'
 import contentProduct from '../content-type-schemas/schemas/content_product.json'
 import partialsBlockCss from '../content-type-schemas/schemas/partials_block-css.json'
 import partialsCarouselItems from '../content-type-schemas/schemas/partials_carousel-items.json'
@@ -99,6 +100,7 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(contentColumns, 'CONTENT_TYPE'),
   entry(contentGrid, 'CONTENT_TYPE'),
   entry(contentCarousel, 'CONTENT_TYPE'),
+  entry(contentProductCarousel, 'CONTENT_TYPE'),
   entry(contentMediaCard, 'CONTENT_TYPE'),
   entry(contentMedia, 'CONTENT_TYPE'),
   entry(slotsSlot, 'SLOT'),

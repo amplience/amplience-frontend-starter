@@ -30,6 +30,7 @@ import verdePlanter from '../../../content/fixtures/anyafinn/pages/products/verd
 
 /** The presentational shape the product components take. */
 export type StoryProduct = {
+  readonly sku: string
   readonly slug: string
   readonly href: string
   readonly name: string
@@ -112,6 +113,7 @@ const toStoryProduct = (
     : []
 
   return {
+    sku: typeof body.sku === 'string' ? body.sku : slug.toUpperCase(),
     slug,
     href: `/products/${slug}`,
     name: text(body.name, locale) ?? slug,

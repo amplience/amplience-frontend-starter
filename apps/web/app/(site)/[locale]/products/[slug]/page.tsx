@@ -31,6 +31,7 @@ import { localeBasePath, localeForSlug, publicPath } from '../../../../../lib/lo
 import { productMediaList } from '../../../../../lib/product-media'
 import { productSource } from '../../../../../lib/product-source'
 import { registry } from '../../../../../lib/registry'
+import { resolveProducts } from '../../../../../lib/resolve-products'
 import {
   ContentUnavailableCard,
   emitContentFailure,
@@ -93,6 +94,8 @@ export default async function ProductPage({ params }: RouteProps) {
       : renderContent(product.content, registry, {
           loadPriority: 'eager',
           localeBasePath: localeBasePath(locale),
+          locale: locale.code,
+          products: await resolveProducts(product.content, registry, locale),
         })
 
   return (

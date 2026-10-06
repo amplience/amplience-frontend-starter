@@ -134,8 +134,8 @@ describe('schema manifest', () => {
   it('exposes content types as the non-partial subset', () => {
     // A deliberate tripwire: bump this when a content type is added, so the
     // count is a decision rather than something derived from the thing it
-    // checks. 24 as of the carousel (ADR-0020).
-    expect(contentTypeSchemas).toHaveLength(25)
+    // checks. 26 as of the product carousel (ADR-0027).
+    expect(contentTypeSchemas).toHaveLength(26)
     expect(contentTypeSchemas.every((e) => e.validationLevel !== 'PARTIAL')).toBe(true)
     expect(findSchema('https://quadratic.amplience.com/v2/partials/media')?.validationLevel).toBe(
       'PARTIAL',
@@ -356,6 +356,7 @@ describe('block CSS (ADR-0026)', () => {
     'https://quadratic.amplience.com/v2/content/markdown-block',
     'https://quadratic.amplience.com/v2/content/media',
     'https://quadratic.amplience.com/v2/content/media-card',
+    'https://quadratic.amplience.com/v2/content/product-carousel',
   ]
 
   type Tab = { label: string; pointers: string[] }

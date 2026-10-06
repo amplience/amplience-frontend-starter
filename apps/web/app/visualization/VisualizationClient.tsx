@@ -33,9 +33,13 @@ import { useEffect, useMemo, useState, useTransition } from 'react'
 import { defaultRegistry } from '@amplience/frontend-starter-components/registry'
 import { resolveLocalized } from '@amplience/frontend-starter-content'
 import type { ContentBody } from '@amplience/frontend-starter-content'
-import type { MediaLoadPriority, RenderContext } from '@amplience/frontend-starter-types'
+import type {
+  MediaLoadPriority,
+  RenderContext,
+  ResolvedProduct,
+} from '@amplience/frontend-starter-types'
 
-import { renderContent } from '../../src/renderer'
+import { collectSkus, renderContent } from '../../src/renderer'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -53,6 +57,19 @@ type Props = {
    * `'lcp'`. Omitted → `'lazy'`.
    */
   loadPriority?: MediaLoadPriority
+  /**
+   * Products the server resolved for `initialModel` (ADR-0027). Passed as an
+   * array because the RSC boundary carries plain JSON; rebuilt as a map here.
+   *
+   * The seed for the first paint; edits then top it up from `/api/products`,
+   * so a SKU added in the content form resolves without a reload.
+   */
+  initialProducts?: readonly ResolvedProduct[]
+  /**
+   * BCP 47 code for the pane's locale (e.g. `de-DE`). Sent to `/api/products`
+   * so live-resolved products carry the same prices and copy as the server's.
+   */
+  localeCode?: string
   /**
    * Active locale URL prefix (ADR-0015) for the pane's locale, so internal
    * links in the visualized content stay inside that locale. Defaults to ''
@@ -80,6 +97,8 @@ export function VisualizationClient({
   loadPriority,
   localeBasePath = '',
   deliveryLocale,
+  initialProducts,
+  localeCode,
 }: Props) {
   const [model, setModel] = useState(initialModel)
   const [, startTransition] = useTransition()
@@ -123,6 +142,52 @@ export function VisualizationClient({
     }
   }, [])
 
-  const ctx: RenderContext = { loadPriority: loadPriority ?? 'lazy', localeBasePath }
+  const [products, setProducts] = useState<ReadonlyMap<string, ResolvedProduct>>(
+    () => new Map((initialProducts ?? []).map((p) => [p.sku, p])),
+  )
+
+  // SKUs the current model references. The server resolved the initial set; an
+  // edit can introduce more, and a client boundary cannot reach `ProductSource`
+  // — so the route does it (ADR-0027).
+  const skus = useMemo(() => collectSkus(resolvedModel, defaultRegistry).join(','), [resolvedModel])
+
+  useEffect(() => {
+    const wanted = skus.split(',').filter(Boolean)
+    const missing = wanted.filter((sku) => !products.has(sku))
+    if (missing.length === 0) return
+
+    const aborted = new AbortController()
+    const query = new URLSearchParams({ skus: missing.join(',') })
+    if (localeCode !== undefined) query.set('locale', localeCode)
+
+    fetch(`/api/products?${query.toString()}`, { signal: aborted.signal })
+      .then((r) => (r.ok ? (r.json() as Promise<{ products?: ResolvedProduct[] }>) : null))
+      .then((body) => {
+        const resolved = body?.products ?? []
+        if (resolved.length === 0) return
+        // Merge rather than replace: products already resolved stay put, so
+        // removing a SKU never re-fetches the rest of the rail.
+        setProducts((current) => new Map([...current, ...resolved.map((p) => [p.sku, p] as const)]))
+      })
+      .catch(() => {
+        // Aborted, offline, or the route is unavailable — the rail renders with
+        // whatever resolved, which is the same degradation a missing SKU gets.
+      })
+
+    return () => {
+      aborted.abort()
+    }
+    // `products` is read but deliberately not a dependency: adding resolved
+    // products would re-run this and, with nothing left missing, it would
+    // simply exit — churn for no gain.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [skus, localeCode])
+
+  const ctx: RenderContext = {
+    loadPriority: loadPriority ?? 'lazy',
+    localeBasePath,
+    products,
+    ...(localeCode !== undefined && { locale: localeCode }),
+  }
   return <>{renderContent(resolvedModel, defaultRegistry, ctx)}</>
 }

@@ -43,6 +43,7 @@
     "./page": "./src/templates/Page/Page.tsx",
     "./product-detail": "./src/templates/ProductDetail/ProductDetail.tsx",
     "./product-carousel": "./src/organisms/ProductCarousel/ProductCarousel.tsx",
+    "./product-carousel-block": "./src/organisms/ProductCarouselBlock/ProductCarouselBlock.tsx",
     "./image-sizes": "./src/utils/imageSizes.ts",
     "./registry": "./src/registry.ts"
   },

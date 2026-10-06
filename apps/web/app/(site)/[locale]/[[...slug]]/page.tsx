@@ -70,6 +70,7 @@ import { localeBasePath, localeForSlug, publicPath } from '../../../../lib/local
 import type { Locale } from '../../../../lib/locales'
 import { productSource } from '../../../../lib/product-source'
 import { registry } from '../../../../lib/registry'
+import { resolveProducts } from '../../../../lib/resolve-products'
 import { deliveryKeyForSlug, pathForDeliveryKey } from '../../../../lib/routing'
 import { ProductGrid } from '../../../../src/ProductGrid'
 import { ContentUnavailableCard, emitContentFailure, renderContent } from '../../../../src/renderer'
@@ -201,9 +202,15 @@ export default async function ContentPage({ params }: RouteProps) {
   // above-the-fold-but-not-LCP, everything after as lazy (ADR-0021).
   // `localeBasePath` rides the whole tree so internal links stay inside this
   // locale (ADR-0015).
+  // Products any block references are resolved in one call before dispatch, so
+  // the synchronous adapters can read them straight off the context (ADR-0027).
+  const products = await resolveProducts(page, registry, locale)
+
   return renderContent(page, registry, {
     loadPriority: 'lcp',
     localeBasePath: localeBasePath(locale),
+    locale: locale.code,
+    products,
   })
 }
 

@@ -18,7 +18,8 @@
             "https://quadratic.amplience.com/v2/content/hero",
             "https://quadratic.amplience.com/v2/content/markdown-block",
             "https://quadratic.amplience.com/v2/content/media",
-            "https://quadratic.amplience.com/v2/content/media-card"
+            "https://quadratic.amplience.com/v2/content/media-card",
+            "https://quadratic.amplience.com/v2/content/product-carousel"
           ]
         }
       }

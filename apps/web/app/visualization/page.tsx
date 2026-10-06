@@ -54,6 +54,7 @@ import {
   localeForSlug,
 } from '../../lib/locales'
 import { registry } from '../../lib/registry'
+import { resolveProducts } from '../../lib/resolve-products'
 import { HOMEPAGE_DELIVERY_KEY } from '../../lib/routing'
 import { LocaleSelectorConfigured } from '../../src/components/LocaleSelectorConfigured'
 import {
@@ -196,6 +197,10 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
   // CSS it applies to the site. So rather than a SchemaUnknown card, preview it
   // against the real homepage (server-rendered here, with chrome) and inject
   // the item's CSS on top, updated live client-side as the editor types.
+  // Resolved once here, on the server: the client boundary cannot await a
+  // port read (ADR-0027 — see its open question on live editing).
+  const previewProducts = [...(await resolveProducts(item, visualizationRegistry, locale)).values()]
+
   const itemSchema = (item as { _meta?: { schema?: string } })?._meta?.schema ?? ''
   if (itemSchema === CUSTOM_CSS_SCHEMA) {
     const initialCss = sanitizeCustomCss(((item as { css?: string }).css ?? '').trim())
@@ -214,6 +219,7 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
       try {
         return renderContent(result.value, visualizationRegistry, {
           localeBasePath: basePath,
+          locale: locale.code,
           loadPriority: topOfPage ? 'lcp' : 'lazy',
         })
       } catch {
@@ -250,6 +256,8 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
             loadPriority="lcp"
             localeBasePath={basePath}
             deliveryLocale={locale.delivery}
+            initialProducts={previewProducts}
+            localeCode={locale.code}
           />
         </div>
       </div>
@@ -263,6 +271,8 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
         loadPriority="lcp"
         localeBasePath={basePath}
         deliveryLocale={locale.delivery}
+        initialProducts={previewProducts}
+        localeCode={locale.code}
       />
     )
   }
@@ -280,6 +290,7 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
     try {
       header = renderContent(headerResult.value, visualizationRegistry, {
         localeBasePath: basePath,
+        locale: locale.code,
       })
     } catch {
       // Not fatal — render without header rather than breaking the visualization.
@@ -289,6 +300,7 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
     try {
       footer = renderContent(footerResult.value, visualizationRegistry, {
         localeBasePath: basePath,
+        locale: locale.code,
       })
     } catch {
       // Not fatal — render without footer rather than breaking the visualization.
@@ -304,6 +316,8 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
           loadPriority="lcp"
           localeBasePath={basePath}
           deliveryLocale={locale.delivery}
+          initialProducts={previewProducts}
+          localeCode={locale.code}
         />
       </main>
       {footer}

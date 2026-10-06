@@ -1,0 +1,85 @@
+/*
+ * ProductCarouselBlock organism styles.
+ *
+ * Section chrome only, the same shape as CarouselBlock.module.css: background
+ * band, vertical rhythm, header spacing. The track belongs to
+ * Carousel.module.css and the tiles to ProductCard.module.css.
+ *
+ * BACKGROUND:
+ *   data-background-color — primary / secondary / tertiary / white / light / dark / black
+ *
+ * GUTTER BLEED:
+ *   With a gutter, this rebinds the molecule's --carousel-bleed-inline so the
+ *   track shows through into it rather than being clipped at the content edge.
+ *
+ * BRAND OVERRIDES: redefine --product-carousel-block-* under [data-brand].
+ */
+
+/* ---------------------------------------------------------------------------
+   Variables + base container
+   --------------------------------------------------------------------------- */
+
+.root {
+  --product-carousel-block-padding-y: calc(var(--spacing) * 10);
+
+  --product-carousel-block-background-color: transparent;
+  --product-carousel-block-text-color: inherit;
+
+  box-sizing: border-box;
+  background-color: var(--product-carousel-block-background-color);
+  color: var(--product-carousel-block-text-color);
+  /* The track can only scroll if it may be narrower than its content, and a
+     flex/grid parent resolves that minimum from this element. */
+  min-width: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  padding-block: var(--product-carousel-block-padding-y);
+  min-width: 0;
+}
+
+/* Let the track bleed into the gutter, so the next slide stays visible at the
+   moment a reader looks for evidence there is more to scroll to. */
+.container[data-gutter] {
+  --carousel-bleed-inline: var(--site-gutter);
+}
+
+.header {
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Background colour
+   --------------------------------------------------------------------------- */
+
+.root[data-background-color='primary'] {
+  --product-carousel-block-background-color: var(--color-primary);
+  --product-carousel-block-text-color: var(--color-primary-contrast);
+}
+.root[data-background-color='secondary'] {
+  --product-carousel-block-background-color: var(--color-secondary);
+  --product-carousel-block-text-color: var(--color-secondary-contrast);
+}
+.root[data-background-color='tertiary'] {
+  --product-carousel-block-background-color: var(--color-tertiary);
+  --product-carousel-block-text-color: var(--color-tertiary-contrast);
+}
+.root[data-background-color='light'] {
+  --product-carousel-block-background-color: var(--color-gray-100);
+  --product-carousel-block-text-color: var(--color-black);
+}
+.root[data-background-color='dark'] {
+  --product-carousel-block-background-color: var(--color-gray-800);
+  --product-carousel-block-text-color: var(--color-white);
+}
+.root[data-background-color='black'] {
+  --product-carousel-block-background-color: var(--color-black);
+  --product-carousel-block-text-color: var(--color-white);
+}
+.root[data-background-color='white'] {
+  --product-carousel-block-background-color: var(--color-white);
+  --product-carousel-block-text-color: var(--color-black);
+}
