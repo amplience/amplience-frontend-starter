@@ -37,7 +37,7 @@
       },
       {
         "id": "18fa7b7a-ef73-5235-a38a-614a62b428eb",
-        "contentType": "https://quadratic.amplience.com/v2/content/carousel",
+        "contentType": "https://quadratic.amplience.com/v2/content/product-carousel",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }

@@ -56,6 +56,30 @@ const boxEntry: ComponentRegistryEntry<BoxSchema, BoxProps> = {
 type IdentityProps = { _meta?: unknown; label?: string }
 const Identity = ({ label }: IdentityProps) => <em>{label}</em>
 
+// A leaf that echoes the formatting locale it was handed.
+const PRICED_SCHEMA = 'https://test.example.com/v1/content/priced'
+const pricedEntry: ComponentRegistryEntry<{ _meta: unknown }, { locale?: string }> = {
+  component: ({ locale }: { locale?: string }) => <span data-locale={locale ?? 'none'} />,
+  propsFromSchema: (_schema, ctx) => ({ ...(ctx.locale !== undefined && { locale: ctx.locale }) }),
+}
+
+// A leaf that reports what it read out of ctx.products (ADR-0027).
+const RAIL_SCHEMA = 'https://test.example.com/v1/content/rail'
+type RailSchema = { _meta: unknown; skus?: readonly string[] }
+type RailProps = { names: readonly string[] }
+const Rail = ({ names }: RailProps) => <span data-rail={names.join(',')} />
+
+const railEntry: ComponentRegistryEntry<RailSchema, RailProps> = {
+  component: Rail,
+  referencedSkus: (schema) => schema.skus ?? [],
+  propsFromSchema: (schema, ctx) => ({
+    names: (schema.skus ?? []).flatMap((sku) => {
+      const found = ctx.products?.get(sku)
+      return found ? [found.name] : []
+    }),
+  }),
+}
+
 // A leaf that surfaces both render-context cues, for the loadPriority tests.
 const EDGE_SCHEMA = 'https://test.example.com/v1/content/edge'
 type EdgeProps = { label: string; bare?: boolean; loadPriority?: MediaLoadPriority }
@@ -130,6 +154,8 @@ const makeRegistry = (): Registry =>
     [COVER_BOX_SCHEMA, coverBoxEntry],
     [SIZED_BOX_SCHEMA, sizedBoxEntry],
     [SIZED_LEAF_SCHEMA, sizedLeafEntry],
+    [RAIL_SCHEMA, railEntry],
+    [PRICED_SCHEMA, pricedEntry],
   ])
 
 const node = (schema: string, fields: Record<string, unknown> = {}, deliveryId?: string) => ({
@@ -463,5 +489,61 @@ describe('renderContent — loud failure', () => {
     expect(out).toContain('data-box="outer"')
     expect(out).toContain('data-renderer-failure="SchemaUnknown"')
     expect(out).toContain('good')
+  })
+})
+
+describe('renderContent — resolved products reach any depth (ADR-0027)', () => {
+  // The pre-pass collects across the whole tree, so the map has to survive the
+  // walk down to wherever a rail actually sits. `childCtx` is built from an
+  // allow-list rather than spreading `ctx`, so anything whole-tree must be
+  // forwarded explicitly — this is the test that says so.
+  const products = new Map([
+    ['A', { sku: 'A', slug: 'a', name: 'Alpha', href: '/products/a' }],
+    ['B', { sku: 'B', slug: 'b', name: 'Beta', href: '/products/b' }],
+  ])
+
+  const withProducts = (content: unknown): string =>
+    renderToStaticMarkup(<>{renderContent(content, makeRegistry(), { products })}</>)
+
+  it('reaches a rail at the top of the tree', () => {
+    expect(withProducts(node(RAIL_SCHEMA, { skus: ['A', 'B'] }))).toContain(
+      'data-rail="Alpha,Beta"',
+    )
+  })
+
+  it('reaches a rail nested two containers deep — the real page shape', () => {
+    const tree = node(BOX_SCHEMA, {
+      name: 'page',
+      items: [node(BOX_SCHEMA, { name: 'slot', items: [node(RAIL_SCHEMA, { skus: ['B'] })] })],
+    })
+    expect(withProducts(tree)).toContain('data-rail="Beta"')
+  })
+
+  it('leaves a rail empty when the route supplied no map', () => {
+    expect(html(node(RAIL_SCHEMA, { skus: ['A'] }))).toContain('data-rail=""')
+  })
+
+  it('skips SKUs the pre-pass could not resolve', () => {
+    expect(withProducts(node(RAIL_SCHEMA, { skus: ['A', 'GONE'] }))).toContain('data-rail="Alpha"')
+  })
+})
+
+describe('renderContent — the formatting locale reaches any depth', () => {
+  // `Intl` without an explicit locale uses the runtime's own default, which is
+  // not the same on the server as in the browser — so a component that formats
+  // and never receives one hydrates with different text than it rendered.
+  const withLocale = (content: unknown): string =>
+    renderToStaticMarkup(<>{renderContent(content, makeRegistry(), { locale: 'en-GB' })}</>)
+
+  it('reaches a formatter nested two containers deep', () => {
+    const tree = node(BOX_SCHEMA, {
+      name: 'page',
+      items: [node(BOX_SCHEMA, { name: 'slot', items: [node(PRICED_SCHEMA)] })],
+    })
+    expect(withLocale(tree)).toContain('data-locale="en-GB"')
+  })
+
+  it('is simply absent when the route sets none', () => {
+    expect(html(node(PRICED_SCHEMA))).toContain('data-locale="none"')
   })
 })

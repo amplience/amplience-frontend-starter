@@ -1,0 +1,185 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/product-carousel",
+  "title": "Product Carousel Block",
+  "description": "A horizontally scrolling rail of products, curated by SKU.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "📝 Content",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "📝 Content",
+            "pointers": ["/sectionHeader", "/skus"]
+          },
+          {
+            "label": "⚙️ Options",
+            "pointers": [
+              "/slidesMobile",
+              "/slidesTablet",
+              "/slidesDesktop",
+              "/gap",
+              "/scrollStep",
+              "/showArrows",
+              "/showDots",
+              "/showScrollbar",
+              "/dragToScroll",
+              "/backgroundColor",
+              "/maxWidth",
+              "/gutter",
+              "/customCss"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "sectionHeader": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/section-header#/definitions/section-header"
+        }
+      ]
+    },
+    "skus": {
+      "title": "Products (SKUs)",
+      "description": "One SKU per slide, in the order they should appear. SKUs rather than links to content: a deployment backed by a PIM has no content item to link to, so identifiers are what keeps this rail working when the product source changes. A SKU that no longer resolves is skipped.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "slidesMobile": {
+      "title": "Slides visible (mobile)",
+      "description": "Below 769px. Try 1.2 to leave a sliver of the next slide showing.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/slides-per-view"
+        }
+      ]
+    },
+    "slidesTablet": {
+      "title": "Slides visible (tablet)",
+      "description": "From 769px.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/slides-per-view"
+        }
+      ]
+    },
+    "slidesDesktop": {
+      "title": "Slides visible (desktop)",
+      "description": "From 992px.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/slides-per-view"
+        }
+      ]
+    },
+    "gap": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/gap"
+        }
+      ]
+    },
+    "scrollStep": {
+      "default": "slide",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/scroll-step"
+        }
+      ]
+    },
+    "showArrows": {
+      "default": true,
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/show-arrows"
+        }
+      ]
+    },
+    "showDots": {
+      "default": false,
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/show-dots"
+        }
+      ]
+    },
+    "showScrollbar": {
+      "default": false,
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/show-scrollbar"
+        }
+      ]
+    },
+    "dragToScroll": {
+      "default": true,
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/drag-to-scroll"
+        }
+      ]
+    },
+    "backgroundColor": {
+      "title": "Background colour",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+      ]
+    },
+    "maxWidth": {
+      "title": "Max width",
+      "default": "default",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width" }
+      ]
+    },
+    "gutter": {
+      "title": "Gutter",
+      "description": "Inset the rail from the viewport edge with horizontal padding. Leave off for an edge-to-edge rail, where slides run to the screen edge and the peek reads most clearly.",
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/gutter" }
+      ]
+    },
+    "customCss": {
+      "title": "Custom CSS (advanced)",
+      "description": "Optional. CSS for this block only — it also reaches any blocks nested inside it. Bare declarations style the block itself (background: …); nested rules style what's inside (h2 { … }, &:hover { … }, @media … { … }); custom properties (--color-primary: …) flow down to child blocks. Leave blank for none.",
+      "type": "string",
+      "ui:extension": { "name": "css-editor" },
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/block-css#/definitions/css" }
+      ]
+    }
+  },
+  "required": ["skus"],
+  "propertyOrder": [
+    "sectionHeader",
+    "skus",
+    "slidesMobile",
+    "slidesTablet",
+    "slidesDesktop",
+    "gap",
+    "scrollStep",
+    "showArrows",
+    "showDots",
+    "showScrollbar",
+    "dragToScroll",
+    "backgroundColor",
+    "maxWidth",
+    "gutter",
+    "customCss"
+  ]
+}

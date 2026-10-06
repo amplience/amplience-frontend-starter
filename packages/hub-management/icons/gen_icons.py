@@ -73,6 +73,31 @@ def shadowed(shape_fmt, dx=4, dy=4):
             + shape_fmt.format(fill="#ffffff", stroke=DARK, tx=0, ty=0))
 
 
+# The price tag glyph, factored out so content_product and the slides inside
+# content_product-carousel draw the same shape — the family resemblance is the
+# point, and a tweak to one is a tweak to both.
+#
+# Drawn in card coordinates; TAG_BBOX lets it be scaled into a smaller slot.
+# Stroke widths are arguments rather than constants so a scaled copy can
+# pre-divide them and still render at the intended weight.
+#
+# The bbox is *measured ink* — rendered extents including the stroke, not the
+# path's own coordinates. Reading it off the `d` attribute understates the
+# left edge by 20 units, because the tag's point sits outside its corner
+# radius, which is enough to push a scaled copy through its container.
+TAG_BBOX = (48, 64, 186, 203)
+
+
+def tag_body(sw=SW, sw_med=SW_MED, sw_thin=SW_THIN, hole="url(#hatchL)"):
+    return ('<path d="M114 66 h54 a16 16 0 0 1 16 16 v54 a9 9 0 0 1 -2.6 6.4 l-56 56 '
+            'a9 9 0 0 1 -12.8 0 l-60 -60 a9 9 0 0 1 0 -12.8 l56 -56 A9 9 0 0 1 114 66 Z" '
+            f'fill="{{fill}}" stroke="{{stroke}}" stroke-width="{sw}"/>'
+            f'<circle cx="157" cy="93" r="11.5" fill="{hole}" stroke="{{stroke}}" stroke-width="{sw_med}"/>'
+            f'<path d="M83 139 l30 30" stroke="{{stroke}}" stroke-width="{sw_thin}"/>'
+            f'<path d="M99 123 l30 30" stroke="{{stroke}}" stroke-width="{sw_thin}"/>')
+
+
+
 ICONS = {}
 
 # ---------- Treatment A ----------
@@ -293,15 +318,45 @@ carousel = (CARD_CLIP
             + cdot(107, active=True) + cdot(121) + cdot(135) + cdot(149))
 ICONS["content_carousel"] = card_b(carousel)
 
+# product-carousel: the same clipped rail as the carousel, but each slide holds
+# the content_product price tag over two caption lines. The clipping says
+# "rail"; the tag says "products" and ties the two types together visually,
+# where a generic image square would have read as any card at all.
+SLIDE_W = 68
+TAG_PAD = 8  # side gap, matching the caption lines' inset below
+
+
+def tag_in_slide(x):
+    x0, y0, x1, y1 = TAG_BBOX
+    # Fit to width rather than height: the gap either side is then the thing
+    # being specified, instead of whatever a chosen height happens to leave.
+    s = (SLIDE_W - 2 * TAG_PAD) / (x1 - x0)
+    tx = x + TAG_PAD - x0 * s
+    ty = 76 - y0 * s
+    # Pre-divide the strokes so scaling lands them back at their usual weight.
+    body = tag_body(sw=SW_BLOCK / s, sw_med=SW_THIN / s, sw_thin=SW_THIN / s)
+    return (f'<g transform="translate({tx:.2f},{ty:.2f}) scale({s:.4f})">'
+            + body.format(fill="#ffffff", stroke=DARK)
+            + '</g>')
+
+
+def pslide(x):
+    return (f'<rect x="{x}" y="66" width="68" height="108" rx="9" '
+            f'fill="none" stroke="{DARK}" stroke-width="{SW_BLOCK}"/>'
+            + tag_in_slide(x)
+            + f'<path d="M{x + 8} 146 h52" stroke="{DARK}" stroke-width="{SW_THIN}"/>'
+            + f'<path d="M{x + 8} 160 h30" stroke="{HATCH}" stroke-width="{SW_THIN}"/>')
+
+
+product_carousel = (CARD_CLIP
+                    + f'<g clip-path="url(#cardClip)">'
+                    + pslide(-28) + pslide(52) + pslide(132) + pslide(212)
+                    + '</g>'
+                    + cdot(107, active=True) + cdot(121) + cdot(135) + cdot(149))
+ICONS["content_product-carousel"] = card_b(product_carousel)
+
 # product: price tag, hole punched top-right, hatched panel for the label area
-product = ('<g transform="translate({tx},{ty})">'
-           '<path d="M114 66 h54 a16 16 0 0 1 16 16 v54 a9 9 0 0 1 -2.6 6.4 l-56 56 '
-           'a9 9 0 0 1 -12.8 0 l-60 -60 a9 9 0 0 1 0 -12.8 l56 -56 A9 9 0 0 1 114 66 Z" '
-           f'fill="{{fill}}" stroke="{{stroke}}" stroke-width="{SW}"/>'
-           f'<circle cx="157" cy="93" r="11.5" fill="url(#hatchL)" stroke="{{stroke}}" stroke-width="{SW_MED}"/>'
-           f'<path d="M83 139 l30 30" stroke="{{stroke}}" stroke-width="{SW_THIN}"/>'
-           f'<path d="M99 123 l30 30" stroke="{{stroke}}" stroke-width="{SW_THIN}"/>'
-           '</g>')
+product = '<g transform="translate({tx},{ty})">' + tag_body() + '</g>'
 ICONS["content_product"] = card_a(shadowed(product))
 
 # ---------- Aliases ----------

@@ -1,14 +1,10 @@
 import clsx from 'clsx'
 
-import type { ContentMediaData, MediaLoadPriority } from '@amplience/frontend-starter-types'
+import type { MediaLoadPriority, ResolvedProduct } from '@amplience/frontend-starter-types'
 
-import { Container } from '../../atoms/Container/Container'
 import { Carousel } from '../../molecules/Carousel/Carousel'
 import type { CarouselScrollStep } from '../../molecules/Carousel/Carousel'
 import { ProductCard } from '../../molecules/ProductCard/ProductCard'
-import type { ProductCardStatus } from '../../molecules/ProductCard/ProductCard'
-import { SectionHeader } from '../../molecules/SectionHeader/SectionHeader'
-import type { SectionHeaderProps } from '../../molecules/SectionHeader/SectionHeader'
 import { carouselSlotSizes } from '../../utils/imageSizes'
 import styles from './ProductCarousel.module.css'
 
@@ -16,31 +12,9 @@ import styles from './ProductCarousel.module.css'
 // Types
 // ---------------------------------------------------------------------------
 
-/**
- * One product as this organism needs it — the presentational subset of the
- * normalised `Product` from the `ProductSource` port (ADR-0018).
- *
- * Restated here rather than imported so `packages/components` keeps no
- * dependency on `packages/content`: a component library that imports a data
- * package can't be used against a different one, which is the whole point of
- * the port. The route maps `Product` → this at the composition boundary.
- */
-export type ProductCarouselItem = {
-  readonly slug: string
-  readonly name: string
-  readonly href: string
-  readonly price?: { readonly amount: number; readonly currencyCode: string }
-  readonly media?: ContentMediaData
-  readonly brand?: string
-  readonly shortDescription?: string
-  readonly status?: ProductCardStatus
-}
-
 export type ProductCarouselProps = {
   /** Products to show, in the order given. */
-  readonly products: readonly ProductCarouselItem[]
-  /** Optional heading group above the track — spread into SectionHeader. */
-  readonly sectionHeader?: Omit<SectionHeaderProps, 'className'>
+  readonly products: readonly ResolvedProduct[]
   /** Slides visible below 769px. Defaults to 1.2 — the peek affordance. */
   readonly slidesMobile?: number
   /** Slides visible from 769px. Defaults to 3. */
@@ -54,6 +28,8 @@ export type ProductCarouselProps = {
   readonly showScrollbar?: boolean
   readonly dragToScroll?: boolean
   readonly scrollStep?: CarouselScrollStep
+  /** Accessible name for the track. Defaults to 'Products'. */
+  readonly label?: string
   /** BCP 47 locale for price formatting. See `Price`. */
   readonly locale?: string
   /** Active locale URL prefix (ADR-0015), supplied by the renderer. */
@@ -68,25 +44,17 @@ export type ProductCarouselProps = {
 // ---------------------------------------------------------------------------
 
 /**
- * ProductCarousel organism — a horizontal rail of `ProductCard`s.
+ * ProductCarousel — a horizontal rail of `ProductCard`s.
  *
- * Composes the `Carousel` molecule rather than reimplementing a track
- * (ADR-0020 §5), and `ProductCard` rather than its own tile — which is why
- * `ProductCard` was promoted to the library instead of living local to the
- * listing route.
+ * The track only. Section chrome — band, container, header — belongs to
+ * `ProductCarouselBlock`, the same split `Carousel` and `CarouselBlock` use.
  *
- * Purely presentational: it receives products, it does not fetch them. The
- * `ProductSource` port is async and a registry adapter is synchronous, so
- * whatever resolves `skus[]` into products sits above this component, at the
- * composition boundary that already holds the source.
- *
- * Renders nothing when given no products — a rail with an empty track is
- * worse than an absent section, and a curated rail whose SKUs have all been
- * unpublished is a real state (`getBySkus` drops misses silently).
+ * Purely presentational: it receives products, it does not fetch them
+ * (ADR-0027). Renders nothing when given none, since a rail whose SKUs have all
+ * been unpublished is a real state and an empty track reads as broken.
  */
 export function ProductCarousel({
   products,
-  sectionHeader,
   slidesMobile = 1.2,
   slidesTablet = 3,
   slidesDesktop = 4,
@@ -96,6 +64,7 @@ export function ProductCarousel({
   showScrollbar = false,
   dragToScroll = true,
   scrollStep = 'slide',
+  label = 'Products',
   locale,
   localeBasePath,
   loadPriority = 'lazy',
@@ -108,46 +77,39 @@ export function ProductCarousel({
   const slotSizes = carouselSlotSizes({ slidesMobile, slidesTablet, slidesDesktop })
 
   return (
-    <section className={clsx('ProductCarousel', styles.root, className)}>
-      <Container>
-        {sectionHeader !== undefined && (
-          <SectionHeader {...sectionHeader} className={clsx(styles.header)} />
-        )}
-
-        <Carousel
-          slidesMobile={slidesMobile}
-          slidesTablet={slidesTablet}
-          slidesDesktop={slidesDesktop}
-          showArrows={showArrows}
-          showDots={showDots}
-          showScrollbar={showScrollbar}
-          dragToScroll={dragToScroll}
-          scrollStep={scrollStep}
-          label={sectionHeader?.title ?? 'Products'}
-          {...(gap !== undefined && { gap })}
-        >
-          {products.map((product, index) => (
-            <ProductCard
-              key={product.slug}
-              name={product.name}
-              href={product.href}
-              sizes={slotSizes}
-              // Only the first slide can be above the fold; the rest are
-              // off-screen by definition, which is what lazy loading is for.
-              loadPriority={index === 0 ? loadPriority : 'lazy'}
-              {...(product.price !== undefined && { price: product.price })}
-              {...(product.media !== undefined && { media: product.media })}
-              {...(product.brand !== undefined && { brand: product.brand })}
-              {...(product.shortDescription !== undefined && {
-                shortDescription: product.shortDescription,
-              })}
-              {...(product.status !== undefined && { status: product.status })}
-              {...(locale !== undefined && { locale })}
-              {...(localeBasePath !== undefined && { localeBasePath })}
-            />
-          ))}
-        </Carousel>
-      </Container>
-    </section>
+    <Carousel
+      className={clsx('ProductCarousel', styles.root, className)}
+      slidesMobile={slidesMobile}
+      slidesTablet={slidesTablet}
+      slidesDesktop={slidesDesktop}
+      showArrows={showArrows}
+      showDots={showDots}
+      showScrollbar={showScrollbar}
+      dragToScroll={dragToScroll}
+      scrollStep={scrollStep}
+      label={label}
+      {...(gap !== undefined && { gap })}
+    >
+      {products.map((product, index) => (
+        <ProductCard
+          key={product.sku}
+          name={product.name}
+          href={product.href}
+          sizes={slotSizes}
+          // Only the first slide can be above the fold; the rest are off-screen
+          // by definition, which is what lazy loading is for.
+          loadPriority={index === 0 ? loadPriority : 'lazy'}
+          {...(product.price !== undefined && { price: product.price })}
+          {...(product.media !== undefined && { media: product.media })}
+          {...(product.brand !== undefined && { brand: product.brand })}
+          {...(product.shortDescription !== undefined && {
+            shortDescription: product.shortDescription,
+          })}
+          {...(product.status !== undefined && { status: product.status })}
+          {...(locale !== undefined && { locale })}
+          {...(localeBasePath !== undefined && { localeBasePath })}
+        />
+      ))}
+    </Carousel>
   )
 }

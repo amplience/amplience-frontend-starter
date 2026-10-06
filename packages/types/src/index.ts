@@ -70,6 +70,16 @@ export type RenderContext = {
    */
   readonly localeBasePath?: string
   /**
+   * BCP 47 code for the active locale (`en-GB`), for components that format
+   * values rather than link — `Price` above all. Distinct from
+   * `localeBasePath` (a URL prefix) and from Amplience's delivery preference
+   * list (`en-GB,*`); see `Locale` in apps/web, which keeps the three apart.
+   *
+   * Without it `Intl` falls back to each runtime's own default, which differs
+   * between the server and the browser and surfaces as a hydration mismatch.
+   */
+  readonly locale?: string
+  /**
    * next/image `sizes` description of the width a child occupies within its
    * parent's layout, expressed as a fraction of the viewport (e.g.
    * `(min-width: 992px) 33.34vw, 100vw`). Layout containers that know their
@@ -85,6 +95,11 @@ export type RenderContext = {
    * that declares none.
    */
   readonly slotSizes?: string
+  /**
+   * Products resolved before render, keyed by SKU (ADR-0027). Values, not a
+   * source: adapters stay synchronous because the fetching already happened.
+   */
+  readonly products?: ReadonlyMap<string, ResolvedProduct>
 }
 
 /**
@@ -152,6 +167,14 @@ export type ComponentRegistryEntry<TSchema = unknown, TProps = unknown> = {
    * a throw surfaces the standard failure card.
    */
   readonly childContextFromSchema?: (schema: TSchema, ctx: RenderContext) => RenderContext
+
+  /**
+   * SKUs this node's content references (ADR-0027). The pre-pass collects them
+   * across the tree and resolves them in one call before rendering; the result
+   * arrives as `ctx.products`. Pure and synchronous — it returns strings, so it
+   * needs no knowledge of any source.
+   */
+  readonly referencedSkus?: (schema: TSchema) => readonly string[]
 }
 
 /**
@@ -340,3 +363,24 @@ export type ContentVideoData = DynamicVideoData | ExternalVideoData
 
 /** All media modes (`partials/rich-media`), discriminated by mediaType. */
 export type ContentMediaData = ContentImageData | ContentVideoData
+
+/** Editorial lifecycle of a product, as the card and rail render it. */
+export type ResolvedProductStatus = 'active' | 'coming-soon' | 'discontinued'
+
+/**
+ * A product as components render it — the presentational subset of the port's
+ * normalised `Product` (ADR-0018), defined here so `packages/components` can
+ * use it without importing `packages/content` (ADR-0027 §6). `apps/web` maps
+ * `Product` onto this at the composition boundary.
+ */
+export type ResolvedProduct = {
+  readonly sku: string
+  readonly slug: string
+  readonly name: string
+  readonly href: string
+  readonly price?: { readonly amount: number; readonly currencyCode: string }
+  readonly media?: ContentMediaData
+  readonly brand?: string
+  readonly shortDescription?: string
+  readonly status?: ResolvedProductStatus
+}
