@@ -4,7 +4,6 @@ import clsx from 'clsx'
 import { useCallback, useEffect, useState } from 'react'
 
 import { IconButton } from '../IconButton/IconButton'
-import styles from './MenuToggleButton.module.css'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -112,7 +111,8 @@ export function MenuToggleButton({ label, className }: MenuToggleButtonProps) {
       label={label?.trim() ? label : 'Toggle menu'}
       onClick={handleClick}
       expanded={open}
-      className={clsx('MenuToggleButton', styles.root, className)}
+      visibility="mobileOnly"
+      className={clsx('MenuToggleButton', className)}
     />
   )
 }
