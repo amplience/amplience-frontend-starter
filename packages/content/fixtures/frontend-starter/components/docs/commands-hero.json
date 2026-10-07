@@ -7,8 +7,36 @@
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "89d79b1a-33b1-5468-9093-8bab2f054bf9"
     },
-    "title": "Command reference",
-    "description": "Everything Amplience Frontend Starter can do from the command line, and where the same operation lives in the Environment Manager GUI.",
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Command reference"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Command reference"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Everything Amplience Frontend Starter can do from the command line, and where the same operation lives in the Environment Manager GUI."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Everything Amplience Frontend Starter can do from the command line, and where the same operation lives in the Environment Manager GUI."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "backgroundColor": "dark",
     "textColor": "white",
     "contentPositionMobile": "beneath",

@@ -6,9 +6,6 @@
   "allOf": [
     {
       "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
-    },
-    {
-      "$ref": "https://quadratic.amplience.com/v2/partials/seo"
     }
   ],
   "ui:component": {
@@ -74,13 +71,28 @@
       }
     },
     "title": {
-      "description": "Document title — <title> and SEO."
+      "description": "Document title — <title> and SEO.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/title"
+        }
+      ]
     },
     "social": {
-      "description": "Open Graph overrides. Unset fields fall back to the page's own title and description."
+      "description": "Open Graph overrides. Unset fields fall back to the page's own title and description.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/social"
+        }
+      ]
     },
     "canonicalUrl": {
-      "description": "Rarely set — when absent, the canonical defaults to the page's own route path."
+      "description": "Rarely set — when absent, the canonical defaults to the page's own route path.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/canonicalUrl"
+        }
+      ]
     },
     "slots": {
       "title": "Slots",
@@ -101,6 +113,27 @@
           }
         ]
       }
+    },
+    "description": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/description"
+        }
+      ]
+    },
+    "keywords": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/keywords"
+        }
+      ]
+    },
+    "robots": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/robots"
+        }
+      ]
     }
   },
   "propertyOrder": ["title", "description", "keywords", "social", "canonicalUrl", "robots", "slots"]

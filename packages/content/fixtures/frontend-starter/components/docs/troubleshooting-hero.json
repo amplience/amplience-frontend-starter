@@ -7,8 +7,36 @@
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "1a9e7657-d729-5938-ba0b-ee5d7fd2748b"
     },
-    "title": "Troubleshooting",
-    "description": "Common gotchas and how to resolve them. This page grows as issues surface.",
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Troubleshooting"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Troubleshooting"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Common gotchas and how to resolve them. This page grows as issues surface."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Common gotchas and how to resolve them. This page grows as issues surface."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "backgroundColor": "dark",
     "textColor": "white",
     "contentPositionMobile": "beneath",

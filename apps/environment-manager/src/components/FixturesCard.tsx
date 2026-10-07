@@ -48,7 +48,7 @@ export function FixturesCard({ set, isActive, onActivate }: Props) {
       >
         <div className="env-card__header-labels">
           <span className="env-card__label">{set.label}</span>
-          <span className="badge badge--brand badge--sm" title="Site name (delivery-key namespace)">
+          <span className="badge badge--brand" title="Site name (delivery-key namespace)">
             # {set.name}
           </span>
           <span className="badge badge--brand" title="Brand">

@@ -7,8 +7,36 @@
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "af9bdf35-60c5-5fa7-9d7d-6cb35495924e"
     },
-    "title": "Working with a hub",
-    "description": "By default Amplience Frontend Starter serves the bundled fixtures offline. When you're ready to use real content, you can point local dev at an Amplience hub and push the content model and starter content to it.",
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Working with a hub"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Working with a hub"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "By default Amplience Frontend Starter serves the bundled fixtures offline. When you're ready to use real content, you can point local dev at an Amplience hub and push the content model and starter content to it."
+        },
+        {
+          "locale": "en-GB",
+          "value": "By default Amplience Frontend Starter serves the bundled fixtures offline. When you're ready to use real content, you can point local dev at an Amplience hub and push the content model and starter content to it."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "backgroundColor": "dark",
     "textColor": "white",
     "contentPositionMobile": "beneath",

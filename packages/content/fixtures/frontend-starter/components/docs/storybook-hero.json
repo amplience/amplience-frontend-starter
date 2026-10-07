@@ -7,8 +7,36 @@
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "30df1440-fb04-505d-bb0d-4f7f1d329d0f"
     },
-    "title": "Storybook",
-    "description": "The shared component library has its own Storybook for browsing or building components in isolation from the app.",
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Storybook"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Storybook"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "The shared component library has its own Storybook for browsing or building components in isolation from the app."
+        },
+        {
+          "locale": "en-GB",
+          "value": "The shared component library has its own Storybook for browsing or building components in isolation from the app."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "backgroundColor": "dark",
     "textColor": "white",
     "contentPositionMobile": "beneath",

@@ -6,9 +6,6 @@
   "allOf": [
     {
       "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
-    },
-    {
-      "$ref": "https://quadratic.amplience.com/v2/partials/seo"
     }
   ],
   "ui:component": {
@@ -86,13 +83,28 @@
       }
     },
     "title": {
-      "description": "Product page title — <title> and SEO. Falls back to the product name when unset."
+      "description": "Product page title — <title> and SEO. Falls back to the product name when unset.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/title"
+        }
+      ]
     },
     "social": {
-      "description": "Open Graph overrides. Unset fields fall back to the product's own name and description."
+      "description": "Open Graph overrides. Unset fields fall back to the product's own name and description.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/social"
+        }
+      ]
     },
     "canonicalUrl": {
-      "description": "Rarely set — when absent, the canonical defaults to the product's /products/{slug} path."
+      "description": "Rarely set — when absent, the canonical defaults to the product's /products/{slug} path.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/canonicalUrl"
+        }
+      ]
     },
     "sku": {
       "type": "string",
@@ -252,6 +264,27 @@
         "title": "Category ID",
         "minLength": 1
       }
+    },
+    "description": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/description"
+        }
+      ]
+    },
+    "keywords": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/keywords"
+        }
+      ]
+    },
+    "robots": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/robots"
+        }
+      ]
     }
   },
   "propertyOrder": [

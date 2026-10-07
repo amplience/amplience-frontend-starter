@@ -7,8 +7,36 @@
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "b6cf11b8-ad38-5201-b8b6-ebc9e7d53977"
     },
-    "title": "Theming",
-    "description": "Every visual decision in Amplience Frontend Starter resolves through a CSS custom property. Brands redefine those properties — in code, in the CMS, or both — and no component file changes.",
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Theming"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Theming"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Every visual decision in Amplience Frontend Starter resolves through a CSS custom property. Brands redefine those properties — in code, in the CMS, or both — and no component file changes."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Every visual decision in Amplience Frontend Starter resolves through a CSS custom property. Brands redefine those properties — in code, in the CMS, or both — and no component file changes."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "backgroundColor": "dark",
     "textColor": "white",
     "contentPositionMobile": "beneath",

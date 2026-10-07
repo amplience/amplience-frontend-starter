@@ -7,8 +7,36 @@
       "schema": "https://quadratic.amplience.com/v2/content/hero",
       "deliveryId": "71ab5a02-82ba-56bd-bb1e-94c42eab0411"
     },
-    "title": "Contributing Guide",
-    "description": "Thank you for your interest in contributing to this project.",
+    "title": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Contributing Guide"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Contributing Guide"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Thank you for your interest in contributing to this project."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Thank you for your interest in contributing to this project."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "backgroundColor": "dark",
     "textColor": "white",
     "contentPositionMobile": "beneath",
