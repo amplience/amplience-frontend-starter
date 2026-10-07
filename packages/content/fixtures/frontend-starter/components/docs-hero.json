@@ -163,7 +163,21 @@
         "color": "primary"
       }
     ],
-    "description": "Helpful information for installing & using Amplience Frontend Starter",
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Helpful information for installing & using Amplience Frontend Starter"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Helpful information for installing & using Amplience Frontend Starter"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
     "mobileOverride": true,
     "mobileMedia": {
       "mediaType": "ManualImage",

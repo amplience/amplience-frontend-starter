@@ -434,8 +434,11 @@ for (const doc of docs) {
 
   const heroBody = {
     _meta: { name: `${title} — hero`, schema: SCHEMA.hero, deliveryId: heroId },
-    title,
-    ...(description ? { description } : {}),
+    // title/description are localized-value fields in the hero schema, so they
+    // carry the same localized envelope as the CTA labels (one value per
+    // emitted locale) — never bare strings.
+    title: localized(title),
+    ...(description ? { description: localized(description) } : {}),
     backgroundColor: 'dark',
     textColor: 'white',
     contentPositionMobile: 'beneath',
