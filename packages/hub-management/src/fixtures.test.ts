@@ -418,3 +418,79 @@ describe('block CSS (ADR-0026)', () => {
     expect(validate?.({ ...body, customCss: 'x'.repeat(4001) })).toBe(false)
   })
 })
+
+describe('partials are consumed at property level, not at the schema root', () => {
+  // A root-level `allOf` to a partial validates fine and renders a broken form:
+  // Amplience's form builder picks a control from the type's *own* properties
+  // and does not merge the root branch in, so any field the type also names
+  // locally — to override a description, say — arrives with no type and the
+  // editor shows "can't be matched with a control". Every other partial in this
+  // package is $ref'd per property, which is why only the SEO one ever broke.
+  // Platform definitions at the root are fine and necessary — the content
+  // envelope, the hierarchy node. They contribute `_meta` plumbing, not fields
+  // an editor types into. It is *our* partials that must not sit there.
+  const OURS = 'https://quadratic.amplience.com/v2/partials/'
+
+  it.each(contentTypeSchemas.map((e) => [e.schemaId, e] as const))(
+    '%s does not root its allOf on one of our partials',
+    (_id, entry) => {
+      const schema = entry.schema as unknown as { allOf?: { $ref?: string }[] }
+      const rooted = (schema.allOf ?? [])
+        .map((branch) => branch.$ref ?? '')
+        .filter((ref) => ref.startsWith(OURS))
+      expect(rooted, 'move these to a per-property $ref').toEqual([])
+    },
+  )
+
+  it.each(contentTypeSchemas.map((e) => [e.schemaId, e] as const))(
+    '%s gives every property something to build a control from',
+    (_id, entry) => {
+      const schema = entry.schema as unknown as {
+        properties?: Record<string, Record<string, unknown>>
+      }
+      const unusable = Object.entries(schema.properties ?? {})
+        .filter(([name]) => name !== '_meta')
+        .filter(
+          ([, field]) =>
+            !('type' in field || '$ref' in field || 'allOf' in field || 'oneOf' in field),
+        )
+        .map(([name]) => name)
+      expect(unusable, 'these fields have no type and no $ref').toEqual([])
+    },
+  )
+})
+
+describe('every tab pointer resolves to a field the form can build', () => {
+  // The silent half of the same failure: a field that exists only in a
+  // root-level `allOf` partial is not in the type's own properties, so the
+  // form builder renders *nothing* for it — no error, no control, just a gap
+  // where three of the six SEO fields used to be. A pointer naming a field
+  // the type does not own is the signal.
+  it.each(contentTypeSchemas.map((e) => [e.schemaId, e] as const))(
+    '%s points only at fields it declares',
+    (_id, entry) => {
+      type Branch = { properties?: Record<string, unknown> }
+      const schema = entry.schema as unknown as Branch & {
+        if?: Branch
+        then?: Branch
+        else?: Branch
+        'ui:component'?: { params?: { tabs?: { items?: { pointers?: string[] }[] } } }
+      }
+      const tabs = schema['ui:component']?.params?.tabs?.items ?? []
+      // Conditional fields are declared under if/then/else rather than at the
+      // top — grid's column counts, for one — and are just as real.
+      const own = new Set(
+        [schema, schema.if, schema.then, schema.else].flatMap((branch) =>
+          Object.keys(branch?.properties ?? {}),
+        ),
+      )
+      const dangling = tabs
+        .flatMap((tab) => tab.pointers ?? [])
+        // `/_meta/...` addresses the core envelope, not a declared field.
+        .filter((pointer) => !pointer.startsWith('/_meta'))
+        .map((pointer) => pointer.split('/')[1] ?? '')
+        .filter((name) => name !== '' && !own.has(name))
+      expect([...new Set(dangling)], 'tab pointers with no matching property').toEqual([])
+    },
+  )
+})

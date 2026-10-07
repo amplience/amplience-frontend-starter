@@ -28,7 +28,6 @@
               "/columnsDesktop",
               "/minItemWidth",
               "/gap",
-              "/alignItems",
               "/backgroundColor",
               "/maxWidth",
               "/gutter",
@@ -71,30 +70,40 @@
     "backgroundColor": {
       "title": "Background colour",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette"
+        }
       ]
     },
     "maxWidth": {
       "title": "Max width",
       "default": "default",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width"
+        }
       ]
     },
     "gutter": {
       "title": "Gutter",
       "description": "Inset grid items from the viewport edge with horizontal padding.",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/gutter" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/gutter"
+        }
       ]
     },
     "customCss": {
       "title": "Custom CSS (advanced)",
       "description": "Optional. CSS for this block only — it also reaches any blocks nested inside it. Bare declarations style the block itself (background: …); nested rules style what's inside (h2 { … }, &:hover { … }, @media … { … }); custom properties (--color-primary: …) flow down to child blocks. Leave blank for none.",
       "type": "string",
-      "ui:extension": { "name": "css-editor" },
+      "ui:extension": {
+        "name": "css-editor"
+      },
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/block-css#/definitions/css" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/block-css#/definitions/css"
+        }
       ]
     }
   },

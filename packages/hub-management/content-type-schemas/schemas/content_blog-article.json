@@ -6,9 +6,6 @@
   "allOf": [
     {
       "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
-    },
-    {
-      "$ref": "https://quadratic.amplience.com/v2/partials/seo"
     }
   ],
   "ui:component": {
@@ -83,13 +80,28 @@
       }
     },
     "title": {
-      "description": "Article headline — <title> and SEO."
+      "description": "Article headline — <title> and SEO.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/title"
+        }
+      ]
     },
     "social": {
-      "description": "Open Graph overrides. Unset fields fall back to the article's own title and description."
+      "description": "Open Graph overrides. Unset fields fall back to the article's own title and description.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/social"
+        }
+      ]
     },
     "canonicalUrl": {
-      "description": "Rarely set — when absent, the canonical defaults to the article's /blog/{slug} path."
+      "description": "Rarely set — when absent, the canonical defaults to the article's /blog/{slug} path.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/canonicalUrl"
+        }
+      ]
     },
     "coverImage": {
       "title": "Cover Image",
@@ -148,6 +160,27 @@
           }
         ]
       }
+    },
+    "description": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/description"
+        }
+      ]
+    },
+    "keywords": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/keywords"
+        }
+      ]
+    },
+    "robots": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/robots"
+        }
+      ]
     }
   },
   "propertyOrder": [

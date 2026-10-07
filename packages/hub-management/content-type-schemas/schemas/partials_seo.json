@@ -2,9 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://quadratic.amplience.com/v2/partials/seo",
   "title": "SEO Metadata",
-  "description": "The shared SEO block — <title>, meta description, keywords, Open Graph overrides, canonical URL and robots flags. Mixed into any content type that owns a URL (page, blog article, product) via a root-level allOf, so a new SEO field lands in one place. Copy here is deliberately type-agnostic: a consuming type overrides an individual field's title or description alongside the $ref where it has something more specific to say.",
+  "description": "The shared SEO block — <title>, meta description, keywords, Open Graph overrides, canonical URL and robots flags, for any content type that owns a URL (page, blog article, product). One definition per field, $ref'd individually by the consuming type, rather than a single grouped object like section-header: these fields sit at the body root, so grouping them would nest the data and is a migration of existing content, not a schema tidy-up. Per-field refs are also what lets a type override an individual title or description alongside the $ref — copy here stays type-agnostic for that reason. Consumed at property level, never via a root-level allOf: the form builder picks controls from the type's own properties and ignores root branches, which renders half the block as errors and the other half not at all.",
   "type": "object",
-  "properties": {
+  "definitions": {
     "title": {
       "type": "string",
       "title": "Title",
@@ -69,6 +69,5 @@
         }
       }
     }
-  },
-  "propertyOrder": ["title", "description", "keywords", "social", "canonicalUrl", "robots"]
+  }
 }
