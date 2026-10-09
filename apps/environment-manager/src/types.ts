@@ -24,6 +24,13 @@ export type Environment = {
   label: string
   hubName: string
   hubId: string
+  /**
+   * The organization the hub belongs to. A Workforce personal access token is
+   * scoped to an organization, so this is what says which hubs one token
+   * covers (ADR-0023). Filled in at discovery, or on the next credentials
+   * check for a hub added before it existed.
+   */
+  organizationId?: string
   localhostUrl: string
   repoContent: string
   repoSlots: string
@@ -129,7 +136,10 @@ export type DiscoverResult = {
 
 // ── Permissions preflight (mirrors server/permissions.ts) ─────────────────────
 
-export type CapabilityState = 'ok' | 'denied' | 'unknown' | 'error' | 'skipped'
+/** The check that has a setup step behind it; mirrors WORKFORCE_KEY on the server. */
+export const WORKFORCE_CHECK_KEY = 'workforce'
+
+export type CapabilityState = 'ok' | 'denied' | 'unknown' | 'error' | 'skipped' | 'not-configured'
 
 export type PermissionCheck = {
   key: string
@@ -140,9 +150,33 @@ export type PermissionCheck = {
 }
 
 export type PermissionsReport = {
-  hub: { id: string; readable: boolean; detail?: string }
+  hub: { id: string; readable: boolean; detail?: string; organizationId?: string }
   checks: PermissionCheck[]
   checkedAt: string
+}
+
+// ── Workforce access (ADR-0023) ───────────────────────────────────────────────
+
+/** An organization's Workforce credential as the GUI sees it — never the token. */
+export type PublicOrganization = {
+  id: string
+  label?: string
+  hasToken: boolean
+  /** Set while a requested token is waiting on an organization admin. */
+  patRequestedAt?: string
+  /** Labels of the configured hubs this organization's token would cover. */
+  hubs: string[]
+}
+
+export type WorkforceOrganizations = {
+  organizations: PublicOrganization[]
+  /**
+   * True when AMPLIENCE_PAT or FLOWS_CLI_TOKEN is set, which outranks anything
+   * stored here — so replacing a stored token would appear to change nothing.
+   */
+  envOverride?: boolean
+  /** Set when a token was saved but could not be checked against Amplience. */
+  warning?: string
 }
 
 export type OpKey =

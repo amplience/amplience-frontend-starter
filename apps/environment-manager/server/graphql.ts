@@ -63,6 +63,21 @@ export function isAuthError(errors: GqlError[] | undefined): boolean {
 }
 
 /** Safe nested property read over unknown JSON. */
+/**
+ * Decode an opaque Relay global id (`base64("Type:value")`), or undefined if it
+ * isn't one. Every Workforce id follows this scheme — `CMSHub`, `ContentFlow`,
+ * `ExtensionInstance`, `Organization` — so this is the one place that knows it.
+ */
+export function decodeId(opaque: string): string | undefined {
+  let decoded: string
+  try {
+    decoded = Buffer.from(opaque, 'base64').toString('utf8')
+  } catch {
+    return undefined
+  }
+  return /^[A-Za-z]+:[\w\-/.@+]+$/.test(decoded) ? decoded : undefined
+}
+
 export function deepGet(value: unknown, path: string[]): unknown {
   let cur = value
   for (const key of path) {

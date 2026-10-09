@@ -1,5 +1,6 @@
 {
   "active": "frontend-starter",
+  "organizations": [],
   "environments": [
     {
       "name": "my-hub",

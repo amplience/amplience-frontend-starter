@@ -6,6 +6,7 @@ import { isRequired, missingRequired } from '../required-fields.js'
 import type { DiscoveredHub, Environment, PermissionsReport } from '../types.js'
 import { EMPTY_ENV } from '../types.js'
 import { PermissionsPanel } from './PermissionsPanel.js'
+import { WorkforceAccessPanel } from './WorkforceAccessPanel.js'
 
 type Props = {
   initial?: Environment
@@ -118,6 +119,8 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
 
   // Permissions preflight state
   const [perms, setPerms] = useState<PermissionsReport | null>(null)
+  /** Organization whose Workforce setup panel is open, if any. */
+  const [workforceOrg, setWorkforceOrg] = useState<string | null>(null)
   const [permsError, setPermsError] = useState<string | null>(null)
   const [permsLoading, setPermsLoading] = useState(false)
 
@@ -159,7 +162,13 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
       (r) => !r.features.includes('slots') && r !== siteComponentsRepo,
     )
     const filled = new Set<string>(['hubName', 'hubId'])
-    const updates: Partial<Environment> = { hubName: hub.name, hubId: hub.id }
+    // organizationId is carried but not shown: it has no field, and it is only
+    // here so a Workforce token can be matched to the hubs it covers (ADR-0023).
+    const updates: Partial<Environment> = {
+      hubName: hub.name,
+      hubId: hub.id,
+      organizationId: hub.organizationId,
+    }
     if (contentRepo !== undefined) {
       updates.repoContent = contentRepo.id
       filled.add('repoContent')
@@ -373,7 +382,27 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
 
             {/* Credential permissions child-card */}
             {perms !== null && !permsLoading && (
-              <PermissionsPanel report={perms} onDismiss={() => setPerms(null)} />
+              <PermissionsPanel
+                report={perms}
+                onDismiss={() => setPerms(null)}
+                onManageWorkforce={setWorkforceOrg}
+              />
+            )}
+
+            {/* Workforce access — the once-per-organization setup step (ADR-0023) */}
+            {workforceOrg !== null && (
+              <WorkforceAccessPanel
+                organizationId={workforceOrg}
+                currentHubLabel={form.label !== '' ? form.label : form.hubName}
+                currentHubName={form.hubName}
+                onClose={() => setWorkforceOrg(null)}
+                // Deliberately left open: after removing a token the next
+                // thing anyone wants is to paste the replacement, and after
+                // saving one the panel is where the result is confirmed.
+                onStored={() => {
+                  void handleCheckPermissions()
+                }}
+              />
             )}
 
             {/* Hub picker — only shown when credentials resolve to multiple hubs */}

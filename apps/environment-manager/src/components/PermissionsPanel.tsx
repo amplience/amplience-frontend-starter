@@ -1,3 +1,4 @@
+import { WORKFORCE_CHECK_KEY } from '../types.js'
 import type { CapabilityState, PermissionsReport } from '../types.js'
 
 // ── CapabilityBadge ───────────────────────────────────────────────────────────
@@ -8,6 +9,9 @@ const CAPABILITY_DISPLAY: Record<CapabilityState, { glyph: string; title: string
   unknown: { glyph: '?', title: 'Could not be determined' },
   error: { glyph: '⚠', title: 'Probe failed — see row detail' },
   skipped: { glyph: '–', title: 'Skipped' },
+  // Deliberately not a cross: a setup step nobody has done yet and a permission
+  // that was refused look identical as a red mark and mean opposite things.
+  'not-configured': { glyph: '○', title: 'Not set up yet' },
 }
 
 function CapabilityBadge({ state }: { state: CapabilityState }) {
@@ -24,6 +28,11 @@ function CapabilityBadge({ state }: { state: CapabilityState }) {
 type Props = {
   report: PermissionsReport
   onDismiss: () => void
+  /**
+   * Open the Workforce access panel for an organization. Omitted where there is
+   * nowhere to send the operator, in which case the row just explains itself.
+   */
+  onManageWorkforce?: (organizationId: string) => void
 }
 
 /**
@@ -31,7 +40,8 @@ type Props = {
  * seed/sync/wipe operations touch, with read (live GET probe) and write
  * (advertised HAL action links) capability per row.
  */
-export function PermissionsPanel({ report, onDismiss }: Props) {
+export function PermissionsPanel({ report, onDismiss, onManageWorkforce }: Props) {
+  const { organizationId } = report.hub
   return (
     <div className="perm-panel">
       <div className="perm-panel__header">
@@ -67,6 +77,21 @@ export function PermissionsPanel({ report, onDismiss }: Props) {
                     {check.detail !== undefined && (
                       <span className="perm-detail"> — {check.detail}</span>
                     )}
+                    {/* Deliberately on every state of this row, not just
+                        `not-configured`: a stored token that turns out to be the
+                        wrong one reports as denied, and that is exactly when
+                        somebody needs the panel most. */}
+                    {check.key === WORKFORCE_CHECK_KEY &&
+                      onManageWorkforce !== undefined &&
+                      organizationId !== undefined && (
+                        <button
+                          type="button"
+                          className="perm-setup-link"
+                          onClick={() => onManageWorkforce(organizationId)}
+                        >
+                          {check.read === 'not-configured' ? 'Set it up' : 'Change token'}
+                        </button>
+                      )}
                   </td>
                   <td className="col-perm">
                     <CapabilityBadge state={check.read} />

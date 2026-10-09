@@ -1,13 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
-import { type GqlFetch, type GqlResult } from './graphql.ts'
+import { decodeId, type GqlFetch, type GqlResult } from './graphql.ts'
 import type { FetchJson } from './permissions.ts'
 import {
   buildWorkforceCheck,
   classify,
   cmsHubIdFor,
   dcHubIdOf,
-  decodeId,
   isValidationError,
   organizationIdOf,
   resolveCmsHubId,
@@ -194,11 +193,21 @@ describe('resolveCmsHubId', () => {
     const res = await resolveCmsHubId(stubHub({ status: 500, body: null }), DC_HUB, {
       organizationId: ORG,
     })
-    expect(res).toEqual({ cmsHubId: CMS_HUB, state: 'ok' })
+    expect(res).toEqual({ cmsHubId: CMS_HUB, organizationId: ORG, state: 'ok' })
   })
 
   it('reads organizationId off the hub and constructs the id', async () => {
-    expect(await resolveCmsHubId(hubOk, DC_HUB)).toEqual({ cmsHubId: CMS_HUB, state: 'ok' })
+    expect(await resolveCmsHubId(hubOk, DC_HUB)).toEqual({
+      cmsHubId: CMS_HUB,
+      organizationId: ORG,
+      state: 'ok',
+    })
+  })
+
+  // The organization is what a personal access token is scoped to, so it has to
+  // come back out of resolution rather than being thrown away with the hub id.
+  it('reports the organization it resolved, for the token lookup', async () => {
+    expect((await resolveCmsHubId(hubOk, DC_HUB)).organizationId).toBe(ORG)
   })
 
   it('reports denied when the hub read is refused', async () => {
@@ -312,6 +321,48 @@ describe('buildWorkforceCheck', () => {
     const { fetch } = stubFetch({ contentFlows: deniedAs200 })
     const check = await buildWorkforceCheck(fetch, hubOk, DC_HUB, { flowLabel: label })
     expect(check).toMatchObject({ read: 'denied', write: 'skipped' })
+  })
+
+  // Without a token there is nothing to attempt, and "denied" would be a lie:
+  // the row has to read as a setup step, not a refused permission.
+  it('reports not-configured, and never calls GraphQL, without a token', async () => {
+    const check = await buildWorkforceCheck(undefined, hubOk, DC_HUB, { flowLabel: label })
+    expect(check).toMatchObject({ read: 'not-configured', write: 'not-configured' })
+    expect(check.detail).toContain('no personal access token')
+  })
+
+  it('says a requested token is awaiting approval rather than missing', async () => {
+    const check = await buildWorkforceCheck(undefined, hubOk, DC_HUB, {
+      flowLabel: label,
+      patState: 'requested',
+    })
+    expect(check).toMatchObject({ read: 'not-configured', write: 'not-configured' })
+    expect(check.detail).toContain('awaiting an organization admin')
+  })
+
+  // An unreadable hub is still a hub problem, even with no token to try.
+  it('reports the hub failure ahead of the missing token', async () => {
+    const check = await buildWorkforceCheck(
+      undefined,
+      stubHub({ status: 403, body: null }),
+      DC_HUB,
+      { flowLabel: label },
+    )
+    expect(check).toMatchObject({ read: 'denied', write: 'skipped' })
+  })
+
+  it('uses a resolution the caller already did instead of reading the hub again', async () => {
+    const { fetch, calls } = stubFetch({
+      contentFlows: ok({ data: { cmsHub: { contentFlows: { edges: [] } } } }),
+      createContentFlow: ok({ data: { createContentFlow: { id: FLOW_ID } } }),
+      deleteContentFlow: ok({ data: {} }),
+    })
+    const check = await buildWorkforceCheck(fetch, stubHub({ status: 500, body: null }), DC_HUB, {
+      flowLabel: label,
+      preresolved: { cmsHubId: CMS_HUB, organizationId: ORG, state: 'ok' },
+    })
+    expect(check).toMatchObject({ read: 'ok', write: 'ok' })
+    expect(calls[0]?.variables).toEqual({ hubId: CMS_HUB })
   })
 
   it('skips both probes, and never calls GraphQL, when the hub has no org id', async () => {

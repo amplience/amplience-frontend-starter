@@ -7,6 +7,7 @@ import type {
   FixtureSetInfo,
   PermissionsReport,
   VercelPreflight,
+  WorkforceOrganizations,
 } from './types.js'
 
 const BASE = '/api'
@@ -69,4 +70,21 @@ export const api = {
     }),
   vercelPreflight: () =>
     request<VercelPreflight>('/vercel/preflight', { method: 'POST', body: '{}' }),
+  /** Workforce access (ADR-0023). Tokens go in; they never come back out. */
+  workforceOrganizations: () => request<WorkforceOrganizations>('/workforce/organizations'),
+  saveWorkforceToken: (organizationId: string, token: string) =>
+    request<WorkforceOrganizations>(
+      `/workforce/organizations/${encodeURIComponent(organizationId)}/token`,
+      { method: 'PUT', body: JSON.stringify({ token }) },
+    ),
+  removeWorkforceToken: (organizationId: string) =>
+    request<WorkforceOrganizations>(
+      `/workforce/organizations/${encodeURIComponent(organizationId)}/token`,
+      { method: 'DELETE' },
+    ),
+  requestWorkforceToken: (organizationId: string) =>
+    request<WorkforceOrganizations>(
+      `/workforce/organizations/${encodeURIComponent(organizationId)}/token/request`,
+      { method: 'POST', body: '{}' },
+    ),
 }

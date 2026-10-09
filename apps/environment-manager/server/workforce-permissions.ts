@@ -15,8 +15,16 @@
 // As with the DAM probe there is no "list my permissions" endpoint, so:
 //   READ  — list the hub's content flows.
 //   WRITE — create an empty throwaway flow and delete it again.
+//
+// Unlike DAM, this does NOT run on the hub's client credentials: Workforce has
+// no machine-credential path, so the caller supplies a `GqlFetch` built from a
+// personal access token (see `workforce-token.ts`), or `undefined` when the
+// organization has no token yet. That case reports `not-configured`, never
+// `denied` — a setup step that hasn't happened and a permission that was
+// refused look identical as a red cross and mean opposite things.
 
 import {
+  decodeId,
   deepGet,
   extensionValue,
   gqlErrors,
@@ -30,6 +38,7 @@ import {
   type FetchJson,
   type PermissionCheck,
 } from './permissions.ts'
+import type { PatState } from './workforce-token.ts'
 
 export const WORKFORCE_KEY = 'workforce'
 export const WORKFORCE_LABEL = 'Workforce content flows'
@@ -43,6 +52,12 @@ const PROBE_FLOW = JSON.stringify({ actions: [], edges: [], virtualActions: [] }
 
 const PROBE_DESCRIPTION =
   'Temporary flow created by the Environment Manager credentials check. Safe to delete.'
+
+const NO_TOKEN_DETAIL =
+  'no personal access token for this organization yet — flow management needs one'
+
+const AWAITING_DETAIL =
+  'a personal access token has been requested and is awaiting an organization admin'
 
 // ── Queries ───────────────────────────────────────────────────────────────────
 
@@ -59,17 +74,6 @@ const DELETE_FLOW = `mutation deleteProbeFlow($flowId: ID!) {
 }`
 
 // ── Opaque id helpers ─────────────────────────────────────────────────────────
-
-/** Decode an opaque `Type:value` id, or undefined if it isn't one. */
-export function decodeId(opaque: string): string | undefined {
-  let decoded: string
-  try {
-    decoded = Buffer.from(opaque, 'base64').toString('utf8')
-  } catch {
-    return undefined
-  }
-  return /^[A-Za-z]+:[\w\-/.@+]+$/.test(decoded) ? decoded : undefined
-}
 
 /** The DC hub id embedded in an opaque `CMSHub:<orgId>/<dcHubId>` id. */
 export function dcHubIdOf(cmsHubId: string): string | undefined {
@@ -150,6 +154,14 @@ export type WorkforceProbeOptions = {
   cmsHubId?: string
   /** Skip the hub read when the organization id is already to hand. */
   organizationId?: string
+  /**
+   * A resolution the caller already did. The organization has to be known
+   * before a token can be chosen, so the route resolves first and passes the
+   * result through rather than paying for the lookup twice.
+   */
+  preresolved?: Resolved
+  /** Why there is no token, when there isn't one — shapes the row's wording. */
+  patState?: PatState
   /** Override the throwaway flow label (tests). */
   flowLabel?: () => string
 }
@@ -158,7 +170,13 @@ function defaultFlowLabel(): string {
   return `ql-cred-check-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
 }
 
-export type Resolved = { cmsHubId?: string; state: CapabilityState; detail?: string }
+export type Resolved = {
+  cmsHubId?: string
+  /** The organization the hub belongs to — what a token is scoped to. */
+  organizationId?: string
+  state: CapabilityState
+  detail?: string
+}
 
 /**
  * Work out the opaque cmsHub id for a DC hub id, by reading the hub's
@@ -170,10 +188,18 @@ export async function resolveCmsHubId(
   opts: WorkforceProbeOptions = {},
 ): Promise<Resolved> {
   if (opts.cmsHubId !== undefined && opts.cmsHubId !== '') {
-    return { cmsHubId: opts.cmsHubId, state: 'ok' }
+    return {
+      cmsHubId: opts.cmsHubId,
+      ...(opts.organizationId !== undefined ? { organizationId: opts.organizationId } : {}),
+      state: 'ok',
+    }
   }
   if (opts.organizationId !== undefined && opts.organizationId !== '') {
-    return { cmsHubId: cmsHubIdFor(opts.organizationId, dcHubId), state: 'ok' }
+    return {
+      cmsHubId: cmsHubIdFor(opts.organizationId, dcHubId),
+      organizationId: opts.organizationId,
+      state: 'ok',
+    }
   }
 
   const res = await fetchJson(`${AMPLIENCE_API}/hubs/${dcHubId}`)
@@ -193,7 +219,7 @@ export async function resolveCmsHubId(
       detail: `hub ${dcHubId} was readable but returned no organizationId, so the Workforce hub id could not be built`,
     }
   }
-  return { cmsHubId: cmsHubIdFor(organizationId, dcHubId), state: 'ok' }
+  return { cmsHubId: cmsHubIdFor(organizationId, dcHubId), organizationId, state: 'ok' }
 }
 
 /**
@@ -241,10 +267,11 @@ export async function writeProbe(
 
 /**
  * Probe read + write access to Workforce content flows and return one report
- * row. Write is only attempted once read has succeeded.
+ * row. Write is only attempted once read has succeeded, and nothing is
+ * attempted at all without a personal access token.
  */
 export async function buildWorkforceCheck(
-  gqlFetch: GqlFetch,
+  gqlFetch: GqlFetch | undefined,
   fetchJson: FetchJson,
   dcHubId: string,
   opts: WorkforceProbeOptions = {},
@@ -261,9 +288,16 @@ export async function buildWorkforceCheck(
     ...(detail !== undefined ? { detail } : {}),
   })
 
-  const resolved = await resolveCmsHubId(fetchJson, dcHubId, opts)
+  const resolved = opts.preresolved ?? (await resolveCmsHubId(fetchJson, dcHubId, opts))
   if (resolved.cmsHubId === undefined) {
     return row(resolved.state, 'skipped', resolved.detail ?? 'hub not resolved — nothing tested')
+  }
+
+  // Reported before anything is attempted, so an operator who has not set a
+  // token up sees a setup step rather than a permissions problem.
+  if (gqlFetch === undefined) {
+    const detail = opts.patState === 'requested' ? AWAITING_DETAIL : NO_TOKEN_DETAIL
+    return row('not-configured', 'not-configured', detail)
   }
 
   const read = classify(await gqlFetch(FLOWS_QUERY, { hubId: resolved.cmsHubId }), 'read')

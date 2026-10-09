@@ -21,7 +21,7 @@ import {
 import { buildDamCheck } from './dam-permissions.ts'
 import { hubManagementEnvVars, updateEnvVars, webEnvVars } from './env-files.ts'
 import { readFixtureSets, resolveFixtureSet, type FixtureSetInfo } from './fixture-sets.ts'
-import { liveGqlFetch } from './graphql.ts'
+import { gqlErrors, isAuthError, liveGqlFetch } from './graphql.ts'
 import { deriveIdentifier } from './hub-identifier.ts'
 import { buildPermissionsReport, type FetchJson } from './permissions.ts'
 import {
@@ -41,7 +41,23 @@ import {
   stripAnsi,
   type VercelSiteInput,
 } from './vercel.ts'
-import { buildWorkforceCheck, WORKFORCE_KEY, WORKFORCE_LABEL } from './workforce-permissions.ts'
+import {
+  buildWorkforceCheck,
+  resolveCmsHubId,
+  WORKFORCE_KEY,
+  WORKFORCE_LABEL,
+} from './workforce-permissions.ts'
+import {
+  ORGANIZATIONS_QUERY,
+  organizationsIn,
+  PAT_ENV_VARS,
+  publicOrganizations,
+  removeToken,
+  resolvePat,
+  storeToken,
+  upsertOrganization,
+  type Organization,
+} from './workforce-token.ts'
 
 // ── Paths ─────────────────────────────────────────────────────────────────────
 
@@ -85,6 +101,13 @@ type Environment = {
   label: string
   hubName: string
   hubId: string
+  /**
+   * The organization the hub belongs to. Recorded at discovery because a
+   * Workforce personal access token is scoped to an organization, so this is
+   * what says which hubs one token covers (ADR-0023). Optional: a hub added
+   * before this existed simply has it filled in on the next credentials check.
+   */
+  organizationId?: string
   localhostUrl: string
   repoContent: string
   repoSlots: string
@@ -121,6 +144,13 @@ type Environment = {
 type Config = {
   /** A hub's name, or a fixture set's. The hubs are enumerable, so the two tell apart. */
   active: string
+  /**
+   * Workforce credentials, keyed by organization rather than by hub: a personal
+   * access token covers every hub in its organization, and a user may hold at
+   * most five per organization (ADR-0023). Absent until one is set up — flows
+   * are the only thing that needs it.
+   */
+  organizations?: Organization[]
   environments: Environment[]
 }
 
@@ -969,10 +999,25 @@ app.post('/api/amplience/permissions', async (c) => {
       })
     }
 
-    // Workforce content flows are managed over the same GraphQL API (ADR-0023).
+    // Workforce content flows run on the same GraphQL API but NOT on the same
+    // credential: client credentials have no flow access at all, so this probe
+    // uses the organization's personal access token (ADR-0023). The
+    // organization is resolved first because that is what a token is scoped to.
     // Probed independently for the same reason as DAM, and equally fail-soft.
     try {
-      const workforceCheck = await buildWorkforceCheck(liveGqlFetch(token), fetchJson, hubId)
+      const config = await readConfig()
+      const resolved = await resolveCmsHubId(fetchJson, hubId)
+      if (resolved.organizationId !== undefined) {
+        report.hub.organizationId = resolved.organizationId
+        await rememberOrganization(hubId, resolved.organizationId)
+      }
+      const pat = resolvePat(config.organizations ?? [], resolved.organizationId, process.env)
+      const workforceCheck = await buildWorkforceCheck(
+        pat.token === undefined ? undefined : liveGqlFetch(pat.token),
+        fetchJson,
+        hubId,
+        { preresolved: resolved, patState: pat.state },
+      )
       report.checks.push(workforceCheck)
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error'
@@ -990,6 +1035,141 @@ app.post('/api/amplience/permissions', async (c) => {
     const message = err instanceof Error ? err.message : 'Unknown error'
     return c.json({ error: `Permissions check failed: ${message}` }, 500)
   }
+})
+
+// ── Workforce access (ADR-0023) ───────────────────────────────────────────────
+
+/**
+ * Fill in an environment's `organizationId` once it is known, so the setup panel
+ * can say which hubs a token covers without a Management API call per hub. A
+ * no-op when it is already recorded or the hub isn't one of ours.
+ */
+async function rememberOrganization(hubId: string, organizationId: string): Promise<void> {
+  const config = await readConfig()
+  const env = config.environments.find((candidate) => candidate.hubId === hubId)
+  if (env === undefined || env.organizationId === organizationId) return
+  env.organizationId = organizationId
+  await writeConfig(config)
+}
+
+/**
+ * What a pasted token turns out to be.
+ *
+ * `wrong-org` is the one worth catching: a token that is perfectly valid but
+ * belongs to a different organization is indistinguishable from a good one
+ * until a hub in *this* organization is probed with it, which is how a bad
+ * paste used to be discovered — as a failing credentials row some steps later.
+ */
+type TokenVerdict =
+  | { state: 'ok'; label?: string }
+  | { state: 'denied'; detail: string }
+  | { state: 'wrong-org'; covers: string[] }
+  | { state: 'unverified' }
+
+/**
+ * Ask the token which organizations it can see. That answers three questions at
+ * once — is it a real token, does it reach this organization, and what is that
+ * organization called — so it is worth doing before storing rather than after.
+ *
+ * An inconclusive answer is deliberately NOT a rejection: no network, or a
+ * response we don't recognise, must not stop someone saving a token that is
+ * probably fine.
+ */
+async function verifyToken(token: string, organizationId: string): Promise<TokenVerdict> {
+  let res
+  try {
+    res = await liveGqlFetch(token)(ORGANIZATIONS_QUERY)
+  } catch {
+    return { state: 'unverified' }
+  }
+
+  const errors = gqlErrors(res.body)
+  if (isAuthError(errors)) {
+    return { state: 'denied', detail: errors?.[0]?.message ?? 'the token was not accepted' }
+  }
+
+  const organizations = organizationsIn(res.body)
+  if (organizations.length === 0) return { state: 'unverified' }
+
+  const match = organizations.find((org) => org.id === organizationId)
+  if (match === undefined) {
+    return { state: 'wrong-org', covers: organizations.map((org) => org.label ?? org.id) }
+  }
+  return { state: 'ok', ...(match.label !== undefined ? { label: match.label } : {}) }
+}
+
+// GET /api/workforce/organizations — which organizations have a token, which
+// hubs each one covers, and whether one is awaiting approval. Never the tokens.
+app.get('/api/workforce/organizations', async (c) => {
+  const config = await readConfig()
+  return c.json({
+    organizations: publicOrganizations(config.organizations ?? [], config.environments),
+    // An environment variable outranks everything stored here, so the panel has
+    // to say so — otherwise replacing a token appears to change nothing.
+    envOverride: PAT_ENV_VARS.some((name) => (process.env[name] ?? '').trim() !== ''),
+  })
+})
+
+// PUT /api/workforce/organizations/:id/token — store a token pasted in from
+// Dynamic Content, once it has been checked against this organization. Clears
+// any outstanding request for one.
+app.put('/api/workforce/organizations/:id/token', async (c) => {
+  const organizationId = c.req.param('id')
+  const { token } = await c.req.json<{ token?: string }>()
+  if (token === undefined || token.trim() === '') {
+    return c.json({ error: 'token is required' }, 400)
+  }
+
+  const verdict = await verifyToken(token.trim(), organizationId)
+  if (verdict.state === 'denied') {
+    return c.json({ error: `Amplience did not accept that token — ${verdict.detail}` }, 400)
+  }
+  if (verdict.state === 'wrong-org') {
+    return c.json(
+      {
+        error: `That token works, but not for this organization. It covers ${verdict.covers.join(', ')}. Create one from a hub in this organization instead.`,
+      },
+      400,
+    )
+  }
+
+  const config = await readConfig()
+  const stored = storeToken(config.organizations ?? [], organizationId, token)
+  config.organizations =
+    verdict.state === 'ok' && verdict.label !== undefined
+      ? upsertOrganization(stored, organizationId, { label: verdict.label })
+      : stored
+  await writeConfig(config)
+  return c.json({
+    organizations: publicOrganizations(config.organizations, config.environments),
+    ...(verdict.state === 'unverified'
+      ? { warning: 'Saved, but it could not be checked against Amplience just now.' }
+      : {}),
+  })
+})
+
+// DELETE /api/workforce/organizations/:id/token — forget it, so a wrong one can
+// be replaced. Nothing leaves this machine; the token stays live in Amplience
+// until someone deletes it there.
+app.delete('/api/workforce/organizations/:id/token', async (c) => {
+  const organizationId = c.req.param('id')
+  const config = await readConfig()
+  config.organizations = removeToken(config.organizations ?? [], organizationId)
+  await writeConfig(config)
+  return c.json({ organizations: publicOrganizations(config.organizations, config.environments) })
+})
+
+// POST /api/workforce/organizations/:id/token/request — record that a token has
+// been asked for. A non-admin's request waits on an organization admin, so the
+// hub is saved without one and the row reads "awaiting approval" until it lands.
+app.post('/api/workforce/organizations/:id/token/request', async (c) => {
+  const organizationId = c.req.param('id')
+  const config = await readConfig()
+  config.organizations = upsertOrganization(config.organizations ?? [], organizationId, {
+    patRequestedAt: new Date().toISOString(),
+  })
+  await writeConfig(config)
+  return c.json({ organizations: publicOrganizations(config.organizations, config.environments) })
 })
 
 // ── Vercel provisioning (ADR-0017) ─────────────────────────────────────────────
