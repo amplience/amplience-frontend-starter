@@ -217,13 +217,26 @@ async function writeActiveEnvFiles(config: Config): Promise<void> {
   const existingWeb = existsSync(WEB_ENV) ? await readFile(WEB_ENV, 'utf-8') : ''
   await writeFile(WEB_ENV, updateEnvVars(existingWeb, webEnvVars(env, site)), 'utf-8')
 
-  // packages/hub-management/.env — full set of vars consumed by hub:import / hub:wipe scripts
+  // packages/hub-management/.env — full set of vars consumed by hub:import /
+  // hub:wipe / flows:pull. The Workforce token is organization-scoped, so it is
+  // looked up by the active hub's organization rather than read off the hub
+  // (ADR-0023); absent is normal and simply leaves the flows commands unarmed.
+  const organizationId = config.environments.find(
+    (candidate) => candidate.name === config.active,
+  )?.organizationId
+  const { token } = resolvePat(config.organizations ?? [], organizationId, process.env)
   const existingHubEnv = existsSync(HUB_MANAGEMENT_ENV)
     ? await readFile(HUB_MANAGEMENT_ENV, 'utf-8')
     : ''
   await writeFile(
     HUB_MANAGEMENT_ENV,
-    updateEnvVars(existingHubEnv, hubManagementEnvVars(env, site)),
+    updateEnvVars(
+      existingHubEnv,
+      hubManagementEnvVars(env, site, {
+        ...(organizationId === undefined ? {} : { organizationId }),
+        ...(token === undefined ? {} : { pat: token }),
+      }),
+    ),
     'utf-8',
   )
 }

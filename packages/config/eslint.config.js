@@ -201,6 +201,14 @@ export default tseslint.config(
         __dirname: 'readonly',
         __filename: 'readonly',
         console: 'readonly',
+        // Web-standard globals Node has had since 18. Declared because a script
+        // that talks to an API needs them, and the alternative is each one
+        // working around the rule — which is how webhooks.mjs ended up parsing
+        // a URL with a regex.
+        fetch: 'readonly',
+        URL: 'readonly',
+        URLSearchParams: 'readonly',
+        Buffer: 'readonly',
       },
     },
   },
