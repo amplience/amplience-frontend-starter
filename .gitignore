@@ -48,3 +48,9 @@ coverage
 # QL-92 hub-import staging (INTERIM dc-cli wrapper)
 packages/hub-management/.import
 .vercel
+
+# Flows and listeners pulled from a customer or sandbox hub. A pull lands here
+# by default; `--shared` writes to the checked-in directory instead. Keeps a
+# customer's brand names, and an extension instance's env, out of the repo.
+packages/hub-management/flows/local/
+packages/hub-management/webhook-listeners/local/

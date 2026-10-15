@@ -147,6 +147,20 @@ export function instanceHandle(title) {
   return version === undefined ? label : `${label}@${version}`
 }
 
+/** The same handle, built from a registry entry rather than from a title. */
+export function handleOf(instance) {
+  const label = (instance?.label ?? '').trim()
+  const version = (instance?.version ?? '').trim()
+  return version === '' ? label : `${label}@${version}`
+}
+
+/** The inverse of `parseInstanceTitle` — what the hub shows in the picker. */
+export function instanceTitle(instance) {
+  const label = (instance?.label ?? '').trim()
+  const version = (instance?.version ?? '').trim()
+  return version === '' ? label : `${label} (v${version})`
+}
+
 /** Index a registry list by id, refusing to guess when two entries share a label. */
 function labelLookup(entries, what, warnings) {
   const byId = new Map()
@@ -317,6 +331,9 @@ export function toFixture(exported, registry = {}) {
       ...(exported.description === undefined ? {} : { description: exported.description }),
       ...(exported.status === undefined ? {} : { status: exported.status }),
       ...(exported.sourceHubId === undefined ? {} : { sourceHubId: exported.sourceHubId }),
+      // A preset name and colour — authored, and the same on every hub, so it
+      // is carried verbatim rather than tokenised.
+      ...(iconOf(exported.icon) === undefined ? {} : { icon: iconOf(exported.icon) }),
       // What each `${extensionInstance:…}` handle meant on the source hub, so a
       // push that finds no instance of that name can still fall back to the one
       // instance of the same extension — the common case on a fresh hub.
@@ -325,5 +342,392 @@ export function toFixture(exported, registry = {}) {
     },
     warnings,
     leftover,
+  }
+}
+
+// ── Push: resolving a fixture against a target hub ────────────────────────────
+
+/**
+ * A token at one of the three sites. Anchored: a `${…}` inside instruction prose
+ * is authored English, not a reference, and must survive untouched.
+ */
+const TOKEN = /^\$\{(extensionInstance|listener|status):([^}]*)\}$/
+
+/** Thrown when a token cannot be resolved. Push writes nothing after one. */
+export class FlowResolutionError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'FlowResolutionError'
+  }
+}
+
+/** Group a registry list by label, so a duplicate can be refused rather than picked. */
+function byLabel(entries) {
+  const groups = new Map()
+  for (const entry of entries ?? []) {
+    if (typeof entry?.label !== 'string') continue
+    groups.set(entry.label, [...(groups.get(entry.label) ?? []), entry])
+  }
+  return groups
+}
+
+const on = (hub) => (hub === undefined ? 'the target hub' : `hub "${hub}"`)
+
+/**
+ * Find the instance a `${extensionInstance:…}` handle means, in three tiers.
+ *
+ * A hub usually holds several instances of one extension, differing by version
+ * or by what they are installed against, so the handle names the instance. When
+ * the target hub has no instance of that name, the manifest's extension is the
+ * fallback — but only where exactly one instance of it exists, because several
+ * with no name match is the case where a guess produces a flow that imports
+ * cleanly and fails at run time.
+ */
+function resolveInstance(handle, manifest, instances, { hub, warnings }) {
+  const named = instances.filter((instance) => handleOf(instance) === handle)
+  if (named.length === 1) return named[0]
+  if (named.length > 1) {
+    throw new FlowResolutionError(
+      `\${extensionInstance:${handle}}: ${named.length} extension instances on ${on(hub)} are ` +
+        `all named "${handle}" (${named.map((i) => i.id).join(', ')}), so there is no way to tell ` +
+        `which one the flow meant. Rename them so each is distinct, then push again.`,
+    )
+  }
+
+  const extension = manifest?.[handle]?.extension
+  if (extension === undefined) {
+    throw new FlowResolutionError(
+      `\${extensionInstance:${handle}}: no extension instance named "${handle}" on ${on(hub)}, ` +
+        `and the fixture records no extension to fall back to. Install the extension on the hub, ` +
+        `or pull the flow again from a hub whose registry includes it.`,
+    )
+  }
+
+  const sameExtension = instances.filter((instance) => instance.extensionId === extension)
+  if (sameExtension.length === 1) {
+    const fallback = sameExtension[0]
+    warnings.push(
+      `\${extensionInstance:${handle}} resolved to "${handleOf(fallback)}" — the only instance of ` +
+        `that extension on ${on(hub)}. The version or installation parameters may differ from the ` +
+        `hub this flow came from, so check the action still does what it did there.`,
+    )
+    return fallback
+  }
+  if (sameExtension.length === 0) {
+    throw new FlowResolutionError(
+      `\${extensionInstance:${handle}}: ${on(hub)} has no instance named "${handle}", and no ` +
+        `instance of its extension either. Install it on the hub before pushing this flow.`,
+    )
+  }
+  throw new FlowResolutionError(
+    `\${extensionInstance:${handle}}: ${on(hub)} has no instance named "${handle}", and ` +
+      `${sameExtension.length} instances of its extension ` +
+      `(${sameExtension.map(handleOf).join(', ')}) — any of which would import cleanly and may ` +
+      `point somewhere else entirely. Rename the one you want to "${handle}", or pull the flow ` +
+      `from this hub instead.`,
+  )
+}
+
+/** Resolve a label against a registry list that must hold exactly one match. */
+function resolveLabel(groups, label, { token, what, hub, remedy }) {
+  const matches = groups.get(label) ?? []
+  if (matches.length === 1) return matches[0]
+  if (matches.length === 0) {
+    throw new FlowResolutionError(
+      `${token}: no ${what} labelled "${label}" on ${on(hub)}. ${remedy}`,
+    )
+  }
+  throw new FlowResolutionError(
+    `${token}: ${matches.length} ${what} on ${on(hub)} are labelled "${label}", so the reference ` +
+      `is ambiguous. Give them distinct labels and push again.`,
+  )
+}
+
+/**
+ * Turn a tokenised fixture graph into one the target hub will accept.
+ *
+ * Reads the same three sites the tokeniser wrote, rather than scanning for
+ * `${…}` across the JSON: the tokeniser classified by site precisely because a
+ * value's shape cannot be trusted, and the reverse direction has the same
+ * problem plus one of its own — instruction text written for a model may
+ * legitimately contain a `${…}`, and rewriting English is not this step's job.
+ *
+ * Throws on the first token it cannot resolve, naming the token and the hub, so
+ * a half-resolved flow never reaches a customer hub.
+ */
+export function resolveGraph(fixture, registry = {}, { hub } = {}) {
+  const warnings = []
+  const manifest = fixture?.extensionInstances ?? {}
+  const flow = fixture?.flow ?? {}
+  const instances = (registry.extensionInstances ?? []).filter(
+    (instance) => typeof instance?.id === 'string',
+  )
+  const listeners = byLabel(registry.listeners)
+  const states = byLabel(registry.workflowStates)
+  /** Instance id → registry entry, for the materialiser that runs after this. */
+  const used = new Map()
+
+  const read = (value, site) => {
+    if (typeof value !== 'string') return undefined
+    const match = TOKEN.exec(value)
+    if (match !== null) return { kind: match[1], name: match[2].trim() }
+    if (/^\$\{.*\}$/.test(value)) {
+      throw new FlowResolutionError(
+        `${site} holds ${value}, which no rule matches. The fixture was written by a newer ` +
+          `flows:pull than this flows:push understands — update the tooling, or fix the token.`,
+      )
+    }
+    warnings.push(
+      `${site} is not tokenised, so the source hub's own id goes to ${on(hub)} unchanged. It will ` +
+        `resolve only if this is the hub the flow came from.`,
+    )
+    return undefined
+  }
+
+  const actions = (flow.actions ?? []).map((action) => {
+    if (!isObject(action?.config)) return action
+    const config = { ...action.config }
+    const where = action.label ?? action.id ?? action.action ?? 'an action'
+
+    if (config.instanceId !== undefined) {
+      const token = read(config.instanceId, `"${where}": instanceId`)
+      if (token?.kind === 'extensionInstance') {
+        const instance = resolveInstance(token.name, manifest, instances, { hub, warnings })
+        used.set(instance.id, instance)
+        config.instanceId = instance.id
+      }
+    }
+
+    if (config['amp:webhookId'] !== undefined) {
+      const token = read(config['amp:webhookId'], `"${where}": amp:webhookId`)
+      if (token?.kind === 'listener') {
+        config['amp:webhookId'] = resolveLabel(listeners, token.name, {
+          token: `\${listener:${token.name}}`,
+          what: 'webhook listener',
+          hub,
+          remedy: 'Run listeners:push before flows:push — flows reference the listeners it seeds.',
+        }).id
+      }
+    }
+
+    return { ...action, config }
+  })
+
+  const edges = (flow.edges ?? []).map((edge) => {
+    const stateId = edge?.inputs?.workflowStateId
+    if (stateId === undefined) return edge
+    const token = read(stateId, `edge ${edge.id ?? ''}: workflowStateId`.trim())
+    if (token?.kind !== 'status') return edge
+    const state = resolveLabel(states, token.name, {
+      token: `\${status:${token.name}}`,
+      what: 'workflow state',
+      hub,
+      remedy: 'Import settings before flows, and check the state label matches exactly.',
+    })
+    return { ...edge, inputs: { ...edge.inputs, workflowStateId: state.id } }
+  })
+
+  const resolved = { ...flow, actions, edges }
+  return {
+    flow: materialiseVirtualActions(resolved, { instances: used, listeners: registry.listeners }),
+    warnings: [...new Set(warnings)],
+  }
+}
+
+/**
+ * Rebuild the hub-bound half of `virtualActions` from what the resolved graph
+ * actually uses.
+ *
+ * Not from the whole registry: the source export lists a different instance set
+ * per declaration — an action only offered by a newer release appears against
+ * one instance where its neighbours list two — so "every instance of this
+ * extension" would be wrong as often as right. What the flow references is both
+ * knowable and sufficient.
+ *
+ * Icons and release schemas are not restored. The spike established the floor:
+ * a flow creates without either, and both are redrawn by the hub.
+ */
+export function materialiseVirtualActions(flow, { instances = new Map(), listeners = [] } = {}) {
+  const virtualActions = flow.virtualActions
+  if (!Array.isArray(virtualActions)) return flow
+
+  const listenerById = new Map(
+    (listeners ?? []).filter((l) => typeof l?.id === 'string').map((l) => [l.id, l]),
+  )
+
+  /** action type → the instance and listener ids the graph binds to it, in order. */
+  const usage = new Map()
+  for (const action of flow.actions ?? []) {
+    if (typeof action?.action !== 'string') continue
+    const entry = usage.get(action.action) ?? { instanceIds: [], webhookIds: [] }
+    const instanceId = action.config?.instanceId
+    if (typeof instanceId === 'string' && !entry.instanceIds.includes(instanceId)) {
+      entry.instanceIds.push(instanceId)
+    }
+    const webhookId = action.config?.['amp:webhookId']
+    if (typeof webhookId === 'string' && !entry.webhookIds.includes(webhookId)) {
+      entry.webhookIds.push(webhookId)
+    }
+    usage.set(action.action, entry)
+  }
+
+  return {
+    ...flow,
+    virtualActions: virtualActions.map((virtualAction) => {
+      const entry = usage.get(virtualAction?.name)
+      if (entry === undefined) return virtualAction
+
+      const bound = entry.instanceIds.map((id) => instances.get(id)).filter((i) => i !== undefined)
+      const seeded = entry.webhookIds
+        .map((id) => listenerById.get(id))
+        .filter((l) => l !== undefined)
+      if (bound.length === 0 && seeded.length === 0) return virtualAction
+
+      const data = { ...(virtualAction.data ?? {}) }
+      if (bound.length > 0) {
+        data.instances = bound.map((instance) => ({
+          id: instance.id,
+          ...(instance.releaseId === undefined ? {} : { releaseId: instance.releaseId }),
+        }))
+        const releaseIds = [
+          ...new Set(bound.map((i) => i.releaseId).filter((id) => id !== undefined)),
+        ]
+        if (releaseIds.length > 0) data.releases = releaseIds.map((id) => ({ id }))
+      }
+      if (seeded.length > 0) {
+        data.webhookListeners = seeded.map((listener) => ({
+          webhookId: listener.id,
+          ...(listener.schema === undefined ? {} : { schema: listener.schema }),
+        }))
+      }
+
+      return {
+        ...virtualAction,
+        data,
+        ...(bound.length === 0 ? {} : { config: withInstanceOptions(virtualAction.config, bound) }),
+      }
+    }),
+  }
+}
+
+/** Put the target hub's instances back into an action's own instance picker. */
+function withInstanceOptions(config, bound) {
+  const property = config?.schema?.properties?.[INSTANCE_PROPERTY]
+  if (!isObject(property)) return config
+  return {
+    ...config,
+    schema: {
+      ...config.schema,
+      properties: {
+        ...config.schema.properties,
+        [INSTANCE_PROPERTY]: {
+          ...property,
+          default: bound[0].id,
+          oneOf: bound.map((instance) => ({
+            title: instanceTitle(instance),
+            const: instance.id,
+            type: 'string',
+          })),
+        },
+      },
+    },
+  }
+}
+
+/**
+ * A flow's icon, as a fixture stores it.
+ *
+ * `ContentFlowIcon` is a union whose only member is `ContentFlowIconPreset`, so
+ * the read shape is `{ name, color }` and the write shape wraps the same pair
+ * in `{ preset: … }`. Neither half is hub-specific — it is a preset name and a
+ * colour, which is authored content.
+ */
+export function iconOf(icon) {
+  const name = icon?.name
+  const color = icon?.color
+  if (typeof name !== 'string' || typeof color !== 'string') return undefined
+  return { name, color }
+}
+
+/** The same pair, shaped for `CreateContentFlowInput.icon`. */
+export function iconInput(icon) {
+  const preset = iconOf(icon)
+  return preset === undefined ? undefined : { preset }
+}
+
+// ── Push: deciding what to send ───────────────────────────────────────────────
+
+/**
+ * Empty every reviewer list in the graph.
+ *
+ * A `human-review` step carries the user ids of the people who may approve it,
+ * and on another hub those ids mean nothing — the Workforce UI **crashes** when
+ * the step is opened, rather than merely showing a dangling reference. The
+ * browser extension's import already strips them for the same reason.
+ *
+ * Keyed on `config.reviewers` rather than on an action type, so a renamed or
+ * additional review step is covered without this having to know its name.
+ */
+export function clearReviewers(flow) {
+  let cleared = 0
+  const actions = (flow.actions ?? []).map((action) => {
+    if (!Array.isArray(action?.config?.reviewers) || action.config.reviewers.length === 0) {
+      return action
+    }
+    cleared += 1
+    return { ...action, config: { ...action.config, reviewers: [] } }
+  })
+  return { flow: { ...flow, actions }, cleared }
+}
+
+/**
+ * Decide whether a fixture creates or updates, matching on the exact label.
+ *
+ * ⚠️ Labels are **not** unique on a hub — three same-labelled flows were
+ * created in the spike without complaint — so the count has three branches, not
+ * two. Two matches is a refusal rather than a guess at which to overwrite,
+ * because the wrong guess silently replaces somebody's work.
+ */
+export function planPush(label, existing) {
+  const matches = (existing ?? []).filter((flow) => flow?.label === label)
+  if (matches.length === 0) return { mode: 'create' }
+  if (matches.length === 1) return { mode: 'update', id: matches[0].id, existing: matches[0] }
+  throw new FlowResolutionError(
+    `"${label}" matches ${matches.length} flows on this hub (${matches
+      .map((flow) => flow.id)
+      .join(', ')}). Labels are not unique and the label is the only identity a fixture has, so ` +
+      `updating one of them would be a guess. Rename or remove the duplicates first.`,
+  )
+}
+
+/**
+ * The `createContentFlow` input.
+ *
+ * ⚠️ `status` is deliberately absent from both inputs. It is not part of the
+ * update mutation at all, so sending it on create and not on update would mean
+ * a flow's enabled state depended on whether it happened to exist yet. A hub
+ * owns its own enabled state; the fixture's `status` records what the source
+ * hub had.
+ */
+export function createFlowInput(fixture, flow, hubRef) {
+  return {
+    cmsHubId: hubRef,
+    label: fixture.label,
+    ...(iconInput(fixture.icon) === undefined ? {} : { icon: iconInput(fixture.icon) }),
+    // ⚠️ `description` is non-null on create (`String!`) and optional on update.
+    // A fixture without one still has to send something, so it sends empty.
+    description: fixture.description ?? '',
+    flow: JSON.stringify(flow),
+  }
+}
+
+/** The `updateContentFlow` input — by the flow's own id, so the id survives. */
+export function updateFlowInput(fixture, flow, id) {
+  return {
+    id,
+    label: fixture.label,
+    ...(iconInput(fixture.icon) === undefined ? {} : { icon: iconInput(fixture.icon) }),
+    ...(fixture.description === undefined ? {} : { description: fixture.description }),
+    flow: JSON.stringify(flow),
   }
 }

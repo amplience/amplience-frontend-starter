@@ -1,0 +1,51 @@
+{
+  "label": "Trigger Translation",
+  "sourceHubId": "6aa14be51c14da4478d5b343",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "payload": {
+        "title": "Payload",
+        "type": "object",
+        "properties": {
+          "id": {
+            "title": "Content Item ID",
+            "type": "string"
+          },
+          "locale": {
+            "title": "Locale",
+            "type": "string"
+          },
+          "contentRepositoryId": {
+            "title": "Content Repository ID",
+            "type": "string"
+          },
+          "body": {
+            "title": "Content Item Body",
+            "type": "object",
+            "properties": {
+              "_meta": {
+                "title": "Content Item Metadata",
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "title": "Content Item Label",
+                    "type": "string"
+                  },
+                  "schema": {
+                    "title": "Schema ID",
+                    "type": "string"
+                  }
+                },
+                "required": ["name", "schema"]
+              }
+            },
+            "required": ["_meta"]
+          }
+        },
+        "required": ["id", "contentRepositoryId", "body"]
+      }
+    },
+    "required": ["payload"]
+  }
+}

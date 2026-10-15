@@ -1153,6 +1153,10 @@ app.put('/api/workforce/organizations/:id/token', async (c) => {
       ? upsertOrganization(stored, organizationId, { label: verdict.label })
       : stored
   await writeConfig(config)
+  // The token is organization-scoped, so storing one changes what the active
+  // hub can do. Rewriting the env files here is what puts AMPLIENCE_PAT in
+  // front of the terminal commands without making someone re-activate the hub.
+  await writeActiveEnvFiles(config)
   return c.json({
     organizations: publicOrganizations(config.organizations, config.environments),
     ...(verdict.state === 'unverified'
@@ -1169,6 +1173,9 @@ app.delete('/api/workforce/organizations/:id/token', async (c) => {
   const config = await readConfig()
   config.organizations = removeToken(config.organizations ?? [], organizationId)
   await writeConfig(config)
+  // Removing it has to reach the env files too, or a token that has been
+  // forgotten here keeps working in the terminal.
+  await writeActiveEnvFiles(config)
   return c.json({ organizations: publicOrganizations(config.organizations, config.environments) })
 })
 

@@ -1,0 +1,432 @@
+{
+  "label": "Translate Content Item [Org]",
+  "description": "Whenever a content item is created in one of the locale repositories with a locale, this translates the content item into its locale's language, and marks it \"Ready for review\" at the end.\n\n#cms #i18n",
+  "status": "ENABLED",
+  "sourceHubId": "6aa14be51c14da4478d5b343",
+  "extensionInstances": {
+    "Amplience Dynamic Content (2.2.0)": {
+      "extension": "RXh0ZW5zaW9uOmFhZTdkOGViLWQyMjktNDU2Ni04NmNjLTNmYTljNmZlMjNlNg==",
+      "sourceInstanceId": "RXh0ZW5zaW9uSW5zdGFuY2U6ZmViYmRjNGMtZWUxOC00MTg2LWJmM2EtMTk1MTFlOGQ2NTIy"
+    }
+  },
+  "flow": {
+    "actions": [
+      {
+        "action": "webhook-trigger",
+        "config": {
+          "amp:webhookId": "${listener:Trigger Translation}"
+        },
+        "position": {
+          "x": 690.9111165280895,
+          "y": -20.735340498578523
+        },
+        "id": "4ce2255b-d15d-426b-898e-8d0a9ee29a5f"
+      },
+      {
+        "action": "decision",
+        "config": {
+          "branches": [
+            {
+              "rules": {
+                "logicGate": "AND",
+                "rules": [
+                  {
+                    "field": {
+                      "type": "path",
+                      "value": "4ce2255b-d15d-426b-898e-8d0a9ee29a5f.out.payload.payload.locale"
+                    },
+                    "operator": "!NULL",
+                    "value": ""
+                  }
+                ]
+              },
+              "label": "Has a locale"
+            }
+          ]
+        },
+        "position": {
+          "x": 690.1914994002516,
+          "y": 93.67461603757852
+        },
+        "id": "c22acb51-d9d7-453d-ada1-91338b03d2d7"
+      },
+      {
+        "action": "RXh0ZW5zaW9uOmFhZTdkOGViLWQyMjktNDU2Ni04NmNjLTNmYTljNmZlMjNlNg==-setWorkflowState",
+        "config": {
+          "instanceId": "${extensionInstance:Amplience Dynamic Content (2.2.0)}"
+        },
+        "label": "Set state to \"Translation in Progress\"",
+        "position": {
+          "x": 656.1914994002516,
+          "y": 248.17461603757852
+        },
+        "id": "2958d948-14c1-4ee8-a4dd-dc0795e996a4"
+      },
+      {
+        "action": "translation-agent",
+        "config": {
+          "model": "Q29udGVudEdlbmVyYXRpb25Nb2RlbDowYjk2YjJmNS02ODVhLTQ3ZmUtOTk4YS1lMTVmNDg5ZTU2ZGM="
+        },
+        "position": {
+          "x": 690.4668795847501,
+          "y": 383.32901276949997
+        },
+        "id": "e9bd55a0-ed81-4691-8b82-ef40b516e047"
+      },
+      {
+        "action": "RXh0ZW5zaW9uOmFhZTdkOGViLWQyMjktNDU2Ni04NmNjLTNmYTljNmZlMjNlNg==-setWorkflowState",
+        "config": {
+          "instanceId": "${extensionInstance:Amplience Dynamic Content (2.2.0)}"
+        },
+        "label": "Set state to \"Ready for Review\"",
+        "position": {
+          "x": 680.7007402506698,
+          "y": 791.2698285131295
+        },
+        "id": "d809c4d7-9b48-4ed0-9319-bc17e2e34db0"
+      },
+      {
+        "action": "RXh0ZW5zaW9uOmFhZTdkOGViLWQyMjktNDU2Ni04NmNjLTNmYTljNmZlMjNlNg==-updateContentItem",
+        "config": {
+          "instanceId": "${extensionInstance:Amplience Dynamic Content (2.2.0)}"
+        },
+        "position": {
+          "x": 695.0516635671253,
+          "y": 656.0305947672591
+        },
+        "id": "7c25242d-7ae5-4b14-a8f5-67b96318ced1"
+      },
+      {
+        "action": "output-chat-message",
+        "config": {},
+        "position": {
+          "x": 695.5489770271499,
+          "y": 520.4158217039708
+        },
+        "id": "fb19975f-69f7-4ad1-810e-3b32588a70fe"
+      },
+      {
+        "action": "json-path",
+        "config": {
+          "values": [
+            {
+              "path": "$.values[1]",
+              "name": "Final Translation"
+            }
+          ]
+        },
+        "position": {
+          "x": 1060,
+          "y": 383.3
+        },
+        "id": "2ceaed80-e185-4c49-ad00-fbf248270073"
+      },
+      {
+        "action": "json-parse",
+        "config": {},
+        "position": {
+          "x": 1060,
+          "y": 470
+        },
+        "id": "5986dbda-675a-4580-a134-64a56fa9c12d"
+      },
+      {
+        "action": "json-path",
+        "config": {
+          "values": [
+            {
+              "name": "Translation Locale",
+              "path": "$.locale"
+            },
+            {
+              "name": "Translation Body",
+              "path": "$.value"
+            }
+          ]
+        },
+        "position": {
+          "x": 1060,
+          "y": 557
+        },
+        "id": "466c7908-e86a-4147-8dab-b8ba36f34471"
+      },
+      {
+        "action": "json-parse",
+        "config": {},
+        "position": {
+          "x": 1060,
+          "y": 644
+        },
+        "id": "a73a2a92-10d3-4414-b0e6-ff927a8f7660"
+      }
+    ],
+    "edges": [
+      {
+        "from": {
+          "actionId": "4ce2255b-d15d-426b-898e-8d0a9ee29a5f",
+          "port": "out"
+        },
+        "to": {
+          "actionId": "c22acb51-d9d7-453d-ada1-91338b03d2d7",
+          "port": "in"
+        },
+        "inputs": {},
+        "id": "d5056b5e-ac46-487f-b1e3-2bbf9c1e8b4e"
+      },
+      {
+        "from": {
+          "actionId": "c22acb51-d9d7-453d-ada1-91338b03d2d7",
+          "port": "branch-0"
+        },
+        "to": {
+          "actionId": "2958d948-14c1-4ee8-a4dd-dc0795e996a4",
+          "port": "in"
+        },
+        "inputs": {
+          "id": {
+            "$interpolate": "handlebars",
+            "value": {
+              "template": "{{4ce2255b-d15d-426b-898e-8d0a9ee29a5f.out.payload.payload.id}}",
+              "vars": {}
+            }
+          },
+          "workflowStateId": "${status:Translation in Progress}"
+        },
+        "id": "9a373681-58ca-46a1-8387-ee0644ccc0d1"
+      },
+      {
+        "from": {
+          "actionId": "2958d948-14c1-4ee8-a4dd-dc0795e996a4",
+          "port": "out"
+        },
+        "to": {
+          "actionId": "e9bd55a0-ed81-4691-8b82-ef40b516e047",
+          "port": "in"
+        },
+        "inputs": {
+          "inputText": {
+            "$interpolate": "handlebars",
+            "value": {
+              "template": "{{4ce2255b-d15d-426b-898e-8d0a9ee29a5f.out.payload.payload.body}}",
+              "vars": {}
+            }
+          },
+          "inputLocale": "en-US",
+          "targetLocales": [
+            {
+              "$interpolate": "handlebars",
+              "value": {
+                "template": "{{4ce2255b-d15d-426b-898e-8d0a9ee29a5f.out.payload.payload.locale}}",
+                "vars": {}
+              }
+            }
+          ],
+          "additionalInstructions": "You are a translator for a big eCommerce retailer."
+        },
+        "id": "80241076-dfd4-4c20-b25d-1f69ec5da4be"
+      },
+      {
+        "from": {
+          "actionId": "fb19975f-69f7-4ad1-810e-3b32588a70fe",
+          "port": "out"
+        },
+        "to": {
+          "actionId": "7c25242d-7ae5-4b14-a8f5-67b96318ced1",
+          "port": "in"
+        },
+        "inputs": {
+          "contentItemId": {
+            "$interpolate": "handlebars",
+            "value": {
+              "template": "{{4ce2255b-d15d-426b-898e-8d0a9ee29a5f.out.payload.payload.id}}",
+              "vars": {}
+            }
+          },
+          "mode": "replace",
+          "body": {
+            "$interpolate": "substitution",
+            "value": {
+              "source": "a73a2a92-10d3-4414-b0e6-ff927a8f7660.out.data"
+            }
+          }
+        },
+        "id": "faa63361-038d-472e-8081-f4d53545ff66"
+      },
+      {
+        "from": {
+          "actionId": "7c25242d-7ae5-4b14-a8f5-67b96318ced1",
+          "port": "out"
+        },
+        "to": {
+          "actionId": "d809c4d7-9b48-4ed0-9319-bc17e2e34db0",
+          "port": "in"
+        },
+        "inputs": {
+          "id": {
+            "$interpolate": "handlebars",
+            "value": {
+              "template": "{{4ce2255b-d15d-426b-898e-8d0a9ee29a5f.out.payload.payload.id}}",
+              "vars": {}
+            }
+          },
+          "workflowStateId": "${status:Ready for Review}"
+        },
+        "id": "9bf9adb4-a720-48f8-ae71-11c9b0341706"
+      },
+      {
+        "from": {
+          "actionId": "e9bd55a0-ed81-4691-8b82-ef40b516e047",
+          "port": "out"
+        },
+        "to": {
+          "actionId": "2ceaed80-e185-4c49-ad00-fbf248270073",
+          "port": "in"
+        },
+        "inputs": {
+          "data": {
+            "$interpolate": "substitution",
+            "value": {
+              "source": "e9bd55a0-ed81-4691-8b82-ef40b516e047.out.text"
+            }
+          }
+        },
+        "id": "68d435fb-149f-4da9-9fa4-91991d6561a5"
+      },
+      {
+        "from": {
+          "actionId": "2ceaed80-e185-4c49-ad00-fbf248270073",
+          "port": "out"
+        },
+        "to": {
+          "actionId": "5986dbda-675a-4580-a134-64a56fa9c12d",
+          "port": "in"
+        },
+        "inputs": {
+          "data": {
+            "$interpolate": "handlebars",
+            "value": {
+              "template": "{{2ceaed80-e185-4c49-ad00-fbf248270073.out.value-0}}",
+              "vars": {}
+            }
+          }
+        },
+        "id": "057c30b8-f501-473e-9c7d-986ae0b63228"
+      },
+      {
+        "from": {
+          "actionId": "5986dbda-675a-4580-a134-64a56fa9c12d",
+          "port": "out"
+        },
+        "to": {
+          "actionId": "466c7908-e86a-4147-8dab-b8ba36f34471",
+          "port": "in"
+        },
+        "inputs": {
+          "data": {
+            "$interpolate": "substitution",
+            "value": {
+              "source": "5986dbda-675a-4580-a134-64a56fa9c12d.out.data"
+            }
+          }
+        },
+        "id": "8dc4cbde-e483-4c85-96f0-ae932dc43808"
+      },
+      {
+        "from": {
+          "actionId": "466c7908-e86a-4147-8dab-b8ba36f34471",
+          "port": "out"
+        },
+        "to": {
+          "actionId": "a73a2a92-10d3-4414-b0e6-ff927a8f7660",
+          "port": "in"
+        },
+        "inputs": {
+          "data": {
+            "$interpolate": "handlebars",
+            "value": {
+              "template": "{{466c7908-e86a-4147-8dab-b8ba36f34471.out.value-1}}",
+              "vars": {}
+            }
+          }
+        },
+        "id": "12ca0dbf-d779-4a7f-8829-460b0bbc8100"
+      },
+      {
+        "from": {
+          "actionId": "a73a2a92-10d3-4414-b0e6-ff927a8f7660",
+          "port": "out"
+        },
+        "to": {
+          "actionId": "fb19975f-69f7-4ad1-810e-3b32588a70fe",
+          "port": "in"
+        },
+        "inputs": {
+          "message": {
+            "$interpolate": "handlebars",
+            "value": {
+              "template": "Translation Body Object:\n\n{{a73a2a92-10d3-4414-b0e6-ff927a8f7660.out.data}}\n\n---\n\nTranslation Locale:\n\n{{466c7908-e86a-4147-8dab-b8ba36f34471.out.value-0}}",
+              "vars": {}
+            }
+          }
+        },
+        "id": "0380b911-fe6e-4c37-bcd0-90e47bbfa601"
+      }
+    ],
+    "virtualActions": [
+      {
+        "baseAction": "extension-action",
+        "name": "RXh0ZW5zaW9uOmFhZTdkOGViLWQyMjktNDU2Ni04NmNjLTNmYTljNmZlMjNlNg==-updateContentItem",
+        "group": "INTEGRATIONS",
+        "category": "Amplience Dynamic Content",
+        "label": "Update Content Item",
+        "description": "Update a content item",
+        "config": {
+          "schema": {
+            "type": "object",
+            "required": ["instanceId"],
+            "properties": {
+              "instanceId": {
+                "title": "Instance",
+                "static": null,
+                "params": []
+              }
+            }
+          }
+        },
+        "data": {
+          "actionName": "updateContentItem"
+        }
+      },
+      {
+        "baseAction": "extension-action",
+        "name": "RXh0ZW5zaW9uOmFhZTdkOGViLWQyMjktNDU2Ni04NmNjLTNmYTljNmZlMjNlNg==-setWorkflowState",
+        "group": "INTEGRATIONS",
+        "category": "Amplience Dynamic Content",
+        "label": "Set Workflow State",
+        "description": "Sets the workflow state on a content item by ID",
+        "config": {
+          "schema": {
+            "type": "object",
+            "required": ["instanceId"],
+            "properties": {
+              "instanceId": {
+                "title": "Instance",
+                "static": null,
+                "params": []
+              }
+            }
+          }
+        },
+        "data": {
+          "actionName": "setWorkflowState"
+        }
+      },
+      {
+        "baseAction": "webhook-trigger-base",
+        "name": "webhook-trigger",
+        "label": "Webhook Trigger",
+        "data": {}
+      }
+    ]
+  }
+}

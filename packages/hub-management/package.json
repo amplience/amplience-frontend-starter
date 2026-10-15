@@ -11,6 +11,7 @@
   },
   "scripts": {
     "flows:pull": "node --env-file-if-exists=.env scripts/flows-pull.mjs",
+    "flows:push": "node --env-file-if-exists=.env scripts/flows-push.mjs",
     "hub:import": "node --env-file-if-exists=.env scripts/hub-import.mjs all",
     "hub:import:content": "node --env-file-if-exists=.env scripts/hub-import.mjs content",
     "hub:import:extensions": "node --env-file-if-exists=.env scripts/hub-import.mjs extensions",
@@ -24,6 +25,8 @@
     "hub:wipe:schemas": "node --env-file-if-exists=.env scripts/hub-wipe.mjs schemas",
     "hub:wipe:types": "node --env-file-if-exists=.env scripts/hub-wipe.mjs types",
     "hub:wipe:webhooks": "node --env-file-if-exists=.env scripts/hub-wipe.mjs webhooks",
+    "listeners:pull": "node --env-file-if-exists=.env scripts/listeners-pull.mjs",
+    "listeners:push": "node --env-file-if-exists=.env scripts/listeners-push.mjs",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
