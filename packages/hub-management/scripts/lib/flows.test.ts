@@ -311,6 +311,24 @@ describe('instance handles', () => {
     })
   })
 
+  // The wiki's install pages use "(v2.2.0)"; the hub Douglas installed from
+  // reads "(2.2.0)". Whoever runs the mutation types the label, so both exist.
+  it('accepts a version with or without the v', () => {
+    expect(parseInstanceTitle('Amplience Dynamic Content (2.2.0)')).toEqual({
+      label: 'Amplience Dynamic Content',
+      version: '2.2.0',
+    })
+    expect(instanceHandle('Amplience Dynamic Content (2.2.0)')).toBe(
+      'Amplience Dynamic Content@2.2.0',
+    )
+  })
+
+  it('leaves a parenthetical that is not a version alone', () => {
+    expect(parseInstanceTitle('Amplience Dynamic Content (Staging)')).toEqual({
+      label: 'Amplience Dynamic Content (Staging)',
+    })
+  })
+
   it('copes with a title carrying no version', () => {
     expect(parseInstanceTitle('Mango Fashion DC Integration')).toEqual({
       label: 'Mango Fashion DC Integration',

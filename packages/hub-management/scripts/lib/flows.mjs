@@ -135,7 +135,12 @@ export function instanceTitles(virtualActions) {
  * instance, not the extension it came from.
  */
 export function parseInstanceTitle(title) {
-  const match = /^(.*)\(v([^)]+)\)\s*$/.exec(title ?? '')
+  // ⚠️ The `v` is optional. These labels are typed by whoever runs the install
+  // mutation, and the wiki's own pages show three spellings of the same
+  // instance — "Amplience Dynamic Content", "… (v2.2.0)" and "… (2.2.0)".
+  // Requiring a digit after it keeps a real parenthetical, like "(Staging)",
+  // out of the version slot.
+  const match = /^(.*)\(v?(\d[^)]*)\)\s*$/.exec(title ?? '')
   return match === null
     ? { label: (title ?? '').trim() }
     : { label: match[1].trim(), version: match[2].trim() }
