@@ -1,0 +1,9 @@
+{
+  "label": "Content Hub Integration",
+  "extensionId": "RXh0ZW5zaW9uOmMxNjQ3ZGFmLWJjNWQtNDYzMy04MDY0LWI3ZDdlMGZlNGFjZA==",
+  "description": "Adds Content Hub Actions",
+  "env": {
+    "CLIENT_ID": "${secret:AMPLIENCE_CLIENT_ID}",
+    "CLIENT_SECRET": "${secret:AMPLIENCE_CLIENT_SECRET}"
+  }
+}

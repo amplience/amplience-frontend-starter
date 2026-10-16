@@ -29,6 +29,7 @@
     "start": "pnpm --filter @amplience/frontend-starter-web start",
     "docs:generate": "node packages/content/scripts/generate-docs.mjs",
     "env-manager": "pnpm --filter @amplience/environment-manager dev",
+    "extensions:push": "pnpm --filter @amplience/frontend-starter-hub-management extensions:push",
     "fixtures:ids": "node packages/content/scripts/stamp-fixture-ids.mjs",
     "flows:pull": "pnpm --filter @amplience/frontend-starter-hub-management flows:pull",
     "flows:push": "pnpm --filter @amplience/frontend-starter-hub-management flows:push",

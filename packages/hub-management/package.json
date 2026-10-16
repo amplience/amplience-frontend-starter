@@ -10,6 +10,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
+    "extensions:push": "node --env-file-if-exists=.env scripts/extensions-push.mjs",
     "flows:pull": "node --env-file-if-exists=.env scripts/flows-pull.mjs",
     "flows:push": "node --env-file-if-exists=.env scripts/flows-push.mjs",
     "hub:import": "node --env-file-if-exists=.env scripts/hub-import.mjs all",

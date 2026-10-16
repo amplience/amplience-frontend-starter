@@ -482,10 +482,14 @@ describe('resolveGraph', () => {
     expect(() => resolveGraph(fixtureOf(), twins)).toThrow(/are all named/)
   })
 
+  // A fixture with no manifest entry has no extension id to match on at all, so
+  // it falls straight through to the label, and an empty hub has none of those
+  // either. It ends at the same refusal a custom extension does — correctly,
+  // since an unrecorded extension is indistinguishable from a custom one.
   it('refuses without a manifest entry to fall back through', () => {
     expect(() =>
       resolveGraph(fixtureOf({ extensionInstances: {} }), { ...target, extensionInstances: [] }),
-    ).toThrow(/records no extension to fall back to/)
+    ).toThrow(/none labelled "Amplience Dynamic Content" either.*custom extension/s)
   })
 
   it('points at listeners:push when a listener is missing', () => {
@@ -735,5 +739,87 @@ describe('flow icon', () => {
     const resolved = { actions: [], edges: [] }
     expect(createFlowInput(bare, resolved, 'hub')).not.toHaveProperty('icon')
     expect(updateFlowInput(bare, resolved, 'flow-1')).not.toHaveProperty('icon')
+  })
+})
+
+describe('resolving a custom extension', () => {
+  // An Extension belongs to a cmsHub, so the same custom extension installed on
+  // another hub is a different record with a different id. Only public ones
+  // keep a stable id, which is why the catalogue decides how to match.
+  const CUSTOM = opaque('Extension:9999custom')
+  const PUBLIC = EXTENSION
+
+  const fixtureFor = (extensionId: string, handle: string) => ({
+    label: 'Flow',
+    extensionInstances: { [handle]: { extension: extensionId, sourceInstanceId: 'src' } },
+    flow: {
+      actions: [
+        { id: 'a', action: 'ext', config: { instanceId: `\${extensionInstance:${handle}}` } },
+      ],
+      edges: [],
+      virtualActions: [],
+    },
+  })
+
+  it('matches a custom extension on its label when the id is not on the hub', () => {
+    const onHub = {
+      extensionInstances: [
+        { id: 'new-id', extensionId: opaque('Extension:differentHere'), label: 'My Integration' },
+      ],
+    }
+    const { flow, warnings } = resolveGraph(fixtureFor(CUSTOM, 'My Integration@1.0'), onHub, {
+      hub: 'target',
+      publicExtensions: new Set([PUBLIC]),
+    })
+    expect(flow.actions?.[0]?.config?.instanceId).toBe('new-id')
+    expect(warnings[0]).toMatch(/matched "My Integration" on its label alone/)
+  })
+
+  // A public extension's id WOULD have matched if it were installed, so a miss
+  // means it is missing, not that it is called something else.
+  it('says a public extension is simply not installed, rather than guessing by label', () => {
+    const onHub = { extensionInstances: [{ id: 'x', extensionId: CUSTOM, label: 'Amplience' }] }
+    expect(() =>
+      resolveGraph(fixtureFor(PUBLIC, 'Amplience@2.2.0'), onHub, {
+        hub: 'target',
+        publicExtensions: new Set([PUBLIC]),
+      }),
+    ).toThrow(/public one, so .*extensions:push.* can install it/)
+  })
+
+  it('refuses when two instances share the custom label', () => {
+    const onHub = {
+      extensionInstances: [
+        { id: 'one', extensionId: 'a', label: 'My Integration' },
+        { id: 'two', extensionId: 'b', label: 'My Integration' },
+      ],
+    }
+    expect(() =>
+      resolveGraph(fixtureFor(CUSTOM, 'My Integration@1.0'), onHub, { hub: 'target' }),
+    ).toThrow(/2 instances on hub "target" are labelled "My Integration"/)
+  })
+
+  it('refuses when neither the id nor the label is on the hub', () => {
+    const onHub = {
+      extensionInstances: [{ id: 'z', extensionId: 'other', label: 'Something Else' }],
+    }
+    expect(() =>
+      resolveGraph(fixtureFor(CUSTOM, 'My Integration@1.0'), onHub, { hub: 'target' }),
+    ).toThrow(/none labelled "My Integration" either.*custom extension/s)
+  })
+
+  // The id still wins when it is present — a hub pushing back to itself, or a
+  // public extension already installed.
+  it('prefers the extension id over the label when both could match', () => {
+    const onHub = {
+      extensionInstances: [
+        { id: 'by-id', extensionId: CUSTOM, label: 'Renamed Here' },
+        { id: 'by-label', extensionId: 'unrelated', label: 'My Integration' },
+      ],
+    }
+    const { flow } = resolveGraph(fixtureFor(CUSTOM, 'My Integration@1.0'), onHub, {
+      hub: 'target',
+    })
+    expect(flow.actions?.[0]?.config?.instanceId).toBe('by-id')
   })
 })

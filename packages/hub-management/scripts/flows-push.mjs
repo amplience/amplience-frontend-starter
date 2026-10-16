@@ -24,6 +24,13 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import {
+  findEntry,
+  installInput,
+  missingExtensions,
+  parseEntry,
+  resolveEnv,
+} from './lib/extensions.mjs'
 import { LOCAL_DIR, mergeFixtures } from './lib/fixtures.mjs'
 import {
   clearReviewers,
@@ -81,6 +88,10 @@ const FLOWS_QUERY = `query flows($hubId: ID!, $first: Int!, $after: String) {
 
 const LISTENER_QUERY = `query listener($id: ID!) {
   webhookListener(id: $id) { id label schema }
+}`
+
+const INSTALL = `mutation install($input: CreateExtensionInstanceInput!) {
+  createExtensionInstance(input: $input) { id label }
 }`
 
 const CREATE = `mutation create($input: CreateContentFlowInput!) {
@@ -141,6 +152,15 @@ function readFixtures() {
   return mergeFixtures(readDir(dir), readDir(path.join(dir, LOCAL_DIR))).map((e) => e.value)
 }
 
+/** The public-extension catalogue, used to install what a flow needs. */
+function readCatalogue() {
+  const from = path.join(packageRoot, 'workforce-extensions')
+  if (!existsSync(from)) return []
+  return readdirSync(from)
+    .filter((name) => name.endsWith('.json'))
+    .map((name) => parseEntry(JSON.parse(readFileSync(path.join(from, name), 'utf8')), name))
+}
+
 /** The labels a fixture's `${listener:…}` tokens name. */
 function listenersReferenced(fixtures) {
   const labels = new Set()
@@ -186,12 +206,62 @@ registry.listeners = await withListenerSchemas(
   listenersReferenced(desired),
 )
 
+// A flow binds to an instance of an extension, so a hub that has never had one
+// installed has nothing to bind to. Installing from the catalogue turns that
+// refusal into a step — but only for an extension the catalogue knows; anything
+// else still refuses, in resolveGraph, with a message naming what it wanted.
+const missing = missingExtensions(desired, registry.extensionInstances)
+const catalogue = readCatalogue()
+const installable = missing
+  .map((want) => ({ ...want, entry: findEntry(catalogue, want.extensionId) }))
+  .filter((want) => want.entry !== undefined)
+
+if (installable.length > 0) {
+  console.log(`\n→ Extensions this flow needs that ${hubName ?? hubId} has not got`)
+  for (const want of installable) {
+    console.log(`  + ${want.entry.label}${want.version === undefined ? '' : ` (v${want.version})`}`)
+  }
+  if (dryRun) {
+    console.log(
+      `\n  Dry run — these would be installed first. Run \`pnpm extensions:push\` to do it ` +
+        `separately, or re-run this without --dry-run.\n`,
+    )
+    process.exit(0)
+  }
+  for (const want of installable) {
+    const env = resolveEnv(want.entry.env, {
+      env: process.env,
+      hubId,
+      hubName,
+      source: want.entry.label,
+    })
+    await graphql(token, INSTALL, {
+      input: installInput(want.entry, { version: want.version, hubRef, env }),
+    })
+    console.log(`  ✓ installed ${want.entry.label}`)
+  }
+  // Re-read, so resolution sees what was just installed.
+  registry.extensionInstances = (
+    await readRegistry(token, mgmtToken, hubId, organizationId)
+  ).registry.extensionInstances
+}
+
 const existing = await readFlows(token, hubRef)
+
+// ⚠️ The catalogue is also what tells resolution which extension ids are
+// *public*. A public extension has the same id on every hub, so an id that is
+// catalogued but absent here means "not installed" and nothing else. A custom
+// extension is a per-hub record with its own id, so an uncatalogued id that
+// misses proves nothing and resolution falls back to the label instead.
+const publicExtensions = new Set(catalogue.map((entry) => entry.extensionId))
 
 // Everything is resolved and planned before anything is sent, so a fixture that
 // cannot resolve stops the run rather than leaving half a set pushed.
 const prepared = desired.map((fixture) => {
-  const { flow, warnings } = resolveGraph(fixture, registry, { hub: hubName ?? hubId })
+  const { flow, warnings } = resolveGraph(fixture, registry, {
+    hub: hubName ?? hubId,
+    publicExtensions,
+  })
   const { flow: ready, cleared } = clearReviewers(flow)
   return { fixture, flow: ready, warnings, cleared, plan: planPush(fixture.label, existing) }
 })

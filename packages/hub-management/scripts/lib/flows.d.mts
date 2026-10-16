@@ -134,7 +134,15 @@ export class FlowResolutionError extends Error {}
 export function resolveGraph(
   fixture: FlowFixture,
   registry?: FlowRegistry,
-  options?: { hub?: string },
+  options?: {
+    hub?: string
+    /**
+     * Extension ids the catalogue knows are public. A miss on one of these
+     * means "not installed"; a miss on anything else means the extension is
+     * custom, whose id differs per hub, so the label is matched instead.
+     */
+    publicExtensions?: Set<string>
+  },
 ): { flow: FlowGraph; warnings: string[] }
 
 /** Replay `data.instances[]`, `data.releases[].id`, the listeners and the picker. */

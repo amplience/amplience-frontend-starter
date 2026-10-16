@@ -388,7 +388,13 @@ const on = (hub) => (hub === undefined ? 'the target hub' : `hub "${hub}"`)
  * with no name match is the case where a guess produces a flow that imports
  * cleanly and fails at run time.
  */
-function resolveInstance(handle, manifest, instances, { hub, warnings }) {
+/** The label half of a `label@version` handle. */
+function labelOfHandle(handle) {
+  const at = (handle ?? '').lastIndexOf('@')
+  return at === -1 ? (handle ?? '') : handle.slice(0, at)
+}
+
+function resolveInstance(handle, manifest, instances, { hub, warnings, publicExtensions }) {
   const named = instances.filter((instance) => handleOf(instance) === handle)
   if (named.length === 1) return named[0]
   if (named.length > 1) {
@@ -400,15 +406,11 @@ function resolveInstance(handle, manifest, instances, { hub, warnings }) {
   }
 
   const extension = manifest?.[handle]?.extension
-  if (extension === undefined) {
-    throw new FlowResolutionError(
-      `\${extensionInstance:${handle}}: no extension instance named "${handle}" on ${on(hub)}, ` +
-        `and the fixture records no extension to fall back to. Install the extension on the hub, ` +
-        `or pull the flow again from a hub whose registry includes it.`,
-    )
-  }
+  const sameExtension =
+    extension === undefined
+      ? []
+      : instances.filter((instance) => instance.extensionId === extension)
 
-  const sameExtension = instances.filter((instance) => instance.extensionId === extension)
   if (sameExtension.length === 1) {
     const fallback = sameExtension[0]
     warnings.push(
@@ -418,18 +420,56 @@ function resolveInstance(handle, manifest, instances, { hub, warnings }) {
     )
     return fallback
   }
-  if (sameExtension.length === 0) {
+  if (sameExtension.length > 1) {
     throw new FlowResolutionError(
-      `\${extensionInstance:${handle}}: ${on(hub)} has no instance named "${handle}", and no ` +
-        `instance of its extension either. Install it on the hub before pushing this flow.`,
+      `\${extensionInstance:${handle}}: ${on(hub)} has no instance named "${handle}", and ` +
+        `${sameExtension.length} instances of its extension ` +
+        `(${sameExtension.map(handleOf).join(', ')}) — any of which would import cleanly and may ` +
+        `point somewhere else entirely. Rename the one you want to "${handle}", or pull the flow ` +
+        `from this hub instead.`,
     )
   }
+
+  // ⚠️ Nothing on this hub carries that extension id. For a **public**
+  // extension that means it simply is not installed, and the id would have
+  // matched if it were — so say so and stop.
+  if (extension !== undefined && publicExtensions?.has(extension) === true) {
+    throw new FlowResolutionError(
+      `\${extensionInstance:${handle}}: ${on(hub)} has no instance of this extension. It is a ` +
+        `public one, so \`pnpm extensions:push\` can install it — flows:push does that for you, ` +
+        `but a standalone resolve will not.`,
+    )
+  }
+
+  // Otherwise treat it as a **custom** extension. An Extension belongs to a
+  // hub, so one authored on another hub has a different id here and matching on
+  // the id cannot work. The label is the only thing that travels — weaker
+  // evidence, so it is always reported.
+  const label = labelOfHandle(handle)
+  const sameLabel = instances.filter((instance) => (instance.label ?? '') === label)
+  if (sameLabel.length === 1) {
+    const matched = sameLabel[0]
+    warnings.push(
+      `\${extensionInstance:${handle}} matched "${handleOf(matched)}" on its label alone. Its ` +
+        `extension id differs from the fixture's, which is normal for a custom extension — a ` +
+        `custom extension installed on another hub is a different record with its own id — but it ` +
+        `does mean nothing has verified this is the same integration. Check the action behaves.`,
+    )
+    return matched
+  }
+  if (sameLabel.length > 1) {
+    throw new FlowResolutionError(
+      `\${extensionInstance:${handle}}: ${sameLabel.length} instances on ${on(hub)} are labelled ` +
+        `"${label}" (${sameLabel.map((i) => i.id).join(', ')}), and the fixture's extension id is ` +
+        `not on this hub, so neither the id nor the label can pick between them.`,
+    )
+  }
+
   throw new FlowResolutionError(
-    `\${extensionInstance:${handle}}: ${on(hub)} has no instance named "${handle}", and ` +
-      `${sameExtension.length} instances of its extension ` +
-      `(${sameExtension.map(handleOf).join(', ')}) — any of which would import cleanly and may ` +
-      `point somewhere else entirely. Rename the one you want to "${handle}", or pull the flow ` +
-      `from this hub instead.`,
+    `\${extensionInstance:${handle}}: ${on(hub)} has no instance of this extension, and none ` +
+      `labelled "${label}" either. It is not one of the public extensions this repo catalogues, ` +
+      `so it looks like a custom extension that has to exist on the hub before a flow can bind to ` +
+      `it — install or author it there, then push again.`,
   )
 }
 
@@ -460,7 +500,7 @@ function resolveLabel(groups, label, { token, what, hub, remedy }) {
  * Throws on the first token it cannot resolve, naming the token and the hub, so
  * a half-resolved flow never reaches a customer hub.
  */
-export function resolveGraph(fixture, registry = {}, { hub } = {}) {
+export function resolveGraph(fixture, registry = {}, { hub, publicExtensions } = {}) {
   const warnings = []
   const manifest = fixture?.extensionInstances ?? {}
   const flow = fixture?.flow ?? {}
@@ -497,7 +537,11 @@ export function resolveGraph(fixture, registry = {}, { hub } = {}) {
     if (config.instanceId !== undefined) {
       const token = read(config.instanceId, `"${where}": instanceId`)
       if (token?.kind === 'extensionInstance') {
-        const instance = resolveInstance(token.name, manifest, instances, { hub, warnings })
+        const instance = resolveInstance(token.name, manifest, instances, {
+          hub,
+          warnings,
+          publicExtensions,
+        })
         used.set(instance.id, instance)
         config.instanceId = instance.id
       }
