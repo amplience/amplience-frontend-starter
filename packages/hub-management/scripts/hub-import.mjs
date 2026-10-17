@@ -126,9 +126,9 @@ import {
   availableSets,
   chooseSet,
   DEFAULT_FIXTURE_SET,
-  fixturesRoot,
   positional,
   resolveSetName,
+  setDirFor,
   setFromArgv,
 } from './lib/fixture-sets.mjs'
 import { describeLocaleFilter, filterLocales } from './lib/locales.mjs'
@@ -200,7 +200,7 @@ try {
   console.error(error instanceof Error ? error.message : String(error))
   process.exit(1)
 }
-const fixturesDir = path.join(fixturesRoot, setName)
+const fixturesDir = setDirFor(setName)
 const fixtureSet = JSON.parse(readFileSync(path.join(fixturesDir, 'set.json'), 'utf8'))
 
 const env = (name) => {

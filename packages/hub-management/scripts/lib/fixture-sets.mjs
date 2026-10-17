@@ -3,7 +3,10 @@
  * the two can't disagree about what a set is or which one is in play.
  *
  * Sets are discovered from disk rather than declared here: a directory under
- * `packages/content/fixtures/` holding a `set.json` is a set. The TypeScript
+ * `packages/content/fixtures/` holding a `set.json` is a set. So is one under
+ * `fixtures/local/`, which is gitignored — the home for demo sets built from a
+ * prospect's site, the same split as `flows/local/`. A local set is addressed
+ * by its own directory name, exactly like a checked-in one. The TypeScript
  * registry in `packages/content/src/mock/loader.ts` is the runtime's list; these
  * scripts are plain ESM and can't import it, so disk is the shared truth and the
  * guard test in the content package holds the two in step.
@@ -33,12 +36,51 @@ export const DEFAULT_FIXTURE_SET = 'frontend-starter'
 /** Directories inside a set that hold content items, in seed order. */
 export const ITEM_DIRS = ['components', 'slots', 'pages', 'site-components']
 
-/** Every set on disk, sorted. `root` is for tests; production uses the default. */
-export const availableSets = (root = fixturesRoot) =>
-  readdirSync(root, { withFileTypes: true })
-    .filter((e) => e.isDirectory() && existsSync(path.join(root, e.name, 'set.json')))
+/** The gitignored subdirectory holding sets that never reach the repository. */
+export const LOCAL_SETS_DIR = 'local'
+
+/** The set directories directly under `dir`. */
+const setDirsIn = (dir) => {
+  let entries
+  try {
+    entries = readdirSync(dir, { withFileTypes: true })
+  } catch {
+    return [] // no local/ directory — the usual case on a fresh clone
+  }
+  return entries
+    .filter((e) => e.isDirectory() && existsSync(path.join(dir, e.name, 'set.json')))
     .map((e) => e.name)
-    .sort()
+}
+
+/** Sets under `local/` — a subset of `availableSets`. */
+export const localSets = (root = fixturesRoot) => setDirsIn(path.join(root, LOCAL_SETS_DIR)).sort()
+
+/**
+ * Every set on disk, checked-in and local, sorted. `root` is for tests;
+ * production uses the default.
+ *
+ * A local set sharing a checked-in set's name is refused rather than shadowed:
+ * the name is the delivery-key prefix and the id seed, so two of them would
+ * seed into one namespace with colliding ids.
+ */
+export const availableSets = (root = fixturesRoot) => {
+  const shared = setDirsIn(root)
+  const local = localSets(root)
+  const clash = local.filter((name) => shared.includes(name))
+  if (clash.length > 0) {
+    throw new Error(
+      `Fixture set ${clash.map((n) => `"${n}"`).join(', ')} exists both in fixtures/ and ` +
+        `fixtures/${LOCAL_SETS_DIR}/.\n  The name is the delivery-key prefix — rename or remove one.`,
+    )
+  }
+  return [...shared, ...local].sort()
+}
+
+/** Where a set lives: `fixtures/<name>`, or `fixtures/local/<name>`. */
+export const setDirFor = (name, root = fixturesRoot) =>
+  existsSync(path.join(root, name, 'set.json'))
+    ? path.join(root, name)
+    : path.join(root, LOCAL_SETS_DIR, name)
 
 /** Every `*.json` under `dir`, recursively, relative to `from`. */
 const jsonFilesUnder = (dir, from) => {
@@ -65,7 +107,7 @@ const jsonFilesUnder = (dir, from) => {
  * if a stamping run is ever pending.
  */
 export const readSet = (name, root = fixturesRoot) => {
-  const dir = path.join(root, name)
+  const dir = setDirFor(name, root)
   const definition = JSON.parse(readFileSync(path.join(dir, 'set.json'), 'utf8'))
 
   // The directory name is the set's identity — it's the delivery-key prefix on

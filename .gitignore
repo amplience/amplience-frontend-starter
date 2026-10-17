@@ -54,3 +54,7 @@ packages/hub-management/.import
 # customer's brand names, and an extension instance's env, out of the repo.
 packages/hub-management/flows/local/
 packages/hub-management/webhook-listeners/local/
+
+# Fixture sets built from a prospect's site (their copy, imagery and brand) —
+# seeded and served like any other set, but never committed.
+packages/content/fixtures/local/

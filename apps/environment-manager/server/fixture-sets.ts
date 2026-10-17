@@ -1,7 +1,8 @@
 /**
  * Fixture sets, as the Environment Manager sees them (ADR-0019).
  *
- * A set is a directory under `packages/content/fixtures/` holding a `set.json`.
+ * A set is a directory under `packages/content/fixtures/` (or its gitignored
+ * `local/`) holding a `set.json`.
  * That is the same definition the seed scripts use
  * (`packages/hub-management/scripts/lib/fixture-sets.mjs`) and the same one the
  * runtime registry in `packages/content/src/mock/loader.ts` is held against by a
@@ -73,16 +74,22 @@ export function readFixtureSets(repoRoot: string): FixtureSetInfo[] {
   if (!existsSync(root)) return []
 
   const sets: FixtureSetInfo[] = []
-  for (const entry of readdirSync(root, { withFileTypes: true })) {
-    if (!entry.isDirectory()) continue
-    const file = path.join(root, entry.name, 'set.json')
-    if (!existsSync(file)) continue
-    try {
-      const raw: unknown = JSON.parse(readFileSync(file, 'utf-8'))
-      if (typeof raw !== 'object' || raw === null) continue
-      sets.push(withDefaults(entry.name, raw as Record<string, unknown>))
-    } catch {
-      continue
+  // Checked-in sets first, then the gitignored `local/` ones; a local set
+  // reusing a checked-in name is skipped here (the seed scripts refuse it).
+  for (const dir of [root, path.join(root, 'local')]) {
+    if (!existsSync(dir)) continue
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue
+      if (sets.some((s) => s.name === entry.name)) continue
+      const file = path.join(dir, entry.name, 'set.json')
+      if (!existsSync(file)) continue
+      try {
+        const raw: unknown = JSON.parse(readFileSync(file, 'utf-8'))
+        if (typeof raw !== 'object' || raw === null) continue
+        sets.push(withDefaults(entry.name, raw as Record<string, unknown>))
+      } catch {
+        continue
+      }
     }
   }
   // Label, then name as the tie-break — two sets sharing a label would
