@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process'
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import path from 'node:path'
@@ -18,10 +18,11 @@ import {
   siteIdentity,
   type ActiveSource,
 } from './active-source.ts'
+import { readHubFlows, type HubFlow } from './content-flows.ts'
 import { buildDamCheck } from './dam-permissions.ts'
 import { hubManagementEnvVars, updateEnvVars, webEnvVars } from './env-files.ts'
 import { readFixtureSets, resolveFixtureSet, type FixtureSetInfo } from './fixture-sets.ts'
-import { gqlErrors, isAuthError, liveGqlFetch } from './graphql.ts'
+import { deepGet, gqlErrors, isAuthError, liveGqlFetch } from './graphql.ts'
 import { deriveIdentifier } from './hub-identifier.ts'
 import { buildPermissionsReport, type FetchJson } from './permissions.ts'
 import {
@@ -43,6 +44,7 @@ import {
 } from './vercel.ts'
 import {
   buildWorkforceCheck,
+  cmsHubIdFor,
   resolveCmsHubId,
   WORKFORCE_KEY,
   WORKFORCE_LABEL,
@@ -1193,6 +1195,98 @@ app.post('/api/workforce/organizations/:id/token/request', async (c) => {
 })
 
 // ── Vercel provisioning (ADR-0017) ─────────────────────────────────────────────
+
+// ── Flows tab (ADR-0023, QL-127) ──────────────────────────────────────────────
+
+/** Where the checked-in flow fixtures live, with `local/` beside them. */
+const FLOWS_DIR = path.join(HUB_MANAGEMENT_ROOT, 'flows')
+
+/**
+ * The flow fixtures in the repository, checked-in and locally-pulled.
+ *
+ * ⚠️ The label is the identity — it is what a push matches on and what the grid
+ * matches on — so a label defined in both homes is refused rather than resolved
+ * by precedence, by the same `mergeFixtures` the commands use. Sharing that
+ * function rather than re-implementing it is the point: a grid that silently
+ * picked one copy would disagree with the push it is describing.
+ */
+async function readFlowFixtures(): Promise<FlowFixture[]> {
+  const { mergeFixtures, LOCAL_DIR } = (await import(
+    pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'fixtures.mjs')).href
+  )) as typeof import('../../../packages/hub-management/scripts/lib/fixtures.mjs')
+
+  const read = (dir: string, local: boolean) => {
+    if (!existsSync(dir)) return []
+    return readdirSync(dir)
+      .filter((name) => name.endsWith('.json'))
+      .map((name) => {
+        const parsed: unknown = JSON.parse(readFileSync(path.join(dir, name), 'utf-8'))
+        const label = deepGet(parsed, ['label'])
+        return {
+          label: typeof label === 'string' ? label : name.replace(/\.json$/, ''),
+          source: local ? `flows/${LOCAL_DIR}/${name}` : `flows/${name}`,
+          value: { file: name, local },
+        }
+      })
+  }
+
+  return mergeFixtures(read(FLOWS_DIR, false), read(path.join(FLOWS_DIR, LOCAL_DIR), true)).map(
+    (entry) => ({ label: entry.label, file: entry.value.file, local: entry.value.local }),
+  )
+}
+
+type FlowFixture = { label: string; file: string; local: boolean }
+
+/**
+ * GET /api/workforce/flows — every fixture against every hub, in one response.
+ *
+ * Fans out across the fleet in parallel. `Promise.all` is safe here only
+ * because `readHubFlows` never rejects: it reports a failure as a value, so one
+ * hub without a token cannot take the other thirteen columns down with it.
+ */
+app.get('/api/workforce/flows', async (c) => {
+  const config = await readConfig()
+  const organizations = config.organizations ?? []
+
+  let fixtures: FlowFixture[] = []
+  let fixturesError: string | undefined
+  try {
+    fixtures = await readFlowFixtures()
+  } catch (err) {
+    fixturesError = err instanceof Error ? err.message : String(err)
+  }
+
+  const hubs = await Promise.all(
+    config.environments.map(async (env) => {
+      const column = { name: env.name, label: env.label }
+
+      // No organization on the hub yet means nothing can be looked up: the
+      // opaque Workforce hub id is built from it. Reported as the same
+      // "set this up" state as a missing token, because that is what it is.
+      if ((env.organizationId ?? '') === '' || (env.hubId ?? '') === '') {
+        return { ...column, unavailable: { reason: 'no-token' as const } }
+      }
+
+      const { token } = resolvePat(organizations, env.organizationId, process.env)
+      const result = await readHubFlows(
+        token === undefined ? undefined : liveGqlFetch(token),
+        cmsHubIdFor(env.organizationId!, env.hubId),
+      )
+
+      return result.ok
+        ? { ...column, flows: result.flows satisfies HubFlow[] }
+        : {
+            ...column,
+            unavailable: {
+              reason: result.reason,
+              ...(result.reason === 'no-token' ? {} : { detail: result.detail }),
+            },
+          }
+    }),
+  )
+
+  return c.json({ fixtures, hubs, ...(fixturesError === undefined ? {} : { fixturesError }) })
+})
 
 // POST /api/vercel/preflight — is the Vercel CLI installed and logged in?
 // Env-independent; drives whether the "Create Vercel site" action is offered

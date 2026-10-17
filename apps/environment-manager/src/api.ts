@@ -1,4 +1,5 @@
 import type { ContentBreakdown } from './content-rows.js'
+import type { FlowsOverview } from './flow-rows.js'
 import type {
   Config,
   DiscoverResult,
@@ -72,6 +73,8 @@ export const api = {
     request<VercelPreflight>('/vercel/preflight', { method: 'POST', body: '{}' }),
   /** Workforce access (ADR-0023). Tokens go in; they never come back out. */
   workforceOrganizations: () => request<WorkforceOrganizations>('/workforce/organizations'),
+  /** The whole Flows grid in one call — the fan-out happens server-side. */
+  flows: () => request<FlowsOverview>('/workforce/flows'),
   saveWorkforceToken: (organizationId: string, token: string) =>
     request<WorkforceOrganizations>(
       `/workforce/organizations/${encodeURIComponent(organizationId)}/token`,

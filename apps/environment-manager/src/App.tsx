@@ -4,6 +4,7 @@ import { api } from './api.js'
 import { EnvironmentCard } from './components/EnvironmentCard.js'
 import { EnvironmentForm } from './components/EnvironmentForm.js'
 import { FixturesCard } from './components/FixturesCard.js'
+import { FlowsTab } from './components/FlowsTab.js'
 import { ListFilter } from './components/ListFilter.js'
 import { SiteCard } from './components/SiteCard.js'
 import { FILTER_MIN_ITEMS, filterEnvironments } from './filter-environments.js'
@@ -11,7 +12,7 @@ import type { Config, Environment, FixtureSetInfo } from './types.js'
 
 type Modal = { mode: 'add' } | { mode: 'edit'; env: Environment } | null
 
-type Tab = 'sources' | 'sites'
+type Tab = 'sources' | 'sites' | 'flows'
 
 /**
  * Localhost web apps are surfaced per-hub in the Content Sources tab (the
@@ -130,6 +131,14 @@ export function App() {
               >
                 Sites
               </button>
+              <button
+                className={`tab${tab === 'flows' ? ' tab--active' : ''}`}
+                role="tab"
+                aria-selected={tab === 'flows'}
+                onClick={() => setTab('flows')}
+              >
+                Flows
+              </button>
             </div>
 
             {/* Content Sources — hubs + fixtures */}
@@ -205,6 +214,12 @@ export function App() {
                 from the same config; each card links back to the hub it takes
                 content from, and can be re-pointed to a different hub. */}
             {tab === 'sites' && <SitesTab config={config} onUpdate={setConfig} />}
+
+            {/* Flows — every flow fixture against every hub (QL-127). Reads
+                its own data: the grid needs a Workforce call per hub, which
+                nothing else on this page wants, so it is not folded into the
+                config load. */}
+            {tab === 'flows' && <FlowsTab />}
           </>
         )}
       </main>
