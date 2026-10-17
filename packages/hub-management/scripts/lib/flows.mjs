@@ -152,11 +152,47 @@ export function instanceHandle(title) {
   return version === undefined ? label : `${label}@${version}`
 }
 
-/** The same handle, built from a registry entry rather than from a title. */
+/**
+ * Reduce any spelling of a handle to the one canonical form.
+ *
+ * ⚠️ The same instance reaches this code written three ways, and until this
+ * existed they did not compare equal:
+ *
+ *   Amplience Dynamic Content (2.2.0)           a fixture pulled before
+ *                                               `parseInstanceTitle` accepted a
+ *                                               bare "(2.2.0)" — the version
+ *                                               never came out of the label
+ *   Amplience Dynamic Content@2.2.0             what a pull produces now
+ *   Amplience Dynamic Content (2.2.0)@2.2.0     what the registry produces,
+ *                                               because the installer typed the
+ *                                               version into the label as well
+ *
+ * All three mean one instance. The label half is therefore parsed the same way
+ * a picker title is, and an explicit `@version` wins over one embedded in the
+ * label — the release is the truth, the label is what somebody typed.
+ */
+export function normaliseHandle(handle) {
+  const raw = handle ?? ''
+  const at = raw.lastIndexOf('@')
+  const labelPart = at === -1 ? raw : raw.slice(0, at)
+  const explicit = at === -1 ? '' : raw.slice(at + 1).trim()
+  const parsed = parseInstanceTitle(labelPart)
+  const version = explicit !== '' ? explicit : parsed.version
+  return version === undefined ? parsed.label : `${parsed.label}@${version}`
+}
+
+/**
+ * The same handle, built from a registry entry rather than from a title.
+ *
+ * Normalised, so it agrees with {@link instanceHandle} on an instance whose
+ * label already carries its own version. Before it did, push and pull
+ * disagreed about the commonest spelling there is — the one the install page
+ * tells people to type.
+ */
 export function handleOf(instance) {
   const label = (instance?.label ?? '').trim()
   const version = (instance?.version ?? '').trim()
-  return version === '' ? label : `${label}@${version}`
+  return normaliseHandle(version === '' ? label : `${label}@${version}`)
 }
 
 /** The inverse of `parseInstanceTitle` — what the hub shows in the picker. */
@@ -390,22 +426,31 @@ const on = (hub) => (hub === undefined ? 'the target hub' : `hub "${hub}"`)
  */
 /** The label half of a `label@version` handle. */
 function labelOfHandle(handle) {
-  const at = (handle ?? '').lastIndexOf('@')
-  return at === -1 ? (handle ?? '') : handle.slice(0, at)
+  const normalised = normaliseHandle(handle)
+  const at = normalised.lastIndexOf('@')
+  return at === -1 ? normalised : normalised.slice(0, at)
 }
 
 function resolveInstance(handle, manifest, instances, { hub, warnings, catalogue }) {
-  const named = instances.filter((instance) => handleOf(instance) === handle)
+  // ⚠️ Both sides normalised. A fixture can carry any of three spellings of
+  // the same instance (see `normaliseHandle`), and comparing them raw made a
+  // hub that holds the instance report that it does not — while advising the
+  // reader to rename it to the name it already had.
+  const wanted = normaliseHandle(handle)
+  const named = instances.filter((instance) => handleOf(instance) === wanted)
   if (named.length === 1) return named[0]
   if (named.length > 1) {
     throw new FlowResolutionError(
       `\${extensionInstance:${handle}}: ${named.length} extension instances on ${on(hub)} are ` +
-        `all named "${handle}" (${named.map((i) => i.id).join(', ')}), so there is no way to tell ` +
-        `which one the flow meant. Rename them so each is distinct, then push again.`,
+        `all named "${wanted}" (${named.map((i) => i.id).join(', ')}), so there is no way to ` +
+        `tell which one the flow meant. Rename them so each is distinct, then push again.`,
     )
   }
 
-  const extension = manifest?.[handle]?.extension
+  // Keyed by whatever the fixture stored, so try that first and the
+  // normalised form second — a manifest written before normalisation existed
+  // uses the raw spelling, one written after uses the canonical one.
+  const extension = (manifest?.[handle] ?? manifest?.[wanted])?.extension
   const sameExtension =
     extension === undefined
       ? []

@@ -211,3 +211,73 @@ describe('listener provenance', () => {
     expect(toListenerFixture(onHub(), {}).fixture).not.toHaveProperty('sourceHubId')
   })
 })
+
+// ── Edges the first pass left uncovered ──────────────────────────────────────
+
+describe('schemaChanged — awkward shapes', () => {
+  // `canonical` recurses through arrays as well as objects, so two spellings
+  // of a schema whose properties sit in an array still compare equal.
+  it('sorts keys inside arrays too', () => {
+    const left = { type: 'object', enum: [{ b: 1, a: 2 }] }
+    expect(schemaChanged(left, '{"enum":[{"a":2,"b":1}],"type":"object"}')).toBe(false)
+  })
+
+  it('treats a null schema on either side as a difference', () => {
+    expect(schemaChanged(null, 'null')).toBe(false)
+    expect(schemaChanged({ type: 'object' }, 'null')).toBe(true)
+  })
+
+  it('compares primitives and nulls inside a schema without choking', () => {
+    const left = { a: null, b: 1, c: 'x', d: true }
+    expect(schemaChanged(left, JSON.stringify({ d: true, c: 'x', b: 1, a: null }))).toBe(false)
+  })
+})
+
+describe('diffListeners — malformed input', () => {
+  // A listener the API returned without a label cannot be matched to a
+  // fixture, so it is skipped rather than indexed under `undefined`.
+  it('ignores an existing listener with no label', () => {
+    // Cast on purpose: the declaration says a listener always has a label,
+    // and the runtime defends against it anyway because the API is the one
+    // deciding. Exercising that guard means lying to the type system once.
+    const unlabelled = [{ id: 'x', url: 'https://hooks.test/x' }] as unknown as Parameters<
+      typeof diffListeners
+    >[1]
+    const plan = diffListeners([fixture], unlabelled)
+    expect(plan.create).toEqual([fixture])
+    expect(plan.refused).toEqual([])
+  })
+
+  it('copes with nothing on either side', () => {
+    // Same reason: both parameters are required by the declaration and
+    // defaulted by the implementation, because a caller mid-refactor is
+    // exactly when this would be reached.
+    const noFixtures = undefined as unknown as Parameters<typeof diffListeners>[0]
+    const noExisting = undefined as unknown as Parameters<typeof diffListeners>[1]
+    expect(diffListeners(noFixtures, noExisting)).toEqual({
+      create: [],
+      update: [],
+      unchanged: [],
+      refused: [],
+    })
+  })
+
+  // The refusal names what it found, so "security unreadable" is the honest
+  // wording when the hub did not say.
+  it('says security is unreadable when the hub reported no type', () => {
+    const plan = diffListeners([fixture], [onHub({ security: {} })])
+    expect(plan.refused[0]?.reason).toMatch(/security unreadable/)
+  })
+})
+
+describe('toListenerFixture — awkward schemas', () => {
+  it('keeps a schema that is already an object', () => {
+    const { fixture: built } = toListenerFixture(onHub({ schema: { type: 'object' } }))
+    expect(built.schema).toEqual({ type: 'object' })
+  })
+
+  it('names the security type it could not express', () => {
+    const { warnings } = toListenerFixture(onHub({ security: {} }))
+    expect(warnings[0]).toMatch(/security unreadable/)
+  })
+})

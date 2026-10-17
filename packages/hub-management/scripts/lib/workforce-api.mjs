@@ -257,3 +257,34 @@ export function shapeRegistry(hub, states) {
       .map((s) => ({ id: s.id, label: s.label })),
   }
 }
+
+/** One listener, fully — the list query omits `schema`, which push replays. */
+const LISTENER_QUERY = `query listener($id: ID!) {
+  webhookListener(id: $id) { id label schema }
+}`
+
+/**
+ * Fill in the `schema` of the listeners a flow actually binds to.
+ *
+ * ⚠️ Shared by `flows:push` and the Environment Manager's Flows tab on
+ * purpose. The declaration a flow is pushed with replays each bound listener's
+ * schema, and the list query does not return one — so an implementation that
+ * drifted between the two callers would produce a flow that imports cleanly
+ * and then misbehaves on the hub that got it from the other path. The listener
+ * label has already cost us once that way (QL-161).
+ *
+ * Only the needed ones are fetched: this is one round-trip per listener, and a
+ * hub can hold far more than a flow refers to.
+ */
+export async function listenerSchemas(token, listeners, needed) {
+  const filled = []
+  for (const listener of listeners ?? []) {
+    if (!needed.has(listener.label)) {
+      filled.push(listener)
+      continue
+    }
+    const full = (await graphql(token, LISTENER_QUERY, { id: listener.id }))?.webhookListener
+    filled.push({ ...listener, ...(full ?? {}) })
+  }
+  return filled
+}

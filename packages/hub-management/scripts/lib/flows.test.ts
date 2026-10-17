@@ -5,11 +5,13 @@ import {
   createFlowInput,
   decodeOpaqueId,
   fixtureFileName,
+  handleOf,
   iconInput,
   iconOf,
   instanceHandle,
   instanceTitles,
   materialiseVirtualActions,
+  normaliseHandle,
   opaqueType,
   parseInstanceTitle,
   planPush,
@@ -846,5 +848,102 @@ describe('resolving against the catalogue', () => {
       hub: 'target',
     })
     expect(flow.actions?.[0]?.config?.instanceId).toBe('by-id')
+  })
+})
+
+describe('normaliseHandle', () => {
+  // The three spellings of one instance that reached resolution and did not
+  // compare equal — the bug behind "no instance named X … rename it to X".
+  const CANONICAL = 'Amplience Dynamic Content@2.2.0'
+
+  it('agrees on all three spellings of the same instance', () => {
+    expect(normaliseHandle('Amplience Dynamic Content (2.2.0)')).toBe(CANONICAL)
+    expect(normaliseHandle('Amplience Dynamic Content@2.2.0')).toBe(CANONICAL)
+    expect(normaliseHandle('Amplience Dynamic Content (2.2.0)@2.2.0')).toBe(CANONICAL)
+    expect(normaliseHandle('Amplience Dynamic Content (v2.2.0)')).toBe(CANONICAL)
+  })
+
+  // The release is the truth; the label is whatever somebody typed into it.
+  it('lets an explicit version win over one embedded in the label', () => {
+    expect(normaliseHandle('Amplience Dynamic Content (2.2.0)@2.3.0')).toBe(
+      'Amplience Dynamic Content@2.3.0',
+    )
+  })
+
+  it('leaves a handle with no version alone', () => {
+    expect(normaliseHandle('Content Hub')).toBe('Content Hub')
+  })
+
+  it('leaves a real parenthetical that is not a version', () => {
+    expect(normaliseHandle('Amplience Dynamic Content (Staging)')).toBe(
+      'Amplience Dynamic Content (Staging)',
+    )
+  })
+
+  it('copes with nothing', () => {
+    expect(normaliseHandle(undefined)).toBe('')
+    expect(normaliseHandle('')).toBe('')
+  })
+})
+
+describe('handleOf and instanceHandle agree', () => {
+  // ⚠️ The asymmetry that caused the Douglas failure: pull built the handle
+  // from the picker title (parsing the version out of the label) and push
+  // built it from the registry entry (not parsing), so an instance whose
+  // label carries its own version — the spelling the install page tells
+  // people to use — never matched itself.
+  it('round-trips an instance whose label already carries its version', () => {
+    const label = 'Amplience Dynamic Content (2.2.0)'
+    expect(handleOf({ label, version: '2.2.0' })).toBe(instanceHandle(label))
+  })
+
+  it('round-trips the plain spelling too', () => {
+    expect(handleOf({ label: 'Amplience Dynamic Content', version: '2.2.0' })).toBe(
+      instanceHandle('Amplience Dynamic Content (2.2.0)'),
+    )
+  })
+
+  it('keeps genuinely different instances apart', () => {
+    expect(handleOf({ label: 'Douglas Demo DC Integration', version: '2.0.0' })).not.toBe(
+      handleOf({ label: 'Amplience Dynamic Content (2.2.0)', version: '2.2.0' }),
+    )
+  })
+})
+
+describe('resolving a fixture written before handles were normalised', () => {
+  // The exact Douglas shape: a stale fixture handle, and a hub carrying both
+  // the instance it means and a second instance of the same extension.
+  const STALE = 'Amplience Dynamic Content (2.2.0)'
+  const EXT = opaque('Extension:dc')
+
+  const douglas = {
+    extensionInstances: [
+      {
+        id: 'dc-1',
+        extensionId: EXT,
+        label: 'Amplience Dynamic Content (2.2.0)',
+        version: '2.2.0',
+      },
+      { id: 'dc-2', extensionId: EXT, label: 'Douglas Demo DC Integration', version: '2.0.0' },
+    ],
+  }
+
+  const fixture = {
+    label: 'Flow',
+    extensionInstances: { [STALE]: { extension: EXT, sourceInstanceId: 'src' } },
+    flow: {
+      actions: [
+        { id: 'a', action: 'ext', config: { instanceId: `\${extensionInstance:${STALE}}` } },
+      ],
+      edges: [],
+      virtualActions: [],
+    },
+  }
+
+  it('binds to the instance it names, rather than refusing over the other one', () => {
+    const { flow, warnings } = resolveGraph(fixture, douglas, { hub: 'Douglas' })
+    expect(flow.actions?.[0]?.config?.instanceId).toBe('dc-1')
+    // An exact handle match is not a guess, so it says nothing.
+    expect(warnings).toEqual([])
   })
 })

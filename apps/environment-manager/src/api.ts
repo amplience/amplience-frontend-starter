@@ -1,5 +1,7 @@
 import type { ContentBreakdown } from './content-rows.js'
+import type { CellAction } from './flow-actions.js'
 import type { FlowsOverview } from './flow-rows.js'
+import type { OpStep } from './op-log.js'
 import type {
   Config,
   DiscoverResult,
@@ -75,6 +77,21 @@ export const api = {
   workforceOrganizations: () => request<WorkforceOrganizations>('/workforce/organizations'),
   /** The whole Flows grid in one call — the fan-out happens server-side. */
   flows: () => request<FlowsOverview>('/workforce/flows'),
+  /**
+   * Run one per-cell flow operation. The response is small by design: the cell
+   * shows a spinner then a tick, and `steps` goes to the shared log drawer.
+   */
+  flowOp: (action: CellAction, body: { hub: string; label: string; confirm?: string }) =>
+    request<{
+      ok: boolean
+      action: string
+      hub: string
+      label: string
+      steps: OpStep[]
+      flowId?: string
+      warnings?: string[]
+      error?: string
+    }>(`/workforce/flows/${action}`, { method: 'POST', body: JSON.stringify(body) }),
   saveWorkforceToken: (organizationId: string, token: string) =>
     request<WorkforceOrganizations>(
       `/workforce/organizations/${encodeURIComponent(organizationId)}/token`,

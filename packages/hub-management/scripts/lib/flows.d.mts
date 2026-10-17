@@ -52,8 +52,14 @@ export type RegistryInstance = {
 /** What a hub currently has — read one way by pull, the other way by push. */
 export type FlowRegistry = {
   extensionInstances?: RegistryInstance[]
-  /** `schema` is carried only by push, which replays it into the declaration. */
-  listeners?: { id: string; label: string; schema?: string }[]
+  /**
+   * `schema` is carried only by push, which replays it into the declaration;
+   * `url` is the Amplience-minted inbound address, which `readListeners`
+   * selects and nothing in resolution reads — it is here because the shape
+   * really does carry it, and a declaration that omitted it made a true
+   * assertion fail to typecheck.
+   */
+  listeners?: { id: string; label: string; schema?: string; url?: string }[]
   workflowStates?: { id: string; label: string }[]
 }
 
@@ -103,6 +109,12 @@ export function instanceTitles(virtualActions: FlowVirtualAction[] | undefined):
 export function parseInstanceTitle(title: string | undefined): { label: string; version?: string }
 /** The text inside `${extensionInstance:…}` — `label@version`, or just the label. */
 export function instanceHandle(title: string | undefined): string
+/**
+ * Reduce any spelling of a handle to one canonical form — the label parsed as
+ * a picker title, plus the version, with an explicit `@version` winning over
+ * one embedded in the label.
+ */
+export function normaliseHandle(handle: string | undefined): string
 /** The same handle, built from a registry entry rather than from a title. */
 export function handleOf(instance: { label?: string; version?: string } | undefined): string
 /** The inverse of `parseInstanceTitle` — what the hub shows in the picker. */

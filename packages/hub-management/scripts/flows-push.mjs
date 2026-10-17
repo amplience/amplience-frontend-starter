@@ -45,6 +45,7 @@ import {
 import {
   cmsHubId,
   graphql,
+  listenerSchemas,
   managementToken,
   organizationOf,
   personalAccessToken,
@@ -88,10 +89,6 @@ const FLOWS_QUERY = `query flows($hubId: ID!, $first: Int!, $after: String) {
   }
 }`
 
-const LISTENER_QUERY = `query listener($id: ID!) {
-  webhookListener(id: $id) { id label schema }
-}`
-
 const INSTALL = `mutation install($input: CreateExtensionInstanceInput!) {
   createExtensionInstance(input: $input) { id label }
 }`
@@ -115,26 +112,6 @@ async function readFlows(token, hubRef) {
     after = page?.pageInfo?.hasNextPage === true ? page.pageInfo.endCursor : undefined
   } while (after !== undefined)
   return flows
-}
-
-/**
- * Fill in each listener's schema, which the list query does not carry.
- *
- * Only for the listeners a fixture's trigger actually binds — the schema is
- * replayed into the trigger declaration, and reading every listener on the hub
- * to find out would be one round trip per listener nobody referenced.
- */
-async function withListenerSchemas(token, listeners, needed) {
-  const filled = []
-  for (const listener of listeners) {
-    if (!needed.has(listener.label)) {
-      filled.push(listener)
-      continue
-    }
-    const full = (await graphql(token, LISTENER_QUERY, { id: listener.id }))?.webhookListener
-    filled.push({ ...listener, ...(full ?? {}) })
-  }
-  return filled
 }
 
 /** One directory's fixtures, as merge entries. */
@@ -215,11 +192,7 @@ const { registry, warnings: registryWarnings } = await readRegistry(
   hubId,
   organizationId,
 )
-registry.listeners = await withListenerSchemas(
-  token,
-  registry.listeners,
-  listenersReferenced(desired),
-)
+registry.listeners = await listenerSchemas(token, registry.listeners, listenersReferenced(desired))
 
 // A flow binds to an instance of an extension, so a hub that has never had one
 // installed has nothing to bind to. Installing from the catalogue turns that

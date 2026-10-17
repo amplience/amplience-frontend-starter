@@ -22,7 +22,8 @@ import { readHubFlows, type HubFlow } from './content-flows.ts'
 import { buildDamCheck } from './dam-permissions.ts'
 import { hubManagementEnvVars, updateEnvVars, webEnvVars } from './env-files.ts'
 import { readFixtureSets, resolveFixtureSet, type FixtureSetInfo } from './fixture-sets.ts'
-import { deepGet, gqlErrors, isAuthError, liveGqlFetch } from './graphql.ts'
+import { confirmsRemoval, matchForAction, opKey, Steps, type FlowAction } from './flow-ops.ts'
+import { deepGet, gqlErrors, isAuthError, liveGqlFetch, type GqlFetch } from './graphql.ts'
 import { deriveIdentifier } from './hub-identifier.ts'
 import { buildPermissionsReport, type FetchJson } from './permissions.ts'
 import {
@@ -1286,6 +1287,325 @@ app.get('/api/workforce/flows', async (c) => {
   )
 
   return c.json({ fixtures, hubs, ...(fixturesError === undefined ? {} : { fixturesError }) })
+})
+
+// ── Per-cell flow operations (QL-162) ─────────────────────────────────────────
+
+/**
+ * Flow operations in flight, keyed per cell by `opKey`.
+ *
+ * ⚠️ Deliberately a different map from `runningOps`. That one is keyed by
+ * environment name and holds the spawned seed/sync child so the cancel
+ * endpoint can kill it; a flow op sharing that key space would be killed by a
+ * cancel meant for a seed, or would evict the seed's entry so that cancel then
+ * found nothing. Flow ops are in-process GraphQL calls with no child to kill —
+ * they are tracked only so a second click, or a held-down key, cannot start
+ * the same operation twice.
+ */
+const runningFlowOps = new Set<string>()
+
+/** The actions the route accepts. Widened here so adding one is a single edit. */
+const FLOW_ACTIONS: readonly FlowAction[] = ['push', 'sync', 'remove', 'enable', 'disable']
+
+/** The full fixture bodies, for a push. The grid only needs their labels. */
+async function readFlowFixtureBodies(): Promise<Record<string, unknown>[]> {
+  const { mergeFixtures, LOCAL_DIR } = (await import(
+    pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'fixtures.mjs')).href
+  )) as typeof import('../../../packages/hub-management/scripts/lib/fixtures.mjs')
+
+  const read = (dir: string) => {
+    if (!existsSync(dir)) return []
+    return readdirSync(dir)
+      .filter((name) => name.endsWith('.json'))
+      .map((name) => {
+        const value = JSON.parse(readFileSync(path.join(dir, name), 'utf-8')) as Record<
+          string,
+          unknown
+        >
+        const label = typeof value.label === 'string' ? value.label : name.replace(/\.json$/, '')
+        return { label, source: name, value }
+      })
+  }
+  return mergeFixtures(read(FLOWS_DIR), read(path.join(FLOWS_DIR, LOCAL_DIR))).map((e) => e.value)
+}
+
+/** The extension catalogue, checked-in plus `local/`, as the commands read it. */
+async function readExtensionCatalogue() {
+  const [{ mergeCatalogue, parseEntry }, { LOCAL_DIR }] = await Promise.all([
+    import(
+      pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'extensions.mjs')).href
+    ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/extensions.mjs')>,
+    import(
+      pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'fixtures.mjs')).href
+    ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/fixtures.mjs')>,
+  ])
+  const base = path.join(HUB_MANAGEMENT_ROOT, 'workforce-extensions')
+  const read = (dir: string) => {
+    if (!existsSync(dir)) return []
+    return readdirSync(dir)
+      .filter((name) => name.endsWith('.json'))
+      .map((name) => ({
+        source: path.join(path.basename(dir), name),
+        value: parseEntry(JSON.parse(readFileSync(path.join(dir, name), 'utf-8')), name),
+      }))
+  }
+  return mergeCatalogue(read(base), read(path.join(base, LOCAL_DIR)))
+}
+
+/** Resolve a hub's Workforce credentials, or throw a reason worth showing. */
+function workforceFetchFor(env: Environment, organizations: Organization[]) {
+  if ((env.organizationId ?? '') === '' || (env.hubId ?? '') === '') {
+    throw new Error(
+      `"${env.label}" has no organization recorded yet, so its Workforce hub id cannot be built. ` +
+        `Run the credentials check on it first.`,
+    )
+  }
+  const { token } = resolvePat(organizations, env.organizationId, process.env)
+  if (token === undefined) {
+    throw new Error(
+      `No Workforce personal access token for "${env.label}"'s organization. Set one up from ` +
+        `the hub's credentials check.`,
+    )
+  }
+  const organizationId = env.organizationId
+  return { token, gql: liveGqlFetch(token), hubRef: cmsHubIdFor(organizationId, env.hubId) }
+}
+
+const CREATE_FLOW_OP = `mutation create($input: CreateContentFlowInput!) {
+  createContentFlow(input: $input) { id label }
+}`
+
+const UPDATE_FLOW_OP = `mutation update($input: UpdateContentFlowInput!) {
+  updateContentFlow(input: $input) { id label }
+}`
+
+const DELETE_FLOW_OP = `mutation removeFlow($id: ID!) {
+  deleteContentFlow(input: { id: $id })
+}`
+
+// ⚠️ A mutation of its own, not a field on `UpdateContentFlowInput` — that
+// input carries id, label, description, flow and icon, and no status at all
+// (confirmed by probe, 17 Oct 2026). Which is the good outcome twice over:
+// flipping a status needs no flow body, so it cannot overwrite a graph someone
+// adjusted on the hub, and a sync has never been able to reset a flow's
+// enabled state as a side effect.
+const SET_FLOW_STATUS_OP = `mutation setStatus($id: ID!, $status: ContentFlowStatus!) {
+  setContentFlowStatus(input: { id: $id, status: $status })
+}`
+
+const INSTALL_EXTENSION_OP = `mutation install($input: CreateExtensionInstanceInput!) {
+  createExtensionInstance(input: $input) { id label }
+}`
+
+/** Send a mutation, turning a GraphQL error into a thrown Error. */
+async function mutateWorkforce(
+  gql: GqlFetch,
+  query: string,
+  variables: Record<string, unknown>,
+): Promise<unknown> {
+  const res = await gql(query, variables)
+  const errors = gqlErrors(res.body)
+  if (errors !== undefined) throw new Error(errors[0]?.message ?? 'The mutation was refused.')
+  if (res.status >= 400) throw new Error(`HTTP ${res.status}`)
+  return deepGet(res.body, ['data'])
+}
+
+/**
+ * POST /api/workforce/flows/:action — push, sync or remove one flow on one hub.
+ *
+ * Small JSON in, small JSON out: the cell shows a spinner then a tick, and the
+ * returned steps go to the shared log drawer. Not streamed — these are a
+ * handful of GraphQL calls over a few seconds, where a spinner already answers
+ * "is it doing something" and the step list answers "what did it do".
+ *
+ * ⚠️ Every guard is re-derived from a **fresh read** of the hub rather than
+ * trusted from the request. The grid that produced the click can be minutes
+ * old, and the three states that must not be acted on — already there, already
+ * gone, duplicated — are exactly the ones that appear in that window.
+ */
+app.post('/api/workforce/flows/:action', async (c) => {
+  const action = c.req.param('action') as FlowAction
+  if (!FLOW_ACTIONS.includes(action)) {
+    return c.json({ error: `Unknown action "${c.req.param('action')}".` }, 400)
+  }
+
+  const body = await c.req.json<{ hub?: string; label?: string; confirm?: string }>()
+  const hubName = (body.hub ?? '').trim()
+  const label = (body.label ?? '').trim()
+  if (hubName === '' || label === '') return c.json({ error: 'hub and label are required.' }, 400)
+
+  const config = await readConfig()
+  const env = config.environments.find((e) => e.name === hubName)
+  if (env === undefined) return c.json({ error: `No hub called "${hubName}".` }, 404)
+
+  const steps = new Steps()
+  const fail = (error: string, status: 400 | 409 | 500) =>
+    c.json({ ok: false, action, hub: hubName, label, steps: steps.all(), error }, status)
+
+  // ⚠️ Removal needs the label typed back, checked here as well as in the
+  // dialog: a guard that exists only in the browser is not a guard, and this
+  // is the one action with no undo.
+  if (action === 'remove' && !confirmsRemoval(body.confirm, label)) {
+    return fail(
+      `Removing "${label}" from ${env.label} needs the flow's label typed back to confirm. It ` +
+        `deletes the flow and its run history on that hub, and cannot be undone.`,
+      400,
+    )
+  }
+
+  // A repeat — a double click, or a key held down — must not start a second
+  // copy of an operation that is already mutating the hub.
+  const key = opKey(hubName, label, action)
+  if (runningFlowOps.has(key)) return fail(`That operation is already running.`, 409)
+  runningFlowOps.add(key)
+
+  try {
+    const { token, gql, hubRef } = workforceFetchFor(env, config.organizations ?? [])
+
+    const onHub = await readHubFlows(gql, hubRef)
+    if (!onHub.ok) {
+      return fail(onHub.reason === 'no-token' ? 'No token for this hub.' : onHub.detail, 500)
+    }
+    steps.add('read the hub', `${onHub.flows.length} flows`)
+
+    const match = matchForAction(onHub.flows, label, action, env.label)
+    if (!match.ok) return fail(match.error, 409)
+
+    if (match.action === 'delete') {
+      await mutateWorkforce(gql, DELETE_FLOW_OP, { id: match.flow.id })
+      steps.add('removed flow', label)
+      return c.json({ ok: true, action, hub: hubName, label, steps: steps.all() })
+    }
+
+    // Enable and disable return here, before the fixture is read: the status
+    // lives on the hub's flow, not in the repository, so none of what follows
+    // — the fixture, the extension installs, the token resolution — applies.
+    if (match.action === 'status') {
+      if (match.already) {
+        steps.add(`already ${match.status.toLowerCase()}`, label)
+      } else {
+        await mutateWorkforce(gql, SET_FLOW_STATUS_OP, {
+          id: match.flow.id,
+          status: match.status,
+        })
+        steps.add(match.status === 'ENABLED' ? 'enabled flow' : 'disabled flow', label)
+      }
+      return c.json({
+        ok: true,
+        action,
+        hub: hubName,
+        label,
+        steps: steps.all(),
+        flowId: match.flow.id,
+      })
+    }
+
+    const fixture = (await readFlowFixtureBodies()).find((f) => f.label === label)
+    if (fixture === undefined) {
+      return fail(`No flow fixture called "${label}" in the repository any more.`, 400)
+    }
+
+    const [{ readRegistry, listenerSchemas }, flowsLib, extensionsLib] = await Promise.all([
+      import(
+        pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'workforce-api.mjs')).href
+      ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/workforce-api.mjs')>,
+      import(
+        pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'flows.mjs')).href
+      ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/flows.mjs')>,
+      import(
+        pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'extensions.mjs')).href
+      ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/extensions.mjs')>,
+    ])
+
+    const mgmtToken = await getAmplienceToken(env.clientId, env.clientSecret)
+    const organizationId = env.organizationId!
+    let { registry } = await readRegistry(token, mgmtToken, env.hubId, organizationId)
+
+    // Matches `pnpm flows:push`: an extension the catalogue knows and the hub
+    // has not got is installed rather than refused. It is a change to the hub
+    // nobody explicitly asked for, so it gets its own step in the log.
+    const catalogue = await readExtensionCatalogue()
+    for (const want of extensionsLib.missingExtensions([fixture], registry.extensionInstances)) {
+      const entry = extensionsLib.findEntry(catalogue, want.extensionId)
+      if (entry?.installable !== true) continue
+      const resolvedEnv = extensionsLib.resolveEnv(entry.env, {
+        env: process.env,
+        hubId: env.hubId,
+        hubName: env.hubName,
+        source: entry.label,
+      })
+      await mutateWorkforce(gql, INSTALL_EXTENSION_OP, {
+        input: extensionsLib.installInput(entry, {
+          version: want.version,
+          hubRef,
+          env: resolvedEnv,
+        }),
+      })
+      steps.add(
+        'installed extension',
+        `${entry.label}${want.version === undefined ? '' : ` (v${want.version})`}`,
+      )
+      // Re-read, so resolution sees what was just installed.
+      registry = (await readRegistry(token, mgmtToken, env.hubId, organizationId)).registry
+    }
+
+    // The declaration replays each bound listener's schema, and the list query
+    // does not return one — shared with `flows:push` so the two cannot drift.
+    const needed = new Set<string>()
+    for (const act of (fixture.flow as { actions?: { config?: Record<string, unknown> }[] })
+      ?.actions ?? []) {
+      const token_ = act?.config?.['amp:webhookId']
+      const hit = typeof token_ === 'string' ? /^\$\{listener:([^}]*)\}$/.exec(token_) : null
+      if (hit !== null) needed.add(hit[1].trim())
+    }
+    if (needed.size > 0) {
+      registry.listeners = await listenerSchemas(token, registry.listeners, needed)
+    }
+
+    const { flow, warnings } = flowsLib.resolveGraph(fixture, registry, {
+      hub: env.label,
+      catalogue: extensionsLib.catalogueIndex(catalogue),
+    })
+    const { flow: ready, cleared } = flowsLib.clearReviewers(flow)
+    if (cleared > 0) steps.add('cleared review steps', `${cleared} reviewer list`)
+
+    if (match.action === 'create') {
+      const made = await mutateWorkforce(gql, CREATE_FLOW_OP, {
+        input: flowsLib.createFlowInput(fixture, ready, hubRef),
+      })
+      steps.add('created flow', label)
+      return c.json({
+        ok: true,
+        action,
+        hub: hubName,
+        label,
+        steps: steps.all(),
+        flowId: deepGet(made, ['createContentFlow', 'id']),
+        ...(warnings.length === 0 ? {} : { warnings }),
+      })
+    }
+
+    await mutateWorkforce(gql, UPDATE_FLOW_OP, {
+      input: flowsLib.updateFlowInput(fixture, ready, match.flow.id),
+    })
+    steps.add('updated flow', label)
+    return c.json({
+      ok: true,
+      action,
+      hub: hubName,
+      label,
+      steps: steps.all(),
+      flowId: match.flow.id,
+      ...(warnings.length === 0 ? {} : { warnings }),
+    })
+  } catch (err) {
+    // The steps so far travel with the failure: knowing an extension was
+    // installed before the push failed is the difference between a clean retry
+    // and a confusing second attempt.
+    return fail(err instanceof Error ? err.message : String(err), 500)
+  } finally {
+    runningFlowOps.delete(key)
+  }
 })
 
 // POST /api/vercel/preflight — is the Vercel CLI installed and logged in?

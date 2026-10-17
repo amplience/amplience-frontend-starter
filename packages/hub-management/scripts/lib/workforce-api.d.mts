@@ -48,3 +48,14 @@ export function readListeners(
 export function versionFrom(
   release: { version?: string; label?: string } | undefined,
 ): string | undefined
+
+/**
+ * Fill in `schema` on the listeners a flow binds to — the list query omits it,
+ * and the pushed declaration replays it. Shared with the Flows tab so the two
+ * push paths cannot drift.
+ */
+export function listenerSchemas<T extends { id: string; label: string }>(
+  token: string,
+  listeners: T[] | undefined,
+  needed: Set<string>,
+): Promise<(T & { schema?: string })[]>
