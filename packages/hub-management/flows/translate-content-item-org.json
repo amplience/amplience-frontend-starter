@@ -221,7 +221,7 @@
               }
             }
           ],
-          "additionalInstructions": "You are a translator for a big eCommerce retailer."
+          "additionalInstructions": "You are a translator for a big eCommerce retailer. The input is a JSON document (an Amplience content item body). For every target locale, return the COMPLETE JSON document: the same keys, structure, arrays and order, with every non-text value (_meta, schema URIs, IDs, URLs, links, colours, numbers, booleans) copied unchanged. Translate only human-readable text values, keeping any Markdown formatting in them. Never return just the translated text on its own, even when the document contains only one text field. Return raw JSON only: no code fences and no commentary."
         },
         "id": "80241076-dfd4-4c20-b25d-1f69ec5da4be"
       },
