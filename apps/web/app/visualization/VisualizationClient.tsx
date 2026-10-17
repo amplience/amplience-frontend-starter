@@ -40,6 +40,7 @@ import type {
 } from '@amplience/frontend-starter-types'
 
 import { collectSkus, renderContent } from '../../src/renderer'
+import { fillLocaleGaps } from './fill-locale-gaps'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -106,11 +107,16 @@ export function VisualizationClient({
   // Collapse field-level localized values to the pane's locale. The server
   // fetch is already resolved, so this is a no-op for `initialModel`; it's the
   // live SDK model (raw, all locales inline) that needs it. Safe on any shape.
-  const resolvedModel = useMemo(
-    () =>
-      deliveryLocale !== undefined ? resolveLocalized(model as ContentBody, deliveryLocale) : model,
-    [model, deliveryLocale],
-  )
+  //
+  // Then fill what the host nulled out: it collapses each localized field to
+  // the pane's locale with no fallback, so a field authored only in another
+  // locale arrives as `null`. The server model already holds the fallback
+  // value (see ./fill-locale-gaps). For `initialModel` itself this is a no-op.
+  const resolvedModel = useMemo(() => {
+    const localized =
+      deliveryLocale !== undefined ? resolveLocalized(model as ContentBody, deliveryLocale) : model
+    return model === initialModel ? localized : fillLocaleGaps(localized, initialModel)
+  }, [model, deliveryLocale, initialModel])
 
   useEffect(() => {
     let unsubscribe: (() => void) | undefined
