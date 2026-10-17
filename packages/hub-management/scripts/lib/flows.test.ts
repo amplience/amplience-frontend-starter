@@ -489,7 +489,7 @@ describe('resolveGraph', () => {
   it('refuses without a manifest entry to fall back through', () => {
     expect(() =>
       resolveGraph(fixtureOf({ extensionInstances: {} }), { ...target, extensionInstances: [] }),
-    ).toThrow(/none labelled "Amplience Dynamic Content" either.*custom extension/s)
+    ).toThrow(/none labelled "Amplience Dynamic Content" either.*not in the catalogue/s)
   })
 
   it('points at listeners:push when a listener is missing', () => {
@@ -742,12 +742,15 @@ describe('flow icon', () => {
   })
 })
 
-describe('resolving a custom extension', () => {
-  // An Extension belongs to a cmsHub, so the same custom extension installed on
-  // another hub is a different record with a different id. Only public ones
-  // keep a stable id, which is why the catalogue decides how to match.
-  const CUSTOM = opaque('Extension:9999custom')
-  const PUBLIC = EXTENSION
+describe('resolving against the catalogue', () => {
+  // An Extension belongs to a cmsHub. A PRIVATE one re-created on another hub
+  // is a different record with a different id, so its id is worthless there;
+  // a PUBLIC or UNLISTED one keeps a stable id. The catalogue is the record of
+  // which ids are stable, so it is what decides how to match.
+  const PER_HUB = opaque('Extension:9999custom')
+  const STABLE = EXTENSION
+  const index = (installable = true) =>
+    new Map([[STABLE, { label: 'Amplience Dynamic Content', installable }]])
 
   const fixtureFor = (extensionId: string, handle: string) => ({
     label: 'Flow',
@@ -761,30 +764,52 @@ describe('resolving a custom extension', () => {
     },
   })
 
-  it('matches a custom extension on its label when the id is not on the hub', () => {
+  it('matches an uncatalogued extension on its label when the id is not on the hub', () => {
     const onHub = {
       extensionInstances: [
         { id: 'new-id', extensionId: opaque('Extension:differentHere'), label: 'My Integration' },
       ],
     }
-    const { flow, warnings } = resolveGraph(fixtureFor(CUSTOM, 'My Integration@1.0'), onHub, {
+    const { flow, warnings } = resolveGraph(fixtureFor(PER_HUB, 'My Integration@1.0'), onHub, {
       hub: 'target',
-      publicExtensions: new Set([PUBLIC]),
+      catalogue: index(),
     })
     expect(flow.actions?.[0]?.config?.instanceId).toBe('new-id')
     expect(warnings[0]).toMatch(/matched "My Integration" on its label alone/)
   })
 
-  // A public extension's id WOULD have matched if it were installed, so a miss
-  // means it is missing, not that it is called something else.
-  it('says a public extension is simply not installed, rather than guessing by label', () => {
-    const onHub = { extensionInstances: [{ id: 'x', extensionId: CUSTOM, label: 'Amplience' }] }
+  // A catalogued id WOULD have matched if the extension were installed, so a
+  // miss means it is missing, not that it is called something else here.
+  it('says a catalogued extension is simply not installed, rather than guessing by label', () => {
+    const onHub = { extensionInstances: [{ id: 'x', extensionId: PER_HUB, label: 'Amplience' }] }
     expect(() =>
-      resolveGraph(fixtureFor(PUBLIC, 'Amplience@2.2.0'), onHub, {
+      resolveGraph(fixtureFor(STABLE, 'Amplience@2.2.0'), onHub, {
         hub: 'target',
-        publicExtensions: new Set([PUBLIC]),
+        catalogue: index(),
       }),
-    ).toThrow(/public one, so .*extensions:push.* can install it/)
+    ).toThrow(/extensions:push "Amplience Dynamic Content"/)
+  })
+
+  // The whole point of the flag: the same miss, but telling someone to run a
+  // command that cannot install it would send them in a circle.
+  it('tells you to install by hand when the entry is not installable', () => {
+    const onHub = { extensionInstances: [] }
+    expect(() =>
+      resolveGraph(fixtureFor(STABLE, 'Amplience@2.2.0'), onHub, {
+        hub: 'target',
+        catalogue: index(false),
+      }),
+    ).toThrow(/cannot install it.*by hand/s)
+  })
+
+  it('never mentions extensions:push for an entry it cannot install', () => {
+    const onHub = { extensionInstances: [] }
+    expect(() =>
+      resolveGraph(fixtureFor(STABLE, 'Amplience@2.2.0'), onHub, {
+        hub: 'target',
+        catalogue: index(false),
+      }),
+    ).not.toThrow(/extensions:push/)
   })
 
   it('refuses when two instances share the custom label', () => {
@@ -795,7 +820,7 @@ describe('resolving a custom extension', () => {
       ],
     }
     expect(() =>
-      resolveGraph(fixtureFor(CUSTOM, 'My Integration@1.0'), onHub, { hub: 'target' }),
+      resolveGraph(fixtureFor(PER_HUB, 'My Integration@1.0'), onHub, { hub: 'target' }),
     ).toThrow(/2 instances on hub "target" are labelled "My Integration"/)
   })
 
@@ -804,20 +829,20 @@ describe('resolving a custom extension', () => {
       extensionInstances: [{ id: 'z', extensionId: 'other', label: 'Something Else' }],
     }
     expect(() =>
-      resolveGraph(fixtureFor(CUSTOM, 'My Integration@1.0'), onHub, { hub: 'target' }),
-    ).toThrow(/none labelled "My Integration" either.*custom extension/s)
+      resolveGraph(fixtureFor(PER_HUB, 'My Integration@1.0'), onHub, { hub: 'target' }),
+    ).toThrow(/none labelled "My Integration" either.*not in the catalogue/s)
   })
 
   // The id still wins when it is present — a hub pushing back to itself, or a
-  // public extension already installed.
+  // catalogued extension already installed.
   it('prefers the extension id over the label when both could match', () => {
     const onHub = {
       extensionInstances: [
-        { id: 'by-id', extensionId: CUSTOM, label: 'Renamed Here' },
+        { id: 'by-id', extensionId: PER_HUB, label: 'Renamed Here' },
         { id: 'by-label', extensionId: 'unrelated', label: 'My Integration' },
       ],
     }
-    const { flow } = resolveGraph(fixtureFor(CUSTOM, 'My Integration@1.0'), onHub, {
+    const { flow } = resolveGraph(fixtureFor(PER_HUB, 'My Integration@1.0'), onHub, {
       hub: 'target',
     })
     expect(flow.actions?.[0]?.config?.instanceId).toBe('by-id')

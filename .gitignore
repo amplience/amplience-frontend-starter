@@ -55,6 +55,11 @@ packages/hub-management/.import
 packages/hub-management/flows/local/
 packages/hub-management/webhook-listeners/local/
 
+# Catalogue entries for a customer's own portable (UNLISTED) extensions. The id
+# is theirs, so it is recorded locally rather than committed — see
+# packages/hub-management/workforce-extensions/README.md.
+packages/hub-management/workforce-extensions/local/
+
 # Fixture sets built from a prospect's site (their copy, imagery and brand) —
 # seeded and served like any other set, but never committed.
 packages/content/fixtures/local/

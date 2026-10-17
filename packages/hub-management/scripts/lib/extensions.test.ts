@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+  catalogueIndex,
   findEntry,
   installInput,
   instanceLabel,
+  mergeCatalogue,
   missingExtensions,
   parseEntry,
   releaseFor,
@@ -32,6 +34,13 @@ const CONTENT_HUB = {
   },
 }
 
+// DC and CONTENT_HUB above are raw file contents, which is what parseEntry
+// takes. Everything downstream takes a parsed entry, so parse once here rather
+// than hand-writing `installable` into the literals — that would quietly stop
+// the default-value test from testing the default.
+const dc = parseEntry(DC)
+const contentHub = parseEntry(CONTENT_HUB)
+
 const context = {
   env: { AMPLIENCE_PAT: ' pat-value ', AMPLIENCE_CLIENT_ID: 'cid', AMPLIENCE_CLIENT_SECRET: 'sec' },
   hubId: '6a03b8012ab087641af296b6',
@@ -55,23 +64,110 @@ describe('parseEntry', () => {
   it('allows an entry that pins no releases, as Content Hub does', () => {
     expect(parseEntry(CONTENT_HUB).releases).toBeUndefined()
   })
+
+  it('treats an entry with no flag as installable', () => {
+    expect(parseEntry(DC).installable).toBe(true)
+  })
+
+  it('records an id without an install recipe when asked', () => {
+    const entry = parseEntry({
+      label: 'Salesforce B2C',
+      extensionId: 'RXh0ZW5zaW9uOnNm',
+      installable: false,
+    })
+    expect(entry.installable).toBe(false)
+  })
+
+  // Configuration nothing will ever read is worse than none: it reads as a
+  // working recipe to whoever opens the file next.
+  it('refuses an uninstallable entry that still carries an install recipe', () => {
+    expect(() => parseEntry({ ...DC, installable: false }, 'dc.json')).toThrow(
+      /installable.*false.*"releases"/s,
+    )
+    expect(() =>
+      parseEntry({ label: 'x', extensionId: 'y', installable: false, env: { A: 'b' } }, 'x.json'),
+    ).toThrow(/installable.*false.*"env"/s)
+  })
+
+  it('refuses a non-boolean flag rather than coercing it', () => {
+    expect(() => parseEntry({ label: 'x', extensionId: 'y', installable: 'no' }, 'x.json')).toThrow(
+      /non-boolean "installable"/,
+    )
+  })
+})
+
+describe('mergeCatalogue', () => {
+  const sourced = (source: string, value: Record<string, unknown>) => ({
+    source,
+    value: parseEntry(value, source),
+  })
+
+  it('combines the checked-in and local sets', () => {
+    const merged = mergeCatalogue(
+      [sourced('workforce-extensions/dc.json', DC)],
+      [sourced('local/theirs.json', { label: 'Their Thing', extensionId: 'RXh0ZW5zaW9uOnRo' })],
+    )
+    expect(merged.map((e) => e.label)).toEqual(['Amplience Dynamic Content', 'Their Thing'])
+  })
+
+  // Two entries for one extension contradict each other, and the loser would
+  // simply never be read — a silence worth refusing.
+  it('refuses the same extensionId in both homes, naming both files', () => {
+    expect(() =>
+      mergeCatalogue(
+        [sourced('workforce-extensions/dc.json', DC)],
+        [sourced('local/dc-copy.json', { ...DC, label: 'DC (ours)' })],
+      ),
+    ).toThrow(/catalogued twice.*dc\.json.*local\/dc-copy\.json/s)
+  })
+
+  // Different ids, same label: `extensions:push "<label>"` has no answer.
+  it('refuses one label over two extension ids', () => {
+    expect(() =>
+      mergeCatalogue(
+        [sourced('workforce-extensions/dc.json', DC)],
+        [sourced('local/other.json', { ...DC, extensionId: 'RXh0ZW5zaW9uOm90aGVy' })],
+      ),
+    ).toThrow(/is catalogued twice.*different extension ids/s)
+  })
+
+  it('is fine with an empty local directory', () => {
+    expect(mergeCatalogue([sourced('a.json', DC)], [])).toHaveLength(1)
+    expect(mergeCatalogue()).toEqual([])
+  })
+})
+
+describe('catalogueIndex', () => {
+  it('keys the facts resolution needs by extension id', () => {
+    const index = catalogueIndex([dc, contentHub])
+    expect(index.get(DC.extensionId)).toEqual({
+      label: 'Amplience Dynamic Content',
+      installable: true,
+    })
+    expect(index.size).toBe(2)
+  })
+
+  it('carries the flag through, which is what changes the refusal wording', () => {
+    const entry = parseEntry({ label: 'B2C', extensionId: 'RXh0ZW5zaW9uOmI=', installable: false })
+    expect(catalogueIndex([entry]).get('RXh0ZW5zaW9uOmI=')?.installable).toBe(false)
+  })
 })
 
 describe('releaseFor', () => {
   it('finds the release for a version', () => {
-    expect(releaseFor(DC, '2.2.0')).toBe('cmVsZWFzZS0yLjIuMA==')
+    expect(releaseFor(dc, '2.2.0')).toBe('cmVsZWFzZS0yLjIuMA==')
   })
 
   it('is undefined when no version is asked for, letting the hub pick', () => {
-    expect(releaseFor(DC, undefined)).toBeUndefined()
+    expect(releaseFor(dc, undefined)).toBeUndefined()
   })
 
   it('names the versions it does have when asked for one it does not', () => {
-    expect(() => releaseFor(DC, '9.9.9')).toThrow(/only 2\.2\.0, 2\.3\.0/)
+    expect(() => releaseFor(dc, '9.9.9')).toThrow(/only 2\.2\.0, 2\.3\.0/)
   })
 
   it('says so plainly when the entry pins nothing', () => {
-    expect(() => releaseFor(CONTENT_HUB, '1.0.0')).toThrow(/pins no versions at all/)
+    expect(() => releaseFor(contentHub, '1.0.0')).toThrow(/pins no versions at all/)
   })
 })
 
@@ -109,13 +205,13 @@ describe('installInput', () => {
   // The wiki installs the same instance under three different labels. Computing
   // it means the picker title parses back to the handle a fixture references.
   it('suffixes the label with the version so the handle round-trips', () => {
-    expect(instanceLabel(DC, '2.2.0')).toBe('Amplience Dynamic Content (v2.2.0)')
-    expect(instanceLabel(CONTENT_HUB, undefined)).toBe('Content Hub Integration')
+    expect(instanceLabel(dc, '2.2.0')).toBe('Amplience Dynamic Content (v2.2.0)')
+    expect(instanceLabel(contentHub, undefined)).toBe('Content Hub Integration')
   })
 
   it('builds the mutation input', () => {
     const env = resolveEnv(DC.env, context)
-    expect(installInput(DC, { version: '2.2.0', hubRef: 'Q01TSHVi', env })).toEqual({
+    expect(installInput(dc, { version: '2.2.0', hubRef: 'Q01TSHVi', env })).toEqual({
       cmsHubId: 'Q01TSHVi',
       extensionId: DC.extensionId,
       label: 'Amplience Dynamic Content (v2.2.0)',
@@ -126,7 +222,7 @@ describe('installInput', () => {
   })
 
   it('omits the release and description when the entry has neither', () => {
-    const input = installInput(CONTENT_HUB, { hubRef: 'Q01TSHVi', env: {} })
+    const input = installInput(contentHub, { hubRef: 'Q01TSHVi', env: {} })
     expect(input).not.toHaveProperty('extensionReleaseId')
     expect(input).not.toHaveProperty('description')
   })
@@ -178,7 +274,7 @@ describe('versionOfHandle', () => {
 
 describe('findEntry', () => {
   it('matches on the extension id', () => {
-    expect(findEntry([DC, CONTENT_HUB], CONTENT_HUB.extensionId)?.label).toBe(CONTENT_HUB.label)
-    expect(findEntry([DC], 'nope')).toBeUndefined()
+    expect(findEntry([dc, contentHub], CONTENT_HUB.extensionId)?.label).toBe(CONTENT_HUB.label)
+    expect(findEntry([dc], 'nope')).toBeUndefined()
   })
 })

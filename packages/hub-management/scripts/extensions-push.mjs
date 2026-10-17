@@ -26,7 +26,8 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { installInput, parseEntry, resolveEnv } from './lib/extensions.mjs'
+import { installInput, mergeCatalogue, parseEntry, resolveEnv } from './lib/extensions.mjs'
+import { LOCAL_DIR } from './lib/fixtures.mjs'
 import {
   cmsHubId,
   graphql,
@@ -62,23 +63,44 @@ const INSTALL = `mutation install($input: CreateExtensionInstanceInput!) {
   createExtensionInstance(input: $input) { id label }
 }`
 
-/** Every catalogue entry on disk. */
-export function readCatalogue(from) {
+/** The entries in one directory, each tagged with the file it came from. */
+function readDir(from) {
   if (!existsSync(from)) return []
   return readdirSync(from)
     .filter((name) => name.endsWith('.json'))
-    .map((name) => parseEntry(JSON.parse(readFileSync(path.join(from, name), 'utf8')), name))
+    .map((name) => ({
+      source: path.join(path.basename(from), name),
+      value: parseEntry(JSON.parse(readFileSync(path.join(from, name), 'utf8')), name),
+    }))
+}
+
+/** The checked-in catalogue plus the gitignored `local/` one. */
+export function readCatalogue(from) {
+  return mergeCatalogue(readDir(from), readDir(path.join(from, LOCAL_DIR)))
 }
 
 const catalogue = readCatalogue(dir)
-const wanted = only === undefined ? catalogue : catalogue.filter((entry) => entry.label === only)
+const named = only === undefined ? catalogue : catalogue.filter((entry) => entry.label === only)
 
 if (catalogue.length === 0) {
   fail(`No catalogue entries in ${path.relative(process.cwd(), dir)}.`)
 }
-if (wanted.length === 0) {
+if (named.length === 0) {
   fail(`No entry labelled "${only}". Available: ${catalogue.map((e) => e.label).join(', ')}`)
 }
+
+// ⚠️ Asked for one by name, say why it cannot be installed rather than printing
+// "nothing to install" — the entry exists, which is the confusing part.
+if (only !== undefined && named.every((entry) => !entry.installable)) {
+  fail(
+    `"${only}" is catalogued but marked "installable": false. Its id is recorded so flows ` +
+      `resolve against it, but this repo has no install recipe for it — no pinned releases, or ` +
+      `credentials it does not hold. Install it on the hub by hand.`,
+  )
+}
+
+const wanted = named.filter((entry) => entry.installable)
+const recordOnly = named.filter((entry) => !entry.installable)
 
 const token = personalAccessToken()
 const hubId = requiredEnv('AMPLIENCE_HUB_ID', 'identify the hub to install on')
@@ -91,6 +113,12 @@ const { registry } = await readRegistry(token, mgmtToken, hubId, organizationId)
 const installed = new Set(registry.extensionInstances.map((instance) => instance.extensionId))
 
 console.log(`\n→ Workforce extensions on hub ${hubName ?? hubId}${dryRun ? ' (dry run)' : ''}`)
+
+// Listed, not hidden: their ids still do work during flow resolution, so
+// someone reading this output should know they were considered.
+for (const entry of recordOnly) {
+  console.log(`  · ${entry.label}  (id catalogued for resolution — not installable from here)`)
+}
 
 const plan = []
 for (const entry of wanted) {

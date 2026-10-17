@@ -137,11 +137,12 @@ export function resolveGraph(
   options?: {
     hub?: string
     /**
-     * Extension ids the catalogue knows are public. A miss on one of these
-     * means "not installed"; a miss on anything else means the extension is
-     * custom, whose id differs per hub, so the label is matched instead.
+     * Extension ids the catalogue knows are stable across hubs, from
+     * `catalogueIndex`. A miss on one of these means "not installed", since the
+     * id would have matched if it were here. A miss on anything else proves
+     * nothing — the id may simply be per-hub — so the label is matched instead.
      */
-    publicExtensions?: Set<string>
+    catalogue?: Map<string, { label: string; installable: boolean }>
   },
 ): { flow: FlowGraph; warnings: string[] }
 

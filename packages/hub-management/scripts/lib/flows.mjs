@@ -394,7 +394,7 @@ function labelOfHandle(handle) {
   return at === -1 ? (handle ?? '') : handle.slice(0, at)
 }
 
-function resolveInstance(handle, manifest, instances, { hub, warnings, publicExtensions }) {
+function resolveInstance(handle, manifest, instances, { hub, warnings, catalogue }) {
   const named = instances.filter((instance) => handleOf(instance) === handle)
   if (named.length === 1) return named[0]
   if (named.length > 1) {
@@ -430,21 +430,27 @@ function resolveInstance(handle, manifest, instances, { hub, warnings, publicExt
     )
   }
 
-  // ⚠️ Nothing on this hub carries that extension id. For a **public**
-  // extension that means it simply is not installed, and the id would have
-  // matched if it were — so say so and stop.
-  if (extension !== undefined && publicExtensions?.has(extension) === true) {
+  // ⚠️ Nothing on this hub carries that extension id. If the catalogue knows
+  // the id, the id is stable across hubs — so it *would* have matched if the
+  // extension were here, and "not installed" is the whole story. Say that and
+  // stop, rather than falling through to a label guess that could bind the
+  // flow to something unrelated that happens to share a name.
+  const catalogued = extension === undefined ? undefined : catalogue?.get(extension)
+  if (catalogued !== undefined) {
     throw new FlowResolutionError(
-      `\${extensionInstance:${handle}}: ${on(hub)} has no instance of this extension. It is a ` +
-        `public one, so \`pnpm extensions:push\` can install it — flows:push does that for you, ` +
-        `but a standalone resolve will not.`,
+      `\${extensionInstance:${handle}}: ${on(hub)} has no instance of "${catalogued.label}". ` +
+        (catalogued.installable
+          ? `The catalogue can install it — flows:push does that for you, but a standalone ` +
+            `resolve will not. Run \`pnpm extensions:push "${catalogued.label}"\` first.`
+          : `The catalogue records its id but cannot install it (no release ids, or credentials ` +
+            `this repo does not hold), so install it on the hub by hand and push again.`),
     )
   }
 
-  // Otherwise treat it as a **custom** extension. An Extension belongs to a
-  // hub, so one authored on another hub has a different id here and matching on
-  // the id cannot work. The label is the only thing that travels — weaker
-  // evidence, so it is always reported.
+  // Otherwise the id is one we have no reason to think is stable. An Extension
+  // belongs to a hub, and a PRIVATE one re-created elsewhere is a different
+  // record with a different id, so matching on the id cannot work. The label is
+  // the only thing that travels — weaker evidence, so it is always reported.
   const label = labelOfHandle(handle)
   const sameLabel = instances.filter((instance) => (instance.label ?? '') === label)
   if (sameLabel.length === 1) {
@@ -467,9 +473,10 @@ function resolveInstance(handle, manifest, instances, { hub, warnings, publicExt
 
   throw new FlowResolutionError(
     `\${extensionInstance:${handle}}: ${on(hub)} has no instance of this extension, and none ` +
-      `labelled "${label}" either. It is not one of the public extensions this repo catalogues, ` +
-      `so it looks like a custom extension that has to exist on the hub before a flow can bind to ` +
-      `it — install or author it there, then push again.`,
+      `labelled "${label}" either. Its id is not in the catalogue, so nothing here can install ` +
+      `it and nothing can vouch for the id travelling between hubs — it has to exist on the hub ` +
+      `first. Install or author it there, then push again. If it is in fact a portable ` +
+      `extension, catalogue its id in workforce-extensions/ and this becomes a clearer refusal.`,
   )
 }
 
@@ -500,7 +507,7 @@ function resolveLabel(groups, label, { token, what, hub, remedy }) {
  * Throws on the first token it cannot resolve, naming the token and the hub, so
  * a half-resolved flow never reaches a customer hub.
  */
-export function resolveGraph(fixture, registry = {}, { hub, publicExtensions } = {}) {
+export function resolveGraph(fixture, registry = {}, { hub, catalogue } = {}) {
   const warnings = []
   const manifest = fixture?.extensionInstances ?? {}
   const flow = fixture?.flow ?? {}
@@ -540,7 +547,7 @@ export function resolveGraph(fixture, registry = {}, { hub, publicExtensions } =
         const instance = resolveInstance(token.name, manifest, instances, {
           hub,
           warnings,
-          publicExtensions,
+          catalogue,
         })
         used.set(instance.id, instance)
         config.instanceId = instance.id

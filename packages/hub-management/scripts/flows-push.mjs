@@ -25,8 +25,10 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import {
+  catalogueIndex,
   findEntry,
   installInput,
+  mergeCatalogue,
   missingExtensions,
   parseEntry,
   resolveEnv,
@@ -152,13 +154,26 @@ function readFixtures() {
   return mergeFixtures(readDir(dir), readDir(path.join(dir, LOCAL_DIR))).map((e) => e.value)
 }
 
-/** The public-extension catalogue, used to install what a flow needs. */
+/**
+ * The catalogue of extension ids known to be the same on every hub.
+ *
+ * Two jobs, and they are not the same job: it is the install recipe for the
+ * entries that have one, and — for every entry, recipe or not — it is what
+ * tells resolution that a missing id means "not installed here" rather than
+ * "this id was never going to match anywhere else".
+ */
 function readCatalogue() {
-  const from = path.join(packageRoot, 'workforce-extensions')
-  if (!existsSync(from)) return []
-  return readdirSync(from)
-    .filter((name) => name.endsWith('.json'))
-    .map((name) => parseEntry(JSON.parse(readFileSync(path.join(from, name), 'utf8')), name))
+  const base = path.join(packageRoot, 'workforce-extensions')
+  const readDir = (from) =>
+    !existsSync(from)
+      ? []
+      : readdirSync(from)
+          .filter((name) => name.endsWith('.json'))
+          .map((name) => ({
+            source: path.join(path.basename(from), name),
+            value: parseEntry(JSON.parse(readFileSync(path.join(from, name), 'utf8')), name),
+          }))
+  return mergeCatalogue(readDir(base), readDir(path.join(base, LOCAL_DIR)))
 }
 
 /** The labels a fixture's `${listener:…}` tokens name. */
@@ -212,9 +227,13 @@ registry.listeners = await withListenerSchemas(
 // else still refuses, in resolveGraph, with a message naming what it wanted.
 const missing = missingExtensions(desired, registry.extensionInstances)
 const catalogue = readCatalogue()
+// An entry marked `installable: false` is deliberately skipped here. Its id is
+// catalogued so resolution knows the id is stable, but there is no recipe to
+// install it — so resolveGraph refuses below with a message that says to do it
+// by hand, rather than this step failing halfway through a mutation.
 const installable = missing
   .map((want) => ({ ...want, entry: findEntry(catalogue, want.extensionId) }))
-  .filter((want) => want.entry !== undefined)
+  .filter((want) => want.entry !== undefined && want.entry.installable)
 
 if (installable.length > 0) {
   console.log(`\n→ Extensions this flow needs that ${hubName ?? hubId} has not got`)
@@ -248,19 +267,19 @@ if (installable.length > 0) {
 
 const existing = await readFlows(token, hubRef)
 
-// ⚠️ The catalogue is also what tells resolution which extension ids are
-// *public*. A public extension has the same id on every hub, so an id that is
-// catalogued but absent here means "not installed" and nothing else. A custom
-// extension is a per-hub record with its own id, so an uncatalogued id that
-// misses proves nothing and resolution falls back to the label instead.
-const publicExtensions = new Set(catalogue.map((entry) => entry.extensionId))
+// ⚠️ The catalogue's second job. A catalogued id is one we assert means the
+// same extension on every hub, so if it is absent here the extension is simply
+// not installed — nothing else explains it. An *un*catalogued id that misses
+// proves nothing, because a PRIVATE extension re-created on another hub is a
+// different record with a different id, so resolution falls back to the label.
+const index = catalogueIndex(catalogue)
 
 // Everything is resolved and planned before anything is sent, so a fixture that
 // cannot resolve stops the run rather than leaving half a set pushed.
 const prepared = desired.map((fixture) => {
   const { flow, warnings } = resolveGraph(fixture, registry, {
     hub: hubName ?? hubId,
-    publicExtensions,
+    catalogue: index,
   })
   const { flow: ready, cleared } = clearReviewers(flow)
   return { fixture, flow: ready, warnings, cleared, plan: planPush(fixture.label, existing) }
