@@ -23,6 +23,7 @@
   --color-danger-hover: #e74040;
   --color-active: #15803d;
   --color-modal-backdrop: rgba(0, 0, 0, 0.33);
+  --color-shadow: rgba(0, 0, 0, 0.2);
   --color-hover: #e8e8f0;
   --color-input-bg: #ffffff;
   --radius: 8px;
@@ -64,6 +65,7 @@
     --color-danger-hover: #f55757;
     --color-active: #16a34a;
     --color-modal-backdrop: rgba(0, 0, 0, 0.7);
+    --color-shadow: rgba(105, 255, 155, 0.1);
     --color-hover: #2a2a38;
     --color-input-bg: #14141c;
   }
@@ -1905,7 +1907,7 @@ body {
 }
 
 .flow-grid {
-  border-collapse: collapse;
+  border-spacing: 0;
   width: 100%;
   font-size: 0.825rem;
 }
@@ -1943,11 +1945,13 @@ body {
 th.flow-grid__fixture {
   position: sticky;
   left: 0;
-  z-index: 1;
   background: var(--color-surface);
   min-width: 15rem;
   font-weight: 500;
   text-align: left;
+  border-right: solid 1px var(--color-border);
+  box-shadow: 0px 10px 10px var(--color-shadow);
+  z-index: 2;
 
   div {
     display: flex;
