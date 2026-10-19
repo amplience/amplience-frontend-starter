@@ -38,6 +38,7 @@ import contentMenu from '../content-type-schemas/schemas/content_menu.json'
 import contentPage from '../content-type-schemas/schemas/content_page.json'
 import contentProductCarousel from '../content-type-schemas/schemas/content_product-carousel.json'
 import contentProduct from '../content-type-schemas/schemas/content_product.json'
+import contentRecipe from '../content-type-schemas/schemas/content_recipe.json'
 import partialsBlockCss from '../content-type-schemas/schemas/partials_block-css.json'
 import partialsCarouselItems from '../content-type-schemas/schemas/partials_carousel-items.json'
 import partialsCarouselOptions from '../content-type-schemas/schemas/partials_carousel-options.json'
@@ -95,6 +96,7 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(contentPage, 'CONTENT_TYPE'),
   entry(contentBlogArticle, 'CONTENT_TYPE'),
   entry(contentProduct, 'CONTENT_TYPE'),
+  entry(contentRecipe, 'CONTENT_TYPE'),
   entry(contentHero, 'CONTENT_TYPE'),
   entry(contentMarkdownBlock, 'CONTENT_TYPE'),
   entry(contentColumns, 'CONTENT_TYPE'),

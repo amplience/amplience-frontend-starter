@@ -2,7 +2,7 @@
 
 # Content types
 
-Amplience Frontend Starter ships a content model of 24 content types — seven renderable blocks, plus the smaller repeatable types that make up pages, navigation and site chrome. Every item carries its schema URI in `_meta.schema` and the recursive renderer dispatches on it, so this page is also the map from a content type to the component that draws it.
+Amplience Frontend Starter ships a content model of 25 content types — seven renderable blocks, plus the smaller repeatable types that make up pages, navigation and site chrome. Every item carries its schema URI in `_meta.schema` and the recursive renderer dispatches on it, so this page is also the map from a content type to the component that draws it.
 
 The model is registered in a hub by `pnpm hub:import` — see [Working with a hub](working-with-a-hub.md). Where things live:
 
@@ -41,6 +41,7 @@ Every schema URI is prefixed `https://quadratic.amplience.com/v2/` — the table
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_grid?w=24)                | [Grid Block](#grid-block)                   | Block       | `GridBlock`                    | [Organisms/GridBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-gridblock--docs)         |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_page?w=24)                | [Page](#page)                               | Page        | `Page`                         | [Templates/Page](https://quadratic-lite-components.vercel.app/?path=/docs/templates-page--docs)                   |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_blog-article?w=24)        | [Blog Article](#blog-article)               | Page        | `BlogArticle`                  | —                                                                                                                 |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_recipe?w=24)              | [Recipe](#recipe)                           | Page        | `RecipeDetail`                 | —                                                                                                                 |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/slots_slot?w=24)                  | [Slot](#slot)                               | Composition | `Slot`                         | [Organisms/Slot](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-slot--docs)                   |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header?w=24)              | [Header](#header)                           | Chrome      | `HeaderBlock`                  | —                                                                                                                 |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header-row?w=24)          | [Header Row](#header-row)                   | Chrome      | `HeaderRow`                    | —                                                                                                                 |
@@ -280,6 +281,40 @@ Shares the head-metadata shape with [Page](#page) (`title`, `description`, `keyw
 | `readTime`    | Read Time (minutes) | number                    |     |                                                                                               |
 
 `_meta.deliveryKeys` follows the `{site}/blog/{slug}` convention.
+
+### Recipe
+
+![Recipe icon](https://cdn.media.amplience.net/i/quadraticdemo/content_recipe?w=48)
+
+A complete recipe in one item — ingredients, method, allergens and nutrition — with the marketing copy and image the page needs. Built for automation: a Workforce flow can create it whole from a recipe source or an intake form.
+
+- **Schema** [`content/recipe`](../packages/hub-management/content-type-schemas/schemas/content_recipe.json) · **Repository** `content`
+- **Components** [`RecipeDetail`](../packages/components/src/templates/RecipeDetail) (template) → [`HeroBlock`](#hero-block), `Markdown`, `Tags`, `AttributeList`, `List`, `Button`
+- **Storybook** [Templates/RecipeDetail](https://quadratic-lite-components.vercel.app/?path=/docs/templates-recipedetail--docs)
+- **Rendering** a leaf — no slots. Emits schema.org `Recipe` JSON-LD, and `recipeMetadataFromSchema` maps head metadata for a route's `generateMetadata`
+
+Allergens and nutrition render exactly as supplied, and a section with no data is omitted rather than shown empty. `heroImage` is a bare DAM image link (not the [Media](#media) partial); the registry entry wraps it for the shared image components.
+
+| Field                                  | Label                | Type                                         | Req | Notes                                                                     |
+| -------------------------------------- | -------------------- | -------------------------------------------- | --- | ------------------------------------------------------------------------- |
+| `recipeId`                             | Source recipe ID     | string                                       |     | `U` + digits. The key between the recipe source, the CMS and the website  |
+| `title`                                | Recipe name          | string                                       | ✅  | As supplied by the chef. The `<h1>`                                       |
+| `slug`                                 | URL slug             | string                                       |     | Lower-case, hyphenated                                                    |
+| `subtitle`                             | Chef's summary       | string                                       |     | Shown in the hero. Also the fallback meta description                     |
+| `serves`                               | Serves               | integer                                      |     |                                                                           |
+| `heroImage` / `heroAltText`            | Recipe image / alt   | image link / string                          |     | Master image; crops come from Dynamic Media                               |
+| `imageIsAiEnhanced`                    | Image AI-enhanced    | boolean                                      |     | Shows an "Image enhanced with AI" label                                   |
+| `copy.intro`                           | Intro                | markdown                                     |     | Marketing copy, max 800 characters                                        |
+| `copy.cardBlurb` / `menuLine`          | Card blurb / menu    | string                                       |     | For cards and diner-facing menus; not shown on the detail page            |
+| `ingredients`                          | Ingredients          | `{ name, quantity, portion, productCode }`[] | ✅  | Verbatim from the source                                                  |
+| `preparation`                          | Preparation          | markdown                                     |     |                                                                           |
+| `methodSteps`                          | Method steps         | string[]                                     | ✅  | One entry per step                                                        |
+| `methodNotes`                          | Chef's notes         | markdown                                     |     |                                                                           |
+| `allergens`                            | Contains (allergens) | enum[]                                       |     | The UK 14, verbatim from the source                                       |
+| `nutrition`                            | Nutrition            | object                                       |     | kcal per 100g and per portion, portion weight, energy split (% of energy) |
+| `seo.metaTitle` / `metaDescription`    | SEO                  | string / string                              |     | Fall back to the recipe name and chef's summary                           |
+| `recipePdfUrl`                         | Recipe PDF URL       | uri                                          |     | Adds a download button                                                    |
+| `source.origin` / `sourceLastModified` | Source               | enum / date                                  |     | Provenance. `sourceLastModified` feeds JSON-LD `dateModified`             |
 
 ## Composition
 

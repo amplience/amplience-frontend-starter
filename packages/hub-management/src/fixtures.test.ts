@@ -134,8 +134,8 @@ describe('schema manifest', () => {
   it('exposes content types as the non-partial subset', () => {
     // A deliberate tripwire: bump this when a content type is added, so the
     // count is a decision rather than something derived from the thing it
-    // checks. 26 as of the product carousel (ADR-0027).
-    expect(contentTypeSchemas).toHaveLength(26)
+    // checks. 27 as of the recipe type (26 as of the product carousel, ADR-0027).
+    expect(contentTypeSchemas).toHaveLength(27)
     expect(contentTypeSchemas.every((e) => e.validationLevel !== 'PARTIAL')).toBe(true)
     expect(findSchema('https://quadratic.amplience.com/v2/partials/media')?.validationLevel).toBe(
       'PARTIAL',

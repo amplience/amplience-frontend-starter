@@ -124,6 +124,14 @@ import {
   productRegistryEntry,
 } from './templates/ProductDetail/ProductDetail.registry'
 import type { ProductSchema } from './templates/ProductDetail/ProductDetail.registry'
+import {
+  RECIPE_DEMO_SCHEMA,
+  RECIPE_SCHEMA,
+  recipeJsonLd,
+  recipeMetadataFromSchema,
+  recipeRegistryEntry,
+} from './templates/RecipeDetail/RecipeDetail.registry'
+import type { RecipeSchema } from './templates/RecipeDetail/RecipeDetail.registry'
 
 /**
  * Build a Registry from `[schemaURI, entry]` pairs.
@@ -167,6 +175,8 @@ export const defaultRegistry: Registry = createRegistry([
   [PAGE_SCHEMA, pageRegistryEntry],
   [BLOG_ARTICLE_SCHEMA, blogArticleRegistryEntry],
   [PRODUCT_SCHEMA, productRegistryEntry],
+  [RECIPE_SCHEMA, recipeRegistryEntry],
+  [RECIPE_DEMO_SCHEMA, recipeRegistryEntry],
   [SLOT_SCHEMA, slotRegistryEntry],
   [HERO_BLOCK_SCHEMA, heroBlockRegistryEntry],
   [MEDIA_BLOCK_SCHEMA, mediaBlockRegistryEntry],
@@ -246,3 +256,11 @@ export { BLOG_ARTICLE_SCHEMA, blogArticleRegistryEntry, blogArticleMetadataFromS
 export type { BlogArticleSchema }
 export { PRODUCT_SCHEMA, productRegistryEntry, productMetadataFromSchema }
 export type { ProductSchema }
+export {
+  RECIPE_SCHEMA,
+  RECIPE_DEMO_SCHEMA,
+  recipeRegistryEntry,
+  recipeMetadataFromSchema,
+  recipeJsonLd,
+}
+export type { RecipeSchema }

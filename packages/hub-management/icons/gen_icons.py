@@ -364,6 +364,7 @@ ICONS["content_product"] = card_a(shadowed(product))
 # each name so every content type has an explicit png/svg pair.
 ALIASES = {
     "content_blog-article": "content_page",
+    "content_recipe": "content_page",
     "content_menu": "content_hierarchy-menu",
     "content_menu-item": "content_hierarchy-menu-item",
 }

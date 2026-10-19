@@ -41,6 +41,8 @@ import {
   LOCALE_SELECTOR_SCHEMA,
   PAGE_SCHEMA,
   PRODUCT_SCHEMA,
+  RECIPE_DEMO_SCHEMA,
+  RECIPE_SCHEMA,
 } from '@amplience/frontend-starter-components/registry'
 import { isContentClientError, resolveContentConfig } from '@amplience/frontend-starter-content'
 import { makeSdkContentClient } from '@amplience/frontend-starter-content/sdk'
@@ -187,9 +189,13 @@ export default async function VisualizationPage({ searchParams }: RouteProps) {
     return <ContentUnavailableCard error={error} resource={contentId} />
   }
 
-  const isTopLevel = [PAGE_SCHEMA, BLOG_ARTICLE_SCHEMA, PRODUCT_SCHEMA].includes(
-    (item as { _meta?: { schema?: string } })?._meta?.schema ?? '',
-  )
+  const isTopLevel = [
+    PAGE_SCHEMA,
+    BLOG_ARTICLE_SCHEMA,
+    PRODUCT_SCHEMA,
+    RECIPE_SCHEMA,
+    RECIPE_DEMO_SCHEMA,
+  ].includes((item as { _meta?: { schema?: string } })?._meta?.schema ?? '')
 
   const basePath = localeBasePath(locale)
 

@@ -1,0 +1,5 @@
+{
+  "body": "./schemas/content_recipe.json",
+  "schemaId": "https://quadratic.amplience.com/v2/content/recipe",
+  "validationLevel": "CONTENT_TYPE"
+}
