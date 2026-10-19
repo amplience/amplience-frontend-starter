@@ -73,7 +73,6 @@ export function App() {
       .catch((err: unknown) =>
         setFlowFixtures({
           fixtures: [],
-          hubs: [],
           fixturesError: err instanceof Error ? err.message : 'Could not list the flow fixtures.',
         }),
       )
@@ -102,6 +101,23 @@ export function App() {
   // Exactly one thing is active across the panel, so "offline" is simply
   // "whatever is active isn't one of the hubs" (ADR-0019).
   const isOffline = config !== null && !hubs.some((e) => e.name === config.active)
+
+  /**
+   * The tab bar only exists once there is a hub to look at.
+   *
+   * Sites and Flows are both *about* hubs — a site is deployed from one and a
+   * flow is pushed to one — so with an empty fleet both tabs can only show an
+   * empty state explaining that there are no hubs, which is a worse way of
+   * saying what the Content Sources tab says by just being there.
+   *
+   * ⚠️ Keyed on the hub list alone, deliberately. Gating a tab on whether its
+   * own data loaded would make the tab bar flicker as reads land, and would
+   * couple the top-level chrome to every panel underneath it.
+   */
+  const hasHubs = hubs.length > 0
+  // Deleting the last hub while on another tab must not leave the panel
+  // stranded with no way back, so the choice falls back rather than persisting.
+  const activeTab: Tab = hasHubs ? tab : 'sources'
   const showHubFilter = hubs.length >= FILTER_MIN_ITEMS
   // Hiding the input must never leave a filter silently applied — deleting hubs
   // can drop the count back below the threshold while a query is still set.
@@ -137,35 +153,37 @@ export function App() {
 
         {config !== null && (
           <>
-            <div className="tabs" role="tablist" aria-label="View">
-              <button
-                className={`tab${tab === 'sources' ? ' tab--active' : ''}`}
-                role="tab"
-                aria-selected={tab === 'sources'}
-                onClick={() => setTab('sources')}
-              >
-                Content Sources
-              </button>
-              <button
-                className={`tab${tab === 'sites' ? ' tab--active' : ''}`}
-                role="tab"
-                aria-selected={tab === 'sites'}
-                onClick={() => setTab('sites')}
-              >
-                Sites
-              </button>
-              <button
-                className={`tab${tab === 'flows' ? ' tab--active' : ''}`}
-                role="tab"
-                aria-selected={tab === 'flows'}
-                onClick={() => setTab('flows')}
-              >
-                Flows
-              </button>
-            </div>
+            {hasHubs && (
+              <div className="tabs" role="tablist" aria-label="View">
+                <button
+                  className={`tab${activeTab === 'sources' ? ' tab--active' : ''}`}
+                  role="tab"
+                  aria-selected={activeTab === 'sources'}
+                  onClick={() => setTab('sources')}
+                >
+                  Content Sources
+                </button>
+                <button
+                  className={`tab${activeTab === 'sites' ? ' tab--active' : ''}`}
+                  role="tab"
+                  aria-selected={activeTab === 'sites'}
+                  onClick={() => setTab('sites')}
+                >
+                  Sites
+                </button>
+                <button
+                  className={`tab${activeTab === 'flows' ? ' tab--active' : ''}`}
+                  role="tab"
+                  aria-selected={activeTab === 'flows'}
+                  onClick={() => setTab('flows')}
+                >
+                  Flows
+                </button>
+              </div>
+            )}
 
             {/* Content Sources — hubs + fixtures */}
-            {tab === 'sources' && (
+            {activeTab === 'sources' && (
               <div className="env-list">
                 <h3 className="env-list__title">Fixture sets</h3>
                 {fixtureSets.map((set) => (
@@ -236,13 +254,13 @@ export function App() {
             {/* Sites — every webApp across all hubs as one flat list. Draws
                 from the same config; each card links back to the hub it takes
                 content from, and can be re-pointed to a different hub. */}
-            {tab === 'sites' && <SitesTab config={config} onUpdate={setConfig} />}
+            {activeTab === 'sites' && <SitesTab config={config} onUpdate={setConfig} />}
 
             {/* Flows — every flow fixture against every hub (QL-127). Reads
                 its own data: the grid needs a Workforce call per hub, which
                 nothing else on this page wants, so it is not folded into the
                 config load. */}
-            {tab === 'flows' && <FlowsTab hubs={hubs} fixtures={flowFixtures} />}
+            {activeTab === 'flows' && <FlowsTab hubs={hubs} fixtures={flowFixtures} />}
           </>
         )}
       </main>

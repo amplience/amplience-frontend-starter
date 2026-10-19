@@ -94,7 +94,6 @@ export type HubFlows = {
  */
 export type FlowsOverview = {
   fixtures: FlowFixture[]
-  hubs: HubFlows[]
   /**
    * Set when the fixtures could not be listed at all — a label defined in both
    * `flows/` and `flows/local/`, say. The grid has no rows in that case, and
@@ -145,11 +144,6 @@ export function stateOfFlow(flow: Pick<HubFlow, 'status'>): 'present' | 'disable
   if (status === DISABLED) return 'disabled'
   if (status === QUARANTINED) return 'quarantined'
   return 'present'
-}
-
-/** Whether the flow will actually run. Quarantined counts as off. */
-export function isRunnable(flow: Pick<HubFlow, 'status'>): boolean {
-  return stateOfFlow(flow) === 'present'
 }
 
 /**
@@ -240,9 +234,6 @@ export const STATE_EXPLANATION: Record<CellState, string> = {
     'this needs a human to rename or remove one.',
   unavailable: 'This hub’s flows are not readable.',
 }
-
-/** States that mean the flow is there but will not run — the ones worth a colour. */
-export const NOT_RUNNING: ReadonlySet<CellState> = new Set<CellState>(['disabled', 'quarantined'])
 
 /** Rows whose fixture label matches a filter, for the ListFilter above the grid. */
 export function filterRows(rows: readonly FlowRow[], query: string): FlowRow[] {
@@ -378,9 +369,16 @@ export function otherFlowsCells(
  *
  * A row of zeroes reads as a category someone is meant to maintain, which this
  * is not — it is residue, and the honest thing when there is none is silence.
+ *
+ * ⚠️ But a hub still being read is not a hub with none. Shown while any column
+ * is outstanding, because in practice a hub almost always carries flows the
+ * repository does not describe — so the row appearing is the common case, and
+ * holding it back until every hub has answered means the grid grows a row
+ * underneath whatever the reader is already looking at. It disappears instead
+ * on the rarer answer, which at least arrives once rather than per hub.
  */
 export function hasOtherFlows(cells: readonly OtherFlowsCell[]): boolean {
-  return cells.some((cell) => (cell.count ?? 0) > 0)
+  return cells.some((cell) => cell.reading === true || (cell.count ?? 0) > 0)
 }
 
 // ── Assembling the columns ────────────────────────────────────────────────────

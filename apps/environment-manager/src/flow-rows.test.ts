@@ -8,10 +8,8 @@ import {
   flowColumns,
   flowRows,
   hasOtherFlows,
-  isRunnable,
   matchesFor,
   matchesHub,
-  NOT_RUNNING,
   otherFlowsCells,
   STATE_EXPLANATION,
   stateOfFlow,
@@ -68,18 +66,13 @@ describe('stateOfFlow', () => {
   })
 })
 
-describe('isRunnable', () => {
-  it('is false for both ways a flow can be stopped', () => {
-    expect(isRunnable({ status: 'ENABLED' })).toBe(true)
-    expect(isRunnable({ status: 'DISABLED' })).toBe(false)
-    expect(isRunnable({ status: 'QUARANTINED' })).toBe(false)
-  })
-
-  it('agrees with NOT_RUNNING', () => {
-    for (const status of ['DISABLED', 'QUARANTINED']) {
-      expect(NOT_RUNNING.has(stateOfFlow({ status }))).toBe(true)
-    }
-    expect(NOT_RUNNING.has(stateOfFlow({ status: 'ENABLED' }))).toBe(false)
+// `isRunnable` and `NOT_RUNNING` said this; both were only ever read by their
+// own tests, so the rule they encoded now lives on `stateOfFlow` directly.
+describe('the two ways a flow can be stopped', () => {
+  it('tells quarantined apart from disabled, and both from running', () => {
+    expect(stateOfFlow({ status: 'ENABLED' })).toBe('present')
+    expect(stateOfFlow({ status: 'DISABLED' })).toBe('disabled')
+    expect(stateOfFlow({ status: 'QUARANTINED' })).toBe('quarantined')
   })
 })
 
@@ -465,6 +458,19 @@ describe('a hub still being read', () => {
   it('survives the hide-without-a-token toggle', () => {
     const visible = filterHubs([reading, untokened], '', { hideUnavailable: true })
     expect(visible.map((hub) => hub.name)).toEqual(['douglas'])
+  })
+
+  // ⚠️ The row shows while the answer is unknown rather than after. A hub
+  // almost always carries flows the repository does not describe, so appearing
+  // is the common case — holding it back means the grid grows a row underneath
+  // whatever the reader is already looking at.
+  it('keeps the other-flows row while any hub is still being read', () => {
+    expect(hasOtherFlows(otherFlowsCells([fixture], [reading]))).toBe(true)
+  })
+
+  it('still goes quiet once every hub has answered with none', () => {
+    const empty = { name: 'douglas', label: 'Douglas', flows: [] }
+    expect(hasOtherFlows(otherFlowsCells([fixture], [empty]))).toBe(false)
   })
 
   // "0 other flows" on a hub nobody has read is a measurement we have not made.

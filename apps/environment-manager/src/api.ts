@@ -91,7 +91,6 @@ export const api = {
     const body = await request<{ flows: FlowFixture[]; flowsError?: string }>('/workforce/fixtures')
     return {
       fixtures: body.flows,
-      hubs: [],
       ...(body.flowsError === undefined ? {} : { fixturesError: body.flowsError }),
     }
   },

@@ -11,8 +11,18 @@
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import type { FlowsOverview } from '../flow-rows.js'
+import type { FlowFixture, HubFlows } from '../flow-rows.js'
 import { FlowsTab } from './FlowsTab.js'
+
+/**
+ * One scenario: the rows, and what each hub answers.
+ *
+ * ⚠️ Not `FlowsOverview` — that type is the rows alone now, because the hubs
+ * reach the tab as a prop and their flows arrive per column. A test still
+ * wants both halves in one literal, so it has its own shape rather than
+ * pushing a `hubs` field back into the production type to suit the tests.
+ */
+type Scenario = { fixtures: FlowFixture[]; hubs: HubFlows[]; fixturesError?: string }
 
 vi.mock('../api.js', () => ({
   api: { hubFlows: vi.fn(), flowOp: vi.fn() },
@@ -36,7 +46,7 @@ const never = <T,>(): Promise<T> => new Promise<T>(() => undefined)
 const LOCALISE = 'Localise Content Item [Org]'
 const SCREENSHOT = 'Create page from a Screenshot [MI]'
 
-const overview = (overrides: Partial<FlowsOverview> = {}): FlowsOverview => ({
+const overview = (overrides: Partial<Scenario> = {}): Scenario => ({
   fixtures: [
     { label: LOCALISE, file: 'localise.json', local: false },
     { label: SCREENSHOT, file: 'screenshot.json', local: true },
@@ -68,7 +78,7 @@ const overview = (overrides: Partial<FlowsOverview> = {}): FlowsOverview => ({
  * app now does: rows from disk, columns from the config the parent holds,
  * cells one hub at a time.
  */
-const mount = (data: FlowsOverview = overview()) => {
+const mount = (data: Scenario = overview()) => {
   hubFlows.mockImplementation((name: string) => {
     const hub = data.hubs.find((candidate) => candidate.name === name)
     return Promise.resolve(
@@ -82,7 +92,6 @@ const mount = (data: FlowsOverview = overview()) => {
       hubs={data.hubs.map(({ name, label }) => ({ name, label }))}
       fixtures={{
         fixtures: data.fixtures,
-        hubs: [],
         ...(data.fixturesError === undefined ? {} : { fixturesError: data.fixturesError }),
       }}
     />,
@@ -145,7 +154,7 @@ describe('FlowsTab — the grid', () => {
     render(
       <FlowsTab
         hubs={[{ name: 'douglas', label: 'Douglas' }]}
-        fixtures={{ fixtures: [], hubs: [], fixturesError: 'API is down' }}
+        fixtures={{ fixtures: [], fixturesError: 'API is down' }}
       />,
     )
     expect(screen.getByText('API is down')).toBeDefined()
@@ -162,7 +171,7 @@ describe('FlowsTab — the grid', () => {
           { name: 'douglas', label: 'Douglas' },
           { name: 'mattdemo', label: 'mattdemo' },
         ]}
-        fixtures={{ ...overview(), hubs: [] }}
+        fixtures={{ fixtures: overview().fixtures }}
       />,
     )
     await loaded()
@@ -178,7 +187,7 @@ describe('FlowsTab — the grid', () => {
     render(
       <FlowsTab
         hubs={[{ name: 'douglas', label: 'Douglas' }]}
-        fixtures={{ ...overview(), hubs: [] }}
+        fixtures={{ fixtures: overview().fixtures }}
       />,
     )
     await loaded()
@@ -215,6 +224,36 @@ describe('FlowsTab — the grid', () => {
     expect(screen.queryByText(/No flow fixtures/)).toBeNull()
   })
 
+  // ⚠️ `reading` and `absent` shared the `·` glyph for a while, so a grid
+  // mid-load looked exactly like one where nothing was installed anywhere.
+  it('does not mark an unread cell the same as an empty one', async () => {
+    hubFlows.mockImplementation(never)
+    render(
+      <FlowsTab
+        hubs={[{ name: 'douglas', label: 'Douglas' }]}
+        fixtures={{ fixtures: overview().fixtures }}
+      />,
+    )
+    await loaded()
+    const glyphs = [...document.querySelectorAll('.flow-cell__glyph')].map((el) => el.textContent)
+    expect(glyphs.every((glyph) => glyph !== '·')).toBe(true)
+  })
+
+  // Hubs almost always carry flows the repository does not describe, so the
+  // row showing is the common case — appearing late would grow the grid
+  // underneath whatever the reader is already looking at.
+  it('keeps the “Other flows” row up while the hubs are answering', async () => {
+    hubFlows.mockImplementation(never)
+    render(
+      <FlowsTab
+        hubs={[{ name: 'douglas', label: 'Douglas' }]}
+        fixtures={{ fixtures: overview().fixtures }}
+      />,
+    )
+    await loaded()
+    expect(screen.getByText('Other flows')).toBeDefined()
+  })
+
   // The placeholders are scaffolding, not content: left readable, a screen
   // reader walks four empty rows before reaching anything real.
   it('hides the placeholder rows from assistive technology', () => {
@@ -229,12 +268,7 @@ describe('FlowsTab — the grid', () => {
 
   it('says so once it has looked and found none', () => {
     hubFlows.mockImplementation(never)
-    render(
-      <FlowsTab
-        hubs={[{ name: 'douglas', label: 'Douglas' }]}
-        fixtures={{ fixtures: [], hubs: [] }}
-      />,
-    )
+    render(<FlowsTab hubs={[{ name: 'douglas', label: 'Douglas' }]} fixtures={{ fixtures: [] }} />)
     expect(screen.getByText(/No flow fixtures/)).toBeDefined()
   })
 })
@@ -476,7 +510,7 @@ describe('FlowsTab — the guarded operations', () => {
 
 describe('FlowsTab — narrowing the hub axis', () => {
   /** Four hubs, so the hub filter clears FILTER_MIN_ITEMS and renders. */
-  const fleet = (): FlowsOverview => ({
+  const fleet = (): Scenario => ({
     fixtures: [{ label: LOCALISE, file: 'localise.json', local: false }],
     hubs: [
       { name: 'douglas', label: 'Douglas', flows: [{ id: 'f1', label: LOCALISE }] },

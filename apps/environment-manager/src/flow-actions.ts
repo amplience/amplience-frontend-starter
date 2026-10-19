@@ -139,6 +139,12 @@ export function needsTypedConfirmation(action: CellAction): boolean {
  * Not the same question as {@link needsTypedConfirmation}: a sync is
  * recoverable — push it again — but what it overwrites may not be, so it gets
  * a confirmation that names the hub without demanding the label.
+ *
+ * ⚠️ No runtime caller any more — {@link isConfirmable} is what routes a click
+ * to the dialog. Kept because it states *why* sync asks, and because the test
+ * that pins `isConfirmable` to the union of the two reasons is the only thing
+ * stopping those two drifting apart. Delete it and the routing rule becomes a
+ * bare list of two action names with nothing saying what they have in common.
  */
 export function overwritesHubCopy(action: CellAction): boolean {
   return action === 'sync'

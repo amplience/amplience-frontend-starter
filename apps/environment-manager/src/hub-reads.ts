@@ -57,19 +57,3 @@ export function resolveColumn<T>(read: HubRead<HubPayload<T>> | undefined): Colu
   if (rows !== undefined) return { rows }
   return { unavailable: unavailable ?? { reason: 'error' } }
 }
-
-/** Hubs still being read, for an `aria-busy` that covers the whole axis. */
-export function readingHubs(names: readonly string[], reads: HubReads<unknown>): string[] {
-  return names.filter((name) => (reads[name]?.status ?? 'reading') === 'reading')
-}
-
-/**
- * Whether every hub has answered.
- *
- * Used to announce a filled grid once, rather than letting each cell announce
- * itself as it lands — fourteen columns arriving separately is fourteen
- * interruptions for anyone using a screen reader.
- */
-export function allSettled(names: readonly string[], reads: HubReads<unknown>): boolean {
-  return readingHubs(names, reads).length === 0
-}

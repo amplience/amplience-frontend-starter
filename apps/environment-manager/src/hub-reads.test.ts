@@ -8,7 +8,7 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { allSettled, readingHubs, resolveColumn, type HubReads } from './hub-reads.js'
+import { resolveColumn } from './hub-reads.js'
 
 const FLOWS = [{ id: 'a', label: 'Localise' }]
 
@@ -53,31 +53,5 @@ describe('resolveColumn', () => {
     expect(resolveColumn({ status: 'ok', data: {} })).toEqual({
       unavailable: { reason: 'error' },
     })
-  })
-})
-
-describe('readingHubs and allSettled', () => {
-  const reads: HubReads<{ rows?: string[] }> = {
-    douglas: { status: 'ok', data: { rows: [] } },
-    anyafinn: { status: 'reading' },
-    schaeffler: { status: 'failed', error: 'nope' },
-  }
-  const names = ['douglas', 'anyafinn', 'schaeffler', 'mattdemo']
-
-  // A hub with no entry has not been read, so it counts as outstanding.
-  it('counts a hub with no entry as still reading', () => {
-    expect(readingHubs(names, reads)).toEqual(['anyafinn', 'mattdemo'])
-  })
-
-  // A failure is settled: it is not going to change on its own, and waiting
-  // for it would mean never announcing the grid as finished.
-  it('treats a failed read as settled', () => {
-    expect(readingHubs(['schaeffler'], reads)).toEqual([])
-    expect(allSettled(['douglas', 'schaeffler'], reads)).toBe(true)
-  })
-
-  it('is settled only when nothing is outstanding', () => {
-    expect(allSettled(names, reads)).toBe(false)
-    expect(allSettled([], reads)).toBe(true)
   })
 })

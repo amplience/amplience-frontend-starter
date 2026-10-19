@@ -49,8 +49,12 @@ import { OpLogDrawer } from './OpLogDrawer.js'
  */
 
 /** The glyph for each state. Never colour alone — the letter carries it too. */
+// ⚠️ Every state needs its own mark. `reading` was `·` for a while, the same
+// as `absent` — so a grid mid-load was indistinguishable at a glance from one
+// where nothing is installed anywhere, which is the single most alarming thing
+// this grid can say. The labels differed; nobody reads the labels first.
 const CELL_GLYPH: Record<CellState, string> = {
-  reading: '·',
+  reading: '⋯',
   present: '✓',
   absent: '·',
   disabled: '⏸',
@@ -188,6 +192,16 @@ function HubHeader({ hub }: { hub: HubFlows }) {
  * there would be a measurement we never took, and it reads like one we did.
  */
 function OtherCell({ cell }: { cell: OtherFlowsCell }) {
+  // Still reading: no count, but not an unavailable hub either. Shown rather
+  // than left blank so the row keeps its height as the columns fill.
+  if (cell.reading === true) {
+    return (
+      <td className="flow-grid__cell flow-grid__cell--reading" title={STATE_EXPLANATION.reading}>
+        <span className="flow-cell__state">{CELL_GLYPH.reading}</span>
+      </td>
+    )
+  }
+
   if (cell.count === undefined) {
     const reason = cell.unavailable?.reason ?? 'error'
     return (
