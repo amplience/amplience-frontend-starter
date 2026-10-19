@@ -1,5 +1,5 @@
 import { spawn } from 'node:child_process'
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 import { homedir } from 'node:os'
 import path from 'node:path'
@@ -18,9 +18,12 @@ import {
   siteIdentity,
   type ActiveSource,
 } from './active-source.ts'
-import { buildDamCheck, liveGqlFetch } from './dam-permissions.ts'
+import { readHubFlows, type HubFlow } from './content-flows.ts'
+import { buildDamCheck } from './dam-permissions.ts'
 import { hubManagementEnvVars, updateEnvVars, webEnvVars } from './env-files.ts'
 import { readFixtureSets, resolveFixtureSet, type FixtureSetInfo } from './fixture-sets.ts'
+import { confirmsRemoval, matchForAction, opKey, Steps, type FlowAction } from './flow-ops.ts'
+import { deepGet, gqlErrors, isAuthError, liveGqlFetch, type GqlFetch } from './graphql.ts'
 import { deriveIdentifier } from './hub-identifier.ts'
 import { buildPermissionsReport, type FetchJson } from './permissions.ts'
 import {
@@ -40,6 +43,24 @@ import {
   stripAnsi,
   type VercelSiteInput,
 } from './vercel.ts'
+import {
+  buildWorkforceCheck,
+  cmsHubIdFor,
+  resolveCmsHubId,
+  WORKFORCE_KEY,
+  WORKFORCE_LABEL,
+} from './workforce-permissions.ts'
+import {
+  ORGANIZATIONS_QUERY,
+  organizationsIn,
+  PAT_ENV_VARS,
+  publicOrganizations,
+  removeToken,
+  resolvePat,
+  storeToken,
+  upsertOrganization,
+  type Organization,
+} from './workforce-token.ts'
 
 // ── Paths ─────────────────────────────────────────────────────────────────────
 
@@ -83,6 +104,13 @@ type Environment = {
   label: string
   hubName: string
   hubId: string
+  /**
+   * The organization the hub belongs to. Recorded at discovery because a
+   * Workforce personal access token is scoped to an organization, so this is
+   * what says which hubs one token covers (ADR-0023). Optional: a hub added
+   * before this existed simply has it filled in on the next credentials check.
+   */
+  organizationId?: string
   localhostUrl: string
   repoContent: string
   repoSlots: string
@@ -119,6 +147,13 @@ type Environment = {
 type Config = {
   /** A hub's name, or a fixture set's. The hubs are enumerable, so the two tell apart. */
   active: string
+  /**
+   * Workforce credentials, keyed by organization rather than by hub: a personal
+   * access token covers every hub in its organization, and a user may hold at
+   * most five per organization (ADR-0023). Absent until one is set up — flows
+   * are the only thing that needs it.
+   */
+  organizations?: Organization[]
   environments: Environment[]
 }
 
@@ -185,13 +220,26 @@ async function writeActiveEnvFiles(config: Config): Promise<void> {
   const existingWeb = existsSync(WEB_ENV) ? await readFile(WEB_ENV, 'utf-8') : ''
   await writeFile(WEB_ENV, updateEnvVars(existingWeb, webEnvVars(env, site)), 'utf-8')
 
-  // packages/hub-management/.env — full set of vars consumed by hub:import / hub:wipe scripts
+  // packages/hub-management/.env — full set of vars consumed by hub:import /
+  // hub:wipe / flows:pull. The Workforce token is organization-scoped, so it is
+  // looked up by the active hub's organization rather than read off the hub
+  // (ADR-0023); absent is normal and simply leaves the flows commands unarmed.
+  const organizationId = config.environments.find(
+    (candidate) => candidate.name === config.active,
+  )?.organizationId
+  const { token } = resolvePat(config.organizations ?? [], organizationId, process.env)
   const existingHubEnv = existsSync(HUB_MANAGEMENT_ENV)
     ? await readFile(HUB_MANAGEMENT_ENV, 'utf-8')
     : ''
   await writeFile(
     HUB_MANAGEMENT_ENV,
-    updateEnvVars(existingHubEnv, hubManagementEnvVars(env, site)),
+    updateEnvVars(
+      existingHubEnv,
+      hubManagementEnvVars(env, site, {
+        ...(organizationId === undefined ? {} : { organizationId }),
+        ...(token === undefined ? {} : { pat: token }),
+      }),
+    ),
     'utf-8',
   )
 }
@@ -257,6 +305,8 @@ type DiscoveredHub = {
   id: string
   name: string
   label: string
+  /** Organization the hub belongs to — half of the opaque Workforce hub id. */
+  organizationId: string
   repos: DiscoveredRepo[]
   stagingHost?: string
 }
@@ -283,6 +333,7 @@ async function discoverHubs(clientId: string, clientSecret: string): Promise<Dis
         id: string
         name: string
         label?: string
+        organizationId: string
         settings?: {
           virtualStagingEnvironment?: { hostname?: string }
           previewVirtualStagingEnvironment?: { hostname?: string }
@@ -305,6 +356,7 @@ async function discoverHubs(clientId: string, clientSecret: string): Promise<Dis
         id: hub.id,
         name: hub.name,
         label: hub.label ?? hub.name,
+        organizationId: hub.organizationId,
         ...(stagingHost !== undefined ? { stagingHost } : {}),
       }
 
@@ -963,6 +1015,37 @@ app.post('/api/amplience/permissions', async (c) => {
       })
     }
 
+    // Workforce content flows run on the same GraphQL API but NOT on the same
+    // credential: client credentials have no flow access at all, so this probe
+    // uses the organization's personal access token (ADR-0023). The
+    // organization is resolved first because that is what a token is scoped to.
+    // Probed independently for the same reason as DAM, and equally fail-soft.
+    try {
+      const config = await readConfig()
+      const resolved = await resolveCmsHubId(fetchJson, hubId)
+      if (resolved.organizationId !== undefined) {
+        report.hub.organizationId = resolved.organizationId
+        await rememberOrganization(hubId, resolved.organizationId)
+      }
+      const pat = resolvePat(config.organizations ?? [], resolved.organizationId, process.env)
+      const workforceCheck = await buildWorkforceCheck(
+        pat.token === undefined ? undefined : liveGqlFetch(pat.token),
+        fetchJson,
+        hubId,
+        { preresolved: resolved, patState: pat.state },
+      )
+      report.checks.push(workforceCheck)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error'
+      report.checks.push({
+        key: WORKFORCE_KEY,
+        label: WORKFORCE_LABEL,
+        read: 'error',
+        write: 'error',
+        detail: `probe failed: ${message}`,
+      })
+    }
+
     return c.json(report)
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
@@ -970,7 +1053,574 @@ app.post('/api/amplience/permissions', async (c) => {
   }
 })
 
+// ── Workforce access (ADR-0023) ───────────────────────────────────────────────
+
+/**
+ * Fill in an environment's `organizationId` once it is known, so the setup panel
+ * can say which hubs a token covers without a Management API call per hub. A
+ * no-op when it is already recorded or the hub isn't one of ours.
+ */
+async function rememberOrganization(hubId: string, organizationId: string): Promise<void> {
+  const config = await readConfig()
+  const env = config.environments.find((candidate) => candidate.hubId === hubId)
+  if (env === undefined || env.organizationId === organizationId) return
+  env.organizationId = organizationId
+  await writeConfig(config)
+}
+
+/**
+ * What a pasted token turns out to be.
+ *
+ * `wrong-org` is the one worth catching: a token that is perfectly valid but
+ * belongs to a different organization is indistinguishable from a good one
+ * until a hub in *this* organization is probed with it, which is how a bad
+ * paste used to be discovered — as a failing credentials row some steps later.
+ */
+type TokenVerdict =
+  | { state: 'ok'; label?: string }
+  | { state: 'denied'; detail: string }
+  | { state: 'wrong-org'; covers: string[] }
+  | { state: 'unverified' }
+
+/**
+ * Ask the token which organizations it can see. That answers three questions at
+ * once — is it a real token, does it reach this organization, and what is that
+ * organization called — so it is worth doing before storing rather than after.
+ *
+ * An inconclusive answer is deliberately NOT a rejection: no network, or a
+ * response we don't recognise, must not stop someone saving a token that is
+ * probably fine.
+ */
+async function verifyToken(token: string, organizationId: string): Promise<TokenVerdict> {
+  let res
+  try {
+    res = await liveGqlFetch(token)(ORGANIZATIONS_QUERY)
+  } catch {
+    return { state: 'unverified' }
+  }
+
+  const errors = gqlErrors(res.body)
+  if (isAuthError(errors)) {
+    return { state: 'denied', detail: errors?.[0]?.message ?? 'the token was not accepted' }
+  }
+
+  const organizations = organizationsIn(res.body)
+  if (organizations.length === 0) return { state: 'unverified' }
+
+  const match = organizations.find((org) => org.id === organizationId)
+  if (match === undefined) {
+    return { state: 'wrong-org', covers: organizations.map((org) => org.label ?? org.id) }
+  }
+  return { state: 'ok', ...(match.label !== undefined ? { label: match.label } : {}) }
+}
+
+// GET /api/workforce/organizations — which organizations have a token, which
+// hubs each one covers, and whether one is awaiting approval. Never the tokens.
+app.get('/api/workforce/organizations', async (c) => {
+  const config = await readConfig()
+  return c.json({
+    organizations: publicOrganizations(config.organizations ?? [], config.environments),
+    // An environment variable outranks everything stored here, so the panel has
+    // to say so — otherwise replacing a token appears to change nothing.
+    envOverride: PAT_ENV_VARS.some((name) => (process.env[name] ?? '').trim() !== ''),
+  })
+})
+
+// PUT /api/workforce/organizations/:id/token — store a token pasted in from
+// Dynamic Content, once it has been checked against this organization. Clears
+// any outstanding request for one.
+app.put('/api/workforce/organizations/:id/token', async (c) => {
+  const organizationId = c.req.param('id')
+  const { token } = await c.req.json<{ token?: string }>()
+  if (token === undefined || token.trim() === '') {
+    return c.json({ error: 'token is required' }, 400)
+  }
+
+  const verdict = await verifyToken(token.trim(), organizationId)
+  if (verdict.state === 'denied') {
+    return c.json({ error: `Amplience did not accept that token — ${verdict.detail}` }, 400)
+  }
+  if (verdict.state === 'wrong-org') {
+    return c.json(
+      {
+        error: `That token works, but not for this organization. It covers ${verdict.covers.join(', ')}. Create one from a hub in this organization instead.`,
+      },
+      400,
+    )
+  }
+
+  const config = await readConfig()
+  const stored = storeToken(config.organizations ?? [], organizationId, token)
+  config.organizations =
+    verdict.state === 'ok' && verdict.label !== undefined
+      ? upsertOrganization(stored, organizationId, { label: verdict.label })
+      : stored
+  await writeConfig(config)
+  // The token is organization-scoped, so storing one changes what the active
+  // hub can do. Rewriting the env files here is what puts AMPLIENCE_PAT in
+  // front of the terminal commands without making someone re-activate the hub.
+  await writeActiveEnvFiles(config)
+  return c.json({
+    organizations: publicOrganizations(config.organizations, config.environments),
+    ...(verdict.state === 'unverified'
+      ? { warning: 'Saved, but it could not be checked against Amplience just now.' }
+      : {}),
+  })
+})
+
+// DELETE /api/workforce/organizations/:id/token — forget it, so a wrong one can
+// be replaced. Nothing leaves this machine; the token stays live in Amplience
+// until someone deletes it there.
+app.delete('/api/workforce/organizations/:id/token', async (c) => {
+  const organizationId = c.req.param('id')
+  const config = await readConfig()
+  config.organizations = removeToken(config.organizations ?? [], organizationId)
+  await writeConfig(config)
+  // Removing it has to reach the env files too, or a token that has been
+  // forgotten here keeps working in the terminal.
+  await writeActiveEnvFiles(config)
+  return c.json({ organizations: publicOrganizations(config.organizations, config.environments) })
+})
+
+// POST /api/workforce/organizations/:id/token/request — record that a token has
+// been asked for. A non-admin's request waits on an organization admin, so the
+// hub is saved without one and the row reads "awaiting approval" until it lands.
+app.post('/api/workforce/organizations/:id/token/request', async (c) => {
+  const organizationId = c.req.param('id')
+  const config = await readConfig()
+  config.organizations = upsertOrganization(config.organizations ?? [], organizationId, {
+    patRequestedAt: new Date().toISOString(),
+  })
+  await writeConfig(config)
+  return c.json({ organizations: publicOrganizations(config.organizations, config.environments) })
+})
+
 // ── Vercel provisioning (ADR-0017) ─────────────────────────────────────────────
+
+// ── Flows tab (ADR-0023, QL-127) ──────────────────────────────────────────────
+
+/** Where the checked-in flow fixtures live, with `local/` beside them. */
+const FLOWS_DIR = path.join(HUB_MANAGEMENT_ROOT, 'flows')
+
+/**
+ * The flow fixtures in the repository, checked-in and locally-pulled.
+ *
+ * ⚠️ The label is the identity — it is what a push matches on and what the grid
+ * matches on — so a label defined in both homes is refused rather than resolved
+ * by precedence, by the same `mergeFixtures` the commands use. Sharing that
+ * function rather than re-implementing it is the point: a grid that silently
+ * picked one copy would disagree with the push it is describing.
+ */
+async function readFlowFixtures(): Promise<FlowFixture[]> {
+  const { mergeFixtures, LOCAL_DIR } = (await import(
+    pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'fixtures.mjs')).href
+  )) as typeof import('../../../packages/hub-management/scripts/lib/fixtures.mjs')
+
+  const read = (dir: string, local: boolean) => {
+    if (!existsSync(dir)) return []
+    return readdirSync(dir)
+      .filter((name) => name.endsWith('.json'))
+      .map((name) => {
+        const parsed: unknown = JSON.parse(readFileSync(path.join(dir, name), 'utf-8'))
+        const label = deepGet(parsed, ['label'])
+        return {
+          label: typeof label === 'string' ? label : name.replace(/\.json$/, ''),
+          source: local ? `flows/${LOCAL_DIR}/${name}` : `flows/${name}`,
+          value: { file: name, local },
+        }
+      })
+  }
+
+  return mergeFixtures(read(FLOWS_DIR, false), read(path.join(FLOWS_DIR, LOCAL_DIR), true)).map(
+    (entry) => ({ label: entry.label, file: entry.value.file, local: entry.value.local }),
+  )
+}
+
+type FlowFixture = { label: string; file: string; local: boolean }
+
+/**
+ * GET /api/workforce/fixtures — the grid's rows, from disk alone.
+ *
+ * Deliberately separate from reading the hubs, and deliberately first: rows are
+ * files and columns are config, so the whole grid can be on screen before any
+ * Workforce call is made. Only the cells need the network.
+ *
+ * Shaped as a map of subjects rather than a bare array so the listeners and
+ * extensions tables can be added to the same response (QL-166, QL-167) without
+ * the client learning a second endpoint shape.
+ */
+app.get('/api/workforce/fixtures', async (c) => {
+  try {
+    return c.json({ flows: await readFlowFixtures() })
+  } catch (err) {
+    // A fixtures failure is a repository problem, not a hub problem: both
+    // labels defined twice, say. Reported as a value so the grid can show the
+    // reason rather than rendering as "no flows in the repo".
+    return c.json({ flows: [], flowsError: err instanceof Error ? err.message : String(err) })
+  }
+})
+
+/**
+ * GET /api/workforce/hubs/:name/flows — one hub's column.
+ *
+ * ⚠️ One hub per request, where QL-127 fanned out across the fleet in one.
+ * The fan-out meant the slowest hub decided when *anything* appeared, and with
+ * three tables coming it would have meant the slowest hub in the slowest table
+ * deciding for all three. Per hub, each column fills as it answers.
+ *
+ * Never 500s for a hub that simply cannot be read: an absent token is a setup
+ * step, not an error, and a column that failed must still render as a column.
+ * Only an unknown hub is a 404, because that is a bug in the caller.
+ */
+app.get('/api/workforce/hubs/:name/flows', async (c) => {
+  const name = c.req.param('name')
+  const config = await readConfig()
+  const env = config.environments.find((e) => e.name === name)
+  if (env === undefined) return c.json({ error: `No hub called "${name}".` }, 404)
+
+  // No organization on the hub yet means nothing can be looked up: the opaque
+  // Workforce hub id is built from it. Reported as the same "set this up"
+  // state as a missing token, because that is what it is.
+  if ((env.organizationId ?? '') === '' || (env.hubId ?? '') === '') {
+    return c.json({ unavailable: { reason: 'no-token' as const } })
+  }
+
+  const { token } = resolvePat(config.organizations ?? [], env.organizationId, process.env)
+  const result = await readHubFlows(
+    token === undefined ? undefined : liveGqlFetch(token),
+    cmsHubIdFor(env.organizationId!, env.hubId),
+  )
+
+  // `rows`, not `flows`: the same key every subject's per-hub endpoint
+  // answers with, so one client-side resolver serves all three grids.
+  return result.ok
+    ? c.json({ rows: result.flows satisfies HubFlow[] })
+    : c.json({
+        unavailable: {
+          reason: result.reason,
+          ...(result.reason === 'no-token' ? {} : { detail: result.detail }),
+        },
+      })
+})
+
+// ── Per-cell flow operations (QL-162) ─────────────────────────────────────────
+
+/**
+ * Flow operations in flight, keyed per cell by `opKey`.
+ *
+ * ⚠️ Deliberately a different map from `runningOps`. That one is keyed by
+ * environment name and holds the spawned seed/sync child so the cancel
+ * endpoint can kill it; a flow op sharing that key space would be killed by a
+ * cancel meant for a seed, or would evict the seed's entry so that cancel then
+ * found nothing. Flow ops are in-process GraphQL calls with no child to kill —
+ * they are tracked only so a second click, or a held-down key, cannot start
+ * the same operation twice.
+ */
+const runningFlowOps = new Set<string>()
+
+/** The actions the route accepts. Widened here so adding one is a single edit. */
+const FLOW_ACTIONS: readonly FlowAction[] = ['push', 'sync', 'remove', 'enable', 'disable']
+
+/** The full fixture bodies, for a push. The grid only needs their labels. */
+async function readFlowFixtureBodies(): Promise<Record<string, unknown>[]> {
+  const { mergeFixtures, LOCAL_DIR } = (await import(
+    pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'fixtures.mjs')).href
+  )) as typeof import('../../../packages/hub-management/scripts/lib/fixtures.mjs')
+
+  const read = (dir: string) => {
+    if (!existsSync(dir)) return []
+    return readdirSync(dir)
+      .filter((name) => name.endsWith('.json'))
+      .map((name) => {
+        const value = JSON.parse(readFileSync(path.join(dir, name), 'utf-8')) as Record<
+          string,
+          unknown
+        >
+        const label = typeof value.label === 'string' ? value.label : name.replace(/\.json$/, '')
+        return { label, source: name, value }
+      })
+  }
+  return mergeFixtures(read(FLOWS_DIR), read(path.join(FLOWS_DIR, LOCAL_DIR))).map((e) => e.value)
+}
+
+/** The extension catalogue, checked-in plus `local/`, as the commands read it. */
+async function readExtensionCatalogue() {
+  const [{ mergeCatalogue, parseEntry }, { LOCAL_DIR }] = await Promise.all([
+    import(
+      pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'extensions.mjs')).href
+    ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/extensions.mjs')>,
+    import(
+      pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'fixtures.mjs')).href
+    ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/fixtures.mjs')>,
+  ])
+  const base = path.join(HUB_MANAGEMENT_ROOT, 'workforce-extensions')
+  const read = (dir: string) => {
+    if (!existsSync(dir)) return []
+    return readdirSync(dir)
+      .filter((name) => name.endsWith('.json'))
+      .map((name) => ({
+        source: path.join(path.basename(dir), name),
+        value: parseEntry(JSON.parse(readFileSync(path.join(dir, name), 'utf-8')), name),
+      }))
+  }
+  return mergeCatalogue(read(base), read(path.join(base, LOCAL_DIR)))
+}
+
+/** Resolve a hub's Workforce credentials, or throw a reason worth showing. */
+function workforceFetchFor(env: Environment, organizations: Organization[]) {
+  if ((env.organizationId ?? '') === '' || (env.hubId ?? '') === '') {
+    throw new Error(
+      `"${env.label}" has no organization recorded yet, so its Workforce hub id cannot be built. ` +
+        `Run the credentials check on it first.`,
+    )
+  }
+  const { token } = resolvePat(organizations, env.organizationId, process.env)
+  if (token === undefined) {
+    throw new Error(
+      `No Workforce personal access token for "${env.label}"'s organization. Set one up from ` +
+        `the hub's credentials check.`,
+    )
+  }
+  const organizationId = env.organizationId
+  return { token, gql: liveGqlFetch(token), hubRef: cmsHubIdFor(organizationId, env.hubId) }
+}
+
+const CREATE_FLOW_OP = `mutation create($input: CreateContentFlowInput!) {
+  createContentFlow(input: $input) { id label }
+}`
+
+const UPDATE_FLOW_OP = `mutation update($input: UpdateContentFlowInput!) {
+  updateContentFlow(input: $input) { id label }
+}`
+
+const DELETE_FLOW_OP = `mutation removeFlow($id: ID!) {
+  deleteContentFlow(input: { id: $id })
+}`
+
+// ⚠️ A mutation of its own, not a field on `UpdateContentFlowInput` — that
+// input carries id, label, description, flow and icon, and no status at all
+// (confirmed by probe, 17 Oct 2026). Which is the good outcome twice over:
+// flipping a status needs no flow body, so it cannot overwrite a graph someone
+// adjusted on the hub, and a sync has never been able to reset a flow's
+// enabled state as a side effect.
+const SET_FLOW_STATUS_OP = `mutation setStatus($id: ID!, $status: ContentFlowStatus!) {
+  setContentFlowStatus(input: { id: $id, status: $status })
+}`
+
+const INSTALL_EXTENSION_OP = `mutation install($input: CreateExtensionInstanceInput!) {
+  createExtensionInstance(input: $input) { id label }
+}`
+
+/** Send a mutation, turning a GraphQL error into a thrown Error. */
+async function mutateWorkforce(
+  gql: GqlFetch,
+  query: string,
+  variables: Record<string, unknown>,
+): Promise<unknown> {
+  const res = await gql(query, variables)
+  const errors = gqlErrors(res.body)
+  if (errors !== undefined) throw new Error(errors[0]?.message ?? 'The mutation was refused.')
+  if (res.status >= 400) throw new Error(`HTTP ${res.status}`)
+  return deepGet(res.body, ['data'])
+}
+
+/**
+ * POST /api/workforce/flows/:action — push, sync or remove one flow on one hub.
+ *
+ * Small JSON in, small JSON out: the cell shows a spinner then a tick, and the
+ * returned steps go to the shared log drawer. Not streamed — these are a
+ * handful of GraphQL calls over a few seconds, where a spinner already answers
+ * "is it doing something" and the step list answers "what did it do".
+ *
+ * ⚠️ Every guard is re-derived from a **fresh read** of the hub rather than
+ * trusted from the request. The grid that produced the click can be minutes
+ * old, and the three states that must not be acted on — already there, already
+ * gone, duplicated — are exactly the ones that appear in that window.
+ */
+app.post('/api/workforce/flows/:action', async (c) => {
+  const action = c.req.param('action') as FlowAction
+  if (!FLOW_ACTIONS.includes(action)) {
+    return c.json({ error: `Unknown action "${c.req.param('action')}".` }, 400)
+  }
+
+  const body = await c.req.json<{ hub?: string; label?: string; confirm?: string }>()
+  const hubName = (body.hub ?? '').trim()
+  const label = (body.label ?? '').trim()
+  if (hubName === '' || label === '') return c.json({ error: 'hub and label are required.' }, 400)
+
+  const config = await readConfig()
+  const env = config.environments.find((e) => e.name === hubName)
+  if (env === undefined) return c.json({ error: `No hub called "${hubName}".` }, 404)
+
+  const steps = new Steps()
+  const fail = (error: string, status: 400 | 409 | 500) =>
+    c.json({ ok: false, action, hub: hubName, label, steps: steps.all(), error }, status)
+
+  // ⚠️ Removal needs the label typed back, checked here as well as in the
+  // dialog: a guard that exists only in the browser is not a guard, and this
+  // is the one action with no undo.
+  if (action === 'remove' && !confirmsRemoval(body.confirm, label)) {
+    return fail(
+      `Removing "${label}" from ${env.label} needs the flow's label typed back to confirm. It ` +
+        `deletes the flow and its run history on that hub, and cannot be undone.`,
+      400,
+    )
+  }
+
+  // A repeat — a double click, or a key held down — must not start a second
+  // copy of an operation that is already mutating the hub.
+  const key = opKey(hubName, label, action)
+  if (runningFlowOps.has(key)) return fail(`That operation is already running.`, 409)
+  runningFlowOps.add(key)
+
+  try {
+    const { token, gql, hubRef } = workforceFetchFor(env, config.organizations ?? [])
+
+    const onHub = await readHubFlows(gql, hubRef)
+    if (!onHub.ok) {
+      return fail(onHub.reason === 'no-token' ? 'No token for this hub.' : onHub.detail, 500)
+    }
+    steps.add('read the hub', `${onHub.flows.length} flows`)
+
+    const match = matchForAction(onHub.flows, label, action, env.label)
+    if (!match.ok) return fail(match.error, 409)
+
+    if (match.action === 'delete') {
+      await mutateWorkforce(gql, DELETE_FLOW_OP, { id: match.flow.id })
+      steps.add('removed flow', label)
+      return c.json({ ok: true, action, hub: hubName, label, steps: steps.all() })
+    }
+
+    // Enable and disable return here, before the fixture is read: the status
+    // lives on the hub's flow, not in the repository, so none of what follows
+    // — the fixture, the extension installs, the token resolution — applies.
+    if (match.action === 'status') {
+      if (match.already) {
+        steps.add(`already ${match.status.toLowerCase()}`, label)
+      } else {
+        await mutateWorkforce(gql, SET_FLOW_STATUS_OP, {
+          id: match.flow.id,
+          status: match.status,
+        })
+        steps.add(match.status === 'ENABLED' ? 'enabled flow' : 'disabled flow', label)
+      }
+      return c.json({
+        ok: true,
+        action,
+        hub: hubName,
+        label,
+        steps: steps.all(),
+        flowId: match.flow.id,
+      })
+    }
+
+    const fixture = (await readFlowFixtureBodies()).find((f) => f.label === label)
+    if (fixture === undefined) {
+      return fail(`No flow fixture called "${label}" in the repository any more.`, 400)
+    }
+
+    const [{ readRegistry, listenerSchemas }, flowsLib, extensionsLib] = await Promise.all([
+      import(
+        pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'workforce-api.mjs')).href
+      ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/workforce-api.mjs')>,
+      import(
+        pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'flows.mjs')).href
+      ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/flows.mjs')>,
+      import(
+        pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'extensions.mjs')).href
+      ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/extensions.mjs')>,
+    ])
+
+    const mgmtToken = await getAmplienceToken(env.clientId, env.clientSecret)
+    const organizationId = env.organizationId!
+    let { registry } = await readRegistry(token, mgmtToken, env.hubId, organizationId)
+
+    // Matches `pnpm flows:push`: an extension the catalogue knows and the hub
+    // has not got is installed rather than refused. It is a change to the hub
+    // nobody explicitly asked for, so it gets its own step in the log.
+    const catalogue = await readExtensionCatalogue()
+    for (const want of extensionsLib.missingExtensions([fixture], registry.extensionInstances)) {
+      const entry = extensionsLib.findEntry(catalogue, want.extensionId)
+      if (entry?.installable !== true) continue
+      const resolvedEnv = extensionsLib.resolveEnv(entry.env, {
+        env: process.env,
+        hubId: env.hubId,
+        hubName: env.hubName,
+        source: entry.label,
+      })
+      await mutateWorkforce(gql, INSTALL_EXTENSION_OP, {
+        input: extensionsLib.installInput(entry, {
+          version: want.version,
+          hubRef,
+          env: resolvedEnv,
+        }),
+      })
+      steps.add(
+        'installed extension',
+        `${entry.label}${want.version === undefined ? '' : ` (v${want.version})`}`,
+      )
+      // Re-read, so resolution sees what was just installed.
+      registry = (await readRegistry(token, mgmtToken, env.hubId, organizationId)).registry
+    }
+
+    // The declaration replays each bound listener's schema, and the list query
+    // does not return one — shared with `flows:push` so the two cannot drift.
+    const needed = new Set<string>()
+    for (const act of (fixture.flow as { actions?: { config?: Record<string, unknown> }[] })
+      ?.actions ?? []) {
+      const token_ = act?.config?.['amp:webhookId']
+      const hit = typeof token_ === 'string' ? /^\$\{listener:([^}]*)\}$/.exec(token_) : null
+      if (hit !== null) needed.add(hit[1].trim())
+    }
+    if (needed.size > 0) {
+      registry.listeners = await listenerSchemas(token, registry.listeners, needed)
+    }
+
+    const { flow, warnings } = flowsLib.resolveGraph(fixture, registry, {
+      hub: env.label,
+      catalogue: extensionsLib.catalogueIndex(catalogue),
+    })
+    const { flow: ready, cleared } = flowsLib.clearReviewers(flow)
+    if (cleared > 0) steps.add('cleared review steps', `${cleared} reviewer list`)
+
+    if (match.action === 'create') {
+      const made = await mutateWorkforce(gql, CREATE_FLOW_OP, {
+        input: flowsLib.createFlowInput(fixture, ready, hubRef),
+      })
+      steps.add('created flow', label)
+      return c.json({
+        ok: true,
+        action,
+        hub: hubName,
+        label,
+        steps: steps.all(),
+        flowId: deepGet(made, ['createContentFlow', 'id']),
+        ...(warnings.length === 0 ? {} : { warnings }),
+      })
+    }
+
+    await mutateWorkforce(gql, UPDATE_FLOW_OP, {
+      input: flowsLib.updateFlowInput(fixture, ready, match.flow.id),
+    })
+    steps.add('updated flow', label)
+    return c.json({
+      ok: true,
+      action,
+      hub: hubName,
+      label,
+      steps: steps.all(),
+      flowId: match.flow.id,
+      ...(warnings.length === 0 ? {} : { warnings }),
+    })
+  } catch (err) {
+    // The steps so far travel with the failure: knowing an extension was
+    // installed before the push failed is the difference between a clean retry
+    // and a confusing second attempt.
+    return fail(err instanceof Error ? err.message : String(err), 500)
+  } finally {
+    runningFlowOps.delete(key)
+  }
+})
 
 // POST /api/vercel/preflight — is the Vercel CLI installed and logged in?
 // Env-independent; drives whether the "Create Vercel site" action is offered

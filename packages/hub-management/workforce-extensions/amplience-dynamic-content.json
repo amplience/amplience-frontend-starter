@@ -1,0 +1,14 @@
+{
+  "label": "Amplience Dynamic Content",
+  "extensionId": "RXh0ZW5zaW9uOmFhZTdkOGViLWQyMjktNDU2Ni04NmNjLTNmYTljNmZlMjNlNg==",
+  "description": "Allow a flow to automate content management in Amplience Dynamic Content such as creating, moving and publishing content.",
+  "releases": {
+    "2.2.0": "RXh0ZW5zaW9uUmVsZWFzZTpjNzEzODA3MC1jNTAyLTRkYTYtYTk4Yi1kZmYwODVkN2UyMmY=",
+    "2.3.0": "RXh0ZW5zaW9uUmVsZWFzZTpmNmYzMTczOS0xMTM0LTQ1NTItODUyMS05NDIwY2Q2ZDZjN2U="
+  },
+  "env": {
+    "DC_PAT_TOKEN": "${secret:AMPLIENCE_PAT}",
+    "DC_HUB_ID": "${hub:id}",
+    "DC_HUB_NAME": "${hub:name}"
+  }
+}

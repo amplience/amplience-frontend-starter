@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { fixtureIdFor } from '../../scripts/lib/fixture-id.mjs'
-import type { ContentLink } from '../types'
+import type { ContentLink, EnrichedContentItem } from '../types'
 import { ContentClientError, isContentLink } from '../types'
 import { makeMockContentClient } from './MockContentClient'
 
@@ -122,6 +122,30 @@ describe('MockContentClient', () => {
     )
     // All present in the fixture set — all should resolve.
     expect(slot.components.every((c) => !isContentLink(c))).toBe(true)
+  })
+
+  it('serves a set handed to it directly, without the registry', async () => {
+    const page: EnrichedContentItem<{ title: string }> = {
+      id: 'local-home',
+      label: 'Home',
+      body: {
+        _meta: {
+          schema: 'https://quadratic.amplience.com/v2/content/page',
+          deliveryKeys: { values: [{ value: 'unregistered/homepage' }] },
+        },
+        title: 'Local',
+      },
+    }
+    const client = makeMockContentClient({
+      name: 'unregistered',
+      hierarchies: {},
+      fixtures: [page],
+    })
+    const home = await client.getByKey<{ title: string }>('unregistered/homepage')
+    expect(home.title).toBe('Local')
+    await expect(client.getByKey('frontend-starter/homepage')).rejects.toBeInstanceOf(
+      ContentClientError,
+    )
   })
 
   describe('listBySchema', () => {

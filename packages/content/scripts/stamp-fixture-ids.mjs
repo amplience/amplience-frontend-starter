@@ -51,19 +51,31 @@ const jsonFilesUnder = (dir, from) => {
   return out
 }
 
-/** The fixture sets on disk — a directory is a set when it holds a `set.json`. */
-const fixtureSets = () =>
-  readdirSync(fixturesRoot, { withFileTypes: true })
+/** Set directories directly under `dir` — a directory is a set when it holds a `set.json`. */
+const setsIn = (dir) => {
+  let entries
+  try {
+    entries = readdirSync(dir, { withFileTypes: true })
+  } catch {
+    return []
+  }
+  return entries
     .filter((e) => e.isDirectory())
-    .map((e) => e.name)
-    .filter((name) => {
+    .filter((e) => {
       try {
-        return statSync(path.join(fixturesRoot, name, 'set.json')).isFile()
+        return statSync(path.join(dir, e.name, 'set.json')).isFile()
       } catch {
         return false
       }
     })
-    .sort()
+    .map((e) => ({ name: e.name, dir: path.join(dir, e.name) }))
+}
+
+/** Every set on disk, checked-in and gitignored `local/` ones alike. */
+const fixtureSets = () =>
+  [...setsIn(fixturesRoot), ...setsIn(path.join(fixturesRoot, 'local'))].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  )
 
 /** Replace any string anywhere in `node` that the map knows about. */
 const remap = (node, map) => {
@@ -84,8 +96,7 @@ let changedFiles = 0
 let checkedFiles = 0
 const written = []
 
-for (const setName of fixtureSets()) {
-  const setDir = path.join(fixturesRoot, setName)
+for (const { name: setName, dir: setDir } of fixtureSets()) {
   const itemFiles = ITEM_DIRS.flatMap((dir) => jsonFilesUnder(path.join(setDir, dir), setDir))
 
   // Pass one — every current id, and what it becomes.

@@ -9,7 +9,7 @@
 //
 // Reading the tree rather than the manifest also catches a fixture on disk that
 // nobody registered in the loader — which the runtime tests cannot see by
-// construction.
+// construction. Gitignored `local/` sets are never registered, so they're out.
 
 import { describe, expect, it } from 'vitest'
 
@@ -19,9 +19,9 @@ import { allFixtures } from './loader'
 /** Vite's glob, typed locally so the package needs no `vite/client` types. */
 const globJson = (
   import.meta as unknown as {
-    glob: (p: string, o: { eager: true }) => Record<string, { default: unknown }>
+    glob: (p: string | string[], o: { eager: true }) => Record<string, { default: unknown }>
   }
-).glob('../../fixtures/**/*.json', { eager: true })
+).glob(['../../fixtures/**/*.json', '!../../fixtures/local/**'], { eager: true })
 
 /** Directories inside a set that hold content items — mirrors the stamper. */
 const ITEM_DIRS = ['components', 'slots', 'pages', 'site-components']

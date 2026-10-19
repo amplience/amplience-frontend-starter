@@ -44,6 +44,18 @@ describe('readFixtureSets', () => {
     ])
   })
 
+  it('includes gitignored local/ sets, skipping one that reuses a checked-in name', () => {
+    const root = tree('local', {
+      alpha: { name: 'alpha', label: 'Alpha' },
+      'local/beta': { name: 'beta', label: 'Beta' },
+      'local/alpha': { name: 'alpha', label: 'Shadow' },
+    })
+    expect(readFixtureSets(root).map((s) => `${s.name}:${s.label}`)).toEqual([
+      'alpha:Alpha',
+      'beta:Beta',
+    ])
+  })
+
   it('breaks a tie on name, so the order is stable between reads', () => {
     const root = tree('tie', {
       zulu: { name: 'zulu', label: 'Same' },

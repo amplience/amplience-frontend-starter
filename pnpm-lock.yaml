@@ -90,6 +90,9 @@ importers:
       '@amplience/frontend-starter-config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@testing-library/react':
+        specifier: ^16.3.3
+        version: 16.3.3(@testing-library/dom@10.4.1)(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@types/node':
         specifier: ^26.1.1
         version: 26.2.0
@@ -105,6 +108,9 @@ importers:
       concurrently:
         specifier: ^10.0.3
         version: 10.0.4
+      jsdom:
+        specifier: ^30.0.1
+        version: 30.0.1
       typescript:
         specifier: ^6.0.3
         version: 6.0.3

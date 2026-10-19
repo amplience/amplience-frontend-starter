@@ -1,0 +1,316 @@
+{
+  "label": "Localise Content Item [Org]",
+  "description": "If a CMS user labels something as \"Ready for Translation\", this localises the content item into its respective locales.\n\n#cms #i18n",
+  "status": "ENABLED",
+  "sourceHubId": "6aa14be51c14da4478d5b343",
+  "extensionInstances": {
+    "Amplience Dynamic Content (2.2.0)": {
+      "extension": "RXh0ZW5zaW9uOmFhZTdkOGViLWQyMjktNDU2Ni04NmNjLTNmYTljNmZlMjNlNg==",
+      "sourceInstanceId": "RXh0ZW5zaW9uSW5zdGFuY2U6ZmViYmRjNGMtZWUxOC00MTg2LWJmM2EtMTk1MTFlOGQ2NTIy"
+    }
+  },
+  "flow": {
+    "actions": [
+      {
+        "action": "webhook-trigger",
+        "config": {
+          "amp:webhookId": "${listener:Trigger Localisation}"
+        },
+        "position": {
+          "x": 558.9111165280895,
+          "y": -198.47948112357852
+        },
+        "id": "4ce2255b-d15d-426b-898e-8d0a9ee29a5f"
+      },
+      {
+        "action": "decision",
+        "config": {
+          "branches": [
+            {
+              "rules": {
+                "logicGate": "AND",
+                "rules": [
+                  {
+                    "field": {
+                      "type": "path",
+                      "value": "4ce2255b-d15d-426b-898e-8d0a9ee29a5f.out.payload.payload.locale"
+                    },
+                    "operator": "!NULL",
+                    "value": ""
+                  }
+                ]
+              },
+              "label": "Has a locale"
+            }
+          ]
+        },
+        "label": "Does it have a locale?",
+        "position": {
+          "x": 690.1914994002516,
+          "y": 93.67461603757852
+        },
+        "id": "c22acb51-d9d7-453d-ada1-91338b03d2d7"
+      },
+      {
+        "action": "RXh0ZW5zaW9uOmFhZTdkOGViLWQyMjktNDU2Ni04NmNjLTNmYTljNmZlMjNlNg==-setWorkflowState",
+        "config": {
+          "instanceId": "${extensionInstance:Amplience Dynamic Content (2.2.0)}"
+        },
+        "label": "Set state to \"Translation in Progress\"",
+        "position": {
+          "x": 658.1914994002516,
+          "y": 350.1746160375785
+        },
+        "id": "2958d948-14c1-4ee8-a4dd-dc0795e996a4"
+      },
+      {
+        "action": "RXh0ZW5zaW9uOmFhZTdkOGViLWQyMjktNDU2Ni04NmNjLTNmYTljNmZlMjNlNg==-localizeContentItem",
+        "config": {
+          "instanceId": "${extensionInstance:Amplience Dynamic Content (2.2.0)}"
+        },
+        "label": "Localise the content item",
+        "position": {
+          "x": 478.1914994002516,
+          "y": 216.17461603757852
+        },
+        "id": "cba05616-4d68-408d-b88c-425d3a76479b"
+      },
+      {
+        "action": "RXh0ZW5zaW9uOmFhZTdkOGViLWQyMjktNDU2Ni04NmNjLTNmYTljNmZlMjNlNg==-localizeContentItem",
+        "config": {
+          "instanceId": "${extensionInstance:Amplience Dynamic Content (2.2.0)}"
+        },
+        "label": "Add en-US locale + localise the content item",
+        "position": {
+          "x": 882.1914994002516,
+          "y": 218.17461603757852
+        },
+        "id": "53ca0b68-f1ff-4c58-8d02-6a48a5b7bd89"
+      },
+      {
+        "action": "decision",
+        "config": {
+          "branches": [
+            {
+              "rules": {
+                "logicGate": "AND",
+                "rules": [
+                  {
+                    "field": {
+                      "type": "path",
+                      "value": "4ce2255b-d15d-426b-898e-8d0a9ee29a5f.out.payload.payload.body._meta.schema"
+                    },
+                    "operator": "=",
+                    "value": "https://quadratic.amplience.com/slots/slot"
+                  }
+                ]
+              },
+              "label": "is a slot"
+            }
+          ]
+        },
+        "label": "Is it a slot?",
+        "position": {
+          "x": 557.1914994002516,
+          "y": -78.9756747305
+        },
+        "id": "6d21c0d2-0161-4da3-a886-76d7e15e34fb"
+      },
+      {
+        "action": "output-chat-message",
+        "config": {},
+        "label": "Don't localise",
+        "position": {
+          "x": 380.1914994002516,
+          "y": 92.2801846445
+        },
+        "id": "e46fd815-e537-4357-8768-ba61dc07e5b6"
+      }
+    ],
+    "edges": [
+      {
+        "from": {
+          "actionId": "c22acb51-d9d7-453d-ada1-91338b03d2d7",
+          "port": "branch-0"
+        },
+        "to": {
+          "actionId": "cba05616-4d68-408d-b88c-425d3a76479b",
+          "port": "in"
+        },
+        "inputs": {
+          "id": {
+            "$interpolate": "handlebars",
+            "value": {
+              "template": "{{4ce2255b-d15d-426b-898e-8d0a9ee29a5f.out.payload.payload.id}}",
+              "vars": {}
+            }
+          },
+          "locales": ["de-DE", "fr-FR"],
+          "sourceLocale": {
+            "$interpolate": "handlebars",
+            "value": {
+              "template": ""
+            }
+          }
+        },
+        "id": "25dde098-7642-4d04-aa0b-c9ba9abe3a39"
+      },
+      {
+        "from": {
+          "actionId": "c22acb51-d9d7-453d-ada1-91338b03d2d7",
+          "port": "else"
+        },
+        "to": {
+          "actionId": "53ca0b68-f1ff-4c58-8d02-6a48a5b7bd89",
+          "port": "in"
+        },
+        "inputs": {
+          "id": {
+            "$interpolate": "handlebars",
+            "value": {
+              "template": "{{4ce2255b-d15d-426b-898e-8d0a9ee29a5f.out.payload.payload.id}}",
+              "vars": {}
+            }
+          },
+          "locales": ["de-DE", "fr-FR"],
+          "sourceLocale": "en-US"
+        },
+        "id": "9282f3a2-2cb6-4112-be62-52b846e56653"
+      },
+      {
+        "from": {
+          "actionId": "cba05616-4d68-408d-b88c-425d3a76479b",
+          "port": "out"
+        },
+        "to": {
+          "actionId": "2958d948-14c1-4ee8-a4dd-dc0795e996a4",
+          "port": "in"
+        },
+        "inputs": {
+          "id": {
+            "$interpolate": "handlebars",
+            "value": {
+              "template": "{{4ce2255b-d15d-426b-898e-8d0a9ee29a5f.out.payload.payload.id}}",
+              "vars": {}
+            }
+          },
+          "workflowStateId": "${status:Ready for Review}"
+        },
+        "id": "6e5bc997-ab9f-49a3-886b-e119bbe8ec8b"
+      },
+      {
+        "from": {
+          "actionId": "53ca0b68-f1ff-4c58-8d02-6a48a5b7bd89",
+          "port": "out"
+        },
+        "to": {
+          "actionId": "2958d948-14c1-4ee8-a4dd-dc0795e996a4",
+          "port": "in"
+        },
+        "inputs": {
+          "id": {
+            "$interpolate": "handlebars",
+            "value": {
+              "template": "{{4ce2255b-d15d-426b-898e-8d0a9ee29a5f.out.payload.payload.id}}",
+              "vars": {}
+            }
+          },
+          "workflowStateId": "${status:Ready for Review}"
+        },
+        "id": "eff6772b-9b13-4902-a3e6-17aa964685a3"
+      },
+      {
+        "from": {
+          "actionId": "4ce2255b-d15d-426b-898e-8d0a9ee29a5f",
+          "port": "out"
+        },
+        "to": {
+          "actionId": "6d21c0d2-0161-4da3-a886-76d7e15e34fb",
+          "port": "in"
+        },
+        "id": "9a0c2de8-399b-4750-bd46-d4ae4632cbd2"
+      },
+      {
+        "from": {
+          "actionId": "6d21c0d2-0161-4da3-a886-76d7e15e34fb",
+          "port": "else"
+        },
+        "to": {
+          "actionId": "c22acb51-d9d7-453d-ada1-91338b03d2d7",
+          "port": "in"
+        },
+        "id": "9bc424a9-dbab-4bb0-b182-c9ae93e9cac6"
+      },
+      {
+        "from": {
+          "actionId": "6d21c0d2-0161-4da3-a886-76d7e15e34fb",
+          "port": "branch-0"
+        },
+        "to": {
+          "actionId": "e46fd815-e537-4357-8768-ba61dc07e5b6",
+          "port": "in"
+        },
+        "inputs": {
+          "message": "This is a slot. We don't localise slots in this flow"
+        },
+        "id": "2a9eb87b-53e7-4db8-904f-374d76f63d9a"
+      }
+    ],
+    "virtualActions": [
+      {
+        "baseAction": "extension-action",
+        "name": "RXh0ZW5zaW9uOmFhZTdkOGViLWQyMjktNDU2Ni04NmNjLTNmYTljNmZlMjNlNg==-localizeContentItem",
+        "group": "INTEGRATIONS",
+        "category": "Amplience Dynamic Content",
+        "label": "Localize Content Item",
+        "description": "Localizes a content item by ID",
+        "config": {
+          "schema": {
+            "type": "object",
+            "required": ["instanceId"],
+            "properties": {
+              "instanceId": {
+                "title": "Instance",
+                "static": null,
+                "params": []
+              }
+            }
+          }
+        },
+        "data": {
+          "actionName": "localizeContentItem"
+        }
+      },
+      {
+        "baseAction": "extension-action",
+        "name": "RXh0ZW5zaW9uOmFhZTdkOGViLWQyMjktNDU2Ni04NmNjLTNmYTljNmZlMjNlNg==-setWorkflowState",
+        "group": "INTEGRATIONS",
+        "category": "Amplience Dynamic Content",
+        "label": "Set Workflow State",
+        "description": "Sets the workflow state on a content item by ID",
+        "config": {
+          "schema": {
+            "type": "object",
+            "required": ["instanceId"],
+            "properties": {
+              "instanceId": {
+                "title": "Instance",
+                "static": null,
+                "params": []
+              }
+            }
+          }
+        },
+        "data": {
+          "actionName": "setWorkflowState"
+        }
+      },
+      {
+        "baseAction": "webhook-trigger-base",
+        "name": "webhook-trigger",
+        "label": "Webhook Trigger",
+        "data": {}
+      }
+    ]
+  }
+}

@@ -132,6 +132,28 @@ describe('webEnvVars', () => {
   })
 })
 
+describe('hubManagementEnvVars — Workforce (ADR-0023)', () => {
+  it('writes the organization and its token so flows:pull needs no second setup', () => {
+    const vars = hubManagementEnvVars(HUB, ON_HUB, { organizationId: 'org_x', pat: 'pat_x' })
+    expect(vars.AMPLIENCE_ORGANIZATION_ID).toBe('org_x')
+    expect(vars.AMPLIENCE_PAT).toBe('pat_x')
+  })
+
+  // Most hubs never touch flows. An absent token is the normal state, and
+  // leaves the flows commands unarmed rather than half-configured.
+  it('leaves both unset when the organization has no token', () => {
+    const vars = hubManagementEnvVars(HUB, ON_HUB, { organizationId: 'org_x' })
+    expect(vars.AMPLIENCE_ORGANIZATION_ID).toBe('org_x')
+    expect(vars.AMPLIENCE_PAT).toBeUndefined()
+  })
+
+  it('writes neither with no hub active at all', () => {
+    const vars = hubManagementEnvVars(null, undefined, { organizationId: 'org_x', pat: 'pat_x' })
+    expect(vars.AMPLIENCE_ORGANIZATION_ID).toBeUndefined()
+    expect(vars.AMPLIENCE_PAT).toBeUndefined()
+  })
+})
+
 describe('hubManagementEnvVars', () => {
   it('maps an active hub onto the vars the hub:* scripts consume', () => {
     expect(hubManagementEnvVars(HUB, ON_HUB)).toEqual({

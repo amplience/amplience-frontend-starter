@@ -72,7 +72,15 @@ side, and each deployment reads only its own.
 | `bare-bones`       | brand `default`, 3 locales   | Header, footer and a one-block homepage — a blank canvas. |
 
 `set.json` carries the set's label, description, `defaultBrand`, `defaultLocale`
-and `authoredLocales`. The brand is the set's own, which is why switching set
+and `authoredLocales`.
+
+**Local sets.** A set under `fixtures/local/<name>/` is gitignored — the home for
+a demo built from a prospect's site (their copy, imagery and brand). It seeds
+(`pnpm hub:import:content --set <name>`), shows up in the Environment Manager and
+takes ids from `pnpm fixtures:ids` like any other set, and the web app's mock
+serves it with `FIXTURE_SET=<name>` by reading it from disk (server-side only).
+It isn't in the registry, so the guard tests ignore it, and its name mustn't
+match a checked-in set's. The brand is the set's own, which is why switching set
 switches the theme with nothing else to configure.
 
 ### A worked path through one set

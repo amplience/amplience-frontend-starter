@@ -31,7 +31,7 @@ import type { ContentItem, ContentRequestOptions, EnrichedContentItem } from '..
 import { ContentClientError } from '../types'
 import { DEFAULT_FIXTURE_SET, resolveFixtureSet } from './loader'
 import { resolveDeep } from './resolver'
-import type { HierarchyManifest } from './set'
+import { indexSet, type FixtureSet, type HierarchyManifest } from './set'
 
 const toContentItem = <T>(
   item: EnrichedContentItem,
@@ -87,11 +87,20 @@ const assembleHierarchyNode = (
 }
 
 /**
- * @param setName which fixture set to serve — the site name a mock deployment
- *   resolves to (ADR-0019). Throws at composition on an unknown set.
+ * @param set which fixture set to serve — a registered set's name (the site
+ *   name a mock deployment resolves to, ADR-0019; throws at composition on an
+ *   unknown one), or a set loaded by the caller, such as a gitignored local set.
  */
-export const makeMockContentClient = (setName: string = DEFAULT_FIXTURE_SET): ContentClient => {
-  const { fixtures, hierarchies, findById, findByKey } = resolveFixtureSet(setName)
+export const makeMockContentClient = (
+  set: string | FixtureSet = DEFAULT_FIXTURE_SET,
+): ContentClient => {
+  const {
+    name: setName,
+    fixtures,
+    hierarchies,
+    findById,
+    findByKey,
+  } = typeof set === 'string' ? resolveFixtureSet(set) : indexSet(set)
 
   return {
     getByKey: <T = unknown>(key: string, opts?: ContentRequestOptions): Promise<ContentItem<T>> => {

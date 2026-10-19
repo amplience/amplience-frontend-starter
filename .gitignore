@@ -48,3 +48,18 @@ coverage
 # QL-92 hub-import staging (INTERIM dc-cli wrapper)
 packages/hub-management/.import
 .vercel
+
+# Flows and listeners pulled from a customer or sandbox hub. A pull lands here
+# by default; `--shared` writes to the checked-in directory instead. Keeps a
+# customer's brand names, and an extension instance's env, out of the repo.
+packages/hub-management/flows/local/
+packages/hub-management/webhook-listeners/local/
+
+# Catalogue entries for a customer's own portable (UNLISTED) extensions. The id
+# is theirs, so it is recorded locally rather than committed — see
+# packages/hub-management/workforce-extensions/README.md.
+packages/hub-management/workforce-extensions/local/
+
+# Fixture sets built from a prospect's site (their copy, imagery and brand) —
+# seeded and served like any other set, but never committed.
+packages/content/fixtures/local/

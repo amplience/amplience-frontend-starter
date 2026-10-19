@@ -27,8 +27,17 @@ export type FixtureSetOnDisk = {
   ids: Set<string>
 }
 
-/** Every set on disk, sorted. `root` is for tests. */
+/** The gitignored subdirectory holding local-only sets. */
+export declare const LOCAL_SETS_DIR: string
+
+/** Every set on disk, checked-in and local, sorted. `root` is for tests. */
 export declare const availableSets: (root?: string) => string[]
+
+/** Sets under `local/` only. */
+export declare const localSets: (root?: string) => string[]
+
+/** Where a set lives: `<root>/<name>` or `<root>/local/<name>`. */
+export declare const setDirFor: (name: string, root?: string) => string
 
 /** One set, read. Throws when the directory name and `set.json` disagree. */
 export declare const readSet: (name: string, root?: string) => FixtureSetOnDisk

@@ -8,11 +8,13 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import {
   availableSets,
   flagValue,
+  localSets,
   positional,
   readAllSets,
   readFlag,
   readSet,
   resolveSetName,
+  setDirFor,
   setFromArgv,
 } from './fixture-sets.mjs'
 
@@ -48,6 +50,27 @@ describe('availableSets', () => {
     writeSet('zulu', { one: 'id-1' })
     writeSet('alpha', { one: 'id-2' })
     expect(availableSets(root)).toEqual(['alpha', 'zulu'])
+  })
+})
+
+describe('local sets', () => {
+  it('finds sets under local/ alongside the checked-in ones', () => {
+    writeSet('alpha', {})
+    writeSet('local/beta', {}, 'beta')
+    expect(availableSets(root)).toEqual(['alpha', 'beta'])
+    expect(localSets(root)).toEqual(['beta'])
+  })
+
+  it('reads a local set from its own directory', () => {
+    writeSet('local/beta', { a: 'id-a' }, 'beta')
+    expect(setDirFor('beta', root)).toBe(path.join(root, 'local', 'beta'))
+    expect([...readSet('beta', root).ids]).toEqual(['id-a'])
+  })
+
+  it('refuses a local set sharing a checked-in set name', () => {
+    writeSet('alpha', {})
+    writeSet('local/alpha', {}, 'alpha')
+    expect(() => availableSets(root)).toThrow(/both in fixtures\/ and fixtures\/local\//)
   })
 })
 

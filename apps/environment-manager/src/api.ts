@@ -1,4 +1,8 @@
 import type { ContentBreakdown } from './content-rows.js'
+import type { CellAction } from './flow-actions.js'
+import type { FlowFixture, FlowsOverview, HubFlow } from './flow-rows.js'
+import type { HubUnavailable } from './hub-reads.js'
+import type { OpStep } from './op-log.js'
 import type {
   Config,
   DiscoverResult,
@@ -7,7 +11,11 @@ import type {
   FixtureSetInfo,
   PermissionsReport,
   VercelPreflight,
+  WorkforceOrganizations,
 } from './types.js'
+
+/** What `GET /workforce/hubs/:name/flows` answers: the column, or why not. */
+type HubPayloadFlows = { rows?: HubFlow[]; unavailable?: HubUnavailable }
 
 const BASE = '/api'
 
@@ -69,4 +77,60 @@ export const api = {
     }),
   vercelPreflight: () =>
     request<VercelPreflight>('/vercel/preflight', { method: 'POST', body: '{}' }),
+  /** Workforce access (ADR-0023). Tokens go in; they never come back out. */
+  workforceOrganizations: () => request<WorkforceOrganizations>('/workforce/organizations'),
+  /** The whole Flows grid in one call — the fan-out happens server-side. */
+  /**
+   * The grid's rows, from disk. No Workforce call, so it answers immediately.
+   *
+   * Shaped as a map of subjects server-side, unwrapped here into the overview
+   * the flows grid wants — the listeners and extensions grids will take their
+   * own keys out of the same response.
+   */
+  flowFixtures: async (): Promise<FlowsOverview> => {
+    const body = await request<{ flows: FlowFixture[]; flowsError?: string }>('/workforce/fixtures')
+    return {
+      fixtures: body.flows,
+      ...(body.flowsError === undefined ? {} : { fixturesError: body.flowsError }),
+    }
+  },
+  /**
+   * One hub's flows.
+   *
+   * ⚠️ Passed to `useHubCells` by reference, so it must stay a stable
+   * function. Defined as a property of this object rather than inline at the
+   * call site for that reason.
+   */
+  hubFlows: (hub: string) =>
+    request<HubPayloadFlows>(`/workforce/hubs/${encodeURIComponent(hub)}/flows`),
+  /**
+   * Run one per-cell flow operation. The response is small by design: the cell
+   * shows a spinner then a tick, and `steps` goes to the shared log drawer.
+   */
+  flowOp: (action: CellAction, body: { hub: string; label: string; confirm?: string }) =>
+    request<{
+      ok: boolean
+      action: string
+      hub: string
+      label: string
+      steps: OpStep[]
+      flowId?: string
+      warnings?: string[]
+      error?: string
+    }>(`/workforce/flows/${action}`, { method: 'POST', body: JSON.stringify(body) }),
+  saveWorkforceToken: (organizationId: string, token: string) =>
+    request<WorkforceOrganizations>(
+      `/workforce/organizations/${encodeURIComponent(organizationId)}/token`,
+      { method: 'PUT', body: JSON.stringify({ token }) },
+    ),
+  removeWorkforceToken: (organizationId: string) =>
+    request<WorkforceOrganizations>(
+      `/workforce/organizations/${encodeURIComponent(organizationId)}/token`,
+      { method: 'DELETE' },
+    ),
+  requestWorkforceToken: (organizationId: string) =>
+    request<WorkforceOrganizations>(
+      `/workforce/organizations/${encodeURIComponent(organizationId)}/token/request`,
+      { method: 'POST', body: '{}' },
+    ),
 }

@@ -17,15 +17,24 @@
 
 import { resolveContentConfig } from '@amplience/frontend-starter-content'
 import type { ContentClient } from '@amplience/frontend-starter-content'
-import { makeMockContentClient } from '@amplience/frontend-starter-content/mock'
+import { fixtureSetNames, makeMockContentClient } from '@amplience/frontend-starter-content/mock'
 import { makeSdkContentClient } from '@amplience/frontend-starter-content/sdk'
+
+import { loadLocalFixtureSet } from './local-fixture-set'
 
 const config = resolveContentConfig()
 
 // In mock mode the site name *is* the fixture set (ADR-0019) — FIXTURE_SET —
 // so one value selects both the content and the namespace it's addressed under.
+// A name the registry lacks may be a gitignored local set; failing that, the
+// registry throws naming what it has.
+const mockSet = (name: string) =>
+  fixtureSetNames().includes(name) ? name : (loadLocalFixtureSet(name) ?? name)
+
 export const client: ContentClient =
-  config.kind === 'sdk' ? makeSdkContentClient(config) : makeMockContentClient(config.siteName)
+  config.kind === 'sdk'
+    ? makeSdkContentClient(config)
+    : makeMockContentClient(mockSet(config.siteName))
 
 /**
  * The deployment's site name (ADR-0014) — the namespace prefix on every

@@ -118,9 +118,23 @@ export function webEnvVars(env: EnvSource | null, site: SiteIdentity | undefined
 }
 
 /** Vars for packages/hub-management/.env — the full set the hub:* scripts consume. */
+/**
+ * Workforce credentials for the active hub's organization (ADR-0023).
+ *
+ * Passed separately because they belong to the organization rather than to the
+ * environment: one token covers every hub in it. Writing them here is what lets
+ * `pnpm flows:pull` work straight after activating a hub, with no second place
+ * to configure.
+ */
+export type WorkforceSource = {
+  pat?: string
+  organizationId?: string
+}
+
 export function hubManagementEnvVars(
   env: EnvSource | null,
   site: SiteIdentity | undefined,
+  workforce: WorkforceSource = {},
 ): EnvVarMap {
   return {
     AMPLIENCE_HUB_NAME: env === null ? undefined : present(env.hubName),
@@ -134,5 +148,7 @@ export function hubManagementEnvVars(
     AMPLIENCE_STAGING_HOST: env === null ? undefined : present(env.stagingHost),
     ...siteVars(site),
     AMPLIENCE_REVALIDATE_SECRET: env === null ? undefined : present(env.revalidateSecret),
+    AMPLIENCE_ORGANIZATION_ID: env === null ? undefined : present(workforce.organizationId ?? ''),
+    AMPLIENCE_PAT: env === null ? undefined : present(workforce.pat ?? ''),
   }
 }

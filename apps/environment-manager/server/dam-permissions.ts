@@ -29,9 +29,8 @@
 // logic is unit-testable without network access. The write probe's throwaway
 // asset name and probe image are injectable for deterministic tests.
 
+import { deepGet, gqlErrors, isAuthError, type GqlFetch, type GqlResult } from './graphql.ts'
 import type { CapabilityState, PermissionCheck } from './permissions.ts'
-
-const GRAPHQL_API = 'https://api.amplience.net/graphql'
 
 /**
  * A small, publicly fetchable image used only to verify write access. The DAM
@@ -43,11 +42,6 @@ const PROBE_IMAGE_URL =
   'https://cdn.media.amplience.net/i/quadraticdemo/about-a-head-for-the-headless-hero'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-
-export type GqlResult = { status: number; body: unknown }
-
-/** Minimal GraphQL fetch: POST a query with auth already applied. */
-export type GqlFetch = (query: string) => Promise<GqlResult>
 
 export type AssetRepository = { id: string; label: string }
 
@@ -67,46 +61,6 @@ export type DamProbeOptions = {
 
 // ── GraphQL response helpers ────────────────────────────────────────────────────
 
-type GqlError = { message: string; code?: string }
-
-/** Pull the `errors` array out of a GraphQL response body, if present. */
-export function gqlErrors(body: unknown): GqlError[] | undefined {
-  if (typeof body !== 'object' || body === null || !('errors' in body)) return undefined
-  const errors = body.errors
-  if (!Array.isArray(errors) || errors.length === 0) return undefined
-  return errors.map((e): GqlError => {
-    if (typeof e !== 'object' || e === null) return { message: String(e) }
-    const message = 'message' in e ? String((e as { message: unknown }).message) : 'Unknown error'
-    const code =
-      'extensions' in e &&
-      typeof (e as { extensions: unknown }).extensions === 'object' &&
-      (e as { extensions: Record<string, unknown> | null }).extensions !== null &&
-      'code' in (e as { extensions: Record<string, unknown> }).extensions
-        ? String((e as { extensions: Record<string, unknown> }).extensions.code)
-        : undefined
-    return code === undefined ? { message } : { message, code }
-  })
-}
-
-const AUTH_CODES = new Set(['FORBIDDEN', 'UNAUTHORIZED', 'UNAUTHENTICATED', 'ACCESS_DENIED'])
-
-/**
- * True when a GraphQL error looks like a permission/authorization failure.
- * The DAM gateway reports a missing `DAM:ASSET STORE:*` grant as HTTP 200 with
- * an error whose message is `Request failed with status code: "403"` — no error
- * `code` and no auth wording — so a bare 401/403 in the message counts too.
- */
-export function isAuthError(errors: GqlError[] | undefined): boolean {
-  if (errors === undefined) return false
-  return errors.some(
-    (e) =>
-      (e.code !== undefined && AUTH_CODES.has(e.code.toUpperCase())) ||
-      /forbidden|unauthori[sz]ed|not permitted|access denied|permission|status code[:\s"]*40[13]/i.test(
-        e.message,
-      ),
-  )
-}
-
 /** Flatten `viewer.mediaHubs.assetRepositories` into a flat repository list. */
 export function extractRepositories(body: unknown): AssetRepository[] {
   const hubEdges = deepGet(body, ['data', 'viewer', 'mediaHubs', 'edges'])
@@ -124,16 +78,6 @@ export function extractRepositories(body: unknown): AssetRepository[] {
     }
   }
   return repos
-}
-
-/** Safe nested property read over unknown JSON. */
-function deepGet(value: unknown, path: string[]): unknown {
-  let cur = value
-  for (const key of path) {
-    if (typeof cur !== 'object' || cur === null || !(key in cur)) return undefined
-    cur = (cur as Record<string, unknown>)[key]
-  }
-  return cur
 }
 
 // ── Read probe ──────────────────────────────────────────────────────────────────
@@ -291,27 +235,4 @@ export function pickRepository(
 ): AssetRepository | undefined {
   if (repositoryLabel === undefined || repositoryLabel === '') return repositories[0]
   return repositories.find((r) => r.label.toLowerCase() === repositoryLabel.toLowerCase())
-}
-
-// ── Live GraphQL fetch factory ───────────────────────────────────────────────────
-
-/** Build a `GqlFetch` bound to a bearer token for the live GraphQL endpoint. */
-export function liveGqlFetch(token: string): GqlFetch {
-  return async (query) => {
-    const res = await fetch(GRAPHQL_API, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ query }),
-    })
-    let body: unknown = null
-    try {
-      body = await res.json()
-    } catch {
-      body = null
-    }
-    return { status: res.status, body }
-  }
 }

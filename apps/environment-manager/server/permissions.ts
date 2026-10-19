@@ -17,11 +17,18 @@
 // Everything here is pure orchestration over an injected `fetchJson`, so the
 // logic is unit-testable without network access.
 
-const AMPLIENCE_API = 'https://api.amplience.net/v2/content'
+export const AMPLIENCE_API = 'https://api.amplience.net/v2/content'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-export type CapabilityState = 'ok' | 'denied' | 'unknown' | 'error' | 'skipped'
+export type CapabilityState =
+  | 'ok'
+  | 'denied'
+  | 'unknown'
+  | 'error'
+  | 'skipped'
+  /** A setup step that has not happened — not a permission that was refused. */
+  | 'not-configured'
 
 export type PermissionCheck = {
   /** Stable key, e.g. "schemas", "items-content". */
@@ -35,7 +42,12 @@ export type PermissionCheck = {
 }
 
 export type PermissionsReport = {
-  hub: { id: string; readable: boolean; detail?: string }
+  /**
+   * `organizationId` is read while resolving the Workforce hub id, and reported
+   * because it is what a personal access token is scoped to — the GUI needs it
+   * to offer setup for the right organization (ADR-0023).
+   */
+  hub: { id: string; readable: boolean; detail?: string; organizationId?: string }
   checks: PermissionCheck[]
   checkedAt: string
 }
