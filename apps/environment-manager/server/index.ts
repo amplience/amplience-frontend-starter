@@ -1239,54 +1239,68 @@ async function readFlowFixtures(): Promise<FlowFixture[]> {
 type FlowFixture = { label: string; file: string; local: boolean }
 
 /**
- * GET /api/workforce/flows — every fixture against every hub, in one response.
+ * GET /api/workforce/fixtures — the grid's rows, from disk alone.
  *
- * Fans out across the fleet in parallel. `Promise.all` is safe here only
- * because `readHubFlows` never rejects: it reports a failure as a value, so one
- * hub without a token cannot take the other thirteen columns down with it.
+ * Deliberately separate from reading the hubs, and deliberately first: rows are
+ * files and columns are config, so the whole grid can be on screen before any
+ * Workforce call is made. Only the cells need the network.
+ *
+ * Shaped as a map of subjects rather than a bare array so the listeners and
+ * extensions tables can be added to the same response (QL-166, QL-167) without
+ * the client learning a second endpoint shape.
  */
-app.get('/api/workforce/flows', async (c) => {
-  const config = await readConfig()
-  const organizations = config.organizations ?? []
-
-  let fixtures: FlowFixture[] = []
-  let fixturesError: string | undefined
+app.get('/api/workforce/fixtures', async (c) => {
   try {
-    fixtures = await readFlowFixtures()
+    return c.json({ flows: await readFlowFixtures() })
   } catch (err) {
-    fixturesError = err instanceof Error ? err.message : String(err)
+    // A fixtures failure is a repository problem, not a hub problem: both
+    // labels defined twice, say. Reported as a value so the grid can show the
+    // reason rather than rendering as "no flows in the repo".
+    return c.json({ flows: [], flowsError: err instanceof Error ? err.message : String(err) })
+  }
+})
+
+/**
+ * GET /api/workforce/hubs/:name/flows — one hub's column.
+ *
+ * ⚠️ One hub per request, where QL-127 fanned out across the fleet in one.
+ * The fan-out meant the slowest hub decided when *anything* appeared, and with
+ * three tables coming it would have meant the slowest hub in the slowest table
+ * deciding for all three. Per hub, each column fills as it answers.
+ *
+ * Never 500s for a hub that simply cannot be read: an absent token is a setup
+ * step, not an error, and a column that failed must still render as a column.
+ * Only an unknown hub is a 404, because that is a bug in the caller.
+ */
+app.get('/api/workforce/hubs/:name/flows', async (c) => {
+  const name = c.req.param('name')
+  const config = await readConfig()
+  const env = config.environments.find((e) => e.name === name)
+  if (env === undefined) return c.json({ error: `No hub called "${name}".` }, 404)
+
+  // No organization on the hub yet means nothing can be looked up: the opaque
+  // Workforce hub id is built from it. Reported as the same "set this up"
+  // state as a missing token, because that is what it is.
+  if ((env.organizationId ?? '') === '' || (env.hubId ?? '') === '') {
+    return c.json({ unavailable: { reason: 'no-token' as const } })
   }
 
-  const hubs = await Promise.all(
-    config.environments.map(async (env) => {
-      const column = { name: env.name, label: env.label }
-
-      // No organization on the hub yet means nothing can be looked up: the
-      // opaque Workforce hub id is built from it. Reported as the same
-      // "set this up" state as a missing token, because that is what it is.
-      if ((env.organizationId ?? '') === '' || (env.hubId ?? '') === '') {
-        return { ...column, unavailable: { reason: 'no-token' as const } }
-      }
-
-      const { token } = resolvePat(organizations, env.organizationId, process.env)
-      const result = await readHubFlows(
-        token === undefined ? undefined : liveGqlFetch(token),
-        cmsHubIdFor(env.organizationId!, env.hubId),
-      )
-
-      return result.ok
-        ? { ...column, flows: result.flows satisfies HubFlow[] }
-        : {
-            ...column,
-            unavailable: {
-              reason: result.reason,
-              ...(result.reason === 'no-token' ? {} : { detail: result.detail }),
-            },
-          }
-    }),
+  const { token } = resolvePat(config.organizations ?? [], env.organizationId, process.env)
+  const result = await readHubFlows(
+    token === undefined ? undefined : liveGqlFetch(token),
+    cmsHubIdFor(env.organizationId!, env.hubId),
   )
 
-  return c.json({ fixtures, hubs, ...(fixturesError === undefined ? {} : { fixturesError }) })
+  // `rows`, not `flows`: the same key every subject's per-hub endpoint
+  // answers with, so one client-side resolver serves all three grids.
+  return result.ok
+    ? c.json({ rows: result.flows satisfies HubFlow[] })
+    : c.json({
+        unavailable: {
+          reason: result.reason,
+          ...(result.reason === 'no-token' ? {} : { detail: result.detail }),
+        },
+      })
 })
 
 // ── Per-cell flow operations (QL-162) ─────────────────────────────────────────

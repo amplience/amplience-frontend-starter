@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { api } from '../api.js'
 import { FILTER_MIN_ITEMS } from '../filter-environments.js'
@@ -16,6 +16,7 @@ import {
   concealedRows,
   filterHubs,
   filterRows,
+  flowColumns,
   flowRows,
   hasOtherFlows,
   otherFlowsCells,
@@ -28,7 +29,9 @@ import {
   type HubFlows,
   type OtherFlowsCell,
 } from '../flow-rows.js'
+import { resolveColumn } from '../hub-reads.js'
 import { addEntry, entryFromError, entryFromResult, type OpEntry } from '../op-log.js'
+import { useHubCells } from '../use-hub-cells.js'
 import { ConfirmFlowOp, type ConfirmableOp, type PendingOp } from './ConfirmFlowOp.js'
 import { ListFilter } from './ListFilter.js'
 import { OpLogDrawer } from './OpLogDrawer.js'
@@ -47,6 +50,7 @@ import { OpLogDrawer } from './OpLogDrawer.js'
 
 /** The glyph for each state. Never colour alone — the letter carries it too. */
 const CELL_GLYPH: Record<CellState, string> = {
+  reading: '·',
   present: '✓',
   absent: '·',
   disabled: '⏸',
@@ -57,6 +61,7 @@ const CELL_GLYPH: Record<CellState, string> = {
 
 /** Short text beside the glyph, so the grid is readable without the legend. */
 const CELL_LABEL: Record<CellState, string> = {
+  reading: 'Reading…',
   present: 'On hub',
   absent: 'Not there',
   disabled: 'Disabled',
@@ -208,9 +213,34 @@ function OtherCell({ cell }: { cell: OtherFlowsCell }) {
   )
 }
 
-export function FlowsTab() {
-  const [data, setData] = useState<FlowsOverview | null>(null)
-  const [error, setError] = useState<string | null>(null)
+/**
+ * Placeholder rows drawn while the fixture list is still being read.
+ *
+ * A guess at a height, nothing more — the real count arrives milliseconds
+ * later. Four is close to what the repository actually holds, so the grid
+ * barely moves when the real rows replace these.
+ */
+const PLACEHOLDER_ROWS = 4
+
+/** All this tab needs of an environment — it never reads credentials. */
+type HubRef = { name: string; label: string }
+
+/**
+ * @param hubs The fleet, from the config `App` has already loaded.
+ *
+ * ⚠️ A prop rather than a request. `App` renders this tab only once `config`
+ * is non-null, so the hub axis is in memory before the tab mounts — fetching
+ * it again meant the columns waited on a fleet-wide fan-out to be told
+ * something the parent already knew, and the tab rendered nothing at all
+ * until the slowest hub answered.
+ */
+export function FlowsTab({
+  hubs: fleet,
+  fixtures,
+}: {
+  hubs: readonly HubRef[]
+  fixtures: FlowsOverview | null
+}) {
   const [query, setQuery] = useState('')
   const [hubQuery, setHubQuery] = useState('')
   const [hideUnavailable, setHideUnavailable] = useState(false)
@@ -219,29 +249,15 @@ export function FlowsTab() {
   const [pending, setPending] = useState<ConfirmableOp | null>(null)
   const [log, setLog] = useState<OpEntry[]>([])
 
-  /**
-   * Re-read the whole grid.
-   *
-   * Called on mount and after every successful operation. Deliberately the
-   * whole thing rather than the one cell: installing an extension changes what
-   * every other row on that hub can resolve against, so patching a single cell
-   * from the response would leave the rest of the column describing a hub that
-   * no longer exists.
-   */
-  const refresh = useCallback(async () => {
-    try {
-      setData(await api.flows())
-      setError(null)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not read the flows.')
-    }
-  }, [])
+  // The cells: one request per hub, in parallel, each column rendering the
+  // moment its own hub answers.
+  const hubNames = useMemo(() => fleet.map((hub) => hub.name), [fleet])
+  const { reads, refresh } = useHubCells(hubNames, api.hubFlows)
 
-  useEffect(() => {
-    void refresh()
-  }, [refresh])
-
-  const allHubs = useMemo(() => data?.hubs ?? [], [data])
+  const allHubs = useMemo(
+    () => flowColumns(fleet, (name) => resolveColumn(reads[name])),
+    [fleet, reads],
+  )
 
   // Hiding the input must never leave a filter silently applied — the same
   // guard App.tsx uses, for the same reason: the count can drop below the
@@ -253,7 +269,10 @@ export function FlowsTab() {
     [allHubs, hubFilter, hideUnavailable],
   )
 
-  const rows = useMemo(() => (data === null ? [] : flowRows(data.fixtures, hubs)), [data, hubs])
+  const rows = useMemo(
+    () => (fixtures === null ? [] : flowRows(fixtures.fixtures, hubs)),
+    [fixtures, hubs],
+  )
   const showFilter = rows.length >= FILTER_MIN_ITEMS
   const filter = showFilter ? query : ''
   const visible = useMemo(() => filterRows(rows, filter), [rows, filter])
@@ -262,8 +281,8 @@ export function FlowsTab() {
   // in the repository claims it", which does not change when someone types in
   // the search box.
   const otherCells = useMemo(
-    () => (data === null ? [] : otherFlowsCells(data.fixtures, hubs)),
-    [data, hubs],
+    () => (fixtures === null ? [] : otherFlowsCells(fixtures.fixtures, hubs)),
+    [fixtures, hubs],
   )
 
   const unavailable = unavailableCount(allHubs)
@@ -271,8 +290,8 @@ export function FlowsTab() {
   // ⚠️ Measured against the *unfiltered* fleet: the number of rows the hub
   // filter has turned into a lie by hiding the only hub they are on.
   const concealed = useMemo(
-    () => (data === null ? 0 : concealedRows(data.fixtures, allHubs, hubs)),
-    [data, allHubs, hubs],
+    () => (fixtures === null ? 0 : concealedRows(fixtures.fixtures, allHubs, hubs)),
+    [fixtures, allHubs, hubs],
   )
 
   const cellKey = (hub: string, label: string) => `${hub}\u0000${label}`
@@ -299,12 +318,19 @@ export function FlowsTab() {
       setLog((current) => addEntry(current, entryFromResult(op, result, at)))
       setOps((current) => ({ ...current, [key]: result.ok ? 'done' : 'failed' }))
       if (result.ok) {
-        await refresh()
-        // ⚠️ The tick has to be *given back* once the grid has re-read, or it
-        // sits on the cell forever and hides the state glyph underneath it.
-        // Invisible until QL-165: push lands on `present`, whose own glyph is
+        // ⚠️ Only the hub that was acted on. The fleet-wide re-read this
+        // replaced sent thirteen requests to show the result of a click on
+        // one column. Still the whole column rather than the one cell,
+        // because a push can install an extension and change what every
+        // other row on *that* hub resolves against.
+        refresh([op.hub])
+        // ⚠️ The tick has to be *given back*, or it sits on the cell forever
+        // and hides the state glyph underneath it. Invisible until the
+        // enable/disable pair: push lands on `present`, whose own glyph is
         // also `✓`, and sync starts and ends there — so the lie only showed
         // when an action changed the glyph, which disable is the first to do.
+        // The cell shows `Reading…` from here until its hub answers, which is
+        // true and is the feedback the tick was standing in for.
         setOps((current) =>
           Object.fromEntries(Object.entries(current).filter(([cell]) => cell !== key)),
         )
@@ -333,18 +359,6 @@ export function FlowsTab() {
     }
     void run(op)
   }
-
-  if (error !== null) {
-    return (
-      <div className="env-list">
-        <div className="banner banner--error">
-          <strong>Error:</strong> {error}
-        </div>
-      </div>
-    )
-  }
-
-  if (data === null) return <p className="loading">Loading flows…</p>
 
   return (
     <div className="env-list">
@@ -413,9 +427,9 @@ export function FlowsTab() {
         )}
       </div>
 
-      {data.fixturesError !== undefined && (
+      {fixtures?.fixturesError !== undefined && (
         <div className="banner banner--error">
-          <strong>Fixtures could not be listed:</strong> {data.fixturesError}
+          <strong>Fixtures could not be listed:</strong> {fixtures.fixturesError}
         </div>
       )}
 
@@ -454,16 +468,27 @@ export function FlowsTab() {
         </p>
       )}
 
-      {rows.length === 0 && data.fixturesError === undefined && (
+      {/* ⚠️ `fixtures !== null` guards against saying the repository is empty
+          while the list is still being read. The two states are a few
+          milliseconds apart — rows come from disk — which is exactly why this
+          grid has no loading placeholder: one that appeared for a frame and a
+          half would be noise. What it must not do is fill that moment with a
+          wrong answer. */}
+      {fixtures !== null && rows.length === 0 && fixtures.fixturesError === undefined && (
         <p className="env-card__description">
           No flow fixtures in <code>packages/hub-management/flows/</code>. Pull one from a hub with{' '}
           <code>pnpm flows:pull &lt;flowId&gt;</code>.
         </p>
       )}
 
-      {rows.length > 0 && hubs.length > 0 && (
+      {/* ⚠️ Gated on the **columns**, not the rows. The hub axis comes from
+          the config the parent already holds, so it costs nothing and can be
+          drawn at once; gating the whole table on the rows meant the grid
+          stayed invisible until the fixture list arrived, which threw away
+          the entire point of reading the two axes separately. */}
+      {hubs.length > 0 && (fixtures === null || rows.length > 0) && (
         <div className="flow-grid__scroll">
-          <table className="flow-grid">
+          <table className="flow-grid" aria-busy={fixtures === null}>
             <caption className="visually-hidden">
               Flow fixtures in the repository against the hubs they are installed on
             </caption>
@@ -481,6 +506,31 @@ export function FlowsTab() {
               </tr>
             </thead>
             <tbody>
+              {/* The rows are not known yet, but their shape and every column
+                  header are. Placeholder rows keep the grid at something like
+                  its real height so it settles into place rather than shoving
+                  the page down, and their cells say `Reading…` because that is
+                  what every real cell will say a moment later. */}
+              {fixtures === null &&
+                Array.from({ length: PLACEHOLDER_ROWS }, (_, index) => (
+                  <tr key={`placeholder-${index}`} aria-hidden="true">
+                    <th scope="row" className="flow-grid__fixture">
+                      <span className="flow-grid__placeholder" />
+                    </th>
+                    {hubs.map((hub) => (
+                      <td
+                        key={hub.name}
+                        className="flow-grid__cell flow-grid__cell--reading"
+                        title={STATE_EXPLANATION.reading}
+                      >
+                        <span className="flow-cell">
+                          <span className="flow-cell__glyph">{CELL_GLYPH.reading}</span>
+                          <span className="flow-cell__state">{CELL_LABEL.reading}</span>
+                        </span>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
               {visible.map((row) => (
                 <tr key={row.fixture.file}>
                   <th scope="row" className="flow-grid__fixture">

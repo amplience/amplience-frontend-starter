@@ -8,6 +8,7 @@ import { FlowsTab } from './components/FlowsTab.js'
 import { ListFilter } from './components/ListFilter.js'
 import { SiteCard } from './components/SiteCard.js'
 import { FILTER_MIN_ITEMS, filterEnvironments } from './filter-environments.js'
+import type { FlowsOverview } from './flow-rows.js'
 import type { Config, Environment, FixtureSetInfo } from './types.js'
 
 type Modal = { mode: 'add' } | { mode: 'edit'; env: Environment } | null
@@ -27,6 +28,16 @@ export function App() {
   // Read once: a set appearing or disappearing is someone editing the repo,
   // which restarts the API server anyway.
   const [fixtureSets, setFixtureSets] = useState<FixtureSetInfo[]>([])
+  /**
+   * The flow fixtures, read once at start-up rather than when the tab opens.
+   *
+   * ⚠️ Same reasoning as `fixtureSets` above — these are files, and a file
+   * appearing or disappearing means someone edited the repo, which restarts
+   * the API server anyway. Reading them here rather than inside the tab uses
+   * the time between start-up and someone clicking "Flows", which is seconds,
+   * so the grid's rows are in hand before it is ever rendered.
+   */
+  const [flowFixtures, setFlowFixtures] = useState<FlowsOverview | null>(null)
   const [modal, setModal] = useState<Modal>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [tab, setTab] = useState<Tab>('sources')
@@ -52,6 +63,20 @@ export function App() {
       .fixtureSets()
       .then(setFixtureSets)
       .catch(() => setFixtureSets([]))
+
+    // A failure is carried as `fixturesError` rather than thrown away: the
+    // Flows tab renders it as a banner, which is the only place it means
+    // anything.
+    void api
+      .flowFixtures()
+      .then(setFlowFixtures)
+      .catch((err: unknown) =>
+        setFlowFixtures({
+          fixtures: [],
+          hubs: [],
+          fixturesError: err instanceof Error ? err.message : 'Could not list the flow fixtures.',
+        }),
+      )
   }, [load])
 
   async function handleSave(env: Environment) {
@@ -89,9 +114,7 @@ export function App() {
         <div className="app-header__inner">
           <div>
             <h1>Environment Manager</h1>
-            <p className="app-header__sub">
-              Manage <code>amplience.config.json</code> — credentials never leave your machine.
-            </p>
+            <p className="app-header__sub">Manage your environments and hubs from one place.</p>
           </div>
         </div>
       </header>
@@ -219,7 +242,7 @@ export function App() {
                 its own data: the grid needs a Workforce call per hub, which
                 nothing else on this page wants, so it is not folded into the
                 config load. */}
-            {tab === 'flows' && <FlowsTab />}
+            {tab === 'flows' && <FlowsTab hubs={hubs} fixtures={flowFixtures} />}
           </>
         )}
       </main>

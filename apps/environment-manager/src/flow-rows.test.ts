@@ -5,6 +5,7 @@ import {
   concealedRows,
   filterHubs,
   filterRows,
+  flowColumns,
   flowRows,
   hasOtherFlows,
   isRunnable,
@@ -420,5 +421,94 @@ describe('hasOtherFlows', () => {
 
   it('is false when the only hubs are unreadable', () => {
     expect(hasOtherFlows([{ hub: 'a', unavailable: { reason: 'no-token' } }])).toBe(false)
+  })
+})
+
+// ── A column that has not answered yet ───────────────────────────────────────
+//
+// `reading` was added when the grid stopped arriving in one response. It looks
+// like `unavailable` in any model that only asks "are there flows?" — both have
+// none — and the difference is what the UI tells someone to do: wait, or go and
+// set a token up. Every assertion below is that distinction holding somewhere
+// it would otherwise be lost.
+
+describe('a hub still being read', () => {
+  const fixture = { label: 'Localise', file: 'localise.json', local: false }
+  const reading = { name: 'douglas', label: 'Douglas', reading: true as const }
+  const untokened = {
+    name: 'mattdemo',
+    label: 'mattdemo',
+    unavailable: { reason: 'no-token' as const },
+  }
+
+  it('is its own cell state, not unavailable', () => {
+    expect(cellFor(fixture, reading).state).toBe('reading')
+    expect(cellFor(fixture, untokened).state).toBe('unavailable')
+  })
+
+  // ⚠️ The check has to come before the `flows === undefined` branch, which a
+  // column being read also satisfies. A hub that reports flows *and* is still
+  // flagged as reading is not a state the app produces, so the one that can
+  // actually happen — reading, with no flows — is what is pinned here.
+  it('wins over the absence of flows', () => {
+    const { flows: _none, ...withoutFlows } = { ...reading, flows: [] as HubFlow[] }
+    expect(cellFor(fixture, withoutFlows).state).toBe('reading')
+  })
+
+  // ⚠️ Counting these would make the banner say the whole fleet has no token
+  // for the first second of every visit, then count itself back down.
+  it('is not counted among the hubs with no token', () => {
+    expect(unavailableCount([reading, untokened])).toBe(1)
+  })
+
+  // ⚠️ And hiding them would delete columns that were about to fill.
+  it('survives the hide-without-a-token toggle', () => {
+    const visible = filterHubs([reading, untokened], '', { hideUnavailable: true })
+    expect(visible.map((hub) => hub.name)).toEqual(['douglas'])
+  })
+
+  // "0 other flows" on a hub nobody has read is a measurement we have not made.
+  it('reports no count in the other-flows row', () => {
+    const [cell] = otherFlowsCells([fixture], [reading])
+    expect(cell).toEqual({ hub: 'douglas', reading: true })
+    expect(cell?.count).toBeUndefined()
+  })
+
+  it('is not treated as a hub the flow is on, for the concealed-rows warning', () => {
+    expect(concealedRows([fixture], [reading], [])).toBe(0)
+  })
+})
+
+describe('flowColumns', () => {
+  const fleet = [
+    { name: 'douglas', label: 'Douglas' },
+    { name: 'anyafinn', label: 'AnyaFinn' },
+    { name: 'mattdemo', label: 'mattdemo' },
+  ]
+  const flows = [{ id: 'a', label: 'Localise' }]
+
+  it('turns each column’s read into the shape the grid wants', () => {
+    const columns = flowColumns(fleet, (name) => {
+      if (name === 'douglas') return { rows: flows }
+      if (name === 'anyafinn') return { unavailable: { reason: 'denied', detail: 'revoked' } }
+      return { reading: true }
+    })
+    expect(columns).toEqual([
+      { name: 'douglas', label: 'Douglas', flows },
+      { name: 'anyafinn', label: 'AnyaFinn', unavailable: { reason: 'denied', detail: 'revoked' } },
+      { name: 'mattdemo', label: 'mattdemo', reading: true },
+    ])
+  })
+
+  // The fleet is the config's, so the axis is complete and in order from the
+  // first render — a column that appeared only once its hub answered would
+  // make the grid jump about as it loaded.
+  it('keeps every hub, in order, whatever each one answered', () => {
+    const columns = flowColumns(fleet, () => ({ reading: true }))
+    expect(columns.map((hub) => hub.name)).toEqual(['douglas', 'anyafinn', 'mattdemo'])
+  })
+
+  it('has no columns when the fleet is empty', () => {
+    expect(flowColumns([], () => ({ reading: true }))).toEqual([])
   })
 })

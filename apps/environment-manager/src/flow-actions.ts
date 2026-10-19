@@ -89,6 +89,11 @@ export const ACTION_EXPLANATION: Record<CellAction, string> = {
  */
 export function offerFor(state: CellState): ActionOffer {
   switch (state) {
+    case 'reading':
+      // Nothing is offered against a column that has not answered. Acting on
+      // a cell whose state is still unknown is the stale-grid problem with
+      // the staleness built in.
+      return { actions: [], reason: 'Still reading this hub.' }
     case 'absent':
       return { actions: ['push'] }
     case 'present':

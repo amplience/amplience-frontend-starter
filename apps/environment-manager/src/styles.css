@@ -2340,3 +2340,38 @@ td.flow-grid__cell {
   margin-top: 0.4rem;
   color: var(--color-text-muted);
 }
+
+/* A cell whose hub has not answered: present, but saying nothing yet. */
+.flow-grid__cell--reading .flow-cell__glyph,
+.flow-grid__cell--reading .flow-cell__state {
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+/* A fixture label that has not been read yet: a bar where the text will be. */
+.flow-grid__placeholder {
+  display: block;
+  width: min(14rem, 70%);
+  height: 0.9rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  animation: flow-grid-placeholder-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes flow-grid-placeholder-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* Pulsing is exactly the kind of motion that causes trouble, and it carries
+   nothing a static bar does not. */
+@media (prefers-reduced-motion: reduce) {
+  .flow-grid__placeholder {
+    animation: none;
+  }
+}

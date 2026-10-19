@@ -15,14 +15,23 @@ import type { FlowsOverview } from '../flow-rows.js'
 import { FlowsTab } from './FlowsTab.js'
 
 vi.mock('../api.js', () => ({
-  api: { flows: vi.fn(), flowOp: vi.fn() },
+  api: { hubFlows: vi.fn(), flowOp: vi.fn() },
 }))
 
 const { api } = await import('../api.js')
-const flows = vi.mocked(api.flows)
+const hubFlows = vi.mocked(api.hubFlows)
 const flowOp = vi.mocked(api.flowOp)
 
 afterEach(cleanup)
+
+/**
+ * A request that never answers.
+ *
+ * The grid's whole claim is that it renders without waiting for these, so a
+ * stub that never settles is the only honest way to assert it — a slow one
+ * would just be a race.
+ */
+const never = <T,>(): Promise<T> => new Promise<T>(() => undefined)
 
 const LOCALISE = 'Localise Content Item [Org]'
 const SCREENSHOT = 'Create page from a Screenshot [MI]'
@@ -51,9 +60,37 @@ const overview = (overrides: Partial<FlowsOverview> = {}): FlowsOverview => ({
   ...overrides,
 })
 
+/**
+ * Render the tab against one scenario.
+ *
+ * The overview is still the single description of a scenario, as it was when
+ * the grid arrived in one response — `mount` just takes it apart the way the
+ * app now does: rows from disk, columns from the config the parent holds,
+ * cells one hub at a time.
+ */
+const mount = (data: FlowsOverview = overview()) => {
+  hubFlows.mockImplementation((name: string) => {
+    const hub = data.hubs.find((candidate) => candidate.name === name)
+    return Promise.resolve(
+      hub?.flows === undefined
+        ? { unavailable: hub?.unavailable ?? { reason: 'error' as const } }
+        : { rows: hub.flows },
+    )
+  })
+  return render(
+    <FlowsTab
+      hubs={data.hubs.map(({ name, label }) => ({ name, label }))}
+      fixtures={{
+        fixtures: data.fixtures,
+        hubs: [],
+        ...(data.fixturesError === undefined ? {} : { fixturesError: data.fixturesError }),
+      }}
+    />,
+  )
+}
+
 beforeEach(() => {
   vi.clearAllMocks()
-  flows.mockResolvedValue(overview())
   flowOp.mockResolvedValue({
     ok: true,
     action: 'push',
@@ -71,7 +108,7 @@ const loaded = () => screen.findByRole('table')
 
 describe('FlowsTab — the grid', () => {
   it('renders a row per fixture and a column per hub', async () => {
-    render(<FlowsTab />)
+    mount()
     await loaded()
     expect(screen.getByRole('rowheader', { name: (name) => name.includes(LOCALISE) })).toBeDefined()
     expect(screen.getByRole('columnheader', { name: 'Douglas' })).toBeDefined()
@@ -79,36 +116,132 @@ describe('FlowsTab — the grid', () => {
   })
 
   it('marks a locally-pulled fixture, so "what we ship" stays honest', async () => {
-    render(<FlowsTab />)
+    mount()
     await loaded()
     expect(screen.getByTitle(/not checked in/)).toBeDefined()
   })
 
   // A hub with no token is a setup step, said once above the grid.
   it('explains the hubs it cannot read, once', async () => {
-    render(<FlowsTab />)
+    mount()
     await loaded()
     expect(screen.getByText(/1 of 2 hubs have no Workforce personal access token/)).toBeDefined()
   })
 
   // Without this the grid implies the fixtures are all the flows there are.
   it('counts the hub’s flows that no fixture claims', async () => {
-    render(<FlowsTab />)
+    mount()
     await loaded()
     expect(screen.getByText('Other flows')).toBeDefined()
     expect(screen.getByTitle(/no fixture in the repository claims/)).toBeDefined()
   })
 
-  it('shows an error instead of a half-grid when the read fails', async () => {
-    flows.mockRejectedValue(new Error('API is down'))
-    render(<FlowsTab />)
-    expect(await screen.findByText('API is down')).toBeDefined()
+  // The rows come from disk; losing them means there is no grid to draw, as
+  // distinct from a hub failing, which costs one column.
+  // A fixtures failure is read once at start-up and carried down as a reason,
+  // so the tab renders it as a banner rather than having its own error path.
+  it('shows why the fixtures could not be listed', () => {
+    hubFlows.mockImplementation(never)
+    render(
+      <FlowsTab
+        hubs={[{ name: 'douglas', label: 'Douglas' }]}
+        fixtures={{ fixtures: [], hubs: [], fixturesError: 'API is down' }}
+      />,
+    )
+    expect(screen.getByText('API is down')).toBeDefined()
+  })
+
+  // ⚠️ The point of the whole progressive read: the axes come from disk and
+  // from config, so a hub that never answers costs its own column and nothing
+  // else. Before this, one slow hub meant a blank tab.
+  it('draws every row and column before any hub has answered', async () => {
+    hubFlows.mockImplementation(never)
+    render(
+      <FlowsTab
+        hubs={[
+          { name: 'douglas', label: 'Douglas' },
+          { name: 'mattdemo', label: 'mattdemo' },
+        ]}
+        fixtures={{ ...overview(), hubs: [] }}
+      />,
+    )
+    await loaded()
+    expect(screen.getByRole('columnheader', { name: 'Douglas' })).toBeDefined()
+    expect(screen.getByRole('rowheader', { name: (name) => name.includes(LOCALISE) })).toBeDefined()
+    expect(screen.getAllByText('Reading…').length).toBeGreaterThan(0)
+  })
+
+  // A column still being read is not a column with no token, and the banner
+  // that tells someone to go and set one up must not appear for it.
+  it('does not call an unanswered hub untokened', async () => {
+    hubFlows.mockImplementation(never)
+    render(
+      <FlowsTab
+        hubs={[{ name: 'douglas', label: 'Douglas' }]}
+        fixtures={{ ...overview(), hubs: [] }}
+      />,
+    )
+    await loaded()
+    expect(screen.queryByText(/no Workforce personal access token/)).toBeNull()
+  })
+
+  // ⚠️ The regression that made the whole split pointless: the table used to
+  // be gated on the rows, so the grid stayed invisible until the fixture list
+  // arrived even though every column header was already in hand.
+  it('draws the table and its column headers before the rows arrive', async () => {
+    hubFlows.mockImplementation(never)
+    render(
+      <FlowsTab
+        hubs={[
+          { name: 'douglas', label: 'Douglas' },
+          { name: 'mattdemo', label: 'mattdemo' },
+        ]}
+        fixtures={null}
+      />,
+    )
+    const table = await screen.findByRole('table')
+    expect(table.getAttribute('aria-busy')).toBe('true')
+    expect(screen.getByRole('columnheader', { name: 'Douglas' })).toBeDefined()
+    expect(screen.getByRole('columnheader', { name: 'mattdemo' })).toBeDefined()
+    // Placeholder rows, so the grid has roughly its real height from the start.
+    expect(screen.getAllByText('Reading…').length).toBeGreaterThan(1)
+  })
+
+  // What that moment must not do is fill itself with a wrong answer — "no flow
+  // fixtures in the repository" is a claim, made before anything had looked.
+  it('does not claim the repository is empty before the rows have arrived', () => {
+    hubFlows.mockImplementation(never)
+    render(<FlowsTab hubs={[{ name: 'douglas', label: 'Douglas' }]} fixtures={null} />)
+    expect(screen.queryByText(/No flow fixtures/)).toBeNull()
+  })
+
+  // The placeholders are scaffolding, not content: left readable, a screen
+  // reader walks four empty rows before reaching anything real.
+  it('hides the placeholder rows from assistive technology', () => {
+    hubFlows.mockImplementation(never)
+    const { container } = render(
+      <FlowsTab hubs={[{ name: 'douglas', label: 'Douglas' }]} fixtures={null} />,
+    )
+    const placeholders = [...container.querySelectorAll('tbody tr')]
+    expect(placeholders.length).toBeGreaterThan(0)
+    expect(placeholders.every((row) => row.getAttribute('aria-hidden') === 'true')).toBe(true)
+  })
+
+  it('says so once it has looked and found none', () => {
+    hubFlows.mockImplementation(never)
+    render(
+      <FlowsTab
+        hubs={[{ name: 'douglas', label: 'Douglas' }]}
+        fixtures={{ fixtures: [], hubs: [] }}
+      />,
+    )
+    expect(screen.getByText(/No flow fixtures/)).toBeDefined()
   })
 })
 
 describe('FlowsTab — what a cell offers', () => {
   it('offers push on an absent cell and sync/remove on a present one', async () => {
-    render(<FlowsTab />)
+    mount()
     await loaded()
     // Present on Douglas → sync + remove; absent on Douglas → push.
     expect(screen.getByRole('button', { name: 'Sync douglas' })).toBeDefined()
@@ -118,7 +251,7 @@ describe('FlowsTab — what a cell offers', () => {
 
   // The enabled flow on Douglas offers pause; the absent one offers neither.
   it('offers disable on a running flow and nothing of the pair on an absent one', async () => {
-    render(<FlowsTab />)
+    mount()
     await loaded()
     expect(screen.getByRole('button', { name: 'Disable douglas' })).toBeDefined()
     expect(screen.queryByRole('button', { name: 'Enable douglas' })).toBeNull()
@@ -127,8 +260,7 @@ describe('FlowsTab — what a cell offers', () => {
   it('offers enable, not disable, once the hub says the flow is off', async () => {
     const paused = overview()
     paused.hubs[0]!.flows = [{ id: 'flow-1', label: LOCALISE, status: 'DISABLED' }]
-    flows.mockResolvedValue(paused)
-    render(<FlowsTab />)
+    mount(paused)
     await loaded()
     expect(screen.getByRole('button', { name: 'Enable douglas' })).toBeDefined()
     expect(screen.queryByRole('button', { name: 'Disable douglas' })).toBeNull()
@@ -136,7 +268,7 @@ describe('FlowsTab — what a cell offers', () => {
 
   // Nothing can be changed on a hub whose flows cannot be read.
   it('offers nothing on a hub with no token', async () => {
-    render(<FlowsTab />)
+    mount()
     await loaded()
     expect(screen.queryByRole('button', { name: /mattdemo/ })).toBeNull()
   })
@@ -149,8 +281,7 @@ describe('FlowsTab — what a cell offers', () => {
       { id: 'a', label: LOCALISE, status: 'ENABLED' },
       { id: 'b', label: LOCALISE, status: 'ENABLED' },
     ]
-    flows.mockResolvedValue(twins)
-    render(<FlowsTab />)
+    mount(twins)
     await loaded()
     expect(screen.queryByRole('button', { name: 'Remove douglas' })).toBeNull()
     expect(screen.queryByRole('button', { name: 'Sync douglas' })).toBeNull()
@@ -160,7 +291,7 @@ describe('FlowsTab — what a cell offers', () => {
 
 describe('FlowsTab — running an operation', () => {
   it('pushes straight through, with no dialog', async () => {
-    render(<FlowsTab />)
+    mount()
     await loaded()
     fireEvent.click(screen.getByRole('button', { name: 'Push douglas' }))
     await waitFor(() =>
@@ -169,19 +300,31 @@ describe('FlowsTab — running an operation', () => {
     expect(screen.queryByRole('dialog')).toBeNull()
   })
 
-  // ⚠️ Re-reads the whole grid rather than patching the clicked cell: a push
-  // can install an extension, which changes what every other row on that hub
-  // resolves against.
-  it('re-reads the grid after a successful push', async () => {
-    render(<FlowsTab />)
+  // ⚠️ Re-reads the clicked hub's whole column rather than the one cell: a
+  // push can install an extension, which changes what every other row on that
+  // hub resolves against.
+  it('re-reads the hub it acted on after a successful push', async () => {
+    mount()
     await loaded()
-    expect(flows).toHaveBeenCalledTimes(1)
+    await waitFor(() => expect(hubFlows).toHaveBeenCalledTimes(2))
     fireEvent.click(screen.getByRole('button', { name: 'Push douglas' }))
-    await waitFor(() => expect(flows).toHaveBeenCalledTimes(2))
+    await waitFor(() => expect(hubFlows).toHaveBeenCalledTimes(3))
+    expect(hubFlows).toHaveBeenLastCalledWith('douglas')
+  })
+
+  // ⚠️ The other half of that: the fleet-wide re-read this replaced sent a
+  // request per hub to show the result of a click on one column.
+  it('leaves the other hubs alone', async () => {
+    mount()
+    await loaded()
+    await waitFor(() => expect(hubFlows).toHaveBeenCalledTimes(2))
+    fireEvent.click(screen.getByRole('button', { name: 'Push douglas' }))
+    await waitFor(() => expect(hubFlows).toHaveBeenCalledTimes(3))
+    expect(hubFlows.mock.calls.filter(([hub]) => hub === 'mattdemo')).toHaveLength(1)
   })
 
   it('logs what the push did, including how long each step took', async () => {
-    render(<FlowsTab />)
+    mount()
     await loaded()
     fireEvent.click(screen.getByRole('button', { name: 'Push douglas' }))
     const activity = await screen.findByRole('button', { name: /Activity/ })
@@ -201,16 +344,16 @@ describe('FlowsTab — running an operation', () => {
       steps: [],
       error: 'two flows share this label',
     })
-    render(<FlowsTab />)
+    mount()
     await loaded()
     fireEvent.click(screen.getByRole('button', { name: 'Push douglas' }))
     expect(await screen.findByText('1 failed')).toBeDefined()
-    expect(flows).toHaveBeenCalledTimes(1)
+    expect(hubFlows.mock.calls.filter(([hub]) => hub === 'douglas')).toHaveLength(1)
   })
 
   it('logs a request that never came back at all', async () => {
     flowOp.mockRejectedValue(new Error('socket hang up'))
-    render(<FlowsTab />)
+    mount()
     await loaded()
     fireEvent.click(screen.getByRole('button', { name: 'Push douglas' }))
     expect(await screen.findByText('1 failed')).toBeDefined()
@@ -222,7 +365,7 @@ describe('FlowsTab — enabling and disabling', () => {
   // a confirmation people learn to click through would wear down the reflex
   // that the remove dialog depends on.
   it('disables straight through, with no dialog', async () => {
-    render(<FlowsTab />)
+    mount()
     await loaded()
     fireEvent.click(screen.getByRole('button', { name: 'Disable douglas' }))
     await waitFor(() =>
@@ -233,12 +376,14 @@ describe('FlowsTab — enabling and disabling', () => {
 
   // The status is what the grid colours the cell by, so a stale cell after a
   // pause is the one wrong answer this pair can give.
-  it('re-reads the grid so the cell stops claiming the flow is running', async () => {
-    render(<FlowsTab />)
+  it('re-reads the hub so the cell stops claiming the flow is running', async () => {
+    mount()
     await loaded()
-    expect(flows).toHaveBeenCalledTimes(1)
+    await waitFor(() => expect(hubFlows).toHaveBeenCalledTimes(2))
     fireEvent.click(screen.getByRole('button', { name: 'Disable douglas' }))
-    await waitFor(() => expect(flows).toHaveBeenCalledTimes(2))
+    await waitFor(() =>
+      expect(hubFlows.mock.calls.filter(([hub]) => hub === 'douglas')).toHaveLength(2),
+    )
   })
 
   // ⚠️ The QL-165 bug: the success tick was never given back, so it sat on
@@ -246,19 +391,14 @@ describe('FlowsTab — enabling and disabling', () => {
   // green tick. Asserts the glyph, not just the buttons — the buttons were
   // right the whole time, which is why it went unnoticed.
   it('shows the paused state once the re-read lands, not a stuck tick', async () => {
-    const paused = overview()
-    flows.mockResolvedValueOnce(overview()).mockResolvedValueOnce({
-      ...paused,
-      hubs: [
-        {
-          name: 'douglas',
-          label: 'Douglas',
-          flows: [{ id: 'flow-1', label: LOCALISE, status: 'DISABLED' }],
-        },
-        paused.hubs[1]!,
-      ],
+    mount()
+    // The hub reports the flow enabled, then disabled once the op has run.
+    hubFlows.mockImplementation((name: string) => {
+      if (name !== 'douglas') return Promise.resolve({ unavailable: { reason: 'no-token' } })
+      return Promise.resolve({
+        rows: [{ id: 'flow-1', label: LOCALISE, status: 'DISABLED' }],
+      })
     })
-    render(<FlowsTab />)
     await loaded()
     fireEvent.click(screen.getByRole('button', { name: 'Disable douglas' }))
 
@@ -268,7 +408,7 @@ describe('FlowsTab — enabling and disabling', () => {
     await waitFor(() => expect(document.querySelector('.flow-grid__cell--op-done')).toBeNull())
   })
 
-  it('logs a refusal without re-reading', async () => {
+  it('logs a refusal without re-reading the hub', async () => {
     flowOp.mockResolvedValue({
       ok: false,
       action: 'enable',
@@ -279,18 +419,17 @@ describe('FlowsTab — enabling and disabling', () => {
     })
     const paused = overview()
     paused.hubs[0]!.flows = [{ id: 'flow-1', label: LOCALISE, status: 'DISABLED' }]
-    flows.mockResolvedValue(paused)
-    render(<FlowsTab />)
+    mount(paused)
     await loaded()
     fireEvent.click(screen.getByRole('button', { name: 'Enable douglas' }))
     expect(await screen.findByText('1 failed')).toBeDefined()
-    expect(flows).toHaveBeenCalledTimes(1)
+    expect(hubFlows.mock.calls.filter(([hub]) => hub === 'douglas')).toHaveLength(1)
   })
 })
 
 describe('FlowsTab — the guarded operations', () => {
   it('asks before a sync, and sends it once confirmed', async () => {
-    render(<FlowsTab />)
+    mount()
     await loaded()
     fireEvent.click(screen.getByRole('button', { name: 'Sync douglas' }))
     expect(await screen.findByRole('dialog')).toBeDefined()
@@ -304,7 +443,7 @@ describe('FlowsTab — the guarded operations', () => {
 
   // ⚠️ The one with no undo: it must not be reachable by a single click.
   it('never removes without the dialog and the typed label', async () => {
-    render(<FlowsTab />)
+    mount()
     await loaded()
     fireEvent.click(screen.getByRole('button', { name: 'Remove douglas' }))
     await screen.findByRole('dialog')
@@ -325,7 +464,7 @@ describe('FlowsTab — the guarded operations', () => {
   })
 
   it('sends nothing when the dialog is cancelled', async () => {
-    render(<FlowsTab />)
+    mount()
     await loaded()
     fireEvent.click(screen.getByRole('button', { name: 'Remove douglas' }))
     await screen.findByRole('dialog')
@@ -348,8 +487,7 @@ describe('FlowsTab — narrowing the hub axis', () => {
   })
 
   it('hides the hubs with no token on request, and says how many', async () => {
-    flows.mockResolvedValue(fleet())
-    render(<FlowsTab />)
+    mount(fleet())
     await loaded()
     expect(screen.getByRole('columnheader', { name: 'mattdemo' })).toBeDefined()
 
@@ -359,8 +497,7 @@ describe('FlowsTab — narrowing the hub axis', () => {
   })
 
   it('narrows the columns by name', async () => {
-    flows.mockResolvedValue(fleet())
-    render(<FlowsTab />)
+    mount(fleet())
     await loaded()
     fireEvent.change(screen.getByLabelText('Filter hubs'), { target: { value: 'doug' } })
     await waitFor(() => expect(screen.queryByRole('columnheader', { name: 'AnyaFinn' })).toBeNull())
@@ -370,16 +507,14 @@ describe('FlowsTab — narrowing the hub axis', () => {
   // ⚠️ The one wrong answer the tab could give: a row reading "not anywhere"
   // because the only hub it is on has been filtered out of view.
   it('warns when the filter has hidden the only hub a flow is on', async () => {
-    flows.mockResolvedValue(fleet())
-    render(<FlowsTab />)
+    mount(fleet())
     await loaded()
     fireEvent.change(screen.getByLabelText('Filter hubs'), { target: { value: 'anyafinn' } })
     expect(await screen.findByText(/on a hidden hub and on none of the/)).toBeDefined()
   })
 
   it('offers a way back when the filter matches no hub at all', async () => {
-    flows.mockResolvedValue(fleet())
-    render(<FlowsTab />)
+    mount(fleet())
     await loaded()
     fireEvent.change(screen.getByLabelText('Filter hubs'), { target: { value: 'zzzz' } })
     const reset = await screen.findByRole('button', { name: /Show all 4 hubs/ })

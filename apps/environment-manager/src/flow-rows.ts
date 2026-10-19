@@ -24,6 +24,8 @@
  */
 
 /** One flow fixture in the repository, as the server lists them. */
+import type { Column, HubUnavailable } from './hub-reads.js'
+
 export type FlowFixture = {
   label: string
   /** Path relative to the fixtures directory, for disambiguating in the UI. */
@@ -43,11 +45,13 @@ export type HubFlow = {
   lastRunDate?: string
 }
 
-/** Why a hub's column has no data. Mirrors `FlowsFailure` on the server. */
-export type HubUnavailable = {
-  reason: 'no-token' | 'denied' | 'error'
-  detail?: string
-}
+/**
+ * Why a hub's column has no data. Mirrors `FlowsFailure` on the server.
+ *
+ * Defined in `hub-reads.ts` now that three tables share one hub axis, and
+ * re-exported here so nothing that already imports it has to move.
+ */
+export type { HubUnavailable } from './hub-reads.js'
 
 /** One hub's column: either its flows, or why they could not be read. */
 export type HubFlows = {
@@ -56,6 +60,16 @@ export type HubFlows = {
   label: string
   flows?: HubFlow[]
   unavailable?: HubUnavailable
+  /**
+   * The hub has not answered yet.
+   *
+   * ⚠️ Checked **before** `flows === undefined` everywhere below, because a
+   * column being read has no flows either. Reading that as "unavailable"
+   * would make every column announce a missing token for the first second of
+   * every visit, and would let the hide-without-a-token toggle delete columns
+   * that were about to fill.
+   */
+  reading?: true
 }
 
 /**
@@ -69,12 +83,14 @@ export type HubFlows = {
  * would hide exactly the case the tab exists to surface.
  */
 /**
- * What `GET /api/workforce/flows` returns — the whole grid in one response.
+ * The grid's two axes, assembled client-side.
  *
- * One request rather than one per hub: the fan-out happens server-side, where
- * the tokens are, and a panel that fired fourteen parallel requests from the
- * browser would also render fourteen separate loading states for what is one
- * question.
+ * ⚠️ No longer one response. `fixtures` comes from disk via
+ * `GET /api/workforce/fixtures` and the hubs come from the config `App`
+ * already holds, so both axes exist before any Workforce call — each column's
+ * flows then arrive on their own (`use-hub-cells.ts`). The single fan-out this
+ * replaced meant the slowest hub in the fleet decided when the grid appeared
+ * at all.
  */
 export type FlowsOverview = {
   fixtures: FlowFixture[]
@@ -88,7 +104,7 @@ export type FlowsOverview = {
 }
 
 export type CellState =
-  'absent' | 'present' | 'disabled' | 'quarantined' | 'duplicate' | 'unavailable'
+  'reading' | 'absent' | 'present' | 'disabled' | 'quarantined' | 'duplicate' | 'unavailable'
 
 export type FlowCell = {
   hub: string
@@ -151,6 +167,10 @@ export function matchesFor(flows: readonly HubFlow[], label: string): HubFlow[] 
 
 /** One fixture against one hub. */
 export function cellFor(fixture: FlowFixture, hub: HubFlows): FlowCell {
+  // ⚠️ Before the `flows === undefined` check, never after it: a hub being
+  // read has no flows yet, and falling through would report it as unavailable.
+  if (hub.reading === true) return { hub: hub.name, state: 'reading' }
+
   if (hub.flows === undefined) {
     return {
       hub: hub.name,
@@ -208,6 +228,7 @@ export const UNAVAILABLE_EXPLANATION: Record<HubUnavailable['reason'], string> =
 
 /** What each cell state means, shown as the cell's title. */
 export const STATE_EXPLANATION: Record<CellState, string> = {
+  reading: 'Still reading this hub.',
   absent: 'Not on this hub. `pnpm flows:push` would create it.',
   present: 'On this hub, enabled.',
   disabled: 'On this hub, but switched off by someone — it will not run.',
@@ -275,7 +296,9 @@ export function filterHubs(
   { hideUnavailable = false }: { hideUnavailable?: boolean } = {},
 ): HubFlows[] {
   return hubs.filter(
-    (hub) => (!hideUnavailable || hub.flows !== undefined) && matchesHub(hub, query),
+    (hub) =>
+      (!hideUnavailable || hub.flows !== undefined || hub.reading === true) &&
+      matchesHub(hub, query),
   )
 }
 
@@ -303,9 +326,15 @@ export function concealedRows(
   ).length
 }
 
-/** How many hubs have no token — what the toggle would remove. */
+/**
+ * How many hubs have no token — what the toggle would remove.
+ *
+ * A hub still being read is not counted. The number drives a banner and a
+ * toggle label, and one that climbed to fourteen on load and then counted
+ * itself back down would be noise rather than information.
+ */
 export function unavailableCount(hubs: readonly HubFlows[]): number {
-  return hubs.filter((hub) => hub.flows === undefined).length
+  return hubs.filter((hub) => hub.reading !== true && hub.flows === undefined).length
 }
 
 // ── The "Other flows" row ─────────────────────────────────────────────────────
@@ -321,6 +350,7 @@ export type OtherFlowsCell = {
   hub: string
   count?: number
   unavailable?: HubUnavailable
+  reading?: true
 }
 
 /**
@@ -335,11 +365,12 @@ export function otherFlowsCells(
   fixtures: readonly FlowFixture[],
   hubs: readonly HubFlows[],
 ): OtherFlowsCell[] {
-  return hubs.map((hub) =>
-    hub.flows === undefined
+  return hubs.map((hub) => {
+    if (hub.reading === true) return { hub: hub.name, reading: true as const }
+    return hub.flows === undefined
       ? { hub: hub.name, unavailable: hub.unavailable ?? { reason: 'error' as const } }
-      : { hub: hub.name, count: unclaimedCount(fixtures, hub) },
-  )
+      : { hub: hub.name, count: unclaimedCount(fixtures, hub) }
+  })
 }
 
 /**
@@ -350,4 +381,29 @@ export function otherFlowsCells(
  */
 export function hasOtherFlows(cells: readonly OtherFlowsCell[]): boolean {
   return cells.some((cell) => (cell.count ?? 0) > 0)
+}
+
+// ── Assembling the columns ────────────────────────────────────────────────────
+
+/**
+ * The hub axis, from the config the app already holds plus whatever has been
+ * read so far.
+ *
+ * Pure on purpose: the async lives in `use-hub-cells.ts`, so the rule that
+ * decides whether a column reads as *loading*, *unavailable* or *there* can be
+ * tested without rendering or mocking anything. That rule is the whole point
+ * of the progressive grid, and it is three lines, which is exactly the kind of
+ * thing that gets quietly broken inside a component.
+ */
+export function flowColumns(
+  hubs: readonly { name: string; label: string }[],
+  columnOf: (name: string) => Column<HubFlow[]>,
+): HubFlows[] {
+  return hubs.map((hub) => {
+    const column = columnOf(hub.name)
+    const base = { name: hub.name, label: hub.label }
+    if ('reading' in column) return { ...base, reading: true as const }
+    if ('rows' in column) return { ...base, flows: column.rows }
+    return { ...base, unavailable: column.unavailable }
+  })
 }
