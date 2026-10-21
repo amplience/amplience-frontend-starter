@@ -6,7 +6,7 @@
 //    `jsx: 'preserve'` for Next.js, which Vite 8's OXC transform would
 //    otherwise honour, leaving JSX unparseable in test files.
 //
-// 2. `resolve.alias` for 'next/font/google' — font constructors are
+// 2. `resolve.alias` for 'next/font/local' — font constructors are
 //    Next.js build-time only and throw in plain Node. The alias is also
 //    present in the root vitest.config.ts so `pnpm test` from the repo
 //    root works too; both need it so either invocation is safe.
@@ -24,7 +24,7 @@ export default mergeConfig(
   defineConfig({
     resolve: {
       alias: {
-        'next/font/google': resolve(__dirname, '__mocks__/next-font-google.ts'),
+        'next/font/local': resolve(__dirname, '__mocks__/next-font-local.ts'),
       },
     },
     oxc: { jsx: { runtime: 'automatic' } },

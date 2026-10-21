@@ -57,3 +57,43 @@ The brands currently live alongside the defaults in [`src/tokens.css`](src/token
 Component CSS always goes through a variable — `background: var(--color-primary)`, never a literal. Hard-coded colour or spacing values in a component `.module.css` are a code-review reject (ADR-0002 §4); the override model above only stays trivial while that holds.
 
 Brands override the _shared_ token first (`--interactive-hover-*`) and reach for component-scoped tokens (`--card-hover-*`) only when one surface needs to differ — the shared token exists so a single line themes every interactive surface at once.
+
+## Fonts
+
+Brand fonts are defined in [`src/fonts.ts`](src/fonts.ts) with `next/font/local` and self-hosted from [`fonts/`](fonts/) — one folder per family, holding the Latin-subset `.woff2` file(s) and that family's licence.
+
+**Why not `next/font/google`?** It downloads every family from Google during `next build`. With a dozen families, a single failed or rate-limited request — common on shared CI/Vercel build machines — fails the whole build with `Module not found: Can't resolve '@vercel/turbopack-next/internal/font/google/font'`. Self-hosting removes that network dependency entirely and pins font versions, so builds are reproducible.
+
+**Variable fonts first.** Where a family has a variable cut, one file covers the whole weight axis (declared as a range, e.g. `weight: '100 900'`). Lato and Poppins have no variable cut, so they ship one static file per weight that's actually used.
+
+### Licensing
+
+The font files are third-party assets and are **not** covered by this repository's Apache 2.0 licence. Each family is distributed under its own licence, kept next to the files as `fonts/<family>/LICENSE`, which must stay with them:
+
+| Family             | Licence    |
+| ------------------ | ---------- |
+| Cormorant Garamond | OFL 1.1    |
+| IBM Plex Sans      | OFL 1.1    |
+| Inter              | OFL 1.1    |
+| JetBrains Mono     | OFL 1.1    |
+| Jost               | OFL 1.1    |
+| Lato               | OFL 1.1    |
+| Montserrat         | OFL 1.1    |
+| Playfair Display   | OFL 1.1    |
+| Poppins            | OFL 1.1    |
+| Public Sans        | OFL 1.1    |
+| Roboto             | OFL 1.1    |
+| Roboto Slab        | Apache 2.0 |
+
+Both licences allow bundling and redistribution with software. The OFL's main conditions: keep the licence with the files, don't sell the fonts on their own, and don't ship a modified font under its original name (the unmodified Fontsource subsets used here are fine).
+
+### Adding or refreshing a font
+
+Files come from [Fontsource](https://fontsource.org/) (Google Fonts families, packaged on npm), currently at version 5.3.0:
+
+1. `npm pack @fontsource-variable/<family>` (or `@fontsource/<family>` if no variable cut exists) in a scratch directory and extract it.
+2. Copy `files/<family>-latin-wght-normal.woff2` (plus `-wght-italic` only if a brand uses italics) — or, for static families, `files/<family>-latin-<weight>-normal.woff2` per weight — into `fonts/<family>/`, along with `LICENSE`.
+3. Add a `localFont({ ... })` entry in `src/fonts.ts` with a `--nf-<family>` variable and add it to `brandFonts`. The `weight` range comes from the package's `metadata.json` (`axes.wght`).
+4. Add the family to the licence table above, and to the Google Fonts `@import` in `packages/components/.storybook/preview-globals.css` so Storybook matches.
+
+To refresh an existing family, repeat steps 1–2 at the newer version. Google rarely changes these families, so this is only worth doing when a fix or new glyphs are needed.

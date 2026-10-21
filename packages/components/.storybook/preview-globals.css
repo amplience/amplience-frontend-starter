@@ -6,8 +6,9 @@
 /*
  * Brand fonts — Storybook-only font loading.
  *
- * next/font/google is a Next.js build-time transform: next/font/google/index.js
- * is an empty stub at runtime, so Vite/Storybook gets nothing from it.
+ * next/font/local is a Next.js build-time transform, so Vite/Storybook gets
+ * nothing from packages/theme/src/fonts.ts. Storybook is a dev tool, not a
+ * deployed build, so it still loads the families from Google Fonts at runtime.
  * We load the same font families directly from Google Fonts instead, then
  * define the --nf-* CSS custom properties that tokens.css references under
  * each [data-brand] selector. This exactly replicates what the Next.js build
@@ -17,14 +18,13 @@
  * Keep in sync with packages/theme/src/fonts.ts — if a font is added or
  * removed there, update this import URL and the :root block below.
  */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&family=Jost:wght@300;400;500&family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600;700&family=Roboto:wght@300;400;500&family=Roboto+Slab:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Jost:wght@300;400;500&family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;600;700&family=Roboto:wght@300;400;500&family=Roboto+Slab:wght@400;600;700&display=swap');
 
 :root {
   --nf-cormorant-garamond: 'Cormorant Garamond';
   --nf-inter: 'Inter';
-  /* fonts.ts uses Jost for both jost and jetbrainsMono — match that here */
   --nf-jost: 'Jost';
-  --nf-jetbrains-mono: 'Jost';
+  --nf-jetbrains-mono: 'JetBrains Mono';
   --nf-lato: 'Lato';
   --nf-montserrat: 'Montserrat';
   --nf-playfair-display: 'Playfair Display';

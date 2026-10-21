@@ -8,7 +8,7 @@
 // Individual packages can still merge their own overrides (e.g. jsdom env
 // in packages/components).
 //
-// `resolve.alias` for 'next/font/google' — font constructors are Next.js
+// `resolve.alias` for 'next/font/local' — font constructors are Next.js
 // build-time only and throw in plain Node. The alias redirects all imports
 // to a static mock before any module executes. It lives here (not in
 // apps/web/vitest.config.ts) because this root config is what actually runs
@@ -27,7 +27,7 @@ export default mergeConfig(
   defineConfig({
     resolve: {
       alias: {
-        'next/font/google': resolve(__dirname, 'apps/web/__mocks__/next-font-google.ts'),
+        'next/font/local': resolve(__dirname, 'apps/web/__mocks__/next-font-local.ts'),
       },
     },
     oxc: { jsx: { runtime: 'automatic' } },
