@@ -4,7 +4,7 @@ import '@storybook/addon-docs/blocks'
 // Design tokens — the CSS variable contract per ADR-0002
 import '@amplience/frontend-starter-theme/tokens.css'
 // Global reset + brand font loading — mirrors apps/web/app/globals.css.
-// Fonts are loaded via Google Fonts @import here (next/font/google is a
+// Fonts are loaded via Google Fonts @import here (next/font/local is a
 // Next.js build-time transform and is a no-op in the Vite/Storybook context).
 import './preview-globals.css'
 

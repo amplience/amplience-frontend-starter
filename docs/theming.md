@@ -94,7 +94,7 @@ A guard test enforces that every component ships its hook, so it can't silently 
 
 The default model: a brand's `[data-brand]` block lives in [`tokens.css`](../packages/theme/src/tokens.css) alongside the defaults, versioned and reviewed like any other change.
 
-To use a web font, add it to [`packages/theme/src/fonts.ts`](../packages/theme/src/fonts.ts) — each font is exposed as a `--nf-*` variable that `tokens.css` then references, so the token layer never couples to `next/font` internals.
+To use a web font, add it to [`packages/theme/src/fonts.ts`](../packages/theme/src/fonts.ts) — each font is exposed as a `--nf-*` variable that `tokens.css` then references, so the token layer never couples to `next/font` internals. Fonts are self-hosted (no Google Fonts request at build time) — see [the theme README](../packages/theme/README.md#fonts) for how to add one and the licence files it needs.
 
 Nested rules are allowed for the cases variables can't reach — a brand-specific type scale, or a decorative pseudo-element — scoped inside the same `[data-brand]` block. The bundled `amplience` brand is the worked example.
 

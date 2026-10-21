@@ -49,3 +49,7 @@ Your next steps will likely be to use:
 - [Editor setup](docs/editor-setup.md) — optional on-save formatting & lint config
 - [Troubleshooting](docs/troubleshooting.md) — common gotchas
 - [Contributing](CONTRIBUTING.md) — workflow and conventions
+
+## Licence
+
+Apache 2.0 — see [LICENCE](LICENCE). Bundled brand fonts in `packages/theme/fonts/` are third-party assets under their own licences (SIL OFL 1.1 or Apache 2.0); see [the theme README](packages/theme/README.md#licensing).
