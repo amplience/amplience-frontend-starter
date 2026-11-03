@@ -42,6 +42,7 @@
     "hub:import:settings": "pnpm --filter @amplience/frontend-starter-hub-management hub:import:settings",
     "hub:import:types": "pnpm --filter @amplience/frontend-starter-hub-management hub:import:types",
     "hub:import:webhooks": "pnpm --filter @amplience/frontend-starter-hub-management hub:import:webhooks",
+    "hub:pull:content": "pnpm --filter @amplience/frontend-starter-hub-management hub:pull:content",
     "hub:wipe": "pnpm --filter @amplience/frontend-starter-hub-management hub:wipe",
     "hub:wipe:content": "pnpm --filter @amplience/frontend-starter-hub-management hub:wipe:content",
     "hub:wipe:extensions": "pnpm --filter @amplience/frontend-starter-hub-management hub:wipe:extensions",
