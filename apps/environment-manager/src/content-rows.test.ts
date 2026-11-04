@@ -5,6 +5,7 @@ import {
   contentRows,
   gateReason,
   localeNote,
+  rowExplanation,
   seedableSets,
   type ContentBreakdown,
 } from './content-rows.js'
@@ -18,6 +19,7 @@ const set = (name: string, authoredLocales: string[] = ['en-US']): FixtureSetInf
   defaultLocale: 'en-US',
   authoredLocales,
   generatedDocs: false,
+  origin: 'built-in',
 })
 
 const SETS = [set('frontend-starter', ['en-US', 'en-GB', 'fr-FR']), set('anyafinn')]
@@ -161,5 +163,24 @@ describe('the provenance gate', () => {
     // They enumerate the hub directly and need no provenance — which is what
     // leaves wipe-and-reseed as a recovery path rather than a dead end.
     expect(canWipeEverything()).toBe(true)
+  })
+})
+
+describe('rowExplanation', () => {
+  it('says a built-in set is in the repository', () => {
+    const [row] = contentRows(available(), SETS)
+    expect(rowExplanation(row!)).toMatch(/built into the repository/)
+  })
+
+  it('says a local set is on this computer only', () => {
+    // A teammate looking at the same hub has no copy to re-seed it from.
+    const local = { ...set('anyafinn'), origin: 'local' as const }
+    const row = contentRows(available(), [local]).find((r) => r.key === 'anyafinn')
+    expect(row?.origin).toBe('local')
+    expect(rowExplanation(row!)).toMatch(/this computer only/)
+  })
+
+  it('leaves the provenance buckets as they were', () => {
+    expect(rowExplanation({ kind: 'custom' })).toMatch(/Authored on the hub/)
   })
 })

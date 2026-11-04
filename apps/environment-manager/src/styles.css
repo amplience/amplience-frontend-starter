@@ -219,6 +219,24 @@ body {
   margin: 0;
 }
 
+/* A section's title and the one-line caption saying what it holds. Grouped so
+   the list's 1rem gap separates sections, not a title from its caption. */
+.env-list__section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.env-list__section-head:not(:first-child) {
+  margin-top: 0.75rem;
+}
+
+.env-list__caption {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
 /* Section title paired with its filter input. Wraps on narrow viewports so the
    input drops below the title rather than squeezing it. */
 .env-list__header {

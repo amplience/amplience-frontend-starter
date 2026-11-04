@@ -19,6 +19,7 @@ const set = (name: string, defaultBrand = name, label = name): FixtureSetInfo =>
   defaultLocale: 'en-US',
   authoredLocales: ['en-US'],
   generatedDocs: false,
+  origin: 'built-in',
 })
 
 const SETS = [set('anyafinn', 'anyafinn', 'Anya Finn'), set(DEFAULT_FIXTURE_SET, 'default')]

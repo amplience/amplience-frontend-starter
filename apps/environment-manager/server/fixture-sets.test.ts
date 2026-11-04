@@ -50,10 +50,28 @@ describe('readFixtureSets', () => {
       'local/beta': { name: 'beta', label: 'Beta' },
       'local/alpha': { name: 'alpha', label: 'Shadow' },
     })
-    expect(readFixtureSets(root).map((s) => `${s.name}:${s.label}`)).toEqual([
-      'alpha:Alpha',
-      'beta:Beta',
+    expect(readFixtureSets(root).map((s) => `${s.name}:${s.label}:${s.origin}`)).toEqual([
+      'alpha:Alpha:built-in',
+      'beta:Beta:local',
     ])
+  })
+
+  it('lists built-in sets before local ones, whatever their labels', () => {
+    // The panel shows the two under separate headings; every other list of sets
+    // (the seed and site pickers) should agree on the order.
+    const root = tree('origin-order', {
+      zulu: { name: 'zulu', label: 'Zulu' },
+      'local/alpha': { name: 'alpha', label: 'Alpha' },
+    })
+    expect(readFixtureSets(root).map((s) => `${s.name}:${s.origin}`)).toEqual([
+      'zulu:built-in',
+      'alpha:local',
+    ])
+  })
+
+  it('never lists the local/ container itself as a built-in set', () => {
+    const root = tree('container', { local: { name: 'local' }, 'local/beta': { name: 'beta' } })
+    expect(readFixtureSets(root).map((s) => s.name)).toEqual(['beta'])
   })
 
   it('breaks a tie on name, so the order is stable between reads', () => {
@@ -84,6 +102,7 @@ describe('readFixtureSets', () => {
       defaultLocale: 'en-US',
       authoredLocales: ['en-US'],
       generatedDocs: false,
+      origin: 'built-in',
     })
   })
 
@@ -105,6 +124,7 @@ describe('readFixtureSets', () => {
       defaultLocale: '',
       authoredLocales: [],
       generatedDocs: false,
+      origin: 'built-in',
     })
   })
 
@@ -156,6 +176,7 @@ const set = (name: string, defaultBrand = name): FixtureSetInfo => ({
   defaultLocale: 'en-US',
   authoredLocales: ['en-US'],
   generatedDocs: false,
+  origin: 'built-in',
 })
 
 describe('resolveFixtureSet', () => {
