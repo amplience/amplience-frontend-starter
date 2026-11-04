@@ -4,7 +4,7 @@ import { api } from '../api.js'
 import {
   contentRows,
   gateReason,
-  ROW_EXPLANATION,
+  rowExplanation,
   seedableSets,
   type ContentBreakdown,
   type ContentRow,
@@ -2078,7 +2078,7 @@ function ContentChildRow({
 
   return (
     <tr className={`content-row content-row--${row.kind}`}>
-      <td className="col-resource col-resource--child" title={ROW_EXPLANATION[row.kind]}>
+      <td className="col-resource col-resource--child" title={rowExplanation(row)}>
         <span className="content-row__label">{row.label}</span>
         {row.localeNote !== undefined && (
           <span className="dim content-row__note"> · {row.localeNote}</span>

@@ -15,7 +15,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { App } from './App.js'
-import type { Config, Environment } from './types.js'
+import type { Config, Environment, FixtureSetInfo } from './types.js'
 
 // ⚠️ The panels are stubbed, not rendered. This file is about the tab bar,
 // and `App` imports the whole card layer — pulling `EnvironmentCard`,
@@ -27,7 +27,9 @@ vi.mock('./components/EnvironmentCard.js', () => ({
   EnvironmentCard: () => <div data-testid="environment-card" />,
 }))
 vi.mock('./components/SiteCard.js', () => ({ SiteCard: () => <div /> }))
-vi.mock('./components/FixturesCard.js', () => ({ FixturesCard: () => <div /> }))
+vi.mock('./components/FixturesCard.js', () => ({
+  FixturesCard: ({ set }: { set: FixtureSetInfo }) => <div data-testid={`set-${set.name}`} />,
+}))
 vi.mock('./components/EnvironmentForm.js', () => ({
   EnvironmentForm: () => <div data-testid="environment-form" />,
 }))
@@ -174,6 +176,54 @@ describe('App — switching panels', () => {
     const clear = await screen.findByRole('button', { name: 'Clear filter' })
     fireEvent.click(clear)
     await waitFor(() => expect(screen.getAllByTestId('environment-card')).toHaveLength(8))
+  })
+})
+
+describe('App — fixture sets', () => {
+  const fixtureSet = (name: string, origin: FixtureSetInfo['origin']): FixtureSetInfo => ({
+    name,
+    label: name,
+    description: '',
+    defaultBrand: name,
+    defaultLocale: 'en-US',
+    authoredLocales: ['en-US'],
+    generatedDocs: false,
+    origin,
+  })
+
+  /** Whether `a` comes before `b` in the document. */
+  const before = (a: HTMLElement, b: HTMLElement) =>
+    (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0
+
+  beforeEach(() => {
+    list.mockResolvedValue(config([hub('douglas')]))
+  })
+
+  // Built-in sets are shared through the repository; local ones exist on this
+  // computer only. Listed under separate headings so nobody seeds a hub from a
+  // set a teammate won't have without being able to tell.
+  it('lists built-in and local sets under their own headings', async () => {
+    fixtureSets.mockResolvedValue([
+      fixtureSet('frontend-starter', 'built-in'),
+      fixtureSet('acme', 'local'),
+    ])
+    render(<App />)
+    const builtIn = await screen.findByText('Built-in fixture sets')
+    const local = screen.getByText('Your fixture sets')
+    const hubs = screen.getByText('Hubs')
+    const shipped = await screen.findByTestId('set-frontend-starter')
+    const mine = screen.getByTestId('set-acme')
+
+    expect(before(builtIn, shipped)).toBe(true)
+    expect(before(shipped, local)).toBe(true)
+    expect(before(local, mine)).toBe(true)
+    expect(before(mine, hubs)).toBe(true)
+  })
+
+  it('explains how to add a local set when there are none', async () => {
+    fixtureSets.mockResolvedValue([fixtureSet('frontend-starter', 'built-in')])
+    render(<App />)
+    expect(await screen.findByText(/None yet/)).toBeDefined()
   })
 })
 

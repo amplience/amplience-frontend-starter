@@ -48,6 +48,8 @@ export type ContentRow = {
   regenerable: boolean
   /** "3 of 6 authored locales", when the hub's list is known and narrower. */
   localeNote?: string | undefined
+  /** For a set row, where the set lives — a local set is on this computer only. */
+  origin?: FixtureSetInfo['origin'] | undefined
 }
 
 /**
@@ -96,6 +98,7 @@ export function contentRows(
       canWipe: true,
       regenerable: true,
       localeNote: localeNote(set, hubLocales),
+      origin: set.origin,
     }))
 
   if (breakdown.orphaned > 0) {
@@ -148,13 +151,27 @@ export function seedableSets(
 
 /** Why a row holds what it holds — shown as its title, so the buckets explain themselves. */
 export const ROW_EXPLANATION: Record<ContentRow['kind'], string> = {
-  set: 'Seeded from this fixture set, which is still in the repository.',
+  set: 'Seeded from this fixture set, which is built into the repository.',
   orphaned:
     'Seeded from a fixture that has since left the repository — a retired set, a renamed ' +
     'fixture, or an older naming scheme. There is nothing on disk to sync from.',
   custom:
     'Authored on the hub rather than seeded, so the repository has no copy. ' +
     'This may be the only copy of someone’s work.',
+}
+
+/**
+ * A row's explanation. A local set's row says so: it can be re-seeded from this
+ * computer, but nobody else has a copy to re-seed it from.
+ */
+export function rowExplanation(row: Pick<ContentRow, 'kind' | 'origin'>): string {
+  if (row.kind === 'set' && row.origin === 'local') {
+    return (
+      'Seeded from this fixture set, which is stored on this computer only ' +
+      '(fixtures/local/), so teammates can’t re-seed it.'
+    )
+  }
+  return ROW_EXPLANATION[row.kind]
 }
 
 /**

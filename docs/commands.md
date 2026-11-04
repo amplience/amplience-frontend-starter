@@ -172,6 +172,42 @@ when more than one set exists, and takes the default when there is nothing to
 ask (the Environment Manager, CI). Only the content step varies by set — the
 schemas, types and extensions are shared, and are seeded once.
 
+### Pulling a site into a fixture set
+
+```sh
+pnpm hub:pull:content --set <new-set> [--from <site>] [--dry-run]
+```
+
+Reads one site's content off the active hub and writes it as a new set under
+`packages/content/fixtures/local/`, which is gitignored. A site is every item
+whose delivery key sits under `<site>/` (`--from`, defaulting to `SITE_NAME`),
+plus everything those items link to and the hierarchy nodes beneath them. The
+hub is only read: nothing is imported, published or changed there.
+
+Each item is cut back to what a fixture holds, its keys move to `<new-set>/`, and
+it is filed into `components/`, `slots/`, `pages/` or `site-components/` by its
+repository and content type. The hierarchy manifest is rebuilt from the items'
+parents, and `set.json` takes its locales from what the content is authored in.
+`pnpm fixtures:ids` then runs over the result, so every id is derived from its
+path — seeding the set back creates new items rather than touching the ones it
+came from.
+
+Furniture shared between sites — a header carrying both `acme/site/header`
+and `other/site/header`, say — keeps only its `<site>/` key; the others are
+dropped. An item reached by a link that has no `<site>/` key at all has its keys
+moved into `<new-set>/` instead, because the frontend finds a hierarchy by its
+root's key. Both are listed in the output. The pull writes nothing if any part
+of the site wouldn't survive the trip: two items landing on the same key, a
+link to a missing or archived item, or a content type the starter doesn't have.
+`--dry-run` lists what would be written, `--force`
+replaces an existing local set of the same name, and `--label` and
+`--default-locale` override what goes into `set.json`. Images stay on whichever
+DAM account the content points at; the summary names it.
+
+A pulled set is local on purpose, because content pulled from a hub can be a
+customer's. Making it a checked-in set means moving its directory up a level and
+registering it in `packages/content/src/mock/sets/`.
+
 ### Configuration
 
 The `hub:*` scripts read the environment, usually from
@@ -219,14 +255,14 @@ result to a hub.
 
 Deliberately deferred, so you don't go looking for them:
 
-| Capability                                   | Status                                                                                                                                                                                                                                                                                                 |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `pull` — hub → repo                          | **Deferred** (requirements §1.3, COULD). The repo is the source of truth for the content model; there is no supported way to bring UI-authored schema changes back into it, so reconcile by hand. A normalising schema pull is the intended v1-migration path and the likelier of these to land first. |
-| `backup` / `restore`                         | **Deferred** (requirements §1.3, COULD). Recovery is `pnpm hub:wipe` followed by a re-seed from source control — which restores the model and the starter content, but not content editors have authored on the hub since.                                                                             |
-| `diff`, `promote` (hub → hub)                | **Deferred** to the MVP automation CLI (ADR-0012).                                                                                                                                                                                                                                                     |
-| Schema deletion                              | Not supported by dc-cli. Removing a content type from a hub is a manual operation in the CMS UI.                                                                                                                                                                                                       |
-| `--dry-run`                                  | Planned at MVP for every hub-mutating operation (requirements §1.3).                                                                                                                                                                                                                                   |
-| A single `frontend-starter <command>` binary | Planned at MVP (ADR-0012). The commands above are its INTERIM form.                                                                                                                                                                                                                                    |
+| Capability                                   | Status                                                                                                                                                                                                                                                                                                                                                              |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Schema `pull` — hub → repo                   | **Deferred** (requirements §1.3, COULD). The repo is the source of truth for the content model; there is no supported way to bring UI-authored schema changes back into it, so reconcile by hand. A normalising schema pull is the intended v1-migration path. Content can be pulled — see [Pulling a site into a fixture set](#pulling-a-site-into-a-fixture-set). |
+| `backup` / `restore`                         | **Deferred** (requirements §1.3, COULD). Recovery is `pnpm hub:wipe` followed by a re-seed from source control — which restores the model and the starter content, but not content editors have authored on the hub since.                                                                                                                                          |
+| `diff`, `promote` (hub → hub)                | **Deferred** to the MVP automation CLI (ADR-0012).                                                                                                                                                                                                                                                                                                                  |
+| Schema deletion                              | Not supported by dc-cli. Removing a content type from a hub is a manual operation in the CMS UI.                                                                                                                                                                                                                                                                    |
+| `--dry-run`                                  | Planned at MVP for every hub-mutating operation (requirements §1.3).                                                                                                                                                                                                                                                                                                |
+| A single `frontend-starter <command>` binary | Planned at MVP (ADR-0012). The commands above are its INTERIM form.                                                                                                                                                                                                                                                                                                 |
 
 ## GUI ↔ terminal equivalence
 
@@ -256,6 +292,7 @@ Deliberately deferred, so you don't go looking for them:
 | All resources → **Sync all**                      | `pnpm hub:import`                                    |
 | All resources → **Wipe all**                      | `pnpm hub:wipe`                                      |
 | Site row → **Deploy** / **Redeploy** / **Remove** | — (GUI only)                                         |
+| —                                                 | `pnpm hub:pull:content --set <name>` (terminal only) |
 
 Seed and Sync differ only for content items, where Seed force-republishes
 everything and Sync publishes new and changed items only. For settings, schemas,
@@ -267,6 +304,6 @@ naming reflects intent (first run vs update), not different behaviour.
 | Layer                          | Location                                                 |
 | ------------------------------ | -------------------------------------------------------- |
 | Root passthrough scripts       | `package.json`                                           |
-| Hub import / wipe              | `packages/hub-management/scripts/`                       |
+| Hub import / wipe / pull       | `packages/hub-management/scripts/`                       |
 | Environment Manager UI + API   | `apps/environment-manager/`                              |
 | GUI operation → script mapping | `apps/environment-manager/server/index.ts` (`OP_CONFIG`) |

@@ -124,6 +124,21 @@ export function App() {
   const hubFilter = showHubFilter ? hubQuery : ''
   const visibleHubs = filterEnvironments(hubs, hubFilter)
 
+  const builtInSets = fixtureSets.filter((set) => set.origin !== 'local')
+  const localSets = fixtureSets.filter((set) => set.origin === 'local')
+  const renderFixtureSet = (set: FixtureSetInfo) => (
+    <FixturesCard
+      key={set.name}
+      set={set}
+      // Exactly one thing is active across the panel, so a set is active only
+      // when no hub is — never both (ADR-0019).
+      isActive={isOffline && config?.active === set.name}
+      onActivate={() => {
+        void handleActivate(set.name)
+      }}
+    />
+  )
+
   return (
     <div className="app">
       <header className="app-header">
@@ -185,38 +200,55 @@ export function App() {
             {/* Content Sources — hubs + fixtures */}
             {activeTab === 'sources' && (
               <div className="env-list">
-                <h3 className="env-list__title">Fixture sets</h3>
-                {fixtureSets.map((set) => (
-                  <FixturesCard
-                    key={set.name}
-                    set={set}
-                    // Exactly one thing is active across the panel, so a set is
-                    // active only when no hub is — never both (ADR-0019).
-                    isActive={isOffline && config.active === set.name}
-                    onActivate={() => {
-                      void handleActivate(set.name)
-                    }}
-                  />
-                ))}
-                {fixtureSets.length === 0 && (
+                {/* Built-in sets are checked in and shared; local ones live in the
+                    gitignored fixtures/local/ on this computer only. Split so the
+                    difference shows before a hub is seeded from a set nobody
+                    else has. readFixtureSets already orders built-in first. */}
+                <div className="env-list__section-head">
+                  <h3 className="env-list__title">Built-in fixture sets</h3>
+                  <p className="env-list__caption">
+                    Included with Frontend Starter, so everyone using the repo has these.
+                  </p>
+                </div>
+                {builtInSets.map(renderFixtureSet)}
+                {builtInSets.length === 0 && (
                   <p className="env-card__description">
                     No fixture sets found under <code>packages/content/fixtures/</code>. Each set is
                     a directory with a <code>set.json</code>.
                   </p>
                 )}
-                <div className="env-list__header">
-                  <h3 className="env-list__title">Hubs</h3>
-                  {showHubFilter && (
-                    <ListFilter
-                      label="Filter hubs"
-                      placeholder="Filter hubs…"
-                      noun="hubs"
-                      value={hubQuery}
-                      onChange={setHubQuery}
-                      resultCount={visibleHubs.length}
-                      totalCount={hubs.length}
-                    />
-                  )}
+
+                <div className="env-list__section-head">
+                  <h3 className="env-list__title">Your fixture sets</h3>
+                  <p className="env-list__caption">
+                    Only on this computer. Kept in <code>fixtures/local/</code> and never committed.
+                  </p>
+                </div>
+                {localSets.map(renderFixtureSet)}
+                {localSets.length === 0 && (
+                  <p className="env-card__description">
+                    None yet. Fixture sets you add under{' '}
+                    <code>packages/content/fixtures/local/</code> appear here — the brand fixture
+                    builder skill can make one from a live site.
+                  </p>
+                )}
+
+                <div className="env-list__section-head">
+                  <div className="env-list__header">
+                    <h3 className="env-list__title">Hubs</h3>
+                    {showHubFilter && (
+                      <ListFilter
+                        label="Filter hubs"
+                        placeholder="Filter hubs…"
+                        noun="hubs"
+                        value={hubQuery}
+                        onChange={setHubQuery}
+                        resultCount={visibleHubs.length}
+                        totalCount={hubs.length}
+                      />
+                    )}
+                  </div>
+                  <p className="env-list__caption">Live Amplience hubs.</p>
                 </div>
 
                 {visibleHubs.map((env) => (

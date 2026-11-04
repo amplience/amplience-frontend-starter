@@ -17,6 +17,8 @@ export type FixtureSetInfo = {
   defaultLocale: string
   authoredLocales: string[]
   generatedDocs: boolean
+  /** `built-in` is checked in; `local` is under the gitignored `fixtures/local/`. */
+  origin: 'built-in' | 'local'
 }
 
 export type Environment = {

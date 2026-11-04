@@ -29,7 +29,17 @@ export type FixtureSetInfo = {
   authoredLocales: string[]
   /** Whether `generate-docs` writes into this set. */
   generatedDocs: boolean
+  /**
+   * Where the set lives: `built-in` is checked in under `fixtures/` and shared
+   * with everyone using the repository; `local` is under the gitignored
+   * `fixtures/local/`, so it exists on this computer only. The panel lists the
+   * two under separate headings, so the difference is visible before anyone
+   * seeds a hub from a set a teammate won't have.
+   */
+  origin: FixtureSetOrigin
 }
+
+export type FixtureSetOrigin = 'built-in' | 'local'
 
 /**
  * The set a zero-config deployment gets — the twin of `FIXTURE_SITE_NAME` in
@@ -44,7 +54,11 @@ export const fixturesRootFor = (repoRoot: string) =>
   path.join(repoRoot, 'packages', 'content', 'fixtures')
 
 /** Everything a `set.json` omits. A set is usable with nothing but a name. */
-const withDefaults = (name: string, raw: Record<string, unknown>): FixtureSetInfo => ({
+const withDefaults = (
+  name: string,
+  raw: Record<string, unknown>,
+  origin: FixtureSetOrigin = 'built-in',
+): FixtureSetInfo => ({
   name,
   label: typeof raw.label === 'string' && raw.label !== '' ? raw.label : name,
   description: typeof raw.description === 'string' ? raw.description : '',
@@ -54,10 +68,12 @@ const withDefaults = (name: string, raw: Record<string, unknown>): FixtureSetInf
     ? raw.authoredLocales.filter((l): l is string => typeof l === 'string')
     : [],
   generatedDocs: raw.generatedDocs === true,
+  origin,
 })
 
 /**
- * Every set on disk, ordered by the label the panel shows.
+ * Every set on disk: built-in sets before local ones, each group ordered by
+ * the label the panel shows.
  *
  * Sorting by directory name would order the list by something the reader can't
  * see — `anyafinn` sorts above `frontend-starter` while "Anya Finn" reads as
@@ -76,25 +92,35 @@ export function readFixtureSets(repoRoot: string): FixtureSetInfo[] {
   const sets: FixtureSetInfo[] = []
   // Checked-in sets first, then the gitignored `local/` ones; a local set
   // reusing a checked-in name is skipped here (the seed scripts refuse it).
-  for (const dir of [root, path.join(root, 'local')]) {
+  const dirs: [string, FixtureSetOrigin][] = [
+    [root, 'built-in'],
+    [path.join(root, 'local'), 'local'],
+  ]
+  for (const [dir, origin] of dirs) {
     if (!existsSync(dir)) continue
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
       if (!entry.isDirectory()) continue
+      // `local` is the container for the local sets, never a set itself.
+      if (origin === 'built-in' && entry.name === 'local') continue
       if (sets.some((s) => s.name === entry.name)) continue
       const file = path.join(dir, entry.name, 'set.json')
       if (!existsSync(file)) continue
       try {
         const raw: unknown = JSON.parse(readFileSync(file, 'utf-8'))
         if (typeof raw !== 'object' || raw === null) continue
-        sets.push(withDefaults(entry.name, raw as Record<string, unknown>))
+        sets.push(withDefaults(entry.name, raw as Record<string, unknown>, origin))
       } catch {
         continue
       }
     }
   }
-  // Label, then name as the tie-break — two sets sharing a label would
-  // otherwise swap places between reads.
-  return sets.sort((a, b) => a.label.localeCompare(b.label) || a.name.localeCompare(b.name))
+  // Origin, then label, then name as the tie-break — two sets sharing a label
+  // would otherwise swap places between reads. Built-in first so every list of
+  // sets (the panel's headings, the seed and site pickers) agrees on order.
+  const rank = (s: FixtureSetInfo) => (s.origin === 'built-in' ? 0 : 1)
+  return sets.sort(
+    (a, b) => rank(a) - rank(b) || a.label.localeCompare(b.label) || a.name.localeCompare(b.name),
+  )
 }
 
 /**

@@ -20,6 +20,7 @@
     "hub:import:settings": "node --env-file-if-exists=.env scripts/hub-import.mjs settings",
     "hub:import:types": "node --env-file-if-exists=.env scripts/hub-import.mjs types",
     "hub:import:webhooks": "node --env-file-if-exists=.env scripts/hub-import.mjs webhooks",
+    "hub:pull:content": "node --env-file-if-exists=.env scripts/hub-pull.mjs content",
     "hub:wipe": "node --env-file-if-exists=.env scripts/hub-wipe.mjs",
     "hub:wipe:content": "node --env-file-if-exists=.env scripts/hub-wipe.mjs content",
     "hub:wipe:extensions": "node --env-file-if-exists=.env scripts/hub-wipe.mjs extensions",
