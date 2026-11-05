@@ -57,7 +57,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
     // the default locale (ADR-0015).
     return {
       title: product.name,
-      ...(product.shortDescription !== undefined && { description: product.shortDescription }),
+      ...(metaDescription(product) !== undefined && { description: metaDescription(product) }),
       alternates: { canonical: publicPath(locale, `/products/${slug}`) },
     }
   } catch (error) {
@@ -111,6 +111,7 @@ export default async function ProductPage({ params }: RouteProps) {
         {...(product.shortDescription !== undefined && {
           shortDescription: product.shortDescription,
         })}
+        {...(product.description !== undefined && { description: product.description })}
         {...(product.brand !== undefined && { brand: product.brand })}
         {...(product.status !== undefined && { status: product.status })}
       >
@@ -118,4 +119,23 @@ export default async function ProductPage({ params }: RouteProps) {
       </ProductDetail>
     </main>
   )
+}
+
+/**
+ * The meta description: the short copy when there is one, else the long copy
+ * clipped at a word boundary near the ~160 characters search results show.
+ */
+const META_DESCRIPTION_LENGTH = 160
+
+const metaDescription = (product: {
+  readonly shortDescription?: string
+  readonly description?: string
+}): string | undefined => {
+  if (product.shortDescription !== undefined) return product.shortDescription
+  const text = product.description?.replace(/\s+/g, ' ').trim()
+  if (!text) return undefined
+  if (text.length <= META_DESCRIPTION_LENGTH) return text
+  const clipped = text.slice(0, META_DESCRIPTION_LENGTH - 1)
+  const lastSpace = clipped.lastIndexOf(' ')
+  return `${lastSpace > 0 ? clipped.slice(0, lastSpace) : clipped}…`
 }

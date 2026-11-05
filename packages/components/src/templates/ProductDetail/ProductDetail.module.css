@@ -103,6 +103,10 @@
   color: var(--product-detail-description-color, var(--color-gray-700));
 }
 
+.longDescription {
+  white-space: pre-line;
+}
+
 .attributes {
   width: 100%;
   margin-top: var(--spacing-2);

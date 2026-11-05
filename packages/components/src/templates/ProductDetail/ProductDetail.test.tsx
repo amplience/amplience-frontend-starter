@@ -54,6 +54,21 @@ describe('ProductDetail', () => {
   })
 })
 
+describe('ProductDetail — descriptions', () => {
+  it('renders the short and the long description', () => {
+    render(
+      <ProductDetail name="Chair" shortDescription="Short." description={'Long.\nSecond line.'} />,
+    )
+    expect(screen.getByText('Short.')).toBeDefined()
+    expect(screen.getByText(/Long\.\s+Second line\./)).toBeDefined()
+  })
+
+  it('renders neither when both are absent', () => {
+    const { container } = render(<ProductDetail name="Chair" />)
+    expect(container.querySelectorAll('p')).toHaveLength(0)
+  })
+})
+
 describe('ProductDetail — gallery', () => {
   it('renders no gallery at all when there are no images', () => {
     // Not an empty box and not a placeholder: on a PDP there is nothing to

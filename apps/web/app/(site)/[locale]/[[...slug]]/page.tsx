@@ -66,6 +66,7 @@ import { isContentClientError } from '@amplience/frontend-starter-content'
 import { categoryIdForSlug, categoryTitle } from '../../../../lib/categories'
 import { client, siteName } from '../../../../lib/content-client'
 import { resolveCurrency } from '../../../../lib/currency'
+import { listingLimit } from '../../../../lib/listing'
 import { localeBasePath, localeForSlug, publicPath } from '../../../../lib/locales'
 import type { Locale } from '../../../../lib/locales'
 import { productSource } from '../../../../lib/product-source'
@@ -236,6 +237,7 @@ export default async function ContentPage({ params }: RouteProps) {
  */
 async function renderCategoryListing(category: string, locale: Locale) {
   const { products } = await productSource.list({
+    ...(listingLimit === undefined ? {} : { limit: listingLimit }),
     category,
     locale: locale.delivery,
     currency: resolveCurrency(locale.code),

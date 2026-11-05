@@ -17,6 +17,11 @@ describe('resolveSourceName', () => {
     expect(resolveSourceName('cms')).toBe('cms')
   })
 
+  it('accepts commercetools', () => {
+    expect(resolveSourceName('commercetools')).toBe('commercetools')
+    expect(resolveSourceName(' CommerceTools ')).toBe('commercetools')
+  })
+
   it('is case- and whitespace-insensitive', () => {
     expect(resolveSourceName(' CMS ')).toBe('cms')
   })
@@ -24,7 +29,7 @@ describe('resolveSourceName', () => {
   it('throws on an unrecognised source rather than falling back', () => {
     // A typo in a future PIM deployment must fail at boot, not degrade to an
     // empty CMS catalogue that reads as "no products published".
-    expect(() => resolveSourceName('commercetools')).toThrow(/not a known product source/)
-    expect(() => resolveSourceName('cmss')).toThrow(/Expected one of: cms/)
+    expect(() => resolveSourceName('shopify')).toThrow(/not a known product source/)
+    expect(() => resolveSourceName('cmss')).toThrow(/Expected one of: cms, commercetools/)
   })
 })

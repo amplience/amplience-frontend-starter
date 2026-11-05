@@ -22,6 +22,7 @@ import { Suspense } from 'react'
 import { HeroBlock } from '@amplience/frontend-starter-components/hero-block'
 
 import { resolveCurrency } from '../../../../lib/currency'
+import { listingLimit } from '../../../../lib/listing'
 import { localeForSlug } from '../../../../lib/locales'
 import { productSource } from '../../../../lib/product-source'
 import { ProductGrid } from '../../../../src/ProductGrid'
@@ -44,6 +45,7 @@ async function ProductListing({ params }: RouteProps) {
   if (locale === undefined) notFound()
 
   const { products } = await productSource.list({
+    ...(listingLimit === undefined ? {} : { limit: listingLimit }),
     locale: locale.delivery,
     currency: resolveCurrency(locale.code),
   })
@@ -55,7 +57,7 @@ async function ProductListing({ params }: RouteProps) {
           title="Products"
           description="Everything in the catalogue."
           backgroundColor="black"
-          contentPadding={30}
+          contentPaddingVertical={30}
           loadPriority="lcp"
         />
       </header>

@@ -33,6 +33,8 @@ export type ProductDetailProps = {
   readonly images?: readonly ContentMediaData[]
   /** A sentence or two below the name. */
   readonly shortDescription?: string
+  /** Long-form copy below the summary; line breaks in the text are kept. */
+  readonly description?: string
   /** Display-only spec rows. */
   readonly attributes?: readonly Attribute[]
   /**
@@ -100,6 +102,7 @@ export function ProductDetail({
   price,
   images,
   shortDescription,
+  description,
   attributes,
   brand,
   tags,
@@ -145,6 +148,12 @@ export function ProductDetail({
             {shortDescription !== undefined && (
               <Typography variant="p" className={clsx(styles.description)}>
                 {shortDescription}
+              </Typography>
+            )}
+
+            {description !== undefined && (
+              <Typography variant="p" className={clsx(styles.description, styles.longDescription)}>
+                {description}
               </Typography>
             )}
 

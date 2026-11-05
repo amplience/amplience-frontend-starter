@@ -104,7 +104,16 @@ export type Product = {
    */
   readonly prices?: readonly ProductPrice[]
   readonly images?: readonly ProductImage[]
+  /** A sentence or two — card and PDP summary copy. */
   readonly shortDescription?: string
+  /**
+   * The full product description, for the PDP. Kept apart from
+   * `shortDescription` because PIMs hold long-form copy that is wrong on a
+   * card: commercetools' `description` is the long text, and a short one only
+   * exists if a project adds an attribute for it. A PIM *overwrites* this
+   * field rather than reconciling it, so ADR-0018 §8 admits it.
+   */
+  readonly description?: string
   readonly attributes?: readonly ProductAttribute[]
   /**
    * Brand or vendor name — the value as displayed, not a reference.

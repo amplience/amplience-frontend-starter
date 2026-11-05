@@ -17,15 +17,20 @@
  * the mock/SDK ladder for free: a fresh clone with no `.env` serves products
  * from fixtures, and a configured hub serves them from Amplience, with no
  * change here.
+ *
+ * `commercetools` reads its own `CTP_*` variables, and only when chosen — a
+ * CMS deployment never needs them. Missing credentials throw at boot, for the
+ * same reason an unknown source name does.
  */
 
 import type { ProductSource } from '@amplience/frontend-starter-content'
 import { CmsProductSource } from '@amplience/frontend-starter-content/product'
+import { makeCommercetoolsProductSource } from '@amplience/frontend-starter-content/product/commercetools'
 
 import { client, siteName } from './content-client'
 
 /** Sources this deployment knows how to build. */
-const SOURCES = ['cms'] as const
+const SOURCES = ['cms', 'commercetools'] as const
 
 type SourceName = (typeof SOURCES)[number]
 
@@ -52,7 +57,16 @@ const resolveSourceName = (raw: string | undefined): SourceName => {
 
 export const productSourceName: SourceName = resolveSourceName(process.env.PRODUCT_SOURCE)
 
-export const productSource: ProductSource = new CmsProductSource({ client, siteName })
+const buildSource = (name: SourceName): ProductSource => {
+  switch (name) {
+    case 'commercetools':
+      return makeCommercetoolsProductSource()
+    case 'cms':
+      return new CmsProductSource({ client, siteName })
+  }
+}
+
+export const productSource: ProductSource = buildSource(productSourceName)
 
 /** Exported for the unit test — the resolution rule, without the module singleton. */
 export { resolveSourceName }
