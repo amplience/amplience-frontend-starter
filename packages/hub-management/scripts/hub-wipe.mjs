@@ -503,6 +503,8 @@ const slotsRepo = wipesContent
   : undefined
 // Optional — only wiped when the deployment uses CMS-managed site config.
 const siteComponentsRepo = env('AMPLIENCE_REPO_SITE_COMPONENTS')
+// Optional — only wiped when products are seeded into a repository of their own.
+const productsRepo = env('AMPLIENCE_REPO_PRODUCTS')
 
 // Filename keeps the `quadratic-` prefix: renaming it orphans every existing
 // hub's map, so dc-cli would re-import the whole model as duplicates.
@@ -686,6 +688,7 @@ const runScopedWipe = async (selector) => {
     { id: contentRepo, label: 'content' },
     { id: slotsRepo, label: 'slots' },
     { id: siteComponentsRepo, label: 'site-components' },
+    { id: productsRepo, label: 'products' },
   ])
 
   const classified = classifyHubItems(
@@ -800,6 +803,9 @@ const wipeContent = async () => {
     if (siteComponentsRepo !== undefined) {
       await reclaimRepo(client, siteComponentsRepo, 'site-components')
     }
+    if (productsRepo !== undefined) {
+      await reclaimRepo(client, productsRepo, 'products')
+    }
     reportUnpublishing()
   } else {
     console.warn(
@@ -832,6 +838,11 @@ const wipeContent = async () => {
   if (siteComponentsRepo !== undefined) {
     console.log(`\nArchiving all content in Site Components repo (${siteComponentsRepo})…`)
     await dcCli('content-item', 'archive', '--repoId', siteComponentsRepo, ...archiveFlags)
+  }
+
+  if (productsRepo !== undefined) {
+    console.log(`\nArchiving all content in products repo (${productsRepo})…`)
+    await dcCli('content-item', 'archive', '--repoId', productsRepo, ...archiveFlags)
   }
 }
 

@@ -61,6 +61,7 @@ export const api = {
     repoContent?: string
     repoSlots?: string
     repoSiteComponents?: string
+    repoProducts?: string
   }) =>
     request<PermissionsReport>('/amplience/permissions', {
       method: 'POST',

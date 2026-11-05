@@ -79,6 +79,17 @@ beforeEach(() => {
   vi.mocked(api.hubFlows).mockImplementation(() => new Promise(() => undefined))
 })
 
+const fixtureSet = (name: string, origin: FixtureSetInfo['origin']): FixtureSetInfo => ({
+  name,
+  label: name,
+  description: '',
+  defaultBrand: name,
+  defaultLocale: 'en-US',
+  authoredLocales: ['en-US'],
+  generatedDocs: false,
+  origin,
+})
+
 describe('App — the tab bar', () => {
   it('shows the tabs once there is a hub', async () => {
     list.mockResolvedValue(config([hub('douglas')]))
@@ -180,17 +191,6 @@ describe('App — switching panels', () => {
 })
 
 describe('App — fixture sets', () => {
-  const fixtureSet = (name: string, origin: FixtureSetInfo['origin']): FixtureSetInfo => ({
-    name,
-    label: name,
-    description: '',
-    defaultBrand: name,
-    defaultLocale: 'en-US',
-    authoredLocales: ['en-US'],
-    generatedDocs: false,
-    origin,
-  })
-
   /** Whether `a` comes before `b` in the document. */
   const before = (a: HTMLElement, b: HTMLElement) =>
     (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0
@@ -228,6 +228,30 @@ describe('App — fixture sets', () => {
 })
 
 describe('App — when the API cannot be reached', () => {
+  // The API server restarts on every save to server/, so a page loaded mid-
+  // restart must not show an empty set list until someone reloads it.
+  it('retries the fixture sets once after a failure', async () => {
+    list.mockResolvedValue(config([]))
+    fixtureSets
+      .mockRejectedValueOnce(new Error('restarting'))
+      .mockResolvedValue([fixtureSet('frontend-starter', 'built-in')])
+    render(<App />)
+    expect(await screen.findByTestId('set-frontend-starter', {}, { timeout: 3000 })).toBeDefined()
+    expect(fixtureSets).toHaveBeenCalledTimes(2)
+  })
+
+  it('reloads the fixture sets with Retry', async () => {
+    list.mockRejectedValue(new Error('nope'))
+    fixtureSets.mockRejectedValue(new Error('nope'))
+    render(<App />)
+    expect(await screen.findByText(/Could not reach the API server/)).toBeDefined()
+
+    list.mockResolvedValue(config([]))
+    fixtureSets.mockResolvedValue([fixtureSet('frontend-starter', 'built-in')])
+    fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
+    expect(await screen.findByTestId('set-frontend-starter')).toBeDefined()
+  })
+
   it('says so, and offers a retry that asks again', async () => {
     list.mockRejectedValue(new Error('nope'))
     render(<App />)

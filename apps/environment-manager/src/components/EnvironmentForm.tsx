@@ -48,6 +48,11 @@ const HUB_FIELDS: FieldMeta[] = [
     placeholder: 'Optional — enables CMS-managed site config',
   },
   {
+    key: 'repoProducts',
+    label: 'Products repo ID',
+    placeholder: 'Optional — seeds products here instead of the content repo',
+  },
+  {
     key: 'stagingHost',
     label: 'Staging host (VSE)',
     placeholder: 'Optional — enables staging preview',
@@ -157,9 +162,11 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
     const siteComponentsRepo = hub.repos.find(
       (r) => (r.label ?? '').trim().toLowerCase() === 'site components',
     )
+    // Products, like Site Components, is recognised by its label alone.
+    const productsRepo = hub.repos.find((r) => (r.label ?? '').trim().toLowerCase() === 'products')
     const slotsRepo = hub.repos.find((r) => r.features.includes('slots'))
     const contentRepo = hub.repos.find(
-      (r) => !r.features.includes('slots') && r !== siteComponentsRepo,
+      (r) => !r.features.includes('slots') && r !== siteComponentsRepo && r !== productsRepo,
     )
     const filled = new Set<string>(['hubName', 'hubId'])
     // organizationId is carried but not shown: it has no field, and it is only
@@ -182,6 +189,11 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
     if (siteComponentsRepo !== undefined) {
       updates.repoSiteComponents = siteComponentsRepo.id
       filled.add('repoSiteComponents')
+    }
+    // Optional — only prefilled when a repo labelled "Products" exists.
+    if (productsRepo !== undefined) {
+      updates.repoProducts = productsRepo.id
+      filled.add('repoProducts')
     }
     if (hub.stagingHost !== undefined) {
       updates.stagingHost = hub.stagingHost
@@ -232,6 +244,7 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
           repoContent: form.repoContent,
           repoSlots: form.repoSlots,
           repoSiteComponents: form.repoSiteComponents,
+          repoProducts: form.repoProducts,
         }),
       )
     } catch (err) {

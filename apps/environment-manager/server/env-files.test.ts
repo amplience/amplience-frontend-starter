@@ -10,6 +10,7 @@ const HUB: EnvSource = {
   repoContent: 'repo-content',
   repoSlots: 'repo-slots',
   repoSiteComponents: 'repo-site-components',
+  repoProducts: 'repo-products',
   revalidateSecret: 's3cret',
   clientId: 'client-id',
   clientSecret: 'client-secret',
@@ -163,6 +164,7 @@ describe('hubManagementEnvVars', () => {
       AMPLIENCE_REPO_CONTENT: 'repo-content',
       AMPLIENCE_REPO_SLOTS: 'repo-slots',
       AMPLIENCE_REPO_SITE_COMPONENTS: 'repo-site-components',
+      AMPLIENCE_REPO_PRODUCTS: 'repo-products',
       AMPLIENCE_CLIENT_ID: 'client-id',
       AMPLIENCE_CLIENT_SECRET: 'client-secret',
       AMPLIENCE_STAGING_HOST: 'acme.staging.bigcontent.io',
@@ -186,6 +188,14 @@ describe('hubManagementEnvVars', () => {
     const sparse = { ...HUB, repoSiteComponents: '', revalidateSecret: '  ' }
     expect(hubManagementEnvVars(sparse, ON_HUB).AMPLIENCE_REPO_SITE_COMPONENTS).toBeUndefined()
     expect(hubManagementEnvVars(sparse, ON_HUB).AMPLIENCE_REVALIDATE_SECRET).toBeUndefined()
+  })
+
+  it('leaves the products repo unset when a hub has none, so products seed into content', () => {
+    const { repoProducts: _omitted, ...older } = HUB
+    expect(hubManagementEnvVars(older, ON_HUB).AMPLIENCE_REPO_PRODUCTS).toBeUndefined()
+    expect(
+      hubManagementEnvVars({ ...HUB, repoProducts: '' }, ON_HUB).AMPLIENCE_REPO_PRODUCTS,
+    ).toBeUndefined()
   })
 })
 

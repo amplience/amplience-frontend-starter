@@ -23,10 +23,13 @@ type Tab = 'sources' | 'sites' | 'flows'
  */
 const isLocalhostUrl = (url: string) => /(?:localhost|127\.0\.0\.1|\[::1\])/i.test(url)
 
+/** How long to wait before the one fixture-sets retry — about a server restart. */
+const FIXTURE_SETS_RETRY_MS = 1500
+
 export function App() {
   const [config, setConfig] = useState<Config | null>(null)
-  // Read once: a set appearing or disappearing is someone editing the repo,
-  // which restarts the API server anyway.
+  // Read with the hub list (start-up and Retry): a set appearing or
+  // disappearing is someone editing the repo, which restarts the API server.
   const [fixtureSets, setFixtureSets] = useState<FixtureSetInfo[]>([])
   /**
    * The flow fixtures, read once at start-up rather than when the tab opens.
@@ -46,6 +49,21 @@ export function App() {
   // useCallback keeps the reference stable so the effect dep array is honest.
   // setState setters are guaranteed stable by React, so no extra deps needed.
   const load = useCallback(() => {
+    // In parallel with the hub list, so it adds nothing to the load time. A
+    // page that loads while the API server is restarting (it restarts on every
+    // save to server/) gets one retry shortly after, instead of an empty set
+    // list until a full reload. A failure keeps whatever list was already
+    // shown — no set rows is worse than slightly stale ones.
+    const loadSets = (retries: number) => {
+      void api
+        .fixtureSets()
+        .then(setFixtureSets)
+        .catch(() => {
+          if (retries > 0) setTimeout(() => loadSets(retries - 1), FIXTURE_SETS_RETRY_MS)
+        })
+    }
+    loadSets(1)
+
     void api
       .list()
       .then((nextConfig) => {
@@ -57,12 +75,6 @@ export function App() {
 
   useEffect(() => {
     load()
-    // A failure here leaves the list empty, which the card reads as "no set
-    // resolved" — the hubs still work, so it isn't worth a second error banner.
-    void api
-      .fixtureSets()
-      .then(setFixtureSets)
-      .catch(() => setFixtureSets([]))
 
     // A failure is carried as `fixturesError` rather than thrown away: the
     // Flows tab renders it as a banner, which is the only place it means
