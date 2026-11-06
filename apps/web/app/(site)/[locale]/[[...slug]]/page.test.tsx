@@ -188,7 +188,9 @@ describe('ContentRoute — content-fetch failures (QL-37)', () => {
 
 describe('ContentRoute — category listings (ADR-0024)', () => {
   // The fixtures put every product in a top-level category and a leaf one,
-  // so `/home` exercises ancestor matching and `/home-tables` a leaf.
+  // so `/home` exercises ancestor matching and `/furniture` a leaf. The
+  // identifiers are commercetools category keys, so the same URLs work with
+  // either product source.
   // Products live in the anyafinn set (ADR-0019); the default set has none.
   // lib/content-client reads FIXTURE_SET when loadRoute() re-imports it.
   beforeEach(() => {
@@ -201,8 +203,8 @@ describe('ContentRoute — category listings (ADR-0024)', () => {
 
   it('renders a category listing for a path with no page behind it', async () => {
     const { default: ContentRoute } = await loadRoute()
-    const out = renderToStaticMarkup((await ContentRoute(routeProps(['home-tables']))) as ReactNode)
-    expect(out).toContain('data-category="home-tables"')
+    const out = renderToStaticMarkup((await ContentRoute(routeProps(['furniture']))) as ReactNode)
+    expect(out).toContain('data-category="furniture"')
     // Assert the filtering, not a marker attribute: both tables are in, and
     // a product from a sibling category is out.
     expect(out).toContain('/products/terra-dining-table')
@@ -222,8 +224,10 @@ describe('ContentRoute — category listings (ADR-0024)', () => {
 
   it('derives an unlocalised title from the identifier', async () => {
     const { default: ContentRoute } = await loadRoute()
-    const out = renderToStaticMarkup((await ContentRoute(routeProps(['mens-shirts']))) as ReactNode)
-    expect(out).toContain('Mens Shirts')
+    const out = renderToStaticMarkup(
+      (await ContentRoute(routeProps(['men-clothing-shirts']))) as ReactNode,
+    )
+    expect(out).toContain('Men Clothing Shirts')
   })
 
   it('still 404s a path that is neither a page nor a category', async () => {
@@ -244,9 +248,9 @@ describe('ContentRoute — category listings (ADR-0024)', () => {
 
   it('gives a category page a derived title and canonical in metadata', async () => {
     const { generateMetadata } = await loadRoute()
-    const meta = await generateMetadata(routeProps(['home-tables']))
-    expect(meta.title).toBe('Home Tables')
-    expect(meta.alternates?.canonical).toBe('/home-tables')
+    const meta = await generateMetadata(routeProps(['furniture']))
+    expect(meta.title).toBe('Furniture')
+    expect(meta.alternates?.canonical).toBe('/furniture')
   })
 })
 

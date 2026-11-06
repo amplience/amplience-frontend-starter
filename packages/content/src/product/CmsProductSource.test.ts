@@ -182,14 +182,14 @@ describe('CmsProductSource — listing', () => {
   })
 
   it('filters by an exact category identifier', async () => {
-    const { products, total } = await source().list({ category: 'home-tables' })
+    const { products, total } = await source().list({ category: 'furniture' })
     expect(products.length).toBeGreaterThan(0)
-    expect(products.every((p) => p.categories?.includes('home-tables'))).toBe(true)
+    expect(products.every((p) => p.categories?.includes('furniture'))).toBe(true)
     expect(total).toBe(products.length)
   })
 
   it('matches an ancestor because ancestors are denormalised onto the product', () => {
-    // No tree walk: a product in `home-tables` also lists `home`, which is
+    // No tree walk: a product in `furniture` also lists `home`, which is
     // what commercetools recommends and what makes this an exact match.
     return source()
       .list({ category: 'home' })

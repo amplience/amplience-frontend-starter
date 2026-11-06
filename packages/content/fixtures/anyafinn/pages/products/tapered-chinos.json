@@ -298,7 +298,7 @@
         }
       }
     ],
-    "categories": ["mens", "mens-trousers"],
+    "categories": ["men", "men-clothing", "men-clothing-trousers"],
     "tags": ["trousers", "halden"],
     "title": "Halden Tapered Chinos | Amplience Frontend Starter",
     "description": "Cotton twill chinos with a clean taper from knee to hem."
