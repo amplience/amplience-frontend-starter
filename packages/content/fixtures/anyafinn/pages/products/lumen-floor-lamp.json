@@ -237,6 +237,6 @@
     "tags": ["brass", "lighting"],
     "title": "Lumen Floor Lamp | Amplience Frontend Starter",
     "description": "A slim brass floor lamp with a linen shade and a dimmable warm bulb.",
-    "categories": ["home", "home-lighting"]
+    "categories": ["home", "electrical", "lighting"]
   }
 }

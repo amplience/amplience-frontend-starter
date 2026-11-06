@@ -248,6 +248,25 @@ describe('buildPermissionsReport', () => {
     expect(check(report, 'items-site-components')).toMatchObject({ read: 'ok', write: 'ok' })
   })
 
+  it('checks the products repo only when one is configured', async () => {
+    const skipped = await buildPermissionsReport(ENV, stubFetch(happyRoutes()))
+    expect(check(skipped, 'items-products')).toMatchObject({
+      read: 'skipped',
+      detail: 'not configured',
+    })
+
+    const routes = happyRoutes()
+    routes.push([
+      `${API}/content-repositories/repoP`,
+      { status: 200, body: { _links: { 'create-content-item': { href: 'x' } } } },
+    ])
+    const report = await buildPermissionsReport(
+      { ...ENV, repoProducts: 'repoP' },
+      stubFetch(routes),
+    )
+    expect(check(report, 'items-products')).toMatchObject({ read: 'ok', write: 'ok' })
+  })
+
   it('stamps checkedAt with an ISO timestamp', async () => {
     const report = await buildPermissionsReport(ENV, stubFetch(happyRoutes()))
     expect(new Date(report.checkedAt).toISOString()).toBe(report.checkedAt)

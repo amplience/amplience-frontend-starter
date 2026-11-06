@@ -234,7 +234,7 @@
         }
       }
     ],
-    "categories": ["mens", "mens-jackets"],
+    "categories": ["men", "men-clothing", "men-clothing-jackets"],
     "tags": ["jackets", "brackish"],
     "title": "Brackish Quilted Bomber | Amplience Frontend Starter",
     "description": "A lightly quilted bomber with a ribbed collar and a zip that runs both ways."

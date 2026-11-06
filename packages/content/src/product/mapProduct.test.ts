@@ -139,6 +139,22 @@ describe('mapProduct — prices', () => {
     ).toBeUndefined()
   })
 
+  it('carries a was price that is higher than the amount', () => {
+    const reduced = { amount: 48, currencyCode: 'GBP', compareAtAmount: 60 }
+    expect(mapProduct({ ...base, prices: [reduced] }, 's')?.price).toEqual(reduced)
+  })
+
+  it('drops a was price that is not higher than the amount', () => {
+    // Struck through, an equal or lower figure would read as a price rise.
+    for (const compareAtAmount of [48, 40]) {
+      const price = mapProduct(
+        { ...base, prices: [{ amount: 48, currencyCode: 'GBP', compareAtAmount }] },
+        's',
+      )?.price
+      expect(price).toEqual({ amount: 48, currencyCode: 'GBP' })
+    }
+  })
+
   it('ignores a non-array prices field', () => {
     expect(mapProduct({ ...base, prices: 'nope' }, 's')?.prices).toBeUndefined()
   })

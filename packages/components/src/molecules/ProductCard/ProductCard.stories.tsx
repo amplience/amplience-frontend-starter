@@ -51,6 +51,15 @@ export const Playground: Story = {
   render: (args) => <div style={{ maxWidth: '280px' }}>{grid(<ProductCard {...args} />)}</div>,
 }
 
+export const OnSale: Story = {
+  name: 'On sale — was and now',
+  args: {
+    ...fromFixture('aurora-lounge-chair'),
+    price: { amount: 599, compareAtAmount: 749, currencyCode: 'GBP' },
+  },
+  render: (args) => <div style={{ maxWidth: '280px' }}>{grid(<ProductCard {...args} />)}</div>,
+}
+
 export const TheFixtureSet: Story = {
   name: 'Every fixture product',
   render: () =>

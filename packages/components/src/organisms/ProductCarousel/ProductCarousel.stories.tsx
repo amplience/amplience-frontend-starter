@@ -2,24 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import type { ResolvedProduct } from '@amplience/frontend-starter-types'
 
-import { storyProducts } from '../../fixtures/products'
+import { storyResolvedProducts } from '../../fixtures/products'
 import { ProductCarousel } from './ProductCarousel'
 
-/**
- * The fixture products as resolved products — the same mapping the composition
- * boundary does from the port's normalised `Product` (ADR-0027).
- */
-export const products: readonly ResolvedProduct[] = storyProducts.map((p) => ({
-  sku: p.sku,
-  slug: p.slug,
-  name: p.name,
-  href: p.href,
-  ...(p.price !== undefined && { price: p.price }),
-  ...(p.images[0] !== undefined && { media: p.images[0] }),
-  ...(p.brand !== undefined && { brand: p.brand }),
-  ...(p.shortDescription !== undefined && { shortDescription: p.shortDescription }),
-  ...(p.status !== undefined && { status: p.status }),
-}))
+/** The fixture products as resolved products (shared with ProductCarouselBlock's stories). */
+export const products: readonly ResolvedProduct[] = storyResolvedProducts
 
 const meta = {
   title: 'Organisms/ProductCarousel',

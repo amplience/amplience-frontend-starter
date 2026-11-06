@@ -108,6 +108,8 @@ const repos = {
   content: requireEnv('AMPLIENCE_REPO_CONTENT', 'list the pages and components'),
   slots: requireEnv('AMPLIENCE_REPO_SLOTS', 'list the slots'),
   siteComponents: env('AMPLIENCE_REPO_SITE_COMPONENTS'),
+  // Products route by schema (into pages/), so this only widens what is listed.
+  products: env('AMPLIENCE_REPO_PRODUCTS'),
 }
 
 // ── Reads ─────────────────────────────────────────────────────────────────────

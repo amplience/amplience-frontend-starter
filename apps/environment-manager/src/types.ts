@@ -45,6 +45,12 @@ export type Environment = {
    */
   repoSiteComponents: string
   /**
+   * Optional repository for product content items. Set, the seed puts every
+   * product there and assigns the product content type to it; blank (""),
+   * products seed into the content repo as before. Seeding tooling only.
+   */
+  repoProducts: string
+  /**
    * Shared secret the deployment's /api/revalidate-* routes check, and the
    * value seeded into the webhook headers that call them. Blank ("") means
    * the webhooks needing it are skipped rather than seeded unauthenticated.
@@ -229,6 +235,7 @@ export const EMPTY_ENV: Environment = {
   repoContent: '',
   repoSlots: '',
   repoSiteComponents: '',
+  repoProducts: '',
   revalidateSecret: '',
   clientId: '',
   clientSecret: '',

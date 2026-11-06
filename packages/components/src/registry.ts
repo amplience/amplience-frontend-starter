@@ -104,26 +104,26 @@ import {
   BLOG_ARTICLE_SCHEMA,
   blogArticleMetadataFromSchema,
   blogArticleRegistryEntry,
-} from './templates/BlogArticle/BlogArticle.registry'
-import type { BlogArticleSchema } from './templates/BlogArticle/BlogArticle.registry'
+} from './templates/BlogArticlePage/BlogArticlePage.registry'
+import type { BlogArticleSchema } from './templates/BlogArticlePage/BlogArticlePage.registry'
 import {
   PAGE_SCHEMA,
   pageMetadataFromSchema,
   pageRegistryEntry,
-} from './templates/Page/Page.registry'
+} from './templates/ContentPage/ContentPage.registry'
 import type {
   PageMetadata,
   PageMetadataOptions,
   PageRobots,
   PageSchema,
   PageSocialCard,
-} from './templates/Page/Page.registry'
+} from './templates/ContentPage/ContentPage.registry'
 import {
   PRODUCT_SCHEMA,
   productMetadataFromSchema,
   productRegistryEntry,
-} from './templates/ProductDetail/ProductDetail.registry'
-import type { ProductSchema } from './templates/ProductDetail/ProductDetail.registry'
+} from './templates/ProductDetailPage/ProductDetailPage.registry'
+import type { ProductSchema } from './templates/ProductDetailPage/ProductDetailPage.registry'
 
 /**
  * Build a Registry from `[schemaURI, entry]` pairs.
@@ -131,7 +131,7 @@ import type { ProductSchema } from './templates/ProductDetail/ProductDetail.regi
  * Typing sugar over `new Map(...)`: a bare Map constructor infers its value
  * type from the entries themselves — with entries for two different schemas
  * it anchors on the first and rejects the rest, since
- * `ComponentRegistryEntry<PageSchema, PageProps>` is not assignable to
+ * `ComponentRegistryEntry<PageSchema, ContentPageProps>` is not assignable to
  * `ComponentRegistryEntry<HeroBlockSchema, HeroBlockProps>`. This helper
  * pins the value type to the erased entry shape (ADR-0010 §2) so
  * heterogeneous compositions type-check, with each entry still fully typed

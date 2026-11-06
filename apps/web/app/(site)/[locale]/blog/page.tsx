@@ -92,7 +92,7 @@ function BlogArticleCard({ article, href }: BlogArticleCardProps) {
 // Archive page
 // ---------------------------------------------------------------------------
 
-export default async function BlogArchivePage({ params }: RouteProps) {
+export default async function BlogArchiveRoute({ params }: RouteProps) {
   const { locale: localeSlug } = await params
   const locale = localeForSlug(localeSlug)
   if (locale === undefined) notFound()

@@ -99,7 +99,7 @@ const edgeEntry: ComponentRegistryEntry<LeafSchema, EdgeProps> = {
 }
 
 // A container that consumes the tier for media of its own before passing what's
-// left to its children — the BlogArticle shape (cover image above body slots).
+// left to its children — the BlogArticlePage shape (cover image above body slots).
 const COVER_BOX_SCHEMA = 'https://test.example.com/v1/content/cover-box'
 type CoverBoxProps = { name: string; loadPriority?: MediaLoadPriority; children?: ReactNode }
 const CoverBox = ({ name, loadPriority, children }: CoverBoxProps) => (
@@ -354,7 +354,7 @@ describe('renderContent — loadPriority (ADR-0021)', () => {
   })
 
   it('spends a step on a container that consumes the tier for its own media', () => {
-    // The BlogArticle case: the cover image takes 'lcp', so the body slots
+    // The BlogArticlePage case: the cover image takes 'lcp', so the body slots
     // start one step below it — never two 'lcp' nodes (and two preloads) on a
     // page.
     const tree = node(COVER_BOX_SCHEMA, {

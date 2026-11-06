@@ -39,8 +39,8 @@ Every schema URI is prefixed `https://quadratic.amplience.com/v2/` — the table
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_carousel?w=24)            | [Carousel Block](#carousel-block)           | Block       | `CarouselBlock`                | [Organisms/CarouselBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-carouselblock--docs) |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_columns?w=24)             | [Columns Block](#columns-block)             | Block       | `ColumnsBlock`                 | [Organisms/ColumnsBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-columnsblock--docs)   |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_grid?w=24)                | [Grid Block](#grid-block)                   | Block       | `GridBlock`                    | [Organisms/GridBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-gridblock--docs)         |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_page?w=24)                | [Page](#page)                               | Page        | `Page`                         | [Templates/Page](https://quadratic-lite-components.vercel.app/?path=/docs/templates-page--docs)                   |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_blog-article?w=24)        | [Blog Article](#blog-article)               | Page        | `BlogArticle`                  | —                                                                                                                 |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_page?w=24)                | [Page](#page)                               | Page        | `ContentPage`                  | [Templates/ContentPage](https://quadratic-lite-components.vercel.app/?path=/docs/templates-contentpage--docs)     |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_blog-article?w=24)        | [Blog Article](#blog-article)               | Page        | `BlogArticlePage`              | —                                                                                                                 |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/slots_slot?w=24)                  | [Slot](#slot)                               | Composition | `Slot`                         | [Organisms/Slot](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-slot--docs)                   |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header?w=24)              | [Header](#header)                           | Chrome      | `HeaderBlock`                  | —                                                                                                                 |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header-row?w=24)          | [Header Row](#header-row)                   | Chrome      | `HeaderRow`                    | —                                                                                                                 |
@@ -244,8 +244,8 @@ Routable content: head metadata plus an ordered list of [slots](#slot) the rende
 A routable page — head metadata plus an ordered list of slots the renderer composes.
 
 - **Schema** [`content/page`](../packages/hub-management/content-type-schemas/schemas/content_page.json) · **Repository** `content`
-- **Components** [`Page`](../packages/components/src/templates/Page) (template) → [`Slot`](#slot) per entry, then whatever each slot holds
-- **Storybook** [Templates/Page](https://quadratic-lite-components.vercel.app/?path=/docs/templates-page--docs)
+- **Components** [`ContentPage`](../packages/components/src/templates/ContentPage) (template) → [`Slot`](#slot) per entry, then whatever each slot holds
+- **Storybook** [Templates/ContentPage](https://quadratic-lite-components.vercel.app/?path=/docs/templates-contentpage--docs)
 
 | Field                                                  | Label         | Type                              | Req | Notes                                                                                |
 | ------------------------------------------------------ | ------------- | --------------------------------- | --- | ------------------------------------------------------------------------------------ |
@@ -265,7 +265,7 @@ A routable page — head metadata plus an ordered list of slots the renderer com
 A blog article page — editorial metadata plus an ordered list of slots the renderer composes.
 
 - **Schema** [`content/blog-article`](../packages/hub-management/content-type-schemas/schemas/content_blog-article.json) · **Repository** `content`
-- **Components** [`BlogArticle`](../packages/components/src/templates/BlogArticle) (template) → [`HeroBlock`](#hero-block), `Tags`, `Container`, `Icon`, then [`Slot`](#slot) per entry
+- **Components** [`BlogArticlePage`](../packages/components/src/templates/BlogArticlePage) (template) → [`HeroBlock`](#hero-block), `Tags`, `Container`, `Icon`, then [`Slot`](#slot) per entry
 - **Storybook** — no story yet
 
 Shares the head-metadata shape with [Page](#page) (`title`, `description`, `keywords`, `social`, `canonicalUrl`, `robots`, `slots`, `_meta`), and adds:

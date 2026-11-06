@@ -66,6 +66,17 @@ export const MinorUnits: Story = {
   ),
 }
 
+export const Reduced: Story = {
+  name: 'Reduced — was and now',
+  render: () => (
+    <div style={{ display: 'flex', gap: '1.5rem' }}>
+      <Price amount={48} compareAtAmount={60} currencyCode="GBP" locale="en-GB" />
+      <Price amount={104} compareAtAmount={139} currencyCode="EUR" locale="de-DE" />
+      <Price amount={112} compareAtAmount={149} currencyCode="USD" locale="en-US" />
+    </div>
+  ),
+}
+
 export const Degraded: Story = {
   name: 'Unknown currency code',
   render: () => <Price amount={749} currencyCode="NOTACODE" locale="en-GB" />,

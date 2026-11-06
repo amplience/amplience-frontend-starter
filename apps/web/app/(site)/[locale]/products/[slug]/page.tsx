@@ -23,7 +23,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { ProductDetail } from '@amplience/frontend-starter-components/product-detail'
+import { ProductDetailPage } from '@amplience/frontend-starter-components/product-detail-page'
 import { isContentClientError } from '@amplience/frontend-starter-content'
 
 import { resolveCurrency } from '../../../../../lib/currency'
@@ -57,7 +57,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
     // the default locale (ADR-0015).
     return {
       title: product.name,
-      ...(product.shortDescription !== undefined && { description: product.shortDescription }),
+      ...(metaDescription(product) !== undefined && { description: metaDescription(product) }),
       alternates: { canonical: publicPath(locale, `/products/${slug}`) },
     }
   } catch (error) {
@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
   }
 }
 
-export default async function ProductPage({ params }: RouteProps) {
+export default async function ProductRoute({ params }: RouteProps) {
   const { locale: localeSlug, slug } = await params
   const locale = localeForSlug(localeSlug)
   if (locale === undefined) notFound()
@@ -85,7 +85,7 @@ export default async function ProductPage({ params }: RouteProps) {
   }
 
   // The editorial slots render through the recursive renderer, the same path a
-  // page's slots take. `loadPriority: 'lcp'` is spent by ProductDetail on the
+  // page's slots take. `loadPriority: 'lcp'` is spent by ProductDetailPage on the
   // gallery's lead image — its registry entry declares `consumesLoadPriority`,
   // so the blocks below start a step lower (ADR-0021 §3).
   const content =
@@ -100,7 +100,7 @@ export default async function ProductPage({ params }: RouteProps) {
 
   return (
     <main data-product-detail-page>
-      <ProductDetail
+      <ProductDetailPage
         name={product.name}
         images={productMediaList(product.images)}
         attributes={product.attributes ?? []}
@@ -111,11 +111,31 @@ export default async function ProductPage({ params }: RouteProps) {
         {...(product.shortDescription !== undefined && {
           shortDescription: product.shortDescription,
         })}
+        {...(product.description !== undefined && { description: product.description })}
         {...(product.brand !== undefined && { brand: product.brand })}
         {...(product.status !== undefined && { status: product.status })}
       >
         {content}
-      </ProductDetail>
+      </ProductDetailPage>
     </main>
   )
+}
+
+/**
+ * The meta description: the short copy when there is one, else the long copy
+ * clipped at a word boundary near the ~160 characters search results show.
+ */
+const META_DESCRIPTION_LENGTH = 160
+
+const metaDescription = (product: {
+  readonly shortDescription?: string
+  readonly description?: string
+}): string | undefined => {
+  if (product.shortDescription !== undefined) return product.shortDescription
+  const text = product.description?.replace(/\s+/g, ' ').trim()
+  if (!text) return undefined
+  if (text.length <= META_DESCRIPTION_LENGTH) return text
+  const clipped = text.slice(0, META_DESCRIPTION_LENGTH - 1)
+  const lastSpace = clipped.lastIndexOf(' ')
+  return `${lastSpace > 0 ? clipped.slice(0, lastSpace) : clipped}…`
 }

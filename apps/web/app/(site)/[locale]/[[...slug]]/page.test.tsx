@@ -70,41 +70,41 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
-describe('ContentPage — path → delivery key routing (QL-76)', () => {
+describe('ContentRoute — path → delivery key routing (QL-76)', () => {
   it('renders the homepage at the root path', async () => {
-    const { default: ContentPage } = await loadRoute()
-    const out = renderToStaticMarkup((await ContentPage(routeProps())) as ReactNode)
+    const { default: ContentRoute } = await loadRoute()
+    const out = renderToStaticMarkup((await ContentRoute(routeProps())) as ReactNode)
     expect(out).toContain('data-page')
     expect(out).toContain('data-slot')
     expect(out).not.toContain('data-renderer-failure')
   })
 
   it('renders the about page server-side at /about', async () => {
-    const { default: ContentPage } = await loadRoute()
-    const out = renderToStaticMarkup((await ContentPage(routeProps(['about']))) as ReactNode)
+    const { default: ContentRoute } = await loadRoute()
+    const out = renderToStaticMarkup((await ContentRoute(routeProps(['about']))) as ReactNode)
     expect(out).toContain('data-page')
     expect(out).toContain('The head for your headless CMS')
     expect(out).not.toContain('data-renderer-failure')
   })
 
   it('renders the same content for an alias delivery key (about-us)', async () => {
-    const { default: ContentPage } = await loadRoute()
-    const out = renderToStaticMarkup((await ContentPage(routeProps(['about-us']))) as ReactNode)
+    const { default: ContentRoute } = await loadRoute()
+    const out = renderToStaticMarkup((await ContentRoute(routeProps(['about-us']))) as ReactNode)
     expect(out).toContain('The head for your headless CMS')
   })
 
   it('throws to the 404 boundary for a reserved key (site furniture)', async () => {
-    const { default: ContentPage } = await loadRoute()
-    await expect(ContentPage(routeProps(['header']))).rejects.toThrowError()
+    const { default: ContentRoute } = await loadRoute()
+    await expect(ContentRoute(routeProps(['header']))).rejects.toThrowError()
   })
 
   it('throws to the 404 boundary for an unknown slug', async () => {
-    const { default: ContentPage } = await loadRoute()
-    await expect(ContentPage(routeProps(['no-such-page']))).rejects.toThrowError()
+    const { default: ContentRoute } = await loadRoute()
+    await expect(ContentRoute(routeProps(['no-such-page']))).rejects.toThrowError()
   })
 })
 
-describe('ContentPage — metadata (QL-76)', () => {
+describe('ContentRoute — metadata (QL-76)', () => {
   it('defaults the canonical to the route path', async () => {
     const { generateMetadata } = await loadRoute()
     const meta = await generateMetadata(routeProps(['docs']))
@@ -157,13 +157,13 @@ describe('ContentPage — metadata (QL-76)', () => {
   })
 })
 
-describe('ContentPage — content-fetch failures (QL-37)', () => {
+describe('ContentRoute — content-fetch failures (QL-37)', () => {
   it.each(['network', 'unauthorised', 'malformed', 'unknown'] as const)(
     'renders a visible ContentUnavailable card when the fetch fails with "%s"',
     async (kind) => {
       failKind = kind
-      const { default: ContentPage } = await loadRoute()
-      const out = renderToStaticMarkup((await ContentPage(routeProps())) as ReactNode)
+      const { default: ContentRoute } = await loadRoute()
+      const out = renderToStaticMarkup((await ContentRoute(routeProps())) as ReactNode)
       expect(out).toContain('data-renderer-failure="ContentUnavailable"')
       expect(out).toContain('role="alert"')
       // Structured console signal emitted alongside the card.
@@ -173,10 +173,10 @@ describe('ContentPage — content-fetch failures (QL-37)', () => {
 
   it('throws to the 404 boundary when the page item does not exist', async () => {
     failKind = 'not-found'
-    const { default: ContentPage } = await loadRoute()
+    const { default: ContentRoute } = await loadRoute()
     // notFound() throws Next's control-flow error; the route must not
     // swallow it into a card.
-    await expect(ContentPage(routeProps())).rejects.toThrowError()
+    await expect(ContentRoute(routeProps())).rejects.toThrowError()
   })
 
   it('falls back to layout metadata when the metadata fetch fails', async () => {
@@ -186,9 +186,11 @@ describe('ContentPage — content-fetch failures (QL-37)', () => {
   })
 })
 
-describe('ContentPage — category listings (ADR-0024)', () => {
+describe('ContentRoute — category listings (ADR-0024)', () => {
   // The fixtures put every product in a top-level category and a leaf one,
-  // so `/home` exercises ancestor matching and `/home-tables` a leaf.
+  // so `/home` exercises ancestor matching and `/furniture` a leaf. The
+  // identifiers are commercetools category slugs, so the same URLs work with
+  // either product source.
   // Products live in the anyafinn set (ADR-0019); the default set has none.
   // lib/content-client reads FIXTURE_SET when loadRoute() re-imports it.
   beforeEach(() => {
@@ -200,9 +202,9 @@ describe('ContentPage — category listings (ADR-0024)', () => {
   })
 
   it('renders a category listing for a path with no page behind it', async () => {
-    const { default: ContentPage } = await loadRoute()
-    const out = renderToStaticMarkup((await ContentPage(routeProps(['home-tables']))) as ReactNode)
-    expect(out).toContain('data-category="home-tables"')
+    const { default: ContentRoute } = await loadRoute()
+    const out = renderToStaticMarkup((await ContentRoute(routeProps(['furniture']))) as ReactNode)
+    expect(out).toContain('data-category="furniture"')
     // Assert the filtering, not a marker attribute: both tables are in, and
     // a product from a sibling category is out.
     expect(out).toContain('/products/terra-dining-table')
@@ -211,8 +213,8 @@ describe('ContentPage — category listings (ADR-0024)', () => {
   })
 
   it('matches an ancestor category, because ancestors are denormalised', async () => {
-    const { default: ContentPage } = await loadRoute()
-    const out = renderToStaticMarkup((await ContentPage(routeProps(['home']))) as ReactNode)
+    const { default: ContentRoute } = await loadRoute()
+    const out = renderToStaticMarkup((await ContentRoute(routeProps(['home']))) as ReactNode)
     expect(out).toContain('data-category="home"')
     // The leaf's products *and* its siblings' — with no tree walk anywhere,
     // because every product carries `home` alongside its leaf category.
@@ -221,14 +223,16 @@ describe('ContentPage — category listings (ADR-0024)', () => {
   })
 
   it('derives an unlocalised title from the identifier', async () => {
-    const { default: ContentPage } = await loadRoute()
-    const out = renderToStaticMarkup((await ContentPage(routeProps(['mens-shirts']))) as ReactNode)
-    expect(out).toContain('Mens Shirts')
+    const { default: ContentRoute } = await loadRoute()
+    const out = renderToStaticMarkup(
+      (await ContentRoute(routeProps(['men-clothing-shirts']))) as ReactNode,
+    )
+    expect(out).toContain('Men Clothing Shirts')
   })
 
   it('still 404s a path that is neither a page nor a category', async () => {
-    const { default: ContentPage } = await loadRoute()
-    await expect(ContentPage(routeProps(['not-a-category-at-all']))).rejects.toThrowError()
+    const { default: ContentRoute } = await loadRoute()
+    await expect(ContentRoute(routeProps(['not-a-category-at-all']))).rejects.toThrowError()
   })
 
   it('lets a CMS page win over a category of the same name', async () => {
@@ -237,20 +241,20 @@ describe('ContentPage — category listings (ADR-0024)', () => {
     stubClient = makeStubClient({
       getByKey: () => Promise.resolve({ _meta: { schema: PAGE_SCHEMA }, slots: [] } as never),
     })
-    const { default: ContentPage } = await loadRoute()
-    const out = renderToStaticMarkup((await ContentPage(routeProps(['home']))) as ReactNode)
+    const { default: ContentRoute } = await loadRoute()
+    const out = renderToStaticMarkup((await ContentRoute(routeProps(['home']))) as ReactNode)
     expect(out).not.toContain('data-category=')
   })
 
   it('gives a category page a derived title and canonical in metadata', async () => {
     const { generateMetadata } = await loadRoute()
-    const meta = await generateMetadata(routeProps(['home-tables']))
-    expect(meta.title).toBe('Home Tables')
-    expect(meta.alternates?.canonical).toBe('/home-tables')
+    const meta = await generateMetadata(routeProps(['furniture']))
+    expect(meta.title).toBe('Furniture')
+    expect(meta.alternates?.canonical).toBe('/furniture')
   })
 })
 
-describe('ContentPage — a transient failure must never become a 404 (ADR-0024 §6)', () => {
+describe('ContentRoute — a transient failure must never become a 404 (ADR-0024 §6)', () => {
   // The highest-risk line in the change: if a hub outage fell through the
   // category branch to notFound(), a five-minute blip would be answered with
   // 404s that crawlers act on and CDNs cache.
@@ -259,8 +263,8 @@ describe('ContentPage — a transient failure must never become a 404 (ADR-0024 
     'shows the failure card rather than 404ing on "%s" at a category path',
     async (kind) => {
       failKind = kind
-      const { default: ContentPage } = await loadRoute()
-      const out = renderToStaticMarkup((await ContentPage(routeProps(['home']))) as ReactNode)
+      const { default: ContentRoute } = await loadRoute()
+      const out = renderToStaticMarkup((await ContentRoute(routeProps(['home']))) as ReactNode)
       expect(out).toContain('data-renderer-failure="ContentUnavailable"')
     },
   )
@@ -272,8 +276,8 @@ describe('ContentPage — a transient failure must never become a 404 (ADR-0024 
       getByKey: () => Promise.reject(new ContentClientError('not-found', 'gone')),
       listBySchema: () => Promise.reject(new ContentClientError('network', 'hub unreachable')),
     })
-    const { default: ContentPage } = await loadRoute()
-    const out = renderToStaticMarkup((await ContentPage(routeProps(['home']))) as ReactNode)
+    const { default: ContentRoute } = await loadRoute()
+    const out = renderToStaticMarkup((await ContentRoute(routeProps(['home']))) as ReactNode)
     expect(out).toContain('data-renderer-failure="ContentUnavailable"')
   })
 
@@ -284,12 +288,12 @@ describe('ContentPage — a transient failure must never become a 404 (ADR-0024 
       getByKey: () => Promise.reject(new ContentClientError('not-found', 'gone')),
       listBySchema: () => Promise.reject(new ContentClientError('not-found', 'nothing')),
     })
-    const { default: ContentPage } = await loadRoute()
-    await expect(ContentPage(routeProps(['home']))).rejects.toThrowError()
+    const { default: ContentRoute } = await loadRoute()
+    await expect(ContentRoute(routeProps(['home']))).rejects.toThrowError()
   })
 })
 
-describe('ContentPage — unexpected (non-content) errors', () => {
+describe('ContentRoute — unexpected (non-content) errors', () => {
   // Anything that isn't a ContentClientError must escape to app/error.tsx,
   // not be swallowed into a card or an empty metadata object.
 
@@ -297,8 +301,8 @@ describe('ContentPage — unexpected (non-content) errors', () => {
     stubClient = makeStubClient({
       getByKey: () => Promise.reject(new TypeError('exploded in transit')),
     })
-    const { default: ContentPage } = await loadRoute()
-    await expect(ContentPage(routeProps())).rejects.toThrowError('exploded in transit')
+    const { default: ContentRoute } = await loadRoute()
+    await expect(ContentRoute(routeProps())).rejects.toThrowError('exploded in transit')
   })
 
   it('rethrows from generateMetadata', async () => {

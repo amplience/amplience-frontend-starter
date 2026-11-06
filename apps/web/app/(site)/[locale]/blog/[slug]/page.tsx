@@ -3,7 +3,7 @@
  *
  * Fetches one blog-article content item by its delivery key (`blog/<slug>`)
  * and renders it through the same registry-driven renderer as the generic
- * catch-all. `BlogArticle` is a container entry: the renderer recurses into
+ * catch-all. `BlogArticlePage` is a container entry: the renderer recurses into
  * its slots, so the article body composes freely from any registered block.
  *
  * The `[locale]` segment carries the active locale (ADR-0015): the article is
@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
   }
 }
 
-export default async function BlogArticlePage({ params }: RouteProps) {
+export default async function BlogArticleRoute({ params }: RouteProps) {
   const { locale: localeSlug, slug } = await params
   const locale = localeForSlug(localeSlug)
   if (locale === undefined) notFound()
