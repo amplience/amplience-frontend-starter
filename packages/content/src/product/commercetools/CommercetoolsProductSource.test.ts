@@ -307,6 +307,131 @@ describe('CommercetoolsProductSource specifics', () => {
     })
   })
 
+  describe('Product Search', () => {
+    const searches = (calls: readonly string[]) =>
+      calls.filter((c) => c.startsWith('POST') && c.includes('/products/search'))
+    const fullReads = (calls: readonly string[]) =>
+      calls.filter((c) => c.includes('/product-projections?') && !c.includes('where='))
+
+    it('serves a page from one search and one fetch, never the whole catalogue', async () => {
+      const { source, server } = setup()
+      const { products, total } = await source.list({ limit: 2 })
+      expect(products.map((p) => p.sku)).toEqual(['AF-SKIRT-001', 'AF-SHIRT-002'])
+      expect(total).toBe(3)
+      expect(searches(server.calls)).toHaveLength(1)
+      expect(fullReads(server.calls)).toHaveLength(0)
+    })
+
+    it('matches a category subtree, in merchandised order before newest', async () => {
+      const { products, total } = await setup().source.list({ category: 'women', limit: 10 })
+      // The shirt carries an order hint for Women, so it leads despite being older.
+      expect(products.map((p) => p.sku)).toEqual(['AF-SHIRT-002', 'AF-SKIRT-001'])
+      expect(total).toBe(2)
+    })
+
+    it('answers an unknown category with nothing, without searching', async () => {
+      const { source, server } = setup()
+      expect(await source.list({ category: 'no-such-category', limit: 10 })).toEqual({
+        products: [],
+        total: 0,
+      })
+      expect(searches(server.calls)).toHaveLength(0)
+    })
+
+    it('selects prices on searched pages too', async () => {
+      const { products } = await setup().source.list({
+        limit: 3,
+        locale: 'de-DE,*',
+        currency: 'EUR',
+      })
+      expect(products.find((p) => p.sku === 'AF-SKIRT-001')?.price).toEqual({
+        amount: 52,
+        currencyCode: 'EUR',
+      })
+    })
+
+    it('pages past the 100-result search limit', async () => {
+      const many: CtProductProjection[] = Array.from({ length: 150 }, (_, i) => ({
+        ...SKIRT,
+        id: `prod-${String(i).padStart(3, '0')}`,
+        slug: { en: `product-${i}` },
+        masterVariant: { sku: `SKU-${i}` },
+        variants: [],
+      }))
+      const { source, server } = setup({ products: many })
+      const { products, total } = await source.list({ limit: 120 })
+      expect(products).toHaveLength(120)
+      expect(total).toBe(150)
+      expect(searches(server.calls)).toHaveLength(2)
+    })
+
+    it('lists categories from a facet, ancestors included, without reading products', async () => {
+      const { source, server } = setup()
+      expect(await source.listCategories()).toEqual([
+        'home',
+        'home-lighting',
+        'women',
+        'women-skirts',
+        'women-tops',
+      ])
+      expect(fullReads(server.calls)).toHaveLength(0)
+    })
+
+    it('reports pagination while search is serving', () => {
+      expect(setup().source.capabilities.pagination).toBe(true)
+      expect(setup({}, { productSearch: false }).source.capabilities.pagination).toBe(false)
+    })
+
+    describe('when the project has not activated it', () => {
+      it('falls back to the catalogue, says how to turn it on, and stops asking for a while', async () => {
+        let clock = 0
+        const warn = quiet()
+        try {
+          const { source, server } = setup({ searchInactive: true }, { now: () => clock })
+          const page = await source.list({ limit: 2 })
+          expect(page.products.map((p) => p.sku)).toEqual(['AF-SKIRT-001', 'AF-SHIRT-002'])
+          expect(page.total).toBe(3)
+          expect(warn).toHaveBeenCalledWith(expect.stringMatching(/Storefront Search/))
+          expect(source.capabilities.pagination).toBe(false)
+
+          await source.list({ limit: 2 })
+          await source.listCategories()
+          expect(searches(server.calls)).toHaveLength(1)
+
+          // Activating it in the Merchant Center is picked up without a restart.
+          clock = 5 * 60_000 + 1
+          await source.list({ limit: 2 })
+          expect(searches(server.calls)).toHaveLength(2)
+        } finally {
+          warn.mockRestore()
+        }
+      })
+
+      it('still lists the same categories', async () => {
+        const warn = quiet()
+        try {
+          const categories = await setup({ searchInactive: true }).source.listCategories()
+          expect(categories).toEqual([
+            'home',
+            'home-lighting',
+            'women',
+            'women-skirts',
+            'women-tops',
+          ])
+        } finally {
+          warn.mockRestore()
+        }
+      })
+    })
+
+    it('is never called when switched off', async () => {
+      const { source, server } = setup({}, { productSearch: false })
+      await source.list({ limit: 2 })
+      await source.listCategories()
+      expect(searches(server.calls)).toHaveLength(0)
+    })
+  })
+
   describe('auth', () => {
     it('reuses one token across requests', async () => {
       const { source, server } = setup()
@@ -365,6 +490,7 @@ describe('resolveCommercetoolsConfig', () => {
       CTP_BRAND_ATTRIBUTES: 'brand, vendor',
       CTP_CACHE_TTL_SECONDS: '0',
       CTP_SCOPES: 'view_products:anyafinn',
+      CTP_PRODUCT_SEARCH: 'off',
     })
     expect(config).toMatchObject({
       apiUrl: 'https://api.us-central1.gcp.commercetools.com',
@@ -373,6 +499,7 @@ describe('resolveCommercetoolsConfig', () => {
       brandAttributes: ['brand', 'vendor'],
       cacheTtlMs: 0,
       scopes: 'view_products:anyafinn',
+      productSearch: false,
     })
   })
 

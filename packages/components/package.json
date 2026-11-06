@@ -42,6 +42,7 @@
     "./slot": "./src/organisms/Slot/Slot.tsx",
     "./page": "./src/templates/Page/Page.tsx",
     "./product-detail": "./src/templates/ProductDetail/ProductDetail.tsx",
+    "./product-listing-page": "./src/templates/ProductListingPage/ProductListingPage.tsx",
     "./product-carousel": "./src/organisms/ProductCarousel/ProductCarousel.tsx",
     "./product-carousel-block": "./src/organisms/ProductCarouselBlock/ProductCarouselBlock.tsx",
     "./image-sizes": "./src/utils/imageSizes.ts",

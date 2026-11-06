@@ -55,7 +55,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { cache } from 'react'
 
-import { Container } from '@amplience/frontend-starter-components/container'
+import { ProductListingPage } from '@amplience/frontend-starter-components/product-listing-page'
 import {
   PAGE_SCHEMA,
   pageMetadataFromSchema,
@@ -71,9 +71,8 @@ import { localeBasePath, localeForSlug, publicPath } from '../../../../lib/local
 import type { Locale } from '../../../../lib/locales'
 import { productSource } from '../../../../lib/product-source'
 import { registry } from '../../../../lib/registry'
-import { resolveProducts } from '../../../../lib/resolve-products'
+import { resolveProducts, toResolvedProduct } from '../../../../lib/resolve-products'
 import { deliveryKeyForSlug, pathForDeliveryKey } from '../../../../lib/routing'
-import { ProductGrid } from '../../../../src/ProductGrid'
 import { ContentUnavailableCard, emitContentFailure, renderContent } from '../../../../src/renderer'
 
 type RouteProps = {
@@ -247,13 +246,13 @@ async function renderCategoryListing(category: string, locale: Locale) {
 
   return (
     <main data-category-listing data-category={category}>
-      <header data-category-listing-header>
-        <Container gutter>
-          <h1>{title}</h1>
-        </Container>
-      </header>
-
-      <ProductGrid products={products} locale={locale} emptyMessage={`Nothing in ${title} yet.`} />
+      <ProductListingPage
+        title={title}
+        products={products.map((product) => toResolvedProduct(product, locale))}
+        emptyMessage={`Nothing in ${title} yet.`}
+        locale={locale.code}
+        localeBasePath={localeBasePath(locale)}
+      />
     </main>
   )
 }

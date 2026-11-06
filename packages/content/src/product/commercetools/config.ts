@@ -37,6 +37,7 @@ export type CommercetoolsEnvConfig = {
   readonly priceCountry?: string
   readonly brandAttributes?: readonly string[]
   readonly shortDescriptionAttribute?: string
+  readonly productSearch?: boolean
   readonly cacheTtlMs?: number
 }
 
@@ -76,6 +77,11 @@ export const resolveCommercetoolsConfig = (
     priceCountry: value(env, 'CTP_PRICE_COUNTRY'),
     brandAttributes: brands && brands.length > 0 ? brands : undefined,
     shortDescriptionAttribute: value(env, 'CTP_SHORT_DESCRIPTION_ATTRIBUTE'),
+    productSearch: ['off', 'false', '0'].includes(
+      value(env, 'CTP_PRODUCT_SEARCH')?.toLowerCase() ?? '',
+    )
+      ? false
+      : undefined,
     cacheTtlMs: ttl === undefined ? undefined : ttl * 1000,
   }
 
@@ -102,6 +108,7 @@ export const makeCommercetoolsProductSource = (
     priceCountry,
     brandAttributes,
     shortDescriptionAttribute,
+    productSearch,
     cacheTtlMs,
     ...clientConfig
   } = config
@@ -112,6 +119,7 @@ export const makeCommercetoolsProductSource = (
     ...(priceCountry ? { priceCountry } : {}),
     ...(brandAttributes ? { brandAttributes } : {}),
     ...(shortDescriptionAttribute ? { shortDescriptionAttribute } : {}),
+    ...(productSearch === false ? { productSearch } : {}),
     ...(cacheTtlMs !== undefined ? { cacheTtlMs } : {}),
   }
   return new CommercetoolsProductSource(options)

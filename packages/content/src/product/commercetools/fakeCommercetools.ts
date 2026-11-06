@@ -5,8 +5,9 @@
  * types, product projections — from fixture data shaped like the AnyaFinn
  * project (product type `main`, GBP/GB prices, Dynamic Media image URLs,
  * language-only locale keys). It emulates the server-side behaviour the
- * adapter relies on: the two `where` predicates it sends, offset paging, and
- * price selection by `priceCurrency` + `priceCountry`.
+ * adapter relies on: the `where` predicates it sends, offset paging, price
+ * selection by `priceCurrency` + `priceCountry`, and Product Search (category
+ * subtree queries, order hints, the categories facet, an inactive project).
  *
  * Not a general commercetools mock: an unrecognised predicate fails the test
  * loudly rather than returning everything.
@@ -68,6 +69,7 @@ const eur = (centAmount: number): CtPrice => ({
 export const SKIRT: CtProductProjection = {
   id: 'prod-skirt',
   productType: { typeId: 'product-type', id: 'pt-main' },
+  createdAt: '2026-03-01T00:00:00.000Z',
   name: { en: 'Pleated Midi Skirt', de: 'Plissierter Midirock' },
   slug: { en: 'pleated-midi-skirt', de: 'plissierter-midirock' },
   description: { en: 'A swishy pleated midi in crimson crepe.' },
@@ -105,6 +107,9 @@ export const SKIRT: CtProductProjection = {
 export const SHIRT: CtProductProjection = {
   id: 'prod-shirt',
   productType: { typeId: 'product-type', id: 'pt-main' },
+  createdAt: '2026-02-01T00:00:00.000Z',
+  // Merchandised first in Women, though it is older than the skirt.
+  categoryOrderHints: { 'cat-women': '0.1' },
   name: { en: 'Linen Shirt' },
   slug: { en: 'linen-shirt' },
   categories: [
@@ -130,6 +135,7 @@ export const SHIRT: CtProductProjection = {
 export const LAMP: CtProductProjection = {
   id: 'prod-lamp',
   productType: { typeId: 'product-type', id: 'pt-main' },
+  createdAt: '2026-01-01T00:00:00.000Z',
   name: { en: 'Arc Table Lamp' },
   slug: { en: 'arc-table-lamp' },
   categories: [{ typeId: 'category', id: 'cat-home-lighting' }],
@@ -158,6 +164,8 @@ export type FakeOptions = {
   readonly refuseToken?: boolean
   /** Answer this many API calls with 401 before behaving. */
   readonly expireTokens?: number
+  /** Product Search not activated: `/products/search` answers 404. */
+  readonly searchInactive?: boolean
 }
 
 export type FakeCommercetools = {
@@ -194,6 +202,12 @@ const filterByWhere = (
     return products.filter((p) => p.slug[locale] === value)
   }
 
+  const ids = /^id in \((.*)\)$/.exec(where)
+  if (ids) {
+    const wanted = new Set(unquoteList(ids[1] ?? ''))
+    return products.filter((p) => wanted.has(p.id))
+  }
+
   const skus = /^masterVariant\(sku in \((.*)\)\) or variants\(sku in \((.*)\)\)$/.exec(where)
   if (skus) {
     const wanted = new Set(unquoteList(skus[1] ?? ''))
@@ -205,6 +219,74 @@ const filterByWhere = (
   }
 
   throw new Error(`fake commercetools: unsupported where predicate: ${where}`)
+}
+
+/** `createdAt desc, id asc` — the order both the adapter's reads ask for. */
+const newestFirst = (a: CtProductProjection, b: CtProductProjection): number =>
+  (b.createdAt ?? '').localeCompare(a.createdAt ?? '') || a.id.localeCompare(b.id)
+
+/** A product's categories plus their ancestors — what `categoriesSubTree` matches. */
+const subtreeOf = (product: CtProductProjection): Set<string> => {
+  const ids = new Set<string>()
+  for (const ref of product.categories ?? []) {
+    ids.add(ref.id)
+    for (const a of CATEGORIES.find((c) => c.id === ref.id)?.ancestors ?? []) ids.add(a.id)
+  }
+  return ids
+}
+
+type SearchBody = {
+  query?: { exact?: { field: string; value: string } }
+  sort?: { field: string; order: 'asc' | 'desc' }[]
+  limit?: number
+  offset?: number
+  facets?: { distinct?: { name: string; field: string; limit?: number } }[]
+}
+
+/** Product Search over the fixture products — ids only, as the real one returns. */
+const search = (products: readonly CtProductProjection[], body: SearchBody) => {
+  const exact = body.query?.exact
+  if (exact && exact.field !== 'categoriesSubTree') {
+    throw new Error(`fake commercetools: unsupported search query field ${exact.field}`)
+  }
+  const matching = exact ? products.filter((p) => subtreeOf(p).has(exact.value)) : [...products]
+
+  const hint = body.sort?.find((s) => s.field.startsWith('categoryOrderHints.'))
+  const hintFor = (p: CtProductProjection) =>
+    hint ? p.categoryOrderHints?.[hint.field.slice('categoryOrderHints.'.length)] : undefined
+  matching.sort((a, b) => {
+    const ha = hintFor(a)
+    const hb = hintFor(b)
+    // Hinted first, ascending; unhinted after — as the docs describe.
+    if (ha !== undefined && hb !== undefined && ha !== hb) return ha.localeCompare(hb)
+    if (ha !== undefined && hb === undefined) return -1
+    if (ha === undefined && hb !== undefined) return 1
+    return newestFirst(a, b)
+  })
+
+  const limit = body.limit ?? 20
+  const offset = body.offset ?? 0
+  const facets = (body.facets ?? []).flatMap(({ distinct }) => {
+    if (!distinct) return []
+    if (distinct.field !== 'categories') {
+      throw new Error(`fake commercetools: unsupported facet field ${distinct.field}`)
+    }
+    const counts = new Map<string, number>()
+    for (const p of matching)
+      for (const ref of p.categories ?? []) counts.set(ref.id, (counts.get(ref.id) ?? 0) + 1)
+    const buckets = [...counts.entries()]
+      .map(([key, count]) => ({ key, count }))
+      .slice(0, distinct.limit ?? 10)
+    return [{ name: distinct.name, buckets }]
+  })
+
+  return {
+    total: matching.length,
+    offset,
+    limit,
+    results: matching.slice(offset, offset + limit).map((p) => ({ id: p.id })),
+    ...(facets.length > 0 ? { facets } : {}),
+  }
 }
 
 /** Server-side price selection, as the projection endpoints do it. */
@@ -233,7 +315,7 @@ export const fakeCommercetools = (options: FakeOptions = {}): FakeCommercetools 
     text: () => Promise.resolve(JSON.stringify(body)),
   })
 
-  const handle = (url: string, init?: { readonly method?: string }) => {
+  const handle = (url: string, init?: { readonly method?: string; readonly body?: string }) => {
     calls.push(`${init?.method ?? 'GET'} ${url}`)
 
     if (url === `${AUTH_URL}/oauth/token`) {
@@ -261,12 +343,19 @@ export const fakeCommercetools = (options: FakeOptions = {}): FakeCommercetools 
       return json(200, { limit, offset, count: results.length, ...total, results })
     }
 
+    if (path === `${base}/products/search` && init?.method === 'POST') {
+      if (options.searchInactive) {
+        return json(404, { statusCode: 404, message: 'ObjectNotFound', errors: [] })
+      }
+      return json(200, search(products, JSON.parse(init.body ?? '{}') as SearchBody))
+    }
     if (path === `${base}/categories`) return page(CATEGORIES)
     if (path === `${base}/product-types`) return page(PRODUCT_TYPES)
     if (path === `${base}/product-projections`) {
       const currency = query.priceCurrency?.[0]
       const country = query.priceCountry?.[0]
-      const matching = filterByWhere(products, query.where?.[0]).map((p) => ({
+      const sorted = [...products].sort(newestFirst)
+      const matching = filterByWhere(sorted, query.where?.[0]).map((p) => ({
         ...p,
         masterVariant: selectFor(p.masterVariant, currency, country),
       }))

@@ -64,6 +64,9 @@ export type CtProductProjection = {
   readonly masterVariant: CtVariant
   readonly variants?: readonly CtVariant[]
   readonly published?: boolean
+  readonly createdAt?: string
+  /** Category id → merchandiser's sort key, compared as a string. */
+  readonly categoryOrderHints?: Readonly<Record<string, string>>
 }
 
 export type CtCategory = {

@@ -108,12 +108,26 @@ export class CommercetoolsClient {
    * mapped straight to a typed error.
    */
   async get<T>(path: string, params: QueryParams = {}): Promise<T> {
+    return await this.#request<T>('GET', path, params)
+  }
+
+  /** POST a JSON body to a project-scoped path (`/products/search`). */
+  async post<T>(path: string, body: unknown, params: QueryParams = {}): Promise<T> {
+    return await this.#request<T>('POST', path, params, JSON.stringify(body))
+  }
+
+  async #request<T>(
+    method: 'GET' | 'POST',
+    path: string,
+    params: QueryParams,
+    body?: string,
+  ): Promise<T> {
     const url = `${this.#config.apiUrl}/${encodeURIComponent(this.#config.projectKey)}${path}${toQuery(params)}`
 
-    let response = await this.#send(url, await this.#bearer())
+    let response = await this.#send(method, url, await this.#bearer(), body)
     if (response.status === 401) {
       this.#token = undefined
-      response = await this.#send(url, await this.#bearer())
+      response = await this.#send(method, url, await this.#bearer(), body)
     }
     if (!response.ok) throw await toError(response, path)
     return (await parseJson(response, path)) as T
@@ -146,7 +160,9 @@ export class CommercetoolsClient {
     const first = await page(0, true)
     const total = first.total ?? first.count
     if (first.count < MAX_PAGE_SIZE || total <= MAX_PAGE_SIZE) return first.results
-    if (total > MAX_OFFSET) return await this.#getAllByCursor(path, params, first.results)
+    // Cursor paging needs `id` order, so it starts again rather than continue
+    // from a first page that may have been sorted differently.
+    if (total > MAX_OFFSET) return await this.#getAllByCursor(path, params)
 
     const offsets: number[] = []
     for (let offset = MAX_PAGE_SIZE; offset < total; offset += MAX_PAGE_SIZE) offsets.push(offset)
@@ -166,18 +182,17 @@ export class CommercetoolsClient {
   async #getAllByCursor<T extends { readonly id: string }>(
     path: string,
     params: QueryParams,
-    firstPage: readonly T[],
   ): Promise<readonly T[]> {
-    const results = [...firstPage]
+    const results: T[] = []
     const where = typeof params.where === 'string' ? params.where : undefined
     for (;;) {
       const last = results[results.length - 1]
-      if (!last) return results
-      const cursor = `id > "${last.id}"`
+      const cursor = last === undefined ? undefined : `id > "${last.id}"`
+      const clauses = [where && `(${where})`, cursor].filter(Boolean).join(' and ')
       const { results: page } = await this.get<PagedQueryResponse<T>>(path, {
         ...params,
         sort: 'id asc',
-        where: where ? `(${where}) and ${cursor}` : cursor,
+        ...(clauses ? { where: clauses } : {}),
         limit: MAX_PAGE_SIZE,
         withTotal: false,
       })
@@ -186,11 +201,16 @@ export class CommercetoolsClient {
     }
   }
 
-  async #send(url: string, bearer: string) {
+  async #send(method: 'GET' | 'POST', url: string, bearer: string, body?: string) {
     try {
       return await this.#fetch(url, {
-        method: 'GET',
-        headers: { Authorization: bearer, Accept: 'application/json' },
+        method,
+        headers: {
+          Authorization: bearer,
+          Accept: 'application/json',
+          ...(body === undefined ? {} : { 'Content-Type': 'application/json' }),
+        },
+        ...(body === undefined ? {} : { body }),
       })
     } catch (cause) {
       throw new ContentClientError('network', `commercetools request failed: ${url}`, cause)

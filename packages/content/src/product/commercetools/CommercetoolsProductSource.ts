@@ -6,15 +6,18 @@
  *
  * Read strategy:
  *
- *  - **`getBySlug` and `getBySkus` query commercetools directly**, so a
+ *  - **`getBySlug` and `getBySkus` query Product Projections directly**, so a
  *    product page and an editorial carousel always see current data.
- *  - **`list`, `listSlugs` and `listCategories` read the whole catalogue**
- *    and filter locally, behind a short TTL cache. That is honest about
- *    `capabilities.pagination` (false) and is what makes category browsing
- *    exact: the port's categories are denormalised to include ancestors, and
- *    commercetools only filters on the categories a product is assigned to.
- *    A large catalogue wants Product Search with `subtree()` filters instead
- *    — a change inside this class, with `pagination`/`facets` flipping true.
+ *  - **A paged `list` and `listCategories` use Product Search** (`search.ts`)
+ *    when the project has it active: one search for the page's ids (a
+ *    category matches its subtree, ordered by category order hints), then one
+ *    fetch of just those products; categories come from a facet. A listing
+ *    costs two small requests, whatever the catalogue size.
+ *  - **Everything else falls back to the whole catalogue**, read once and
+ *    filtered locally behind a TTL cache: an unpaged `list`, `listSlugs`, and
+ *    any read while search is inactive. Search is an accelerator, never a
+ *    requirement — it needs activating per project and switches itself off
+ *    after 30 days unused, and a demo must not break when that happens.
  *  - Categories and product types are lookup tables (identifiers, ancestors,
  *    attribute labels) and share the same cache.
  *
@@ -36,14 +39,22 @@ import type {
   SourceCapabilities,
 } from '../../product-types'
 import { NO_CAPABILITIES } from '../../product-types'
-import { ContentClientError } from '../../types'
+import { ContentClientError, isContentClientError } from '../../types'
 import { warnOnMissingCurrency } from '../selectPrice'
 import { warnOnMissingSkus } from '../warnings'
 import type { CommercetoolsClient, PagedQueryResponse, QueryParams } from './client'
 import { MAX_PAGE_SIZE } from './client'
 import { localePreferences } from './localize'
 import type { MappingContext } from './mapProjection'
-import { mapProjection, skusOf } from './mapProjection'
+import { categoryIdentifier, mapProjection, skusOf } from './mapProjection'
+import type { SearchRequest, SearchResponse } from './search'
+import {
+  categoryFacetRequest,
+  facetCategoryIds,
+  listingRequest,
+  MAX_SEARCH_LIMIT,
+  MAX_SEARCH_WINDOW,
+} from './search'
 import type { CtCategory, CtProductProjection, CtProductType } from './wire'
 
 export type CommercetoolsProductSourceOptions = {
@@ -60,6 +71,11 @@ export type CommercetoolsProductSourceOptions = {
   readonly brandAttributes?: readonly string[]
   /** Attribute read as the short description. Default `shortDescription`. */
   readonly shortDescriptionAttribute?: string
+  /**
+   * Use Product Search for paged listings and the category list when the
+   * project has it active. Default true; false always reads the catalogue.
+   */
+  readonly productSearch?: boolean
   /** How long catalogue and lookup reads are reused. Default 60s; 0 disables. */
   readonly cacheTtlMs?: number
   /** Clock, for tests. */
@@ -67,6 +83,12 @@ export type CommercetoolsProductSourceOptions = {
 }
 
 const DEFAULT_TTL_MS = 60_000
+
+/** How long to stop asking an inactive Product Search before trying again. */
+const SEARCH_RECHECK_MS = 5 * 60_000
+
+/** Projections fetched per id-list request (keeps the `where` predicate short). */
+const IDS_PER_FETCH = 100
 
 // `process` and `console` via globalThis — see config.ts.
 type Globals = {
@@ -81,17 +103,27 @@ export class CommercetoolsProductSource implements ProductSource {
   /**
    * `multiCurrency` is true because every variant price is read, and the
    * mapper selects locally when server-side selection returns nothing.
-   * Everything else is false until this adapter uses Product Search.
+   * `pagination` follows Product Search: true while it is serving pages,
+   * false while listings fall back to slicing the whole catalogue.
    */
-  readonly capabilities: SourceCapabilities = { ...NO_CAPABILITIES, multiCurrency: true }
+  get capabilities(): SourceCapabilities {
+    return {
+      ...NO_CAPABILITIES,
+      multiCurrency: true,
+      pagination: this.#productSearch && this.#searchDownUntil <= this.#now(),
+    }
+  }
 
   readonly #client: CommercetoolsClient
   readonly #slugLocale: string
   readonly #priceCountry: string | undefined
   readonly #brandAttributes: readonly string[]
   readonly #shortDescriptionAttribute: string
+  readonly #productSearch: boolean
   readonly #now: () => number
   readonly #cache: TtlCache
+  /** Until when Product Search is presumed inactive; 0 = not known to be. */
+  #searchDownUntil = 0
 
   constructor(options: CommercetoolsProductSourceOptions) {
     this.#client = options.client
@@ -99,6 +131,7 @@ export class CommercetoolsProductSource implements ProductSource {
     this.#priceCountry = options.priceCountry?.toUpperCase()
     this.#brandAttributes = options.brandAttributes ?? ['brand', 'designer']
     this.#shortDescriptionAttribute = options.shortDescriptionAttribute ?? 'shortDescription'
+    this.#productSearch = options.productSearch ?? true
     this.#now = options.now ?? Date.now
     this.#cache = new TtlCache(options.cacheTtlMs ?? DEFAULT_TTL_MS, this.#now)
   }
@@ -163,7 +196,56 @@ export class CommercetoolsProductSource implements ProductSource {
     return resolved
   }
 
+  /**
+   * A page of the catalogue. Paged requests go through Product Search when it
+   * is active; an unpaged one (or any while it is not) slices the whole
+   * catalogue — the same order either way, so nothing reshuffles.
+   */
   async list(opts: ProductListOptions = {}): Promise<ProductListResult> {
+    if (opts.limit !== undefined) {
+      const page = await this.#searchList({ ...opts, limit: opts.limit })
+      if (page !== undefined) return page
+    }
+    return await this.#listFromCatalogue(opts)
+  }
+
+  async listSlugs(): Promise<readonly string[]> {
+    return (await this.#catalogue()).map((p) => p.slug)
+  }
+
+  /**
+   * Categories that hold at least one product, plus their ancestors — derived
+   * from the products, like the CMS source (ADR-0024), not the category tree.
+   *
+   * From a Product Search facet when search is active: one request, no
+   * products. Falls back to the catalogue when it is not, or when the facet
+   * may have been cut short (200+ categories).
+   */
+  async listCategories(): Promise<readonly string[]> {
+    const fromFacet = await this.#cache.get('category-facet', async () => {
+      const response = await this.#search(categoryFacetRequest())
+      return response === undefined ? undefined : facetCategoryIds(response)
+    })
+    if (fromFacet !== undefined) {
+      const { categoriesById } = await this.#context(undefined)
+      const ids = new Set<string>()
+      for (const id of fromFacet) {
+        const category = categoriesById.get(id)
+        if (!category) continue
+        ids.add(id)
+        for (const ancestor of category.ancestors ?? []) ids.add(ancestor.id)
+      }
+      const identifiers = [...ids]
+        .map((id) => categoriesById.get(id))
+        .filter((c): c is CtCategory => c !== undefined)
+        .map((c) => categoryIdentifier(c, this.#slugLocale))
+      return [...new Set(identifiers)].sort()
+    }
+    const all = await this.#catalogue()
+    return [...new Set(all.flatMap((p) => p.categories ?? []))].sort()
+  }
+
+  async #listFromCatalogue(opts: ProductListOptions): Promise<ProductListResult> {
     const all = await this.#catalogue(opts)
     const { category } = opts
     const matching = category ? all.filter((p) => p.categories?.includes(category)) : all
@@ -176,14 +258,101 @@ export class CommercetoolsProductSource implements ProductSource {
     return { products, total: matching.length }
   }
 
-  async listSlugs(): Promise<readonly string[]> {
-    return (await this.#catalogue()).map((p) => p.slug)
+  /**
+   * One page via Product Search: the ids (as many searches of ≤100 as the
+   * limit needs), then those products in one or two projection fetches,
+   * returned in search order. `undefined` when search is unavailable, so the
+   * caller falls back.
+   *
+   * `total` is the search's count, which can include a product the mapper
+   * then drops (no slug in the slug locale) — so a page may come up a card
+   * short. The catalogue path's dropped-products warning names the cause.
+   */
+  async #searchList(
+    opts: ProductListOptions & { readonly limit: number },
+  ): Promise<ProductListResult | undefined> {
+    if (!this.#productSearch || this.#searchDownUntil > this.#now()) return undefined
+
+    const ctx = await this.#context(opts)
+    let categoryId: string | undefined
+    if (opts.category !== undefined) {
+      categoryId = this.#categoryIdFor(opts.category, ctx)
+      if (categoryId === undefined) return { products: [], total: 0 }
+    }
+
+    const started = this.#now()
+    const ids: string[] = []
+    let total = 0
+    let offset = opts.offset ?? 0
+    do {
+      const size = Math.min(MAX_SEARCH_LIMIT, opts.limit - ids.length)
+      if (offset + size > MAX_SEARCH_WINDOW) break
+      const response = await this.#search(listingRequest({ categoryId, limit: size, offset }))
+      if (response === undefined) return undefined
+      total = response.total
+      ids.push(...response.results.map((r) => r.id))
+      offset += response.results.length
+      if (response.results.length < size) break
+    } while (ids.length < opts.limit)
+
+    const projections = await this.#projectionsByIds(ids, opts)
+    const byId = new Map(projections.map((p) => [p.id, p]))
+    const products = ids
+      .map((id) => byId.get(id))
+      .filter((p): p is CtProductProjection => p !== undefined)
+      .map((p) => mapProjection(p, ctx))
+      .filter((p): p is Product => p !== undefined)
+    devTiming(`searched ${products.length} of ${total} products`, this.#now() - started)
+    warnOnMissingCurrencies(opts.currency, products)
+    return { products, total }
   }
 
-  /** Derived from the products, like the CMS source (ADR-0024) — not the category tree. */
-  async listCategories(): Promise<readonly string[]> {
-    const all = await this.#catalogue()
-    return [...new Set(all.flatMap((p) => p.categories ?? []))].sort()
+  /** Projections by id, in batches, with server-side price selection. */
+  async #projectionsByIds(
+    ids: readonly string[],
+    opts: ReadOpts,
+  ): Promise<readonly CtProductProjection[]> {
+    const batches: string[][] = []
+    for (let i = 0; i < ids.length; i += IDS_PER_FETCH)
+      batches.push(ids.slice(i, i + IDS_PER_FETCH))
+    const pages = await Promise.all(
+      batches.map((batch) =>
+        this.#client.get<PagedQueryResponse<CtProductProjection>>('/product-projections', {
+          ...this.#priceParams(opts),
+          where: `id in (${batch.map(quote).join(', ')})`,
+          limit: batch.length,
+        }),
+      ),
+    )
+    return pages.flatMap((page) => page.results)
+  }
+
+  /** The commercetools id behind a category identifier, if any category has it. */
+  #categoryIdFor(identifier: string, ctx: MappingContext): string | undefined {
+    for (const category of ctx.categoriesById.values()) {
+      if (categoryIdentifier(category, this.#slugLocale) === identifier) return category.id
+    }
+    return undefined
+  }
+
+  /**
+   * A Product Search request, or `undefined` when search is off or inactive.
+   *
+   * An inactive project answers 404 (`ObjectNotFound`). That is remembered
+   * for a few minutes — so a page doesn't pay a failed request per render —
+   * then retried, so activating search in the Merchant Center takes effect
+   * without a restart. Any other failure is a real error and propagates.
+   */
+  async #search(body: SearchRequest): Promise<SearchResponse | undefined> {
+    if (!this.#productSearch || this.#searchDownUntil > this.#now()) return undefined
+    try {
+      return await this.#client.post<SearchResponse>('/products/search', body)
+    } catch (error) {
+      if (!isContentClientError(error) || error.kind !== 'not-found') throw error
+      this.#searchDownUntil = this.#now() + SEARCH_RECHECK_MS
+      warnSearchInactive()
+      return undefined
+    }
   }
 
   #priceParams(opts: ReadOpts | undefined): QueryParams {
@@ -206,9 +375,11 @@ export class CommercetoolsProductSource implements ProductSource {
     const key = `catalogue|${opts.locale ?? ''}|${opts.currency ?? ''}`
     return await this.#cache.get(key, async () => {
       const [ctx, projections] = await Promise.all([this.#context(opts), this.#projections()])
+      const started = this.#now()
       const products = dedupeSlugs(
         projections.map((p) => mapProjection(p, ctx)).filter((p): p is Product => p !== undefined),
       )
+      devTiming(`mapped ${products.length} products`, this.#now() - started)
       warnOnMissingCurrencies(opts.currency, products)
       return products
     })
@@ -216,9 +387,13 @@ export class CommercetoolsProductSource implements ProductSource {
 
   async #projections(): Promise<readonly CtProductProjection[]> {
     return await this.#cache.get('projections', async () => {
+      const started = this.#now()
       const projections = await this.#client.getAll<CtProductProjection>('/product-projections', {
         staged: false,
+        // Product Search's listing order, so the fallback matches it.
+        sort: ['createdAt desc', 'id asc'],
       })
+      devTiming(`fetched ${projections.length} products from commercetools`, this.#now() - started)
       this.#warnOnDropped(projections)
       return projections
     })
@@ -264,6 +439,21 @@ export class CommercetoolsProductSource implements ProductSource {
 }
 
 /**
+ * Dev-loud note that listings fell back to the full catalogue. Product Search
+ * is the difference between a ~20s and a sub-second listing on a large
+ * project, so saying how to turn it on is worth a log line.
+ */
+const warnSearchInactive = (): void => {
+  if (globals.process?.env?.NODE_ENV === 'production') return
+  globals.console?.warn?.(
+    "[products] commercetools Product Search isn't active on this project, so listings read the " +
+      'whole catalogue (slow on large projects). Turn it on in the Merchant Center: Settings → ' +
+      'Project settings → Storefront Search. It switches itself off after 30 days unused. ' +
+      'Set CTP_PRODUCT_SEARCH=off to always use the catalogue and silence this.',
+  )
+}
+
+/**
  * One summary line for products with no price in the requested currency —
  * the per-product warning the CMS source uses would be thousands of lines
  * against a real catalogue. Dev-loud, production-quiet, like the rest.
@@ -290,6 +480,18 @@ const warnOnMissingCurrencies = (
     `[products] ${missing.length} of ${products.length} commercetools product(s) have no ${currency} ` +
       `price and will render without one (they hold: ${summary}). Prices are never substituted ` +
       `across currencies — map this locale to a held currency in PRODUCT_CURRENCIES.`,
+  )
+}
+
+/**
+ * Dev-only timing for the catalogue read — fetch vs map — so a slow listing
+ * shows where its time went. Opt out with `CTP_TIMING=0`; never in production.
+ */
+const devTiming = (what: string, ms: number): void => {
+  const env = globals.process?.env
+  if (env?.NODE_ENV === 'production' || env?.CTP_TIMING === '0') return
+  ;(globals.console as { info?: (m: string) => void } | undefined)?.info?.(
+    `[products] ${what} in ${Math.round(ms)}ms`,
   )
 }
 
