@@ -7,7 +7,7 @@ import {
   productMetadataFromSchema,
   productRegistryEntry,
   type ProductSchema,
-} from './ProductDetail.registry'
+} from './ProductDetailPage.registry'
 
 const ctx: RenderContext = {}
 

@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { ContentMediaData } from '@amplience/frontend-starter-types'
 
-import { pageMetadataFromSchema, type PageSchema } from './Page.registry'
+import { pageMetadataFromSchema, type PageSchema } from './ContentPage.registry'
 
 const page = (fields: Partial<PageSchema> = {}): PageSchema => ({
   _meta: { schema: 'https://quadratic.amplience.com/v2/content/page' },

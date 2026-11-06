@@ -23,7 +23,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import { ProductDetail } from '@amplience/frontend-starter-components/product-detail'
+import { ProductDetailPage } from '@amplience/frontend-starter-components/product-detail-page'
 import { isContentClientError } from '@amplience/frontend-starter-content'
 
 import { resolveCurrency } from '../../../../../lib/currency'
@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
   }
 }
 
-export default async function ProductPage({ params }: RouteProps) {
+export default async function ProductRoute({ params }: RouteProps) {
   const { locale: localeSlug, slug } = await params
   const locale = localeForSlug(localeSlug)
   if (locale === undefined) notFound()
@@ -85,7 +85,7 @@ export default async function ProductPage({ params }: RouteProps) {
   }
 
   // The editorial slots render through the recursive renderer, the same path a
-  // page's slots take. `loadPriority: 'lcp'` is spent by ProductDetail on the
+  // page's slots take. `loadPriority: 'lcp'` is spent by ProductDetailPage on the
   // gallery's lead image — its registry entry declares `consumesLoadPriority`,
   // so the blocks below start a step lower (ADR-0021 §3).
   const content =
@@ -100,7 +100,7 @@ export default async function ProductPage({ params }: RouteProps) {
 
   return (
     <main data-product-detail-page>
-      <ProductDetail
+      <ProductDetailPage
         name={product.name}
         images={productMediaList(product.images)}
         attributes={product.attributes ?? []}
@@ -116,7 +116,7 @@ export default async function ProductPage({ params }: RouteProps) {
         {...(product.status !== undefined && { status: product.status })}
       >
         {content}
-      </ProductDetail>
+      </ProductDetailPage>
     </main>
   )
 }

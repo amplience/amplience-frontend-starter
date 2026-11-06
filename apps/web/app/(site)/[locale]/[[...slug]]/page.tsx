@@ -164,7 +164,7 @@ export async function generateMetadata({ params }: RouteProps): Promise<Metadata
   }
 }
 
-export default async function ContentPage({ params }: RouteProps) {
+export default async function ContentRoute({ params }: RouteProps) {
   const { locale: localeSlug, slug } = await params
   const locale = localeForSlug(localeSlug)
   if (locale === undefined) notFound()

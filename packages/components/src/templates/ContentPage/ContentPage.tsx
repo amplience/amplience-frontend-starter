@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 // Types
 // ---------------------------------------------------------------------------
 
-export type PageProps = {
+export type ContentPageProps = {
   /** The page's rendered slots, in content order. */
   children?: ReactNode
 }
@@ -14,7 +14,7 @@ export type PageProps = {
 // ---------------------------------------------------------------------------
 
 /**
- * Page template — the rendered form of an Amplience page content item.
+ * ContentPage template — the rendered form of an Amplience page content item.
  *
  * A page is an ordered list of slots; this template renders them in content
  * order inside a single `<main>` landmark. Page-level fields beyond `slots`
@@ -26,8 +26,8 @@ export type PageProps = {
  * the content tree is the renderer's job, not this component's.
  *
  * Usage (via the renderer):
- *   <Page>{renderedSlots}</Page>
+ *   <ContentPage>{renderedSlots}</ContentPage>
  */
-export function Page({ children }: PageProps) {
+export function ContentPage({ children }: ContentPageProps) {
   return <main data-page>{children}</main>
 }

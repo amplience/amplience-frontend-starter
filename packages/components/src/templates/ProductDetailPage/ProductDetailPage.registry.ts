@@ -1,7 +1,7 @@
 import type { ComponentRegistryEntry, ContentMediaData } from '@amplience/frontend-starter-types'
 
 import { contentMediaUrl } from '../../molecules/DynamicImage/di-utils'
-import { ProductDetail, type ProductDetailProps } from './ProductDetail'
+import { ProductDetailPage, type ProductDetailPageProps } from './ProductDetailPage'
 
 /** The schema URI this entry dispatches on (ADR-0010 §3 — no aliasing). */
 export const PRODUCT_SCHEMA = 'https://quadratic.amplience.com/v2/content/product'
@@ -19,7 +19,7 @@ type ProductAttributeSchema = {
  * `ProductSource` port returns (ADR-0018). The registry dispatches on a
  * content item, so a product opened in the CMS visualization renders through
  * this adapter; the `/products/[slug]` route renders the same template from a
- * `Product` instead. The two paths converge on `ProductDetailProps`, which is
+ * `Product` instead. The two paths converge on `ProductDetailPageProps`, which is
  * why the props contract is deliberately source-agnostic.
  */
 export type ProductSchema = {
@@ -109,13 +109,13 @@ const completeAttributes = (
  * hands the product's `slots` to the renderer, which renders them recursively
  * and passes the result in as `children`.
  *
- * It declares `consumesLoadPriority` for the same reason `BlogArticle` does —
+ * It declares `consumesLoadPriority` for the same reason `BlogArticlePage` does —
  * it renders media of its own (the gallery's lead image, a PDP's LCP element
  * in practice) *and* has children. Without it the page would carry two `'lcp'`
  * nodes and preload the product image against the first editorial block.
  */
-export const productRegistryEntry: ComponentRegistryEntry<ProductSchema, ProductDetailProps> = {
-  component: ProductDetail,
+export const productRegistryEntry: ComponentRegistryEntry<ProductSchema, ProductDetailPageProps> = {
+  component: ProductDetailPage,
   consumesLoadPriority: true,
   propsFromSchema: (schema, ctx) => {
     const attributes =

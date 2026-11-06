@@ -31,7 +31,7 @@ type RouteProps = {
   params: Promise<{ locale: string }>
 }
 
-export default function ProductsPage({ params }: RouteProps) {
+export default function ProductsRoute({ params }: RouteProps) {
   return (
     <Suspense fallback={null}>
       <ProductListing params={params} />

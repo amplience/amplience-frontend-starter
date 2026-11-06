@@ -5,7 +5,7 @@ import type {
 } from '@amplience/frontend-starter-types'
 
 import { contentMediaUrl } from '../../molecules/DynamicImage/di-utils'
-import { BlogArticle, type BlogArticleProps } from './BlogArticle'
+import { BlogArticlePage, type BlogArticlePageProps } from './BlogArticlePage'
 
 /** The schema URI this entry dispatches on (ADR-0010 §3 — no aliasing). */
 export const BLOG_ARTICLE_SCHEMA = 'https://quadratic.amplience.com/v2/content/blog-article'
@@ -93,19 +93,21 @@ export const blogArticleMetadataFromSchema = (
  * inherit. Without that, an article page would carry two `'lcp'` nodes and
  * preload its cover image and its first body block against each other.
  */
-export const blogArticleRegistryEntry: ComponentRegistryEntry<BlogArticleSchema, BlogArticleProps> =
-  {
-    component: BlogArticle,
-    consumesLoadPriority: true,
-    propsFromSchema: (schema, ctx) => ({
-      loadPriority: ctx.loadPriority ?? 'lazy',
-      ...(schema.title !== undefined && { title: schema.title }),
-      ...(schema.coverImage !== undefined && { coverImage: schema.coverImage }),
-      ...(schema.author !== undefined && { author: schema.author }),
-      ...(schema.publishDate !== undefined && { publishDate: schema.publishDate }),
-      ...(schema.category !== undefined && { category: schema.category }),
-      ...(schema.tags !== undefined && { tags: schema.tags }),
-      ...(schema.readTime !== undefined && { readTime: schema.readTime }),
-    }),
-    getChildren: (schema) => schema.slots ?? [],
-  }
+export const blogArticleRegistryEntry: ComponentRegistryEntry<
+  BlogArticleSchema,
+  BlogArticlePageProps
+> = {
+  component: BlogArticlePage,
+  consumesLoadPriority: true,
+  propsFromSchema: (schema, ctx) => ({
+    loadPriority: ctx.loadPriority ?? 'lazy',
+    ...(schema.title !== undefined && { title: schema.title }),
+    ...(schema.coverImage !== undefined && { coverImage: schema.coverImage }),
+    ...(schema.author !== undefined && { author: schema.author }),
+    ...(schema.publishDate !== undefined && { publishDate: schema.publishDate }),
+    ...(schema.category !== undefined && { category: schema.category }),
+    ...(schema.tags !== undefined && { tags: schema.tags }),
+    ...(schema.readTime !== undefined && { readTime: schema.readTime }),
+  }),
+  getChildren: (schema) => schema.slots ?? [],
+}

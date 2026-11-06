@@ -1,26 +1,26 @@
 // @vitest-environment jsdom
 //
-// Smoke tests for the Page template (QL-36).
+// Smoke tests for the ContentPage template (QL-36).
 
 import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 
-import { Page } from './Page'
+import { ContentPage } from './ContentPage'
 
 afterEach(cleanup)
 
-describe('Page', () => {
+describe('ContentPage', () => {
   it('renders a <main> landmark', () => {
-    render(<Page>content</Page>)
+    render(<ContentPage>content</ContentPage>)
     expect(screen.getByRole('main').tagName).toBe('MAIN')
   })
 
   it('renders its children in order', () => {
     render(
-      <Page>
+      <ContentPage>
         <p>first slot</p>
         <p>second slot</p>
-      </Page>,
+      </ContentPage>,
     )
     const paragraphs = [...screen.getByRole('main').querySelectorAll('p')].map((p) => p.textContent)
     expect(paragraphs).toEqual(['first slot', 'second slot'])

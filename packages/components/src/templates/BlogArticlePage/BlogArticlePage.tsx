@@ -6,13 +6,13 @@ import { Container } from '../../atoms/Container/Container'
 import { Icon } from '../../atoms/Icon/Icon'
 import { Tags } from '../../molecules/Tags/Tags'
 import { HeroBlock } from '../../organisms/HeroBlock/HeroBlock'
-import styles from './BlogArticle.module.css'
+import styles from './BlogArticlePage.module.css'
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-export type BlogArticleProps = {
+export type BlogArticlePageProps = {
   /** Article headline. */
   readonly title?: string
   /**
@@ -58,7 +58,7 @@ const formatDate = (iso: string): string =>
 // ---------------------------------------------------------------------------
 
 /**
- * BlogArticle template — the rendered form of an Amplience blog-article
+ * BlogArticlePage template — the rendered form of an Amplience blog-article
  * content item.
  *
  * Renders the cover image, headline, metadata bar (author, date, read time,
@@ -67,7 +67,7 @@ const formatDate = (iso: string): string =>
  * calls `blogArticleMetadataFromSchema` from `generateMetadata`, not this
  * component.
  */
-export function BlogArticle({
+export function BlogArticlePage({
   title,
   coverImage,
   author,
@@ -77,7 +77,7 @@ export function BlogArticle({
   readTime,
   loadPriority = 'lazy',
   children,
-}: BlogArticleProps) {
+}: BlogArticlePageProps) {
   return (
     <article data-blog-article>
       <header data-blog-article-header className={styles.header}>

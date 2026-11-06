@@ -1,20 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
 import { storyProductIn } from '../../fixtures/products'
-import { ProductDetail } from './ProductDetail'
+import { ProductDetailPage } from './ProductDetailPage'
 
 const meta = {
-  title: 'Templates/ProductDetail',
-  component: ProductDetail,
+  title: 'Templates/ProductDetailPage',
+  component: ProductDetailPage,
   tags: ['autodocs'],
   parameters: {
     controls: { disable: true },
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof ProductDetail>
+} satisfies Meta<typeof ProductDetailPage>
 
 export default meta
-type Story = StoryObj<typeof ProductDetail>
+type Story = StoryObj<typeof ProductDetailPage>
 
 /** Spread a fixture product into the template's props. */
 const fromFixture = (slug: string, locale = 'en-GB') => {
@@ -66,7 +66,7 @@ export const WithEditorialContent: Story = {
   name: 'With editorial slots',
   args: fromFixture('terra-dining-table'),
   render: (args) => (
-    <ProductDetail {...args}>
+    <ProductDetailPage {...args}>
       {/* Stands in for the rendered slots — the real page passes the
           renderer's output for the product's `slots` array. */}
       <div style={{ maxWidth: '48rem', margin: '0 auto', padding: '2rem 1rem' }}>
@@ -76,7 +76,7 @@ export const WithEditorialContent: Story = {
           two are the same colour, and the nail-holes are left in.
         </p>
       </div>
-    </ProductDetail>
+    </ProductDetailPage>
   ),
 }
 

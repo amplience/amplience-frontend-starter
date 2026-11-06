@@ -13,15 +13,15 @@ import { ContentMedia } from '../../molecules/ContentMedia/ContentMedia'
 import { mediaLoadingProps } from '../../molecules/ContentMedia/mediaLoadingProps'
 import { Tags } from '../../molecules/Tags/Tags'
 import { carouselSlotSizes } from '../../utils/imageSizes'
-import styles from './ProductDetail.module.css'
+import styles from './ProductDetailPage.module.css'
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-export type ProductDetailStatus = 'active' | 'coming-soon' | 'discontinued'
+export type ProductDetailPageStatus = 'active' | 'coming-soon' | 'discontinued'
 
-export type ProductDetailProps = {
+export type ProductDetailPageProps = {
   /** Product display name — the page's h1. */
   readonly name: string
   /** Amount in major units. Omit for a product with no price. */
@@ -45,7 +45,7 @@ export type ProductDetailProps = {
   /** Topic tags. */
   readonly tags?: readonly string[]
   /** Editorial lifecycle. `active` shows no badge. */
-  readonly status?: ProductDetailStatus
+  readonly status?: ProductDetailPageStatus
   /** BCP 47 locale for price formatting. See `Price`. */
   readonly locale?: string
   /**
@@ -59,7 +59,7 @@ export type ProductDetailProps = {
   readonly children?: ReactNode
 }
 
-const STATUS_LABELS: Record<Exclude<ProductDetailStatus, 'active'>, string> = {
+const STATUS_LABELS: Record<Exclude<ProductDetailPageStatus, 'active'>, string> = {
   'coming-soon': 'Coming soon',
   discontinued: 'Discontinued',
 }
@@ -77,7 +77,7 @@ const GALLERY_SLIDES = { slidesMobile: 1, slidesTablet: 1, slidesDesktop: 1 } as
 // ---------------------------------------------------------------------------
 
 /**
- * ProductDetail template — the rendered form of a `product` content item.
+ * ProductDetailPage template — the rendered form of a `product` content item.
  *
  * Two halves. The commerce half (gallery, name, price, description,
  * attributes) comes from the normalised `Product` the `ProductSource` port
@@ -97,7 +97,7 @@ const GALLERY_SLIDES = { slidesMobile: 1, slidesTablet: 1, slidesDesktop: 1 } as
  * Head metadata is the route's job via `productMetadataFromSchema`, not this
  * component's.
  */
-export function ProductDetail({
+export function ProductDetailPage({
   name,
   price,
   images,
@@ -110,11 +110,11 @@ export function ProductDetail({
   locale,
   loadPriority = 'lazy',
   children,
-}: ProductDetailProps) {
+}: ProductDetailPageProps) {
   const gallery = images ?? []
 
   return (
-    <article className={clsx('ProductDetail', styles.root)} data-product-detail>
+    <article className={clsx('ProductDetailPage', styles.root)} data-product-detail>
       <Container gutter>
         <div className={styles.layout}>
           <div className={styles.gallery}>{renderGallery(gallery, name, loadPriority)}</div>

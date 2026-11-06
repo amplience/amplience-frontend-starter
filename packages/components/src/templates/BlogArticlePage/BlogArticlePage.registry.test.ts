@@ -16,7 +16,7 @@ import {
   blogArticleMetadataFromSchema,
   blogArticleRegistryEntry,
   type BlogArticleSchema,
-} from './BlogArticle.registry'
+} from './BlogArticlePage.registry'
 
 const manualImage: ContentMediaData = {
   mediaType: 'ManualImage',

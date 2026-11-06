@@ -1,7 +1,7 @@
 import type { ComponentRegistryEntry, ContentImageData } from '@amplience/frontend-starter-types'
 
 import { contentMediaUrl } from '../../molecules/DynamicImage/di-utils'
-import { Page, type PageProps } from './Page'
+import { ContentPage, type ContentPageProps } from './ContentPage'
 
 /** The schema URI this entry dispatches (ADR-0010 §3 — no aliasing). */
 export const PAGE_SCHEMA = 'https://quadratic.amplience.com/v2/content/page'
@@ -149,14 +149,14 @@ export const pageMetadataFromSchema = (
  * the page's `slots` back to the renderer, which renders them recursively
  * and passes the result in as `children`.
  *
- * Head metadata is deliberately not rendered by the Page template: document
+ * Head metadata is deliberately not rendered by the ContentPage template: document
  * `<head>` tags rendered inside the body tree would collide with the
  * deployment's route-level metadata (Next.js renders the layout's `metadata`
  * export into `<head>` already). Routes own the head; they call
  * `pageMetadataFromSchema` from `generateMetadata` instead.
  */
-export const pageRegistryEntry: ComponentRegistryEntry<PageSchema, PageProps> = {
-  component: Page,
+export const pageRegistryEntry: ComponentRegistryEntry<PageSchema, ContentPageProps> = {
+  component: ContentPage,
   propsFromSchema: () => ({}),
   getChildren: (schema) => schema.slots ?? [],
 }

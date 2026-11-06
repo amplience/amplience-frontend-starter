@@ -130,7 +130,7 @@ export type ComponentRegistryEntry<TSchema = unknown, TProps = unknown> = {
   readonly validate?: (schema: unknown) => schema is TSchema
 
   /**
-   * For container entries (Page, Slot, ColumnsBlock, GridBlock): returns the
+   * For container entries (ContentPage, Slot, ColumnsBlock, GridBlock): returns the
    * child content nodes nested under this node. The dispatcher renders them
    * recursively and passes the result to `component` as `children`. Leaf
    * entries omit this.
@@ -152,7 +152,7 @@ export type ComponentRegistryEntry<TSchema = unknown, TProps = unknown> = {
    * a step below it. That is what keeps "at most one `'lcp'` per page" true for
    * a node that is both a container and a media consumer (ADR-0021).
    *
-   * Structural containers (Page, Slot, GridBlock, ColumnsBlock) leave this
+   * Structural containers (ContentPage, Slot, GridBlock, ColumnsBlock) leave this
    * unset: they render no media of their own, so spending a step there would
    * starve the page's first real block of the tier meant for it.
    */
