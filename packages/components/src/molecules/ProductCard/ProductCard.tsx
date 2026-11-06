@@ -22,7 +22,7 @@ export type ProductCardProps = {
   /** Where the card links. Usually `/products/{slug}`. */
   href: string
   /** Amount in major units. Omit for a product with no price. */
-  price?: { amount: number; currencyCode: string }
+  price?: { amount: number; currencyCode: string; compareAtAmount?: number }
   /** Lead image. Omit for a product with none — the card renders text-only. */
   media?: ContentMediaData
   /** Brand or vendor name, rendered above the product name. */
@@ -147,6 +147,9 @@ export function ProductCard({
             <Price
               amount={price.amount}
               currencyCode={price.currencyCode}
+              {...(price.compareAtAmount !== undefined && {
+                compareAtAmount: price.compareAtAmount,
+              })}
               className={clsx(styles.price)}
               {...(locale !== undefined && { locale })}
             />

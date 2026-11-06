@@ -1,25 +1,25 @@
 {
-  "id": "fea9b46c-5a08-5456-9562-1e868b21d4d4",
-  "label": "Home — department card: Kids",
+  "id": "68e0d908-59e9-58f5-bd1a-25929f478c0d",
+  "label": "Home — department card: Sale",
   "body": {
     "_meta": {
-      "name": "Home — department card: Kids",
+      "name": "Home — department card: Sale",
       "schema": "https://quadratic.amplience.com/v2/content/media-card",
-      "deliveryId": "fea9b46c-5a08-5456-9562-1e868b21d4d4"
+      "deliveryId": "68e0d908-59e9-58f5-bd1a-25929f478c0d"
     },
     "title": {
       "values": [
         {
           "locale": "en-US",
-          "value": "Kids"
+          "value": "Sale"
         },
         {
           "locale": "fr-FR",
-          "value": "Enfant"
+          "value": "Soldes"
         },
         {
           "locale": "de-DE",
-          "value": "Kinder"
+          "value": "Sale"
         }
       ],
       "_meta": {
@@ -30,15 +30,15 @@
       "values": [
         {
           "locale": "en-US",
-          "value": "Built for puddles, playgrounds and growth spurts."
+          "value": "Last chance on this season’s favourites."
         },
         {
           "locale": "fr-FR",
-          "value": "Pensé pour les flaques, les cours de récré et les poussées de croissance."
+          "value": "Dernière chance sur les pièces phares de la saison."
         },
         {
           "locale": "de-DE",
-          "value": "Gemacht für Pfützen, Spielplätze und Wachstumsschübe."
+          "value": "Letzte Chance auf die Lieblingsstücke der Saison."
         }
       ],
       "_meta": {
@@ -48,14 +48,14 @@
     "media": {
       "mediaType": "ManualImage",
       "image": {
-        "src": "https://cdn.media.amplience.net/i/quadraticdemo/wk31-hp-cat-b4a-210825",
-        "alt": "Children's feet in bright socks and shoes around an orange ball",
-        "width": 1200,
-        "height": 1600
+        "src": "https://cdn.media.amplience.net/i/quadraticdemo/pexels-evg-kowalievska-1040173",
+        "alt": "Woman in a deep-green faux-fur coat holding a small black bag",
+        "width": 3648,
+        "height": 5472
       }
     },
     "links": {
-      "href": "/kids"
+      "href": "/sale"
     },
     "layout": "overlay",
     "headingVariant": "h3",

@@ -49,15 +49,18 @@
     "brand": "Marisol",
     "prices": [
       {
-        "amount": 120,
+        "amount": 90,
+        "compareAtAmount": 120,
         "currencyCode": "GBP"
       },
       {
-        "amount": 139,
+        "amount": 104,
+        "compareAtAmount": 139,
         "currencyCode": "EUR"
       },
       {
-        "amount": 149,
+        "amount": 112,
+        "compareAtAmount": 149,
         "currencyCode": "USD"
       }
     ],
@@ -298,7 +301,14 @@
         }
       }
     ],
-    "categories": ["women", "women-clothing", "women-clothing-dresses"],
+    "categories": [
+      "women",
+      "women-clothing",
+      "women-clothing-dresses",
+      "sale",
+      "sale-women",
+      "sale-women-clothing"
+    ],
     "tags": ["dresses", "marisol"],
     "title": "Marisol Pleated Sundress | Amplience Frontend Starter",
     "description": "Knife pleats in washed cotton, with a strap that adjusts at the shoulder."

@@ -378,7 +378,12 @@ export type ResolvedProduct = {
   readonly slug: string
   readonly name: string
   readonly href: string
-  readonly price?: { readonly amount: number; readonly currencyCode: string }
+  /** `compareAtAmount` is the "was" price, present only when reduced. */
+  readonly price?: {
+    readonly amount: number
+    readonly currencyCode: string
+    readonly compareAtAmount?: number
+  }
   readonly media?: ContentMediaData
   readonly brand?: string
   readonly shortDescription?: string

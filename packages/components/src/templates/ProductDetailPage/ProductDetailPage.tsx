@@ -25,7 +25,11 @@ export type ProductDetailPageProps = {
   /** Product display name — the page's h1. */
   readonly name: string
   /** Amount in major units. Omit for a product with no price. */
-  readonly price?: { readonly amount: number; readonly currencyCode: string }
+  readonly price?: {
+    readonly amount: number
+    readonly currencyCode: string
+    readonly compareAtAmount?: number
+  }
   /**
    * Product imagery, first image first. Zero renders no gallery region, one
    * renders a single image, several render a carousel — see the component doc.
@@ -140,6 +144,9 @@ export function ProductDetailPage({
               <Price
                 amount={price.amount}
                 currencyCode={price.currencyCode}
+                {...(price.compareAtAmount !== undefined && {
+                  compareAtAmount: price.compareAtAmount,
+                })}
                 className={clsx(styles.price)}
                 {...(locale !== undefined && { locale })}
               />

@@ -189,7 +189,7 @@ describe('ContentRoute — content-fetch failures (QL-37)', () => {
 describe('ContentRoute — category listings (ADR-0024)', () => {
   // The fixtures put every product in a top-level category and a leaf one,
   // so `/home` exercises ancestor matching and `/furniture` a leaf. The
-  // identifiers are commercetools category keys, so the same URLs work with
+  // identifiers are commercetools category slugs, so the same URLs work with
   // either product source.
   // Products live in the anyafinn set (ADR-0019); the default set has none.
   // lib/content-client reads FIXTURE_SET when loadRoute() re-imports it.

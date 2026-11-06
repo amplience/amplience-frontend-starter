@@ -113,12 +113,19 @@ export const toPrice = (money: CtTypedMoney): ProductPrice => ({
 })
 
 /**
- * The amount a shopper pays: the discounted value when a product discount
- * applies, else the price. The port has one price per currency, so showing
- * the undiscounted figure would quote a number nobody is charged.
+ * The amount a shopper pays — the discounted value when a product discount
+ * applies — with the undiscounted value as the "was" price beside it.
  */
 const effective = (price: CtPrice | undefined): ProductPrice | undefined =>
-  price ? toPrice(price.discounted?.value ?? price.value) : undefined
+  price ? priceOf(price) : undefined
+
+const priceOf = (price: CtPrice): ProductPrice => {
+  const discounted = price.discounted?.value
+  if (!discounted) return toPrice(price.value)
+  const now = toPrice(discounted)
+  const was = toPrice(price.value).amount
+  return was > now.amount ? { ...now, compareAtAmount: was } : now
+}
 
 /**
  * One price per currency from the variant's full set.
@@ -144,7 +151,7 @@ const mapPrices = (prices: readonly CtPrice[] | undefined, ctx: MappingContext):
   for (const p of [...live].sort((a, b) => rank(a) - rank(b))) {
     if (!byCurrency.has(p.value.currencyCode)) byCurrency.set(p.value.currencyCode, p)
   }
-  return [...byCurrency.values()].map((p) => toPrice(p.discounted?.value ?? p.value))
+  return [...byCurrency.values()].map(priceOf)
 }
 
 /**

@@ -52,14 +52,11 @@ import siteHeaderRow1 from '../../../fixtures/anyafinn/components/header/site-he
 import siteHeaderRow2 from '../../../fixtures/anyafinn/components/header/site-header-row-2.json' with { type: 'json' }
 import siteHeader from '../../../fixtures/anyafinn/components/header/site-header.json' with { type: 'json' }
 import siteHierarchyMenuItemHomeware from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-homeware.json' with { type: 'json' }
-import siteHierarchyMenuItemKidsBaby from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-kids-baby.json' with { type: 'json' }
-import siteHierarchyMenuItemKidsBoys from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-kids-boys.json' with { type: 'json' }
-import siteHierarchyMenuItemKidsGirls from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-kids-girls.json' with { type: 'json' }
-import siteHierarchyMenuItemKids from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-kids.json' with { type: 'json' }
 import siteHierarchyMenuItemMensJackets from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens-jackets.json' with { type: 'json' }
 import siteHierarchyMenuItemMensShirts from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens-shirts.json' with { type: 'json' }
 import siteHierarchyMenuItemMensTrousers from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens-trousers.json' with { type: 'json' }
 import siteHierarchyMenuItemMens from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens.json' with { type: 'json' }
+import siteHierarchyMenuItemSale from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-sale.json' with { type: 'json' }
 import siteHierarchyMenuItemShopTheLook from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-shop-the-look.json' with { type: 'json' }
 import siteHierarchyMenuItemWomensAccessories from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens-accessories.json' with { type: 'json' }
 import siteHierarchyMenuItemWomensDresses from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens-dresses.json' with { type: 'json' }
@@ -72,13 +69,12 @@ import siteLocaleSelector from '../../../fixtures/anyafinn/components/header/sit
 import siteLogo from '../../../fixtures/anyafinn/components/header/site-logo.json' with { type: 'json' }
 import siteMenuToggleButton from '../../../fixtures/anyafinn/components/header/site-menu-toggle-button.json' with { type: 'json' }
 import homeCardDepartmentHome from '../../../fixtures/anyafinn/components/home-card-department-home.json' with { type: 'json' }
-import homeCardDepartmentKids from '../../../fixtures/anyafinn/components/home-card-department-kids.json' with { type: 'json' }
 import homeCardDepartmentMens from '../../../fixtures/anyafinn/components/home-card-department-mens.json' with { type: 'json' }
+import homeCardDepartmentSale from '../../../fixtures/anyafinn/components/home-card-department-sale.json' with { type: 'json' }
 import homeCardDepartmentWomens from '../../../fixtures/anyafinn/components/home-card-department-womens.json' with { type: 'json' }
 import homeCardGrownUpGlitter from '../../../fixtures/anyafinn/components/home-card-grown-up-glitter.json' with { type: 'json' }
 import homeCardOpulentDecadence from '../../../fixtures/anyafinn/components/home-card-opulent-decadence.json' with { type: 'json' }
 import homeCardPiratecore from '../../../fixtures/anyafinn/components/home-card-piratecore.json' with { type: 'json' }
-import homeCardProductCordPinafore from '../../../fixtures/anyafinn/components/home-card-product-cord-pinafore.json' with { type: 'json' }
 import homeCardProductCorduroyTrousers from '../../../fixtures/anyafinn/components/home-card-product-corduroy-trousers.json' with { type: 'json' }
 import homeCardProductLeatherTote from '../../../fixtures/anyafinn/components/home-card-product-leather-tote.json' with { type: 'json' }
 import homeCardProductMaraHandWovenWoolThrow from '../../../fixtures/anyafinn/components/home-card-product-mara-hand-woven-wool-throw.json' with { type: 'json' }
@@ -121,24 +117,18 @@ import home from '../../../fixtures/anyafinn/pages/home.json' with { type: 'json
 import productAuroraLoungeChair from '../../../fixtures/anyafinn/pages/products/aurora-lounge-chair.json' with { type: 'json' }
 import productAuroraShelving from '../../../fixtures/anyafinn/pages/products/aurora-shelving.json' with { type: 'json' }
 import productAuroraSideTable from '../../../fixtures/anyafinn/pages/products/aurora-side-table.json' with { type: 'json' }
-import productCargoShorts from '../../../fixtures/anyafinn/pages/products/cargo-shorts.json'
-import productCordPinafore from '../../../fixtures/anyafinn/pages/products/cord-pinafore.json'
 import productCorduroyTrousers from '../../../fixtures/anyafinn/pages/products/corduroy-trousers.json'
-import productFloralBlouse from '../../../fixtures/anyafinn/pages/products/floral-blouse.json'
-import productKnittedBooties from '../../../fixtures/anyafinn/pages/products/knitted-booties.json'
 import productLeatherTote from '../../../fixtures/anyafinn/pages/products/leather-tote.json'
 import productLinenCampShirt from '../../../fixtures/anyafinn/pages/products/linen-camp-shirt.json'
 import productLumenFloorLamp from '../../../fixtures/anyafinn/pages/products/lumen-floor-lamp.json' with { type: 'json' }
 import productMaraWoolThrow from '../../../fixtures/anyafinn/pages/products/mara-hand-woven-wool-throw.json' with { type: 'json' }
 import productMidiWrapDress from '../../../fixtures/anyafinn/pages/products/midi-wrap-dress.json'
-import productOrganicBabygro from '../../../fixtures/anyafinn/pages/products/organic-babygro.json'
 import productOxfordShirt from '../../../fixtures/anyafinn/pages/products/oxford-shirt.json'
 import productPleatedSundress from '../../../fixtures/anyafinn/pages/products/pleated-sundress.json'
 import productQuiltedBomber from '../../../fixtures/anyafinn/pages/products/quilted-bomber.json'
 import productRibbedKnitTop from '../../../fixtures/anyafinn/pages/products/ribbed-knit-top.json'
 import productSilkBlouse from '../../../fixtures/anyafinn/pages/products/silk-blouse.json'
 import productSilkScarf from '../../../fixtures/anyafinn/pages/products/silk-scarf.json'
-import productStripedRugbyShirt from '../../../fixtures/anyafinn/pages/products/striped-rugby-shirt.json'
 import productTaperedChinos from '../../../fixtures/anyafinn/pages/products/tapered-chinos.json'
 import productTerraDiningTable from '../../../fixtures/anyafinn/pages/products/terra-dining-table.json' with { type: 'json' }
 import productVerdeCeramicPlanter from '../../../fixtures/anyafinn/pages/products/verde-ceramic-planter.json' with { type: 'json' }
@@ -199,11 +189,8 @@ const fixtures: readonly EnrichedContentItem[] = [
   siteHierarchyMenuItemWomensDresses,
   siteHierarchyMenuItemWomensTops,
   siteHierarchyMenuItemWomensAccessories,
-  siteHierarchyMenuItemKids,
-  siteHierarchyMenuItemKidsBoys,
-  siteHierarchyMenuItemKidsGirls,
-  siteHierarchyMenuItemKidsBaby,
   siteHierarchyMenuItemHomeware,
+  siteHierarchyMenuItemSale,
   siteHierarchyMenuItemShopTheLook,
   siteHierarchyMenuMain,
   siteIconButtonAccount,
@@ -245,12 +232,6 @@ const fixtures: readonly EnrichedContentItem[] = [
   productPleatedSundress,
   productLeatherTote,
   productSilkScarf,
-  productStripedRugbyShirt,
-  productCargoShorts,
-  productCordPinafore,
-  productFloralBlouse,
-  productOrganicBabygro,
-  productKnittedBooties,
   blogGrownUpGlitterBody,
   blogGrownUpGlitterMoreLooks,
   blogOpulentDecadenceBody,
@@ -258,10 +239,9 @@ const fixtures: readonly EnrichedContentItem[] = [
   blogPiratecoreBody,
   blogPiratecoreMoreLooks,
   homeCardDepartmentHome,
-  homeCardDepartmentKids,
+  homeCardDepartmentSale,
   homeCardDepartmentMens,
   homeCardDepartmentWomens,
-  homeCardProductCordPinafore,
   homeCardProductCorduroyTrousers,
   homeCardProductLeatherTote,
   homeCardProductMaraHandWovenWoolThrow,

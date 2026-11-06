@@ -63,14 +63,14 @@
         }
       },
       {
-        "id": "fea9b46c-5a08-5456-9562-1e868b21d4d4",
+        "id": "fcc9549c-7ad6-5f01-afaf-7108327b6b93",
         "contentType": "https://quadratic.amplience.com/v2/content/media-card",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
       },
       {
-        "id": "fcc9549c-7ad6-5f01-afaf-7108327b6b93",
+        "id": "68e0d908-59e9-58f5-bd1a-25929f478c0d",
         "contentType": "https://quadratic.amplience.com/v2/content/media-card",
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"

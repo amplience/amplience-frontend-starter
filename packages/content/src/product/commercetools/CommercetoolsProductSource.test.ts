@@ -120,12 +120,12 @@ describe('CommercetoolsProductSource specifics', () => {
       }
     })
 
-    it('shows the discounted amount when a discount applies', async () => {
+    it('shows the discounted amount, with the original as the was price', async () => {
       const product = await setup().source.getBySlug('linen-shirt', {
         locale: 'en-GB,*',
         currency: 'GBP',
       })
-      expect(product.price).toEqual({ amount: 48, currencyCode: 'GBP' })
+      expect(product.price).toEqual({ amount: 48, currencyCode: 'GBP', compareAtAmount: 60 })
     })
 
     it('keeps one price per currency and ignores channel and customer-group prices', async () => {

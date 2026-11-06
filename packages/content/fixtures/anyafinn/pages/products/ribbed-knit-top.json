@@ -49,15 +49,18 @@
     "brand": "Marisol",
     "prices": [
       {
-        "amount": 78,
+        "amount": 58,
+        "compareAtAmount": 78,
         "currencyCode": "GBP"
       },
       {
-        "amount": 89,
+        "amount": 67,
+        "compareAtAmount": 89,
         "currencyCode": "EUR"
       },
       {
-        "amount": 99,
+        "amount": 74,
+        "compareAtAmount": 99,
         "currencyCode": "USD"
       }
     ],
@@ -298,7 +301,14 @@
         }
       }
     ],
-    "categories": ["women", "women-clothing", "women-clothing-tops"],
+    "categories": [
+      "women",
+      "women-clothing",
+      "women-clothing-tops",
+      "sale",
+      "sale-women",
+      "sale-women-clothing"
+    ],
     "tags": ["tops", "marisol"],
     "title": "Marisol Ribbed Knit Top | Amplience Frontend Starter",
     "description": "A fine-gauge merino rib that holds its shape and layers under everything."

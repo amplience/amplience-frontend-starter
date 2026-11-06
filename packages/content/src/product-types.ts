@@ -38,6 +38,17 @@ export type ProductStatus = 'active' | 'coming-soon' | 'discontinued'
 export type ProductPrice = {
   readonly amount: number
   readonly currencyCode: string
+  /**
+   * The price before a reduction — the struck-through "was" figure — in the
+   * same currency and units as `amount`. Present only when it is higher than
+   * `amount`, so its presence alone means "on sale".
+   *
+   * Named after Shopify's `compareAtPrice`; commercetools supplies it as the
+   * undiscounted `value` beside a `discounted` one, and BigCommerce as `price`
+   * beside `sale_price`. Kept on the price rather than the product so the two
+   * figures can never be in different currencies.
+   */
+  readonly compareAtAmount?: number
 }
 
 /**

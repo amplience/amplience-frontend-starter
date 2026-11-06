@@ -244,9 +244,15 @@
             "title": "Currency",
             "description": "ISO 4217 code, e.g. GBP, USD, EUR.",
             "pattern": "^[A-Z]{3}$"
+          },
+          "compareAtAmount": {
+            "type": "number",
+            "title": "Was price",
+            "description": "The price before a reduction, shown struck through beside Amount. Leave empty when the product isn't reduced — it is ignored unless it is higher than Amount. Same currency and units as Amount.",
+            "minimum": 0
           }
         },
-        "propertyOrder": ["amount", "currencyCode"],
+        "propertyOrder": ["amount", "compareAtAmount", "currencyCode"],
         "required": ["amount", "currencyCode"]
       }
     },

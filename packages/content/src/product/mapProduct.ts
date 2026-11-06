@@ -34,11 +34,16 @@ const num = (v: unknown): number | undefined =>
   typeof v === 'number' && Number.isFinite(v) ? v : undefined
 
 const mapPrice = (v: unknown): ProductPrice | undefined => {
-  const p = v as { amount?: unknown; currencyCode?: unknown } | undefined
+  const p = v as { amount?: unknown; currencyCode?: unknown; compareAtAmount?: unknown } | undefined
   const amount = num(p?.amount)
   const currencyCode = str(p?.currencyCode)
   if (amount === undefined || currencyCode === undefined) return undefined
-  return { amount, currencyCode }
+  // A "was" price only means something above the current one; anything else
+  // is an authoring slip, and showing it struck through would read as a rise.
+  const compareAtAmount = num(p?.compareAtAmount)
+  return compareAtAmount !== undefined && compareAtAmount > amount
+    ? { amount, currencyCode, compareAtAmount }
+    : { amount, currencyCode }
 }
 
 /**

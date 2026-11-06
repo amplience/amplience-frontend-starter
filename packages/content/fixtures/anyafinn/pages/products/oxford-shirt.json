@@ -49,15 +49,18 @@
     "brand": "Halden",
     "prices": [
       {
-        "amount": 75,
+        "amount": 56,
+        "compareAtAmount": 75,
         "currencyCode": "GBP"
       },
       {
-        "amount": 89,
+        "amount": 67,
+        "compareAtAmount": 89,
         "currencyCode": "EUR"
       },
       {
-        "amount": 95,
+        "amount": 71,
+        "compareAtAmount": 95,
         "currencyCode": "USD"
       }
     ],
@@ -298,7 +301,14 @@
         }
       }
     ],
-    "categories": ["men", "men-clothing", "men-clothing-shirts"],
+    "categories": [
+      "men",
+      "men-clothing",
+      "men-clothing-shirts",
+      "sale",
+      "sale-men",
+      "sale-men-clothing"
+    ],
     "tags": ["shirts", "halden"],
     "title": "Halden Oxford Shirt | Amplience Frontend Starter",
     "description": "A button-down Oxford in soft-washed cotton, cut for everyday wear."
