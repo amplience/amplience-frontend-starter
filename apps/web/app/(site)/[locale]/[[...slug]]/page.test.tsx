@@ -98,6 +98,13 @@ describe('ContentRoute — path → delivery key routing (QL-76)', () => {
     await expect(ContentRoute(routeProps(['header']))).rejects.toThrowError()
   })
 
+  it('throws to the 404 boundary for a locale that is not configured', async () => {
+    const { default: ContentRoute } = await loadRoute()
+    await expect(
+      ContentRoute({ params: Promise.resolve({ locale: 'xx-xx', slug: ['about'] }) }),
+    ).rejects.toThrowError()
+  })
+
   it('throws to the 404 boundary for an unknown slug', async () => {
     const { default: ContentRoute } = await loadRoute()
     await expect(ContentRoute(routeProps(['no-such-page']))).rejects.toThrowError()
@@ -191,7 +198,7 @@ describe('ContentRoute — category listings (ADR-0024)', () => {
   // so `/home` exercises ancestor matching and `/furniture` a leaf. The
   // identifiers are commercetools category slugs, so the same URLs work with
   // either product source.
-  // Products live in the anyafinn set (ADR-0019); the default set has none.
+  // These categories live in the anyafinn set (ADR-0019), not the default one.
   // lib/content-client reads FIXTURE_SET when loadRoute() re-imports it.
   beforeEach(() => {
     vi.stubEnv('FIXTURE_SET', 'anyafinn')
@@ -244,6 +251,19 @@ describe('ContentRoute — category listings (ADR-0024)', () => {
     const { default: ContentRoute } = await loadRoute()
     const out = renderToStaticMarkup((await ContentRoute(routeProps(['home']))) as ReactNode)
     expect(out).not.toContain('data-category=')
+  })
+
+  it('lists every product in the category when the listing limit is off', async () => {
+    vi.stubEnv('PRODUCT_LISTING_LIMIT', '0')
+    const { default: ContentRoute } = await loadRoute()
+    const out = renderToStaticMarkup((await ContentRoute(routeProps(['furniture']))) as ReactNode)
+    expect(out).toContain('/products/terra-dining-table')
+    expect(out).toContain('/products/aurora-side-table')
+  })
+
+  it('falls back to layout metadata for a path that is neither a page nor a category', async () => {
+    const { generateMetadata } = await loadRoute()
+    await expect(generateMetadata(routeProps(['not-a-category-at-all']))).resolves.toEqual({})
   })
 
   it('gives a category page a derived title and canonical in metadata', async () => {
@@ -303,6 +323,15 @@ describe('ContentRoute — unexpected (non-content) errors', () => {
     })
     const { default: ContentRoute } = await loadRoute()
     await expect(ContentRoute(routeProps())).rejects.toThrowError('exploded in transit')
+  })
+
+  it('rethrows from the category lookup after a page miss', async () => {
+    stubClient = makeStubClient({
+      getByKey: () => Promise.reject(new ContentClientError('not-found', 'gone')),
+      listBySchema: () => Promise.reject(new Error('category read exploded')),
+    })
+    const { default: ContentRoute } = await loadRoute()
+    await expect(ContentRoute(routeProps(['home']))).rejects.toThrowError('category read exploded')
   })
 
   it('rethrows from generateMetadata', async () => {

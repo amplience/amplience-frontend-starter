@@ -44,7 +44,7 @@ export const moveProductItems = (fromDir, toDir) => {
   const moved = []
   for (const entry of readdirSync(fromDir, { recursive: true, withFileTypes: true })) {
     if (!entry.isFile() || !entry.name.endsWith('.json')) continue
-    const file = path.join(entry.parentPath ?? entry.path, entry.name)
+    const file = path.join(entry.parentPath, entry.name)
     const item = JSON.parse(readFileSync(file, 'utf8'))
     if (item?.body?._meta?.schema !== PRODUCT_SCHEMA) continue
 

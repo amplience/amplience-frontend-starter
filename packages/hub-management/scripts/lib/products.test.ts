@@ -22,6 +22,13 @@ describe('withProductsRepo', () => {
     expect(withProductsRepo(page, 'products')).toBe(page)
   })
 
+  it('assigns the products repo to a type that lists no repositories', () => {
+    const bare: { contentTypeUri: string; repositories?: string[] } = {
+      contentTypeUri: PRODUCT_SCHEMA,
+    }
+    expect(withProductsRepo(bare, 'products').repositories).toEqual(['products'])
+  })
+
   it('is a no-op with no products repo, or when already assigned', () => {
     expect(withProductsRepo(productType, undefined)).toBe(productType)
     const assigned = { ...productType, repositories: ['content', 'products'] }
@@ -60,6 +67,23 @@ describe('moveProductItems', () => {
     expect(existsSync(path.join(products, 'chair.json'))).toBe(true)
     expect(existsSync(path.join(products, 'lighting', 'lamp.json'))).toBe(true)
     expect(existsSync(path.join(products, 'misfiled.json'))).toBe(true)
+  })
+
+  it('keeps a folder that still holds pages after its products move out', () => {
+    const pages = tmp()
+    write(pages, 'products/chair.json', PRODUCT_SCHEMA, 'p1')
+    write(
+      pages,
+      'products/overview.json',
+      'https://quadratic.amplience.com/v2/content/page',
+      'page',
+    )
+
+    expect(moveProductItems(pages, tmp())).toEqual(['p1'])
+    expect(readdirSync(pages, { recursive: true }).sort()).toEqual([
+      'products',
+      'products/overview.json',
+    ])
   })
 
   it('moves nothing from a set with no products', () => {
