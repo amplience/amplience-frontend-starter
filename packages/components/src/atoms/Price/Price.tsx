@@ -13,6 +13,12 @@ export type PriceProps = {
   /** ISO 4217 code, e.g. GBP, USD, JPY. */
   currencyCode: string
   /**
+   * The price before a reduction, in the same units and currency. When it is
+   * higher than `amount` the price renders as a sale: the current amount
+   * first, then this one struck through. Ignored otherwise.
+   */
+  compareAtAmount?: number
+  /**
    * BCP 47 locale governing symbol placement, grouping and decimal marks.
    * Supplied by the route from the active locale; falls back to the runtime
    * default, which in a server render is the *server's* locale — so pass it
@@ -41,8 +47,39 @@ export type PriceProps = {
  *   <Price amount={749} currencyCode="GBP" locale="en-GB" />   → £749.00
  *   <Price amount={749} currencyCode="EUR" locale="de-DE" />   → 749,00 €
  */
-export function Price({ amount, currencyCode, locale, className, ...rest }: PriceProps) {
+export function Price({
+  amount,
+  currencyCode,
+  compareAtAmount,
+  locale,
+  className,
+  ...rest
+}: PriceProps) {
   const formatted = formatPrice(amount, currencyCode, locale)
+
+  if (compareAtAmount !== undefined && compareAtAmount > amount) {
+    // A strikethrough is invisible to most screen readers, which would read
+    // the two figures as one price followed by another — so each carries a
+    // visually hidden label saying which is which.
+    return (
+      <span
+        className={clsx('Price', styles.root, styles.reduced, className)}
+        data-reduced
+        {...rest}
+      >
+        <data className={styles.now} value={String(amount)}>
+          <span className={styles.label}>Now </span>
+          {formatted}
+        </data>
+        <s className={styles.was}>
+          <data value={String(compareAtAmount)}>
+            <span className={styles.label}>Was </span>
+            {formatPrice(compareAtAmount, currencyCode, locale)}
+          </data>
+        </s>
+      </span>
+    )
+  }
 
   return (
     <data className={clsx('Price', styles.root, className)} value={String(amount)} {...rest}>

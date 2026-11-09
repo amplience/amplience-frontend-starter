@@ -61,7 +61,7 @@ const dispatchFailures = [
 
 const contentFailureKinds = ['network', 'unauthorised', 'malformed', 'unknown'] as const
 
-export default function FailuresPage() {
+export default function FailuresRoute() {
   if (process.env.NODE_ENV === 'production') notFound()
 
   return (

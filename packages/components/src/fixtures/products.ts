@@ -18,7 +18,7 @@
  * free of a dependency on `packages/content`, which would defeat the port.
  */
 
-import type { ContentMediaData } from '@amplience/frontend-starter-types'
+import type { ContentMediaData, ResolvedProduct } from '@amplience/frontend-starter-types'
 
 import auroraLoungeChair from '../../../content/fixtures/anyafinn/pages/products/aurora-lounge-chair.json'
 import auroraShelving from '../../../content/fixtures/anyafinn/pages/products/aurora-shelving.json'
@@ -167,3 +167,20 @@ export const storyProductIn = (slug: string, locale: string, currency?: string):
   if (source === undefined) throw new Error(`No product fixture with slug "${slug}"`)
   return toStoryProduct(source, locale, currency)
 }
+
+/**
+ * The fixture products as `ResolvedProduct`s — the same mapping the
+ * composition boundary does from the port's normalised `Product` (ADR-0027),
+ * for the components that take resolved products (carousels, listings).
+ */
+export const storyResolvedProducts: readonly ResolvedProduct[] = storyProducts.map((p) => ({
+  sku: p.sku,
+  slug: p.slug,
+  name: p.name,
+  href: p.href,
+  ...(p.price !== undefined && { price: p.price }),
+  ...(p.images[0] !== undefined && { media: p.images[0] }),
+  ...(p.brand !== undefined && { brand: p.brand }),
+  ...(p.shortDescription !== undefined && { shortDescription: p.shortDescription }),
+  ...(p.status !== undefined && { status: p.status }),
+}))

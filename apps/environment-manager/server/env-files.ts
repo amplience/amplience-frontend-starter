@@ -21,6 +21,8 @@ export type EnvSource = {
   repoContent: string
   repoSlots: string
   repoSiteComponents: string
+  /** Optional; older configs predate it. */
+  repoProducts?: string
   revalidateSecret: string
   clientId: string
   clientSecret: string
@@ -143,6 +145,7 @@ export function hubManagementEnvVars(
     AMPLIENCE_REPO_CONTENT: env === null ? undefined : present(env.repoContent),
     AMPLIENCE_REPO_SLOTS: env === null ? undefined : present(env.repoSlots),
     AMPLIENCE_REPO_SITE_COMPONENTS: env === null ? undefined : present(env.repoSiteComponents),
+    AMPLIENCE_REPO_PRODUCTS: env === null ? undefined : present(env.repoProducts ?? ''),
     AMPLIENCE_CLIENT_ID: env === null ? undefined : present(env.clientId),
     AMPLIENCE_CLIENT_SECRET: env === null ? undefined : present(env.clientSecret),
     AMPLIENCE_STAGING_HOST: env === null ? undefined : present(env.stagingHost),

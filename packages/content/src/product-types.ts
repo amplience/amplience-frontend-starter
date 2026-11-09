@@ -38,6 +38,17 @@ export type ProductStatus = 'active' | 'coming-soon' | 'discontinued'
 export type ProductPrice = {
   readonly amount: number
   readonly currencyCode: string
+  /**
+   * The price before a reduction — the struck-through "was" figure — in the
+   * same currency and units as `amount`. Present only when it is higher than
+   * `amount`, so its presence alone means "on sale".
+   *
+   * Named after Shopify's `compareAtPrice`; commercetools supplies it as the
+   * undiscounted `value` beside a `discounted` one, and BigCommerce as `price`
+   * beside `sale_price`. Kept on the price rather than the product so the two
+   * figures can never be in different currencies.
+   */
+  readonly compareAtAmount?: number
 }
 
 /**
@@ -104,7 +115,16 @@ export type Product = {
    */
   readonly prices?: readonly ProductPrice[]
   readonly images?: readonly ProductImage[]
+  /** A sentence or two — card and PDP summary copy. */
   readonly shortDescription?: string
+  /**
+   * The full product description, for the PDP. Kept apart from
+   * `shortDescription` because PIMs hold long-form copy that is wrong on a
+   * card: commercetools' `description` is the long text, and a short one only
+   * exists if a project adds an attribute for it. A PIM *overwrites* this
+   * field rather than reconciling it, so ADR-0018 §8 admits it.
+   */
+  readonly description?: string
   readonly attributes?: readonly ProductAttribute[]
   /**
    * Brand or vendor name — the value as displayed, not a reference.

@@ -116,6 +116,8 @@ type Environment = {
   repoSlots: string
   /** "Site Components" repo (authoring/permission boundary for CMS site config); "" = unset. */
   repoSiteComponents: string
+  /** Optional repo the seed puts products in; "" = the content repo. */
+  repoProducts?: string
   /**
    * Shared secret for the deployment's /api/revalidate-* routes, seeded into
    * the webhooks that call them; "" = unset, so those webhooks are skipped
@@ -438,6 +440,8 @@ function buildEnv(env: Environment, republish = false, setName?: string): NodeJS
     AMPLIENCE_REPO_SLOTS: env.repoSlots,
     // Blank when the deployment has no Site Components repo (feature not in use).
     AMPLIENCE_REPO_SITE_COMPONENTS: env.repoSiteComponents ?? '',
+    // Blank seeds products into the content repo, as before.
+    AMPLIENCE_REPO_PRODUCTS: env.repoProducts ?? '',
     AMPLIENCE_CLIENT_ID: env.clientId,
     AMPLIENCE_CLIENT_SECRET: env.clientSecret,
     AMPLIENCE_HUB_ID: env.hubId,
@@ -969,6 +973,7 @@ app.post('/api/amplience/permissions', async (c) => {
     repoContent?: string
     repoSlots?: string
     repoSiteComponents?: string
+    repoProducts?: string
   }>()
   const { clientId, clientSecret, hubId } = body
   if (!clientId || !clientSecret || !hubId) {
@@ -993,6 +998,7 @@ app.post('/api/amplience/permissions', async (c) => {
         repoContent: body.repoContent ?? '',
         repoSlots: body.repoSlots ?? '',
         repoSiteComponents: body.repoSiteComponents ?? '',
+        repoProducts: body.repoProducts ?? '',
       },
       fetchJson,
     )
@@ -2138,30 +2144,47 @@ app.get('/api/environments/:name/stats', async (c) => {
     const token = await getAmplienceToken(env.clientId, env.clientSecret)
     // Ordered as the GUI lists them: settings → schemas → types → extensions
     // → webhooks → content items.
-    const [workflowStates, schemas, types, extensions, webhooks, contentItems, slotItems, locales] =
-      await Promise.all([
-        fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/workflow-states`),
-        fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/content-type-schemas?status=ACTIVE`),
-        fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/content-types?status=ACTIVE`),
-        fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/extensions`),
-        fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/webhooks`),
-        fetchCount(
-          token,
-          `${AMPLIENCE_API}/content-repositories/${env.repoContent}/content-items?status=ACTIVE`,
-        ),
-        fetchCount(
-          token,
-          `${AMPLIENCE_API}/content-repositories/${env.repoSlots}/content-items?status=ACTIVE`,
-        ),
-        fetchHubLocales(token, env.hubId),
-      ])
+    const productItemsCount =
+      env.repoProducts !== undefined && env.repoProducts !== ''
+        ? fetchCount(
+            token,
+            `${AMPLIENCE_API}/content-repositories/${env.repoProducts}/content-items?status=ACTIVE`,
+          )
+        : Promise.resolve(0)
+    const [
+      workflowStates,
+      schemas,
+      types,
+      extensions,
+      webhooks,
+      contentItems,
+      slotItems,
+      locales,
+      productItems,
+    ] = await Promise.all([
+      fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/workflow-states`),
+      fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/content-type-schemas?status=ACTIVE`),
+      fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/content-types?status=ACTIVE`),
+      fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/extensions`),
+      fetchCount(token, `${AMPLIENCE_API}/hubs/${env.hubId}/webhooks`),
+      fetchCount(
+        token,
+        `${AMPLIENCE_API}/content-repositories/${env.repoContent}/content-items?status=ACTIVE`,
+      ),
+      fetchCount(
+        token,
+        `${AMPLIENCE_API}/content-repositories/${env.repoSlots}/content-items?status=ACTIVE`,
+      ),
+      fetchHubLocales(token, env.hubId),
+      productItemsCount,
+    ])
     return c.json({
       workflowStates,
       schemas,
       types,
       extensions,
       webhooks,
-      items: contentItems + slotItems,
+      items: contentItems + slotItems + productItems,
       locales,
     })
   } catch (err) {
@@ -2252,7 +2275,7 @@ app.get('/api/environments/:name/content-breakdown', async (c) => {
       contentItems?: [string, string][]
     }
     const token = await getAmplienceToken(env.clientId, env.clientSecret)
-    const repos = [env.repoContent, env.repoSlots, env.repoSiteComponents].filter(
+    const repos = [env.repoContent, env.repoSlots, env.repoSiteComponents, env.repoProducts].filter(
       (id): id is string => (id ?? '') !== '',
     )
     const items = (await Promise.all(repos.map((id) => listRepoItems(token, id)))).flat()

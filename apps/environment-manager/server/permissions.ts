@@ -62,6 +62,7 @@ export type PermissionsEnv = {
   repoContent: string
   repoSlots: string
   repoSiteComponents?: string
+  repoProducts?: string
 }
 
 // ── Pure helpers ──────────────────────────────────────────────────────────────
@@ -202,6 +203,7 @@ export async function buildPermissionsReport(
     itemsContent,
     itemsSlots,
     itemsSite,
+    itemsProducts,
   ] = await Promise.all([
     probe('workflow-states'),
     probe('content-type-schemas'),
@@ -216,6 +218,7 @@ export async function buildPermissionsReport(
       'Content items (site components repo)',
       env.repoSiteComponents ?? '',
     ),
+    repoCheck(fetchJson, 'items-products', 'Content items (products repo)', env.repoProducts ?? ''),
   ])
 
   const checks: PermissionCheck[] = [
@@ -240,6 +243,7 @@ export async function buildPermissionsReport(
     itemsContent,
     itemsSlots,
     itemsSite,
+    itemsProducts,
   ]
 
   return { hub: { id: env.hubId, readable: true }, checks, checkedAt }

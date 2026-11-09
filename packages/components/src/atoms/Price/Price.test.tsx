@@ -86,6 +86,30 @@ describe('Price', () => {
     }
   })
 
+  it('renders a reduction as the current price, then the was price struck through', () => {
+    const { container } = render(
+      <Price amount={48} compareAtAmount={60} currencyCode="GBP" locale="en-GB" />,
+    )
+    const values = [...container.querySelectorAll('data')].map((d) => d.getAttribute('value'))
+    expect(values).toEqual(['48', '60'])
+    expect(container.querySelector('s')?.textContent).toContain('£60.00')
+    // Labelled for screen readers, which don't announce a strikethrough.
+    expect(container.textContent).toBe('Now £48.00Was £60.00')
+  })
+
+  it('ignores a was price that is not higher than the amount', () => {
+    const { container } = render(
+      <Price amount={48} compareAtAmount={48} currencyCode="GBP" locale="en-GB" />,
+    )
+    expect(container.querySelector('s')).toBeNull()
+    expect(container.textContent).toBe('£48.00')
+  })
+
+  it('keeps its theming hook when reduced', () => {
+    const { container } = render(<Price amount={48} compareAtAmount={60} currencyCode="GBP" />)
+    expect(container.firstElementChild?.classList.contains('Price')).toBe(true)
+  })
+
   it('carries its theming hook and forwards a className', () => {
     render(<Price data-testid="p" amount={1} currencyCode="GBP" className="custom" />)
     const { className } = screen.getByTestId('p')

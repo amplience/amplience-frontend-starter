@@ -49,15 +49,18 @@
     "brand": "Halden",
     "prices": [
       {
-        "amount": 85,
+        "amount": 64,
+        "compareAtAmount": 85,
         "currencyCode": "GBP"
       },
       {
-        "amount": 99,
+        "amount": 74,
+        "compareAtAmount": 99,
         "currencyCode": "EUR"
       },
       {
-        "amount": 109,
+        "amount": 82,
+        "compareAtAmount": 109,
         "currencyCode": "USD"
       }
     ],
@@ -298,7 +301,14 @@
         }
       }
     ],
-    "categories": ["mens", "mens-trousers"],
+    "categories": [
+      "men",
+      "men-clothing",
+      "men-clothing-trousers",
+      "sale",
+      "sale-men",
+      "sale-men-clothing"
+    ],
     "tags": ["trousers", "halden"],
     "title": "Halden Tapered Chinos | Amplience Frontend Starter",
     "description": "Cotton twill chinos with a clean taper from knee to hem."

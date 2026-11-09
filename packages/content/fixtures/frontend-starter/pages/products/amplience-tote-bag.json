@@ -1,0 +1,180 @@
+{
+  "id": "48b67f20-e1b4-5ac6-bb14-b934f825134c",
+  "label": "Product — Amplience Tote Bag",
+  "body": {
+    "_meta": {
+      "name": "Amplience Tote Bag",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "48b67f20-e1b4-5ac6-bb14-b934f825134c",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/products/amplience-tote-bag"
+          }
+        ]
+      }
+    },
+    "sku": "amp0005",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Amplience Tote Bag"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Amplience Tote Bag"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Tote bag Amplience"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Amplience Tragetasche"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Bolsa tote Amplience"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Tote bag Amplience"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "prices": [
+      {
+        "amount": 3.99,
+        "currencyCode": "GBP",
+        "compareAtAmount": 5.99
+      },
+      {
+        "amount": 6.8,
+        "currencyCode": "USD",
+        "compareAtAmount": 8
+      },
+      {
+        "amount": 4.25,
+        "currencyCode": "EUR",
+        "compareAtAmount": 5
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Black cotton tote with sturdy straps and bold logo."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Black cotton tote with sturdy straps and bold logo."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Sac en coton noir avec anses longues et logo audacieux."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Schwarze Baumwolltasche mit langen Henkeln und auffälligem Logo."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Bolsa de algodón negro con asas largas y logotipo llamativo."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Borsa in cotone nero con manici lunghi e logo evidente."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/quadraticdemo/AMP08697",
+          "alt": "Amplience Tote Bag",
+          "width": 3416,
+          "height": 3416
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "BaseID"
+            },
+            {
+              "locale": "en-GB",
+              "value": "BaseID"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "BaseID"
+            },
+            {
+              "locale": "de-DE",
+              "value": "BasisID"
+            },
+            {
+              "locale": "es-ES",
+              "value": "BaseID"
+            },
+            {
+              "locale": "it-IT",
+              "value": "BaseID"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "amp0005"
+            },
+            {
+              "locale": "en-GB",
+              "value": "amp0005"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "amp0005"
+            },
+            {
+              "locale": "de-DE",
+              "value": "amp0005"
+            },
+            {
+              "locale": "es-ES",
+              "value": "amp0005"
+            },
+            {
+              "locale": "it-IT",
+              "value": "amp0005"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "tags": ["amplience", "merchandise"],
+    "title": "Amplience Tote Bag | Amplience Frontend Starter",
+    "description": "Black cotton tote with sturdy straps and bold logo.",
+    "categories": ["accessories", "merchandise"]
+  }
+}

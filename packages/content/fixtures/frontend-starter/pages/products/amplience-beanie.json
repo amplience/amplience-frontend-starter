@@ -1,0 +1,180 @@
+{
+  "id": "21fef77a-749a-5a26-8095-b33498f9cbb9",
+  "label": "Product — Amplience Beanie",
+  "body": {
+    "_meta": {
+      "name": "Amplience Beanie",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "21fef77a-749a-5a26-8095-b33498f9cbb9",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/products/amplience-beanie"
+          }
+        ]
+      }
+    },
+    "sku": "amp0007",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Amplience Beanie"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Amplience Beanie"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Bonnet Amplience"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Amplience Beanie"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Gorro Amplience"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Berretto Amplience"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "prices": [
+      {
+        "amount": 26.99,
+        "currencyCode": "GBP",
+        "compareAtAmount": 31.99
+      },
+      {
+        "amount": 34,
+        "currencyCode": "USD",
+        "compareAtAmount": 40
+      },
+      {
+        "amount": 29.75,
+        "currencyCode": "EUR",
+        "compareAtAmount": 35
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Cozy navy knit beanie with stitched logo accent."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Cozy navy knit beanie with stitched logo accent."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Bonnet bleu marine en maille avec logo brodé."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Warme navy Strickmütze mit gesticktem Logo."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Gorro de punto azul marino con logotipo bordado."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Berretto blu navy in maglia con logo ricamato."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/quadraticdemo/AMP08693",
+          "alt": "Amplience Beanie",
+          "width": 3421,
+          "height": 3421
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "BaseID"
+            },
+            {
+              "locale": "en-GB",
+              "value": "BaseID"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "BaseID"
+            },
+            {
+              "locale": "de-DE",
+              "value": "BasisID"
+            },
+            {
+              "locale": "es-ES",
+              "value": "BaseID"
+            },
+            {
+              "locale": "it-IT",
+              "value": "BaseID"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "amp0007"
+            },
+            {
+              "locale": "en-GB",
+              "value": "amp0007"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "amp0007"
+            },
+            {
+              "locale": "de-DE",
+              "value": "amp0007"
+            },
+            {
+              "locale": "es-ES",
+              "value": "amp0007"
+            },
+            {
+              "locale": "it-IT",
+              "value": "amp0007"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "tags": ["amplience", "merchandise"],
+    "title": "Amplience Beanie | Amplience Frontend Starter",
+    "description": "Cozy navy knit beanie with stitched logo accent.",
+    "categories": ["accessories", "merchandise"]
+  }
+}

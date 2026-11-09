@@ -135,7 +135,7 @@ const misconfigured = (summary: string) => (
   />
 )
 
-export default async function VisualizationPage({ searchParams }: RouteProps) {
+export default async function VisualizationRoute({ searchParams }: RouteProps) {
   const params = await searchParams
   const vse = single(params.vse)
   const contentId = single(params.content)

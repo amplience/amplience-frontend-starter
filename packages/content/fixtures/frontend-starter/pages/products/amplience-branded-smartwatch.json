@@ -1,0 +1,180 @@
+{
+  "id": "0e6ca72c-43ca-5b2f-8f48-4491118530aa",
+  "label": "Product — Amplience Branded Smartwatch",
+  "body": {
+    "_meta": {
+      "name": "Amplience Branded Smartwatch",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "0e6ca72c-43ca-5b2f-8f48-4491118530aa",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/products/amplience-branded-smartwatch"
+          }
+        ]
+      }
+    },
+    "sku": "amp0002",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Amplience Branded Smartwatch"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Amplience Branded Smartwatch"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Montre connectée Amplience"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Amplience Smartwatch"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Reloj inteligente Amplience"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Smartwatch Amplience"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "prices": [
+      {
+        "amount": 59.99,
+        "currencyCode": "GBP",
+        "compareAtAmount": 70.99
+      },
+      {
+        "amount": 76.5,
+        "currencyCode": "USD",
+        "compareAtAmount": 90
+      },
+      {
+        "amount": 72.25,
+        "currencyCode": "EUR",
+        "compareAtAmount": 85
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Modern black look with a durable silicone strap."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Modern black look with a durable silicone strap."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Design noir élégant avec bracelet en silicone."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Schlankes schwarzes Design mit bequemem Silikonarmband."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Diseño negro elegante con correa de silicona."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Design nero raffinato con cinturino in silicone."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/quadraticdemo/AMP08677",
+          "alt": "Amplience Branded Smartwatch",
+          "width": 2993,
+          "height": 2993
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "BaseID"
+            },
+            {
+              "locale": "en-GB",
+              "value": "BaseID"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "BaseID"
+            },
+            {
+              "locale": "de-DE",
+              "value": "BasisID"
+            },
+            {
+              "locale": "es-ES",
+              "value": "BaseID"
+            },
+            {
+              "locale": "it-IT",
+              "value": "BaseID"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "amp0002"
+            },
+            {
+              "locale": "en-GB",
+              "value": "amp0002"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "amp0002"
+            },
+            {
+              "locale": "de-DE",
+              "value": "amp0002"
+            },
+            {
+              "locale": "es-ES",
+              "value": "amp0002"
+            },
+            {
+              "locale": "it-IT",
+              "value": "amp0002"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "tags": ["amplience", "merchandise"],
+    "title": "Amplience Branded Smartwatch | Amplience Frontend Starter",
+    "description": "Modern black look with a durable silicone strap.",
+    "categories": ["accessories", "merchandise"]
+  }
+}

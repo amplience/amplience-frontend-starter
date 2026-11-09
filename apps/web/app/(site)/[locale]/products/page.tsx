@@ -12,25 +12,26 @@
  * error under `cacheComponents`. These are new files, so paying that now is
  * free; paying it during the caching sweep would not be.
  *
- * The grid itself lives in `src/ProductGrid` because category listings
- * (ADR-0024) render the same thing from the same `Product[]`.
+ * The layout is the `ProductListingPage` template, shared with category
+ * listings (ADR-0024); this route supplies the data and the hero.
  */
 
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
-import { HeroBlock } from '@amplience/frontend-starter-components/hero-block'
+import { ProductListingPage } from '@amplience/frontend-starter-components/product-listing-page'
 
 import { resolveCurrency } from '../../../../lib/currency'
-import { localeForSlug } from '../../../../lib/locales'
+import { listingLimit } from '../../../../lib/listing'
+import { localeBasePath, localeForSlug } from '../../../../lib/locales'
 import { productSource } from '../../../../lib/product-source'
-import { ProductGrid } from '../../../../src/ProductGrid'
+import { toResolvedProduct } from '../../../../lib/resolve-products'
 
 type RouteProps = {
   params: Promise<{ locale: string }>
 }
 
-export default function ProductsPage({ params }: RouteProps) {
+export default function ProductsRoute({ params }: RouteProps) {
   return (
     <Suspense fallback={null}>
       <ProductListing params={params} />
@@ -44,23 +45,20 @@ async function ProductListing({ params }: RouteProps) {
   if (locale === undefined) notFound()
 
   const { products } = await productSource.list({
+    ...(listingLimit === undefined ? {} : { limit: listingLimit }),
     locale: locale.delivery,
     currency: resolveCurrency(locale.code),
   })
 
   return (
     <main data-product-listing>
-      <header data-product-listing-header>
-        <HeroBlock
-          title="Products"
-          description="Everything in the catalogue."
-          backgroundColor="black"
-          contentPadding={30}
-          loadPriority="lcp"
-        />
-      </header>
-
-      <ProductGrid products={products} locale={locale} />
+      <ProductListingPage
+        title="Products"
+        description="Everything in the catalogue."
+        products={products.map((product) => toResolvedProduct(product, locale))}
+        locale={locale.code}
+        localeBasePath={localeBasePath(locale)}
+      />
     </main>
   )
 }

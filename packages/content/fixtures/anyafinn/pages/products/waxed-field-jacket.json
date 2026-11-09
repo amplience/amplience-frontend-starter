@@ -298,7 +298,7 @@
         }
       }
     ],
-    "categories": ["mens", "mens-jackets"],
+    "categories": ["men", "men-clothing", "men-clothing-jackets"],
     "tags": ["jackets", "halden"],
     "title": "Halden Waxed Field Jacket | Amplience Frontend Starter",
     "description": "A four-pocket field jacket in waxed cotton, built to weather badly and age well."

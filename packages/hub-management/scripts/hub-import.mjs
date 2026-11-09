@@ -91,6 +91,10 @@
  *   LOCALHOST_URL            localhost origin — fills ${localhostUrl} in viz URIs (default: http://localhost:3000)
  *   AMPLIENCE_REPO_CONTENT   repository id for pages + components (content step)
  *   AMPLIENCE_REPO_SLOTS     repository id for slots (content step)
+ *   AMPLIENCE_REPO_PRODUCTS  optional — repository id for products (types +
+ *                            content steps). Unset, products seed into the
+ *                            content repo. Set, the types step also needs
+ *                            AMPLIENCE_CLIENT_ID/SECRET to read its name.
  *   AMPLIENCE_CLIENT_ID      ┐ optional — when all three are set they're
  *   AMPLIENCE_CLIENT_SECRET  │ passed to dc-cli; otherwise dc-cli's own
  *   AMPLIENCE_HUB_ID         ┘ active configuration is used. The webhooks
@@ -132,6 +136,7 @@ import {
   setFromArgv,
 } from './lib/fixture-sets.mjs'
 import { describeLocaleFilter, filterLocales } from './lib/locales.mjs'
+import { alreadyMapped, moveProductItems, withProductsRepo } from './lib/products.mjs'
 import {
   buildStatusMap,
   EXTENSION_INSTANCE_FIELDS,
@@ -366,8 +371,40 @@ const importSchemas = async () => {
   await dcCli('content-type-schema', 'import', path.join(packageRoot, 'content-type-schemas'))
 }
 
+/**
+ * The products repository's *name*, when one is configured.
+ *
+ * dc-cli assigns content types to repositories by name, while the environment
+ * holds ids — so the name is read from the Management API. A configured repo
+ * that can't be read stops the seed: carrying on would leave the product type
+ * unassigned and fail every product in the content step.
+ */
+const productsRepoName = async () => {
+  const repoId = env('AMPLIENCE_REPO_PRODUCTS')
+  if (!repoId) return undefined
+  const clientId = require_('AMPLIENCE_CLIENT_ID', 'read the products repository name')
+  const clientSecret = require_('AMPLIENCE_CLIENT_SECRET', 'read the products repository name')
+  try {
+    const client = new DynamicContent({ client_id: clientId, client_secret: clientSecret })
+    const repo = await client.contentRepositories.get(repoId)
+    if (!repo.name) throw new Error('the repository has no name')
+    return repo.name
+  } catch (err) {
+    console.error(
+      `\n✗ Could not read the products repository (${repoId}): ` +
+        `${err instanceof Error ? err.message : String(err)}.\n` +
+        '  Check AMPLIENCE_REPO_PRODUCTS, or clear it to seed products into the content repo.',
+    )
+    process.exit(1)
+  }
+}
+
 const importTypes = async () => {
   const hubName = require_('AMPLIENCE_HUB_NAME', 'fill the ${hub} token in visualization URIs')
+  const productsRepo = await productsRepoName()
+  if (productsRepo !== undefined) {
+    console.log(`\n→ Assigning the product content type to the "${productsRepo}" repository too`)
+  }
   let localhostUrl = env('LOCALHOST_URL') ?? 'http://localhost:3000'
   while (localhostUrl.endsWith('/')) localhostUrl = localhostUrl.slice(0, -1)
 
@@ -391,8 +428,9 @@ const importTypes = async () => {
   for (const file of readdirSync(source)) {
     // Parse as JSON so we can mutate the visualizations array cleanly.
     const raw = readFileSync(path.join(source, file), 'utf8')
-    const data = JSON.parse(
-      raw.replaceAll('${hub}', hubName).replaceAll('${localhostUrl}', localhostUrl),
+    const data = withProductsRepo(
+      JSON.parse(raw.replaceAll('${hub}', hubName).replaceAll('${localhostUrl}', localhostUrl)),
+      productsRepo,
     )
 
     // If there's at least one webApp, inject a custom card thumbnail using the first one's URL.
@@ -566,6 +604,8 @@ const importContent = async () => {
   const slotsRepo = require_('AMPLIENCE_REPO_SLOTS', 'target the slots repository')
   // Optional — only seeded when the deployment uses CMS-managed site config.
   const siteComponentsRepo = env('AMPLIENCE_REPO_SITE_COMPONENTS')
+  // Optional — unset, products seed into the content repo with the pages.
+  const productsRepo = env('AMPLIENCE_REPO_PRODUCTS')
 
   // --publish only queues items the run created or changed; when the hub
   // already matches the fixtures (e.g. recovering from a run that imported
@@ -596,7 +636,8 @@ const importContent = async () => {
   console.log(
     `\n→ Seeding the "${setName}" fixture set into "${siteName}/" on hub "${hubName}"` +
       `${siteName === setName ? '' : ' [SITE_NAME override]'}` +
-      `${siteComponentsRepo ? ' (with site components)' : ''}`,
+      `${siteComponentsRepo ? ' (with site components)' : ''}` +
+      `${productsRepo ? ' (products into their own repo)' : ''}`,
   )
 
   const hubLocales = await probeHubLocales()
@@ -635,8 +676,36 @@ const importContent = async () => {
       for (const l of dropped) localeTally.dropped.add(l)
     }
     markStagedItemsPublishable(stagedDir)
-    return { stagedDir, repo }
+    return { stagedDir, repo, dir }
   })
+
+  // Products leave the pages phase for their own, just before it: they may
+  // link components and slots (imported above) and nothing links to them.
+  if (productsRepo) {
+    const pagesIndex = staged.findIndex((phase) => phase.dir === 'pages')
+    const productsDir = path.join(stagingRoot, setName, 'items-products')
+    rmSync(productsDir, { recursive: true, force: true })
+    mkdirSync(productsDir, { recursive: true })
+    const moved =
+      pagesIndex === -1 ? [] : moveProductItems(staged[pagesIndex].stagedDir, productsDir)
+    if (moved.length > 0) {
+      staged.splice(pagesIndex, 0, { stagedDir: productsDir, repo: productsRepo, dir: 'products' })
+      console.log(`  products: ${moved.length} into the products repo`)
+
+      // dc-cli updates a mapped item where it already lives, so products an
+      // earlier seed put in the content repo stay there. Say so, rather than
+      // look as though the setting was ignored.
+      const map = existsSync(mapFile) ? JSON.parse(readFileSync(mapFile, 'utf8')) : undefined
+      const stuck = alreadyMapped(moved, map)
+      if (stuck.length > 0) {
+        console.warn(
+          `  ! ${stuck.length} of them were seeded before and will be updated where they are ` +
+            '(the content repo, if that is where they went). To move them, wipe this set ' +
+            "(hub:wipe --set) and seed again — a seed can't move an existing item between repos.",
+        )
+      }
+    }
+  }
 
   for (const { stagedDir, repo } of staged) {
     await dcCli(

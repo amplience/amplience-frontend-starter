@@ -234,7 +234,7 @@
         }
       }
     ],
-    "categories": ["mens", "mens-trousers"],
+    "categories": ["men", "men-clothing", "men-clothing-trousers"],
     "tags": ["trousers", "brackish"],
     "title": "Brackish Corduroy Trousers | Amplience Frontend Starter",
     "description": "Eight-wale corduroy, cut straight and softened in the wash."

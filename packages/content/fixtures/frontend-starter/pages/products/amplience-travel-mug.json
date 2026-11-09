@@ -1,0 +1,180 @@
+{
+  "id": "1615b718-5cb5-5f41-b3ab-11323d79055e",
+  "label": "Product — Amplience Travel Mug",
+  "body": {
+    "_meta": {
+      "name": "Amplience Travel Mug",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "1615b718-5cb5-5f41-b3ab-11323d79055e",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "frontend-starter/products/amplience-travel-mug"
+          }
+        ]
+      }
+    },
+    "sku": "amp0004",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Amplience Travel Mug"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Amplience Travel Mug"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Mug de voyage Amplience"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Amplience Reisebecher"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Taza de viaje Amplience"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Mug da viaggio Amplience"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "prices": [
+      {
+        "amount": 19.99,
+        "currencyCode": "GBP",
+        "compareAtAmount": 23.99
+      },
+      {
+        "amount": 25.5,
+        "currencyCode": "USD",
+        "compareAtAmount": 30
+      },
+      {
+        "amount": 21.25,
+        "currencyCode": "EUR",
+        "compareAtAmount": 25
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Sturdy black mug with handle and spill-resistant lid."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Sturdy black mug with handle and spill-resistant lid."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Mug noir robuste avec anse et couvercle anti-fuite."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Stabiler schwarzer Becher mit Henkel und auslaufsicherem Deckel."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Taza negra resistente con asa y tapa antigoteo."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Tazza nera resistente con manico e coperchio anti-perdita."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/quadraticdemo/AMP08664",
+          "alt": "Amplience Travel Mug",
+          "width": 3604,
+          "height": 3604
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "BaseID"
+            },
+            {
+              "locale": "en-GB",
+              "value": "BaseID"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "BaseID"
+            },
+            {
+              "locale": "de-DE",
+              "value": "BasisID"
+            },
+            {
+              "locale": "es-ES",
+              "value": "BaseID"
+            },
+            {
+              "locale": "it-IT",
+              "value": "BaseID"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "amp0004"
+            },
+            {
+              "locale": "en-GB",
+              "value": "amp0004"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "amp0004"
+            },
+            {
+              "locale": "de-DE",
+              "value": "amp0004"
+            },
+            {
+              "locale": "es-ES",
+              "value": "amp0004"
+            },
+            {
+              "locale": "it-IT",
+              "value": "amp0004"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "tags": ["amplience", "merchandise"],
+    "title": "Amplience Travel Mug | Amplience Frontend Starter",
+    "description": "Sturdy black mug with handle and spill-resistant lid.",
+    "categories": ["accessories", "merchandise"]
+  }
+}

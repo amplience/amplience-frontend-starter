@@ -49,6 +49,7 @@ import siteHierarchyMenuItemDocsTheming from '../../../fixtures/frontend-starter
 import siteHierarchyMenuItemDocsTroubleshooting from '../../../fixtures/frontend-starter/components/header/site-hierarchy-menu-item-docs-troubleshooting.json' with { type: 'json' }
 import siteHierarchyMenuItemDocsWorkingWithAHub from '../../../fixtures/frontend-starter/components/header/site-hierarchy-menu-item-docs-working-with-a-hub.json' with { type: 'json' }
 import siteHierarchyMenuItemDocs from '../../../fixtures/frontend-starter/components/header/site-hierarchy-menu-item-docs.json' with { type: 'json' }
+import siteHierarchyMenuItemMerch from '../../../fixtures/frontend-starter/components/header/site-hierarchy-menu-item-merch.json' with { type: 'json' }
 import siteHierarchyMenuItemStores from '../../../fixtures/frontend-starter/components/header/site-hierarchy-menu-item-stores.json' with { type: 'json' }
 import siteHierarchyMenuMain from '../../../fixtures/frontend-starter/components/header/site-hierarchy-menu-main.json' with { type: 'json' }
 import siteIconButtonCart from '../../../fixtures/frontend-starter/components/header/site-icon-button-cart.json' with { type: 'json' }
@@ -69,6 +70,7 @@ import siteMenuItemDocsTheming from '../../../fixtures/frontend-starter/componen
 import siteMenuItemDocsTroubleshooting from '../../../fixtures/frontend-starter/components/header/site-menu-item-docs-troubleshooting.json' with { type: 'json' }
 import siteMenuItemDocsWorkingWithAHub from '../../../fixtures/frontend-starter/components/header/site-menu-item-docs-working-with-a-hub.json' with { type: 'json' }
 import siteMenuItemDocs from '../../../fixtures/frontend-starter/components/header/site-menu-item-docs.json' with { type: 'json' }
+import siteMenuItemMerch from '../../../fixtures/frontend-starter/components/header/site-menu-item-merch.json' with { type: 'json' }
 import siteMenuMain from '../../../fixtures/frontend-starter/components/header/site-menu-main.json' with { type: 'json' }
 import siteMenuToggleButton from '../../../fixtures/frontend-starter/components/header/site-menu-toggle-button.json' with { type: 'json' }
 import homeBenefits from '../../../fixtures/frontend-starter/components/home-benefits.json' with { type: 'json' }
@@ -104,6 +106,11 @@ import blogQuadraticAcceleratorPage from '../../../fixtures/frontend-starter/pag
 import contributingPage from '../../../fixtures/frontend-starter/pages/contributing.json' with { type: 'json' }
 import docsPage from '../../../fixtures/frontend-starter/pages/docs.json' with { type: 'json' }
 import homePage from '../../../fixtures/frontend-starter/pages/home.json' with { type: 'json' }
+import productAmplienceBaseballCap from '../../../fixtures/frontend-starter/pages/products/amplience-baseball-cap.json' with { type: 'json' }
+import productAmplienceBeanie from '../../../fixtures/frontend-starter/pages/products/amplience-beanie.json' with { type: 'json' }
+import productAmplienceBrandedSmartwatch from '../../../fixtures/frontend-starter/pages/products/amplience-branded-smartwatch.json' with { type: 'json' }
+import productAmplienceToteBag from '../../../fixtures/frontend-starter/pages/products/amplience-tote-bag.json' with { type: 'json' }
+import productAmplienceTravelMug from '../../../fixtures/frontend-starter/pages/products/amplience-travel-mug.json' with { type: 'json' }
 import siteCustomCss from '../../../fixtures/frontend-starter/site-components/custom-css.json' with { type: 'json' }
 import aboutMainSlot from '../../../fixtures/frontend-starter/slots/about-main.json' with { type: 'json' }
 import blogContentModellingMainSlot from '../../../fixtures/frontend-starter/slots/blog-content-modelling-main.json' with { type: 'json' }
@@ -150,6 +157,7 @@ const fixtures: readonly EnrichedContentItem[] = [
   siteHierarchyMenuItemDocsEditorSetup,
   siteHierarchyMenuItemDocsTroubleshooting,
   siteHierarchyMenuItemDocsContributing,
+  siteHierarchyMenuItemMerch,
   siteHierarchyMenuItemStores,
   siteHierarchyMenuItemAccount,
   siteMenuItemBlog,
@@ -165,6 +173,7 @@ const fixtures: readonly EnrichedContentItem[] = [
   siteMenuItemDocsEditorSetup,
   siteMenuItemDocsTroubleshooting,
   siteMenuItemDocsContributing,
+  siteMenuItemMerch,
   siteFooter,
   siteFooterMenuDocumentation,
   siteFooterMenuProject,
@@ -231,6 +240,11 @@ const fixtures: readonly EnrichedContentItem[] = [
   blogContentModellingPage,
   blogContentModellingMainSlot,
   blogContentModellingBody,
+  productAmplienceBeanie,
+  productAmplienceBaseballCap,
+  productAmplienceToteBag,
+  productAmplienceTravelMug,
+  productAmplienceBrandedSmartwatch,
 ]
 
 export const frontendStarterSet: FixtureSet = {
