@@ -1,0 +1,13 @@
+{
+  "id": "246fa7e4-5e61-581e-9a6f-4d821fb5c466",
+  "label": "Menu item: Merch",
+  "body": {
+    "_meta": {
+      "name": "Menu item: Merch",
+      "schema": "https://quadratic.amplience.com/v2/content/menu-item",
+      "deliveryId": "246fa7e4-5e61-581e-9a6f-4d821fb5c466"
+    },
+    "label": "Merch",
+    "link": "/merchandise"
+  }
+}

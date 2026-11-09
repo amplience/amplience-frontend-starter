@@ -29,6 +29,13 @@
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
+      },
+      {
+        "id": "246fa7e4-5e61-581e-9a6f-4d821fb5c466",
+        "contentType": "https://quadratic.amplience.com/v2/content/menu-item",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
       }
     ]
   }

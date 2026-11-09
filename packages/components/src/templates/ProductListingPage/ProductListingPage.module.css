@@ -6,27 +6,14 @@
  * custom-CSS layer (ADR-0016) can retune the page without touching this file.
  */
 
-.root {
-  display: block;
-  padding-block-end: var(--product-listing-padding-block-end, var(--spacing-8));
-}
-
 .header {
   padding-block: var(--product-listing-header-padding-block, var(--spacing-6) var(--spacing-4));
-}
-
-.title {
-  margin: 0;
 }
 
 .description {
   margin: var(--spacing-2) 0 0;
   max-width: var(--product-listing-description-max-width, 48rem);
   color: var(--product-listing-description-color, var(--color-gray-700));
-}
-
-.grid {
-  display: block;
 }
 
 .empty {

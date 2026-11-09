@@ -102,28 +102,26 @@ export function ProductListingPage({
           </p>
         </Container>
       ) : (
-        <div className={styles.grid}>
-          <GridBlock gutter sizingMode="auto" minItemWidth={MIN_ITEM_WIDTH}>
-            {products.map((product, index) => (
-              <ProductCard
-                key={product.sku}
-                name={product.name}
-                href={product.href}
-                sizes={CARD_SIZES}
-                loadPriority={index < EAGER_CARDS ? 'eager' : 'lazy'}
-                {...(product.price !== undefined && { price: product.price })}
-                {...(product.media !== undefined && { media: product.media })}
-                {...(product.brand !== undefined && { brand: product.brand })}
-                {...(product.shortDescription !== undefined && {
-                  shortDescription: product.shortDescription,
-                })}
-                {...(product.status !== undefined && { status: product.status })}
-                {...(locale !== undefined && { locale })}
-                {...(localeBasePath !== undefined && { localeBasePath })}
-              />
-            ))}
-          </GridBlock>
-        </div>
+        <GridBlock gutter sizingMode="auto" minItemWidth={MIN_ITEM_WIDTH}>
+          {products.map((product, index) => (
+            <ProductCard
+              key={product.sku}
+              name={product.name}
+              href={product.href}
+              sizes={CARD_SIZES}
+              loadPriority={index < EAGER_CARDS ? 'eager' : 'lazy'}
+              {...(product.price !== undefined && { price: product.price })}
+              {...(product.media !== undefined && { media: product.media })}
+              {...(product.brand !== undefined && { brand: product.brand })}
+              {...(product.shortDescription !== undefined && {
+                shortDescription: product.shortDescription,
+              })}
+              {...(product.status !== undefined && { status: product.status })}
+              {...(locale !== undefined && { locale })}
+              {...(localeBasePath !== undefined && { localeBasePath })}
+            />
+          ))}
+        </GridBlock>
       )}
     </div>
   )

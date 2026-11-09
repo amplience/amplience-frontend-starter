@@ -117,6 +117,7 @@ export function ProductCard({
               {...mediaLoadingProps(loadPriority)}
               {...(sizes !== undefined && { sizes })}
               {...(styles.image !== undefined && { className: styles.image })}
+              className="Image"
             />
           )}
           {status !== 'active' && (

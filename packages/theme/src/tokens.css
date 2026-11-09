@@ -215,6 +215,9 @@
       }
     }
   }
+  .ProductListingPage .GridBlock {
+    background: var(--color-gray-100);
+  }
 
   @media (max-width: 300px) {
     .LocaleSelector {
