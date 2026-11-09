@@ -6,10 +6,11 @@
 // `x-middleware-next`. The test environment resolves the zero-config default
 // locale (en-US → slug `en-us`), so unprefixed paths rewrite under `/en-us`.
 
+import { unstable_doesMiddlewareMatch } from 'next/experimental/testing/server'
 import { NextRequest } from 'next/server'
 import { describe, expect, it } from 'vitest'
 
-import { middleware } from './middleware'
+import { config, middleware } from './middleware'
 
 const run = (path: string) => middleware(new NextRequest(new URL(`http://localhost${path}`)))
 
@@ -67,5 +68,31 @@ describe('locale middleware', () => {
 
   it('forwards the resolved locale as x-locale on a passthrough', () => {
     expect(forwardedLocale('/en-us/about')).toBe('en-us')
+  })
+})
+
+// The cases above call the middleware directly, so they never exercise the
+// matcher — which decides whether it runs at all.
+describe('locale middleware matcher', () => {
+  const matches = (path: string) =>
+    unstable_doesMiddlewareMatch({ config, url: `http://localhost${path}` })
+
+  it.each(['/', '/about', '/blog/hello-world', '/en-us/about', '/apiary', '/visualize-this'])(
+    'runs on the content path %s',
+    (path) => {
+      expect(matches(path)).toBe(true)
+    },
+  )
+
+  it.each([
+    '/api/products?skus=AF-1',
+    '/api/revalidate-custom-css',
+    '/visualization?vse=x&content=y',
+    '/debug',
+    '/_next/static/chunk.js',
+    '/.well-known/security.txt',
+    '/favicon.ico',
+  ])('skips the non-content path %s', (path) => {
+    expect(matches(path)).toBe(false)
   })
 })

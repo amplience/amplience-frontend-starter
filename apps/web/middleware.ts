@@ -25,9 +25,9 @@
  * reads this header to fetch its content at the right locale (ADR-0015).
  *
  * The matcher keeps this off everything that isn't a content page: Next
- * internals, the visualization and debug tooling routes (which sit outside
- * `(site)` and manage their own rendering), well-known probes, and any path
- * with a file extension (static assets).
+ * internals, route handlers under `/api/`, the visualization and debug tooling
+ * routes (which sit outside `(site)` and manage their own rendering),
+ * well-known probes, and any path with a file extension (static assets).
  */
 
 import { NextResponse, type NextRequest } from 'next/server'
@@ -76,8 +76,9 @@ export function middleware(request: NextRequest): NextResponse {
 }
 
 export const config = {
-  // Run on page paths only. Excludes Next internals (`_next/*`), the
-  // visualization and debug tooling routes, well-known probes, and any path
+  // Run on page paths only. Excludes Next internals (`_next/*`), route
+  // handlers (`api/*` — a rewrite would land them on the content catch-all),
+  // the visualization and debug tooling routes, well-known probes, and any path
   // containing a dot (static files like `/favicon.ico`, `/robots.txt`).
-  matcher: ['/((?!_next/|visualization|debug|\\.well-known|.*\\.).*)'],
+  matcher: ['/((?!_next/|api/|visualization|debug|\\.well-known|.*\\.).*)'],
 }
