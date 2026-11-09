@@ -15,7 +15,7 @@
  * of this runs and products seed into the content repo as they always have.
  */
 
-import { mkdirSync, readdirSync, readFileSync, renameSync } from 'node:fs'
+import { mkdirSync, readdirSync, readFileSync, renameSync, rmdirSync } from 'node:fs'
 import path from 'node:path'
 
 export const PRODUCT_SCHEMA = 'https://quadratic.amplience.com/v2/content/product'
@@ -55,7 +55,18 @@ export const moveProductItems = (fromDir, toDir) => {
     renameSync(file, target)
     moved.push(item.id)
   }
+  if (moved.length > 0) pruneEmptyDirs(fromDir)
   return moved
+}
+
+/** Remove folders under `dir` (not `dir` itself) that the move left empty. */
+const pruneEmptyDirs = (dir) => {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue
+    const sub = path.join(dir, entry.name)
+    pruneEmptyDirs(sub)
+    if (readdirSync(sub).length === 0) rmdirSync(sub)
+  }
 }
 
 /**

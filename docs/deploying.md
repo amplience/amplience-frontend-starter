@@ -21,8 +21,46 @@ All environment variables are optional with sensible accelerator defaults. Howev
 | `SITE_DESCRIPTION`       | Default SEO description. Both can be overridden per page in the CMS.                                             | `A quick demo site for the ACME corporation`       | 'A clean starting point for an Amplience-backed site.' |
 | `THEME_COLOR`            | Browser-chrome theme colour.                                                                                     | `#7340e7`                                          | None                                                   |
 | `AMPLIENCE_STAGING_HOST` | VSE domain — when set, it bypasses the 'published' state to serve the latest saved (not just published) content. | `1234567890abcdefghijklmnop.staging.bigcontent.io` | None                                                   |
+| `PRODUCT_SOURCE`         | Where product data comes from — see [Products](#products).                                                       | `commercetools`                                    | `cms`                                                  |
 
 See [`apps/web/.env.example`](../apps/web/.env.example) for the full list, defaults, and notes.
+
+## Products
+
+Product pages (`/products/<slug>`), the `/products` listing and category pages (`/<category>`) read through one product source, chosen by `PRODUCT_SOURCE`. Both sources serve the same routes and components, so switching is an environment change, not a code change.
+
+- **`cms`** (default) — products are items of the [`product` content type](content-types.md#product), read through whichever content client is active. Offline that's the bundled fixture set, so a clone with no configuration has a working catalogue. Categories are derived from the products' own `categories` values.
+- **`commercetools`** — products are read live from a commercetools project. Categories come from the project's category tree.
+
+An unrecognised `PRODUCT_SOURCE` stops the site at boot rather than serving an empty catalogue.
+
+| Variable                   | Purpose                                                                                                | e.g.                            | Default when not set                   |
+| -------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------- | -------------------------------------- |
+| `PRODUCT_SOURCE`           | `cms` or `commercetools`.                                                                              | `commercetools`                 | `cms`                                  |
+| `PRODUCT_CURRENCIES`       | Locale → currency map. Prices are never converted: a product with no price in the currency shows none. | `en-GB:GBP,en-US:USD,de-DE:EUR` | Every locale uses the default currency |
+| `PRODUCT_CURRENCY_DEFAULT` | Currency for any locale not in `PRODUCT_CURRENCIES`.                                                   | `EUR`                           | `GBP`                                  |
+| `PRODUCT_LISTING_LIMIT`    | Products per listing page. `0` means no limit.                                                         | `24`                            | `48`                                   |
+
+### commercetools
+
+Read only when `PRODUCT_SOURCE="commercetools"`. The three credentials are required — a missing one stops the site at boot. An API client with `view_products` and `view_categories` is enough; the site only reads. The names follow commercetools' `CTP_` convention, so the "Environment variables" download from creating an API client pastes straight in.
+
+| Variable                          | Purpose                                                                                                                                                                                                                                                             | e.g.                     | Default when not set                  |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ | ------------------------------------- |
+| `CTP_PROJECT_KEY`                 | Project key. **Required.**                                                                                                                                                                                                                                          | `anyafinn`               | —                                     |
+| `CTP_CLIENT_ID`                   | API client id. **Required.**                                                                                                                                                                                                                                        |                          | —                                     |
+| `CTP_CLIENT_SECRET`               | API client secret. **Required.** Keep it out of source control.                                                                                                                                                                                                     |                          | —                                     |
+| `CTP_REGION`                      | Region host fragment; the API and auth URLs are derived from it.                                                                                                                                                                                                    | `us-central1.gcp`        | `europe-west1.gcp`                    |
+| `CTP_API_URL` / `CTP_AUTH_URL`    | Explicit API / auth URLs, overriding `CTP_REGION`.                                                                                                                                                                                                                  |                          | Derived from the region               |
+| `CTP_SCOPES`                      | Scopes requested for the token.                                                                                                                                                                                                                                     | `view_products:anyafinn` | The API client's own scopes           |
+| `CTP_SLUG_LOCALE`                 | The one locale product slugs are read in — URLs aren't localized. Must be a key the project's slugs use (often `en`).                                                                                                                                               | `en`                     | `en`                                  |
+| `CTP_PRICE_COUNTRY`               | Country for country-scoped prices.                                                                                                                                                                                                                                  | `GB`                     | The locale's region (`en-GB` → GB)    |
+| `CTP_BRAND_ATTRIBUTES`            | Attribute(s) shown as the brand; first present wins.                                                                                                                                                                                                                | `manufacturer`           | `brand,designer`                      |
+| `CTP_SHORT_DESCRIPTION_ATTRIBUTE` | Attribute holding the short (card) description. commercetools' own `description` is long-form and shows on the product page only, so without this attribute cards show no description.                                                                              | `summary`                | `shortDescription`                    |
+| `CTP_PRODUCT_SEARCH`              | `off` skips commercetools Product Search. When the project has it active, listings run one small search per page instead of reading the whole catalogue; it is off by default in commercetools (Merchant Center → Settings → Project settings → Storefront Search). | `off`                    | Used when active, full read otherwise |
+| `CTP_CACHE_TTL_SECONDS`           | How long the catalogue listing is reused. `0` disables. Product pages and carousels always read live.                                                                                                                                                               | `300`                    | `60`                                  |
+
+Sale prices work the same from either source: a product carrying a higher "was" price beside its current one renders both — `compareAtAmount` on a CMS price, a discounted price in commercetools.
 
 ## Site namespacing
 

@@ -69,7 +69,7 @@ describe('CommercetoolsProductSource specifics', () => {
     it('reads a short description from its attribute, and keeps it out of the spec rows', async () => {
       const product = await setup().source.getBySlug('linen-shirt')
       expect(product.shortDescription).toBe('Breezy linen for warm days.')
-      expect(product.attributes?.map((a) => a.label)).not.toContain('Short description')
+      expect(product.attributes?.map((a) => a.label) ?? []).not.toContain('Short description')
     })
 
     it('falls back from a regional locale to its language', async () => {

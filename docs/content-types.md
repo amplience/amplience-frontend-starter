@@ -2,7 +2,7 @@
 
 # Content types
 
-Amplience Frontend Starter ships a content model of 24 content types — seven renderable blocks, plus the smaller repeatable types that make up pages, navigation and site chrome. Every item carries its schema URI in `_meta.schema` and the recursive renderer dispatches on it, so this page is also the map from a content type to the component that draws it.
+Amplience Frontend Starter ships a content model of 26 content types — eight renderable blocks, plus the smaller repeatable types that make up pages, navigation and site chrome. Every item carries its schema URI in `_meta.schema` and the recursive renderer dispatches on it, so this page is also the map from a content type to the component that draws it.
 
 The model is registered in a hub by `pnpm hub:import` — see [Working with a hub](working-with-a-hub.md). Where things live:
 
@@ -20,8 +20,8 @@ Every schema URI is prefixed `https://quadratic.amplience.com/v2/` — the table
 ## Contents
 
 - [At a glance](#at-a-glance)
-- [Blocks](#blocks) — the seven types a slot can hold
-- [Pages](#pages) — routable content
+- [Blocks](#blocks) — the eight types a slot can hold
+- [Pages](#pages) — routable content, including [products](#product)
 - [Composition](#composition)
 - [Header and footer](#header-and-footer)
 - [Navigation](#navigation)
@@ -30,42 +30,44 @@ Every schema URI is prefixed `https://quadratic.amplience.com/v2/` — the table
 
 ## At a glance
 
-|                                                                                       | Type                                        | Group       | Component                      | Storybook                                                                                                         |
-| ------------------------------------------------------------------------------------- | ------------------------------------------- | ----------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_hero?w=24)                | [Hero Block](#hero-block)                   | Block       | `HeroBlock`                    | [Organisms/HeroBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-heroblock--docs)         |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_markdown-block?w=24)      | [Rich Text Block](#rich-text-block)         | Block       | `MarkdownBlock`                | [Organisms/MarkdownBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-markdownblock--docs) |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_media?w=24)               | [Media Block](#media-block)                 | Block       | `MediaBlock`                   | [Organisms/MediaBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-mediablock--docs)       |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_media-card?w=24)          | [Card](#card)                               | Block       | `MediaCard`                    | [Molecules/MediaCard](https://quadratic-lite-components.vercel.app/?path=/docs/molecules-mediacard--docs)         |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_carousel?w=24)            | [Carousel Block](#carousel-block)           | Block       | `CarouselBlock`                | [Organisms/CarouselBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-carouselblock--docs) |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_columns?w=24)             | [Columns Block](#columns-block)             | Block       | `ColumnsBlock`                 | [Organisms/ColumnsBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-columnsblock--docs)   |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_grid?w=24)                | [Grid Block](#grid-block)                   | Block       | `GridBlock`                    | [Organisms/GridBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-gridblock--docs)         |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_page?w=24)                | [Page](#page)                               | Page        | `ContentPage`                  | [Templates/ContentPage](https://quadratic-lite-components.vercel.app/?path=/docs/templates-contentpage--docs)     |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_blog-article?w=24)        | [Blog Article](#blog-article)               | Page        | `BlogArticlePage`              | —                                                                                                                 |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/slots_slot?w=24)                  | [Slot](#slot)                               | Composition | `Slot`                         | [Organisms/Slot](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-slot--docs)                   |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header?w=24)              | [Header](#header)                           | Chrome      | `HeaderBlock`                  | —                                                                                                                 |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header-row?w=24)          | [Header Row](#header-row)                   | Chrome      | `HeaderRow`                    | —                                                                                                                 |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header-group?w=24)        | [Header Group](#header-group)               | Chrome      | `HeaderGroup`                  | —                                                                                                                 |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_footer?w=24)              | [Footer](#footer)                           | Chrome      | `FooterBlock`                  | —                                                                                                                 |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_footer-row?w=24)          | [Footer Row](#footer-row)                   | Chrome      | `FooterRow`                    | —                                                                                                                 |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_menu?w=24)                | [Menu](#menu)                               | Navigation  | `Menu`                         | —                                                                                                                 |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_menu-item?w=24)           | [Menu Item](#menu-item)                     | Navigation  | `MenuItem`                     | —                                                                                                                 |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_hierarchy-menu?w=24)      | [Hierarchy Menu](#hierarchy-menu)           | Navigation  | `Menu`                         | —                                                                                                                 |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_hierarchy-menu-item?w=24) | [Hierarchy Menu Item](#hierarchy-menu-item) | Navigation  | `MenuItem`                     | —                                                                                                                 |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_logo?w=24)                | [Logo](#logo)                               | Navigation  | `Logo`                         | —                                                                                                                 |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_icon-button?w=24)         | [Icon Button](#icon-button)                 | Navigation  | `IconButton`                   | —                                                                                                                 |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_menu-toggle-button?w=24)  | [Menu Toggle Button](#menu-toggle-button)   | Navigation  | `MenuToggleButton`             | —                                                                                                                 |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_locale-selector?w=24)     | [Locale Selector](#locale-selector)         | Navigation  | `LocaleSelector`               | —                                                                                                                 |
-| ![](https://cdn.media.amplience.net/i/quadraticdemo/sitestructure_custom-css?w=24)    | [Custom CSS](#custom-css)                   | Site config | _n/a — injected by `apps/web`_ | —                                                                                                                 |
+|                                                                                       | Type                                              | Group       | Component                      | Storybook                                                                                                                       |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_hero?w=24)                | [Hero Block](#hero-block)                         | Block       | `HeroBlock`                    | [Organisms/HeroBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-heroblock--docs)                       |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_markdown-block?w=24)      | [Rich Text Block](#rich-text-block)               | Block       | `MarkdownBlock`                | [Organisms/MarkdownBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-markdownblock--docs)               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_media?w=24)               | [Media Block](#media-block)                       | Block       | `MediaBlock`                   | [Organisms/MediaBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-mediablock--docs)                     |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_media-card?w=24)          | [Card](#card)                                     | Block       | `MediaCard`                    | [Molecules/MediaCard](https://quadratic-lite-components.vercel.app/?path=/docs/molecules-mediacard--docs)                       |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_carousel?w=24)            | [Carousel Block](#carousel-block)                 | Block       | `CarouselBlock`                | [Organisms/CarouselBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-carouselblock--docs)               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_columns?w=24)             | [Columns Block](#columns-block)                   | Block       | `ColumnsBlock`                 | [Organisms/ColumnsBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-columnsblock--docs)                 |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_grid?w=24)                | [Grid Block](#grid-block)                         | Block       | `GridBlock`                    | [Organisms/GridBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-gridblock--docs)                       |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_product-carousel?w=24)    | [Product Carousel Block](#product-carousel-block) | Block       | `ProductCarouselBlock`         | [Organisms/ProductCarouselBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-productcarouselblock--docs) |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_page?w=24)                | [Page](#page)                                     | Page        | `ContentPage`                  | [Templates/ContentPage](https://quadratic-lite-components.vercel.app/?path=/docs/templates-contentpage--docs)                   |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_blog-article?w=24)        | [Blog Article](#blog-article)                     | Page        | `BlogArticlePage`              | —                                                                                                                               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_product?w=24)             | [Product](#product)                               | Page        | `ProductDetailPage`            | [Templates/ProductDetailPage](https://quadratic-lite-components.vercel.app/?path=/docs/templates-productdetailpage--docs)       |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/slots_slot?w=24)                  | [Slot](#slot)                                     | Composition | `Slot`                         | [Organisms/Slot](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-slot--docs)                                 |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header?w=24)              | [Header](#header)                                 | Chrome      | `HeaderBlock`                  | —                                                                                                                               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header-row?w=24)          | [Header Row](#header-row)                         | Chrome      | `HeaderRow`                    | —                                                                                                                               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header-group?w=24)        | [Header Group](#header-group)                     | Chrome      | `HeaderGroup`                  | —                                                                                                                               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_footer?w=24)              | [Footer](#footer)                                 | Chrome      | `FooterBlock`                  | —                                                                                                                               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_footer-row?w=24)          | [Footer Row](#footer-row)                         | Chrome      | `FooterRow`                    | —                                                                                                                               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_menu?w=24)                | [Menu](#menu)                                     | Navigation  | `Menu`                         | —                                                                                                                               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_menu-item?w=24)           | [Menu Item](#menu-item)                           | Navigation  | `MenuItem`                     | —                                                                                                                               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_hierarchy-menu?w=24)      | [Hierarchy Menu](#hierarchy-menu)                 | Navigation  | `Menu`                         | —                                                                                                                               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_hierarchy-menu-item?w=24) | [Hierarchy Menu Item](#hierarchy-menu-item)       | Navigation  | `MenuItem`                     | —                                                                                                                               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_logo?w=24)                | [Logo](#logo)                                     | Navigation  | `Logo`                         | —                                                                                                                               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_icon-button?w=24)         | [Icon Button](#icon-button)                       | Navigation  | `IconButton`                   | —                                                                                                                               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_menu-toggle-button?w=24)  | [Menu Toggle Button](#menu-toggle-button)         | Navigation  | `MenuToggleButton`             | —                                                                                                                               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_locale-selector?w=24)     | [Locale Selector](#locale-selector)               | Navigation  | `LocaleSelector`               | —                                                                                                                               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/sitestructure_custom-css?w=24)    | [Custom CSS](#custom-css)                         | Site config | _n/a — injected by `apps/web`_ | —                                                                                                                               |
 
 Each type's schema URI and repository are in its own section below. The icons are the published assets DC shows in the content library, served from Content Hub (`https://cdn.media.amplience.net/i/quadraticdemo/{type}`) with a `?w=` size parameter. The sources live in [`icons/svg`](../packages/hub-management/icons/svg) and [`icons/png`](../packages/hub-management/icons/png), and each type registration points at the CDN URL.
 
 ## Blocks
 
-Blocks are the renderable sections of a page. All seven are members of the [Content Block](#content-block) union, which is what [slots](#slot), [columns](#columns-block), [grids](#grid-block) and [blog articles](#blog-article) accept — so any block goes anywhere a block is allowed, and nesting is the editor's choice rather than a per-container list.
+Blocks are the renderable sections of a page. All eight are members of the [Content Block](#content-block) union, which is what [slots](#slot), [columns](#columns-block), [grids](#grid-block) and [blog articles](#blog-article) accept — so any block goes anywhere a block is allowed, and nesting is the editor's choice rather than a per-container list.
 
 Four fields recur across blocks, and mean the same thing everywhere: `backgroundColor` ([palette](#colour)), `maxWidth` and `gutter` ([container](#container)), and `sectionHeader` ([section header](#section-header)).
 
-Every block also carries an optional `customCss` field — **Custom CSS (advanced)**, the last field on its Options (or Layout) tab. It is omitted from the tables below because it behaves identically on all seven: CSS scoped to that block and whatever is nested inside it. See [Per-block custom CSS](theming.md#per-block-custom-css) and [Block CSS](#block-css).
+Every block also carries an optional `customCss` field — **Custom CSS (advanced)**, the last field on its Options (or Layout) tab. It is omitted from the tables below because it behaves identically on all eight: CSS scoped to that block and whatever is nested inside it. See [Per-block custom CSS](theming.md#per-block-custom-css) and [Block CSS](#block-css).
 
 ### Hero Block
 
@@ -233,6 +235,30 @@ A wrapping grid of content items — fixed columns per breakpoint, or auto-fit b
 | `maxWidth`                                           | Max width              | [Max width](#container)           |     |                                                                                                 |
 | `gutter`                                             | Gutter                 | boolean                           |     |                                                                                                 |
 
+### Product Carousel Block
+
+![Product Carousel Block icon](https://cdn.media.amplience.net/i/quadraticdemo/content_product-carousel?w=48)
+
+A horizontally scrolling rail of products, curated by SKU.
+
+- **Schema** [`content/product-carousel`](../packages/hub-management/content-type-schemas/schemas/content_product-carousel.json) · **Repository** `content`
+- **Components** [`ProductCarouselBlock`](../packages/components/src/organisms/ProductCarouselBlock) (organism) → `SectionHeader`, `Container`, [`ProductCarousel`](../packages/components/src/organisms/ProductCarousel) → `ProductCard` per slide
+- **Storybook** [Organisms/ProductCarouselBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-productcarouselblock--docs)
+
+It holds SKUs, not links to [products](#product): the renderer resolves each SKU through the active product source (`PRODUCT_SOURCE` — see [Deploying](deploying.md#products)), so the same rail works whether products live in the CMS or in commercetools. SKUs the source doesn't know are skipped, and a rail that resolves to nothing isn't rendered.
+
+| Field                                             | Label             | Type                                  | Req | Notes                                                      |
+| ------------------------------------------------- | ----------------- | ------------------------------------- | --- | ---------------------------------------------------------- |
+| `sectionHeader`                                   | Section header    | [Section Header](#section-header)     |     |                                                            |
+| `skus`                                            | Products (SKUs)   | string[]                              | ✓   | One SKU per slide, in display order. At least one          |
+| `slidesMobile` / `slidesTablet` / `slidesDesktop` | Slides visible    | [Carousel Options](#carousel-options) |     | Fractional values leave the next slide peeking, e.g. `1.2` |
+| `gap` / `scrollStep`                              | Gap, scroll step  | [Carousel Options](#carousel-options) |     | `scrollStep` defaults to `slide`                           |
+| `showArrows` / `showDots` / `showScrollbar`       | Controls          | [Carousel Options](#carousel-options) |     | Arrows on by default; dots and scrollbar off               |
+| `dragToScroll`                                    | Drag to scroll    | [Carousel Options](#carousel-options) |     | On by default                                              |
+| `backgroundColor`                                 | Background colour | [Palette](#colour)                    |     |                                                            |
+| `maxWidth`                                        | Max width         | [Max width](#container)               |     |                                                            |
+| `gutter`                                          | Gutter            | boolean                               |     | Off for an edge-to-edge rail                               |
+
 ## Pages
 
 Routable content: head metadata plus an ordered list of [slots](#slot) the renderer composes. A URL maps to a delivery key, so launching a page is a publish rather than a deployment.
@@ -280,6 +306,39 @@ Shares the head-metadata shape with [Page](#page) (`title`, `description`, `keyw
 | `readTime`    | Read Time (minutes) | number                    |     |                                                                                               |
 
 `_meta.deliveryKeys` follows the `{site}/blog/{slug}` convention.
+
+### Product
+
+![Product icon](https://cdn.media.amplience.net/i/quadraticdemo/content_product?w=48)
+
+A product page — presentation-grade commerce fields plus optional slots for editorial content. Deliberately a brochure, not a catalogue: no variants, no inventory, no pricing rules. A field belongs here only if a real PIM would overwrite it; anything a PIM would have to be reconciled with — a category taxonomy, a variant graph, a product-type schema — does not (ADR-0018).
+
+- **Schema** [`content/product`](../packages/hub-management/content-type-schemas/schemas/content_product.json) · **Repository** `content`, or a dedicated products repository when `AMPLIENCE_REPO_PRODUCTS` is set (see [Commands](commands.md))
+- **Components** [`ProductDetailPage`](../packages/components/src/templates/ProductDetailPage) (template) → `Price`, `AttributeList`, `Tags`, `ContentMedia` (or a `Carousel` gallery for several images), then [`Slot`](#slot) per entry. Listings use `ProductListingPage` → `ProductCard`
+- **Storybook** [Templates/ProductDetailPage](https://quadratic-lite-components.vercel.app/?path=/docs/templates-productdetailpage--docs)
+
+Only read when `PRODUCT_SOURCE` is `cms` (the default) — with `commercetools` the same pages render from the commerce project instead, and these items are ignored. See [Deploying › Products](deploying.md#products).
+
+Shares the head-metadata shape with [Page](#page) (`title`, `description`, `keywords`, `social`, `canonicalUrl`, `robots`, `slots`, `_meta`), and adds:
+
+| Field              | Label             | Type                                        | Req | Notes                                                                                                                                     |
+| ------------------ | ----------------- | ------------------------------------------- | --- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `sku`              | SKU               | string                                      | ✓   | The identifier in your commerce or PIM system — what [product carousels](#product-carousel-block) reference. Not displayed                |
+| `name`             | Product Name      | localized string                            | ✓   |                                                                                                                                           |
+| `shortDescription` | Short Description | localized string                            |     | A sentence or two for the product page and cards. Longer copy belongs in slots                                                            |
+| `prices`           | Prices            | object[]                                    |     | One per currency: `amount`, `currencyCode` (ISO 4217), and optional `compareAtAmount`. See below                                          |
+| `images`           | Images            | [Media](#media)[]                           |     | The first is the card and lead image; two or more make the product page a gallery                                                         |
+| `attributes`       | Attributes        | object[]                                    |     | Display-only spec rows: localized `label` and `value`                                                                                     |
+| `brand`            | Brand             | string                                      |     | Display name, not a reference                                                                                                             |
+| `categories`       | Categories        | string[]                                    |     | Category identifiers. Each one becomes a category page at `/<identifier>`; list a product's parent categories too (`mens`, `mens-shirts`) |
+| `tags`             | Tags              | string[]                                    |     |                                                                                                                                           |
+| `status`           | Status            | `active` \| `coming-soon` \| `discontinued` |     | Editorial lifecycle, not stock. Defaults to `active`                                                                                      |
+
+**Prices.** Amounts are in major units (`19.99`, not `1999`). Which currency a visitor sees is a deployment setting (`PRODUCT_CURRENCIES`), not a property of the product, so prices are keyed by currency rather than localized — and never converted: a product with no price in the requested currency shows none. `compareAtAmount` is the "was" price: when it's higher than `amount` the card and product page show both, the old one struck through; otherwise it's ignored.
+
+**Categories** are derived, not authored: there is no category content type, and the set of category pages is simply every distinct value across published products (ADR-0024). Publishing a product into a new category creates that category's page; a CMS page at the same path takes precedence.
+
+`_meta.deliveryKeys` follows the `{site}/products/{slug}` convention; the slug is the product's URL.
 
 ## Composition
 
@@ -614,7 +673,7 @@ DAM videos play the account's transcode renditions (`/v/{endpoint}/{name}/{profi
 
 ### Content Block
 
-[`partials/content-blocks`](../packages/hub-management/content-type-schemas/schemas/partials_content-blocks.json) — a content link narrowed to the renderable [blocks](#blocks): [Carousel](#carousel-block), [Columns](#columns-block), [Grid](#grid-block), [Hero](#hero-block), [Rich Text](#rich-text-block), [Media](#media-block), [Card](#card). Referenced by slots, columns, grids and blog articles, so the allowed set is maintained in one place.
+[`partials/content-blocks`](../packages/hub-management/content-type-schemas/schemas/partials_content-blocks.json) — a content link narrowed to the renderable [blocks](#blocks): [Carousel](#carousel-block), [Columns](#columns-block), [Grid](#grid-block), [Hero](#hero-block), [Rich Text](#rich-text-block), [Media](#media-block), [Card](#card), [Product Carousel](#product-carousel-block). Referenced by slots, columns, grids and blog articles, so the allowed set is maintained in one place.
 
 ### Carousel Item
 

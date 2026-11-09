@@ -1,7 +1,7 @@
 {
   "name": "frontend-starter",
   "label": "Amplience Frontend Starter",
-  "description": "Introductory content that mirrors the repo docs. The set a partner clones as a starting point.",
+  "description": "Introductory content that mirrors the repo docs, plus a small Amplience merch catalogue for the product pages. The set a partner clones as a starting point.",
   "defaultBrand": "amplience",
   "defaultLocale": "en-US",
   "authoredLocales": ["en-US", "en-GB", "fr-FR", "de-DE", "es-ES", "it-IT"],
