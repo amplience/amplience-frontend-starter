@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest'
 import type { AnyComponentRegistryEntry, Registry } from '@amplience/frontend-starter-types'
 
 import { collectSkus } from './collect-skus'
+import { LOCALE_CONTENT_SCHEMA } from './locale-content'
 
 const RAIL = 'test/rail'
 const SLOT = 'test/slot'
@@ -75,5 +76,47 @@ describe('collectSkus', () => {
     }
     node.children.push(node)
     expect(collectSkus(node, registry)).toEqual(['A'])
+  })
+})
+
+describe('collectSkus — Locale-based Content', () => {
+  // Only the variant the render will show is collected: SKUs for a rail that
+  // loses would be fetched, priced and then thrown away.
+  const variants = (defaultContent: unknown[], ...overrides: [string[], unknown[]?][]) => ({
+    _meta: { schema: LOCALE_CONTENT_SCHEMA },
+    defaultContent,
+    localeOverrides: overrides.map(([locales, content]) => ({
+      locales,
+      ...(content !== undefined && { content }),
+    })),
+  })
+
+  const tree = slot(
+    rail('ALWAYS'),
+    variants([rail('DEFAULT')], [['fr-FR'], [rail('FRENCH')]], [['de-DE'], [rail('GERMAN')]]),
+  )
+
+  it('collects the default variant when no locale is given', () => {
+    expect(collectSkus(tree, registry)).toEqual(['ALWAYS', 'DEFAULT'])
+  })
+
+  it('collects the default variant for a locale with no override', () => {
+    expect(collectSkus(tree, registry, 'en-GB')).toEqual(['ALWAYS', 'DEFAULT'])
+  })
+
+  it('collects only the matching override, not the default or the other locales', () => {
+    expect(collectSkus(tree, registry, 'fr-FR')).toEqual(['ALWAYS', 'FRENCH'])
+    expect(collectSkus(tree, registry, 'de-DE')).toEqual(['ALWAYS', 'GERMAN'])
+  })
+
+  it('collects nothing from a wrapper whose matching override is empty', () => {
+    const hidden = slot(variants([rail('DEFAULT')], [['fr-FR']]))
+    expect(collectSkus(hidden, registry, 'fr-FR')).toEqual([])
+  })
+
+  it('resolves a wrapper at the root of the tree, not only inside an array', () => {
+    const root = variants([rail('DEFAULT')], [['fr-FR'], [rail('FRENCH')]])
+    expect(collectSkus(root, registry, 'fr-FR')).toEqual(['FRENCH'])
+    expect(collectSkus(root, registry, 'en-GB')).toEqual(['DEFAULT'])
   })
 })

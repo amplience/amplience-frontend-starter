@@ -359,6 +359,68 @@ ICONS["content_product-carousel"] = card_b(product_carousel)
 product = '<g transform="translate({tx},{ty})">' + tag_body() + '</g>'
 ICONS["content_product"] = card_a(shadowed(product))
 
+# ---------- Variant wrappers (locale-content, audience-content) ----------
+# One shape for the whole "conditional wrapper" family: a rounded block split by
+# an S-curve into two halves of identical flat stripes, the default (pale) on the
+# left and the variant (darker) on the right. A badge sits on each outer corner
+# naming what the split is *by*: a globe for locale, a user silhouette for
+# audience. The geometry is shared so the siblings read as a set at a glance.
+VARIANT_PALE = "#d3def7"
+VARIANT_DARK = "#86a8d6"
+VARIANT_DEFS = (
+    '<defs>'
+    + ''.join(
+        f'<pattern id="{pid}" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">'
+        f'<rect width="8" height="8" fill="#ffffff"/><rect width="3.6" height="8" fill="{col}"/></pattern>'
+        for pid, col in (("stripePale", VARIANT_PALE), ("stripeDark", VARIANT_DARK)))
+    + '</defs>')
+VX0, VY0, VX1, VY1, VRX = 46, 68, 206, 188, 12
+
+
+def globe_badge(cx, cy, r=19):
+    return (f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="#ffffff" stroke="{DARK}" stroke-width="{SW_MED}"/>'
+            f'<ellipse cx="{cx}" cy="{cy}" rx="{r*0.4:.1f}" ry="{r}" fill="none" stroke="{DARK}" stroke-width="{SW_THIN-0.4}"/>'
+            f'<path d="M{cx-r} {cy} h{2*r}" stroke="{DARK}" stroke-width="{SW_THIN-0.4}"/>'
+            f'<path d="M{cx-r*0.82:.1f} {cy-r*0.45:.1f} h{r*1.64:.1f} M{cx-r*0.82:.1f} {cy+r*0.45:.1f} h{r*1.64:.1f}" '
+            f'stroke="{DARK}" stroke-width="{SW_THIN-0.8}"/>')
+
+
+def user_badge(cx, cy, r=19, solid=False):
+    # neutral silhouette; the two corners differ by fill (outlined vs solid), not by person
+    fill, ink = (DARK, "#ffffff") if solid else ("#ffffff", DARK)
+    clip = f'user_{cx}_{cy}'
+    head_y = cy - r * 0.22
+    return (f'<clipPath id="{clip}"><circle cx="{cx}" cy="{cy}" r="{r-1.2}"/></clipPath>'
+            f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="{fill}" stroke="{DARK}" stroke-width="{SW_MED}"/>'
+            f'<g clip-path="url(#{clip})">'
+            f'<circle cx="{cx}" cy="{head_y:.1f}" r="{r*0.34:.1f}" fill="{ink}"/>'
+            f'<path d="M{cx-r*0.78:.1f} {cy+r:.1f} q0 -{r*0.62:.1f} {r*0.78:.1f} -{r*0.64:.1f} '
+            f'q{r*0.78:.1f} 0 {r*0.78:.1f} {r*0.64:.1f} Z" fill="{ink}"/></g>')
+
+
+def variant_split(badge_tl, badge_br):
+    w, h = VX1 - VX0, VY1 - VY0
+    top_x, bot_x = VX0 + 0.75 * w, VX0 + 0.25 * w   # 75% along the top, 25% along the bottom
+    mid = VY0 + h * 0.5
+    curve = f"C{top_x} {mid} {bot_x} {mid} {bot_x} {VY1}"            # vertical tangent at both ends
+    curve_back = f"C{bot_x} {mid} {top_x} {mid} {top_x} {VY0}"
+    return (VARIANT_DEFS
+            + f'<clipPath id="inner"><rect x="{VX0}" y="{VY0}" width="{w}" height="{h}" rx="{VRX}"/></clipPath>'
+            '<g clip-path="url(#inner)">'
+            f'<path d="M{VX0} {VY0} H{top_x} {curve} H{VX0} Z" fill="url(#stripePale)"/>'
+            f'<path d="M{top_x} {VY0} H{VX1} V{VY1} H{bot_x} {curve_back} Z" fill="url(#stripeDark)"/></g>'
+            f'<rect x="{VX0}" y="{VY0}" width="{w}" height="{h}" rx="{VRX}" fill="none" stroke="{DARK}" stroke-width="{SW_BLOCK}"/>'
+            f'<path d="M{top_x} {VY0} {curve}" fill="none" stroke="{DARK}" stroke-width="{SW_BLOCK}"/>'
+            + badge_tl(VX0, VY0) + badge_br(VX1, VY1))
+
+
+# locale-content: globe on each corner (default locale / the locale being served)
+ICONS["content_locale-content"] = card_b(variant_split(globe_badge, globe_badge))
+# audience-content (planned): outlined user = everyone, solid user = the targeted audience.
+# Drawn now so the pair ships together; the content type itself is not registered yet.
+ICONS["content_audience-content"] = card_b(variant_split(
+    lambda x, y: user_badge(x, y, solid=False), lambda x, y: user_badge(x, y, solid=True)))
+
 # ---------- Aliases ----------
 # Types that deliberately share an icon. Files are still written out under
 # each name so every content type has an explicit png/svg pair.

@@ -20,6 +20,13 @@
         "_meta": {
           "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
         }
+      },
+      {
+        "id": "a23f989f-d147-53ab-8412-3245220ef9e0",
+        "contentType": "https://quadratic.amplience.com/v2/content/locale-content",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
       }
     ]
   }

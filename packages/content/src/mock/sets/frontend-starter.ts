@@ -12,6 +12,9 @@
 
 import manifests from '../../../fixtures/frontend-starter/_hierarchy/manifests.json' with { type: 'json' }
 import aboutHero from '../../../fixtures/frontend-starter/components/about-hero.json' with { type: 'json' }
+import aboutLocaleContentDefault from '../../../fixtures/frontend-starter/components/about-locale-content-default.json' with { type: 'json' }
+import aboutLocaleContentOverride from '../../../fixtures/frontend-starter/components/about-locale-content-override.json' with { type: 'json' }
+import aboutLocaleContent from '../../../fixtures/frontend-starter/components/about-locale-content.json' with { type: 'json' }
 import aboutMarkdown from '../../../fixtures/frontend-starter/components/about-markdown.json' with { type: 'json' }
 import blogContentModellingBody from '../../../fixtures/frontend-starter/components/blog/content-modelling-body.json' with { type: 'json' }
 import blogGettingStartedBody from '../../../fixtures/frontend-starter/components/blog/getting-started-body.json' with { type: 'json' }
@@ -222,6 +225,9 @@ const fixtures: readonly EnrichedContentItem[] = [
   aboutMainSlot,
   aboutHero,
   aboutMarkdown,
+  aboutLocaleContent,
+  aboutLocaleContentDefault,
+  aboutLocaleContentOverride,
   contributingPage,
   contributingMainSlot,
   contributingHero,

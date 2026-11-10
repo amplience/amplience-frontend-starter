@@ -155,7 +155,10 @@ export function VisualizationClient({
   // SKUs the current model references. The server resolved the initial set; an
   // edit can introduce more, and a client boundary cannot reach `ProductSource`
   // — so the route does it (ADR-0027).
-  const skus = useMemo(() => collectSkus(resolvedModel, defaultRegistry).join(','), [resolvedModel])
+  const skus = useMemo(
+    () => collectSkus(resolvedModel, defaultRegistry, localeCode).join(','),
+    [resolvedModel, localeCode],
+  )
 
   useEffect(() => {
     const wanted = skus.split(',').filter(Boolean)

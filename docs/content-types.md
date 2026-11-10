@@ -2,7 +2,7 @@
 
 # Content types
 
-Amplience Frontend Starter ships a content model of 26 content types — eight renderable blocks, plus the smaller repeatable types that make up pages, navigation and site chrome. Every item carries its schema URI in `_meta.schema` and the recursive renderer dispatches on it, so this page is also the map from a content type to the component that draws it.
+Amplience Frontend Starter ships a content model of 27 content types — eight renderable blocks, plus the smaller repeatable types that make up pages, navigation and site chrome. Every item carries its schema URI in `_meta.schema` and the recursive renderer dispatches on it, so this page is also the map from a content type to the component that draws it.
 
 The model is registered in a hub by `pnpm hub:import` — see [Working with a hub](working-with-a-hub.md). Where things live:
 
@@ -44,6 +44,7 @@ Every schema URI is prefixed `https://quadratic.amplience.com/v2/` — the table
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_blog-article?w=24)        | [Blog Article](#blog-article)                     | Page        | `BlogArticlePage`              | —                                                                                                                               |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_product?w=24)             | [Product](#product)                               | Page        | `ProductDetailPage`            | [Templates/ProductDetailPage](https://quadratic-lite-components.vercel.app/?path=/docs/templates-productdetailpage--docs)       |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/slots_slot?w=24)                  | [Slot](#slot)                                     | Composition | `Slot`                         | [Organisms/Slot](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-slot--docs)                                 |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_locale-content?w=24)      | [Locale-based Content](#locale-based-content)     | Composition | _n/a — resolved pre-render_    | —                                                                                                                               |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header?w=24)              | [Header](#header)                                 | Chrome      | `HeaderBlock`                  | —                                                                                                                               |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header-row?w=24)          | [Header Row](#header-row)                         | Chrome      | `HeaderRow`                    | —                                                                                                                               |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header-group?w=24)        | [Header Group](#header-group)                     | Chrome      | `HeaderGroup`                  | —                                                                                                                               |
@@ -356,6 +357,26 @@ An ordered list of component content the renderer recurses into. The join betwee
 | -------------------- | ------------- | --------------------------------- | --- | ---------------------------------------- |
 | `components`         | Components    | [Content Block](#content-block)[] |     | Ordered components rendered in this slot |
 | `_meta.deliveryKeys` | Delivery keys | object                            |     |                                          |
+
+### Locale-based Content
+
+![Locale-based Content icon](https://cdn.media.amplience.net/i/quadraticdemo/content_locale-content?w=48)
+
+Different blocks for different locales: default content that everyone sees, plus locale overrides that replace it for the locales they name. This is item-level localisation — which blocks appear — and it sits alongside [field-level localisation](#localisation), which translates the fields of whichever block is shown. Wrap only the blocks that differ; anything identical in every locale stays outside.
+
+- **Schema** [`content/locale-content`](../packages/hub-management/content-type-schemas/schemas/content_locale-content.json) · **Repository** `content`
+- **Components** none — resolved before rendering by [`resolveLocaleContent`](../apps/web/src/renderer/locale-content.ts), which splices the selected blocks into the parent in the wrapper's place
+- **Storybook** — n/a
+
+| Field                       | Label           | Type                              | Req | Notes                                                                                                  |
+| --------------------------- | --------------- | --------------------------------- | --- | ------------------------------------------------------------------------------------------------------ |
+| `defaultContent`            | Default content | [Content Block](#content-block)[] | ✓   | Shown for every locale with no matching override. May be empty                                         |
+| `localeOverrides[].locales` | Locales         | string[]                          | ✓   | Amplience locale codes (`fr-FR`), matched exactly and case-insensitively — `fr` does not cover `fr-CA` |
+| `localeOverrides[].content` | Content         | [Content Block](#content-block)[] |     | Replaces the default for those locales. Leave empty to hide the content there                          |
+
+How it resolves: the active locale is the one in the URL (`ctx.locale`), so the choice is made per route and is as cacheable as the page. The first override whose `locales` include it wins and replaces the default **in full**; with no match, the default applies. Because the wrapper is replaced rather than rendered, the first selected block is the page's LCP candidate exactly as if it had been authored there, and product SKUs are collected only for the variant that will render. A wrapper can sit anywhere a [Content Block](#content-block) can, and may nest.
+
+Override locales are free text because a hub cannot list the locales a deployment serves — they are configured with `AMPLIENCE_LOCALES`. An override naming a locale the site never serves is never selected, and is not reported.
 
 ## Header and footer
 
@@ -673,7 +694,7 @@ DAM videos play the account's transcode renditions (`/v/{endpoint}/{name}/{profi
 
 ### Content Block
 
-[`partials/content-blocks`](../packages/hub-management/content-type-schemas/schemas/partials_content-blocks.json) — a content link narrowed to the renderable [blocks](#blocks): [Carousel](#carousel-block), [Columns](#columns-block), [Grid](#grid-block), [Hero](#hero-block), [Rich Text](#rich-text-block), [Media](#media-block), [Card](#card), [Product Carousel](#product-carousel-block). Referenced by slots, columns, grids and blog articles, so the allowed set is maintained in one place.
+[`partials/content-blocks`](../packages/hub-management/content-type-schemas/schemas/partials_content-blocks.json) — a content link narrowed to the renderable [blocks](#blocks): [Carousel](#carousel-block), [Columns](#columns-block), [Grid](#grid-block), [Hero](#hero-block), [Rich Text](#rich-text-block), [Media](#media-block), [Card](#card), [Product Carousel](#product-carousel-block) — and [Locale-based Content](#locale-based-content), which wraps other blocks rather than rendering anything itself. Referenced by slots, columns, grids and blog articles, so the allowed set is maintained in one place.
 
 ### Carousel Item
 
@@ -682,6 +703,8 @@ DAM videos play the account's transcode renditions (`/v/{endpoint}/{name}/{profi
 ### Localisation
 
 Fields typed "localized string" use Amplience's `localization` core schema: one value per locale, resolved at the content-client boundary. Delivery returns the value for the requested locale, so components receive a plain string.
+
+That only covers _what a field says_. When a locale should see different _blocks_ — a promotion for one market, a legal notice for another — use [Locale-based Content](#locale-based-content) instead; the two compose, so a block inside an override is still field-localised as normal.
 
 ## Adding a content type
 

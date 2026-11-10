@@ -5,7 +5,8 @@
  * composed: `packages/content` knows nothing about rendering, and
  * `packages/components` knows nothing about sources.
  *
- * One batched `getBySkus` per render, de-duplicated across the whole tree.
+ * One batched `getBySkus` per render, de-duplicated across the whole tree and
+ * limited to the Locale-based Content variants this locale will actually render.
  * Misses are dropped by the port (dev-loud, prod-quiet), so a mistyped SKU
  * shortens a rail rather than failing a page.
  */
@@ -52,7 +53,7 @@ export async function resolveProducts(
   registry: Registry,
   locale: Locale,
 ): Promise<ReadonlyMap<string, ResolvedProduct>> {
-  return await resolveProductsBySku(collectSkus(content, registry), locale)
+  return await resolveProductsBySku(collectSkus(content, registry, locale.code), locale)
 }
 
 /**
