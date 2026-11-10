@@ -15,6 +15,8 @@
 import { LocaleSelector } from '@amplience/frontend-starter-components/locale-selector'
 
 import { defaultLocale, localeLabel, locales } from '../../lib/locales'
+import { previewBasePath } from '../../lib/preview'
+import { getPreviewHost } from '../../lib/preview-request'
 
 /**
  * The delivery body — only `label` is authored; `_meta` rides along unused.
@@ -28,7 +30,8 @@ type LocaleSelectorStub = {
   readonly [key: string]: unknown
 }
 
-export function LocaleSelectorConfigured({ label, localeParam }: LocaleSelectorStub) {
+export async function LocaleSelectorConfigured({ label, localeParam }: LocaleSelectorStub) {
+  const host = await getPreviewHost()
   const selectorLocales = locales.map((locale) => ({
     slug: locale.slug,
     label: localeLabel(locale),
@@ -40,6 +43,7 @@ export function LocaleSelectorConfigured({ label, localeParam }: LocaleSelectorS
       defaultSlug={defaultLocale.slug}
       {...(typeof label === 'string' && { label })}
       {...(typeof localeParam === 'string' && { localeParam })}
+      {...(host !== undefined && { pathPrefix: previewBasePath(host) })}
     />
   )
 }

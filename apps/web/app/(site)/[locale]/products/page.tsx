@@ -23,7 +23,8 @@ import { ProductListingPage } from '@amplience/frontend-starter-components/produ
 
 import { resolveCurrency } from '../../../../lib/currency'
 import { listingLimit } from '../../../../lib/listing'
-import { localeBasePath, localeForSlug } from '../../../../lib/locales'
+import { localeForSlug } from '../../../../lib/locales'
+import { siteBasePath } from '../../../../lib/preview-request'
 import { productSource } from '../../../../lib/product-source'
 import { toResolvedProduct } from '../../../../lib/resolve-products'
 
@@ -57,7 +58,7 @@ async function ProductListing({ params }: RouteProps) {
         description="Everything in the catalogue."
         products={products.map((product) => toResolvedProduct(product, locale))}
         locale={locale.code}
-        localeBasePath={localeBasePath(locale)}
+        localeBasePath={await siteBasePath(locale)}
       />
     </main>
   )

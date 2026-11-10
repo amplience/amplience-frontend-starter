@@ -79,7 +79,7 @@ To register a deployed site against a hub, open that hub's card in `env-manager`
 - **+ Add existing site** — records a site you've already deployed (any host): give it a URL, and the brand and site name it was deployed with. Left blank, they're recorded as the hub's defaults — the same fallback **+ Create Vercel site** applies — and the placeholders show what those are. Reference only; nothing is created or redeployed, so the record should match the deployment's own `SITE_NAME` and `NEXT_PUBLIC_BRAND`.
 - **+ Create Vercel site** — provisions a new Vercel project from the values this hub already holds: it creates the project, pushes the runtime env vars, deploys `apps/web`, and records the resulting URL for you. Needs the [Vercel CLI](https://vercel.com/docs/cli) installed and logged in (`vercel login`); a preflight check guides you if not. Only non-secret runtime variables are pushed — the Amplience OAuth credentials are management-only and never leave your machine.
 
-Either way, once a site is recorded it's added as a visualization option in the CMS whenever you next seed or sync that hub's content types.
+Either way, once a site is recorded it's added as a visualization option in the CMS whenever you next seed or sync that hub's content types, and as a [schedule preview](working-with-a-hub.md#schedule-preview) application whenever you next seed its settings.
 
 A newly recorded site is also what webhooks need in order to exist — they're created one per registered site, so seed them (**Webhooks → Seed**, or `pnpm hub:import:webhooks`) after adding one. See [Webhooks](working-with-a-hub.md#webhooks).
 

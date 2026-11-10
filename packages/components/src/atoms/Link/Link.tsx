@@ -41,15 +41,25 @@ function isExternal(href: string): boolean {
 
 /**
  * Prefix an internal href with the active locale base. Only root-relative
- * paths (`/about`) are rewritten; anchors (`#…`), relative segments, and
- * hrefs already under the base pass through, so the operation is idempotent.
- * The bare root `/` maps to the base itself (`/fr-fr`), not `/fr-fr/`.
+ * paths (`/about`) are rewritten; anchors (`#…`) and relative segments pass
+ * through. The bare root `/` maps to the base itself (`/fr-fr`, not `/fr-fr/`).
+ *
+ * The base can be longer than a locale — `/preview/<host>/fr-fr` in a
+ * schedule preview (ADR-0028) — and an href may already carry its tail, as
+ * `publicPath` output (`/fr-fr/blog/x`) does. Only the missing head is added,
+ * which also keeps the operation idempotent.
  */
 function withLocaleBase(href: string, base: string): string {
   if (base === '') return href
   if (href === '/') return base
   if (!href.startsWith('/')) return href
-  if (href === base || href.startsWith(`${base}/`)) return href
+  const parts = base.split('/')
+  for (let i = 1; i < parts.length; i++) {
+    const tail = `/${parts.slice(i).join('/')}`
+    if (href === tail || ['/', '?', '#'].some((sep) => href.startsWith(`${tail}${sep}`))) {
+      return `${parts.slice(0, i).join('/')}${href}`
+    }
+  }
   return `${base}${href}`
 }
 

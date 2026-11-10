@@ -80,7 +80,7 @@ routes need the hub configured first — see
 ```sh
 pnpm hub:import               # everything, in dependency order (~1m45s)
 
-pnpm hub:import:settings      # preview devices, locales, workflow states
+pnpm hub:import:settings      # preview devices + applications, locales, workflow states
 pnpm hub:import:schemas       # JSON Schemas
 pnpm hub:import:types         # content-type registrations (+ visualizations)
 pnpm hub:import:extensions    # UI and dashboard extensions
