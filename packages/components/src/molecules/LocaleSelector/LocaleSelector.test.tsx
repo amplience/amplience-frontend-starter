@@ -97,6 +97,13 @@ describe('LocaleSelector', () => {
     expect(nav.push).toHaveBeenCalledWith('/fr-fr')
   })
 
+  it('reads a mis-cased locale prefix and switches from it', () => {
+    renderSelector('/DE-DE/about')
+    expect(select().value).toBe('de-de')
+    change('fr-fr')
+    expect(nav.push).toHaveBeenCalledWith('/fr-fr/about')
+  })
+
   it('uses a custom accessible label when provided', () => {
     nav.path = '/about'
     render(<LocaleSelector locales={LOCALES} defaultSlug="en-us" label="Choose language" />)

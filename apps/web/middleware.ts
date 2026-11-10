@@ -10,9 +10,9 @@
  *     form (`/fr-fr/about`): pass it through untouched. The `[locale]` route
  *     serves it and reads the locale from the segment.
  *   - The first segment names a locale in some other casing (`/en-GB/about`):
- *     301/308-redirect to the lowercase canonical (`/en-gb/about`). Path URLs
- *     are case-sensitive, so two casings would be duplicate content — one
- *     canonical form, but any casing a user types still gets there.
+ *     serve the lowercase canonical page (`/en-gb/about`) in place. Its
+ *     canonical tag names the lowercase URL, so search engines still see one
+ *     page. (ADR-0015 redirected here; see the swap note in `routeLocale`.)
  *   - Anything else (`/about`, `/`): rewrite internally to the default locale
  *     (`/en-gb/about`). The rewrite is invisible — the address bar keeps the
  *     clean URL — so every existing URL keeps working and the default locale
@@ -43,8 +43,8 @@ import { sameOriginUrl } from './lib/same-origin'
 
 /**
  * Route `path` (the site path, after any preview prefix) to its `[locale]`
- * page. `base` is `''` on the live site and `/preview/<host>` in a preview,
- * where it is kept on redirects and dropped from the internal rewrite.
+ * page. `base` is `''` on the live site and `/preview/<host>` in a preview;
+ * the internal rewrite drops it.
  */
 const routeLocale = (
   request: NextRequest,
@@ -60,14 +60,18 @@ const routeLocale = (
   if (firstSegment !== '') {
     const canonical = canonicalLocaleSlug(firstSegment)
     if (canonical !== undefined) {
-      // A configured locale. Redirect any non-canonical casing to lowercase
-      // (the redirected request re-enters and picks up the header below);
-      // otherwise let the `[locale]` route handle it, locale header attached.
+      // A configured locale, served by the `[locale]` route with its header attached.
+      headers.set('x-locale', canonical)
       if (canonical !== firstSegment) {
         segments[1] = canonical
-        return NextResponse.redirect(sameOriginUrl(request, `${base}${segments.join('/')}`), 308)
+        // Option 2 (current): serve a mis-cased locale in place. To restore the
+        // ADR-0015 308 (Option 1, once the SAST open-redirect finding can be
+        // dismissed), replace the return below with:
+        //   return NextResponse.redirect(sameOriginUrl(request, `${base}${segments.join('/')}`), 308)
+        return NextResponse.rewrite(sameOriginUrl(request, segments.join('/')), {
+          request: { headers },
+        })
       }
-      headers.set('x-locale', canonical)
       if (base === '') return NextResponse.next({ request: { headers } })
       return NextResponse.rewrite(sameOriginUrl(request, path), { request: { headers } })
     }

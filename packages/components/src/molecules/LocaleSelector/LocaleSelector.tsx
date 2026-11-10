@@ -117,7 +117,8 @@ function PathPrefixSelector({
 
   const slugs = new Set(locales.map((l) => l.slug))
   const segments = pathname.split('/')
-  const firstSegment = segments[1] ?? ''
+  // Lowercased: the middleware serves a mis-cased locale (`/EN-US/…`) in place.
+  const firstSegment = (segments[1] ?? '').toLowerCase()
   const hasPrefix = slugs.has(firstSegment)
   const rawClean = hasPrefix ? `/${segments.slice(2).join('/')}` : pathname
   const cleanPath = rawClean === '' ? '/' : rawClean
