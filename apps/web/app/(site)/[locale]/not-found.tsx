@@ -31,7 +31,8 @@ import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 
 import { client, siteName } from '../../../lib/content-client'
-import { defaultLocale, localeBasePath, localeForSlug } from '../../../lib/locales'
+import { defaultLocale, localeForSlug } from '../../../lib/locales'
+import { siteBasePath } from '../../../lib/preview-request'
 import { registry } from '../../../lib/registry'
 import { NotFoundContent } from '../../../src/components/NotFoundContent'
 import { renderContent } from '../../../src/renderer'
@@ -45,7 +46,7 @@ export default async function NotFound() {
   // in a header. Default when it's missing so the 404 always has a locale.
   const localeSlug = (await headers()).get('x-locale')
   const locale = (localeSlug != null ? localeForSlug(localeSlug) : undefined) ?? defaultLocale
-  const ctx = { localeBasePath: localeBasePath(locale) }
+  const ctx = { localeBasePath: await siteBasePath(locale) }
   try {
     const slot = await client.getByKey(`${siteName}/site/not-found`, {
       depth: 'all',

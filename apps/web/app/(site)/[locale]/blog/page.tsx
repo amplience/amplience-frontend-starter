@@ -37,6 +37,7 @@ import type { BlogArticleSchema } from '@amplience/frontend-starter-components/r
 import { blogArchiveFromItems, warnOnDuplicateSlugs } from '../../../../lib/blog-archive'
 import { client, siteName } from '../../../../lib/content-client'
 import { localeForSlug, publicPath } from '../../../../lib/locales'
+import { siteBasePath } from '../../../../lib/preview-request'
 
 export const metadata: Metadata = {
   title: 'Blog',
@@ -54,9 +55,10 @@ type RouteProps = {
 type BlogArticleCardProps = {
   readonly article: BlogArticleSchema & { readonly _meta: unknown }
   readonly href: string
+  readonly localeBasePath: string
 }
 
-function BlogArticleCard({ article, href }: BlogArticleCardProps) {
+function BlogArticleCard({ article, href, localeBasePath }: BlogArticleCardProps) {
   /* If there's an author, prepend it to the description (separated with a bullet point character) */
   /* Same goes for the publish date, if present. */
   const cardContent = [
@@ -83,6 +85,7 @@ function BlogArticleCard({ article, href }: BlogArticleCardProps) {
         title={article.title ?? ''}
         {...(cardContent !== '' && { description: cardContent })}
         links={{ href }}
+        localeBasePath={localeBasePath}
       />
     </article>
   )
@@ -105,6 +108,7 @@ export default async function BlogArchiveRoute({ params }: RouteProps) {
   // live in `blogArchiveFromItems`, shared with `/blog/[slug]`.
   const { entries: articles, duplicateSlugs } = blogArchiveFromItems(all, siteName)
   warnOnDuplicateSlugs(duplicateSlugs)
+  const basePath = await siteBasePath(locale)
 
   return (
     <main data-blog-archive>
@@ -134,6 +138,7 @@ export default async function BlogArchiveRoute({ params }: RouteProps) {
               key={slug}
               article={article}
               href={publicPath(locale, `/blog/${slug}`)}
+              localeBasePath={basePath}
               data-blog-archive-item
             />
           ))}

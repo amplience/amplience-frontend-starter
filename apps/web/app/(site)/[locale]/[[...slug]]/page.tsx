@@ -67,8 +67,9 @@ import { categoryIdForSlug, categoryTitle } from '../../../../lib/categories'
 import { client, siteName } from '../../../../lib/content-client'
 import { resolveCurrency } from '../../../../lib/currency'
 import { listingLimit } from '../../../../lib/listing'
-import { localeBasePath, localeForSlug, publicPath } from '../../../../lib/locales'
+import { localeForSlug, publicPath } from '../../../../lib/locales'
 import type { Locale } from '../../../../lib/locales'
+import { siteBasePath } from '../../../../lib/preview-request'
 import { productSource } from '../../../../lib/product-source'
 import { registry } from '../../../../lib/registry'
 import { resolveProducts, toResolvedProduct } from '../../../../lib/resolve-products'
@@ -208,7 +209,7 @@ export default async function ContentRoute({ params }: RouteProps) {
 
   return renderContent(page, registry, {
     loadPriority: 'lcp',
-    localeBasePath: localeBasePath(locale),
+    localeBasePath: await siteBasePath(locale),
     locale: locale.code,
     products,
   })
@@ -251,7 +252,7 @@ async function renderCategoryListing(category: string, locale: Locale) {
         products={products.map((product) => toResolvedProduct(product, locale))}
         emptyMessage={`Nothing in ${title} yet.`}
         locale={locale.code}
-        localeBasePath={localeBasePath(locale)}
+        localeBasePath={await siteBasePath(locale)}
       />
     </main>
   )

@@ -16,7 +16,7 @@
 
 import { unstable_cache } from 'next/cache'
 
-import { client, siteName } from './content-client'
+import { liveClient, siteName } from './content-client'
 import { sanitizeCustomCss } from './custom-css-schema'
 
 /** Cache tag for on-demand revalidation (e.g. from an Amplience webhook). */
@@ -33,7 +33,8 @@ const DELIVERY_KEY = `${siteName}/site/custom-css`
 
 async function fetchCustomCssUncached(): Promise<string> {
   try {
-    const item = await client.getByKey<{ css?: string }>(DELIVERY_KEY)
+    // Live only: this read is shared across requests, so it must never see a preview.
+    const item = await liveClient.getByKey<{ css?: string }>(DELIVERY_KEY)
     return (item.css ?? '').trim()
   } catch {
     // not-found / delivery error → treat as "no custom CSS" (graceful degradation).

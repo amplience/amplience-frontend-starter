@@ -27,7 +27,8 @@ import { ProductDetailPage } from '@amplience/frontend-starter-components/produc
 import { isContentClientError } from '@amplience/frontend-starter-content'
 
 import { resolveCurrency } from '../../../../../lib/currency'
-import { localeBasePath, localeForSlug, publicPath } from '../../../../../lib/locales'
+import { localeForSlug, publicPath } from '../../../../../lib/locales'
+import { siteBasePath } from '../../../../../lib/preview-request'
 import { productMediaList } from '../../../../../lib/product-media'
 import { productSource } from '../../../../../lib/product-source'
 import { registry } from '../../../../../lib/registry'
@@ -93,7 +94,7 @@ export default async function ProductRoute({ params }: RouteProps) {
       ? undefined
       : renderContent(product.content, registry, {
           loadPriority: 'eager',
-          localeBasePath: localeBasePath(locale),
+          localeBasePath: await siteBasePath(locale),
           locale: locale.code,
           products: await resolveProducts(product.content, registry, locale),
         })

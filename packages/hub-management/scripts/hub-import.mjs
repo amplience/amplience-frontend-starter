@@ -15,7 +15,8 @@
  * `hub clone` pipeline (settings → schema → type → extension → content):
  *
  *   1. settings — settings/*.json: preview devices, locales and the
- *                 workflow states. Workflow states come first because both
+ *                 workflow states, staged with one schedule-preview
+ *                 application per web app (ADR-0028). Workflow states come first because both
  *                 the content items and the dashboard extensions reference
  *                 them by id, and dc-cli mints a fresh id per state on each
  *                 new hub — recording the source→target pairing in a
@@ -136,6 +137,11 @@ import {
   setFromArgv,
 } from './lib/fixture-sets.mjs'
 import { describeLocaleFilter, filterLocales } from './lib/locales.mjs'
+import {
+  missingApplications,
+  previewApplications,
+  withPreviewApplications,
+} from './lib/preview-apps.mjs'
 import { alreadyMapped, moveProductItems, withProductsRepo } from './lib/products.mjs'
 import {
   buildStatusMap,
@@ -316,9 +322,56 @@ const settingsFile = () => {
 }
 
 const importSettings = async () => {
+  const hubName = env('AMPLIENCE_HUB_NAME')
+  let localhostUrl = env('LOCALHOST_URL') ?? 'http://localhost:3000'
+  while (localhostUrl.endsWith('/')) localhostUrl = localhostUrl.slice(0, -1)
+  const webApps = (hubName === undefined ? [] : loadWebApps(hubName)).map((site) => ({
+    ...site,
+    url: site.url.replace(/\/+$/, ''),
+  }))
+  const applications = previewApplications({ localhostUrl, webApps })
+
+  const source = settingsFile()
+  const staged = path.join(stagingRoot, 'settings', path.basename(source))
+  rmSync(path.dirname(staged), { recursive: true, force: true })
+  mkdirSync(path.dirname(staged), { recursive: true })
+  const definition = withPreviewApplications(JSON.parse(readFileSync(source, 'utf8')), applications)
+  writeFileSync(staged, JSON.stringify(definition, null, 2) + '\n')
+
+  console.log(`\n→ Preview applications (ADR-0028):`)
+  for (const app of applications) console.log(`  • ${app.name} — ${app.templatedUri}`)
+
   // -f overwrites existing workflow states without prompting (non-interactive).
   // The mapFile captures each state's source→target id for the extensions step.
-  await dcCli('settings', 'import', settingsFile(), '--mapFile', settingsMapFile(), '-f')
+  await dcCli('settings', 'import', staged, '--mapFile', settingsMapFile(), '-f')
+  await checkPreviewApplications(applications)
+}
+
+/**
+ * dc-cli merges preview applications into the hub's list, but writes an empty
+ * list when the hub has none recorded at all — so read back and say so.
+ */
+const checkPreviewApplications = async (applications) => {
+  const clientId = env('AMPLIENCE_CLIENT_ID')
+  const clientSecret = env('AMPLIENCE_CLIENT_SECRET')
+  const hubId = env('AMPLIENCE_HUB_ID')
+  if (!clientId || !clientSecret || !hubId) return
+  try {
+    const client = new DynamicContent({ client_id: clientId, client_secret: clientSecret })
+    const hub = await client.hubs.get(hubId)
+    const missing = missingApplications(applications, hub.settings?.applications)
+    if (missing.length > 0) {
+      console.warn(
+        `  ! The hub is missing preview application(s) ${missing.join(', ')} after import — ` +
+          're-run `pnpm hub:import settings`, or add them under Settings → Preview.',
+      )
+    }
+  } catch (err) {
+    console.warn(
+      `  ! Could not read back the preview applications ` +
+        `(${err instanceof Error ? err.message : String(err)}).`,
+    )
+  }
 }
 
 const importExtensions = async () => {

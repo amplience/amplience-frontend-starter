@@ -17,7 +17,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 const getByKey = vi.fn()
 
 vi.mock('./content-client', () => ({
-  client: { getByKey },
+  liveClient: { getByKey },
   siteName: 'acme',
 }))
 

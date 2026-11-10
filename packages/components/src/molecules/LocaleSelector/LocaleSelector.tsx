@@ -39,6 +39,12 @@ export type LocaleSelectorProps = {
    * default path-prefix behaviour.
    */
   readonly localeParam?: string
+  /**
+   * A non-locale prefix the site is served under, e.g. `/preview/<host>` in a
+   * schedule preview (ADR-0028). Path-prefix mode strips it before reading the
+   * locale and puts it back on the target, so switching stays inside it.
+   */
+  readonly pathPrefix?: string
   readonly className?: string
 }
 
@@ -94,9 +100,20 @@ export function LocaleSelector(props: LocaleSelectorProps) {
  * Path-prefix mode (site): swap the `[locale]` segment, keeping the same page.
  * `/de-de/about` → French → `/fr-fr/about`; → the default locale → `/about`.
  */
-function PathPrefixSelector({ locales, defaultSlug, label, className }: LocaleSelectorProps) {
-  const pathname = usePathname()
+function PathPrefixSelector({
+  locales,
+  defaultSlug,
+  label,
+  pathPrefix = '',
+  className,
+}: LocaleSelectorProps) {
+  const fullPathname = usePathname()
   const router = useRouter()
+
+  const inPrefix =
+    pathPrefix !== '' && (fullPathname === pathPrefix || fullPathname.startsWith(`${pathPrefix}/`))
+  const pathname = inPrefix ? fullPathname.slice(pathPrefix.length) || '/' : fullPathname
+  const prefix = inPrefix ? pathPrefix : ''
 
   const slugs = new Set(locales.map((l) => l.slug))
   const segments = pathname.split('/')
@@ -109,7 +126,7 @@ function PathPrefixSelector({ locales, defaultSlug, label, className }: LocaleSe
   const navigate = (slug: string) => {
     const target =
       slug === defaultSlug ? cleanPath : cleanPath === '/' ? `/${slug}` : `/${slug}${cleanPath}`
-    router.push(target)
+    router.push(prefix !== '' && target === '/' ? prefix : `${prefix}${target}`)
   }
 
   return (

@@ -2,8 +2,10 @@ import { notFound } from 'next/navigation'
 import type { ReactNode } from 'react'
 
 import { client, siteName } from '../../../lib/content-client'
-import { localeBasePath, localeForSlug } from '../../../lib/locales'
+import { localeForSlug } from '../../../lib/locales'
+import { getPreviewHost, siteBasePath } from '../../../lib/preview-request'
 import { registry } from '../../../lib/registry'
+import { PreviewBanner } from '../../../src/components/PreviewBanner'
 import { renderContent } from '../../../src/renderer'
 
 /**
@@ -31,7 +33,8 @@ export default async function SiteLayout({
   const { locale: localeSlug } = await params
   const locale = localeForSlug(localeSlug)
   if (locale === undefined) notFound()
-  const ctx = { localeBasePath: localeBasePath(locale) }
+  const previewHost = await getPreviewHost()
+  const ctx = { localeBasePath: await siteBasePath(locale) }
   const [headerResult, footerResult] = await Promise.allSettled([
     client.getByKey(`${siteName}/site/header`, { depth: 'all', locale: locale.delivery }),
     client.getByKey(`${siteName}/site/footer`, { depth: 'all', locale: locale.delivery }),
@@ -42,6 +45,7 @@ export default async function SiteLayout({
     footerResult.status === 'fulfilled' ? renderContent(footerResult.value, registry, ctx) : null
   return (
     <>
+      {previewHost !== undefined && <PreviewBanner host={previewHost} />}
       {header}
       <main>{children}</main>
       {footer}

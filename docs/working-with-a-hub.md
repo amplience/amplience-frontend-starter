@@ -63,6 +63,32 @@ Each layer can be seeded on its own (`pnpm hub:import:settings`, `:types`, `:ext
 
 For the full walkthrough — prerequisites, repository IDs, verification steps, and publishing behaviour — see the [seeding runbook](runbooks/hub-setup.md).
 
+## Schedule preview
+
+Amplience's **Preview** (from the planning calendar, the timeline or an edition)
+shows the whole site as it will be at a chosen date and time, scheduled content
+included. The settings seed registers one preview application per site — the
+same `Web (…)` names as the visualizations — opening
+`<site>/preview/{{vse.domain}}`.
+
+- **It's an ordinary browse.** Every page, the menu and the blog listing are
+  read from Amplience's virtual staging host for that moment, and links stay
+  inside the preview. The address carries the preview, so live tabs open
+  alongside it are unaffected.
+- **Move the date in place.** The banner at the top has a date picker; picking
+  a new moment reloads the same page as of then. **Exit preview** goes to the
+  same page on the live site.
+- **What doesn't time-travel.** Products from commercetools (only CMS products
+  are scheduled content), and CMS-managed custom CSS, which stays live.
+
+> [!WARNING] Treat preview links as private
+> A preview URL contains the hub's staging host, which reads every scheduled
+> and draft item on the hub at any date. Preview pages are `noindex` and send
+> no Referer, but don't paste the link anywhere public.
+
+Re-run `pnpm hub:import:settings` after registering a new site to add its
+preview application.
+
 ## Webhooks
 
 Publishing in the CMS updates Amplience's own delivery CDN straight away, but a

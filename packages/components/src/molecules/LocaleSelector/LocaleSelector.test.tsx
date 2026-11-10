@@ -104,6 +104,37 @@ describe('LocaleSelector', () => {
   })
 })
 
+describe('LocaleSelector — inside a path prefix (schedule preview)', () => {
+  const PREFIX = '/preview/h.staging.bigcontent.io'
+  const renderPrefixed = (path: string) => {
+    nav.path = path
+    return render(<LocaleSelector locales={LOCALES} defaultSlug="en-us" pathPrefix={PREFIX} />)
+  }
+
+  it('reads the locale from under the prefix', () => {
+    renderPrefixed(`${PREFIX}/de-de/about`)
+    expect(select().value).toBe('de-de')
+  })
+
+  it.each([
+    [`${PREFIX}/de-de/about`, 'fr-fr', `${PREFIX}/fr-fr/about`],
+    [`${PREFIX}/de-de/about`, 'en-us', `${PREFIX}/about`],
+    [`${PREFIX}/about`, 'fr-fr', `${PREFIX}/fr-fr/about`],
+    [PREFIX, 'fr-fr', `${PREFIX}/fr-fr`],
+    [`${PREFIX}/fr-fr`, 'en-us', PREFIX],
+  ])('%s → %s navigates to %s', (path, slug, target) => {
+    renderPrefixed(path)
+    change(slug)
+    expect(nav.push).toHaveBeenCalledWith(target)
+  })
+
+  it('ignores a prefix the current path is not under', () => {
+    renderPrefixed('/de-de/about')
+    change('fr-fr')
+    expect(nav.push).toHaveBeenCalledWith('/fr-fr/about')
+  })
+})
+
 describe('LocaleSelector — query-param mode (visualizer)', () => {
   const renderQuery = (path: string, search: string) => {
     nav.path = path

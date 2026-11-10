@@ -159,4 +159,30 @@ describe('Link', () => {
       expect(screen.getByRole('link', { name: 'About' }).hasAttribute('localebasepath')).toBe(false)
     })
   })
+
+  describe('longer bases — schedule preview (ADR-0028)', () => {
+    const PREVIEW = '/preview/h.staging.bigcontent.io'
+    const hrefFor = (href: string, base: string) => {
+      render(
+        <Link href={href} localeBasePath={base}>
+          Go
+        </Link>,
+      )
+      return screen.getByRole('link', { name: 'Go' }).getAttribute('href')
+    }
+
+    it.each([
+      ['/about', PREVIEW, `${PREVIEW}/about`],
+      ['/', PREVIEW, PREVIEW],
+      ['/about', `${PREVIEW}/fr-fr`, `${PREVIEW}/fr-fr/about`],
+      ['/fr-fr/blog/x', `${PREVIEW}/fr-fr`, `${PREVIEW}/fr-fr/blog/x`],
+      ['/fr-fr', `${PREVIEW}/fr-fr`, `${PREVIEW}/fr-fr`],
+      ['/fr-fr?page=2', `${PREVIEW}/fr-fr`, `${PREVIEW}/fr-fr?page=2`],
+      [`${PREVIEW}/fr-fr/about`, `${PREVIEW}/fr-fr`, `${PREVIEW}/fr-fr/about`],
+      ['/fr-fr/about', PREVIEW, `${PREVIEW}/fr-fr/about`],
+      ['/fr-fr-old/about', `${PREVIEW}/fr-fr`, `${PREVIEW}/fr-fr/fr-fr-old/about`],
+    ])('%s under %s → %s', (href, base, expected) => {
+      expect(hrefFor(href, base)).toBe(expected)
+    })
+  })
 })

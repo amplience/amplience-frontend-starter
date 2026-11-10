@@ -53,6 +53,7 @@ import {
   localeBasePath,
   localeForSlug,
 } from '../../lib/locales'
+import { isVseHost, VSE_SUFFIX } from '../../lib/preview'
 import { registry } from '../../lib/registry'
 import { resolveProducts } from '../../lib/resolve-products'
 import { HOMEPAGE_DELIVERY_KEY } from '../../lib/routing'
@@ -90,23 +91,6 @@ export const metadata: Metadata = {
 }
 
 const EXPECTED_TEMPLATE = '/visualization?vse={{vse.domain}}&content={{content.sys.id}}'
-
-/** The only host suffix a VSE can have — literal suffix check, no patterns. */
-const VSE_SUFFIX = '.staging.bigcontent.io'
-
-/** Characters that would let a host param escape `https://<host>/...`. */
-const HOST_BREAKERS = ['/', '?', '#', '@', ':', '\\', ' ']
-
-/**
- * Validate the `vse` param: a bare VSE hostname and nothing else. The value
- * is interpolated into a URL, so anything that could smuggle in a path,
- * port, or credentials is rejected outright.
- */
-const isVseHost = (value: string): boolean =>
-  value.length > VSE_SUFFIX.length &&
-  value.length <= 253 &&
-  value.endsWith(VSE_SUFFIX) &&
-  HOST_BREAKERS.every((char) => !value.includes(char))
 
 const DELIVERY_ID_CHARS = new Set('0123456789abcdef-')
 

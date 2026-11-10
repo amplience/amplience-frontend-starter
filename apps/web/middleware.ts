@@ -24,6 +24,11 @@
  * `[locale]` param, but `not-found.tsx` gets no params — so the branded 404
  * reads this header to fetch its content at the right locale (ADR-0015).
  *
+ * Schedule preview (ADR-0028): `/preview/<vse-host>/<path>` runs the same
+ * three cases on `<path>`, then rewrites to the plain locale route with the
+ * validated host forwarded in `x-preview-vse`. That header is stripped from
+ * every incoming request first, so only a preview URL can ever set it.
+ *
  * The matcher keeps this off everything that isn't a content page: Next
  * internals, route handlers under `/api/`, the visualization and debug tooling
  * routes (which sit outside `(site)` and manage their own rendering),
@@ -33,24 +38,24 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
 import { canonicalLocaleSlug, defaultLocale } from './lib/locales'
+import { isVseHost, PREVIEW_HEADER, PREVIEW_SEGMENT, previewBasePath } from './lib/preview'
 
 /**
- * Forward the request downstream with the resolved locale slug attached as an
- * `x-locale` header — the one signal `not-found.tsx` has for the active locale.
+ * Route `path` (the site path, after any preview prefix) to its `[locale]`
+ * page. `base` is `''` on the live site and `/preview/<host>` in a preview,
+ * where it is kept on redirects and dropped from the internal rewrite.
  */
-const withLocale = (request: NextRequest, slug: string, rewriteTo?: URL): NextResponse => {
-  const headers = new Headers(request.headers)
-  headers.set('x-locale', slug)
-  const init = { request: { headers } }
-  return rewriteTo === undefined ? NextResponse.next(init) : NextResponse.rewrite(rewriteTo, init)
-}
-
-export function middleware(request: NextRequest): NextResponse {
-  const { pathname } = request.nextUrl
+const routeLocale = (
+  request: NextRequest,
+  headers: Headers,
+  base: string,
+  path: string,
+): NextResponse => {
   // Keep the raw split (not filtered): index 1 is the first segment, and the
   // array rebuilds the path verbatim (leading/trailing slashes preserved).
-  const segments = pathname.split('/')
+  const segments = path.split('/')
   const firstSegment = segments[1] ?? ''
+  const url = request.nextUrl.clone()
 
   if (firstSegment !== '') {
     const canonical = canonicalLocaleSlug(firstSegment)
@@ -60,19 +65,47 @@ export function middleware(request: NextRequest): NextResponse {
       // otherwise let the `[locale]` route handle it, locale header attached.
       if (canonical !== firstSegment) {
         segments[1] = canonical
-        const url = request.nextUrl.clone()
-        url.pathname = segments.join('/')
+        url.pathname = `${base}${segments.join('/')}`
         return NextResponse.redirect(url, 308)
       }
-      return withLocale(request, canonical)
+      headers.set('x-locale', canonical)
+      if (base === '') return NextResponse.next({ request: { headers } })
+      url.pathname = path
+      return NextResponse.rewrite(url, { request: { headers } })
     }
   }
 
   // Unprefixed — rewrite to the default locale so `[locale]` is populated.
   // The suffix is the original path (empty at the root, so `/` → `/en-gb`).
-  const url = request.nextUrl.clone()
-  url.pathname = `/${defaultLocale.slug}${pathname === '/' ? '' : pathname}`
-  return withLocale(request, defaultLocale.slug, url)
+  headers.set('x-locale', defaultLocale.slug)
+  url.pathname = `/${defaultLocale.slug}${path === '/' ? '' : path}`
+  return NextResponse.rewrite(url, { request: { headers } })
+}
+
+export function middleware(request: NextRequest): NextResponse {
+  const headers = new Headers(request.headers)
+  headers.delete(PREVIEW_HEADER)
+
+  const { pathname } = request.nextUrl
+  const segments = pathname.split('/')
+  const host = segments[1] === PREVIEW_SEGMENT ? (segments[2] ?? '') : ''
+
+  // Anything that isn't a valid preview URL — including `/preview` with a bad
+  // host — is an ordinary content path.
+  if (!isVseHost(host)) return routeLocale(request, headers, '', pathname)
+
+  headers.set(PREVIEW_HEADER, host)
+  const response = routeLocale(
+    request,
+    headers,
+    previewBasePath(host),
+    `/${segments.slice(3).join('/')}`,
+  )
+  // Preview URLs carry the hub's staging host: keep them out of indexes and
+  // out of the Referer sent to other origins.
+  response.headers.set('X-Robots-Tag', 'noindex, nofollow')
+  response.headers.set('Referrer-Policy', 'no-referrer')
+  return response
 }
 
 export const config = {
@@ -80,5 +113,6 @@ export const config = {
   // handlers (`api/*` — a rewrite would land them on the content catch-all),
   // the visualization and debug tooling routes, well-known probes, and any path
   // containing a dot (static files like `/favicon.ico`, `/robots.txt`).
-  matcher: ['/((?!_next/|api/|visualization|debug|\\.well-known|.*\\.).*)'],
+  // Preview URLs are matched separately: their staging host contains dots.
+  matcher: ['/((?!_next/|api/|visualization|debug|\\.well-known|.*\\.).*)', '/preview/:path*'],
 }
