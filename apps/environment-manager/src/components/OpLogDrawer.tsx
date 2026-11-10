@@ -1,6 +1,7 @@
 import { useId, useState } from 'react'
 
 import { failureCount, formatMs, totalMs, type OpEntry } from '../op-log.js'
+import { Chevron } from './Chevron.js'
 
 /**
  * What the per-cell operations did, newest first (ADR-0023, QL-162).
@@ -33,7 +34,7 @@ export function OpLogDrawer({ log, onClear }: { log: OpEntry[]; onClear: () => v
           aria-controls={panelId}
           onClick={() => setOpen(!open)}
         >
-          <span aria-hidden="true">{open ? '▾' : '▸'}</span> Activity ({log.length})
+          <Chevron open={open} /> Activity ({log.length})
         </button>
 
         {/* Shown whether or not the drawer is open: a failure that scrolled

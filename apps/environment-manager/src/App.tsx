@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { api } from './api.js'
+import { CollapsibleSection } from './components/CollapsibleSection.js'
 import { EnvironmentCard } from './components/EnvironmentCard.js'
 import { EnvironmentForm } from './components/EnvironmentForm.js'
 import { FixturesCard } from './components/FixturesCard.js'
@@ -216,39 +217,43 @@ export function App() {
                     gitignored fixtures/local/ on this computer only. Split so the
                     difference shows before a hub is seeded from a set nobody
                     else has. readFixtureSets already orders built-in first. */}
-                <div className="env-list__section-head">
-                  <h3 className="env-list__title">Built-in fixture sets</h3>
-                  <p className="env-list__caption">
-                    Included with Frontend Starter, so everyone using the repo has these.
-                  </p>
-                </div>
-                {builtInSets.map(renderFixtureSet)}
-                {builtInSets.length === 0 && (
-                  <p className="env-card__description">
-                    No fixture sets found under <code>packages/content/fixtures/</code>. Each set is
-                    a directory with a <code>set.json</code>.
-                  </p>
-                )}
+                <CollapsibleSection
+                  title="Built-in fixture sets"
+                  caption="Included with Frontend Starter, so everyone using the repo has these."
+                >
+                  {builtInSets.map(renderFixtureSet)}
+                  {builtInSets.length === 0 && (
+                    <p className="env-card__description">
+                      No fixture sets found under <code>packages/content/fixtures/</code>. Each set
+                      is a directory with a <code>set.json</code>.
+                    </p>
+                  )}
+                </CollapsibleSection>
 
-                <div className="env-list__section-head">
-                  <h3 className="env-list__title">Your fixture sets</h3>
-                  <p className="env-list__caption">
-                    Only on this computer. Kept in <code>fixtures/local/</code> and never committed.
-                  </p>
-                </div>
-                {localSets.map(renderFixtureSet)}
-                {localSets.length === 0 && (
-                  <p className="env-card__description">
-                    None yet. Fixture sets you add under{' '}
-                    <code>packages/content/fixtures/local/</code> appear here — the brand fixture
-                    builder skill can make one from a live site.
-                  </p>
-                )}
+                <CollapsibleSection
+                  title="Your fixture sets"
+                  caption={
+                    <>
+                      Only on this computer. Kept in <code>fixtures/local/</code> and never
+                      committed.
+                    </>
+                  }
+                >
+                  {localSets.map(renderFixtureSet)}
+                  {localSets.length === 0 && (
+                    <p className="env-card__description">
+                      None yet. Fixture sets you add under{' '}
+                      <code>packages/content/fixtures/local/</code> appear here — the brand fixture
+                      builder skill can make one from a live site.
+                    </p>
+                  )}
+                </CollapsibleSection>
 
-                <div className="env-list__section-head">
-                  <div className="env-list__header">
-                    <h3 className="env-list__title">Hubs</h3>
-                    {showHubFilter && (
+                <CollapsibleSection
+                  title="Hubs"
+                  caption="Live Amplience hubs."
+                  headerExtra={
+                    showHubFilter && (
                       <ListFilter
                         label="Filter hubs"
                         placeholder="Filter hubs…"
@@ -258,40 +263,39 @@ export function App() {
                         resultCount={visibleHubs.length}
                         totalCount={hubs.length}
                       />
-                    )}
-                  </div>
-                  <p className="env-list__caption">Live Amplience hubs.</p>
-                </div>
-
-                {visibleHubs.map((env) => (
-                  <EnvironmentCard
-                    key={env.name}
-                    env={env}
-                    fixtureSets={fixtureSets}
-                    isActive={env.name === config.active}
-                    onActivate={() => {
-                      void handleActivate(env.name)
-                    }}
-                    onEdit={() => setModal({ mode: 'edit', env })}
-                    onUpdate={setConfig}
-                  />
-                ))}
-
-                {visibleHubs.length === 0 && hubFilter.trim() !== '' && (
-                  <p className="empty-state empty-state--filter">
-                    No hubs match “{hubFilter.trim()}”.
-                    <button className="btn btn--sm btn--ghost" onClick={() => setHubQuery('')}>
-                      Clear filter
-                    </button>
-                  </p>
-                )}
-
-                <button
-                  className="btn btn--primary btn--add"
-                  onClick={() => setModal({ mode: 'add' })}
+                    )
+                  }
                 >
-                  + Add hub
-                </button>
+                  {visibleHubs.map((env) => (
+                    <EnvironmentCard
+                      key={env.name}
+                      env={env}
+                      fixtureSets={fixtureSets}
+                      isActive={env.name === config.active}
+                      onActivate={() => {
+                        void handleActivate(env.name)
+                      }}
+                      onEdit={() => setModal({ mode: 'edit', env })}
+                      onUpdate={setConfig}
+                    />
+                  ))}
+
+                  {visibleHubs.length === 0 && hubFilter.trim() !== '' && (
+                    <p className="empty-state empty-state--filter">
+                      No hubs match “{hubFilter.trim()}”.
+                      <button className="btn btn--sm btn--ghost" onClick={() => setHubQuery('')}>
+                        Clear filter
+                      </button>
+                    </p>
+                  )}
+
+                  <button
+                    className="btn btn--primary btn--add"
+                    onClick={() => setModal({ mode: 'add' })}
+                  >
+                    + Add hub
+                  </button>
+                </CollapsibleSection>
               </div>
             )}
 
