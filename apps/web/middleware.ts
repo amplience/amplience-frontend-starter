@@ -39,6 +39,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 import { canonicalLocaleSlug, defaultLocale } from './lib/locales'
 import { isVseHost, PREVIEW_HEADER, PREVIEW_SEGMENT, previewBasePath } from './lib/preview'
+import { sameOriginUrl } from './lib/same-origin'
 
 /**
  * Route `path` (the site path, after any preview prefix) to its `[locale]`
@@ -55,7 +56,6 @@ const routeLocale = (
   // array rebuilds the path verbatim (leading/trailing slashes preserved).
   const segments = path.split('/')
   const firstSegment = segments[1] ?? ''
-  const url = request.nextUrl.clone()
 
   if (firstSegment !== '') {
     const canonical = canonicalLocaleSlug(firstSegment)
@@ -65,21 +65,19 @@ const routeLocale = (
       // otherwise let the `[locale]` route handle it, locale header attached.
       if (canonical !== firstSegment) {
         segments[1] = canonical
-        url.pathname = `${base}${segments.join('/')}`
-        return NextResponse.redirect(url, 308)
+        return NextResponse.redirect(sameOriginUrl(request, `${base}${segments.join('/')}`), 308)
       }
       headers.set('x-locale', canonical)
       if (base === '') return NextResponse.next({ request: { headers } })
-      url.pathname = path
-      return NextResponse.rewrite(url, { request: { headers } })
+      return NextResponse.rewrite(sameOriginUrl(request, path), { request: { headers } })
     }
   }
 
   // Unprefixed — rewrite to the default locale so `[locale]` is populated.
   // The suffix is the original path (empty at the root, so `/` → `/en-gb`).
   headers.set('x-locale', defaultLocale.slug)
-  url.pathname = `/${defaultLocale.slug}${path === '/' ? '' : path}`
-  return NextResponse.rewrite(url, { request: { headers } })
+  const target = sameOriginUrl(request, `/${defaultLocale.slug}${path === '/' ? '' : path}`)
+  return NextResponse.rewrite(target, { request: { headers } })
 }
 
 export function middleware(request: NextRequest): NextResponse {

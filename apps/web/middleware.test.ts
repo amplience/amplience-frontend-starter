@@ -147,3 +147,23 @@ describe('preview routing', () => {
     ).toBe(true)
   })
 })
+
+describe('redirect and rewrite targets stay on this origin', () => {
+  it.each(['/EN-US//evil.example/x', '/EN-US/\\evil.example/x', '/EN-US///evil.example'])(
+    'a casing redirect from %s stays on localhost',
+    (path) => {
+      const location = new URL(run(path).headers.get('location') ?? '')
+      expect(location.origin).toBe('http://localhost')
+      expect(location.pathname.startsWith('//')).toBe(false)
+    },
+  )
+
+  it.each(['//evil.example/x', '/about//evil.example'])(
+    'a rewrite of %s stays on localhost',
+    (path) => {
+      const header = run(path).headers.get('x-middleware-rewrite') ?? ''
+      expect(new URL(header).origin).toBe('http://localhost')
+      expect(new URL(header).pathname).not.toContain('//')
+    },
+  )
+})
