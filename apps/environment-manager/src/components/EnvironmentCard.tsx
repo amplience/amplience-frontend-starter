@@ -21,6 +21,7 @@ import type {
   VercelPreflight,
   WebApp,
 } from '../types.js'
+import { Chevron } from './Chevron.js'
 
 type Props = {
   env: Environment
@@ -896,20 +897,7 @@ export function EnvironmentCard({
               Set active
             </button>
           )}
-          <svg
-            className={`env-card__chevron${collapsed ? '' : ' env-card__chevron--open'}`}
-            aria-hidden="true"
-            width="12"
-            height="12"
-            viewBox="0 0 12 12"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="2,4 6,8 10,4" />
-          </svg>
+          <Chevron open={!collapsed} />
         </div>
       </div>
 
@@ -1297,12 +1285,7 @@ export function EnvironmentCard({
                 }}
               >
                 <span className="log-header__left">
-                  <span
-                    className={`log-caret${logExpanded ? ' log-caret--open' : ''}`}
-                    aria-hidden="true"
-                  >
-                    ›
-                  </span>
+                  <Chevron open={logExpanded} />
                   <span className="log-title">{OP_LABELS[op.key]}</span>
                   {op.status === 'running' && (
                     <span className="log-status">

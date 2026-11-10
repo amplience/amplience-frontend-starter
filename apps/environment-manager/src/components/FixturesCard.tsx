@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import type { FixtureSetInfo } from '../types.js'
+import { Chevron } from './Chevron.js'
 
 /** Droplet — used for 'brand' fields/badges. */
 const ThemeIcon = () => (
@@ -70,20 +71,7 @@ export function FixturesCard({ set, isActive, onActivate }: Props) {
               Set active
             </button>
           )}
-          <svg
-            className={`env-card__chevron${collapsed ? '' : ' env-card__chevron--open'}`}
-            aria-hidden="true"
-            width="12"
-            height="12"
-            viewBox="0 0 12 12"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="2,4 6,8 10,4" />
-          </svg>
+          <Chevron open={!collapsed} />
         </div>
       </div>
 
