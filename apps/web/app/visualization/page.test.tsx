@@ -32,6 +32,12 @@ vi.mock('@amplience/frontend-starter-content/sdk', async () => {
   }
 })
 
+// The client boundary reaches for the app router, which plain SSR doesn't mount.
+vi.mock('next/navigation', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('next/navigation')>()),
+  useRouter: () => ({ replace: vi.fn() }),
+}))
+
 const loadRoute = async () => {
   vi.resetModules()
   return import('./page')

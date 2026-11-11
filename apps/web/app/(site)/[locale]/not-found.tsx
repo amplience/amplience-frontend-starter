@@ -46,7 +46,9 @@ export default async function NotFound() {
   // in a header. Default when it's missing so the 404 always has a locale.
   const localeSlug = (await headers()).get('x-locale')
   const locale = (localeSlug != null ? localeForSlug(localeSlug) : undefined) ?? defaultLocale
-  const ctx = { localeBasePath: await siteBasePath(locale) }
+  // `locale` is what lets Locale-based Content in the seeded slot pick its
+  // variant; without it the default content would show in every locale.
+  const ctx = { localeBasePath: await siteBasePath(locale), locale: locale.code }
   try {
     const slot = await client.getByKey(`${siteName}/site/not-found`, {
       depth: 'all',

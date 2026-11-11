@@ -1,0 +1,34 @@
+{
+  "id": "a23f989f-d147-53ab-8412-3245220ef9e0",
+  "label": "About — locale-based content",
+  "body": {
+    "_meta": {
+      "name": "About — locale-based content",
+      "schema": "https://quadratic.amplience.com/v2/content/locale-content",
+      "deliveryId": "a23f989f-d147-53ab-8412-3245220ef9e0"
+    },
+    "defaultContent": [
+      {
+        "id": "c00e9155-3b6e-5eda-a31e-1adbac9bbb22",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ],
+    "localeOverrides": [
+      {
+        "locales": ["fr-FR", "de-DE"],
+        "content": [
+          {
+            "id": "f65b2091-1fc7-54cf-8afa-882f5f33795b",
+            "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+            "_meta": {
+              "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

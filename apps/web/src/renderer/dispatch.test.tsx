@@ -24,6 +24,7 @@ import type {
 } from '@amplience/frontend-starter-types'
 
 import { renderContent } from './dispatch'
+import { LOCALE_CONTENT_SCHEMA } from './locale-content'
 
 // ---------------------------------------------------------------------------
 // Stub components and registry
@@ -545,5 +546,122 @@ describe('renderContent — the formatting locale reaches any depth', () => {
 
   it('is simply absent when the route sets none', () => {
     expect(html(node(PRICED_SCHEMA))).toContain('data-locale="none"')
+  })
+})
+
+describe('renderContent — Locale-based Content', () => {
+  // The wrapper has no registry entry and renders nothing itself: it is replaced
+  // by the blocks it selects before anything dispatches. The registry here is the
+  // ordinary one, which is the point.
+  const edge = (label: string) => node(EDGE_SCHEMA, { label }, `id-${label}`)
+  const span = (label: string, tier: string) =>
+    `<span data-bare="false" data-tier="${tier}">${label}</span>`
+
+  const wrapper = (defaultContent: unknown[], ...overrides: [string[], unknown[]?][]) =>
+    node(LOCALE_CONTENT_SCHEMA, {
+      defaultContent,
+      localeOverrides: overrides.map(([locales, content]) => ({
+        locales,
+        ...(content !== undefined && { content }),
+      })),
+    })
+
+  const inLocale = (
+    content: unknown,
+    locale: string | undefined,
+    loadPriority?: MediaLoadPriority,
+  ) =>
+    renderToStaticMarkup(
+      <>
+        {renderContent(content, makeRegistry(), {
+          ...(locale !== undefined && { locale }),
+          ...(loadPriority !== undefined && { loadPriority }),
+        })}
+      </>,
+    )
+
+  const tree = [
+    edge('before'),
+    wrapper([edge('default')], [['fr-FR'], [edge('french')]]),
+    edge('after'),
+  ]
+
+  it('renders the default content for a locale with no override', () => {
+    expect(inLocale(tree, 'en-GB')).toBe(
+      span('before', 'lazy') + span('default', 'lazy') + span('after', 'lazy'),
+    )
+  })
+
+  it('renders the matching override in place of the default', () => {
+    expect(inLocale(tree, 'fr-FR')).toBe(
+      span('before', 'lazy') + span('french', 'lazy') + span('after', 'lazy'),
+    )
+  })
+
+  it('renders nothing for a wrapper whose matching override is empty', () => {
+    const hidden = [edge('before'), wrapper([edge('default')], [['fr-FR']]), edge('after')]
+    expect(inLocale(hidden, 'fr-FR')).toBe(span('before', 'lazy') + span('after', 'lazy'))
+  })
+
+  it('gives the selected blocks the loadPriority of the position the wrapper stood in', () => {
+    // The wrapper is spliced out, so it spends no step of the ladder: the first
+    // selected block is the page's LCP candidate as if authored there. A wrapper
+    // that stayed in the tree would take index 0 and push its content down.
+    const leading = [
+      wrapper([edge('default-1'), edge('default-2')], [['fr-FR'], [edge('fr-1'), edge('fr-2')]]),
+      edge('after'),
+    ]
+    expect(inLocale(leading, 'fr-FR', 'lcp')).toBe(
+      span('fr-1', 'lcp') + span('fr-2', 'eager') + span('after', 'lazy'),
+    )
+    expect(inLocale(leading, 'en-GB', 'lcp')).toBe(
+      span('default-1', 'lcp') + span('default-2', 'eager') + span('after', 'lazy'),
+    )
+  })
+
+  it('resolves a wrapper handed over as the root of the tree', () => {
+    const root = wrapper([edge('default')], [['fr-FR'], [edge('french')]])
+    expect(inLocale(root, 'fr-FR', 'lcp')).toBe(span('french', 'lcp'))
+    expect(inLocale(root, 'en-GB', 'lcp')).toBe(span('default', 'lcp'))
+  })
+
+  it('resolves a wrapper inside a container, as pages and slots hold them', () => {
+    const slot = node(BOX_SCHEMA, {
+      name: 'slot',
+      items: [
+        wrapper(
+          [node(LEAF_SCHEMA, { label: 'default' })],
+          [['fr-FR'], [node(LEAF_SCHEMA, { label: 'french' })]],
+        ),
+      ],
+    })
+    expect(inLocale(slot, 'fr-FR')).toBe(
+      '<div data-box="slot"><span data-bare="true">french</span></div>',
+    )
+  })
+
+  it('resolves a wrapper nested in a wrapper', () => {
+    const nested = wrapper([wrapper([edge('inner-default')], [['fr-FR'], [edge('inner-french')]])])
+    expect(inLocale([nested], 'fr-FR')).toBe(span('inner-french', 'lazy'))
+  })
+
+  it('shows the default content, and says so, when the context carries no locale', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+    expect(inLocale(tree, undefined)).toBe(
+      span('before', 'lazy') + span('default', 'lazy') + span('after', 'lazy'),
+    )
+    expect(warn).toHaveBeenCalledOnce()
+    expect(JSON.stringify(warn.mock.calls)).toContain('LocaleContentWithoutLocale')
+  })
+
+  it('stays quiet when the context carries a locale', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+    inLocale(tree, 'fr-FR')
+    expect(warn).not.toHaveBeenCalled()
+  })
+
+  it('still fails loudly for an unresolved link inside the selected variant', () => {
+    const stub = { id: 'x', contentType: 'test/y', _meta: { schema: CONTENT_LINK_SCHEMA } }
+    expect(inLocale([wrapper([stub])], 'en-GB')).toContain('not resolved')
   })
 })

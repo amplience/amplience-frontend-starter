@@ -15,6 +15,14 @@
  * rendering the server-fetched initialModel. Behaviour is identical to the
  * pre-QL-93 save-then-reload path; the route never breaks.
  *
+ * Locale: the editor's locale picker in the visualization toolbar decides which
+ * locale the SDK delivers the form model in, and the SDK can read that choice
+ * but never set it. So the host picker is the source of truth: when it names a
+ * locale other than the one the server rendered, the route is re-requested with
+ * `?locale=` set to it, which re-fetches the page chrome and initial model in
+ * that locale too. The pane's own locale selector (query mode) therefore only
+ * sticks when the route is opened standalone, where there is no host picker.
+ *
  * Registry choice: defaultRegistry (not the deployment registry). The
  * deployment registry's HierarchyMenuServer override is an async RSC that
  * fetches from the hierarchy API — it cannot run client-side. HierarchyMenu
@@ -28,6 +36,7 @@
  * in place (ADR-0010 §5B) rather than crashing.
  */
 import { init } from 'dc-visualization-sdk'
+import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState, useTransition } from 'react'
 
 import { defaultRegistry } from '@amplience/frontend-starter-components/registry'
@@ -101,8 +110,16 @@ export function VisualizationClient({
   initialProducts,
   localeCode,
 }: Props) {
-  const [model, setModel] = useState(initialModel)
+  // The model the content form last pushed (unsaved edits included), or
+  // undefined until it does. Only the *live* model is state: `initialModel` is
+  // the server's, and arrives fresh as a prop whenever the route re-renders (a
+  // locale switch), so it is read, never copied.
+  const [liveModel, setLiveModel] = useState<unknown>(undefined)
   const [, startTransition] = useTransition()
+  const router = useRouter()
+  // The locale picked in the host's visualization toolbar; null until the SDK
+  // reports one (standalone, or the host has none selected).
+  const [hostLocale, setHostLocale] = useState<string | null>(null)
 
   // Collapse field-level localized values to the pane's locale. The server
   // fetch is already resolved, so this is a no-op for `initialModel`; it's the
@@ -113,10 +130,11 @@ export function VisualizationClient({
   // locale arrives as `null`. The server model already holds the fallback
   // value (see ./fill-locale-gaps). For `initialModel` itself this is a no-op.
   const resolvedModel = useMemo(() => {
+    const model = liveModel ?? initialModel
     const localized =
       deliveryLocale !== undefined ? resolveLocalized(model as ContentBody, deliveryLocale) : model
-    return model === initialModel ? localized : fillLocaleGaps(localized, initialModel)
-  }, [model, deliveryLocale, initialModel])
+    return liveModel === undefined ? localized : fillLocaleGaps(localized, initialModel)
+  }, [liveModel, deliveryLocale, initialModel])
 
   useEffect(() => {
     let unsubscribe: (() => void) | undefined
@@ -130,14 +148,23 @@ export function VisualizationClient({
         // startTransition marks the re-render as non-urgent: React coalesces
         // rapid updates (e.g. every keystroke) and skips intermediate renders
         // when a new model arrives before the previous one finishes painting.
-        unsubscribe = sdk.form.changed(
+        const unsubscribeForm = sdk.form.changed(
           ({ content }) => {
             startTransition(() => {
-              setModel(content)
+              setLiveModel(content)
             })
           },
           { format: 'inlined', depth: 'all' },
         )
+        const unsubscribeLocale = sdk.locale.changed(setHostLocale)
+        unsubscribe = () => {
+          unsubscribeForm()
+          unsubscribeLocale()
+        }
+        // `changed` only fires on a change, so read the current pick too.
+        sdk.locale.get().then(setHostLocale, () => {
+          // The host has no locale to report — keep the pane's own.
+        })
       })
       .catch(() => {
         // Not inside a content-form iframe — no live updates, keep initial model.
@@ -148,6 +175,20 @@ export function VisualizationClient({
     }
   }, [])
 
+  // Follow the host's locale picker (see the module doc). Compared
+  // case-insensitively: the host speaks delivery codes (`fr-FR`), the route
+  // accepts slugs (`fr-fr`). A locale the deployment doesn't serve resolves to
+  // the default on the server, leaving `localeCode` unchanged — so this effect
+  // doesn't re-run and can't loop.
+  useEffect(() => {
+    if (hostLocale === null || localeCode === undefined) return
+    if (hostLocale.toLowerCase() === localeCode.toLowerCase()) return
+
+    const url = new URL(window.location.href)
+    url.searchParams.set('locale', hostLocale.toLowerCase())
+    router.replace(`${url.pathname}${url.search}`)
+  }, [hostLocale, localeCode, router])
+
   const [products, setProducts] = useState<ReadonlyMap<string, ResolvedProduct>>(
     () => new Map((initialProducts ?? []).map((p) => [p.sku, p])),
   )
@@ -155,7 +196,10 @@ export function VisualizationClient({
   // SKUs the current model references. The server resolved the initial set; an
   // edit can introduce more, and a client boundary cannot reach `ProductSource`
   // — so the route does it (ADR-0027).
-  const skus = useMemo(() => collectSkus(resolvedModel, defaultRegistry).join(','), [resolvedModel])
+  const skus = useMemo(
+    () => collectSkus(resolvedModel, defaultRegistry, localeCode).join(','),
+    [resolvedModel, localeCode],
+  )
 
   useEffect(() => {
     const wanted = skus.split(',').filter(Boolean)

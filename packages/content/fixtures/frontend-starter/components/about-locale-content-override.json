@@ -1,0 +1,32 @@
+{
+  "id": "f65b2091-1fc7-54cf-8afa-882f5f33795b",
+  "label": "About — locale-based content: fr-FR and de-DE override",
+  "body": {
+    "_meta": {
+      "name": "About — locale-based content: fr-FR and de-DE override",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "f65b2091-1fc7-54cf-8afa-882f5f33795b"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "### Content chosen for your locale\n\nThis is the locale override for `fr-FR` and `de-DE`. It replaces the default block rather than translating it, so it can say something quite different."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "### Un contenu choisi pour votre langue\n\nVoici le remplacement prévu pour `fr-FR` et `de-DE`. Il remplace le bloc par défaut au lieu de le traduire : il peut donc dire tout autre chose."
+        },
+        {
+          "locale": "de-DE",
+          "value": "### Ein Inhalt für Ihre Sprache\n\nDies ist der Ersatz für `fr-FR` und `de-DE`. Er ersetzt den Standardblock, statt ihn zu übersetzen — er kann also etwas ganz anderes sagen."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "maxWidth": "narrow",
+    "gutter": true
+  }
+}

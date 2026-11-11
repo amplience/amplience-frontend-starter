@@ -33,10 +33,20 @@ import type {
 } from '@amplience/frontend-starter-types'
 
 import { BLOCK_CSS_PRECEDENCE, prepareBlockCss, type PreparedBlockCss } from './block-css'
-import { emitBlockCssRejected, emitRendererFailure } from './console'
+import {
+  emitBlockCssRejected,
+  emitLocaleContentWithoutLocale,
+  emitRendererFailure,
+} from './console'
 import { ComponentUnregisteredCard } from './failure/ComponentUnregisteredCard'
 import { PropsValidationFailureCard } from './failure/PropsValidationFailureCard'
 import { SchemaUnknownCard } from './failure/SchemaUnknownCard'
+import {
+  isLocaleContent,
+  LOCALE_CONTENT_SCHEMA,
+  resolveLocaleContent,
+  selectLocaleContent,
+} from './locale-content'
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -197,7 +207,11 @@ export function renderContent(
   // a vertical stack, so each one's media loads a step less urgently than the
   // one above it (see `demote`).
   if (Array.isArray(content)) {
-    return content.map((node, i) => {
+    // Locale-based Content is spliced out before anything renders, so the blocks
+    // it selects take their place in the array — and therefore their place in the
+    // `loadPriority` ladder — as if they had been authored there.
+    if (ctx.locale === undefined && content.some(isLocaleContent)) emitLocaleContentWithoutLocale()
+    return resolveLocaleContent(content, ctx.locale).map((node, i) => {
       const childCtx: RenderContext = { ...ctx, loadPriority: demote(ctx.loadPriority, i) }
       return <Fragment key={keyOf(node, i)}>{renderContent(node, registry, childCtx)}</Fragment>
     })
@@ -229,6 +243,16 @@ export function renderContent(
       },
       content,
     )
+  }
+
+  // Structural guard — Locale-based Content reached as a root (a keyed item
+  // rendered on its own, or a visualised one). Resolved like an array member
+  // would be, and handed back to the array branch with the context untouched so
+  // the selected blocks start the `loadPriority` ladder where the wrapper stood.
+  // It has no registry entry on purpose: it is resolved, never rendered.
+  if (schemaUri === LOCALE_CONTENT_SCHEMA && isLocaleContent(content)) {
+    if (ctx.locale === undefined) emitLocaleContentWithoutLocale()
+    return renderContent(selectLocaleContent(content, ctx.locale), registry, ctx)
   }
 
   // Registry lookup. The entry's per-registration generics are erased here

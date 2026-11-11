@@ -104,6 +104,13 @@ describe('LocaleSelector', () => {
     expect(nav.push).toHaveBeenCalledWith('/fr-fr/about')
   })
 
+  it('stays enabled in an iframe — the site is not the visualizer', () => {
+    vi.stubGlobal('top', {})
+    renderSelector('/')
+    expect(select().disabled).toBe(false)
+    vi.unstubAllGlobals()
+  })
+
   it('uses a custom accessible label when provided', () => {
     nav.path = '/about'
     render(<LocaleSelector locales={LOCALES} defaultSlug="en-us" label="Choose language" />)
@@ -173,6 +180,22 @@ describe('LocaleSelector — query-param mode (visualizer)', () => {
   it('falls back to the default when the query param is absent', () => {
     renderQuery('/visualization', 'content=xyz')
     expect(select().value).toBe('en-us')
+  })
+
+  it('is enabled when the pane is not in an iframe', () => {
+    renderQuery('/visualization', 'content=xyz')
+    expect(select().disabled).toBe(false)
+  })
+
+  describe('inside an iframe (the content form)', () => {
+    afterEach(() => vi.unstubAllGlobals())
+
+    it('is disabled, as the host’s locale picker is in charge', () => {
+      vi.stubGlobal('top', {})
+      renderQuery('/visualization', 'content=xyz&locale=fr-fr')
+      expect(select().disabled).toBe(true)
+      expect(select().value).toBe('fr-fr')
+    })
   })
 })
 

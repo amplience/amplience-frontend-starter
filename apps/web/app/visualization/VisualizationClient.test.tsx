@@ -2,7 +2,7 @@
 //
 // VisualizationClient tests (QL-93).
 //
-// Three axes:
+// Four axes:
 //   1. Initial render — the component renders initialModel straight away,
 //      matching the server-rendered output the editor sees before any form
 //      interaction.
@@ -11,6 +11,9 @@
 //      the correct SDK options ({ format: 'inlined', depth: 'all' }).
 //   3. Live update / fallback — the component re-renders when form.changed
 //      fires; gracefully keeps the initial model when init() rejects.
+//
+//   4. Locale sync — the pane follows the host's locale picker by re-requesting
+//      the route with `?locale=`, and leaves the URL alone when they agree.
 //
 // dc-visualization-sdk is mocked throughout so tests run without a real
 // content-form iframe. Each test configures the mock to the shape it needs.
@@ -37,6 +40,13 @@ vi.mock('dc-visualization-sdk', () => ({
 }))
 
 const mockInit = init as ReturnType<typeof vi.fn>
+
+// The pane re-requests the route through the app router, which isn't mounted
+// under jsdom — stand in a spy so tests can assert on the navigation. One
+// router object for every render, as in Next, where `useRouter()` is stable.
+const { mockRouter } = vi.hoisted(() => ({ mockRouter: { replace: vi.fn() } }))
+const mockReplace = mockRouter.replace
+vi.mock('next/navigation', () => ({ useRouter: () => mockRouter }))
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -92,10 +102,12 @@ const STUB_SDK_MODEL = {
  * a new model; `_opts()` returns the options form.changed was called with;
  * `_unsubscribe` is the spy the component should call on unmount.
  */
-const makeMockSdk = () => {
+const makeMockSdk = (hostLocale: string | null = null) => {
   const unsubscribe = vi.fn()
+  const unsubscribeLocale = vi.fn()
   let capturedCb: ((model: unknown) => void) | undefined
   let capturedOpts: unknown
+  let capturedLocaleCb: ((locale: string | null) => void) | undefined
 
   return {
     form: {
@@ -105,7 +117,16 @@ const makeMockSdk = () => {
         return unsubscribe
       }),
     },
+    locale: {
+      get: vi.fn(() => Promise.resolve(hostLocale)),
+      changed: vi.fn((cb: (locale: string | null) => void) => {
+        capturedLocaleCb = cb
+        return unsubscribeLocale
+      }),
+    },
     _fire: (model: unknown) => capturedCb?.(model),
+    _fireLocale: (locale: string | null) => capturedLocaleCb?.(locale),
+    _unsubscribeLocale: unsubscribeLocale,
     _opts: () => capturedOpts,
     _unsubscribe: unsubscribe,
   }
@@ -193,6 +214,7 @@ describe('VisualizationClient — listener lifecycle', () => {
       unmount()
     })
     expect(sdk._unsubscribe).toHaveBeenCalledOnce()
+    expect(sdk._unsubscribeLocale).toHaveBeenCalledOnce()
   })
 
   it('does not throw on unmount when init() rejected before subscribe', async () => {
@@ -273,5 +295,147 @@ describe('VisualizationClient — live updates', () => {
     })
 
     expect(document.querySelector('[data-renderer-failure]')).not.toBeNull()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// 4. Locale sync
+// ---------------------------------------------------------------------------
+
+describe('VisualizationClient — locale sync with the host picker', () => {
+  it("re-requests the route in the host's locale when it differs from the pane's", async () => {
+    mockInit.mockResolvedValue(makeMockSdk('fr-FR'))
+    window.history.replaceState(null, '', '/visualization?vse=a.com&content=abc')
+
+    render(<VisualizationClient initialModel={HERO_MODEL} localeCode="en-US" />)
+
+    await waitFor(() => {
+      expect(mockReplace).toHaveBeenCalledWith('/visualization?vse=a.com&content=abc&locale=fr-fr')
+    })
+  })
+
+  it('follows the host when its picker changes after load', async () => {
+    const sdk = makeMockSdk('en-US')
+    mockInit.mockResolvedValue(sdk)
+    window.history.replaceState(null, '', '/visualization?vse=a.com&content=abc')
+
+    render(<VisualizationClient initialModel={HERO_MODEL} localeCode="en-US" />)
+    await waitFor(() => {
+      expect(sdk.locale.changed).toHaveBeenCalledOnce()
+    })
+    expect(mockReplace).not.toHaveBeenCalled()
+
+    act(() => {
+      sdk._fireLocale('de-DE')
+    })
+
+    expect(mockReplace).toHaveBeenCalledWith('/visualization?vse=a.com&content=abc&locale=de-de')
+  })
+
+  it('replaces a stale ?locale= rather than appending a second one', async () => {
+    mockInit.mockResolvedValue(makeMockSdk('fr-FR'))
+    window.history.replaceState(null, '', '/visualization?vse=a.com&locale=en-us&content=abc')
+
+    render(<VisualizationClient initialModel={HERO_MODEL} localeCode="en-US" />)
+
+    await waitFor(() => {
+      expect(mockReplace).toHaveBeenCalledWith('/visualization?vse=a.com&locale=fr-fr&content=abc')
+    })
+  })
+
+  it('leaves the URL alone when the host and the pane agree, whatever the casing', async () => {
+    const sdk = makeMockSdk('fr-FR')
+    mockInit.mockResolvedValue(sdk)
+
+    render(<VisualizationClient initialModel={HERO_MODEL} localeCode="fr-fr" />)
+
+    await waitFor(() => {
+      expect(sdk.locale.get).toHaveBeenCalledOnce()
+    })
+    expect(mockReplace).not.toHaveBeenCalled()
+  })
+
+  it('keeps the pane’s own locale when the host has none selected', async () => {
+    const sdk = makeMockSdk(null)
+    mockInit.mockResolvedValue(sdk)
+
+    render(<VisualizationClient initialModel={HERO_MODEL} localeCode="de-DE" />)
+
+    await waitFor(() => {
+      expect(sdk.locale.get).toHaveBeenCalledOnce()
+    })
+    expect(mockReplace).not.toHaveBeenCalled()
+  })
+
+  it('does nothing standalone, where init() rejects and there is no host picker', async () => {
+    mockInit.mockRejectedValue(new Error('not embedded in content form'))
+
+    render(<VisualizationClient initialModel={HERO_MODEL} localeCode="de-DE" />)
+
+    await waitFor(() => {
+      expect(mockInit).toHaveBeenCalledOnce()
+    })
+    expect(mockReplace).not.toHaveBeenCalled()
+  })
+
+  it("does not navigate in a loop for a host locale the deployment doesn't serve", async () => {
+    // The server falls back to the default, so `localeCode` stays put and the
+    // effect has no new inputs to run on again.
+    mockInit.mockResolvedValue(makeMockSdk('es-ES'))
+    window.history.replaceState(null, '', '/visualization?vse=a.com&content=abc')
+
+    const { rerender } = render(
+      <VisualizationClient initialModel={HERO_MODEL} localeCode="en-US" />,
+    )
+    await waitFor(() => {
+      expect(mockReplace).toHaveBeenCalledOnce()
+    })
+
+    rerender(<VisualizationClient initialModel={HERO_MODEL} localeCode="en-US" />)
+    expect(mockReplace).toHaveBeenCalledOnce()
+  })
+})
+
+// ---------------------------------------------------------------------------
+// 5. A new server model (the route re-rendered in another locale)
+// ---------------------------------------------------------------------------
+
+describe('VisualizationClient — re-rendered by the server', () => {
+  it('shows the new initialModel when the route re-renders, standalone', () => {
+    mockInit.mockRejectedValue(new Error('not embedded in content form'))
+
+    const { rerender } = render(<VisualizationClient initialModel={HERO_MODEL} />)
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(
+      'Build composable sites.',
+    )
+
+    rerender(
+      <VisualizationClient
+        initialModel={{ ...HERO_MODEL, title: 'Créez des sites composables.' }}
+      />,
+    )
+
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(
+      'Créez des sites composables.',
+    )
+  })
+
+  it('keeps the live form model over a re-rendered initialModel', async () => {
+    const sdk = makeMockSdk()
+    mockInit.mockResolvedValue(sdk)
+
+    const { rerender } = render(<VisualizationClient initialModel={HERO_MODEL} />)
+    await waitFor(() => {
+      expect(sdk.form.changed).toHaveBeenCalledOnce()
+    })
+    act(() => {
+      sdk._fire(UPDATED_HERO_SDK_MODEL)
+    })
+
+    rerender(<VisualizationClient initialModel={{ ...HERO_MODEL, title: 'Saved title.' }} />)
+
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(
+      'Updated title from live form.',
+    )
   })
 })

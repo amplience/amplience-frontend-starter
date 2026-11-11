@@ -32,6 +32,11 @@
   background-position: right 0.5rem center;
 }
 
+.select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .root:focus-visible {
   outline: 2px solid var(--color-primary, #7340e7);
   outline-offset: 1px;

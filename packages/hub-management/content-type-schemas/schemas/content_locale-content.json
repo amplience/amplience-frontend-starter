@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/locale-content",
+  "title": "Locale-based Content",
+  "description": "Shows different blocks to visitors in different locales. Everyone sees the default content unless a locale override matches their locale; the first matching override replaces the default content in full. Wrap only the blocks that differ between locales — anything the same everywhere belongs outside this wrapper. Field-level translation (localised fields on a block) is separate and still applies to whichever block is shown.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "defaultContent": {
+      "title": "Default content",
+      "description": "Shown to every locale that has no matching override below. Leave empty to show nothing by default, for content that should only appear in some locales.",
+      "type": "array",
+      "items": {
+        "$ref": "https://quadratic.amplience.com/v2/partials/content-blocks"
+      }
+    },
+    "localeOverrides": {
+      "title": "Locale overrides",
+      "description": "Content that replaces the default for specific locales. The first override whose locales include the visitor's locale is used; the rest are ignored.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "title": "Locale override",
+        "properties": {
+          "locales": {
+            "title": "Locales",
+            "description": "The locales this override applies to, as Amplience locale codes — e.g. fr-FR or de-DE. Each must be a locale the site is configured to serve.",
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "title": "Locale code",
+              "description": "A language, with an optional region: fr, or fr-FR.",
+              "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+            }
+          },
+          "content": {
+            "title": "Content",
+            "description": "Replaces the default content for these locales. Leave empty to hide the content in these locales.",
+            "type": "array",
+            "items": {
+              "$ref": "https://quadratic.amplience.com/v2/partials/content-blocks"
+            }
+          }
+        },
+        "propertyOrder": ["locales", "content"],
+        "required": ["locales"]
+      }
+    }
+  },
+  "propertyOrder": ["defaultContent", "localeOverrides"],
+  "required": ["defaultContent"]
+}

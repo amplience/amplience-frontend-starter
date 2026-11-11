@@ -112,3 +112,24 @@ export function emitBlockCssRejected(
 
   console.warn('[renderer]', { failureClass: 'BlockCssRejected', schemaUri, ...rejection })
 }
+
+/**
+ * Warn that a Locale-based Content wrapper was resolved with no active locale,
+ * so its default content was shown whatever the visitor's locale.
+ *
+ * That is a composition bug, not an authoring one: a render call site forgot to
+ * put `locale` in the `RenderContext`. It would otherwise be silent — the page
+ * renders, just always in the default locale's variant.
+ */
+export function emitLocaleContentWithoutLocale(): void {
+  if (isDev) {
+    console.warn(
+      '[renderer] LocaleContentWithoutLocale — a Locale-based Content block was rendered ' +
+        'with no `locale` in the render context, so its default content was used. Pass the ' +
+        "active locale's code (e.g. `locale: locale.code`) to renderContent.",
+    )
+    return
+  }
+
+  console.warn('[renderer]', { failureClass: 'LocaleContentWithoutLocale' })
+}

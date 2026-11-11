@@ -1,0 +1,24 @@
+{
+  "id": "c00e9155-3b6e-5eda-a31e-1adbac9bbb22",
+  "label": "About — locale-based content: default",
+  "body": {
+    "_meta": {
+      "name": "About — locale-based content: default",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "c00e9155-3b6e-5eda-a31e-1adbac9bbb22"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "### Content chosen per locale\n\nThis section is a **Locale-based Content** block. Visitors in most locales see this default content. For `fr-FR` and `de-DE`, a locale override replaces it with a different block entirely — not just a translation of this one.\n\nSwitch language to see it change."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "maxWidth": "narrow",
+    "gutter": true
+  }
+}
