@@ -2,7 +2,7 @@
 
 import clsx from 'clsx'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { Suspense, useId } from 'react'
+import { Suspense, useId, useSyncExternalStore } from 'react'
 
 import styles from './LocaleSelector.module.css'
 
@@ -37,6 +37,11 @@ export type LocaleSelectorProps = {
    * visualization pane, which addresses content by delivery ID and carries the
    * locale as `?locale=` (ADR-0015). On the site, leave it unset for the
    * default path-prefix behaviour.
+   *
+   * Inside an iframe the selector is disabled: the pane is embedded in the
+   * Amplience content form, whose own locale picker decides the locale, so a
+   * second control would only drift out of sync with it. Outside an iframe it
+   * switches as usual.
    */
   readonly localeParam?: string
   /**
@@ -144,7 +149,8 @@ function PathPrefixSelector({
 /**
  * Query-param mode (visualization pane): locale lives in `?<localeParam>=`, not
  * the path. Accepts a slug or a delivery code (`de-DE`) case-insensitively;
- * writes the slug and preserves the other params (vse, content, …).
+ * writes the slug and preserves the other params (vse, content, …). Disabled
+ * when embedded in an iframe, where the host's locale picker is in charge.
  */
 function QueryParamSelector({
   locales,
@@ -156,6 +162,7 @@ function QueryParamSelector({
   const pathname = usePathname()
   const router = useRouter()
   const searchParams = useSearchParams()
+  const embedded = useSyncExternalStore(subscribeNever, isEmbedded, isNotEmbedded)
 
   const slugs = new Set(locales.map((l) => l.slug))
   const raw = searchParams.get(localeParam)?.toLowerCase()
@@ -174,9 +181,24 @@ function QueryParamSelector({
       className={className}
       currentSlug={currentSlug}
       onNavigate={navigate}
+      disabled={embedded}
+      title={
+        embedded
+          ? "The locale picker is disabled while embedded.\nUse the visualizer's locale picker instead."
+          : undefined
+      }
     />
   )
 }
+
+// Whether the page sits in an iframe. A browser fact that never changes after
+// load, so there is nothing to subscribe to; the server snapshot says "not
+// embedded", which makes the control enabled in the server HTML and disabled
+// once the client hydrates.
+const noop = () => undefined
+const subscribeNever = () => noop
+const isEmbedded = () => window.self !== window.top
+const isNotEmbedded = () => false
 
 /** Shared presentation: the native `<select>` both modes render. */
 type LocaleSelectProps = {
@@ -185,18 +207,29 @@ type LocaleSelectProps = {
   readonly className?: string | undefined
   readonly currentSlug: string
   readonly onNavigate: (slug: string) => void
+  readonly disabled?: boolean
+  readonly title?: string | undefined
 }
 
-function LocaleSelect({ locales, label, className, currentSlug, onNavigate }: LocaleSelectProps) {
+function LocaleSelect({
+  locales,
+  label,
+  className,
+  currentSlug,
+  onNavigate,
+  disabled = false,
+  title,
+}: LocaleSelectProps) {
   const selectId = useId()
 
   return (
-    <label htmlFor={selectId} className={clsx('LocaleSelector', styles.root)}>
+    <label htmlFor={selectId} className={clsx('LocaleSelector', styles.root)} title={title}>
       <select
         id={selectId}
         className={clsx(styles.select, className)}
         aria-label={label ?? 'Language'}
         value={currentSlug}
+        disabled={disabled}
         onChange={(event) => onNavigate(event.target.value)}
       >
         {locales.map(({ slug, label: optionLabel }) => (
