@@ -2497,7 +2497,7 @@ td.flow-grid__cell {
 
 .sortable-hub {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.25rem;
 }
 
@@ -2545,6 +2545,10 @@ td.flow-grid__cell {
 
 .edit-button {
   cursor: pointer;
+}
+
+.sortable-hub .drag-handle {
+  padding-block: 1.1rem;
 }
 
 .hub-group__head {
