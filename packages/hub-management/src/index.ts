@@ -52,7 +52,6 @@ import partialsMedia from '../content-type-schemas/schemas/partials_media.json'
 import partialsRichMedia from '../content-type-schemas/schemas/partials_rich-media.json'
 import partialsSectionHeader from '../content-type-schemas/schemas/partials_section-header.json'
 import partialsSeo from '../content-type-schemas/schemas/partials_seo.json'
-import partialsSlotBlocks from '../content-type-schemas/schemas/partials_slot-blocks.json'
 import sitestructureCustomCss from '../content-type-schemas/schemas/sitestructure_custom-css.json'
 import slotsSlot from '../content-type-schemas/schemas/slots_slot.json'
 
@@ -87,7 +86,6 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(partialsRichMedia, 'PARTIAL'),
   entry(partialsCta, 'PARTIAL'),
   entry(partialsContentBlocks, 'PARTIAL'),
-  entry(partialsSlotBlocks, 'PARTIAL'),
   entry(partialsCarouselItems, 'PARTIAL'),
   entry(partialsCarouselOptions, 'PARTIAL'),
   entry(partialsColour, 'PARTIAL'),

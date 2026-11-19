@@ -12,6 +12,7 @@
       "properties": {
         "contentType": {
           "enum": [
+            "https://quadratic.amplience.com/v2/content/announcement-bar",
             "https://quadratic.amplience.com/v2/content/carousel",
             "https://quadratic.amplience.com/v2/content/columns",
             "https://quadratic.amplience.com/v2/content/grid",

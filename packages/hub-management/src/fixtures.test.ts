@@ -420,35 +420,6 @@ describe('block CSS (ADR-0026)', () => {
   })
 })
 
-describe('slot blocks', () => {
-  // partials/slot-blocks is partials/content-blocks plus the blocks that only
-  // make sense full-width at slot level. Held as two lists (not a $ref chain,
-  // which the Dynamic Content form doesn't merge into one picker), so this
-  // keeps them in step: a block added to content-blocks must reach slots too.
-  type LinkPartial = { allOf: [unknown, { properties: { contentType: { enum: string[] } } }] }
-  const allowed = (id: string) =>
-    (findSchema(id)?.schema as unknown as LinkPartial).allOf[1].properties.contentType.enum
-  const SLOT_ONLY = ['https://quadratic.amplience.com/v2/content/announcement-bar']
-
-  it('is content-blocks plus the slot-only blocks', () => {
-    expect([...allowed('https://quadratic.amplience.com/v2/partials/slot-blocks')].sort()).toEqual(
-      [
-        ...allowed('https://quadratic.amplience.com/v2/partials/content-blocks'),
-        ...SLOT_ONLY,
-      ].sort(),
-    )
-  })
-
-  it('is what slots draw their components from', () => {
-    const slot = findSchema('https://quadratic.amplience.com/v2/slots/slot')?.schema as unknown as {
-      properties: { components: { items: { $ref: string } } }
-    }
-    expect(slot.properties.components.items.$ref).toBe(
-      'https://quadratic.amplience.com/v2/partials/slot-blocks',
-    )
-  })
-})
-
 describe('partials are consumed at property level, not at the schema root', () => {
   // A root-level `allOf` to a partial validates fine and renders a broken form:
   // Amplience's form builder picks a control from the type's *own* properties

@@ -354,10 +354,10 @@ An ordered list of component content the renderer recurses into. The join betwee
 - **Components** [`Slot`](../packages/components/src/organisms/Slot) (organism) — dispatches each child on its `_meta.schema`
 - **Storybook** [Organisms/Slot](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-slot--docs)
 
-| Field                | Label         | Type                        | Req | Notes                                    |
-| -------------------- | ------------- | --------------------------- | --- | ---------------------------------------- |
-| `components`         | Components    | [Slot Block](#slot-block)[] |     | Ordered components rendered in this slot |
-| `_meta.deliveryKeys` | Delivery keys | object                      |     |                                          |
+| Field                | Label         | Type                              | Req | Notes                                    |
+| -------------------- | ------------- | --------------------------------- | --- | ---------------------------------------- |
+| `components`         | Components    | [Content Block](#content-block)[] |     | Ordered components rendered in this slot |
+| `_meta.deliveryKeys` | Delivery keys | object                            |     |                                          |
 
 ### Locale-based Content
 
@@ -404,7 +404,7 @@ Site header — one or more rows of navigation content.
 
 ![Announcement Bar icon](https://cdn.media.amplience.net/i/quadraticdemo/content_announcement-bar?w=48)
 
-A slim, full-width notification banner — one line of message with an optional whole-bar link, optionally dismissible by the visitor. Sits in a [Header](#header) as one of its rows, or at the top of a [Slot](#slot).
+A slim, full-width notification banner — one line of message with an optional whole-bar link, optionally dismissible by the visitor. Sits in a [Header](#header) as one of its rows, or in a [Slot](#slot) like any other [block](#content-block).
 
 - **Schema** [`content/announcement-bar`](../packages/hub-management/content-type-schemas/schemas/content_announcement-bar.json) · **Repository** `content`
 - **Components** [`AnnouncementBar`](../packages/components/src/organisms/AnnouncementBar) (organism) → `Container`, `Markdown`; the dismiss behaviour is the only client code (`AnnouncementBarDismiss`)
@@ -719,11 +719,7 @@ DAM videos play the account's transcode renditions (`/v/{endpoint}/{name}/{profi
 
 ### Content Block
 
-[`partials/content-blocks`](../packages/hub-management/content-type-schemas/schemas/partials_content-blocks.json) — a content link narrowed to the renderable [blocks](#blocks): [Carousel](#carousel-block), [Columns](#columns-block), [Grid](#grid-block), [Hero](#hero-block), [Rich Text](#rich-text-block), [Media](#media-block), [Card](#card), [Product Carousel](#product-carousel-block) — and [Locale-based Content](#locale-based-content), which wraps other blocks rather than rendering anything itself. Referenced by slots, columns, grids and blog articles, so the allowed set is maintained in one place.
-
-### Slot Block
-
-[`partials/slot-blocks`](../packages/hub-management/content-type-schemas/schemas/partials_slot-blocks.json) — what a [Slot](#slot) can hold: every [Content Block](#content-block) plus the [Announcement Bar](#announcement-bar), which only makes sense full-width at slot level, so it stays out of grids, columns and blog articles. The two lists are kept in step by a test in `hub-management`: add a block to Content Block and it must reach Slot Block too.
+[`partials/content-blocks`](../packages/hub-management/content-type-schemas/schemas/partials_content-blocks.json) — a content link narrowed to the renderable [blocks](#blocks): [Announcement Bar](#announcement-bar), [Carousel](#carousel-block), [Columns](#columns-block), [Grid](#grid-block), [Hero](#hero-block), [Rich Text](#rich-text-block), [Media](#media-block), [Card](#card), [Product Carousel](#product-carousel-block) — and [Locale-based Content](#locale-based-content), which wraps other blocks rather than rendering anything itself. Referenced by slots, columns, grids and blog articles, so the allowed set is maintained in one place.
 
 ### Carousel Item
 
@@ -744,6 +740,6 @@ The shape of the work, end to end:
 3. Add an icon to [`icons/svg`](../packages/hub-management/icons/svg), generate the PNG, and publish it to Content Hub so the registration URL resolves.
 4. Build the component in [`packages/components/src`](../packages/components/src) with a `*.registry.ts` entry that dispatches on the schema URI.
 5. Add a `*.stories.tsx` with the `autodocs` tag.
-6. If it is a block, add it to [`partials/content-blocks`](#content-block) and [`partials/slot-blocks`](#slot-block) (and [`partials/carousel-items`](#carousel-item) if it works as a slide). A slot-only type, like the [Announcement Bar](#announcement-bar), goes in `partials/slot-blocks` alone.
+6. If it is a block, add it to [`partials/content-blocks`](#content-block) (and [`partials/carousel-items`](#carousel-item) if it works as a slide).
 7. Run `pnpm hub:import` to push the model to a hub — see [Working with a hub](working-with-a-hub.md).
 8. Add it to this page.
