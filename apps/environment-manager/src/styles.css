@@ -2527,24 +2527,32 @@ td.flow-grid__cell {
   }
 }
 
+.drag-handle {
+  display: none;
+}
+
+.env-list__section-body:has(.hub-group + .hub-group),
+.hub-group__body:has(.sortable-hub + .sortable-hub) {
+  .drag-handle {
+    display: block;
+  }
+}
+
 .env-list__section-body:has(.hub-group__head:hover) .hub-group__head,
 .hub-group__body:hover {
-  button.drag-handle,
-  button.edit-button {
+  button.drag-handle {
+    cursor: grab;
     opacity: 1;
+
+    &:active {
+      cursor: grabbing;
+    }
   }
-}
 
-.drag-handle {
-  cursor: grab;
-
-  &:active {
-    cursor: grabbing;
+  .edit-button {
+    opacity: 1;
+    cursor: pointer;
   }
-}
-
-.edit-button {
-  cursor: pointer;
 }
 
 .sortable-hub .drag-handle {
