@@ -2510,19 +2510,41 @@ td.flow-grid__cell {
   opacity: 0.5;
 }
 
-.drag-handle {
+.drag-handle,
+.edit-button {
   background: none;
   border: 0;
   padding: 0.6rem 0.25rem;
   color: var(--color-text-muted);
-  cursor: grab;
   font-size: 1rem;
   line-height: 1;
+  opacity: 0;
+  transition: opacity 0.15s ease-in;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-text);
+  }
 }
 
-.drag-handle:hover,
-.drag-handle:focus-visible {
-  color: var(--color-text);
+.env-list__section-body:has(.hub-group__head:hover) .hub-group__head,
+.hub-group__body:hover {
+  button.drag-handle,
+  button.edit-button {
+    opacity: 1;
+  }
+}
+
+.drag-handle {
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.edit-button {
+  cursor: pointer;
 }
 
 .hub-group__head {

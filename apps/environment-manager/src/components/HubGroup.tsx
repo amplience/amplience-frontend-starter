@@ -85,7 +85,7 @@ export function HubGroup({
       }}
     >
       <div className="hub-group__head">
-        {reorderable && (
+        {reorderable ? (
           <button
             ref={handleRef}
             type="button"
@@ -103,6 +103,8 @@ export function HubGroup({
           >
             ⠿
           </button>
+        ) : (
+          <div className="drag-handle">⠿</div>
         )}
         {renaming ? (
           <form
@@ -141,7 +143,7 @@ export function HubGroup({
             {onRename !== undefined && (
               <button
                 type="button"
-                className="drag-handle"
+                className="edit-button"
                 aria-label={`Rename group ${title}`}
                 title="Rename group"
                 onClick={() => {

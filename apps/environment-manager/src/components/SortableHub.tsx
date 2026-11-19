@@ -64,7 +64,7 @@ export function SortableHub({
         onDragEnd()
       }}
     >
-      {enabled && (
+      {enabled ? (
         <button
           ref={handleRef}
           type="button"
@@ -82,6 +82,8 @@ export function SortableHub({
         >
           ⠿
         </button>
+      ) : (
+        <div className="drag-handle">⠿</div>
       )}
       <div className="sortable-hub__card">{children}</div>
     </div>
