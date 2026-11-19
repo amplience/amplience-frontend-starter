@@ -22,6 +22,7 @@ import type {
   WebApp,
 } from '../types.js'
 import { Chevron } from './Chevron.js'
+import { HubIcon } from './HubIcon.js'
 
 type Props = {
   env: Environment
@@ -874,6 +875,7 @@ export function EnvironmentCard({
         }}
       >
         <div className="env-card__header-labels">
+          <HubIcon icon={env.icon} />
           <span className="env-card__label">{env.label || env.name}</span>
           {hubBrands(env).map((brand) => (
             <span key={brand} className="badge badge--brand" title="Brand">

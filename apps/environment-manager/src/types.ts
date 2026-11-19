@@ -79,6 +79,10 @@ export type Environment = {
    * Optional: absent/false means never ignore validation.
    */
   ignoreSchemaValidation?: boolean
+  /** Optional single group the hub is listed under; absent = ungrouped. */
+  group?: string
+  /** Optional emoji, or an http(s) image URL, shown beside the label. */
+  icon?: string
 }
 
 export type Config = {

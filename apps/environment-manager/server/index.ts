@@ -21,6 +21,7 @@ import {
 import { readHubFlows, type HubFlow } from './content-flows.ts'
 import { buildDamCheck } from './dam-permissions.ts'
 import { hubManagementEnvVars, updateEnvVars, webEnvVars } from './env-files.ts'
+import { applyOrder } from './environment-order.ts'
 import { readFixtureSets, resolveFixtureSet, type FixtureSetInfo } from './fixture-sets.ts'
 import { confirmsRemoval, matchForAction, opKey, Steps, type FlowAction } from './flow-ops.ts'
 import { deepGet, gqlErrors, isAuthError, liveGqlFetch, type GqlFetch } from './graphql.ts'
@@ -144,6 +145,10 @@ type Environment = {
   republish: boolean
   /** Opt-in per environment: allow dc-cli's --ignoreSchemaValidation (see src/types.ts). */
   ignoreSchemaValidation?: boolean
+  /** Optional single group the hub is listed under (see src/types.ts). */
+  group?: string
+  /** Optional emoji or http(s) image URL shown beside the label (see src/types.ts). */
+  icon?: string
 }
 
 type Config = {
@@ -850,6 +855,18 @@ app.post('/api/environments', async (c) => {
 
   await writeConfig(config)
   return c.json(config, 201)
+})
+
+// PUT /api/environment-order  — persist the hub order
+app.put('/api/environment-order', async (c) => {
+  const { names } = await c.req.json<{ names?: unknown }>()
+  if (!Array.isArray(names) || !names.every((n) => typeof n === 'string')) {
+    return c.json({ error: 'Expected { names: string[] }.' }, 400)
+  }
+  const config = await readConfig()
+  config.environments = applyOrder(config.environments, names)
+  await writeConfig(config)
+  return c.json(config)
 })
 
 // PUT /api/environments/:name  — update an existing environment

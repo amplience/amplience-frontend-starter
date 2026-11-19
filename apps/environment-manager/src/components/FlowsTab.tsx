@@ -33,6 +33,7 @@ import { resolveColumn } from '../hub-reads.js'
 import { addEntry, entryFromError, entryFromResult, type OpEntry } from '../op-log.js'
 import { useHubCells } from '../use-hub-cells.js'
 import { ConfirmFlowOp, type ConfirmableOp, type PendingOp } from './ConfirmFlowOp.js'
+import { HubIcon } from './HubIcon.js'
 import { ListFilter } from './ListFilter.js'
 import { OpLogDrawer } from './OpLogDrawer.js'
 
@@ -177,10 +178,13 @@ function Cell({
 }
 
 /** The column header. Just the hub — the unclaimed count has its own row. */
-function HubHeader({ hub }: { hub: HubFlows }) {
+function HubHeader({ hub, icon }: { hub: HubFlows; icon: string | undefined }) {
   return (
     <th scope="col" className="flow-grid__hub">
-      <span className="flow-grid__hub-label">{hub.label}</span>
+      <span className="flow-grid__hub-label">
+        <HubIcon icon={icon} />
+        {hub.label}
+      </span>
     </th>
   )
 }
@@ -237,7 +241,7 @@ function OtherCell({ cell }: { cell: OtherFlowsCell }) {
 const PLACEHOLDER_ROWS = 4
 
 /** All this tab needs of an environment — it never reads credentials. */
-type HubRef = { name: string; label: string }
+type HubRef = { name: string; label: string; icon?: string }
 
 /**
  * @param hubs The fleet, from the config `App` has already loaded.
@@ -515,7 +519,11 @@ export function FlowsTab({
                   </div>
                 </th>
                 {hubs.map((hub) => (
-                  <HubHeader key={hub.name} hub={hub} />
+                  <HubHeader
+                    key={hub.name}
+                    hub={hub}
+                    icon={fleet.find((h) => h.name === hub.name)?.icon}
+                  />
                 ))}
               </tr>
             </thead>

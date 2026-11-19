@@ -42,6 +42,7 @@ vi.mock('./api.js', () => ({
     flowFixtures: vi.fn(),
     hubFlows: vi.fn(),
     flowOp: vi.fn(),
+    reorder: vi.fn(),
   },
 }))
 
@@ -260,5 +261,110 @@ describe('App — when the API cannot be reached', () => {
     list.mockResolvedValue(config([hub('douglas')]))
     fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
     expect(await screen.findByRole('tab', { name: 'Flows' })).toBeDefined()
+  })
+})
+
+describe('App — groups and ordering', () => {
+  const grouped = (name: string, group?: string): Environment => ({
+    ...hub(name),
+    ...(group === undefined ? {} : { group }),
+  })
+
+  const nudge = (name: string, key: 'ArrowUp' | 'ArrowDown') =>
+    fireEvent.keyDown(
+      screen.getByRole('button', { name: (label) => label.startsWith(`Reorder ${name}.`) }),
+      { key, altKey: true },
+    )
+
+  beforeEach(() => {
+    vi.mocked(api.reorder).mockResolvedValue(config([]))
+  })
+
+  it('lists hubs under their group, with ungrouped hubs last', async () => {
+    list.mockResolvedValue(
+      config([grouped('a'), grouped('b', 'Prospects'), grouped('c', 'Customers')]),
+    )
+    render(<App />)
+    const titles = (await screen.findAllByRole('heading', { level: 4 })).map((h) => h.textContent)
+    expect(titles).toEqual(['Prospects', 'Customers', 'Ungrouped'])
+  })
+
+  it('keeps a plain list when no hub is grouped', async () => {
+    list.mockResolvedValue(config([grouped('a'), grouped('b')]))
+    render(<App />)
+    await screen.findAllByTestId('environment-card')
+    expect(screen.queryAllByRole('heading', { level: 4 })).toHaveLength(0)
+  })
+
+  it('saves the new order when a hub is moved with the keyboard', async () => {
+    list.mockResolvedValue(config([grouped('a'), grouped('b'), grouped('c')]))
+    render(<App />)
+    await screen.findAllByTestId('environment-card')
+    nudge('b', 'ArrowUp')
+    expect(api.reorder).toHaveBeenCalledWith(['b', 'a', 'c'])
+  })
+
+  it('only moves a hub within its own group', async () => {
+    list.mockResolvedValue(config([grouped('a', 'X'), grouped('b'), grouped('c', 'X')]))
+    render(<App />)
+    await screen.findAllByTestId('environment-card')
+    nudge('c', 'ArrowUp')
+    expect(api.reorder).toHaveBeenCalledWith(['c', 'b', 'a'])
+    vi.mocked(api.reorder).mockClear()
+    nudge('c', 'ArrowDown')
+    expect(api.reorder).not.toHaveBeenCalled()
+  })
+
+  it('offers no handles while a filter is applied', async () => {
+    list.mockResolvedValue(config(['a', 'b', 'c', 'd', 'e'].map((n) => grouped(n))))
+    render(<App />)
+    fireEvent.change(await screen.findByLabelText('Filter hubs'), { target: { value: 'b' } })
+    await waitFor(() => expect(screen.getAllByTestId('environment-card')).toHaveLength(1))
+    expect(screen.queryAllByRole('button', { name: /^Reorder/ })).toHaveLength(0)
+  })
+
+  it('does nothing when a hub is nudged past the end of its group', async () => {
+    list.mockResolvedValue(config([grouped('a'), grouped('b')]))
+    render(<App />)
+    await screen.findAllByTestId('environment-card')
+    nudge('a', 'ArrowUp')
+    expect(api.reorder).not.toHaveBeenCalled()
+  })
+
+  it('says so when the new order cannot be saved', async () => {
+    vi.mocked(api.reorder).mockRejectedValue(new Error('nope'))
+    list.mockResolvedValue(config([grouped('a'), grouped('b')]))
+    render(<App />)
+    await screen.findAllByTestId('environment-card')
+    nudge('b', 'ArrowUp')
+    expect(await screen.findByText(/Could not save the new hub order/)).toBeDefined()
+  })
+
+  it('reorders by dragging a hub onto another', async () => {
+    list.mockResolvedValue(config([grouped('a'), grouped('b'), grouped('c')]))
+    render(<App />)
+    await screen.findAllByTestId('environment-card')
+    const wrapperOf = (name: string) => {
+      const found = screen.getByRole('button', {
+        name: (label) => label.startsWith(`Reorder ${name}.`),
+      })
+      const wrapper = found.closest('.sortable-hub')
+      if (wrapper === null) throw new Error('no wrapper')
+      return wrapper
+    }
+    fireEvent.mouseDown(screen.getByRole('button', { name: /^Reorder a\./ }))
+    fireEvent.dragStart(wrapperOf('a'), { dataTransfer: { effectAllowed: '', setData: vi.fn() } })
+    fireEvent.dragOver(wrapperOf('c'))
+    fireEvent.drop(wrapperOf('c'))
+    expect(api.reorder).toHaveBeenCalledWith(['b', 'c', 'a'])
+  })
+
+  it('folds a group away and back', async () => {
+    list.mockResolvedValue(config([grouped('a', 'Prospects'), grouped('b')]))
+    render(<App />)
+    const toggle = await screen.findByRole('button', { name: /^Prospects/ })
+    expect(toggle.getAttribute('aria-expanded')).toBe('true')
+    fireEvent.click(toggle)
+    expect(toggle.getAttribute('aria-expanded')).toBe('false')
   })
 })

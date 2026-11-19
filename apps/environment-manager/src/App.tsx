@@ -6,10 +6,13 @@ import { EnvironmentCard } from './components/EnvironmentCard.js'
 import { EnvironmentForm } from './components/EnvironmentForm.js'
 import { FixturesCard } from './components/FixturesCard.js'
 import { FlowsTab } from './components/FlowsTab.js'
+import { HubGroup } from './components/HubGroup.js'
 import { ListFilter } from './components/ListFilter.js'
 import { SiteCard } from './components/SiteCard.js'
+import { SortableHub } from './components/SortableHub.js'
 import { FILTER_MIN_ITEMS, filterEnvironments } from './filter-environments.js'
 import type { FlowsOverview } from './flow-rows.js'
+import { groupHubs, groupNames, reorderWithin } from './hub-groups.js'
 import type { Config, Environment, FixtureSetInfo } from './types.js'
 
 type Modal = { mode: 'add' } | { mode: 'edit'; env: Environment } | null
@@ -46,6 +49,7 @@ export function App() {
   const [loadError, setLoadError] = useState<string | null>(null)
   const [tab, setTab] = useState<Tab>('sources')
   const [hubQuery, setHubQuery] = useState('')
+  const [dragName, setDragName] = useState<string | null>(null)
 
   // useCallback keeps the reference stable so the effect dep array is honest.
   // setState setters are guaranteed stable by React, so no extra deps needed.
@@ -136,6 +140,64 @@ export function App() {
   // can drop the count back below the threshold while a query is still set.
   const hubFilter = showHubFilter ? hubQuery : ''
   const visibleHubs = filterEnvironments(hubs, hubFilter)
+
+  // Reordering a filtered subset is ambiguous, so it waits for the filter to clear.
+  const canReorder = hubFilter.trim() === '' && hubs.length > 1
+
+  function saveOrder(next: string[]) {
+    void api
+      .reorder(next)
+      .then(setConfig)
+      .catch(() => setLoadError('Could not save the new hub order.'))
+  }
+
+  function moveHub(from: string, to: string, siblings: string[]) {
+    saveOrder(
+      reorderWithin(
+        hubs.map((h) => h.name),
+        siblings,
+        from,
+        to,
+      ),
+    )
+  }
+
+  function renderHub(env: Environment, siblings: string[]) {
+    if (config === null) return null
+    return (
+      <SortableHub
+        key={env.name}
+        name={env.name}
+        label={env.label || env.name}
+        siblings={siblings}
+        enabled={canReorder}
+        dragName={dragName}
+        onDragStart={setDragName}
+        onDragEnd={() => setDragName(null)}
+        onDrop={(from, to) => {
+          setDragName(null)
+          moveHub(from, to, siblings)
+        }}
+        onNudge={(name, delta) => {
+          const target = siblings[siblings.indexOf(name) + delta]
+          if (target !== undefined) moveHub(name, target, siblings)
+        }}
+      >
+        <EnvironmentCard
+          env={env}
+          fixtureSets={fixtureSets}
+          isActive={env.name === config.active}
+          onActivate={() => {
+            void handleActivate(env.name)
+          }}
+          onEdit={() => setModal({ mode: 'edit', env })}
+          onUpdate={setConfig}
+        />
+      </SortableHub>
+    )
+  }
+
+  const sections = groupHubs(visibleHubs)
 
   const builtInSets = fixtureSets.filter((set) => set.origin !== 'local')
   const localSets = fixtureSets.filter((set) => set.origin === 'local')
@@ -266,19 +328,21 @@ export function App() {
                     )
                   }
                 >
-                  {visibleHubs.map((env) => (
-                    <EnvironmentCard
-                      key={env.name}
-                      env={env}
-                      fixtureSets={fixtureSets}
-                      isActive={env.name === config.active}
-                      onActivate={() => {
-                        void handleActivate(env.name)
-                      }}
-                      onEdit={() => setModal({ mode: 'edit', env })}
-                      onUpdate={setConfig}
-                    />
-                  ))}
+                  {sections.map((section) => {
+                    const names = section.hubs.map((h) => h.name)
+                    const cards = section.hubs.map((env) => renderHub(env, names))
+                    // No groups in use: the plain list, as before.
+                    if (sections.length === 1 && section.group === null) return cards
+                    return (
+                      <HubGroup
+                        key={section.group ?? ''}
+                        title={section.group ?? 'Ungrouped'}
+                        count={section.hubs.length}
+                      >
+                        {cards}
+                      </HubGroup>
+                    )
+                  })}
 
                   {visibleHubs.length === 0 && hubFilter.trim() !== '' && (
                     <p className="empty-state empty-state--filter">
@@ -316,6 +380,7 @@ export function App() {
       {modal !== null && (
         <EnvironmentForm
           {...(modal.mode === 'edit' ? { initial: modal.env } : {})}
+          groups={groupNames(hubs)}
           onSave={handleSave}
           onCancel={() => setModal(null)}
           {...(modal.mode === 'edit'

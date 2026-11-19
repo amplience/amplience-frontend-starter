@@ -2420,3 +2420,107 @@ td.flow-grid__cell {
     animation: none;
   }
 }
+
+/* Hub icon, groups and reordering */
+.hub-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.hub-icon img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.flow-grid__hub-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.field__row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.field__row input {
+  flex: 1;
+}
+
+.hub-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.hub-group__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: flex-start;
+  background: none;
+  border: 0;
+  padding: 0.25rem 0;
+  color: var(--color-text);
+  cursor: pointer;
+  font: inherit;
+}
+
+.hub-group__title {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.hub-group__count {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.hub-group__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.hub-group__body[hidden] {
+  display: none;
+}
+
+.sortable-hub {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.sortable-hub__card {
+  flex: 1;
+  min-width: 0;
+}
+
+.sortable-hub--dragging {
+  opacity: 0.5;
+}
+
+.drag-handle {
+  background: none;
+  border: 0;
+  padding: 0.6rem 0.25rem;
+  color: var(--color-text-muted);
+  cursor: grab;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.drag-handle:hover,
+.drag-handle:focus-visible {
+  color: var(--color-text);
+}

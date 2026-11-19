@@ -12,6 +12,7 @@ const matchFields = (env: Environment): string[] => [
   env.name,
   env.hubName,
   env.defaultBrand,
+  env.group ?? '',
 ]
 
 /**
