@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://quadratic.amplience.com/v2/content/announcement-bar",
+  "title": "Announcement Bar",
+  "description": "A slim, full-width notification banner — a short message with an optional link, for the header or the top of a slot. Can be made dismissible by the visitor.",
+  "allOf": [
+    {
+      "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
+    }
+  ],
+  "ui:component": {
+    "name": "tabs",
+    "params": {
+      "tabs": {
+        "defaultTab": "📝 Content",
+        "variant": "outline",
+        "items": [
+          {
+            "label": "📝 Content",
+            "pointers": ["/message", "/href", "/linkLabel"]
+          },
+          {
+            "label": "⚙️ Options",
+            "pointers": [
+              "/dismissible",
+              "/backgroundColor",
+              "/textColor",
+              "/textAlign",
+              "/maxWidth",
+              "/customCss"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "message": {
+      "title": "Message",
+      "description": "Keep it to a line. Markdown: bold, italics and inline links work; headings and lists are flattened.",
+      "allOf": [
+        {
+          "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      ],
+      "properties": {
+        "values": {
+          "items": {
+            "properties": {
+              "value": {
+                "type": "string",
+                "title": "Message",
+                "description": "Keep it to a line. Markdown: bold, italics and inline links work.",
+                "format": "markdown",
+                "minLength": 1,
+                "maxLength": 300
+              }
+            }
+          }
+        }
+      }
+    },
+    "href": {
+      "type": "string",
+      "title": "Bar link",
+      "description": "Optional. Makes the whole bar a link. Inline links in the message still work on their own.",
+      "pattern": "^(?!https?\\/\\/)(?:(?:https?:\\/\\/)(?:localhost|(?:[A-Za-z0-9-]+\\.)+[A-Za-z]{2,})(?::\\d{2,5})?(?:\\/[^\\s?#]*)?(?:\\?[^\\s#]*)?(?:#[^\\s]*)?|\\/(?:[^\\s?#]+(?:\\/[^\\s?#]*)*)?(?:\\?[^\\s#]*)?(?:#[^\\s]*)?|(?:\\.\\.?\\/)?[^\\s/:?#]+(?:\\/[^\\s?#]*)*(?:\\?[^\\s#]*)?(?:#[^\\s]*)?)$"
+    },
+    "linkLabel": {
+      "title": "Link text",
+      "description": "Optional. Shown after the message, e.g. \"Shop now\". Without it the whole bar is still clickable, announced by the message itself.",
+      "allOf": [
+        {
+          "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+        }
+      ]
+    },
+    "dismissible": {
+      "type": "boolean",
+      "title": "Dismissible",
+      "description": "Show a close (×) button. A dismissed bar stays hidden for that visitor (stored in their browser) until this announcement's message changes.",
+      "default": false
+    },
+    "backgroundColor": {
+      "title": "Background colour",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette"
+        }
+      ]
+    },
+    "textColor": {
+      "title": "Text colour",
+      "description": "Optional. Defaults to the background colour's contrast colour.",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette"
+        }
+      ]
+    },
+    "textAlign": {
+      "type": "string",
+      "enum": ["left", "center", "right"],
+      "title": "Text alignment",
+      "default": "center"
+    },
+    "maxWidth": {
+      "title": "Max width",
+      "description": "Width of the message area; the background always spans the page.",
+      "default": "wide",
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width"
+        }
+      ]
+    },
+    "customCss": {
+      "title": "Custom CSS (advanced)",
+      "description": "Optional. CSS for this block only — it also reaches any blocks nested inside it. Bare declarations style the block itself (background: …); nested rules style what's inside (h2 { … }, &:hover { … }, @media … { … }); custom properties (--color-primary: …) flow down to child blocks. Leave blank for none.",
+      "type": "string",
+      "ui:extension": {
+        "name": "css-editor"
+      },
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/block-css#/definitions/css"
+        }
+      ]
+    }
+  },
+  "propertyOrder": [
+    "message",
+    "href",
+    "linkLabel",
+    "dismissible",
+    "backgroundColor",
+    "textColor",
+    "textAlign",
+    "maxWidth",
+    "customCss"
+  ],
+  "required": ["message"]
+}

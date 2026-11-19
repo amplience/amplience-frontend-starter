@@ -16,7 +16,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 
-import { contentTypeSchemas } from './index'
+import { contentTypeSchemas, schemaManifest } from './index'
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 
@@ -95,4 +95,34 @@ describe('content-type registrations', () => {
       expect(data.settings?.icons?.[0]?.url, file).toContain(expected)
     }
   })
+})
+
+describe('content-type schema definitions', () => {
+  // `hub-import` pushes schemas with `dc-cli content-type-schema import
+  // content-type-schemas/`, which reads only the definition files at that
+  // level — each pointing at its body in schemas/. A body without one is
+  // never sent, and the hub fails later with UNABLE_TO_LOAD_SCHEMA.
+  const dir = path.join(packageRoot, 'content-type-schemas')
+  const definitions = new Map(
+    readdirSync(dir)
+      .filter((f) => f.endsWith('.json'))
+      .map((file) => {
+        const data = JSON.parse(readFileSync(path.join(dir, file), 'utf8')) as {
+          body?: string
+          schemaId?: string
+          validationLevel?: string
+        }
+        return [data.schemaId ?? '', { file, ...data }] as const
+      }),
+  )
+
+  it.each(schemaManifest.map((e) => [e.schemaId, e] as const))(
+    '%s has a definition dc-cli will import',
+    (schemaId, { validationLevel }) => {
+      const definition = definitions.get(schemaId)
+      expect(definition, `no content-type-schemas/*.json for ${schemaId}`).toBeDefined()
+      expect(definition?.validationLevel).toBe(validationLevel)
+      expect(definition?.body).toBe(`./schemas/${definition?.file}`)
+    },
+  )
 })

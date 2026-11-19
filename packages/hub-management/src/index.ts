@@ -14,6 +14,7 @@
  * `content-type-schemas/schemas/<name>.json` is the JSON Schema body.
  */
 
+import contentAnnouncementBar from '../content-type-schemas/schemas/content_announcement-bar.json'
 import contentBlogArticle from '../content-type-schemas/schemas/content_blog-article.json'
 import contentCarousel from '../content-type-schemas/schemas/content_carousel.json'
 import contentColumns from '../content-type-schemas/schemas/content_columns.json'
@@ -106,6 +107,7 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(contentMediaCard, 'CONTENT_TYPE'),
   entry(contentMedia, 'CONTENT_TYPE'),
   entry(slotsSlot, 'SLOT'),
+  entry(contentAnnouncementBar, 'CONTENT_TYPE'),
   entry(contentHeader, 'CONTENT_TYPE'),
   entry(contentHeaderRow, 'CONTENT_TYPE'),
   entry(contentHeaderGroup, 'CONTENT_TYPE'),

@@ -134,8 +134,8 @@ describe('schema manifest', () => {
   it('exposes content types as the non-partial subset', () => {
     // A deliberate tripwire: bump this when a content type is added, so the
     // count is a decision rather than something derived from the thing it
-    // checks. 27 as of Locale-based Content (item-level localisation).
-    expect(contentTypeSchemas).toHaveLength(27)
+    // checks. 28 as of the announcement bar.
+    expect(contentTypeSchemas).toHaveLength(28)
     expect(contentTypeSchemas.every((e) => e.validationLevel !== 'PARTIAL')).toBe(true)
     expect(findSchema('https://quadratic.amplience.com/v2/partials/media')?.validationLevel).toBe(
       'PARTIAL',
@@ -347,6 +347,7 @@ describe('block CSS (ADR-0026)', () => {
    * apps/web/src/renderer/dispatch.block-css.test.tsx — keep the two in step).
    */
   const BLOCKS = [
+    'https://quadratic.amplience.com/v2/content/announcement-bar',
     'https://quadratic.amplience.com/v2/content/carousel',
     'https://quadratic.amplience.com/v2/content/columns',
     'https://quadratic.amplience.com/v2/content/grid',

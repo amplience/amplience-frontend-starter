@@ -53,6 +53,10 @@ import {
   menuToggleButtonRegistryEntry,
 } from './molecules/MenuToggleButton/MenuToggleButton.registry'
 import {
+  ANNOUNCEMENT_BAR_SCHEMA,
+  announcementBarRegistryEntry,
+} from './organisms/AnnouncementBar/AnnouncementBar.registry'
+import {
   CAROUSEL_BLOCK_SCHEMA,
   carouselBlockRegistryEntry,
 } from './organisms/CarouselBlock/CarouselBlock.registry'
@@ -171,6 +175,7 @@ export const defaultRegistry: Registry = createRegistry([
   [HERO_BLOCK_SCHEMA, heroBlockRegistryEntry],
   [MEDIA_BLOCK_SCHEMA, mediaBlockRegistryEntry],
   [MARKDOWN_BLOCK_SCHEMA, markdownBlockRegistryEntry],
+  [ANNOUNCEMENT_BAR_SCHEMA, announcementBarRegistryEntry],
   [COLUMNS_BLOCK_SCHEMA, columnsBlockRegistryEntry],
   [GRID_BLOCK_SCHEMA, gridBlockRegistryEntry],
   [CAROUSEL_BLOCK_SCHEMA, carouselBlockRegistryEntry],
@@ -206,6 +211,8 @@ export {
   heroBlockRegistryEntry,
   MEDIA_BLOCK_SCHEMA,
   mediaBlockRegistryEntry,
+  ANNOUNCEMENT_BAR_SCHEMA,
+  announcementBarRegistryEntry,
   MARKDOWN_BLOCK_SCHEMA,
   markdownBlockRegistryEntry,
   MEDIA_CARD_SCHEMA,

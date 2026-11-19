@@ -63,7 +63,7 @@
     },
     "rows": {
       "title": "Header rows",
-      "description": "Ordered list of header rows (e.g. logo row, nav row).",
+      "description": "Ordered list of header rows (e.g. logo row, nav row), and any announcement bars to show above, between or below them.",
       "type": "array",
       "items": {
         "type": "object",
@@ -74,7 +74,10 @@
           {
             "properties": {
               "contentType": {
-                "enum": ["https://quadratic.amplience.com/v2/content/header-row"]
+                "enum": [
+                  "https://quadratic.amplience.com/v2/content/header-row",
+                  "https://quadratic.amplience.com/v2/content/announcement-bar"
+                ]
               }
             }
           }

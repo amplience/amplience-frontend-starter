@@ -1,0 +1,169 @@
+/*
+ * AnnouncementBar organism styles.
+ *
+ * A slim full-width band: the section carries the colour, the Container
+ * centres a single line of message (+ optional link text and close button).
+ * Brands override via the --announcement-bar-* tokens under [data-brand], or
+ * target the stable `.AnnouncementBar` hook.
+ */
+
+.root {
+  --announcement-bar-font-size: 0.875rem;
+  --announcement-bar-padding-y: var(--spacing-2);
+  --announcement-bar-background: var(--color-black);
+  --announcement-bar-color: var(--color-white);
+
+  position: relative; /* anchors the stretched link */
+  background-color: var(--announcement-bar-background);
+  color: var(--announcement-bar-color);
+  font-size: var(--announcement-bar-font-size);
+  line-height: 1.4;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding-block: var(--announcement-bar-padding-y);
+  min-height: 2.5rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Message — one line of markdown; block elements are flattened inline so a
+   stray heading or paragraph can't blow the bar up.
+   --------------------------------------------------------------------------- */
+
+.message {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  & :where(p, h1, h2, h3, h4, h5, h6, ul, ol, li, blockquote) {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+  }
+
+  & a {
+    position: relative; /* above the stretched link */
+    z-index: 1;
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+.root[data-text-align='left'] .message {
+  text-align: left;
+}
+.root[data-text-align='center'] .message {
+  text-align: center;
+}
+.root[data-text-align='right'] .message {
+  text-align: right;
+}
+
+/* Keep a centred message optically centred when the close button sits beside it */
+.root[data-text-align='center'][data-dismissible] .message {
+  padding-inline-start: 2.5rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Stretched link — the whole bar is the hit area
+   --------------------------------------------------------------------------- */
+
+.link {
+  flex: 0 0 auto;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  white-space: nowrap;
+
+  &:empty {
+    flex: 0 0 0;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:focus-visible::after {
+    outline: 2px solid currentColor;
+    outline-offset: -4px;
+  }
+}
+
+.root[data-linked]:hover .message {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.dismiss {
+  position: relative; /* above the stretched link */
+  z-index: 1;
+  margin-inline-end: calc(var(--spacing-2) * -1);
+}
+
+/* ---------------------------------------------------------------------------
+   Colour — background sets its contrast text colour; textColor overrides it
+   --------------------------------------------------------------------------- */
+
+.root[data-background-color='primary'] {
+  --announcement-bar-background: var(--color-primary);
+  --announcement-bar-color: var(--color-primary-contrast);
+}
+.root[data-background-color='secondary'] {
+  --announcement-bar-background: var(--color-secondary);
+  --announcement-bar-color: var(--color-secondary-contrast);
+}
+.root[data-background-color='tertiary'] {
+  --announcement-bar-background: var(--color-tertiary);
+  --announcement-bar-color: var(--color-tertiary-contrast);
+}
+.root[data-background-color='light'] {
+  --announcement-bar-background: var(--color-gray-100);
+  --announcement-bar-color: var(--color-black);
+}
+.root[data-background-color='dark'] {
+  --announcement-bar-background: var(--color-gray-800);
+  --announcement-bar-color: var(--color-white);
+}
+.root[data-background-color='black'] {
+  --announcement-bar-background: var(--color-black);
+  --announcement-bar-color: var(--color-white);
+}
+.root[data-background-color='white'] {
+  --announcement-bar-background: var(--color-white);
+  --announcement-bar-color: var(--color-black);
+}
+
+.root[data-background-color][data-text-color='primary'] {
+  --announcement-bar-color: var(--color-primary);
+}
+.root[data-background-color][data-text-color='secondary'] {
+  --announcement-bar-color: var(--color-secondary);
+}
+.root[data-background-color][data-text-color='tertiary'] {
+  --announcement-bar-color: var(--color-tertiary);
+}
+.root[data-background-color][data-text-color='light'] {
+  --announcement-bar-color: var(--color-gray-100);
+}
+.root[data-background-color][data-text-color='dark'] {
+  --announcement-bar-color: var(--color-gray-800);
+}
+.root[data-background-color][data-text-color='black'] {
+  --announcement-bar-color: var(--color-black);
+}
+.root[data-background-color][data-text-color='white'] {
+  --announcement-bar-color: var(--color-white);
+}

@@ -46,6 +46,7 @@ Every schema URI is prefixed `https://quadratic.amplience.com/v2/` — the table
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/slots_slot?w=24)                  | [Slot](#slot)                                     | Composition | `Slot`                         | [Organisms/Slot](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-slot--docs)                                 |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_locale-content?w=24)      | [Locale-based Content](#locale-based-content)     | Composition | _n/a — resolved pre-render_    | —                                                                                                                               |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header?w=24)              | [Header](#header)                                 | Chrome      | `HeaderBlock`                  | —                                                                                                                               |
+| ![](https://cdn.media.amplience.net/i/quadraticdemo/content_announcement-bar?w=24)    | [Announcement Bar](#announcement-bar)             | Chrome      | `AnnouncementBar`              | [Organisms/AnnouncementBar](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-announcementbar--docs)           |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header-row?w=24)          | [Header Row](#header-row)                         | Chrome      | `HeaderRow`                    | —                                                                                                                               |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_header-group?w=24)        | [Header Group](#header-group)                     | Chrome      | `HeaderGroup`                  | —                                                                                                                               |
 | ![](https://cdn.media.amplience.net/i/quadraticdemo/content_footer?w=24)              | [Footer](#footer)                                 | Chrome      | `FooterBlock`                  | —                                                                                                                               |
@@ -392,12 +393,36 @@ Site header — one or more rows of navigation content.
 - **Components** [`HeaderBlock`](../packages/components/src/organisms/HeaderBlock) (organism) → `Container`, then [Header Row](#header-row) per entry
 - **Storybook** — no story yet
 
-| Field                | Label         | Type                                       | Req | Notes                                                 |
-| -------------------- | ------------- | ------------------------------------------ | --- | ----------------------------------------------------- |
-| `rows`               | Header rows   | Content link → [Header Row](#header-row)[] |     | Ordered, e.g. logo row then nav row                   |
-| `sticky`             | Sticky        | boolean                                    |     | Fixes the header to the top of the viewport on scroll |
-| `maxWidth`           | Max width     | [Max width](#container)                    |     | Passed to child Containers                            |
-| `_meta.deliveryKeys` | Delivery keys | object                                     |     |                                                       |
+| Field                | Label         | Type                                                                                | Req | Notes                                                 |
+| -------------------- | ------------- | ----------------------------------------------------------------------------------- | --- | ----------------------------------------------------- |
+| `rows`               | Header rows   | Content link → [Header Row](#header-row) or [Announcement Bar](#announcement-bar)[] |     | Ordered, e.g. announcement bar, logo row, nav row     |
+| `sticky`             | Sticky        | boolean                                                                             |     | Fixes the header to the top of the viewport on scroll |
+| `maxWidth`           | Max width     | [Max width](#container)                                                             |     | Passed to child Containers                            |
+| `_meta.deliveryKeys` | Delivery keys | object                                                                              |     |                                                       |
+
+### Announcement Bar
+
+![Announcement Bar icon](https://cdn.media.amplience.net/i/quadraticdemo/content_announcement-bar?w=48)
+
+A slim, full-width notification banner — one line of message with an optional whole-bar link, optionally dismissible by the visitor. Sits in a [Header](#header) as one of its rows, or in a [Slot](#slot) like any other [block](#content-block).
+
+- **Schema** [`content/announcement-bar`](../packages/hub-management/content-type-schemas/schemas/content_announcement-bar.json) · **Repository** `content`
+- **Components** [`AnnouncementBar`](../packages/components/src/organisms/AnnouncementBar) (organism) → `Container`, `Markdown`; the dismiss behaviour is the only client code (`AnnouncementBarDismiss`)
+- **Storybook** [Organisms/AnnouncementBar](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-announcementbar--docs)
+
+| Field             | Label             | Type                          | Req | Notes                                                                                                                                                                                                                          |
+| ----------------- | ----------------- | ----------------------------- | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `message`         | Message           | localized markdown            | ✓   | One line, max 300 characters. Bold, italics and inline links render; block elements are flattened onto the line                                                                                                                |
+| `href`            | Bar link          | string                        |     | Makes the whole bar a link (a stretched link — inline links and the close button still work on top of it)                                                                                                                      |
+| `linkLabel`       | Link text         | localized string              |     | Shown after the message, e.g. "Shop now". Without it the link is named by the message                                                                                                                                          |
+| `dismissible`     | Dismissible       | boolean                       |     | Adds a close (×) button. The dismissal is stored in the visitor's `localStorage` under `announcement-bar:dismissed:<delivery id>`, with a fingerprint of the message as the value — so editing the message shows the bar again |
+| `backgroundColor` | Background colour | [Palette](#colour)            |     | Defaults to `black`; sets the matching contrast text colour                                                                                                                                                                    |
+| `textColor`       | Text colour       | [Palette](#colour)            |     | Overrides the contrast colour                                                                                                                                                                                                  |
+| `textAlign`       | Text alignment    | `left` \| `center` \| `right` |     | Defaults to `center`                                                                                                                                                                                                           |
+| `maxWidth`        | Max width         | [Max width](#container)       |     | Width of the message area; the background always spans the page. Defaults to `wide`                                                                                                                                            |
+| `customCss`       | Custom CSS        | [Block CSS](#block-css)       |     |                                                                                                                                                                                                                                |
+
+The server render always includes the bar — storage isn't readable there — so a returning visitor who dismissed it can see it briefly until the page hydrates. A sticky header's scroll offset follows the height change on its own. Theming hooks: the `.AnnouncementBar` class, and the `--announcement-bar-font-size`, `--announcement-bar-padding-y`, `--announcement-bar-background` and `--announcement-bar-color` custom properties.
 
 ### Header Row
 
@@ -694,7 +719,7 @@ DAM videos play the account's transcode renditions (`/v/{endpoint}/{name}/{profi
 
 ### Content Block
 
-[`partials/content-blocks`](../packages/hub-management/content-type-schemas/schemas/partials_content-blocks.json) — a content link narrowed to the renderable [blocks](#blocks): [Carousel](#carousel-block), [Columns](#columns-block), [Grid](#grid-block), [Hero](#hero-block), [Rich Text](#rich-text-block), [Media](#media-block), [Card](#card), [Product Carousel](#product-carousel-block) — and [Locale-based Content](#locale-based-content), which wraps other blocks rather than rendering anything itself. Referenced by slots, columns, grids and blog articles, so the allowed set is maintained in one place.
+[`partials/content-blocks`](../packages/hub-management/content-type-schemas/schemas/partials_content-blocks.json) — a content link narrowed to the renderable [blocks](#blocks): [Announcement Bar](#announcement-bar), [Carousel](#carousel-block), [Columns](#columns-block), [Grid](#grid-block), [Hero](#hero-block), [Rich Text](#rich-text-block), [Media](#media-block), [Card](#card), [Product Carousel](#product-carousel-block) — and [Locale-based Content](#locale-based-content), which wraps other blocks rather than rendering anything itself. Referenced by slots, columns, grids and blog articles, so the allowed set is maintained in one place.
 
 ### Carousel Item
 
@@ -710,7 +735,7 @@ That only covers _what a field says_. When a locale should see different _blocks
 
 The shape of the work, end to end:
 
-1. Add the JSON schema to [`content-type-schemas/schemas`](../packages/hub-management/content-type-schemas/schemas), following the `{repository}_{name}.json` convention.
+1. Add the JSON schema to [`content-type-schemas/schemas`](../packages/hub-management/content-type-schemas/schemas), following the `{repository}_{name}.json` convention, plus a same-named definition file one level up in [`content-type-schemas`](../packages/hub-management/content-type-schemas) (`body`, `schemaId`, `validationLevel`) — that is the file dc-cli imports, so without it the schema never reaches the hub. Register it in `src/index.ts` too.
 2. Add the matching registration to [`content-types`](../packages/hub-management/content-types) — label, icon URL, visualisations, repository.
 3. Add an icon to [`icons/svg`](../packages/hub-management/icons/svg), generate the PNG, and publish it to Content Hub so the registration URL resolves.
 4. Build the component in [`packages/components/src`](../packages/components/src) with a `*.registry.ts` entry that dispatches on the schema URI.

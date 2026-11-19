@@ -251,6 +251,17 @@ footer = (f'<path d="M20 172 v26 a18 18 0 0 0 18 18 h176 a18 18 0 0 0 18-18 v-26
           f'<path d="M40 72 h160 M40 96 h176 M40 120 h132" stroke="{HATCH}" stroke-width="3.2"/>')
 ICONS["content_footer"] = card_b(footer)
 
+# announcement-bar: slim dark-hatched band across the top with a message
+# line and a close (x), faint page body beneath
+announcement_bar = (f'<path d="M20 78 v-20 a18 18 0 0 1 18-18 h176 a18 18 0 0 1 18 18 v20 Z" fill="url(#hatchD)"/>'
+                    f'<path d="M16 82 h220" stroke="{DARK}" stroke-width="{SW_THIN}"/>'
+                    f'<rect x="62" y="51" width="112" height="18" rx="9" fill="#ffffff" stroke="{DARK}" stroke-width="{SW_THIN}"/>'
+                    f'<path d="M80 60 h60" stroke="{DARK}" stroke-width="{SW}"/>'
+                    f'<circle cx="207" cy="60" r="11" fill="#ffffff" stroke="{DARK}" stroke-width="{SW_THIN}"/>'
+                    f'<path d="M202.5 55.5 l9 9 M211.5 55.5 l-9 9" stroke="{DARK}" stroke-width="{SW_THIN}"/>'
+                    f'<path d="M40 116 h160 M40 140 h176 M40 164 h132" stroke="{HATCH}" stroke-width="3.2"/>')
+ICONS["content_announcement-bar"] = card_b(announcement_bar)
+
 # header-row: band with logo dot, nav lines, CTA pill
 header_row = (f'<path d="M16 102 h220 M16 154 h220" stroke="{DARK}" stroke-width="{SW_THIN}"/>'
               f'<circle cx="48" cy="128" r="9" fill="{DARK}"/>'
