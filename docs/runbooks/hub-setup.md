@@ -167,7 +167,7 @@ resources in. Each is runnable on its own when iterating:
 | 3    | `pnpm hub:import:types`      | Stages `content-types/` with `${hub}` and `${appUrl}` substituted, imports with `--sync` so visualization changes reach already-registered types                                                                                                                                                                                                                                                                                                                                                                |
 | 4    | `pnpm hub:import:extensions` | Stages `extensions/*.json` with hub-independent tokens resolved — `${repo:content}` → the content repo, `${status:Label}` → the workflow-state id the settings step created for that label — then imports. Depends on step 1                                                                                                                                                                                                                                                                                    |
 | 5    | `pnpm hub:import:webhooks`   | Creates one webhook per web app registered against this hub, from `webhooks/*.json`, with `${site:url}` / `${site:label}` / `${secret:…}` resolved per deployment. Skipped when the hub has no web apps, or when a definition's secret isn't set — never seeded unauthenticated. Needs `AMPLIENCE_CLIENT_ID` / `_SECRET` / `AMPLIENCE_HUB_ID` explicitly. Before content, so the seed's own publishes exercise the webhooks it just created — a wrong secret shows up in the hub's delivery log during the seed |
-| 6    | `pnpm hub:import:content`    | Stages one fixture set with its delivery keys re-prefixed to the site namespace (`SITE_NAME`, default: the set's own name — ADR-0014), drops any locale the hub lacks, then imports leaf-first — components → slots → pages — each into its repository, with `--publish`                                                                                                                                                                                                                                        |
+| 6    | `pnpm hub:import:content`    | Stages one fixture set with its delivery keys re-prefixed to the site namespace (`SITE_NAME`, default: the set's own name — ADR-0014), drops any locale the hub lacks, then imports every repository's items in one dc-cli run — each set in its own folder per repository — with `--publish`                                                                                                                                                                                                                   |
 
 Only step 6 varies by fixture set; the model is shared, so steps 1–5 run once
 however many sets the hub carries.
@@ -251,14 +251,25 @@ the mapping file makes repeats safe.
 
 ### Why the order matters
 
-The leaf-first content order exists because dc-cli rewrites cross-item links
-using a mapping file: by the time a slot or page arrives, every item it links to
-is already in the map. The script passes one explicit shared map
-(`~/.amplience/imports/quadratic-<hubName>.json`) to every phase — dc-cli's
-default is a map _per repository_, which would null any link whose target lives
-in the other repository. That shared map is also what makes re-running the import
-update items in place rather than duplicate them, so `pnpm hub:import` is the
-"push my changes" command too. There is no separate `push`.
+The content step stages a set as `<repository label>/<site name>/…` — keeping
+`components/` and `pages/` as folders, since they share the content repository —
+and makes a single dc-cli call without `--baseRepo`. dc-cli then matches each
+top-level folder to a repository by its label, and builds one dependency tree
+across all of them: it imports leaves first, resolves circular links itself
+(including links between repositories, such as a slot inside a grid), and
+publishes only once everything is in. Two consequences:
+
+- Each configured repository needs a label that is unique on the hub, and usable
+  as a folder name. The import checks this first and stops with a message
+  rather than letting dc-cli guess.
+- Each set lands in its own folder (named after the site) in every repository,
+  so several sets on one hub stay apart.
+
+The script passes one explicit map file (`~/.amplience/imports/quadratic-<hubName>.json`).
+It records only fixture id → hub id pairs, never a repository or folder, which
+is what makes re-running the import update items in place rather than duplicate
+them, so `pnpm hub:import` is the "push my changes" command too. There is no
+separate `push`.
 
 ⚠️ The map is **machine-local**. Someone else seeding the same hub from their own
 machine has no map, and dc-cli would create duplicates rather than update. Until

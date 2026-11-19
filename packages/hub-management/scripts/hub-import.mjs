@@ -41,9 +41,16 @@
  *                 since a wrong secret shows up in the hub's delivery log
  *                 during the seed rather than the next time an editor
  *                 publishes.
- *   6. content  — fixtures imported leaf-first (components → slots →
- *                 pages) so the mapping file already knows every link
- *                 target when the linking item arrives.
+ *   6. content  — every repository's fixtures in one dc-cli run, staged as
+ *                 <repository label>/<site name>/… (keeping the fixture
+ *                 directory as a folder only where two share a
+ *                 repository: components/ and pages/). Without
+ *                 --baseRepo, dc-cli matches each top-level folder to a
+ *                 repository by label and builds one dependency tree across
+ *                 all of them: it imports leaves first, resolves circular
+ *                 links itself, and publishes only once everything is in.
+ *                 The site-name folder keeps each set's items together, so
+ *                 several sets on one hub don't merge into shared folders.
  *
  * The webhooks step is the one step that doesn't wrap dc-cli.
  * `dc-cli webhook import` discards the top-level `secret` (the HMAC signing
@@ -55,13 +62,11 @@
  * expressible, and identity is the webhook's label rather than a mapping
  * file. See webhooks/README.md.
  *
- * All three content phases share one explicit --mapFile
- * (~/.amplience/imports/quadratic-<hubName>.json). dc-cli's default would
- * be a mapping file *per repository*, which breaks cross-repo links —
- * pages (content repo) link slots (slots repo) link components (content
- * repo) — by nulling any reference whose target lives in another repo's
- * map. The shared map is also what makes re-runs update items in place
- * rather than duplicate them.
+ * The content import passes one explicit --mapFile per hub
+ * (~/.amplience/imports/quadratic-<hubName>.json). The map records only
+ * fixture id → hub id pairs, never a repository or folder, so it carries over
+ * unchanged between import strategies. It is what makes re-runs update items
+ * in place rather than duplicate them.
  *
  * dc-cli exits 0 on some import failures (e.g. LINKED_CONTENT_ITEMS_NOT_
  * FOUND aborts), so this script also scans dc-cli's output and fails the
@@ -90,7 +95,9 @@
  *                            SITE_NAME on purpose: one says which content,
  *                            the other says which namespace it lands in.
  *   LOCALHOST_URL            localhost origin — fills ${localhostUrl} in viz URIs (default: http://localhost:3000)
- *   AMPLIENCE_REPO_CONTENT   repository id for pages + components (content step)
+ *   AMPLIENCE_REPO_CONTENT   repository id for pages + components (content step).
+ *                            Each configured repository's label must be unique
+ *                            on the hub — dc-cli matches repositories by label.
  *   AMPLIENCE_REPO_SLOTS     repository id for slots (content step)
  *   AMPLIENCE_REPO_PRODUCTS  optional — repository id for products (types +
  *                            content steps). Unset, products seed into the
@@ -143,6 +150,7 @@ import {
   withPreviewApplications,
 } from './lib/preview-apps.mjs'
 import { alreadyMapped, moveProductItems, withProductsRepo } from './lib/products.mjs'
+import { repositoryFolders } from './lib/repositories.mjs'
 import {
   buildStatusMap,
   EXTENSION_INSTANCE_FIELDS,
@@ -292,6 +300,34 @@ const dcCli = (...args) =>
         process.exit(code === 0 || code === null ? 1 : code)
       }
       resolve()
+    })
+  })
+
+/** Run a read-only dc-cli command with `--json` and parse what it prints. */
+const dcCliJson = (...args) =>
+  new Promise((resolve) => {
+    const child = spawn('dc-cli', [...args, '--json', ...credentialFlags()], {
+      stdio: ['ignore', 'pipe', 'inherit'],
+      shell: false,
+    })
+    let out = ''
+    child.stdout.on('data', (chunk) => (out += chunk.toString()))
+    child.on('error', () => {
+      console.error(
+        'Could not run dc-cli — run this script via pnpm so node_modules/.bin is on the PATH.',
+      )
+      process.exit(1)
+    })
+    child.on('close', (code) => {
+      try {
+        if (code !== 0) throw new Error(`exit ${code}`)
+        resolve(JSON.parse(out))
+      } catch (err) {
+        console.error(
+          `\n✗ dc-cli ${args.join(' ')} failed (${err instanceof Error ? err.message : err}).`,
+        )
+        process.exit(1)
+      }
     })
   })
 
@@ -670,19 +706,17 @@ const importContent = async () => {
   // Filename keeps the `quadratic-` prefix: renaming it orphans every existing hub's map, so dc-cli would re-import the whole model as duplicates.
   const mapFile = path.join(os.homedir(), '.amplience', 'imports', `quadratic-${hubName}.json`)
 
-  // Leaf-first phases: an item is only ever imported after everything it
-  // links to, so reference rewriting always finds its target in the map.
+  // Which fixture directories seed, and into which repository.
   const phases = [
-    { dir: 'components', repo: contentRepo },
-    { dir: 'slots', repo: slotsRepo },
-    { dir: 'pages', repo: contentRepo },
+    { dir: 'components', repo: 'AMPLIENCE_REPO_CONTENT' },
+    { dir: 'slots', repo: 'AMPLIENCE_REPO_SLOTS' },
+    { dir: 'pages', repo: 'AMPLIENCE_REPO_CONTENT' },
   ]
-  // Site Components is standalone (nothing links to or from it), so its order
-  // in the leaf-first sequence is irrelevant. Seed it only when both the repo
-  // is configured and the deployment actually ships fixtures for it — absent
-  // either, the feature simply isn't in use and the phase is skipped.
+  // Site Components is seeded only when both the repo is configured and the
+  // set actually ships fixtures for it — absent either, the feature simply
+  // isn't in use.
   if (siteComponentsRepo && existsSync(path.join(fixturesDir, 'site-components'))) {
-    phases.push({ dir: 'site-components', repo: siteComponentsRepo })
+    phases.push({ dir: 'site-components', repo: 'AMPLIENCE_REPO_SITE_COMPONENTS' })
   }
   // A mis-targeted seed is expensive to undo, so say what this run is about to
   // do before it does any of it.
@@ -692,6 +726,23 @@ const importContent = async () => {
       `${siteComponentsRepo ? ' (with site components)' : ''}` +
       `${productsRepo ? ' (products into their own repo)' : ''}`,
   )
+
+  // dc-cli finds repositories by label, so stage under each one's label.
+  let folders
+  try {
+    folders = repositoryFolders(
+      {
+        AMPLIENCE_REPO_CONTENT: contentRepo,
+        AMPLIENCE_REPO_SLOTS: slotsRepo,
+        ...(siteComponentsRepo && { AMPLIENCE_REPO_SITE_COMPONENTS: siteComponentsRepo }),
+        ...(productsRepo && { AMPLIENCE_REPO_PRODUCTS: productsRepo }),
+      },
+      await dcCliJson('content-repository', 'list'),
+    )
+  } catch (err) {
+    console.error(`\n✗ ${err instanceof Error ? err.message : String(err)}`)
+    process.exit(1)
+  }
 
   const hubLocales = await probeHubLocales()
   if (hubLocales === undefined) {
@@ -709,40 +760,40 @@ const importContent = async () => {
     }
   }
 
-  const localeTally = { kept: new Set(), dropped: new Set() }
-
-  // Stage and check every phase before importing any of them. Both checks
-  // (namespacing, locale filtering) exit non-zero, and an exit after the
-  // components phase had imported would leave a half-seeded hub — so they all
-  // run while the hub is still untouched.
-  const staged = phases.map(({ dir, repo }) => {
-    // Staged per set, so seeding a second set doesn't clobber the first's
-    // staging directory mid-run.
-    const stagedDir = path.join(stagingRoot, setName, `items-${dir}`)
-    rmSync(stagedDir, { recursive: true, force: true })
+  // Stage the whole set as <repository label>/<site name>/…, then
+  // check it, all before anything is imported: both checks (namespacing,
+  // locale filtering) exit non-zero, and the hub must still be untouched when
+  // they do. Staged per set, so seeding a second set doesn't clobber the
+  // first's staging directory mid-run.
+  const stagedRoot = path.join(stagingRoot, setName)
+  const siteFolder = (repo) => path.join(stagedRoot, folders[repo], siteName)
+  rmSync(stagedRoot, { recursive: true, force: true })
+  // A fixture directory only becomes a folder of its own where it shares a
+  // repository with another (components and pages, in the content repo).
+  // Alone in its repository, its items go straight into the set's folder.
+  const sharesRepo = (repo) =>
+    phases.filter((phase) => folders[phase.repo] === folders[repo]).length > 1
+  for (const { dir, repo } of phases) {
+    const stagedDir = sharesRepo(repo) ? path.join(siteFolder(repo), dir) : siteFolder(repo)
     mkdirSync(stagedDir, { recursive: true })
     cpSync(path.join(fixturesDir, dir), stagedDir, { recursive: true })
-    namespaceStagedDeliveryKeys(stagedDir, `${setName}/`, siteName)
-    if (hubLocales !== undefined) {
-      const { kept, dropped } = filterStagedLocales(stagedDir, hubLocales)
-      for (const l of kept) localeTally.kept.add(l)
-      for (const l of dropped) localeTally.dropped.add(l)
-    }
-    markStagedItemsPublishable(stagedDir)
-    return { stagedDir, repo, dir }
-  })
+  }
+  namespaceStagedDeliveryKeys(stagedRoot, `${setName}/`, siteName)
+  const localeTally = { kept: new Set(), dropped: new Set() }
+  if (hubLocales !== undefined) {
+    const { kept, dropped } = filterStagedLocales(stagedRoot, hubLocales)
+    for (const l of kept) localeTally.kept.add(l)
+    for (const l of dropped) localeTally.dropped.add(l)
+  }
+  markStagedItemsPublishable(stagedRoot)
 
-  // Products leave the pages phase for their own, just before it: they may
-  // link components and slots (imported above) and nothing links to them.
+  // Products leave the staged pages for the products repository's own folder.
   if (productsRepo) {
-    const pagesIndex = staged.findIndex((phase) => phase.dir === 'pages')
-    const productsDir = path.join(stagingRoot, setName, 'items-products')
-    rmSync(productsDir, { recursive: true, force: true })
-    mkdirSync(productsDir, { recursive: true })
-    const moved =
-      pagesIndex === -1 ? [] : moveProductItems(staged[pagesIndex].stagedDir, productsDir)
+    const moved = moveProductItems(
+      path.join(siteFolder('AMPLIENCE_REPO_CONTENT'), 'pages'),
+      siteFolder('AMPLIENCE_REPO_PRODUCTS'),
+    )
     if (moved.length > 0) {
-      staged.splice(pagesIndex, 0, { stagedDir: productsDir, repo: productsRepo, dir: 'products' })
       console.log(`  products: ${moved.length} into the products repo`)
 
       // dc-cli updates a mapped item where it already lives, so products an
@@ -760,19 +811,7 @@ const importContent = async () => {
     }
   }
 
-  for (const { stagedDir, repo } of staged) {
-    await dcCli(
-      'content-item',
-      'import',
-      stagedDir,
-      '--baseRepo',
-      repo,
-      '--mapFile',
-      mapFile,
-      '-f',
-      ...publishFlags,
-    )
-  }
+  await dcCli('content-item', 'import', stagedRoot, '--mapFile', mapFile, '-f', ...publishFlags)
 
   const summary = describeLocaleFilter(localeTally, fixtureSet.authoredLocales?.length ?? 0)
   if (summary) console.log(`\n  ${summary}`)
