@@ -103,8 +103,8 @@ pnpm hub:wipe content --custom      # items authored on the hub, never seeded
 Four things about `hub:import` that aren't obvious from the name:
 
 - **It is also the "push my changes" command.** Re-running updates items in place
-  rather than duplicating them, because every phase shares one dc-cli mapping
-  file. There is no separate `push`.
+  rather than duplicating them, because every run on a hub shares one dc-cli
+  mapping file. There is no separate `push`.
 - **The order matters and is not alphabetical.** Settings first (extensions and
   content reference workflow-state IDs that the settings step mints), then
   schemas → types → extensions → webhooks → content. `pnpm hub:import` handles
