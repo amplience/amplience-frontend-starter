@@ -1,15 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { api } from '../api.js'
+import { canonicalGroup } from '../hub-groups.js'
 import type { StringEnvKey } from '../required-fields.js'
 import { isRequired, missingRequired } from '../required-fields.js'
 import type { DiscoveredHub, Environment, PermissionsReport } from '../types.js'
 import { EMPTY_ENV } from '../types.js'
+import { HubIcon } from './HubIcon.js'
 import { PermissionsPanel } from './PermissionsPanel.js'
 import { WorkforceAccessPanel } from './WorkforceAccessPanel.js'
 
 type Props = {
   initial?: Environment
+  /** Groups already in use, offered as suggestions. */
+  groups?: string[]
   onSave: (env: Environment) => Promise<void>
   onCancel: () => void
   onDelete?: () => void
@@ -104,7 +108,7 @@ const FIELD_LABELS = new Map(
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) {
+export function EnvironmentForm({ initial, groups = [], onSave, onCancel, onDelete }: Props) {
   const isEdit = initial !== undefined
   const [form, setForm] = useState<Environment>(initial ?? EMPTY_ENV)
   const [saving, setSaving] = useState(false)
@@ -272,7 +276,14 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
     setSaving(true)
     setError(null)
     try {
-      await onSave(form)
+      const { group, icon, ...rest } = form
+      const nextGroup = canonicalGroup(group ?? '', groups)
+      const nextIcon = (icon ?? '').trim()
+      await onSave({
+        ...rest,
+        ...(nextGroup === '' ? {} : { group: nextGroup }),
+        ...(nextIcon === '' ? {} : { icon: nextIcon }),
+      })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error')
       setSaving(false)
@@ -342,6 +353,37 @@ export function EnvironmentForm({ initial, onSave, onCancel, onDelete }: Props) 
           <div className="form-fields">
             {/* ── Identity ── */}
             {IDENTITY_FIELDS.map((f, i) => renderField(f, i))}
+            <div className="field">
+              <label htmlFor="icon">{labelParts('Icon (emoji or image URL)')}</label>
+              <div className="field__row">
+                <input
+                  id="icon"
+                  type="text"
+                  value={form.icon ?? ''}
+                  placeholder="e.g. 🛍️ or https://example.com/logo.png"
+                  autoComplete="off"
+                  onChange={(e) => set('icon', e.target.value)}
+                />
+                <HubIcon icon={form.icon} />
+              </div>
+            </div>
+            <div className="field">
+              <label htmlFor="group">{labelParts('Group (optional)')}</label>
+              <input
+                id="group"
+                type="text"
+                list="hub-groups"
+                value={form.group ?? ''}
+                placeholder="e.g. Prospects"
+                autoComplete="off"
+                onChange={(e) => set('group', e.target.value)}
+              />
+              <datalist id="hub-groups">
+                {groups.map((g) => (
+                  <option key={g} value={g} />
+                ))}
+              </datalist>
+            </div>
 
             {/* ── Credentials + discover ── */}
             <div className="form-section">

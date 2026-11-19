@@ -44,6 +44,11 @@ export const api = {
       method: 'PUT',
       body: JSON.stringify(env),
     }),
+  /** Persist the hub order; hubs missing from `names` keep their place at the end. */
+  reorder: (names: string[]) =>
+    request<Config>('/environment-order', { method: 'PUT', body: JSON.stringify({ names }) }),
+  renameGroup: (from: string, to: string) =>
+    request<Config>('/environment-groups', { method: 'PUT', body: JSON.stringify({ from, to }) }),
   fixtureSets: () => request<FixtureSetInfo[]>('/fixture-sets'),
   /** `name` is a hub's identifier or a fixture set's — one of each is never active at once. */
   activate: (name: string) =>
