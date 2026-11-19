@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { canonicalGroup, groupHubs, groupNames, reorderWithin } from './hub-groups.js'
+import { canonicalGroup, groupHubs, groupNames, moveGroup, reorderWithin } from './hub-groups.js'
 import type { Environment } from './types.js'
 import { EMPTY_ENV } from './types.js'
 
@@ -70,5 +70,21 @@ describe('reorderWithin', () => {
   it('returns the input for a no-op or unknown names', () => {
     expect(reorderWithin(names, ['a', 'b'], 'a', 'a')).toBe(names)
     expect(reorderWithin(names, ['a', 'b'], 'a', 'z')).toBe(names)
+  })
+})
+
+describe('moveGroup', () => {
+  const envs = [hub('a', 'X'), hub('b'), hub('c', 'Y'), hub('d', 'X'), hub('e', 'Z')]
+  const names = (next: string[]) => next.join('')
+
+  it('moves a group onto another, keeping hubs together and ungrouped last', () => {
+    expect(names(moveGroup(envs, 'Z', 'X'))).toBe('eadcb')
+    expect(names(moveGroup(envs, 'X', 'Z'))).toBe('cead' + 'b')
+  })
+
+  it('returns the current order for a no-op or unknown group', () => {
+    const current = names(envs.map((e) => e.name))
+    expect(names(moveGroup(envs, 'X', 'X'))).toBe(current)
+    expect(names(moveGroup(envs, 'X', 'Nope'))).toBe(current)
   })
 })

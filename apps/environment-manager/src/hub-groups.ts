@@ -58,3 +58,19 @@ export function reorderWithin(names: string[], section: string[], from: string, 
   let next = 0
   return names.map((name) => (slots.has(name) ? (moved[next++] ?? name) : name))
 }
+
+/** Hub order after moving group `from` onto `to`'s position; ungrouped hubs stay last. */
+export function moveGroup(envs: Environment[], from: string, to: string): string[] {
+  const order = envs.map((env) => env.name)
+  const sections = groupHubs(envs).filter((s) => s.group !== null)
+  const fromIdx = sections.findIndex((s) => s.group === from)
+  const toIdx = sections.findIndex((s) => s.group === to)
+  const moved = sections[fromIdx]
+  if (moved === undefined || toIdx === -1 || fromIdx === toIdx) return order
+  const next = sections.filter((_, i) => i !== fromIdx)
+  next.splice(toIdx, 0, moved)
+  return [
+    ...next.flatMap((s) => s.hubs.map((h) => h.name)),
+    ...envs.filter((env) => groupOf(env) === undefined).map((env) => env.name),
+  ]
+}

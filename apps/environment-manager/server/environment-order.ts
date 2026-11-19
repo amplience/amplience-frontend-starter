@@ -11,3 +11,21 @@ export function applyOrder<T extends { name: string }>(envs: T[], names: string[
   const listed = new Set(requested.map((env) => env.name))
   return [...requested, ...envs.filter((env) => !listed.has(env.name))]
 }
+
+/**
+ * Moves every hub in group `from` to group `to`. A `to` that matches another
+ * group ignoring case joins it under that group's spelling.
+ */
+export function renameGroup<T extends { group?: string }>(
+  envs: T[],
+  from: string,
+  to: string,
+): T[] {
+  const source = from.trim()
+  const target = to.trim()
+  const existing = envs
+    .map((env) => env.group?.trim())
+    .find((g) => g !== undefined && g !== source && g.toLowerCase() === target.toLowerCase())
+  const name = existing ?? target
+  return envs.map((env) => (env.group?.trim() === source ? { ...env, group: name } : env))
+}

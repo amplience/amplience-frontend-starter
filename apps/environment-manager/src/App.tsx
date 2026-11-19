@@ -12,7 +12,7 @@ import { SiteCard } from './components/SiteCard.js'
 import { SortableHub } from './components/SortableHub.js'
 import { FILTER_MIN_ITEMS, filterEnvironments } from './filter-environments.js'
 import type { FlowsOverview } from './flow-rows.js'
-import { groupHubs, groupNames, reorderWithin } from './hub-groups.js'
+import { groupHubs, groupNames, moveGroup, reorderWithin } from './hub-groups.js'
 import type { Config, Environment, FixtureSetInfo } from './types.js'
 
 type Modal = { mode: 'add' } | { mode: 'edit'; env: Environment } | null
@@ -50,6 +50,7 @@ export function App() {
   const [tab, setTab] = useState<Tab>('sources')
   const [hubQuery, setHubQuery] = useState('')
   const [dragName, setDragName] = useState<string | null>(null)
+  const [dragGroup, setDragGroup] = useState<string | null>(null)
 
   // useCallback keeps the reference stable so the effect dep array is honest.
   // setState setters are guaranteed stable by React, so no extra deps needed.
@@ -162,8 +163,18 @@ export function App() {
     )
   }
 
+  function moveGroupTo(from: string, to: string) {
+    saveOrder(moveGroup(hubs, from, to))
+  }
+
+  function renameGroupTo(from: string, to: string) {
+    void api
+      .renameGroup(from, to)
+      .then(setConfig)
+      .catch(() => setLoadError('Could not rename the group.'))
+  }
+
   function renderHub(env: Environment, siblings: string[]) {
-    if (config === null) return null
     return (
       <SortableHub
         key={env.name}
@@ -186,7 +197,7 @@ export function App() {
         <EnvironmentCard
           env={env}
           fixtureSets={fixtureSets}
-          isActive={env.name === config.active}
+          isActive={env.name === config?.active}
           onActivate={() => {
             void handleActivate(env.name)
           }}
@@ -198,6 +209,7 @@ export function App() {
   }
 
   const sections = groupHubs(visibleHubs)
+  const namedGroups = sections.flatMap((s) => (s.group === null ? [] : [s.group]))
 
   const builtInSets = fixtureSets.filter((set) => set.origin !== 'local')
   const localSets = fixtureSets.filter((set) => set.origin === 'local')
@@ -331,13 +343,29 @@ export function App() {
                   {sections.map((section) => {
                     const names = section.hubs.map((h) => h.name)
                     const cards = section.hubs.map((env) => renderHub(env, names))
+                    const { group } = section
                     // No groups in use: the plain list, as before.
-                    if (sections.length === 1 && section.group === null) return cards
+                    if (sections.length === 1 && group === null) return cards
                     return (
                       <HubGroup
-                        key={section.group ?? ''}
-                        title={section.group ?? 'Ungrouped'}
+                        key={group ?? ''}
+                        title={group ?? 'Ungrouped'}
                         count={section.hubs.length}
+                        {...(group === null
+                          ? {}
+                          : { onRename: (name: string) => renameGroupTo(group, name) })}
+                        reorderable={group !== null && canReorder && namedGroups.length > 1}
+                        dragGroup={dragGroup}
+                        onDragStart={setDragGroup}
+                        onDragEnd={() => setDragGroup(null)}
+                        onDrop={(from, to) => {
+                          setDragGroup(null)
+                          moveGroupTo(from, to)
+                        }}
+                        onNudge={(title, delta) => {
+                          const target = namedGroups[namedGroups.indexOf(title) + delta]
+                          if (target !== undefined) moveGroupTo(title, target)
+                        }}
                       >
                         {cards}
                       </HubGroup>

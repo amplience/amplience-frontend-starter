@@ -21,7 +21,7 @@ import {
 import { readHubFlows, type HubFlow } from './content-flows.ts'
 import { buildDamCheck } from './dam-permissions.ts'
 import { hubManagementEnvVars, updateEnvVars, webEnvVars } from './env-files.ts'
-import { applyOrder } from './environment-order.ts'
+import { applyOrder, renameGroup } from './environment-order.ts'
 import { readFixtureSets, resolveFixtureSet, type FixtureSetInfo } from './fixture-sets.ts'
 import { confirmsRemoval, matchForAction, opKey, Steps, type FlowAction } from './flow-ops.ts'
 import { deepGet, gqlErrors, isAuthError, liveGqlFetch, type GqlFetch } from './graphql.ts'
@@ -865,6 +865,23 @@ app.put('/api/environment-order', async (c) => {
   }
   const config = await readConfig()
   config.environments = applyOrder(config.environments, names)
+  await writeConfig(config)
+  return c.json(config)
+})
+
+// PUT /api/environment-groups  — rename a group across all its hubs
+app.put('/api/environment-groups', async (c) => {
+  const { from, to } = await c.req.json<{ from?: unknown; to?: unknown }>()
+  if (
+    typeof from !== 'string' ||
+    typeof to !== 'string' ||
+    from.trim() === '' ||
+    to.trim() === ''
+  ) {
+    return c.json({ error: 'Expected { from, to } as non-blank strings.' }, 400)
+  }
+  const config = await readConfig()
+  config.environments = renameGroup(config.environments, from, to)
   await writeConfig(config)
   return c.json(config)
 })

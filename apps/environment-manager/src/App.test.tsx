@@ -33,7 +33,9 @@ vi.mock('./components/FixturesCard.js', () => ({
 vi.mock('./components/EnvironmentForm.js', () => ({
   EnvironmentForm: () => <div data-testid="environment-form" />,
 }))
-vi.mock('./components/FlowsTab.js', () => ({ FlowsTab: () => <div data-testid="flows-tab" /> }))
+vi.mock('./components/FlowsTab.js', () => ({
+  FlowsTab: () => <div data-testid="flows-tab" />,
+}))
 
 vi.mock('./api.js', () => ({
   api: {
@@ -43,6 +45,7 @@ vi.mock('./api.js', () => ({
     hubFlows: vi.fn(),
     flowOp: vi.fn(),
     reorder: vi.fn(),
+    renameGroup: vi.fn(),
   },
 }))
 
@@ -272,7 +275,9 @@ describe('App — groups and ordering', () => {
 
   const nudge = (name: string, key: 'ArrowUp' | 'ArrowDown') =>
     fireEvent.keyDown(
-      screen.getByRole('button', { name: (label) => label.startsWith(`Reorder ${name}.`) }),
+      screen.getByRole('button', {
+        name: (label) => label.startsWith(`Reorder ${name}.`),
+      }),
       { key, altKey: true },
     )
 
@@ -318,9 +323,49 @@ describe('App — groups and ordering', () => {
   it('offers no handles while a filter is applied', async () => {
     list.mockResolvedValue(config(['a', 'b', 'c', 'd', 'e'].map((n) => grouped(n))))
     render(<App />)
-    fireEvent.change(await screen.findByLabelText('Filter hubs'), { target: { value: 'b' } })
+    fireEvent.change(await screen.findByLabelText('Filter hubs'), {
+      target: { value: 'b' },
+    })
     await waitFor(() => expect(screen.getAllByTestId('environment-card')).toHaveLength(1))
     expect(screen.queryAllByRole('button', { name: /^Reorder/ })).toHaveLength(0)
+  })
+
+  it('saves the new order when a group is moved with the keyboard', async () => {
+    list.mockResolvedValue(config([grouped('a', 'X'), grouped('b', 'Y'), grouped('c', 'X')]))
+    render(<App />)
+    await screen.findAllByTestId('environment-card')
+    fireEvent.keyDown(screen.getByRole('button', { name: /^Reorder group Y\./ }), {
+      key: 'ArrowUp',
+      altKey: true,
+    })
+    expect(api.reorder).toHaveBeenCalledWith(['b', 'a', 'c'])
+  })
+
+  it('offers no group handles with a single group', async () => {
+    list.mockResolvedValue(config([grouped('a', 'X'), grouped('b')]))
+    render(<App />)
+    await screen.findAllByTestId('environment-card')
+    expect(screen.queryAllByRole('button', { name: /^Reorder group/ })).toHaveLength(0)
+  })
+
+  it('renames a group', async () => {
+    vi.mocked(api.renameGroup).mockResolvedValue(config([]))
+    list.mockResolvedValue(config([grouped('a', 'X'), grouped('b')]))
+    render(<App />)
+    fireEvent.click(await screen.findByRole('button', { name: 'Rename group X' }))
+    const input = screen.getByLabelText('New name for group X')
+    fireEvent.change(input, { target: { value: ' Leads ' } })
+    fireEvent.submit(input)
+    expect(api.renameGroup).toHaveBeenCalledWith('X', 'Leads')
+  })
+
+  it('ignores a rename that changes nothing, and has no rename for Ungrouped', async () => {
+    list.mockResolvedValue(config([grouped('a', 'X'), grouped('b')]))
+    render(<App />)
+    fireEvent.click(await screen.findByRole('button', { name: 'Rename group X' }))
+    fireEvent.submit(screen.getByLabelText('New name for group X'))
+    expect(api.renameGroup).not.toHaveBeenCalled()
+    expect(screen.queryByRole('button', { name: 'Rename group Ungrouped' })).toBeNull()
   })
 
   it('does nothing when a hub is nudged past the end of its group', async () => {
@@ -366,5 +411,32 @@ describe('App — groups and ordering', () => {
     expect(toggle.getAttribute('aria-expanded')).toBe('true')
     fireEvent.click(toggle)
     expect(toggle.getAttribute('aria-expanded')).toBe('false')
+  })
+
+  it('does nothing when a group is nudged past the end', async () => {
+    list.mockResolvedValue(config([grouped('a', 'X'), grouped('b', 'Y')]))
+    render(<App />)
+    await screen.findAllByTestId('environment-card')
+    fireEvent.keyDown(screen.getByRole('button', { name: /^Reorder group X\./ }), {
+      key: 'ArrowUp',
+      altKey: true,
+    })
+    expect(api.reorder).not.toHaveBeenCalled()
+  })
+
+  it('says so when a group cannot be renamed', async () => {
+    vi.mocked(api.renameGroup).mockRejectedValue(new Error('nope'))
+    list.mockResolvedValue(config([grouped('a', 'X')]))
+    render(<App />)
+    fireEvent.click(await screen.findByRole('button', { name: 'Rename group X' }))
+    fireEvent.change(screen.getByLabelText('New name for group X'), { target: { value: 'Y' } })
+    fireEvent.submit(screen.getByLabelText('New name for group X'))
+    expect(await screen.findByText(/Could not rename the group/)).toBeDefined()
+  })
+
+  it('falls back to the identifier for a hub with no label', async () => {
+    list.mockResolvedValue(config([{ ...grouped('a'), label: '' }, grouped('b')]))
+    render(<App />)
+    expect(await screen.findByRole('button', { name: /^Reorder a\./ })).toBeDefined()
   })
 })

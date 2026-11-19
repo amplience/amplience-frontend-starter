@@ -2524,3 +2524,23 @@ td.flow-grid__cell {
 .drag-handle:focus-visible {
   color: var(--color-text);
 }
+
+.hub-group__head {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.hub-group__rename input {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.2em 0.5em;
+}
+
+.hub-group--dragging {
+  opacity: 0.5;
+}
