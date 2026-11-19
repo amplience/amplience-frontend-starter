@@ -134,8 +134,8 @@ describe('schema manifest', () => {
   it('exposes content types as the non-partial subset', () => {
     // A deliberate tripwire: bump this when a content type is added, so the
     // count is a decision rather than something derived from the thing it
-    // checks. 27 as of Locale-based Content (item-level localisation).
-    expect(contentTypeSchemas).toHaveLength(27)
+    // checks. 28 as of the announcement bar.
+    expect(contentTypeSchemas).toHaveLength(28)
     expect(contentTypeSchemas.every((e) => e.validationLevel !== 'PARTIAL')).toBe(true)
     expect(findSchema('https://quadratic.amplience.com/v2/partials/media')?.validationLevel).toBe(
       'PARTIAL',
@@ -347,6 +347,7 @@ describe('block CSS (ADR-0026)', () => {
    * apps/web/src/renderer/dispatch.block-css.test.tsx — keep the two in step).
    */
   const BLOCKS = [
+    'https://quadratic.amplience.com/v2/content/announcement-bar',
     'https://quadratic.amplience.com/v2/content/carousel',
     'https://quadratic.amplience.com/v2/content/columns',
     'https://quadratic.amplience.com/v2/content/grid',
@@ -416,6 +417,35 @@ describe('block CSS (ADR-0026)', () => {
     const body = { _meta: { schema: 'x' }, content: 'Hello' }
     expect(validate?.({ ...body, customCss: 'h2 { color: red; }' })).toBe(true)
     expect(validate?.({ ...body, customCss: 'x'.repeat(4001) })).toBe(false)
+  })
+})
+
+describe('slot blocks', () => {
+  // partials/slot-blocks is partials/content-blocks plus the blocks that only
+  // make sense full-width at slot level. Held as two lists (not a $ref chain,
+  // which the Dynamic Content form doesn't merge into one picker), so this
+  // keeps them in step: a block added to content-blocks must reach slots too.
+  type LinkPartial = { allOf: [unknown, { properties: { contentType: { enum: string[] } } }] }
+  const allowed = (id: string) =>
+    (findSchema(id)?.schema as unknown as LinkPartial).allOf[1].properties.contentType.enum
+  const SLOT_ONLY = ['https://quadratic.amplience.com/v2/content/announcement-bar']
+
+  it('is content-blocks plus the slot-only blocks', () => {
+    expect([...allowed('https://quadratic.amplience.com/v2/partials/slot-blocks')].sort()).toEqual(
+      [
+        ...allowed('https://quadratic.amplience.com/v2/partials/content-blocks'),
+        ...SLOT_ONLY,
+      ].sort(),
+    )
+  })
+
+  it('is what slots draw their components from', () => {
+    const slot = findSchema('https://quadratic.amplience.com/v2/slots/slot')?.schema as unknown as {
+      properties: { components: { items: { $ref: string } } }
+    }
+    expect(slot.properties.components.items.$ref).toBe(
+      'https://quadratic.amplience.com/v2/partials/slot-blocks',
+    )
   })
 })
 

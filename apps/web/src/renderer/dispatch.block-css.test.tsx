@@ -11,6 +11,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import {
+  ANNOUNCEMENT_BAR_SCHEMA,
   CAROUSEL_BLOCK_SCHEMA,
   COLUMNS_BLOCK_SCHEMA,
   defaultRegistry,
@@ -212,6 +213,7 @@ const REAL_BLOCKS: readonly [string, Record<string, unknown>][] = [
   [MEDIA_BLOCK_SCHEMA, { media: image }],
   [HEADER_BLOCK_SCHEMA, { rows: [] }],
   [HEADER_ROW_SCHEMA, { items: [] }],
+  [ANNOUNCEMENT_BAR_SCHEMA, { message: 'Hello' }],
 ]
 
 describe('block CSS — real blocks', () => {

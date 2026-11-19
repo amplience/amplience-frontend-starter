@@ -14,6 +14,7 @@
  * `content-type-schemas/schemas/<name>.json` is the JSON Schema body.
  */
 
+import contentAnnouncementBar from '../content-type-schemas/schemas/content_announcement-bar.json'
 import contentBlogArticle from '../content-type-schemas/schemas/content_blog-article.json'
 import contentCarousel from '../content-type-schemas/schemas/content_carousel.json'
 import contentColumns from '../content-type-schemas/schemas/content_columns.json'
@@ -51,6 +52,7 @@ import partialsMedia from '../content-type-schemas/schemas/partials_media.json'
 import partialsRichMedia from '../content-type-schemas/schemas/partials_rich-media.json'
 import partialsSectionHeader from '../content-type-schemas/schemas/partials_section-header.json'
 import partialsSeo from '../content-type-schemas/schemas/partials_seo.json'
+import partialsSlotBlocks from '../content-type-schemas/schemas/partials_slot-blocks.json'
 import sitestructureCustomCss from '../content-type-schemas/schemas/sitestructure_custom-css.json'
 import slotsSlot from '../content-type-schemas/schemas/slots_slot.json'
 
@@ -85,6 +87,7 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(partialsRichMedia, 'PARTIAL'),
   entry(partialsCta, 'PARTIAL'),
   entry(partialsContentBlocks, 'PARTIAL'),
+  entry(partialsSlotBlocks, 'PARTIAL'),
   entry(partialsCarouselItems, 'PARTIAL'),
   entry(partialsCarouselOptions, 'PARTIAL'),
   entry(partialsColour, 'PARTIAL'),
@@ -106,6 +109,7 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(contentMediaCard, 'CONTENT_TYPE'),
   entry(contentMedia, 'CONTENT_TYPE'),
   entry(slotsSlot, 'SLOT'),
+  entry(contentAnnouncementBar, 'CONTENT_TYPE'),
   entry(contentHeader, 'CONTENT_TYPE'),
   entry(contentHeaderRow, 'CONTENT_TYPE'),
   entry(contentHeaderGroup, 'CONTENT_TYPE'),

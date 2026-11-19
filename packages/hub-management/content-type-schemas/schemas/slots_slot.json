@@ -62,7 +62,7 @@
       "description": "Ordered components rendered in this slot.",
       "type": "array",
       "items": {
-        "$ref": "https://quadratic.amplience.com/v2/partials/content-blocks"
+        "$ref": "https://quadratic.amplience.com/v2/partials/slot-blocks"
       }
     }
   },
