@@ -432,6 +432,21 @@ ICONS["content_locale-content"] = card_b(variant_split(globe_badge, globe_badge)
 ICONS["content_audience-content"] = card_b(variant_split(
     lambda x, y: user_badge(x, y, solid=False), lambda x, y: user_badge(x, y, solid=True)))
 
+
+def sources_badge(cx, cy, r=19):
+    # a stack of layers in the variant stripes' pale-to-dark shades: several data sources
+    def layer(dy, fill):
+        return (f'<path d="M{cx} {cy - 11 + dy} l12 6 -12 6 -12 -6 Z" '
+                f'fill="{fill}" stroke="{DARK}" stroke-width="{SW_THIN - 0.3}"/>')
+    return (f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="#ffffff" stroke="{DARK}" stroke-width="{SW_MED}"/>'
+            + layer(10, "#ffffff") + layer(5, VARIANT_PALE) + layer(0, VARIANT_DARK))
+
+
+# multi-pim-product-carousel: the product carousel unchanged, plus the variant
+# family's corner badge (same spot and size as locale/audience's first badge) —
+# one item that varies by context, here by product source.
+ICONS["content_multi-pim-product-carousel"] = card_b(product_carousel + sources_badge(VX0, VY0))
+
 # ---------- Aliases ----------
 # Types that deliberately share an icon. Files are still written out under
 # each name so every content type has an explicit png/svg pair.
