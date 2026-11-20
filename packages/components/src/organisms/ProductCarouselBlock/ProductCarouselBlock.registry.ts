@@ -1,4 +1,8 @@
-import type { ComponentRegistryEntry, ResolvedProduct } from '@amplience/frontend-starter-types'
+import type {
+  ComponentRegistryEntry,
+  RenderContext,
+  ResolvedProduct,
+} from '@amplience/frontend-starter-types'
 
 import { ProductCarouselBlock, type ProductCarouselBlockProps } from './ProductCarouselBlock'
 
@@ -7,9 +11,9 @@ export const PRODUCT_CAROUSEL_SCHEMA = 'https://quadratic.amplience.com/v2/conte
 
 /**
  * The product-carousel delivery body — the block's own props minus the ones
- * the renderer supplies, plus the authored `skus`.
+ * the renderer supplies, plus the authored `products` — SKUs or product ids.
  *
- * `skus` is a string array rather than content links: a PIM-backed deployment
+ * `products` is a string array rather than content links: a PIM-backed deployment
  * has no content item to link to, so identifiers are the only reference that
  * survives swapping the source (ADR-0027 §1).
  */
@@ -18,8 +22,18 @@ export type ProductCarouselSchema = Omit<
   'products' | 'locale' | 'localeBasePath' | 'loadPriority'
 > & {
   readonly _meta: unknown
+  readonly products?: readonly string[]
+  /**
+   * The field's name before it took product ids too. Hubs seeded earlier still
+   * hold it until re-synced, so it is read as a fallback.
+   * TODO: remove once seeded hubs have been re-synced.
+   */
   readonly skus?: readonly string[]
 }
+
+/** The carousel's product references, from `products` or the legacy `skus`. */
+const referencesOf = (schema: ProductCarouselSchema): readonly string[] =>
+  schema.products ?? schema.skus ?? []
 
 /**
  * Registry entry for the product-carousel schema.
@@ -37,19 +51,29 @@ export const productCarouselRegistryEntry: ComponentRegistryEntry<
   ProductCarouselBlockProps
 > = {
   component: ProductCarouselBlock,
-  referencedSkus: (schema) => schema.skus ?? [],
-  propsFromSchema: ({ _meta: _envelope, skus, ...props }, ctx) => {
-    const resolved = ctx.products
-    const products = (skus ?? [])
-      .map((sku) => resolved?.get(sku))
-      .filter((p): p is ResolvedProduct => p !== undefined)
+  referencedSkus: referencesOf,
+  propsFromSchema: (schema, ctx) => productCarouselProps(schema, ctx),
+}
 
-    return {
-      ...props,
-      products,
-      ...(ctx.locale !== undefined && { locale: ctx.locale }),
-      ...(ctx.localeBasePath !== undefined && { localeBasePath: ctx.localeBasePath }),
-      ...(ctx.loadPriority !== undefined && { loadPriority: ctx.loadPriority }),
-    }
-  },
+/**
+ * Body → props, shared with the multi-PIM carousel, which narrows its body to
+ * one product list and then renders exactly as this does.
+ */
+export function productCarouselProps(
+  schema: ProductCarouselSchema,
+  ctx: RenderContext,
+): ProductCarouselBlockProps {
+  const { _meta: _envelope, products: _products, skus: _skus, ...props } = schema
+  const resolved = ctx.products
+  const products = referencesOf(schema)
+    .map((reference) => resolved?.get(reference))
+    .filter((p): p is ResolvedProduct => p !== undefined)
+
+  return {
+    ...props,
+    products,
+    ...(ctx.locale !== undefined && { locale: ctx.locale }),
+    ...(ctx.localeBasePath !== undefined && { localeBasePath: ctx.localeBasePath }),
+    ...(ctx.loadPriority !== undefined && { loadPriority: ctx.loadPriority }),
+  }
 }

@@ -202,6 +202,21 @@ const filterByWhere = (
     return products.filter((p) => p.slug[locale] === value)
   }
 
+  const refs =
+    /^id in \((.*)\) or masterVariant\(sku in \((.*)\)\) or variants\(sku in \((.*)\)\)$/.exec(
+      where,
+    )
+  if (refs) {
+    const wanted = new Set(unquoteList(refs[1] ?? ''))
+    return products.filter(
+      (p) =>
+        wanted.has(p.id) ||
+        [p.masterVariant, ...(p.variants ?? [])].some(
+          (v) => v.sku !== undefined && wanted.has(v.sku),
+        ),
+    )
+  }
+
   const ids = /^id in \((.*)\)$/.exec(where)
   if (ids) {
     const wanted = new Set(unquoteList(ids[1] ?? ''))

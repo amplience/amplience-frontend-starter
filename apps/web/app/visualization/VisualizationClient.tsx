@@ -48,7 +48,7 @@ import type {
   ResolvedProduct,
 } from '@amplience/frontend-starter-types'
 
-import { collectSkus, renderContent } from '../../src/renderer'
+import { collectSkus, productMap, renderContent } from '../../src/renderer'
 import { fillLocaleGaps } from './fill-locale-gaps'
 
 // ---------------------------------------------------------------------------
@@ -81,6 +81,11 @@ type Props = {
    */
   localeCode?: string
   /**
+   * The deployment's product source (`PRODUCT_SOURCE`), from the server — the
+   * multi-PIM carousel shows the list for this site's source.
+   */
+  productSource?: string
+  /**
    * Active locale URL prefix (ADR-0015) for the pane's locale, so internal
    * links in the visualized content stay inside that locale. Defaults to ''
    * (the default locale — links unprefixed).
@@ -109,6 +114,7 @@ export function VisualizationClient({
   deliveryLocale,
   initialProducts,
   localeCode,
+  productSource,
 }: Props) {
   // The model the content form last pushed (unsaved edits included), or
   // undefined until it does. Only the *live* model is state: `initialModel` is
@@ -189,16 +195,16 @@ export function VisualizationClient({
     router.replace(`${url.pathname}${url.search}`)
   }, [hostLocale, localeCode, router])
 
-  const [products, setProducts] = useState<ReadonlyMap<string, ResolvedProduct>>(
-    () => new Map((initialProducts ?? []).map((p) => [p.sku, p])),
+  const [products, setProducts] = useState<ReadonlyMap<string, ResolvedProduct>>(() =>
+    productMap(initialProducts ?? []),
   )
 
   // SKUs the current model references. The server resolved the initial set; an
   // edit can introduce more, and a client boundary cannot reach `ProductSource`
   // — so the route does it (ADR-0027).
   const skus = useMemo(
-    () => collectSkus(resolvedModel, defaultRegistry, localeCode).join(','),
-    [resolvedModel, localeCode],
+    () => collectSkus(resolvedModel, defaultRegistry, localeCode, productSource).join(','),
+    [resolvedModel, localeCode, productSource],
   )
 
   useEffect(() => {
@@ -217,7 +223,7 @@ export function VisualizationClient({
         if (resolved.length === 0) return
         // Merge rather than replace: products already resolved stay put, so
         // removing a SKU never re-fetches the rest of the rail.
-        setProducts((current) => new Map([...current, ...resolved.map((p) => [p.sku, p] as const)]))
+        setProducts((current) => new Map([...current, ...productMap(resolved)]))
       })
       .catch(() => {
         // Aborted, offline, or the route is unavailable — the rail renders with
@@ -237,6 +243,7 @@ export function VisualizationClient({
     loadPriority: loadPriority ?? 'lazy',
     localeBasePath,
     products,
+    ...(productSource !== undefined && { productSource }),
     ...(localeCode !== undefined && { locale: localeCode }),
   }
   return <>{renderContent(resolvedModel, defaultRegistry, ctx)}</>

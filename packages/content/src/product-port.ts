@@ -44,6 +44,10 @@ export type ProductSource = {
    * Fetch products by SKU, for content that references products by identity
    * rather than by listing — a curated carousel, a related-products rail.
    *
+   * A source whose products also carry an `id` resolves those too, so content
+   * filled by a product picker (which stores ids) and content authored by SKU
+   * both work. The returned `sku` is always the product's own.
+   *
    * Returns only the SKUs that resolved, in the order requested, so an
    * unpublished or mistyped SKU degrades to a shorter rail rather than an
    * error. Implementations pass the misses through `warnOnMissingSkus`,

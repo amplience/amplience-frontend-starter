@@ -13,10 +13,11 @@
  * collected, and one inside the variant that wins is. Without it SKUs would be
  * fetched for every locale's variants and only one rendered. The locale must be
  * the one the render will use (`ctx.locale`); omitted, the default content is
- * what is collected, matching a render with no locale.
+ * what is collected, matching a render with no locale. `productSource` likewise
+ * must be the render's `ctx.productSource`.
  */
 
-import type { Registry } from '@amplience/frontend-starter-types'
+import type { Registry, RenderContext } from '@amplience/frontend-starter-types'
 
 import { isLocaleContent, resolveLocaleContent, selectLocaleContent } from './locale-content'
 
@@ -25,7 +26,14 @@ export function collectSkus(
   content: unknown,
   registry: Registry,
   locale?: string,
+  productSource?: string,
 ): readonly string[] {
+  // What `referencedSkus` may read: the multi-PIM carousel picks its list by
+  // the site's product source.
+  const ctx: RenderContext = {
+    ...(locale !== undefined && { locale }),
+    ...(productSource !== undefined && { productSource }),
+  }
   const found = new Set<string>()
   // A content tree can be self-referential through a mis-authored link; track
   // visited nodes so traversal terminates.
@@ -53,9 +61,9 @@ export function collectSkus(
     if (entry === undefined) return
 
     const referencedSkus = entry.referencedSkus as
-      ((schema: unknown) => readonly string[]) | undefined
+      ((schema: unknown, ctx: RenderContext) => readonly string[]) | undefined
     if (referencedSkus !== undefined) {
-      for (const sku of referencedSkus(node)) {
+      for (const sku of referencedSkus(node, ctx)) {
         if (typeof sku === 'string' && sku.length > 0) found.add(sku)
       }
     }

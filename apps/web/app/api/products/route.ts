@@ -16,6 +16,7 @@
 import { defaultLocale, locales } from '../../../lib/locales'
 import type { Locale } from '../../../lib/locales'
 import { resolveProductsBySku } from '../../../lib/resolve-products'
+import { uniqueProducts } from '../../../src/renderer/product-map'
 
 /** Beyond this a request is abuse, not a carousel — the CMS caps rails far lower. */
 const MAX_SKUS = 100
@@ -40,7 +41,7 @@ export async function GET(req: Request): Promise<Response> {
 
   const products = await resolveProductsBySku(skus, localeForCode(params.get('locale')))
   return Response.json(
-    { products: [...products.values()] },
+    { products: uniqueProducts(products) },
     // Author-facing and live by nature; a cached response would show stale
     // prices moments after an edit.
     { headers: { 'cache-control': 'no-store' } },

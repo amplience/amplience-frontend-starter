@@ -34,6 +34,8 @@ export type ResolveOptions = {
   site?: SiteTarget
   /** Fills ${secret:name} (webhooks step); resolved in memory only. */
   secrets?: Map<string, string>
+  /** Fills ${commercetools:field} (extensions step) — see product-pickers. */
+  commercetools?: Readonly<Record<string, string>>
   source?: string
 }
 

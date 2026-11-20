@@ -225,6 +225,12 @@ describe('CommercetoolsProductSource specifics', () => {
       expect(total).toBe(2)
     })
 
+    it('resolves a product id, as the eComm Toolkit picker stores, alongside SKUs', async () => {
+      const products = await setup().source.getBySkus(['prod-lamp', 'AF-SKIRT-001'])
+      expect(products.map((p) => p.sku)).toEqual(['AF-LAMP-003', 'AF-SKIRT-001'])
+      expect(products[0]?.id).toBe('prod-lamp')
+    })
+
     it('resolves a variant SKU to its product', async () => {
       const products = await setup().source.getBySkus(['AF-SKIRT-001-L', 'AF-LAMP-003'])
       expect(products.map((p) => p.sku)).toEqual(['AF-SKIRT-001', 'AF-LAMP-003'])

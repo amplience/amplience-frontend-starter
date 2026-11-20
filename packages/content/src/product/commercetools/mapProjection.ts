@@ -91,6 +91,7 @@ export const mapProjection = (
 
   return {
     sku,
+    id: projection.id,
     slug,
     name,
     ...(price ? { price } : {}),

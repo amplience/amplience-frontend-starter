@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://quadratic.amplience.com/v2/content/product-carousel",
   "title": "Product Carousel Block",
-  "description": "A horizontally scrolling rail of products, curated by SKU.",
+  "description": "A horizontally scrolling rail of curated products.",
   "allOf": [
     {
       "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/content"
@@ -17,7 +17,7 @@
         "items": [
           {
             "label": "📝 Content",
-            "pointers": ["/sectionHeader", "/skus"]
+            "pointers": ["/sectionHeader", "/products"]
           },
           {
             "label": "⚙️ Options",
@@ -50,9 +50,9 @@
         }
       ]
     },
-    "skus": {
-      "title": "Products (SKUs)",
-      "description": "One SKU per slide, in the order they should appear. SKUs rather than links to content: a deployment backed by a PIM has no content item to link to, so identifiers are what keeps this rail working when the product source changes. A SKU that no longer resolves is skipped.",
+    "products": {
+      "title": "Products",
+      "description": "The products to show, one per slide, in order. Each entry is a SKU or, where the hub has a product picker, the product source's own id, which the picker fills in for you. Identifiers rather than links to content, so the rail keeps working whichever product source the site uses. One that no longer resolves is skipped.",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -164,10 +164,10 @@
       ]
     }
   },
-  "required": ["skus"],
+  "required": ["products"],
   "propertyOrder": [
     "sectionHeader",
-    "skus",
+    "products",
     "slidesMobile",
     "slidesTablet",
     "slidesDesktop",

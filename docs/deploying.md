@@ -60,6 +60,8 @@ Read only when `PRODUCT_SOURCE="commercetools"`. The three credentials are requi
 | `CTP_PRODUCT_SEARCH`              | `off` skips commercetools Product Search. When the project has it active, listings run one small search per page instead of reading the whole catalogue; it is off by default in commercetools (Merchant Center → Settings → Project settings → Storefront Search). | `off`                    | Used when active, full read otherwise |
 | `CTP_CACHE_TTL_SECONDS`           | How long the catalogue listing is reused. `0` disables. Product pages and carousels always read live.                                                                                                                                                               | `300`                    | `60`                                  |
 
+Editors can pick commercetools products in carousels instead of typing SKUs — see [commercetools product picker](working-with-a-hub.md#commercetools-product-picker). The picker stores product ids; the site resolves SKUs and ids alike.
+
 Sale prices work the same from either source: a product carrying a higher "was" price beside its current one renders both — `compareAtAmount` on a CMS price, a discounted price in commercetools.
 
 ## Site namespacing

@@ -149,6 +149,12 @@ import {
   previewApplications,
   withPreviewApplications,
 } from './lib/preview-apps.mjs'
+import {
+  commercetoolsSettings,
+  needsCommercetools,
+  seedsContentType,
+  withProductPickers,
+} from './lib/product-pickers.mjs'
 import { alreadyMapped, moveProductItems, withProductsRepo } from './lib/products.mjs'
 import { repositoryFolders } from './lib/repositories.mjs'
 import {
@@ -171,22 +177,25 @@ const repoRoot = path.join(packageRoot, '..', '..')
 const stagingRoot = path.join(packageRoot, '.import')
 
 /**
- * Load webApps for a given hub name from amplience.config.json.
- * Falls back to the example config if the real one isn't present.
- * Returns an empty array if the config can't be found or the hub isn't listed.
+ * This hub's entry in amplience.config.json, falling back to the example
+ * config if the real one isn't present. Undefined if neither lists the hub.
  */
-function loadWebApps(hubName) {
+function loadHubEntry(hubName) {
   const configPath = existsSync(path.join(repoRoot, 'amplience.config.json'))
     ? path.join(repoRoot, 'amplience.config.json')
     : path.join(repoRoot, 'amplience.config.example.json')
-  if (!existsSync(configPath)) return []
+  if (!existsSync(configPath)) return undefined
   try {
     const config = JSON.parse(readFileSync(configPath, 'utf8'))
-    const envEntry = config.environments?.find((e) => e.hubName === hubName)
-    return envEntry?.webApps ?? []
+    return config.environments?.find((e) => e.hubName === hubName)
   } catch {
-    return []
+    return undefined
   }
+}
+
+/** The web apps registered against this hub (empty if none). */
+function loadWebApps(hubName) {
+  return loadHubEntry(hubName)?.webApps ?? []
 }
 
 const argv = process.argv.slice(2)
@@ -412,6 +421,8 @@ const checkPreviewApplications = async (applications) => {
 
 const importExtensions = async () => {
   const hubName = env('AMPLIENCE_HUB_NAME')
+  // The eComm Toolkit is seeded only where the hub has commercetools settings.
+  const commercetools = commercetoolsSettings(loadHubEntry(hubName))
   const repoContent = env('AMPLIENCE_REPO_CONTENT')
   const repoSiteComponents = env('AMPLIENCE_REPO_SITE_COMPONENTS')
 
@@ -430,12 +441,14 @@ const importExtensions = async () => {
   mkdirSync(staged, { recursive: true })
 
   for (const file of readdirSync(source).filter((f) => f.endsWith('.json'))) {
+    const text = readFileSync(path.join(source, file), 'utf8')
+    if (needsCommercetools(text) && commercetools === undefined) {
+      console.log(`  - ${file}: skipped (no commercetools settings for this hub)`)
+      continue
+    }
     // Drop instance fields (hubId, audit stamps, status) so the checked-in
     // definition is hub-independent, then resolve its ${…} tokens for this hub.
-    const definition = stripFields(
-      JSON.parse(readFileSync(path.join(source, file), 'utf8')),
-      EXTENSION_INSTANCE_FIELDS,
-    )
+    const definition = stripFields(JSON.parse(text), EXTENSION_INSTANCE_FIELDS)
     let resolved
     try {
       resolved = resolveTokens(JSON.stringify(definition, null, 2), {
@@ -443,6 +456,7 @@ const importExtensions = async () => {
         repoContent,
         repoSiteComponents,
         statusMap,
+        ...(commercetools !== undefined && { commercetools }),
         source: file,
       })
     } catch (err) {
@@ -456,8 +470,30 @@ const importExtensions = async () => {
   await dcCli('extension', 'import', staged)
 }
 
+/**
+ * Schemas are staged so the carousels' product fields can get this hub's
+ * picker (lib/product-pickers.mjs) — every other schema is copied as-is.
+ */
 const importSchemas = async () => {
-  await dcCli('content-type-schema', 'import', path.join(packageRoot, 'content-type-schemas'))
+  const hubEntry = loadHubEntry(env('AMPLIENCE_HUB_NAME'))
+  const commercetools = commercetoolsSettings(hubEntry) !== undefined
+  console.log(
+    `\n→ Product pickers: ${commercetools ? 'commercetools (eComm Toolkit)' : 'none — products are entered by SKU'}`,
+  )
+
+  const source = path.join(packageRoot, 'content-type-schemas')
+  const staged = path.join(stagingRoot, 'content-type-schemas')
+  rmSync(staged, { recursive: true, force: true })
+  cpSync(source, staged, { recursive: true })
+  const schemasDir = path.join(staged, 'schemas')
+  for (const file of readdirSync(schemasDir).filter((f) => f.endsWith('.json'))) {
+    const schema = JSON.parse(readFileSync(path.join(schemasDir, file), 'utf8'))
+    const picked = withProductPickers(schema, { commercetools })
+    if (picked !== schema) {
+      writeFileSync(path.join(schemasDir, file), JSON.stringify(picked, null, 2) + '\n')
+    }
+  }
+  await dcCli('content-type-schema', 'import', staged)
 }
 
 /**
@@ -514,7 +550,10 @@ const importTypes = async () => {
   rmSync(staged, { recursive: true, force: true })
   mkdirSync(staged, { recursive: true })
 
+  // The multi-PIM carousel is a demo tool: only hubs that opt in register it.
+  const hubEntry = loadHubEntry(hubName)
   for (const file of readdirSync(source)) {
+    if (!seedsContentType(file, hubEntry)) continue
     // Parse as JSON so we can mutate the visualizations array cleanly.
     const raw = readFileSync(path.join(source, file), 'utf8')
     const data = withProductsRepo(

@@ -100,6 +100,10 @@ import {
 } from './organisms/Menu/HierarchyMenu.registry'
 import { MENU_SCHEMA, menuRegistryEntry } from './organisms/Menu/Menu.registry'
 import {
+  MULTI_PIM_PRODUCT_CAROUSEL_SCHEMA,
+  multiPimProductCarouselRegistryEntry,
+} from './organisms/ProductCarouselBlock/MultiPimProductCarousel.registry'
+import {
   PRODUCT_CAROUSEL_SCHEMA,
   productCarouselRegistryEntry,
 } from './organisms/ProductCarouselBlock/ProductCarouselBlock.registry'
@@ -180,6 +184,7 @@ export const defaultRegistry: Registry = createRegistry([
   [GRID_BLOCK_SCHEMA, gridBlockRegistryEntry],
   [CAROUSEL_BLOCK_SCHEMA, carouselBlockRegistryEntry],
   [PRODUCT_CAROUSEL_SCHEMA, productCarouselRegistryEntry],
+  [MULTI_PIM_PRODUCT_CAROUSEL_SCHEMA, multiPimProductCarouselRegistryEntry],
   [MEDIA_CARD_SCHEMA, mediaCardRegistryEntry],
   [HEADER_BLOCK_SCHEMA, headerBlockRegistryEntry],
   [HEADER_ROW_SCHEMA, headerRowRegistryEntry],
@@ -203,6 +208,8 @@ export {
   carouselBlockRegistryEntry,
   PRODUCT_CAROUSEL_SCHEMA,
   productCarouselRegistryEntry,
+  MULTI_PIM_PRODUCT_CAROUSEL_SCHEMA,
+  multiPimProductCarouselRegistryEntry,
   COLUMNS_BLOCK_SCHEMA,
   columnsBlockRegistryEntry,
   GRID_BLOCK_SCHEMA,
