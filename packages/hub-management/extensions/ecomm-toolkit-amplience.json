@@ -1,0 +1,11 @@
+{
+  "name": "ecomm-toolkit-amplience",
+  "label": "eComm Toolkit (Amplience PIM)",
+  "description": "Product picker for products authored in Amplience as Product content items. Needs no credentials, so it is seeded on every hub: it reads the hub's own content as the signed-in editor.",
+  "url": "https://dc-extension-ecomm-toolkit-for-afs.vercel.app/",
+  "enabledForAllContentTypes": false,
+  "category": "CONTENT_FIELD",
+  "parameters": "{\n  \"vendor\": \"amplience\",\n  \"productSchemaUri\": \"https://quadratic.amplience.com/v2/content/product\"\n}",
+  "snippets": [],
+  "settings": "{\"API\":{\"READ\":true,\"EDIT\":true},\"SANDBOX\":{\"SAME_ORIGIN\":true,\"MODALS\":false,\"NAVIGATION\":false,\"POPUPS\":false,\"POPUP_ESCAPE_SANDBOX\":false,\"DOWNLOADS\":false,\"FORMS\":false}}"
+}

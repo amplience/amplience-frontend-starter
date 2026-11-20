@@ -250,9 +250,9 @@ A horizontally scrolling rail of curated products.
 
 It holds product references, not links to [products](#product): the renderer resolves each one through the active product source (`PRODUCT_SOURCE` — see [Deploying](deploying.md#products)), so the same rail works whether products live in the CMS or in commercetools. A reference is a SKU, or — with commercetools — a product id, which is what the product picker stores. References the source doesn't know are skipped, and a rail that resolves to nothing isn't rendered.
 
-How the field is edited depends on the hub. When the hub's entry in `amplience.config.json` has a [`commercetools` block](working-with-a-hub.md#commercetools-product-picker), `hub:import` seeds the field with the eComm Toolkit product picker (search by keyword or category); otherwise it is a plain list of SKUs. The schema in the repo is the same either way — the picker is added at import time.
+How the field is edited depends on the hub. `hub:import` seeds it with an eComm Toolkit [product picker](working-with-a-hub.md#product-pickers) (search by keyword or category): the commercetools one when the hub's entry in `amplience.config.json` has a [`commercetools` block](working-with-a-hub.md#commercetools), otherwise the Amplience PIM one, which finds [Product](#product) items in the hub and stores their SKUs. The schema in the repo is the same either way — the picker is added at import time.
 
-> **Known limitation.** The picker stores commercetools product ids and can only display ids. A carousel seeded with SKUs (as the fixture sets are) renders correctly on the site, but the picker shows it as empty until products are picked again — and saving from the picker replaces the SKUs with ids.
+> **Known limitation (commercetools picker).** It stores commercetools product ids and can only display ids. A carousel seeded with SKUs (as the fixture sets are) renders correctly on the site, but the picker shows it as empty until products are picked again — and saving from the picker replaces the SKUs with ids.
 
 | Field                                             | Label             | Type                                  | Req | Notes                                                              |
 | ------------------------------------------------- | ----------------- | ------------------------------------- | --- | ------------------------------------------------------------------ |
@@ -270,17 +270,17 @@ How the field is edited depends on the hub. When the hub's entry in `amplience.c
 
 ![Multi-PIM Product Carousel icon](https://cdn.media.amplience.net/i/quadraticdemo/content_multi-pim-product-carousel?w=48)
 
-A [Product Carousel](#product-carousel-block) for demo hubs that serve sites backed by more than one product source. Opt-in: `hub:import` only seeds it on hubs whose entry in `amplience.config.json` sets `"multiPimDemo": true` (see [Working with a hub](working-with-a-hub.md#commercetools-product-picker)).
+A [Product Carousel](#product-carousel-block) for demo hubs that serve sites backed by more than one product source. Opt-in: `hub:import` only seeds it on hubs whose entry in `amplience.config.json` sets `"multiPimDemo": true` (see [Working with a hub](working-with-a-hub.md#product-pickers)).
 
 - **Schema** [`content/multi-pim-product-carousel`](../packages/hub-management/content-type-schemas/schemas/content_multi-pim-product-carousel.json) · **Repository** `content`
 - **Components** the same [`ProductCarouselBlock`](../packages/components/src/organisms/ProductCarouselBlock) as the Product Carousel
 
 Every field matches the Product Carousel except `products`, which holds one list per product source, each on its own tab:
 
-| Field                    | Label                    | Type     | Req | Notes                                                                                                                                                                  |
-| ------------------------ | ------------------------ | -------- | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `products.cms`           | Products (Amplience)     | string[] |     | SKUs, read by sites running `PRODUCT_SOURCE=cms`                                                                                                                       |
-| `products.commercetools` | Products (commercetools) | string[] |     | Product picker; read by sites running `PRODUCT_SOURCE=commercetools`. Omitted on hubs without a `commercetools` block, which then show the Amplience list without tabs |
+| Field                    | Label                    | Type     | Req | Notes                                                                                                                                                                                |
+| ------------------------ | ------------------------ | -------- | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `products.cms`           | Products (Amplience)     | string[] |     | Amplience PIM product picker (SKUs); read by sites running `PRODUCT_SOURCE=cms`                                                                                                      |
+| `products.commercetools` | Products (commercetools) | string[] |     | commercetools product picker; read by sites running `PRODUCT_SOURCE=commercetools`. Omitted on hubs without a `commercetools` block, which then show the Amplience list without tabs |
 
 Each site renders the list for its own `PRODUCT_SOURCE` and ignores the others, so one content item can drive a CMS-backed site and a commercetools-backed site side by side. Single-source hubs should use the Product Carousel, so editors see one field.
 
