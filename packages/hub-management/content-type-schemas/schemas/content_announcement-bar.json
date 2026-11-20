@@ -37,11 +37,13 @@
   "type": "object",
   "properties": {
     "message": {
-      "title": "Message",
-      "description": "Keep it to a line. Markdown: bold, italics and inline links work; headings and lists are flattened.",
       "allOf": [
         {
           "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        },
+        {
+          "title": "Message",
+          "description": "Keep it to a line. Markdown: bold, italics and inline links work; headings and lists are flattened."
         }
       ],
       "properties": {
@@ -68,11 +70,13 @@
       "pattern": "^(?!https?\\/\\/)(?:(?:https?:\\/\\/)(?:localhost|(?:[A-Za-z0-9-]+\\.)+[A-Za-z]{2,})(?::\\d{2,5})?(?:\\/[^\\s?#]*)?(?:\\?[^\\s#]*)?(?:#[^\\s]*)?|\\/(?:[^\\s?#]+(?:\\/[^\\s?#]*)*)?(?:\\?[^\\s#]*)?(?:#[^\\s]*)?|(?:\\.\\.?\\/)?[^\\s/:?#]+(?:\\/[^\\s?#]*)*(?:\\?[^\\s#]*)?(?:#[^\\s]*)?)$"
     },
     "linkLabel": {
-      "title": "Link text",
-      "description": "Optional. Shown after the message, e.g. \"Shop now\". Without it the whole bar is still clickable, announced by the message itself.",
       "allOf": [
         {
           "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+        },
+        {
+          "title": "Link text",
+          "description": "Optional. Shown after the message, e.g. \"Shop now\". Without it the whole bar is still clickable, announced by the message itself."
         }
       ]
     },
@@ -83,19 +87,20 @@
       "default": false
     },
     "backgroundColor": {
-      "title": "Background colour",
       "allOf": [
         {
-          "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette"
+          "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/background-palette"
         }
       ]
     },
     "textColor": {
-      "title": "Text colour",
-      "description": "Optional. Defaults to the background colour's contrast colour.",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette"
+        },
+        {
+          "title": "Text colour",
+          "description": "Optional. Defaults to the background colour's contrast colour."
         }
       ]
     },
@@ -106,22 +111,17 @@
       "default": "center"
     },
     "maxWidth": {
-      "title": "Max width",
-      "description": "Width of the message area; the background always spans the page.",
-      "default": "wide",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width"
+        },
+        {
+          "description": "Width of the message area; the background always spans the page.",
+          "default": "wide"
         }
       ]
     },
     "customCss": {
-      "title": "Custom CSS (advanced)",
-      "description": "Optional. CSS for this block only — it also reaches any blocks nested inside it. Bare declarations style the block itself (background: …); nested rules style what's inside (h2 { … }, &:hover { … }, @media … { … }); custom properties (--color-primary: …) flow down to child blocks. Leave blank for none.",
-      "type": "string",
-      "ui:extension": {
-        "name": "css-editor"
-      },
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/block-css#/definitions/css"

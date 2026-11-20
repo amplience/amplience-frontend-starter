@@ -9,6 +9,16 @@
       "type": "string",
       "enum": ["primary", "secondary", "tertiary", "light", "dark", "black", "white"]
     },
+    "background-palette": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette"
+        },
+        {
+          "title": "Background colour"
+        }
+      ]
+    },
     "button-palette": {
       "type": "string",
       "enum": ["primary", "secondary", "tertiary", "black", "white"]

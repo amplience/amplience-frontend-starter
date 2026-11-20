@@ -11,10 +11,12 @@
   "type": "object",
   "properties": {
     "image": {
-      "title": "Image",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/media"
+        },
+        {
+          "title": "Image"
         }
       ]
     },

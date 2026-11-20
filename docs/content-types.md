@@ -708,23 +708,24 @@ DAM videos play the account's transcode renditions (`/v/{endpoint}/{name}/{profi
 
 [`partials/colour`](../packages/hub-management/content-type-schemas/schemas/partials_colour.json) — the design-token colour choices offered to authors, so every schema surfacing a colour draws from the same palette as the [theme tokens](theming.md).
 
-| Definition       | Values                                                                |
-| ---------------- | --------------------------------------------------------------------- |
-| `palette`        | `primary`, `secondary`, `tertiary`, `light`, `dark`, `black`, `white` |
-| `button-palette` | `primary`, `secondary`, `tertiary`, `black`, `white`                  |
+| Definition           | Values                                                                           |
+| -------------------- | -------------------------------------------------------------------------------- |
+| `palette`            | `primary`, `secondary`, `tertiary`, `light`, `dark`, `black`, `white`            |
+| `background-palette` | The `palette` values, labelled **Background colour** (used by `backgroundColor`) |
+| `button-palette`     | `primary`, `secondary`, `tertiary`, `black`, `white`                             |
 
 ### Container
 
 [`partials/container`](../packages/hub-management/content-type-schemas/schemas/partials_container.json) — the `Container` atom's authoring contract, referenced property-by-property by the blocks that wrap their content in one.
 
-| Definition  | Values                              |
-| ----------- | ----------------------------------- |
-| `max-width` | `narrow`, `default`, `wide`, `none` |
-| `gutter`    | boolean                             |
+| Definition  | Values                                                                                   |
+| ----------- | ---------------------------------------------------------------------------------------- |
+| `max-width` | **Max width**: `narrow`, `default`, `wide`, `none`; defaults to `default`                |
+| `gutter`    | **Gutter**: boolean, with a generic help text that blocks override to name what is inset |
 
 ### Block CSS
 
-[`partials/block-css`](../packages/hub-management/content-type-schemas/schemas/partials_block-css.json) — the value contract for every block's optional `customCss`: a string capped at 4,000 characters, the same limit the renderer enforces. The field's label, help text and CSS-editor extension are repeated on each block rather than held here, because an extension behind a cross-schema `$ref` hasn't been shown to render in the Dynamic Content form (ADR-0025, ADR-0026).
+[`partials/block-css`](../packages/hub-management/content-type-schemas/schemas/partials_block-css.json) — the value contract for every block's optional `customCss`: a string capped at 4,000 characters, the same limit the renderer enforces. The field's label (**Custom CSS (advanced)**), help text and CSS-editor extension are all held here and shared by every block, so each block's `customCss` property is just a reference (ADR-0026; ADR-0025 originally repeated these per block).
 
 ### Icon
 
@@ -738,7 +739,7 @@ DAM videos play the account's transcode renditions (`/v/{endpoint}/{name}/{profi
 
 ### Carousel Options
 
-[`partials/carousel-options`](../packages/hub-management/content-type-schemas/schemas/partials_carousel-options.json) — the `Carousel` molecule's presentation contract: `slides-per-view`, `gap`, `scroll-step` (`slide` \| `page`), `show-arrows`, `show-dots`, `show-scrollbar`, `drag-to-scroll`. Held separately because more than one content type renders through the same molecule (ADR-0020), so a new option is one edit rather than several.
+[`partials/carousel-options`](../packages/hub-management/content-type-schemas/schemas/partials_carousel-options.json) — the `Carousel` molecule's presentation contract: `slides-per-view` (with `slides-per-view-mobile`, `-tablet` and `-desktop` variants that add the breakpoint's label, help text and default of 1.2, 3 and 4 slides), `gap`, `scroll-step` (`slide` \| `page`), `show-arrows`, `show-dots`, `show-scrollbar`, `drag-to-scroll`. Each definition carries its own label, help text and default, so a block only adds an override where it differs. Held separately because more than one content type renders through the same molecule (ADR-0020), so a new option is one edit rather than several.
 
 ### Content Block
 

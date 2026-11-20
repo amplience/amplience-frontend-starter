@@ -11,29 +11,35 @@
       "type": "object",
       "properties": {
         "title": {
-          "title": "Title",
-          "description": "Optional heading rendered above the content.",
           "allOf": [
             {
               "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+            },
+            {
+              "title": "Title",
+              "description": "Optional heading rendered above the content."
             }
           ]
         },
         "subtitle": {
-          "title": "Subtitle",
-          "description": "Optional subheading shown beneath the title.",
           "allOf": [
             {
               "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+            },
+            {
+              "title": "Subtitle",
+              "description": "Optional subheading shown beneath the title."
             }
           ]
         },
         "description": {
-          "title": "Description",
-          "description": "Optional introductory copy shown beneath the subtitle.",
           "allOf": [
             {
               "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+            },
+            {
+              "title": "Description",
+              "description": "Optional introductory copy shown beneath the subtitle."
             }
           ]
         }

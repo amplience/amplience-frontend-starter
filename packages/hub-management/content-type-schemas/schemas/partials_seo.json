@@ -39,10 +39,12 @@
           "ui:component": "text-area"
         },
         "image": {
-          "title": "Social image",
           "allOf": [
             {
               "$ref": "https://quadratic.amplience.com/v2/partials/media"
+            },
+            {
+              "title": "Social image"
             }
           ]
         }

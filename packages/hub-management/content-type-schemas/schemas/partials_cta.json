@@ -25,10 +25,14 @@
   },
   "properties": {
     "label": {
-      "title": "CTA Text",
-      "minLength": 1,
       "allOf": [
-        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+        {
+          "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+        },
+        {
+          "title": "CTA Text",
+          "minLength": 1
+        }
       ]
     },
     "href": {
@@ -43,9 +47,13 @@
       "default": "solid"
     },
     "color": {
-      "title": "Button Colour",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/button-palette" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/button-palette"
+        },
+        {
+          "title": "Button Colour"
+        }
       ]
     }
   },

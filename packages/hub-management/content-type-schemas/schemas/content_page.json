@@ -71,26 +71,32 @@
       }
     },
     "title": {
-      "description": "Document title — <title> and SEO.",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/title"
+        },
+        {
+          "description": "Document title — <title> and SEO."
         }
       ]
     },
     "social": {
-      "description": "Open Graph overrides. Unset fields fall back to the page's own title and description.",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/social"
+        },
+        {
+          "description": "Open Graph overrides. Unset fields fall back to the page's own title and description."
         }
       ]
     },
     "canonicalUrl": {
-      "description": "Rarely set — when absent, the canonical defaults to the page's own route path.",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/canonicalUrl"
+        },
+        {
+          "description": "Rarely set — when absent, the canonical defaults to the page's own route path."
         }
       ]
     },

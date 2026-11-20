@@ -88,11 +88,13 @@
       "default": false
     },
     "maxWidth": {
-      "title": "Max width",
-      "description": "Max-width constraint passed to child Containers.",
-      "default": "default",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width"
+        },
+        {
+          "description": "Max-width constraint passed to child Containers."
+        }
       ]
     }
   },

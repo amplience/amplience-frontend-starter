@@ -11,7 +11,6 @@
   "type": "object",
   "properties": {
     "media": {
-      "title": "Media",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/rich-media"
@@ -19,9 +18,13 @@
       ]
     },
     "caption": {
-      "title": "Caption",
       "allOf": [
-        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+        {
+          "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+        },
+        {
+          "title": "Caption"
+        }
       ]
     },
     "href": {
@@ -35,26 +38,27 @@
       "description": "Extend the media edge-to-edge, ignoring container padding and max-width."
     },
     "backgroundColor": {
-      "title": "Background colour",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/background-palette"
+        }
       ]
     },
     "maxWidth": {
-      "title": "Max width",
-      "description": "Ignored when full bleed is on.",
-      "default": "default",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width"
+        },
+        {
+          "description": "Ignored when full bleed is on."
+        }
       ]
     },
     "customCss": {
-      "title": "Custom CSS (advanced)",
-      "description": "Optional. CSS for this block only — it also reaches any blocks nested inside it. Bare declarations style the block itself (background: …); nested rules style what's inside (h2 { … }, &:hover { … }, @media … { … }); custom properties (--color-primary: …) flow down to child blocks. Leave blank for none.",
-      "type": "string",
-      "ui:extension": { "name": "css-editor" },
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/block-css#/definitions/css" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/block-css#/definitions/css"
+        }
       ]
     }
   },

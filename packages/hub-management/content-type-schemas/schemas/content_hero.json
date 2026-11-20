@@ -61,37 +61,54 @@
   "type": "object",
   "properties": {
     "preTitle": {
-      "title": "Pre-title",
       "allOf": [
-        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+        {
+          "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+        },
+        {
+          "title": "Pre-title"
+        }
       ]
     },
     "title": {
-      "title": "Title",
-      "description": "Drives the <h1> and the section's accessible name.",
-      "minLength": 1,
       "allOf": [
-        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+        {
+          "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+        },
+        {
+          "title": "Title",
+          "description": "Drives the <h1> and the section's accessible name.",
+          "minLength": 1
+        }
       ]
     },
     "subtitle": {
-      "title": "Subtitle",
       "allOf": [
-        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+        {
+          "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+        },
+        {
+          "title": "Subtitle"
+        }
       ]
     },
     "description": {
-      "title": "Description",
       "allOf": [
-        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+        {
+          "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+        },
+        {
+          "title": "Description"
+        }
       ]
     },
     "media": {
-      "title": "Media",
-      "description": "Image or video. A video in a hero always plays as an ambient background: muted, looping, no controls. The mobile override only applies to images.",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/rich-media"
+        },
+        {
+          "description": "Image or video. A video in a hero always plays as an ambient background: muted, looping, no controls. The mobile override only applies to images."
         }
       ]
     },
@@ -158,12 +175,16 @@
       "default": "gradient"
     },
     "overlayColor": {
-      "title": "Overlay colour",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
-      ],
-      "description": "Colour of the overlay scrim, from the design token palette.",
-      "default": "black"
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette"
+        },
+        {
+          "title": "Overlay colour",
+          "description": "Colour of the overlay scrim, from the design token palette.",
+          "default": "black"
+        }
+      ]
     },
     "overlayIntensity": {
       "type": "number",
@@ -173,22 +194,31 @@
       "maximum": 100
     },
     "textColor": {
-      "title": "Text colour",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette"
+        },
+        {
+          "title": "Text colour"
+        }
       ]
     },
     "contentPanelColor": {
-      "title": "Content panel colour",
-      "description": "Background colour of the content panel (title, subtitle, description, CTAs) for a contained 'card' look behind the text.",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette"
+        },
+        {
+          "title": "Content panel colour",
+          "description": "Background colour of the content panel (title, subtitle, description, CTAs) for a contained 'card' look behind the text."
+        }
       ]
     },
     "backgroundColor": {
-      "title": "Background colour",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/background-palette"
+        }
       ]
     },
     "contentWidth": {
@@ -215,11 +245,13 @@
       "description": "Overrides Foreground Content padding for the left and right edges only."
     },
     "maxWidth": {
-      "title": "Max width",
-      "description": "Max-width constraint on the content slot.",
-      "default": "default",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width"
+        },
+        {
+          "description": "Max-width constraint on the content slot."
+        }
       ]
     },
     "minHeight": {
@@ -233,12 +265,10 @@
       "minimum": 0
     },
     "customCss": {
-      "title": "Custom CSS (advanced)",
-      "description": "Optional. CSS for this block only — it also reaches any blocks nested inside it. Bare declarations style the block itself (background: …); nested rules style what's inside (h2 { … }, &:hover { … }, @media … { … }); custom properties (--color-primary: …) flow down to child blocks. Leave blank for none.",
-      "type": "string",
-      "ui:extension": { "name": "css-editor" },
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/block-css#/definitions/css" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/block-css#/definitions/css"
+        }
       ]
     }
   },
@@ -249,11 +279,13 @@
   "then": {
     "properties": {
       "mobileMedia": {
-        "title": "Mobile media",
-        "description": "Shown at ≤768px when Mobile override is on. May use a different aspect ratio to the main media — each breakpoint reserves its own box, so there is no layout shift, and only the matched image downloads.",
         "allOf": [
           {
             "$ref": "https://quadratic.amplience.com/v2/partials/media"
+          },
+          {
+            "title": "Mobile media",
+            "description": "Shown at ≤768px when Mobile override is on. May use a different aspect ratio to the main media — each breakpoint reserves its own box, so there is no layout shift, and only the matched image downloads."
           }
         ]
       }
