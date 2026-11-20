@@ -23,7 +23,17 @@ export type ProductCarouselSchema = Omit<
 > & {
   readonly _meta: unknown
   readonly products?: readonly string[]
+  /**
+   * The field's name before it took product ids too. Hubs seeded earlier still
+   * hold it until re-synced, so it is read as a fallback.
+   * TODO: remove once seeded hubs have been re-synced.
+   */
+  readonly skus?: readonly string[]
 }
+
+/** The carousel's product references, from `products` or the legacy `skus`. */
+const referencesOf = (schema: ProductCarouselSchema): readonly string[] =>
+  schema.products ?? schema.skus ?? []
 
 /**
  * Registry entry for the product-carousel schema.
@@ -41,7 +51,7 @@ export const productCarouselRegistryEntry: ComponentRegistryEntry<
   ProductCarouselBlockProps
 > = {
   component: ProductCarouselBlock,
-  referencedSkus: (schema) => schema.products ?? [],
+  referencedSkus: referencesOf,
   propsFromSchema: (schema, ctx) => productCarouselProps(schema, ctx),
 }
 
@@ -50,11 +60,12 @@ export const productCarouselRegistryEntry: ComponentRegistryEntry<
  * one product list and then renders exactly as this does.
  */
 export function productCarouselProps(
-  { _meta: _envelope, products: references, ...props }: ProductCarouselSchema,
+  schema: ProductCarouselSchema,
   ctx: RenderContext,
 ): ProductCarouselBlockProps {
+  const { _meta: _envelope, products: _products, skus: _skus, ...props } = schema
   const resolved = ctx.products
-  const products = (references ?? [])
+  const products = referencesOf(schema)
     .map((reference) => resolved?.get(reference))
     .filter((p): p is ResolvedProduct => p !== undefined)
 

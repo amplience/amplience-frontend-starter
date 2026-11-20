@@ -48,6 +48,14 @@ describe('productCarouselRegistryEntry — propsFromSchema', () => {
   it('strips the envelope and the raw references from the props', () => {
     const props = adapt(schema('A'), resolved('A'))
     expect(props).not.toHaveProperty('_meta')
+    expect(props?.products).toEqual([product('A')])
+  })
+
+  it('still reads the legacy `skus` field, which hubs seeded before the rename hold', () => {
+    const legacy = { _meta: { schema: PRODUCT_CAROUSEL_SCHEMA }, skus: ['B', 'A'] }
+    expect(productCarouselRegistryEntry.referencedSkus?.(legacy, {})).toEqual(['B', 'A'])
+    const props = adapt(legacy, resolved('A', 'B'))
+    expect(props?.products.map((p) => p.sku)).toEqual(['B', 'A'])
     expect(props).not.toHaveProperty('skus')
   })
 
