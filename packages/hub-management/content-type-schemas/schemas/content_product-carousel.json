@@ -52,7 +52,7 @@
     },
     "products": {
       "title": "Products",
-      "description": "The products to show, one per slide, in order. Each entry is a SKU or, where the hub has a product picker, the product source's own id, which the picker fills in for you. Identifiers rather than links to content, so the rail keeps working whichever product source the site uses. One that no longer resolves is skipped.",
+      "description": "The products to show, one per slide, in order. If a product no longer resolves it is skipped.",
       "type": "array",
       "minItems": 1,
       "items": {
@@ -61,29 +61,23 @@
       }
     },
     "slidesMobile": {
-      "title": "Slides visible (mobile)",
-      "description": "Below 769px. Try 1.2 to leave a sliver of the next slide showing.",
       "allOf": [
         {
-          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/slides-per-view"
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/slides-per-view-mobile"
         }
       ]
     },
     "slidesTablet": {
-      "title": "Slides visible (tablet)",
-      "description": "From 769px.",
       "allOf": [
         {
-          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/slides-per-view"
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/slides-per-view-tablet"
         }
       ]
     },
     "slidesDesktop": {
-      "title": "Slides visible (desktop)",
-      "description": "From 992px.",
       "allOf": [
         {
-          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/slides-per-view"
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/slides-per-view-desktop"
         }
       ]
     },
@@ -95,7 +89,6 @@
       ]
     },
     "scrollStep": {
-      "default": "slide",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/scroll-step"
@@ -103,7 +96,6 @@
       ]
     },
     "showArrows": {
-      "default": true,
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/show-arrows"
@@ -111,7 +103,6 @@
       ]
     },
     "showDots": {
-      "default": false,
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/show-dots"
@@ -119,7 +110,6 @@
       ]
     },
     "showScrollbar": {
-      "default": false,
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/show-scrollbar"
@@ -127,7 +117,6 @@
       ]
     },
     "dragToScroll": {
-      "default": true,
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/drag-to-scroll"
@@ -135,32 +124,34 @@
       ]
     },
     "backgroundColor": {
-      "title": "Background colour",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/background-palette"
+        }
       ]
     },
     "maxWidth": {
-      "title": "Max width",
-      "default": "default",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/max-width"
+        }
       ]
     },
     "gutter": {
-      "title": "Gutter",
-      "description": "Inset the rail from the viewport edge with horizontal padding. Leave off for an edge-to-edge rail, where slides run to the screen edge and the peek reads most clearly.",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/gutter" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/container#/definitions/gutter"
+        },
+        {
+          "description": "Inset the rail from the viewport edge with horizontal padding. Leave off for an edge-to-edge rail, where slides run to the screen edge and the peek reads most clearly."
+        }
       ]
     },
     "customCss": {
-      "title": "Custom CSS (advanced)",
-      "description": "Optional. CSS for this block only — it also reaches any blocks nested inside it. Bare declarations style the block itself (background: …); nested rules style what's inside (h2 { … }, &:hover { … }, @media … { … }); custom properties (--color-primary: …) flow down to child blocks. Leave blank for none.",
-      "type": "string",
-      "ui:extension": { "name": "css-editor" },
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/block-css#/definitions/css" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/block-css#/definitions/css"
+        }
       ]
     }
   },

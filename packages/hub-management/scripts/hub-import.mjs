@@ -421,7 +421,8 @@ const checkPreviewApplications = async (applications) => {
 
 const importExtensions = async () => {
   const hubName = env('AMPLIENCE_HUB_NAME')
-  // The eComm Toolkit is seeded only where the hub has commercetools settings.
+  // The commercetools toolkit is seeded only where the hub has commercetools
+  // settings; the Amplience PIM one needs none, so every hub gets it.
   const commercetools = commercetoolsSettings(loadHubEntry(hubName))
   const repoContent = env('AMPLIENCE_REPO_CONTENT')
   const repoSiteComponents = env('AMPLIENCE_REPO_SITE_COMPONENTS')
@@ -478,7 +479,7 @@ const importSchemas = async () => {
   const hubEntry = loadHubEntry(env('AMPLIENCE_HUB_NAME'))
   const commercetools = commercetoolsSettings(hubEntry) !== undefined
   console.log(
-    `\n→ Product pickers: ${commercetools ? 'commercetools (eComm Toolkit)' : 'none — products are entered by SKU'}`,
+    `\n→ Product pickers (eComm Toolkit): ${commercetools ? 'commercetools and Amplience PIM' : 'Amplience PIM'}`,
   )
 
   const source = path.join(packageRoot, 'content-type-schemas')

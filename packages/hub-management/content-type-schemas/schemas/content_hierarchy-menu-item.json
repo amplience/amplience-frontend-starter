@@ -35,10 +35,13 @@
       "description": "URL this item navigates to. Omit for parent-only category labels."
     },
     "icon": {
-      "title": "Icon",
-      "description": "Optional icon from the design system's icon set, shown alongside the label.",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/icon#/definitions/icon-name" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/icon#/definitions/icon-name"
+        },
+        {
+          "description": "Optional icon from the design system's icon set, shown alongside the label."
+        }
       ]
     },
     "visibility": {

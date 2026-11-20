@@ -54,11 +54,12 @@
       }
     },
     "backgroundColor": {
-      "title": "Background colour",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/background-palette"
+        }
       ]
     }
   },
-  "propertyOrder": ["items", "backgroundColor", "foregroundColor"]
+  "propertyOrder": ["items", "backgroundColor"]
 }

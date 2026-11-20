@@ -6,10 +6,14 @@
   "type": "object",
   "definitions": {
     "max-width": {
+      "title": "Max width",
       "type": "string",
-      "enum": ["narrow", "default", "wide", "none"]
+      "enum": ["narrow", "default", "wide", "none"],
+      "default": "default"
     },
     "gutter": {
+      "title": "Gutter",
+      "description": "Inset the content from the viewport edge with horizontal padding. Leave off for an edge-to-edge layout.",
       "type": "boolean"
     }
   }

@@ -58,28 +58,38 @@ describe('commercetoolsSettings', () => {
 })
 
 describe('withProductPickers', () => {
-  it("gives the carousel's products field the toolkit picker on a commercetools hub", () => {
+  it("gives the carousel's products field the commercetools picker on a commercetools hub", () => {
     const picked = withProductPickers(carousel, { commercetools: true })
     expect(picked.properties.products?.['ui:extension']).toMatchObject({
-      name: 'ecomm-toolkit',
+      name: 'ecomm-toolkit-commercetools',
       params: { type: 'strings' },
     })
     // The field is still a list of strings, so content stays valid either way.
     expect(picked.properties.products?.type).toBe('array')
   })
 
-  it('leaves the carousel a plain SKU list without commercetools', () => {
-    expect(withProductPickers(carousel, { commercetools: false })).toBe(carousel)
+  it("gives the carousel's products field the Amplience PIM picker without commercetools", () => {
+    const picked = withProductPickers(carousel, { commercetools: false })
+    expect(picked.properties.products?.['ui:extension']).toMatchObject({
+      name: 'ecomm-toolkit-amplience',
+      params: { type: 'strings' },
+    })
+    expect(picked.properties.products?.type).toBe('array')
+  })
+
+  it("gives each multi-PIM list its own source's picker", () => {
+    const lists = listsOf(withProductPickers(multi, { commercetools: true }))
+    expect(Object.keys(lists)).toEqual(['cms', 'commercetools'])
+    expect(lists.cms?.['ui:extension']).toMatchObject({ name: 'ecomm-toolkit-amplience' })
+    expect(lists.commercetools?.['ui:extension']).toMatchObject({
+      name: 'ecomm-toolkit-commercetools',
+    })
   })
 
   it("keeps the multi-PIM carousel's commercetools list only on a commercetools hub", () => {
-    expect(Object.keys(listsOf(withProductPickers(multi, { commercetools: false })))).toEqual([
-      'cms',
-    ])
-    const lists = listsOf(withProductPickers(multi, { commercetools: true }))
-    expect(Object.keys(lists)).toEqual(['cms', 'commercetools'])
-    expect(lists.commercetools?.['ui:extension']).toMatchObject({ name: 'ecomm-toolkit' })
-    expect(lists.cms?.['ui:extension']).toBeUndefined()
+    const lists = listsOf(withProductPickers(multi, { commercetools: false }))
+    expect(Object.keys(lists)).toEqual(['cms'])
+    expect(lists.cms?.['ui:extension']).toMatchObject({ name: 'ecomm-toolkit-amplience' })
   })
 
   it("tabs the multi-PIM carousel's lists only when there is more than one", () => {
@@ -94,6 +104,7 @@ describe('withProductPickers', () => {
   it('does not touch the checked-in schema', () => {
     withProductPickers(multi, { commercetools: false })
     expect(Object.keys(listsOf(multi))).toEqual(['cms', 'commercetools'])
+    expect(listsOf(multi).cms?.['ui:extension']).toBeUndefined()
     expect(multi.properties.products?.['ui:component']).toBeDefined()
   })
 
@@ -111,8 +122,11 @@ describe('seedsContentType', () => {
   })
 })
 
-describe('the eComm Toolkit extension definition', () => {
-  const definition = readFileSync(path.join(here, '../../extensions/ecomm-toolkit.json'), 'utf8')
+describe('the commercetools eComm Toolkit extension definition', () => {
+  const definition = readFileSync(
+    path.join(here, '../../extensions/ecomm-toolkit-commercetools.json'),
+    'utf8',
+  )
 
   it('is recognised as needing commercetools settings', () => {
     expect(needsCommercetools(definition)).toBe(true)
@@ -123,7 +137,7 @@ describe('the eComm Toolkit extension definition', () => {
     const resolved = JSON.parse(
       resolveTokens(definition, {
         ...(settings && { commercetools: settings }),
-        source: 'ecomm-toolkit.json',
+        source: 'ecomm-toolkit-commercetools.json',
       }),
     ) as { parameters: string }
     expect(JSON.parse(resolved.parameters)).toEqual({
@@ -141,8 +155,61 @@ describe('the eComm Toolkit extension definition', () => {
   })
 
   it('refuses to resolve without commercetools settings', () => {
-    expect(() => resolveTokens(definition, { source: 'ecomm-toolkit.json' })).toThrow(
+    expect(() => resolveTokens(definition, { source: 'ecomm-toolkit-commercetools.json' })).toThrow(
       /commercetools/,
+    )
+  })
+})
+
+describe('the Amplience PIM eComm Toolkit extension definition', () => {
+  const definition = readFileSync(
+    path.join(here, '../../extensions/ecomm-toolkit-amplience.json'),
+    'utf8',
+  )
+
+  it('needs no commercetools settings, so every hub is seeded with it', () => {
+    expect(needsCommercetools(definition)).toBe(false)
+  })
+
+  it('carries the parameters the toolkit expects', () => {
+    const { parameters } = JSON.parse(definition) as { parameters: string }
+    expect(JSON.parse(parameters)).toEqual({
+      vendor: 'amplience',
+      productSchemaUri: 'https://quadratic.amplience.com/v2/content/product',
+    })
+  })
+})
+
+describe('the toolkit extensions and the pickers that use them', () => {
+  const definitionNamed = (file: string) =>
+    JSON.parse(readFileSync(path.join(here, '../../extensions', file), 'utf8')) as {
+      name: string
+      url: string
+    }
+  const definitions = [
+    definitionNamed('ecomm-toolkit-commercetools.json'),
+    definitionNamed('ecomm-toolkit-amplience.json'),
+  ]
+  const pickerName = (field: Record<string, unknown> | undefined) =>
+    (field?.['ui:extension'] as { name: string } | undefined)?.name
+  const picked = (commercetools: boolean) => ({
+    carousel: pickerName(withProductPickers(carousel, { commercetools }).properties.products),
+    cms: pickerName(listsOf(withProductPickers(multi, { commercetools })).cms),
+    commercetools: pickerName(listsOf(withProductPickers(multi, { commercetools })).commercetools),
+  })
+
+  // A picker naming an extension that is never seeded would render as a broken
+  // field in the editor, so the two sides are checked against each other.
+  it('has an extension definition for every picker a schema can get', () => {
+    const used = new Set(
+      [...Object.values(picked(true)), ...Object.values(picked(false))].filter(Boolean),
+    )
+    expect([...used].sort()).toEqual(definitions.map((definition) => definition.name).sort())
+  })
+
+  it('serves both from the same extension app', () => {
+    expect(new Set(definitions.map((definition) => definition.url))).toEqual(
+      new Set(['https://dc-extension-ecomm-toolkit-for-afs.vercel.app/']),
     )
   })
 })

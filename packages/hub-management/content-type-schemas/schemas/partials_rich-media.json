@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://quadratic.amplience.com/v2/partials/rich-media",
-  "title": "Rich media",
+  "title": "Media",
   "description": "Image or video, chosen with a content palette (object). The image options copy partials/media's fields (a test keeps them identical).",
   "type": "object",
   "required": ["mediaType"],
@@ -18,10 +18,12 @@
           "type": "object",
           "properties": {
             "image": {
-              "title": "Base image",
               "allOf": [
                 {
                   "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
+                },
+                {
+                  "title": "Base image"
                 }
               ]
             },
@@ -127,20 +129,24 @@
       "properties": {
         "mediaType": { "const": "DynamicVideo", "ui:component": "none" },
         "video": {
-          "title": "Video",
-          "description": "Pick from the Amplience media library.",
           "allOf": [
             {
               "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/video-link"
+            },
+            {
+              "title": "Video",
+              "description": "Pick from the Amplience media library."
             }
           ]
         },
         "poster": {
-          "title": "Poster image",
-          "description": "Optional. Shown before the video plays. Defaults to the video's own thumbnail.",
           "allOf": [
             {
               "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/image-link"
+            },
+            {
+              "title": "Poster image",
+              "description": "Optional. Shown before the video plays. Defaults to the video's own thumbnail."
             }
           ]
         },
