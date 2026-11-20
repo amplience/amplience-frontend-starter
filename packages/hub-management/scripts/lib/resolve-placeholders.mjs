@@ -13,6 +13,9 @@
  *   ${site:url}             → a configured web app's origin (webhooks step)
  *   ${site:label}           → that web app's display label (webhooks step)
  *   ${secret:name}          → a named secret from the environment (webhooks step)
+ *   ${commercetools:field}  → the hub's commercetools settings, from its
+ *                             `commercetools` block in amplience.config.json
+ *                             (extensions step — the eComm Toolkit picker)
  *
  * `${secret:…}` values are resolved in memory and never staged to disk — the
  * webhooks step sends them straight to the Management API, so no file in the
@@ -76,6 +79,7 @@ export function resolveTokens(
     statusMap = new Map(),
     site,
     secrets = new Map(),
+    commercetools,
     source = 'input',
   },
 ) {
@@ -144,6 +148,18 @@ export function resolveTokens(
           `Set it on this environment (Environment Manager → settings) or export it ` +
           `before running the step — the seed will not create a webhook whose ` +
           `authentication it cannot fill, because it would fail on every delivery.`,
+      )
+    }
+    return value
+  })
+
+  result = result.replace(/\$\{commercetools:([^}]+)\}/g, (_match, rawField) => {
+    const field = rawField.trim()
+    const value = commercetools?.[field]
+    if (value === undefined || value === '') {
+      throw new Error(
+        `${source}: references \${commercetools:${field}} but this hub has no commercetools ` +
+          `settings with that field. Add a "commercetools" block to the hub in amplience.config.json.`,
       )
     }
     return value

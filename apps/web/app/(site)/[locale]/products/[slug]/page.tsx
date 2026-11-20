@@ -30,7 +30,7 @@ import { resolveCurrency } from '../../../../../lib/currency'
 import { localeForSlug, publicPath } from '../../../../../lib/locales'
 import { siteBasePath } from '../../../../../lib/preview-request'
 import { productMediaList } from '../../../../../lib/product-media'
-import { productSource } from '../../../../../lib/product-source'
+import { productSource, productSourceName } from '../../../../../lib/product-source'
 import { registry } from '../../../../../lib/registry'
 import { resolveProducts } from '../../../../../lib/resolve-products'
 import {
@@ -95,6 +95,7 @@ export default async function ProductRoute({ params }: RouteProps) {
       : renderContent(product.content, registry, {
           loadPriority: 'eager',
           localeBasePath: await siteBasePath(locale),
+          productSource: productSourceName,
           locale: locale.code,
           products: await resolveProducts(product.content, registry, locale),
         })

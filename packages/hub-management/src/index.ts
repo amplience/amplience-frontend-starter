@@ -37,6 +37,7 @@ import contentMedia from '../content-type-schemas/schemas/content_media.json'
 import contentMenuItem from '../content-type-schemas/schemas/content_menu-item.json'
 import contentMenuToggleButton from '../content-type-schemas/schemas/content_menu-toggle-button.json'
 import contentMenu from '../content-type-schemas/schemas/content_menu.json'
+import contentMultiPimProductCarousel from '../content-type-schemas/schemas/content_multi-pim-product-carousel.json'
 import contentPage from '../content-type-schemas/schemas/content_page.json'
 import contentProductCarousel from '../content-type-schemas/schemas/content_product-carousel.json'
 import contentProduct from '../content-type-schemas/schemas/content_product.json'
@@ -104,6 +105,7 @@ export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(contentGrid, 'CONTENT_TYPE'),
   entry(contentCarousel, 'CONTENT_TYPE'),
   entry(contentProductCarousel, 'CONTENT_TYPE'),
+  entry(contentMultiPimProductCarousel, 'CONTENT_TYPE'),
   entry(contentMediaCard, 'CONTENT_TYPE'),
   entry(contentMedia, 'CONTENT_TYPE'),
   entry(slotsSlot, 'SLOT'),

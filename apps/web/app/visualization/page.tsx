@@ -54,6 +54,7 @@ import {
   localeForSlug,
 } from '../../lib/locales'
 import { isVseHost, VSE_SUFFIX } from '../../lib/preview'
+import { productSourceName } from '../../lib/product-source'
 import { registry } from '../../lib/registry'
 import { resolveProducts } from '../../lib/resolve-products'
 import { HOMEPAGE_DELIVERY_KEY } from '../../lib/routing'
@@ -63,6 +64,7 @@ import {
   emitContentFailure,
   FailureCard,
   renderContent,
+  uniqueProducts,
 } from '../../src/renderer'
 import { CustomCssVisualization } from './CustomCssVisualization'
 import { VisualizationClient } from './VisualizationClient'
@@ -183,7 +185,7 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
   // the item's CSS on top, updated live client-side as the editor types.
   // Resolved once here, on the server: the client boundary cannot await a
   // port read (ADR-0027 — see its open question on live editing).
-  const previewProducts = [...(await resolveProducts(item, visualizationRegistry, locale)).values()]
+  const previewProducts = uniqueProducts(await resolveProducts(item, visualizationRegistry, locale))
 
   const itemSchema = (item as { _meta?: { schema?: string } })?._meta?.schema ?? ''
   if (itemSchema === CUSTOM_CSS_SCHEMA) {
@@ -241,6 +243,7 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
             localeBasePath={basePath}
             deliveryLocale={locale.delivery}
             initialProducts={previewProducts}
+            productSource={productSourceName}
             localeCode={locale.code}
           />
         </div>
@@ -256,6 +259,7 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
         localeBasePath={basePath}
         deliveryLocale={locale.delivery}
         initialProducts={previewProducts}
+        productSource={productSourceName}
         localeCode={locale.code}
       />
     )
@@ -301,6 +305,7 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
           localeBasePath={basePath}
           deliveryLocale={locale.delivery}
           initialProducts={previewProducts}
+          productSource={productSourceName}
           localeCode={locale.code}
         />
       </main>

@@ -24,19 +24,19 @@ const resolved = (...skus: string[]): RenderContext => ({
 })
 
 const schema = (...skus: string[]) =>
-  ({ _meta: { schema: PRODUCT_CAROUSEL_SCHEMA }, skus }) as ProductCarouselSchema
+  ({ _meta: { schema: PRODUCT_CAROUSEL_SCHEMA }, products: skus }) as ProductCarouselSchema
 
 const adapt = (s: ProductCarouselSchema, ctx: RenderContext) =>
   productCarouselRegistryEntry.propsFromSchema?.(s, ctx)
 
 describe('productCarouselRegistryEntry — referencedSkus', () => {
   it('declares the SKUs the pre-pass should resolve', () => {
-    expect(productCarouselRegistryEntry.referencedSkus?.(schema('A', 'B'))).toEqual(['A', 'B'])
+    expect(productCarouselRegistryEntry.referencedSkus?.(schema('A', 'B'), {})).toEqual(['A', 'B'])
   })
 
   it('declares none when the field is absent', () => {
     const bare = { _meta: { schema: PRODUCT_CAROUSEL_SCHEMA } } as ProductCarouselSchema
-    expect(productCarouselRegistryEntry.referencedSkus?.(bare)).toEqual([])
+    expect(productCarouselRegistryEntry.referencedSkus?.(bare, {})).toEqual([])
   })
 
   it('is not a container — slides are products, not content nodes', () => {
@@ -45,7 +45,7 @@ describe('productCarouselRegistryEntry — referencedSkus', () => {
 })
 
 describe('productCarouselRegistryEntry — propsFromSchema', () => {
-  it('strips the envelope and the raw SKUs from the props', () => {
+  it('strips the envelope and the raw references from the props', () => {
     const props = adapt(schema('A'), resolved('A'))
     expect(props).not.toHaveProperty('_meta')
     expect(props).not.toHaveProperty('skus')

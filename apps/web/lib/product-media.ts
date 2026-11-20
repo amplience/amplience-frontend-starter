@@ -14,9 +14,12 @@
  *    becomes a `DynamicImage`, which keeps the DI loader and its responsive
  *    `srcset` (ADR-0021). PIMs fed from Amplience DAM — AnyaFinn in
  *    commercetools is one — hand back exactly these URLs.
- *  - **Any other URL with known dimensions** becomes a `ManualImage`.
- *  - **A URL with no dimensions** stays unrenderable: `ManualImage` needs a
- *    box size, and guessing one would lay the page out wrong.
+ *  - **Any other URL** becomes a `ManualImage`. Its dimensions come from the
+ *    source when it has them; when it doesn't (commercetools allows 0×0 for
+ *    externally hosted images, and its sample data uses it) a square stand-in
+ *    is used. That only reserves space until the image loads — the `Image`
+ *    atom's `height: auto` then takes the real ratio, and product cards crop
+ *    to their own box regardless.
  */
 
 import type { ProductImage } from '@amplience/frontend-starter-content'
@@ -53,6 +56,9 @@ export const parseDiUrl = (
   }
 }
 
+/** Stand-in box (px) for an image whose source gives no dimensions. */
+const UNKNOWN_SIZE = 1000
+
 /** A media body for a URL-only image — see the module comment for the rules. */
 const mediaFromUrl = (image: ProductImage): ContentMediaData | undefined => {
   const di = parseDiUrl(image.url)
@@ -70,13 +76,16 @@ const mediaFromUrl = (image: ProductImage): ContentMediaData | undefined => {
       ...(image.alt ? { imageAltText: image.alt } : {}),
     }
   }
-  if (image.width && image.height) {
-    return {
-      mediaType: 'ManualImage',
-      image: { src: image.url, alt: image.alt ?? '', width: image.width, height: image.height },
-    }
+  const sized = image.width && image.height
+  return {
+    mediaType: 'ManualImage',
+    image: {
+      src: image.url,
+      alt: image.alt ?? '',
+      width: sized ? image.width : UNKNOWN_SIZE,
+      height: sized ? image.height : UNKNOWN_SIZE,
+    },
   }
-  return undefined
 }
 
 /**

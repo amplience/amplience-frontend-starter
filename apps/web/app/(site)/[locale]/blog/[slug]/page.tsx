@@ -30,6 +30,7 @@ import { isContentClientError } from '@amplience/frontend-starter-content'
 import { client, siteName } from '../../../../../lib/content-client'
 import { localeForSlug, publicPath } from '../../../../../lib/locales'
 import { siteBasePath } from '../../../../../lib/preview-request'
+import { productSourceName } from '../../../../../lib/product-source'
 import { registry } from '../../../../../lib/registry'
 import { resolveProducts } from '../../../../../lib/resolve-products'
 import {
@@ -81,6 +82,7 @@ export default async function BlogArticleRoute({ params }: RouteProps) {
   return renderContent(article, registry, {
     loadPriority: 'lcp',
     localeBasePath: await siteBasePath(locale),
+    productSource: productSourceName,
     locale: locale.code,
     products,
   })

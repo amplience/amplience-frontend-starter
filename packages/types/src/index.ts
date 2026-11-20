@@ -96,10 +96,17 @@ export type RenderContext = {
    */
   readonly slotSizes?: string
   /**
-   * Products resolved before render, keyed by SKU (ADR-0027). Values, not a
-   * source: adapters stay synchronous because the fetching already happened.
+   * Products resolved before render, keyed by SKU — and by product id, for a
+   * source that has one (ADR-0027). Values, not a source: adapters stay
+   * synchronous because the fetching already happened.
    */
   readonly products?: ReadonlyMap<string, ResolvedProduct>
+  /**
+   * The deployment's product source (`PRODUCT_SOURCE`: `cms`, `commercetools`).
+   * Content that holds a product list per source — the multi-PIM carousel —
+   * reads the one for this site. Whole-tree, like `locale`.
+   */
+  readonly productSource?: string
 }
 
 /**
@@ -172,9 +179,9 @@ export type ComponentRegistryEntry<TSchema = unknown, TProps = unknown> = {
    * SKUs this node's content references (ADR-0027). The pre-pass collects them
    * across the tree and resolves them in one call before rendering; the result
    * arrives as `ctx.products`. Pure and synchronous — it returns strings, so it
-   * needs no knowledge of any source.
+   * needs no knowledge of any source beyond `ctx.productSource`'s name.
    */
-  readonly referencedSkus?: (schema: TSchema) => readonly string[]
+  readonly referencedSkus?: (schema: TSchema, ctx: RenderContext) => readonly string[]
 }
 
 /**
@@ -375,6 +382,8 @@ export type ResolvedProductStatus = 'active' | 'coming-soon' | 'discontinued'
  */
 export type ResolvedProduct = {
   readonly sku: string
+  /** The source's own product id, when it has one — see the port's `Product.id`. */
+  readonly id?: string
   readonly slug: string
   readonly name: string
   readonly href: string

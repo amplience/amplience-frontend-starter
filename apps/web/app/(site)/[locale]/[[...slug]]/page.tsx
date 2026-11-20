@@ -70,7 +70,7 @@ import { listingLimit } from '../../../../lib/listing'
 import { localeForSlug, publicPath } from '../../../../lib/locales'
 import type { Locale } from '../../../../lib/locales'
 import { siteBasePath } from '../../../../lib/preview-request'
-import { productSource } from '../../../../lib/product-source'
+import { productSource, productSourceName } from '../../../../lib/product-source'
 import { registry } from '../../../../lib/registry'
 import { resolveProducts, toResolvedProduct } from '../../../../lib/resolve-products'
 import { deliveryKeyForSlug, pathForDeliveryKey } from '../../../../lib/routing'
@@ -210,6 +210,7 @@ export default async function ContentRoute({ params }: RouteProps) {
   return renderContent(page, registry, {
     loadPriority: 'lcp',
     localeBasePath: await siteBasePath(locale),
+    productSource: productSourceName,
     locale: locale.code,
     products,
   })

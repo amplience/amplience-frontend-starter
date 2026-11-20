@@ -318,6 +318,7 @@ export function renderContent(
       // Resolved products are whole-tree too (ADR-0027): the pre-pass collects
       // from the entire tree, so a rail at any depth reads the same map.
       ...(ctx.products !== undefined && { products: ctx.products }),
+      ...(ctx.productSource !== undefined && { productSource: ctx.productSource }),
     }
     const children = renderContent(getChildren(node), registry, childCtx)
     return createBlock(component, props, blockCss, children)

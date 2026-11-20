@@ -95,6 +95,13 @@ export type ProductAttribute = {
 /** The normalised product every adapter returns. */
 export type Product = {
   readonly sku: string
+  /**
+   * The source's own product identifier, when it has one distinct from the
+   * SKU — commercetools' product id. Content may reference a product by it:
+   * the eComm Toolkit product picker stores ids, not SKUs. A CMS-backed
+   * product has none; its SKU is its identity.
+   */
+  readonly id?: string
   readonly slug: string
   readonly name: string
   /**

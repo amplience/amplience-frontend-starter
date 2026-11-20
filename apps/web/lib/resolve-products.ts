@@ -16,11 +16,12 @@ import { isContentClientError } from '@amplience/frontend-starter-content'
 import type { Registry, ResolvedProduct } from '@amplience/frontend-starter-types'
 
 import { collectSkus } from '../src/renderer/collect-skus'
+import { productMap } from '../src/renderer/product-map'
 import { resolveCurrency } from './currency'
 import type { Locale } from './locales'
 import { publicPath } from './locales'
 import { productMedia } from './product-media'
-import { productSource } from './product-source'
+import { productSource, productSourceName } from './product-source'
 
 const EMPTY: ReadonlyMap<string, ResolvedProduct> = new Map()
 
@@ -29,6 +30,7 @@ export const toResolvedProduct = (product: Product, locale: Locale): ResolvedPro
   const media = productMedia(product.images?.[0])
   return {
     sku: product.sku,
+    ...(product.id !== undefined && { id: product.id }),
     slug: product.slug,
     name: product.name,
     href: publicPath(locale, `/products/${product.slug}`),
@@ -53,7 +55,10 @@ export async function resolveProducts(
   registry: Registry,
   locale: Locale,
 ): Promise<ReadonlyMap<string, ResolvedProduct>> {
-  return await resolveProductsBySku(collectSkus(content, registry, locale.code), locale)
+  return await resolveProductsBySku(
+    collectSkus(content, registry, locale.code, productSourceName),
+    locale,
+  )
 }
 
 /**
@@ -71,7 +76,7 @@ export async function resolveProductsBySku(
       locale: locale.delivery,
       currency: resolveCurrency(locale.code),
     })
-    return new Map(products.map((p) => [p.sku, toResolvedProduct(p, locale)]))
+    return productMap(products.map((p) => toResolvedProduct(p, locale)))
   } catch (error) {
     if (!isContentClientError(error)) throw error
     return EMPTY

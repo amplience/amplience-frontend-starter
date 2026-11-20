@@ -63,6 +63,34 @@ Each layer can be seeded on its own (`pnpm hub:import:settings`, `:types`, `:ext
 
 For the full walkthrough — prerequisites, repository IDs, verification steps, and publishing behaviour — see the [seeding runbook](runbooks/hub-setup.md).
 
+## commercetools product picker
+
+A hub serving commercetools-backed sites can give editors the eComm Toolkit product picker on [Product Carousel](content-types.md#product-carousel-block) blocks, in place of typing SKUs. There's no Environment Manager field for this yet: add a `commercetools` block to the hub's entry under `environments` in `amplience.config.json` by hand (the Environment Manager keeps it when it saves), then run `pnpm hub:import` (or just `:schemas` and `:extensions`).
+
+```json
+{
+  "name": "anyafinn",
+  "commercetools": {
+    "projectKey": "anyafinn",
+    "clientId": "…",
+    "clientSecret": "…",
+    "region": "europe-west1.gcp",
+    "language": "en"
+  },
+  "multiPimDemo": true
+}
+```
+
+`projectKey`, `clientId` and `clientSecret` are required. `region` defaults to `europe-west1.gcp`, and `language` (the locale the picker searches and labels in) defaults to `en`. `multiPimDemo` is optional — see below. The hub's other settings sit alongside as usual; the file is plain JSON, so no comments.
+
+With the block present, `hub:import` seeds the `ecomm-toolkit` extension with these credentials and adds the picker to the carousel's `products` field. Without it (or with any of the three required keys missing) the extension is skipped and the field stays a plain SKU list, so a CMS-only hub is unaffected.
+
+- **Use a dedicated read-only API client.** The toolkit calls commercetools from the editor's browser, so its secret is visible to anyone who can edit content. Create an API client with only `view_published_products` and `view_categories` — not the site's own client.
+- **The picker needs Product Projection Search.** The toolkit's search runs on commercetools' older Product Projection Search, which is deprecated and has to be active on the project. That's separate from the newer Product Search the site uses for listings (see [Deploying](deploying.md#commercetools)).
+- **Seeded SKUs show as empty in the picker.** The picker stores and displays commercetools product ids. Carousels seeded with SKUs render correctly on the site, but appear empty in the picker until re-picked, and saving from the picker replaces them with ids.
+
+`"multiPimDemo": true` also registers the [Multi-PIM Product Carousel](content-types.md#multi-pim-product-carousel-demo) — one product list per source, for demo hubs whose sites run on different product sources. Leave it off for a client's hub, so editors see a single carousel.
+
 ## Schedule preview
 
 Amplience's **Preview** (from the planning calendar, the timeline or an edition)

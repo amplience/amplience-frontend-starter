@@ -27,7 +27,8 @@
  *
  * Every SKU on a product resolves to it — master and variants — because the
  * port has no variants and an editor pasting a variant SKU into a carousel
- * means "this product". The returned `sku` is always the master's.
+ * means "this product". So does its product id, which is what the eComm
+ * Toolkit picker stores. The returned `sku` is always the master's.
  */
 
 import type { ProductSource } from '../../product-port'
@@ -172,7 +173,8 @@ export class CommercetoolsProductSource implements ProductSource {
       this.#context(opts),
       this.#client.get<PagedQueryResponse<CtProductProjection>>('/product-projections', {
         ...this.#priceParams(opts),
-        where: `masterVariant(sku in (${list})) or variants(sku in (${list}))`,
+        // Product ids too: the eComm Toolkit picker stores ids, not SKUs.
+        where: `id in (${list}) or masterVariant(sku in (${list})) or variants(sku in (${list}))`,
         limit: MAX_PAGE_SIZE,
       }),
     ])
@@ -182,6 +184,7 @@ export class CommercetoolsProductSource implements ProductSource {
       const product = mapProjection(projection, ctx)
       if (!product) continue
       for (const sku of skusOf(projection)) bySku.set(sku, product)
+      bySku.set(projection.id, product)
     }
 
     const resolved: Product[] = []

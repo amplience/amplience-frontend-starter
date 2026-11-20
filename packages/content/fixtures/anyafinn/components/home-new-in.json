@@ -55,7 +55,7 @@
     "dragToScroll": true,
     "maxWidth": "default",
     "gutter": true,
-    "skus": [
+    "products": [
       "HAL-JACK-01",
       "MAR-TOP-01",
       "ORE-ACC-01",

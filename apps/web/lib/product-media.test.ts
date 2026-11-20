@@ -72,8 +72,16 @@ describe('productMedia', () => {
     })
   })
 
-  it('leaves a non-DI URL with no dimensions unrenderable', () => {
-    expect(productMedia({ url: 'https://images.example.com/lamp.jpg' })).toBeUndefined()
-    expect(productMediaList([{ url: 'https://images.example.com/lamp.jpg' }])).toEqual([])
+  it('gives a non-DI URL with no dimensions a square stand-in size', () => {
+    const stand = {
+      mediaType: 'ManualImage',
+      image: { src: 'https://images.example.com/lamp.jpg', alt: '', width: 1000, height: 1000 },
+    }
+    expect(productMedia({ url: 'https://images.example.com/lamp.jpg' })).toEqual(stand)
+    // commercetools reports 0×0 for externally hosted images.
+    expect(
+      productMedia({ url: 'https://images.example.com/lamp.jpg', width: 0, height: 0 }),
+    ).toEqual(stand)
+    expect(productMediaList([{ url: 'https://images.example.com/lamp.jpg' }])).toEqual([stand])
   })
 })
