@@ -54,6 +54,23 @@
       "title": "Products",
       "description": "One list per product source. Each site shows the list for the source it is configured with (PRODUCT_SOURCE), so one carousel can serve a CMS-backed site and a commercetools-backed one on the same hub. Fill in the lists for the sites this carousel appears on.",
       "type": "object",
+      "ui:component": {
+        "name": "tabs",
+        "params": {
+          "tabs": {
+            "items": [
+              {
+                "label": "Amplience",
+                "pointers": ["/cms"]
+              },
+              {
+                "label": "commercetools",
+                "pointers": ["/commercetools"]
+              }
+            ]
+          }
+        }
+      },
       "properties": {
         "cms": {
           "title": "Products (Amplience)",

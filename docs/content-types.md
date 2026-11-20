@@ -275,12 +275,12 @@ A [Product Carousel](#product-carousel-block) for demo hubs that serve sites bac
 - **Schema** [`content/multi-pim-product-carousel`](../packages/hub-management/content-type-schemas/schemas/content_multi-pim-product-carousel.json) · **Repository** `content`
 - **Components** the same [`ProductCarouselBlock`](../packages/components/src/organisms/ProductCarouselBlock) as the Product Carousel
 
-Every field matches the Product Carousel except `products`, which holds one list per product source, stacked one under the other:
+Every field matches the Product Carousel except `products`, which holds one list per product source, each on its own tab:
 
-| Field                    | Label                    | Type     | Req | Notes                                                                                                                 |
-| ------------------------ | ------------------------ | -------- | --- | --------------------------------------------------------------------------------------------------------------------- |
-| `products.cms`           | Products (Amplience)     | string[] |     | SKUs, read by sites running `PRODUCT_SOURCE=cms`                                                                      |
-| `products.commercetools` | Products (commercetools) | string[] |     | Product picker; read by sites running `PRODUCT_SOURCE=commercetools`. Omitted on hubs without a `commercetools` block |
+| Field                    | Label                    | Type     | Req | Notes                                                                                                                                                                  |
+| ------------------------ | ------------------------ | -------- | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `products.cms`           | Products (Amplience)     | string[] |     | SKUs, read by sites running `PRODUCT_SOURCE=cms`                                                                                                                       |
+| `products.commercetools` | Products (commercetools) | string[] |     | Product picker; read by sites running `PRODUCT_SOURCE=commercetools`. Omitted on hubs without a `commercetools` block, which then show the Amplience list without tabs |
 
 Each site renders the list for its own `PRODUCT_SOURCE` and ignores the others, so one content item can drive a CMS-backed site and a commercetools-backed site side by side. Single-source hubs should use the Product Carousel, so editors see one field.
 

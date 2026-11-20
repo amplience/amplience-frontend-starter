@@ -82,9 +82,19 @@ describe('withProductPickers', () => {
     expect(lists.cms?.['ui:extension']).toBeUndefined()
   })
 
+  it("tabs the multi-PIM carousel's lists only when there is more than one", () => {
+    const tabsOf = (schema: typeof multi) => schema.properties.products?.['ui:component']
+    expect(tabsOf(withProductPickers(multi, { commercetools: true }))).toMatchObject({
+      name: 'tabs',
+      params: { tabs: { items: [{ pointers: ['/cms'] }, { pointers: ['/commercetools'] }] } },
+    })
+    expect(tabsOf(withProductPickers(multi, { commercetools: false }))).toBeUndefined()
+  })
+
   it('does not touch the checked-in schema', () => {
     withProductPickers(multi, { commercetools: false })
     expect(Object.keys(listsOf(multi))).toEqual(['cms', 'commercetools'])
+    expect(multi.properties.products?.['ui:component']).toBeDefined()
   })
 
   it('returns every other schema unchanged', () => {

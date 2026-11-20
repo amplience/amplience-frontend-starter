@@ -74,7 +74,8 @@ export const seedsContentType = (file, hubEntry) =>
  *
  *   - product carousel: `products` gets the toolkit picker on a commercetools hub;
  *   - multi-PIM carousel: its commercetools list gets the picker, or is removed
- *     on a hub without commercetools, leaving the Amplience (SKU) list.
+ *     on a hub without commercetools — along with the per-source tabs, which
+ *     would otherwise hold a single Amplience (SKU) list.
  *
  * Every other schema is returned unchanged.
  */
@@ -85,11 +86,16 @@ export const withProductPickers = (schema, { commercetools }) => {
     return { ...schema, properties: { ...schema.properties, products } }
   }
   if (schema?.$id === MULTI_PIM_PRODUCT_CAROUSEL_SCHEMA) {
-    const lists = { ...schema.properties.products.properties }
-    if (commercetools)
+    const { 'ui:component': tabs, ...field } = schema.properties.products
+    const lists = { ...field.properties }
+    if (commercetools) {
       lists.commercetools = { ...lists.commercetools, 'ui:extension': ECOMM_TOOLKIT_PICKER }
-    else delete lists.commercetools
-    const products = { ...schema.properties.products, properties: lists }
+      const products = { ...field, 'ui:component': tabs, properties: lists }
+      return { ...schema, properties: { ...schema.properties, products } }
+    }
+    // One list left, so no tabs: just the Amplience list.
+    delete lists.commercetools
+    const products = { ...field, properties: lists }
     return { ...schema, properties: { ...schema.properties, products } }
   }
   return schema
