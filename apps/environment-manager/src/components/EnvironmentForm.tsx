@@ -4,7 +4,13 @@ import { api } from '../api.js'
 import { canonicalGroup } from '../hub-groups.js'
 import type { StringEnvKey } from '../required-fields.js'
 import { isRequired, missingRequired } from '../required-fields.js'
-import type { DiscoveredHub, Environment, PermissionsReport } from '../types.js'
+import type {
+  CommercetoolsSettings,
+  DiscoveredHub,
+  Environment,
+  PermissionsReport,
+  ProductSourceName,
+} from '../types.js'
 import { EMPTY_ENV } from '../types.js'
 import { HubIcon } from './HubIcon.js'
 import { PermissionsPanel } from './PermissionsPanel.js'
@@ -31,7 +37,7 @@ type FieldMeta = {
 const IDENTITY_FIELDS: FieldMeta[] = [
   {
     key: 'label',
-    label: 'Label (Just for your personal reference)',
+    label: 'Label',
     placeholder: 'e.g. Client A — Staging',
   },
 ]
@@ -68,19 +74,34 @@ const HUB_FIELDS: FieldMeta[] = [
   },
 ]
 
-const CONFIG_FIELDS: FieldMeta[] = [
-  { key: 'localhostUrl', label: 'Localhost URL', placeholder: 'http://localhost:3000' },
-  {
-    key: 'defaultBrand',
-    label: 'Default brand',
-    placeholder: 'e.g. acme — sets NEXT_PUBLIC_BRAND',
-  },
-  {
-    key: 'defaultSite',
-    label: 'Default site',
-    placeholder: 'e.g. acme — defaults to the fixture set name if empty',
-  },
+/** The commercetools picker's settings the form collects (region and language stay hand-set). */
+type CommercetoolsField = 'projectKey' | 'clientId' | 'clientSecret'
+
+const COMMERCETOOLS_FIELDS: { key: CommercetoolsField; label: string; placeholder: string }[] = [
+  { key: 'projectKey', label: 'Project key', placeholder: 'e.g. anyafinn' },
+  { key: 'clientId', label: 'Client ID', placeholder: 'Read-only API client ID' },
+  { key: 'clientSecret', label: 'Client secret', placeholder: 'Read-only API client secret' },
 ]
+
+const PIM_LABELS: Record<ProductSourceName, string> = {
+  cms: 'Amplience',
+  commercetools: 'commercetools',
+}
+
+/** Whether the hub has every commercetools setting the picker needs. */
+const hasCommercetools = (ct: Partial<CommercetoolsSettings> | undefined) =>
+  COMMERCETOOLS_FIELDS.every(({ key }) => (ct?.[key] ?? '').trim() !== '')
+
+/**
+ * The main PIM the form shows and saves: the hub's own choice when its PIM has
+ * what it needs, else what hub:import would infer.
+ */
+const effectiveMainPim = (env: Environment): ProductSourceName => {
+  const commercetools = hasCommercetools(env.commercetools)
+  if (env.mainPim === 'cms' || (env.mainPim === 'commercetools' && commercetools))
+    return env.mainPim
+  return commercetools ? 'commercetools' : 'cms'
+}
 
 /**
  * Splits a label so any bracketed qualifier — "Staging host (VSE)" — can be
@@ -100,10 +121,7 @@ function labelParts(label: string) {
 
 /** Field labels by key, for naming what's still blank on a failed submit. */
 const FIELD_LABELS = new Map(
-  [...IDENTITY_FIELDS, ...CREDENTIAL_FIELDS, ...HUB_FIELDS, ...CONFIG_FIELDS].map((f) => [
-    f.key,
-    f.label,
-  ]),
+  [...IDENTITY_FIELDS, ...CREDENTIAL_FIELDS, ...HUB_FIELDS].map((f) => [f.key, f.label]),
 )
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -155,6 +173,19 @@ export function EnvironmentForm({ initial, groups = [], onSave, onCancel, onDele
         return next
       })
     }
+  }
+
+  function setCommercetools(key: CommercetoolsField, value: string) {
+    setForm((prev) => ({
+      ...prev,
+      commercetools: {
+        projectKey: '',
+        clientId: '',
+        clientSecret: '',
+        ...prev.commercetools,
+        [key]: value,
+      },
+    }))
   }
 
   // ── Discovery ──────────────────────────────────────────────────────────────
@@ -273,16 +304,28 @@ export function EnvironmentForm({ initial, groups = [], onSave, onCancel, onDele
       document.getElementById(firstMissing)?.focus()
       return
     }
+    // commercetools is all or nothing: hub:import ignores a partial block.
+    const ctFilled = COMMERCETOOLS_FIELDS.filter(
+      ({ key }) => (form.commercetools?.[key] ?? '').trim() !== '',
+    )
+    if (ctFilled.length > 0 && ctFilled.length < COMMERCETOOLS_FIELDS.length) {
+      setError('Fill in all three commercetools fields, or leave them all blank.')
+      return
+    }
     setSaving(true)
     setError(null)
     try {
-      const { group, icon, ...rest } = form
+      const { group, icon, commercetools, mainPim: _mainPim, multiPimDemo, ...rest } = form
       const nextGroup = canonicalGroup(group ?? '', groups)
       const nextIcon = (icon ?? '').trim()
       await onSave({
         ...rest,
         ...(nextGroup === '' ? {} : { group: nextGroup }),
         ...(nextIcon === '' ? {} : { icon: nextIcon }),
+        ...(commercetools !== undefined && hasCommercetools(commercetools) && { commercetools }),
+        // Saved explicitly, so the hub's main PIM is a decision, not an inference.
+        mainPim: effectiveMainPim(form),
+        ...(multiPimDemo === true && { multiPimDemo }),
       })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error')
@@ -330,7 +373,7 @@ export function EnvironmentForm({ initial, groups = [], onSave, onCancel, onDele
         if (e.key === 'Escape' && !saving) onCancel()
       }}
     >
-      <div className="modal" role="dialog" aria-modal="true">
+      <div className="modal modal--wide" role="dialog" aria-modal="true">
         <div className="modal__header">
           <h2>{isEdit ? 'Edit hub' : 'Add hub'}</h2>
           <button
@@ -350,181 +393,253 @@ export function EnvironmentForm({ initial, groups = [], onSave, onCancel, onDele
           }}
           noValidate
         >
+          {/* Sections stack, or sit two by two when the form is wide enough. */}
           <div className="form-fields">
-            {/* ── Identity ── */}
-            {IDENTITY_FIELDS.map((f, i) => renderField(f, i))}
-            <div className="field">
-              <label htmlFor="icon">{labelParts('Icon (emoji or image URL)')}</label>
-              <div className="field__row">
-                <input
-                  id="icon"
-                  type="text"
-                  value={form.icon ?? ''}
-                  placeholder="e.g. 🛍️ or https://example.com/logo.png"
-                  autoComplete="off"
-                  onChange={(e) => set('icon', e.target.value)}
-                />
-                <HubIcon icon={form.icon} />
+            {/* ── Personal reference ── */}
+            <section className="form-group">
+              <div className="form-section">
+                <span className="form-section__label">Personal reference</span>
               </div>
-            </div>
-            <div className="field">
-              <label htmlFor="group">{labelParts('Group (optional)')}</label>
-              <input
-                id="group"
-                type="text"
-                list="hub-groups"
-                value={form.group ?? ''}
-                placeholder="e.g. Prospects"
-                autoComplete="off"
-                onChange={(e) => set('group', e.target.value)}
-              />
-              <datalist id="hub-groups">
-                {groups.map((g) => (
-                  <option key={g} value={g} />
-                ))}
-              </datalist>
-            </div>
+              {IDENTITY_FIELDS.map((f, i) => renderField(f, i))}
+              <div className="field">
+                <label htmlFor="icon">{labelParts('Icon (optional emoji or image URL)')}</label>
+                <div className="field__row">
+                  <input
+                    id="icon"
+                    type="text"
+                    value={form.icon ?? ''}
+                    placeholder="e.g. 🛍️ or https://example.com/logo.png"
+                    autoComplete="off"
+                    onChange={(e) => set('icon', e.target.value)}
+                  />
+                  <HubIcon icon={form.icon} />
+                </div>
+              </div>
+              <div className="field">
+                <label htmlFor="group">{labelParts('Group (optional)')}</label>
+                <input
+                  id="group"
+                  type="text"
+                  list="hub-groups"
+                  value={form.group ?? ''}
+                  placeholder="e.g. Prospects"
+                  autoComplete="off"
+                  onChange={(e) => set('group', e.target.value)}
+                />
+                <datalist id="hub-groups">
+                  {groups.map((g) => (
+                    <option key={g} value={g} />
+                  ))}
+                </datalist>
+              </div>
+            </section>
 
             {/* ── Credentials + discover ── */}
-            <div className="form-section">
-              <span className="form-section__label">Credentials</span>
-            </div>
-            {CREDENTIAL_FIELDS.map((f) => renderField(f, 99))}
-
-            <div className="form-discover">
-              <button
-                type="button"
-                className="btn btn--sm btn--ghost form-discover__btn"
-                onClick={() => {
-                  void handleDiscover()
-                }}
-                disabled={discovering || saving || !form.clientId || !form.clientSecret}
-              >
-                {discovering ? (
-                  <>
-                    <span className="spinner spinner--sm" aria-hidden="true" /> Fetching…
-                  </>
-                ) : (
-                  '⬇️ Fetch hub details'
-                )}
-              </button>
-              <button
-                type="button"
-                className="btn btn--sm btn--ghost form-discover__btn"
-                onClick={() => {
-                  void handleCheckPermissions()
-                }}
-                disabled={
-                  permsLoading || saving || !form.clientId || !form.clientSecret || !form.hubId
-                }
-                title={
-                  !form.hubId
-                    ? 'Needs a hub ID — fetch hub details first'
-                    : 'Check what these credentials can read and write'
-                }
-              >
-                {permsLoading ? (
-                  <>
-                    <span className="spinner spinner--sm" aria-hidden="true" /> Checking…
-                  </>
-                ) : (
-                  '🔑 Check credentials'
-                )}
-              </button>
-              {discoverError !== null && <p className="form-discover__error">{discoverError}</p>}
-              {permsError !== null && <p className="form-discover__error">{permsError}</p>}
-            </div>
-
-            {/* Credential permissions child-card */}
-            {perms !== null && !permsLoading && (
-              <PermissionsPanel
-                report={perms}
-                onDismiss={() => setPerms(null)}
-                onManageWorkforce={setWorkforceOrg}
-              />
-            )}
-
-            {/* Workforce access — the once-per-organization setup step (ADR-0023) */}
-            {workforceOrg !== null && (
-              <WorkforceAccessPanel
-                organizationId={workforceOrg}
-                currentHubLabel={form.label !== '' ? form.label : form.hubName}
-                currentHubName={form.hubName}
-                onClose={() => setWorkforceOrg(null)}
-                // Deliberately left open: after removing a token the next
-                // thing anyone wants is to paste the replacement, and after
-                // saving one the panel is where the result is confirmed.
-                onStored={() => {
-                  void handleCheckPermissions()
-                }}
-              />
-            )}
-
-            {/* Hub picker — only shown when credentials resolve to multiple hubs */}
-            {discoveredHubs !== null && discoveredHubs.length > 1 && (
-              <div className="field">
-                <label htmlFor="hub-picker">Hub</label>
-                <select
-                  id="hub-picker"
-                  onChange={(e) => {
-                    const hub = discoveredHubs[Number(e.target.value)]
-                    if (hub !== undefined) applyHub(hub)
-                  }}
-                >
-                  <option value="">— select a hub —</option>
-                  {discoveredHubs.map((hub, i) => (
-                    <option key={hub.id} value={i}>
-                      {hub.label || hub.name}
-                    </option>
-                  ))}
-                </select>
+            <section className="form-group">
+              <div className="form-section">
+                <span className="form-section__label">API credentials</span>
               </div>
-            )}
+              {CREDENTIAL_FIELDS.map((f) => renderField(f, 99))}
+
+              <div className="form-discover">
+                <button
+                  type="button"
+                  className="btn btn--sm btn--ghost form-discover__btn"
+                  onClick={() => {
+                    void handleDiscover()
+                  }}
+                  disabled={discovering || saving || !form.clientId || !form.clientSecret}
+                >
+                  {discovering ? (
+                    <>
+                      <span className="spinner spinner--sm" aria-hidden="true" /> Fetching…
+                    </>
+                  ) : (
+                    '⬇️ Fetch hub details'
+                  )}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--sm btn--ghost form-discover__btn"
+                  onClick={() => {
+                    void handleCheckPermissions()
+                  }}
+                  disabled={
+                    permsLoading || saving || !form.clientId || !form.clientSecret || !form.hubId
+                  }
+                  title={
+                    !form.hubId
+                      ? 'Needs a hub ID — fetch hub details first'
+                      : 'Check what these credentials can read and write'
+                  }
+                >
+                  {permsLoading ? (
+                    <>
+                      <span className="spinner spinner--sm" aria-hidden="true" /> Checking…
+                    </>
+                  ) : (
+                    '🔑 Check credentials'
+                  )}
+                </button>
+                {discoverError !== null && <p className="form-discover__error">{discoverError}</p>}
+                {permsError !== null && <p className="form-discover__error">{permsError}</p>}
+              </div>
+
+              {/* Credential permissions child-card */}
+              {perms !== null && !permsLoading && (
+                <PermissionsPanel
+                  report={perms}
+                  onDismiss={() => setPerms(null)}
+                  onManageWorkforce={setWorkforceOrg}
+                />
+              )}
+
+              {/* Workforce access — the once-per-organization setup step (ADR-0023) */}
+              {workforceOrg !== null && (
+                <WorkforceAccessPanel
+                  organizationId={workforceOrg}
+                  currentHubLabel={form.label !== '' ? form.label : form.hubName}
+                  currentHubName={form.hubName}
+                  onClose={() => setWorkforceOrg(null)}
+                  // Deliberately left open: after removing a token the next
+                  // thing anyone wants is to paste the replacement, and after
+                  // saving one the panel is where the result is confirmed.
+                  onStored={() => {
+                    void handleCheckPermissions()
+                  }}
+                />
+              )}
+
+              {/* Hub picker — only shown when credentials resolve to multiple hubs */}
+              {discoveredHubs !== null && discoveredHubs.length > 1 && (
+                <div className="field">
+                  <label htmlFor="hub-picker">Hub</label>
+                  <select
+                    id="hub-picker"
+                    onChange={(e) => {
+                      const hub = discoveredHubs[Number(e.target.value)]
+                      if (hub !== undefined) applyHub(hub)
+                    }}
+                  >
+                    <option value="">— select a hub —</option>
+                    {discoveredHubs.map((hub, i) => (
+                      <option key={hub.id} value={i}>
+                        {hub.label || hub.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </section>
 
             {revealed && (
               <>
                 {/* ── Hub details ── */}
-                <div className="form-section">
-                  <span className="form-section__label">Hub details</span>
-                </div>
-                {HUB_FIELDS.map((f) => renderField(f, 99))}
+                <section className="form-group">
+                  <div className="form-section">
+                    <span className="form-section__label">Hub details</span>
+                  </div>
+                  {HUB_FIELDS.map((f) => renderField(f, 99))}
 
-                {/* ── Config ── */}
-                <div className="form-section">
-                  <span className="form-section__label">Local Config</span>
-                </div>
-                {CONFIG_FIELDS.map((f) => renderField(f, 99))}
+                  <div className="field field--checkbox">
+                    <label htmlFor="republish">
+                      <input
+                        id="republish"
+                        type="checkbox"
+                        checked={form.republish}
+                        onChange={(e) => set('republish', e.target.checked)}
+                      />
+                      {labelParts('Force republish on import (--republish)')}
+                    </label>
+                  </div>
 
-                <div className="field field--checkbox">
-                  <label htmlFor="republish">
-                    <input
-                      id="republish"
-                      type="checkbox"
-                      checked={form.republish}
-                      onChange={(e) => set('republish', e.target.checked)}
-                    />
-                    {labelParts('Force republish on import (--republish)')}
-                  </label>
-                </div>
+                  <div className="field field--checkbox">
+                    <label htmlFor="ignoreSchemaValidation">
+                      <input
+                        id="ignoreSchemaValidation"
+                        type="checkbox"
+                        checked={form.ignoreSchemaValidation ?? false}
+                        onChange={(e) => set('ignoreSchemaValidation', e.target.checked)}
+                      />
+                      {labelParts(
+                        'Ignore schema validation on wipe/import (--ignoreSchemaValidation)',
+                      )}
+                    </label>
+                    <p className="hint">
+                      Requires the hub&rsquo;s &ldquo;Ignore schema validation&rdquo; setting to be
+                      enabled (DC &rarr; hub &rarr; Properties). Lets teardown strip keys from items
+                      whose body no longer matches a changed schema.
+                    </p>
+                  </div>
+                </section>
 
-                <div className="field field--checkbox">
-                  <label htmlFor="ignoreSchemaValidation">
-                    <input
-                      id="ignoreSchemaValidation"
-                      type="checkbox"
-                      checked={form.ignoreSchemaValidation ?? false}
-                      onChange={(e) => set('ignoreSchemaValidation', e.target.checked)}
-                    />
-                    {labelParts(
-                      'Ignore schema validation on wipe/import (--ignoreSchemaValidation)',
-                    )}
-                  </label>
+                {/* ── PIM details ── */}
+                <section className="form-group">
+                  <div className="form-section">
+                    <span className="form-section__label">PIM details</span>
+                  </div>
+                  <p className="form-subsection">Amplience</p>
                   <p className="hint">
-                    Requires the hub&rsquo;s &ldquo;Ignore schema validation&rdquo; setting to be
-                    enabled (DC &rarr; hub &rarr; Properties). Lets teardown strip keys from items
-                    whose body no longer matches a changed schema.
+                    Built in: products are Product items in this hub. No credentials needed.
                   </p>
-                </div>
+
+                  <p className="form-subsection">commercetools</p>
+                  {COMMERCETOOLS_FIELDS.map(({ key, label, placeholder }) => (
+                    <div className="field" key={key}>
+                      <label htmlFor={`commercetools-${key}`}>{label}</label>
+                      <input
+                        id={`commercetools-${key}`}
+                        type={key === 'clientSecret' ? 'password' : 'text'}
+                        value={form.commercetools?.[key] ?? ''}
+                        placeholder={placeholder}
+                        autoComplete="off"
+                        onChange={(e) => setCommercetools(key, e.target.value)}
+                      />
+                    </div>
+                  ))}
+                  <p className="hint">
+                    For the commercetools product picker. Its secret reaches editors&rsquo;
+                    browsers, so use an API client with only <code>view_published_products</code>{' '}
+                    and <code>view_categories</code> &mdash; not a site&rsquo;s own.
+                  </p>
+
+                  <div className="field">
+                    <label htmlFor="mainPim">Hub&rsquo;s main PIM</label>
+                    <select
+                      id="mainPim"
+                      value={effectiveMainPim(form)}
+                      onChange={(e) => set('mainPim', e.target.value)}
+                    >
+                      {(['cms', 'commercetools'] as const)
+                        .filter((pim) => pim === 'cms' || hasCommercetools(form.commercetools))
+                        .map((pim) => (
+                          <option key={pim} value={pim}>
+                            {PIM_LABELS[pim]}
+                          </option>
+                        ))}
+                    </select>
+                    <p className="hint">
+                      Which picker the Product Carousel gets. Match it to the{' '}
+                      <code>PRODUCT_SOURCE</code> of the sites this hub mainly serves.
+                    </p>
+                  </div>
+
+                  <div className="field field--checkbox">
+                    <label htmlFor="multiPimDemo">
+                      <input
+                        id="multiPimDemo"
+                        type="checkbox"
+                        checked={form.multiPimDemo ?? false}
+                        onChange={(e) => set('multiPimDemo', e.target.checked)}
+                      />
+                      Enable multi-PIM carousels
+                    </label>
+                    <p className="hint">
+                      Adds the Multi-PIM Product Carousel, with a product list per PIM, for demo
+                      hubs whose sites use different product sources.
+                    </p>
+                  </div>
+                </section>
               </>
             )}
           </div>

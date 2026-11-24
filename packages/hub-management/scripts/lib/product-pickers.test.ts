@@ -7,6 +7,7 @@ import { describe, expect, it } from 'vitest'
 // exercises the exact code the seed runs.
 import {
   commercetoolsSettings,
+  mainPim,
   MULTI_PIM_CONTENT_TYPE_FILE,
   needsCommercetools,
   seedsContentType,
@@ -57,9 +58,30 @@ describe('commercetoolsSettings', () => {
   })
 })
 
+describe('mainPim', () => {
+  it("uses the hub's own choice", () => {
+    expect(mainPim({ ...hub, mainPim: 'cms' })).toBe('cms')
+    expect(mainPim({ ...hub, mainPim: 'commercetools' })).toBe('commercetools')
+  })
+
+  it('falls back to commercetools when the hub has its settings, and the CMS otherwise', () => {
+    expect(mainPim(hub)).toBe('commercetools')
+    expect(mainPim({})).toBe('cms')
+    expect(mainPim(undefined)).toBe('cms')
+  })
+
+  it('refuses commercetools without settings, rather than seeding the other picker', () => {
+    expect(() => mainPim({ mainPim: 'commercetools' })).toThrow(/needs a complete "commercetools"/)
+  })
+
+  it('refuses a value that is not a product source', () => {
+    expect(() => mainPim({ mainPim: 'shopify' })).toThrow(/isn't a product source/)
+  })
+})
+
 describe('withProductPickers', () => {
   it("gives the carousel's products field the commercetools picker on a commercetools hub", () => {
-    const picked = withProductPickers(carousel, { commercetools: true })
+    const picked = withProductPickers(carousel, { mainPim: 'commercetools', commercetools: true })
     expect(picked.properties.products?.['ui:extension']).toMatchObject({
       name: 'ecomm-toolkit-commercetools',
       params: { type: 'strings' },
@@ -69,7 +91,7 @@ describe('withProductPickers', () => {
   })
 
   it("gives the carousel's products field the Amplience PIM picker without commercetools", () => {
-    const picked = withProductPickers(carousel, { commercetools: false })
+    const picked = withProductPickers(carousel, { mainPim: 'cms', commercetools: false })
     expect(picked.properties.products?.['ui:extension']).toMatchObject({
       name: 'ecomm-toolkit-amplience',
       params: { type: 'strings' },
@@ -77,8 +99,23 @@ describe('withProductPickers', () => {
     expect(picked.properties.products?.type).toBe('array')
   })
 
+  it("follows the main PIM, not the credentials, for the carousel's picker", () => {
+    // A multi-PIM demo hub: commercetools settings for its multi-PIM lists,
+    // but the CMS as its main source.
+    const options = { mainPim: 'cms', commercetools: true } as const
+    expect(
+      withProductPickers(carousel, options).properties.products?.['ui:extension'],
+    ).toMatchObject({ name: 'ecomm-toolkit-amplience' })
+    expect(Object.keys(listsOf(withProductPickers(multi, options)))).toEqual([
+      'cms',
+      'commercetools',
+    ])
+  })
+
   it("gives each multi-PIM list its own source's picker", () => {
-    const lists = listsOf(withProductPickers(multi, { commercetools: true }))
+    const lists = listsOf(
+      withProductPickers(multi, { mainPim: 'commercetools', commercetools: true }),
+    )
     expect(Object.keys(lists)).toEqual(['cms', 'commercetools'])
     expect(lists.cms?.['ui:extension']).toMatchObject({ name: 'ecomm-toolkit-amplience' })
     expect(lists.commercetools?.['ui:extension']).toMatchObject({
@@ -87,22 +124,26 @@ describe('withProductPickers', () => {
   })
 
   it("keeps the multi-PIM carousel's commercetools list only on a commercetools hub", () => {
-    const lists = listsOf(withProductPickers(multi, { commercetools: false }))
+    const lists = listsOf(withProductPickers(multi, { mainPim: 'cms', commercetools: false }))
     expect(Object.keys(lists)).toEqual(['cms'])
     expect(lists.cms?.['ui:extension']).toMatchObject({ name: 'ecomm-toolkit-amplience' })
   })
 
   it("tabs the multi-PIM carousel's lists only when there is more than one", () => {
     const tabsOf = (schema: typeof multi) => schema.properties.products?.['ui:component']
-    expect(tabsOf(withProductPickers(multi, { commercetools: true }))).toMatchObject({
+    expect(
+      tabsOf(withProductPickers(multi, { mainPim: 'commercetools', commercetools: true })),
+    ).toMatchObject({
       name: 'tabs',
       params: { tabs: { items: [{ pointers: ['/cms'] }, { pointers: ['/commercetools'] }] } },
     })
-    expect(tabsOf(withProductPickers(multi, { commercetools: false }))).toBeUndefined()
+    expect(
+      tabsOf(withProductPickers(multi, { mainPim: 'cms', commercetools: false })),
+    ).toBeUndefined()
   })
 
   it('does not touch the checked-in schema', () => {
-    withProductPickers(multi, { commercetools: false })
+    withProductPickers(multi, { mainPim: 'cms', commercetools: false })
     expect(Object.keys(listsOf(multi))).toEqual(['cms', 'commercetools'])
     expect(listsOf(multi).cms?.['ui:extension']).toBeUndefined()
     expect(multi.properties.products?.['ui:component']).toBeDefined()
@@ -110,7 +151,7 @@ describe('withProductPickers', () => {
 
   it('returns every other schema unchanged', () => {
     const other = { $id: 'https://quadratic.amplience.com/v2/content/hero', properties: {} }
-    expect(withProductPickers(other, { commercetools: true })).toBe(other)
+    expect(withProductPickers(other, { mainPim: 'commercetools', commercetools: true })).toBe(other)
   })
 })
 
@@ -142,6 +183,7 @@ describe('the commercetools eComm Toolkit extension definition', () => {
     ) as { parameters: string }
     expect(JSON.parse(resolved.parameters)).toEqual({
       vendor: 'commercetools',
+      identifier: 'sku',
       codec_params: {
         project: 'anyafinn',
         language: 'en',
@@ -192,11 +234,14 @@ describe('the toolkit extensions and the pickers that use them', () => {
   ]
   const pickerName = (field: Record<string, unknown> | undefined) =>
     (field?.['ui:extension'] as { name: string } | undefined)?.name
-  const picked = (commercetools: boolean) => ({
-    carousel: pickerName(withProductPickers(carousel, { commercetools }).properties.products),
-    cms: pickerName(listsOf(withProductPickers(multi, { commercetools })).cms),
-    commercetools: pickerName(listsOf(withProductPickers(multi, { commercetools })).commercetools),
-  })
+  const picked = (commercetools: boolean) => {
+    const options = { mainPim: commercetools ? 'commercetools' : 'cms', commercetools } as const
+    return {
+      carousel: pickerName(withProductPickers(carousel, options).properties.products),
+      cms: pickerName(listsOf(withProductPickers(multi, options)).cms),
+      commercetools: pickerName(listsOf(withProductPickers(multi, options)).commercetools),
+    }
+  }
 
   // A picker naming an extension that is never seeded would render as a broken
   // field in the editor, so the two sides are checked against each other.

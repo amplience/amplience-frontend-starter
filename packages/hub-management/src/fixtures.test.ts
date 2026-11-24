@@ -391,14 +391,10 @@ describe('block CSS (ADR-0026)', () => {
   })
 
   it('uses one identical property definition everywhere', () => {
-    // The title, description and ui:extension are copied per block rather than
-    // living in the partial (see its description), so hold the copies together.
+    // The type, ui:extension, title and description all live in the partial, so
+    // each block's property is just the reference — hold the copies together.
     const [first, ...rest] = BLOCKS.map((id) => schemaOf(id).properties.customCss)
-    expect(first).toMatchObject({
-      type: 'string',
-      'ui:extension': { name: 'css-editor' },
-      allOf: [{ $ref: REF }],
-    })
+    expect(first).toMatchObject({ allOf: [{ $ref: REF }] })
     for (const prop of rest) expect(prop).toEqual(first)
   })
 

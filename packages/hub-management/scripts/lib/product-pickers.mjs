@@ -5,12 +5,16 @@
  * Driven by the hub's entry in amplience.config.json:
  *
  *   "commercetools": { "projectKey", "clientId", "clientSecret", "region"? }
- *       Seeds the commercetools eComm Toolkit extension with these credentials
- *       and gives the product carousel's `products` field the commercetools
- *       picker. Without it the field gets the Amplience PIM picker instead.
+ *       Seeds the commercetools eComm Toolkit extension with these credentials,
+ *       for whichever carousels use it (see `mainPim` and `multiPimDemo`).
  *       The secret reaches editors' browsers (the toolkit calls commercetools
  *       from there), so use an API client that can only read published
  *       products and categories.
+ *
+ *   "mainPim": "cms" | "commercetools"
+ *       The hub's main product source — which picker the product carousel
+ *       gets. Same values as a site's PRODUCT_SOURCE. Without it, commercetools
+ *       when the hub has commercetools settings, and the CMS otherwise.
  *
  * Every hub is seeded with the Amplience PIM extension: it needs no
  * credentials, because it reads the hub's own Product items as the signed-in
@@ -55,6 +59,9 @@ const COMMERCETOOLS_PICKER = toolkitPicker('ecomm-toolkit-commercetools')
 /** Stores SKUs of Product items authored in Amplience. */
 const AMPLIENCE_PICKER = toolkitPicker('ecomm-toolkit-amplience')
 
+/** The product sources a hub can name as its main one — PRODUCT_SOURCE's values. */
+export const PRODUCT_SOURCES = ['cms', 'commercetools']
+
 /**
  * The hub's commercetools settings as `${commercetools:…}` token values, or
  * `undefined` when it has none (or an incomplete block — no half-configured
@@ -75,6 +82,28 @@ export const commercetoolsSettings = (hubEntry) => {
   }
 }
 
+/**
+ * The hub's main product source: its `mainPim`, or — when it doesn't name one —
+ * commercetools if it has commercetools settings and the CMS otherwise. Throws
+ * on a value that isn't a product source, or on commercetools without
+ * settings, rather than quietly seeding the other picker.
+ */
+export const mainPim = (hubEntry) => {
+  const hasCommercetools = commercetoolsSettings(hubEntry) !== undefined
+  const pim = hubEntry?.mainPim ?? (hasCommercetools ? 'commercetools' : 'cms')
+  if (!PRODUCT_SOURCES.includes(pim)) {
+    throw new Error(
+      `"mainPim": "${pim}" isn't a product source. Use ${PRODUCT_SOURCES.map((p) => `"${p}"`).join(' or ')}.`,
+    )
+  }
+  if (pim === 'commercetools' && !hasCommercetools) {
+    throw new Error(
+      `"mainPim": "commercetools" needs a complete "commercetools" block for this hub in amplience.config.json.`,
+    )
+  }
+  return pim
+}
+
 /** Whether an extension definition needs commercetools settings to resolve. */
 export const needsCommercetools = (definitionText) => definitionText.includes('${commercetools:')
 
@@ -86,8 +115,7 @@ export const seedsContentType = (file, hubEntry) =>
  * A schema with this hub's product pickers applied. Only the two carousel
  * schemas change:
  *
- *   - product carousel: `products` gets the commercetools picker on a
- *     commercetools hub, and the Amplience PIM picker otherwise;
+ *   - product carousel: `products` gets the main PIM's picker;
  *   - multi-PIM carousel: its Amplience list gets the Amplience PIM picker, and
  *     its commercetools list the commercetools one — or is removed on a hub
  *     without commercetools, along with the per-source tabs, which would
@@ -95,9 +123,9 @@ export const seedsContentType = (file, hubEntry) =>
  *
  * Every other schema is returned unchanged.
  */
-export const withProductPickers = (schema, { commercetools }) => {
+export const withProductPickers = (schema, { mainPim, commercetools }) => {
   if (schema?.$id === PRODUCT_CAROUSEL_SCHEMA) {
-    const picker = commercetools ? COMMERCETOOLS_PICKER : AMPLIENCE_PICKER
+    const picker = mainPim === 'commercetools' ? COMMERCETOOLS_PICKER : AMPLIENCE_PICKER
     const products = { ...schema.properties.products, 'ui:extension': picker }
     return { ...schema, properties: { ...schema.properties, products } }
   }
