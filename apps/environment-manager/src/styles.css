@@ -667,10 +667,19 @@ body {
    Replaces the resource table when a hub holds nothing at all. The table is
    accurate there but reads as six broken rows; this reads as a starting point. */
 .env-card__empty {
+  position: relative;
   padding: 1rem 0.75rem 1.1rem;
   border: 1px dashed var(--color-border);
   border-radius: var(--radius-sm, 4px);
   text-align: center;
+}
+
+/* Refresh + settings, in the same corner they occupy on a populated hub. */
+.env-card__empty-tools {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  display: flex;
 }
 
 .env-card__empty-title {
