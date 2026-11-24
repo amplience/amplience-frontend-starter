@@ -1,0 +1,81 @@
+{
+  "id": "5da30b88-a8cc-5641-a9db-74314a220e50",
+  "label": "Merchandise Product Carousel Block",
+  "body": {
+    "_meta": {
+      "name": "Merchandise Product Carousel Block",
+      "schema": "https://quadratic.amplience.com/v2/content/product-carousel",
+      "deliveryId": "5da30b88-a8cc-5641-a9db-74314a220e50"
+    },
+    "dragToScroll": true,
+    "gutter": true,
+    "maxWidth": "default",
+    "products": ["amp0006", "amp0007", "amp0002", "amp0005", "amp0004"],
+    "scrollStep": "slide",
+    "sectionHeader": {
+      "subtitle": {
+        "values": [
+          {
+            "locale": "en-US",
+            "value": "We have merch!"
+          },
+          {
+            "locale": "fr-FR",
+            "value": "On a du merch !"
+          },
+          {
+            "locale": "de-DE",
+            "value": "Wir haben Merch!"
+          }
+        ],
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      },
+      "title": {
+        "values": [
+          {
+            "locale": "en-US",
+            "value": "Love Amplience?"
+          },
+          {
+            "locale": "fr-FR",
+            "value": "Vous aimez Amplience ?"
+          },
+          {
+            "locale": "de-DE",
+            "value": "Du liebst Amplience?"
+          }
+        ],
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      },
+      "description": {
+        "values": [
+          {
+            "locale": "en-US",
+            "value": "This also showcases how we can handle products, PDPs and PLPs either internally or integrated with 3rd-party PIM suppliers."
+          },
+          {
+            "locale": "fr-FR",
+            "value": "Cela illustre également comment nous pouvons gérer les produits, les PDP et les PLP, soit en interne, soit en les intégrant à des fournisseurs de PIM tiers."
+          },
+          {
+            "locale": "de-DE",
+            "value": "Dies zeigt außerdem, wie wir Produkte, PDPs und PLPs entweder intern verwalten oder nahtlos über PIM-Systeme von Drittanbietern integrieren können."
+          }
+        ],
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        }
+      }
+    },
+    "showArrows": true,
+    "showDots": false,
+    "showScrollbar": false,
+    "slidesDesktop": 4,
+    "slidesMobile": 1.4,
+    "slidesTablet": 3
+  }
+}

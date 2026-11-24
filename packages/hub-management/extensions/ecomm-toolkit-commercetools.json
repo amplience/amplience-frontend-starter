@@ -5,7 +5,7 @@
   "url": "https://dc-extension-ecomm-toolkit-for-afs.vercel.app/",
   "enabledForAllContentTypes": false,
   "category": "CONTENT_FIELD",
-  "parameters": "{\n  \"vendor\": \"commercetools\",\n  \"codec_params\": {\n    \"project\": \"${commercetools:project}\",\n    \"language\": \"${commercetools:language}\",\n    \"client_id\": \"${commercetools:clientId}\",\n    \"client_secret\": \"${commercetools:clientSecret}\",\n    \"auth_url\": \"${commercetools:authUrl}\",\n    \"api_url\": \"${commercetools:apiUrl}\",\n    \"scope\": \"${commercetools:scope}\"\n  }\n}",
+  "parameters": "{\n  \"vendor\": \"commercetools\",\n  \"identifier\": \"sku\",\n  \"codec_params\": {\n    \"project\": \"${commercetools:project}\",\n    \"language\": \"${commercetools:language}\",\n    \"client_id\": \"${commercetools:clientId}\",\n    \"client_secret\": \"${commercetools:clientSecret}\",\n    \"auth_url\": \"${commercetools:authUrl}\",\n    \"api_url\": \"${commercetools:apiUrl}\",\n    \"scope\": \"${commercetools:scope}\"\n  }\n}",
   "snippets": [],
   "settings": "{\"API\":{\"READ\":true,\"EDIT\":true},\"SANDBOX\":{\"SAME_ORIGIN\":true,\"MODALS\":false,\"NAVIGATION\":false,\"POPUPS\":false,\"POPUP_ESCAPE_SANDBOX\":false,\"DOWNLOADS\":false,\"FORMS\":false}}"
 }
