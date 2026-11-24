@@ -93,6 +93,14 @@ const hasCommercetools = (ct: Partial<CommercetoolsSettings> | undefined) =>
   COMMERCETOOLS_FIELDS.every(({ key }) => (ct?.[key] ?? '').trim() !== '')
 
 /**
+ * The PIMs this hub can choose between — Amplience always (it needs no
+ * credentials), commercetools once its settings are in. hub:import's
+ * `availablePims` applies the same rule.
+ */
+const availablePims = (env: Environment): ProductSourceName[] =>
+  hasCommercetools(env.commercetools) ? ['cms', 'commercetools'] : ['cms']
+
+/**
  * The main PIM the form shows and saves: the hub's own choice when its PIM has
  * what it needs, else what hub:import would infer.
  */
@@ -325,7 +333,8 @@ export function EnvironmentForm({ initial, groups = [], onSave, onCancel, onDele
         ...(commercetools !== undefined && hasCommercetools(commercetools) && { commercetools }),
         // Saved explicitly, so the hub's main PIM is a decision, not an inference.
         mainPim: effectiveMainPim(form),
-        ...(multiPimDemo === true && { multiPimDemo }),
+        // Only meaningful with more than one PIM; hub:import ignores it otherwise.
+        ...(multiPimDemo === true && availablePims(form).length > 1 && { multiPimDemo }),
       })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error')
@@ -603,42 +612,45 @@ export function EnvironmentForm({ initial, groups = [], onSave, onCancel, onDele
                     and <code>view_categories</code> &mdash; not a site&rsquo;s own.
                   </p>
 
-                  <div className="field">
-                    <label htmlFor="mainPim">Hub&rsquo;s main PIM</label>
-                    <select
-                      id="mainPim"
-                      value={effectiveMainPim(form)}
-                      onChange={(e) => set('mainPim', e.target.value)}
-                    >
-                      {(['cms', 'commercetools'] as const)
-                        .filter((pim) => pim === 'cms' || hasCommercetools(form.commercetools))
-                        .map((pim) => (
-                          <option key={pim} value={pim}>
-                            {PIM_LABELS[pim]}
-                          </option>
-                        ))}
-                    </select>
-                    <p className="hint">
-                      Which picker the Product Carousel gets. Match it to the{' '}
-                      <code>PRODUCT_SOURCE</code> of the sites this hub mainly serves.
-                    </p>
-                  </div>
+                  {/* Choices only exist once there's a second PIM to choose. */}
+                  {availablePims(form).length > 1 && (
+                    <>
+                      <div className="field">
+                        <label htmlFor="mainPim">Hub&rsquo;s main PIM</label>
+                        <select
+                          id="mainPim"
+                          value={effectiveMainPim(form)}
+                          onChange={(e) => set('mainPim', e.target.value)}
+                        >
+                          {availablePims(form).map((pim) => (
+                            <option key={pim} value={pim}>
+                              {PIM_LABELS[pim]}
+                            </option>
+                          ))}
+                        </select>
+                        <p className="hint">
+                          Which picker the Product Carousel gets. Match it to the{' '}
+                          <code>PRODUCT_SOURCE</code> of the sites this hub mainly serves.
+                        </p>
+                      </div>
 
-                  <div className="field field--checkbox">
-                    <label htmlFor="multiPimDemo">
-                      <input
-                        id="multiPimDemo"
-                        type="checkbox"
-                        checked={form.multiPimDemo ?? false}
-                        onChange={(e) => set('multiPimDemo', e.target.checked)}
-                      />
-                      Enable multi-PIM carousels
-                    </label>
-                    <p className="hint">
-                      Adds the Multi-PIM Product Carousel, with a product list per PIM, for demo
-                      hubs whose sites use different product sources.
-                    </p>
-                  </div>
+                      <div className="field field--checkbox">
+                        <label htmlFor="multiPimDemo">
+                          <input
+                            id="multiPimDemo"
+                            type="checkbox"
+                            checked={form.multiPimDemo ?? false}
+                            onChange={(e) => set('multiPimDemo', e.target.checked)}
+                          />
+                          Enable multi-PIM carousels
+                        </label>
+                        <p className="hint">
+                          Adds the Multi-PIM Product Carousel, with a product list per PIM, for demo
+                          hubs whose sites use different product sources.
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </section>
               </>
             )}

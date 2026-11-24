@@ -106,7 +106,7 @@ With the block present, `hub:import` seeds the `ecomm-toolkit-commercetools` ext
 - **The picker needs Product Projection Search.** The toolkit's search runs on commercetools' older Product Projection Search, which is deprecated and has to be active on the project. That's separate from the newer Product Search the site uses for listings (see [Deploying](deploying.md#commercetools)).
 - **The commercetools picker finds products by SKU.** Each SKU it stores must exist in the project — the same rule the site applies when it renders the carousel.
 
-`"multiPimDemo": true` also registers the [Multi-PIM Product Carousel](content-types.md#multi-pim-product-carousel-demo) — one product list per source, for demo hubs whose sites run on different product sources. Each list gets its own source's picker: Amplience PIM for the CMS list, commercetools for the commercetools list. Leave it off for a client's hub, so editors see a single carousel.
+`"multiPimDemo": true` also registers the [Multi-PIM Product Carousel](content-types.md#multi-pim-product-carousel-demo) — one product list per source, for demo hubs whose sites run on different product sources. Each list gets its own source's picker: Amplience PIM for the CMS list, commercetools for the commercetools list. It needs more than one PIM, so it's only seeded once the hub has commercetools details, and the Environment Manager only shows it ("Enable multi-PIM carousels"), along with the main PIM choice, from then on. Leave it off for a client's hub, so editors see a single carousel.
 
 ## Schedule preview
 

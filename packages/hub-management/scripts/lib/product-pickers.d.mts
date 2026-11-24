@@ -43,6 +43,8 @@ export declare const mainPim: (hubEntry: HubEntry | undefined) => ProductSourceN
 
 export declare const needsCommercetools: (definitionText: string) => boolean
 
+export declare const availablePims: (hubEntry: HubEntry | undefined) => ProductSourceName[]
+
 export declare const seedsContentType: (file: string, hubEntry: HubEntry | undefined) => boolean
 
 export declare const withProductPickers: <T>(

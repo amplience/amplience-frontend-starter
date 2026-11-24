@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest'
 // Plain ESM shared with hub-import.mjs; import it directly so the test
 // exercises the exact code the seed runs.
 import {
+  availablePims,
   commercetoolsSettings,
   mainPim,
   MULTI_PIM_CONTENT_TYPE_FILE,
@@ -157,9 +158,20 @@ describe('withProductPickers', () => {
 
 describe('seedsContentType', () => {
   it('registers the multi-PIM carousel only on hubs that opt in', () => {
-    expect(seedsContentType(MULTI_PIM_CONTENT_TYPE_FILE, {})).toBe(false)
-    expect(seedsContentType(MULTI_PIM_CONTENT_TYPE_FILE, { multiPimDemo: true })).toBe(true)
+    expect(seedsContentType(MULTI_PIM_CONTENT_TYPE_FILE, hub)).toBe(false)
+    expect(seedsContentType(MULTI_PIM_CONTENT_TYPE_FILE, { ...hub, multiPimDemo: true })).toBe(true)
     expect(seedsContentType('content_product-carousel.json', undefined)).toBe(true)
+  })
+
+  it('needs more than one PIM: a hub with only the Amplience PIM gets nothing', () => {
+    expect(seedsContentType(MULTI_PIM_CONTENT_TYPE_FILE, { multiPimDemo: true })).toBe(false)
+  })
+})
+
+describe('availablePims', () => {
+  it('always offers the Amplience PIM, and commercetools when the hub has its settings', () => {
+    expect(availablePims({})).toEqual(['cms'])
+    expect(availablePims(hub)).toEqual(['cms', 'commercetools'])
   })
 })
 

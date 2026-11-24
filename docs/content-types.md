@@ -268,7 +268,7 @@ How the field is edited depends on the hub. `hub:import` seeds it with the eComm
 
 ![Multi-PIM Product Carousel icon](https://cdn.media.amplience.net/i/quadraticdemo/content_multi-pim-product-carousel?w=48)
 
-A [Product Carousel](#product-carousel-block) for demo hubs that serve sites backed by more than one product source. Opt-in: `hub:import` only seeds it on hubs whose entry in `amplience.config.json` sets `"multiPimDemo": true` (see [Working with a hub](working-with-a-hub.md#product-pickers)).
+A [Product Carousel](#product-carousel-block) for demo hubs that serve sites backed by more than one product source. Opt-in: `hub:import` only seeds it on hubs whose entry in `amplience.config.json` sets `"multiPimDemo": true` and that have more than one PIM (today: commercetools details as well as the built-in Amplience PIM) (see [Working with a hub](working-with-a-hub.md#product-pickers)).
 
 - **Schema** [`content/multi-pim-product-carousel`](../packages/hub-management/content-type-schemas/schemas/content_multi-pim-product-carousel.json) · **Repository** `content`
 - **Components** the same [`ProductCarouselBlock`](../packages/components/src/organisms/ProductCarouselBlock) as the Product Carousel

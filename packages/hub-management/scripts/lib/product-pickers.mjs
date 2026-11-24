@@ -23,7 +23,8 @@
  *   "multiPimDemo": true
  *       Registers the Multi-PIM Product Carousel content type — a demo tool
  *       for hubs whose sites use different product sources. Off by default,
- *       so a real client's hub only ever has the one carousel.
+ *       so a real client's hub only ever has the one carousel, and ignored on
+ *       a hub with only one PIM available, where it would hold a single list.
  *
  * The multi-PIM *schema* is always seeded (schemas are invisible to editors
  * and the content-blocks palette lists it); only its content type is gated.
@@ -107,9 +108,20 @@ export const mainPim = (hubEntry) => {
 /** Whether an extension definition needs commercetools settings to resolve. */
 export const needsCommercetools = (definitionText) => definitionText.includes('${commercetools:')
 
-/** Whether this hub registers a content-type file. */
+/**
+ * The product sources this hub can pick from: the CMS always (the Amplience
+ * PIM needs no credentials), and commercetools when the hub has its settings.
+ */
+export const availablePims = (hubEntry) =>
+  PRODUCT_SOURCES.filter((pim) => pim === 'cms' || commercetoolsSettings(hubEntry) !== undefined)
+
+/**
+ * Whether this hub registers a content-type file. The multi-PIM carousel needs
+ * the hub to opt in *and* to have more than one PIM to show lists for.
+ */
 export const seedsContentType = (file, hubEntry) =>
-  file !== MULTI_PIM_CONTENT_TYPE_FILE || hubEntry?.multiPimDemo === true
+  file !== MULTI_PIM_CONTENT_TYPE_FILE ||
+  (hubEntry?.multiPimDemo === true && availablePims(hubEntry).length > 1)
 
 /**
  * A schema with this hub's product pickers applied. Only the two carousel
