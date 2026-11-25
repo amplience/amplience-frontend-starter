@@ -239,6 +239,8 @@
      Suits a fashion/lifestyle brand where motion feels heavy-handed. */
   --interactive-hover-opacity: 0.8;
 
+  --product-card-media-ratio: 3 / 4;
+
   --color-line: #e0d3bd;
   --color-off-white: #fdf8f0;
 
