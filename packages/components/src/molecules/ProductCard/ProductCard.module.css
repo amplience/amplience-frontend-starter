@@ -37,7 +37,7 @@
 
 .media {
   position: relative;
-  aspect-ratio: var(--product-card-media-ratio, 3 / 4);
+  aspect-ratio: var(--product-card-media-ratio, 1 / 1);
   overflow: hidden;
   background: var(--product-card-media-background, var(--color-gray-100));
 }
