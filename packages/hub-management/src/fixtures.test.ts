@@ -38,6 +38,15 @@ const coreSchemaStub = {
         contentType: { type: 'string' },
       },
     },
+    // Referenced by partials/link (Page option). Same shape as content-link.
+    'content-reference': {
+      type: 'object',
+      required: ['id', 'contentType'],
+      properties: {
+        id: { type: 'string' },
+        contentType: { type: 'string' },
+      },
+    },
     // Referenced by partials/media and partials/rich-media (DynamicImage
     // branch, image-poi extension; DynamicVideo poster).
     // Mirrors the fields the renderer requires to build a DI URL.

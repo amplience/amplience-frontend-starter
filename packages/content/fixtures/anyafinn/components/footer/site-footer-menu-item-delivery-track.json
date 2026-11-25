@@ -8,6 +8,6 @@
       "deliveryId": "5ada66f3-617e-52ac-be90-2815190c1028"
     },
     "label": "Track your order",
-    "link": "/delivery/track"
+    "link": { "type": "url", "url": "/delivery/track" }
   }
 }

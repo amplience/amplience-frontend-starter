@@ -13,6 +13,6 @@
       }
     },
     "label": "Sale",
-    "link": "/sale"
+    "link": { "type": "category", "category": "sale" }
   }
 }

@@ -49,6 +49,7 @@ import partialsContainer from '../content-type-schemas/schemas/partials_containe
 import partialsContentBlocks from '../content-type-schemas/schemas/partials_content-blocks.json'
 import partialsCta from '../content-type-schemas/schemas/partials_cta.json'
 import partialsIcon from '../content-type-schemas/schemas/partials_icon.json'
+import partialsLink from '../content-type-schemas/schemas/partials_link.json'
 import partialsMedia from '../content-type-schemas/schemas/partials_media.json'
 import partialsRichMedia from '../content-type-schemas/schemas/partials_rich-media.json'
 import partialsSectionHeader from '../content-type-schemas/schemas/partials_section-header.json'
@@ -85,6 +86,7 @@ const entry = (
 export const schemaManifest: readonly SchemaManifestEntry[] = [
   entry(partialsMedia, 'PARTIAL'),
   entry(partialsRichMedia, 'PARTIAL'),
+  entry(partialsLink, 'PARTIAL'),
   entry(partialsCta, 'PARTIAL'),
   entry(partialsContentBlocks, 'PARTIAL'),
   entry(partialsCarouselItems, 'PARTIAL'),

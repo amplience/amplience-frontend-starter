@@ -8,6 +8,15 @@
       "deliveryId": "eebf8468-ca4f-56f7-8908-e3e2c1f3c5d3"
     },
     "label": "Deploying",
-    "link": "/docs/deploying"
+    "link": {
+      "type": "page",
+      "page": {
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+        },
+        "contentType": "https://quadratic.amplience.com/v2/content/page",
+        "id": "90adc9f7-0b38-5bb8-9411-43257bdd25cd"
+      }
+    }
   }
 }

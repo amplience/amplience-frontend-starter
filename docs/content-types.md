@@ -141,7 +141,7 @@ A standalone media section with optional caption and link. Takes an image or a v
 | ----------------- | ----------------- | --------------------------------- | --- | -------------------------------------------------------------------------------------------------------- |
 | `media`           | Media             | [Rich media](#rich-media)         | ✅  |                                                                                                          |
 | `caption`         | Caption           | [Localized string](#localisation) |     |                                                                                                          |
-| `href`            | Link              | string                            |     | Wraps the media in a link. External URLs open in a new tab. A linked video is ambient and plays on hover |
+| `href`            | Link              | [Link](#link)                     |     | Wraps the media in a link. External URLs open in a new tab. A linked video is ambient and plays on hover |
 | `fullBleed`       | Full bleed        | boolean                           |     | Edge-to-edge, ignoring container padding and max-width                                                   |
 | `backgroundColor` | Background colour | [Palette](#colour)                |     |                                                                                                          |
 | `maxWidth`        | Max width         | [Max width](#container)           |     | Ignored when full bleed is on                                                                            |
@@ -167,7 +167,7 @@ A card with an optional cover image, title, body copy, and a CTA. The workhorse 
 | `headingVariant` | Heading level | `h2`–`h6`                                     |     | Heading element for the card title                           |
 | `elevation`      | Card Type     | `flat` \| `raised` \| `bordered`              |     |                                                              |
 | `color`          | Card colour   | [Palette](#colour)                            |     |                                                              |
-| `links.href`     | Card Link     | string                                        |     | Makes the whole card one link. When set, the CTA is ignored  |
+| `links.href`     | Card Link     | [Link](#link)                                 |     | Makes the whole card one link. When set, the CTA is ignored  |
 
 ### Carousel Block
 
@@ -435,7 +435,7 @@ A slim, full-width notification banner — one line of message with an optional 
 | Field             | Label             | Type                          | Req | Notes                                                                                                                                                                                                                          |
 | ----------------- | ----------------- | ----------------------------- | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `message`         | Message           | localized markdown            | ✓   | One line, max 300 characters. Bold, italics and inline links render; block elements are flattened onto the line                                                                                                                |
-| `href`            | Bar link          | string                        |     | Makes the whole bar a link (a stretched link — inline links and the close button still work on top of it)                                                                                                                      |
+| `href`            | Bar link          | [Link](#link)                 |     | Makes the whole bar a link (a stretched link — inline links and the close button still work on top of it)                                                                                                                      |
 | `linkLabel`       | Link text         | localized string              |     | Shown after the message, e.g. "Shop now". Without it the link is named by the message                                                                                                                                          |
 | `dismissible`     | Dismissible       | boolean                       |     | Adds a close (×) button. The dismissal is stored in the visitor's `localStorage` under `announcement-bar:dismissed:<delivery id>`, with a fingerprint of the message as the value — so editing the message shows the bar again |
 | `backgroundColor` | Background colour | [Palette](#colour)            |     | Defaults to `black`; sets the matching contrast text colour                                                                                                                                                                    |
@@ -540,7 +540,7 @@ A single item in a navigation menu — with an optional link and optional child 
 | Field        | Label       | Type                          | Req | Notes                          |
 | ------------ | ----------- | ----------------------------- | --- | ------------------------------ |
 | `label`      | Label       | string                        | ✅  | Display text                   |
-| `link`       | Link        | string                        |     | Omit for parent-only items     |
+| `link`       | Link        | [Link](#link)                 |     | Omit for parent-only items     |
 | `icon`       | Icon        | [Icon name](#icon)            |     | Shown alongside the label      |
 | `visibility` | Visibility  | `mobileOnly` \| `desktopOnly` |     | Unset shows at all breakpoints |
 | `children`   | Child items | Content link → Menu Item[]    |     | Nested items                   |
@@ -576,7 +576,7 @@ A single node in a Hierarchy Menu. Child items are managed by DC's hierarchy tre
 | Field        | Label      | Type                          | Req | Notes                                |
 | ------------ | ---------- | ----------------------------- | --- | ------------------------------------ |
 | `label`      | Label      | string                        | ✅  |                                      |
-| `link`       | Link       | string                        |     | Omit for parent-only category labels |
+| `link`       | Link       | [Link](#link)                 |     | Omit for parent-only category labels |
 | `icon`       | Icon       | [Icon name](#icon)            |     |                                      |
 | `visibility` | Visibility | `mobileOnly` \| `desktopOnly` |     |                                      |
 
@@ -593,7 +593,7 @@ A brand logo — an image with an optional link.
 | Field   | Label | Type            | Req | Notes         |
 | ------- | ----- | --------------- | --- | ------------- |
 | `image` | Image | [Media](#media) | ✅  |               |
-| `link`  | Link  | string          |     | Typically `/` |
+| `link`  | Link  | [Link](#link)   |     | Typically `/` |
 
 ### Icon Button
 
@@ -609,7 +609,7 @@ A clickable icon from the design system's icon set.
 | ------------ | ---------------- | ----------------------------- | --- | ------------------------------------------------ |
 | `icon`       | Icon             | [Icon name](#icon)            | ✅  |                                                  |
 | `label`      | Accessible label | string                        | ✅  | Screen reader label — required for accessibility |
-| `link`       | Link             | string                        |     |                                                  |
+| `link`       | Link             | [Link](#link)                 |     |                                                  |
 | `visibility` | Visibility       | `mobileOnly` \| `desktopOnly` |     |                                                  |
 
 ### Menu Toggle Button
@@ -699,9 +699,22 @@ DAM videos play the account's transcode renditions (`/v/{endpoint}/{name}/{profi
 | Field     | Label          | Type                              | Req |
 | --------- | -------------- | --------------------------------- | --- |
 | `label`   | CTA Text       | [Localized string](#localisation) | ✅  |
-| `href`    | CTA Link       | string                            | ✅  |
+| `href`    | CTA Link       | [Link](#link)                     | ✅  |
 | `variant` | Button Variant | `text` \| `solid` \| `outlined`   |     |
 | `color`   | Button Colour  | [Button palette](#colour)         |     |
+
+### Link
+
+[`partials/link`](../packages/hub-management/content-type-schemas/schemas/partials_link.json) — where a link goes, picked from an object [content palette](https://amplience.com/developers/docs/schema-reference/content-palettes/). `type` is each option's hidden `const`:
+
+| `type`     | Option           | Field      | Stores                                        | Renders as                          |
+| ---------- | ---------------- | ---------- | --------------------------------------------- | ----------------------------------- |
+| `url`      | Custom URL       | `url`      | A site path or an `https://` URL              | The URL as written                  |
+| `page`     | Page             | `page`     | A content reference to a Page or Blog Article | The page's own URL                  |
+| `product`  | Product          | `product`  | A SKU or product id, from the product picker  | `/products/{slug}`                  |
+| `category` | Product category | `category` | A category slug, from the category picker     | `/{category}` ([listing](#product)) |
+
+The product and category pickers are the eComm Toolkit extension for the hub's main PIM, added when the schemas are seeded. Pages and products are looked up before render (`apps/web/lib/resolve-links.ts`), so a page whose URL changes is followed automatically. Picking a type and leaving its field empty is allowed, so the form doesn't flag the field before anything is entered. An empty link, or a target that no longer resolves, renders without a link.
 
 ### Colour
 

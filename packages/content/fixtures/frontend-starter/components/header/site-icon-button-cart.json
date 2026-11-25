@@ -9,6 +9,6 @@
     },
     "icon": "cart",
     "label": "Shopping cart",
-    "link": "/cart"
+    "link": { "type": "url", "url": "/cart" }
   }
 }

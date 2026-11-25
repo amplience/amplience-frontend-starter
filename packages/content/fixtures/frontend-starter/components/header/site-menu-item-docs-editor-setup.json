@@ -8,6 +8,15 @@
       "deliveryId": "59fc873a-992c-54ef-bc53-400908a1cc71"
     },
     "label": "Editor setup",
-    "link": "/docs/editor-setup"
+    "link": {
+      "type": "page",
+      "page": {
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+        },
+        "contentType": "https://quadratic.amplience.com/v2/content/page",
+        "id": "38dbd296-5f86-5625-adb3-fcbadab9a973"
+      }
+    }
   }
 }

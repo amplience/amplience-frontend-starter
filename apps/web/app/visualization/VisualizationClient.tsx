@@ -76,6 +76,12 @@ type Props = {
    */
   initialProducts?: readonly ResolvedProduct[]
   /**
+   * Page and product link targets the server resolved for `initialModel`, as
+   * `[key, path]` pairs. Not topped up live: a link added in the form resolves
+   * on the next reload.
+   */
+  initialLinks?: readonly (readonly [string, string])[]
+  /**
    * BCP 47 code for the pane's locale (e.g. `de-DE`). Sent to `/api/products`
    * so live-resolved products carry the same prices and copy as the server's.
    */
@@ -113,6 +119,7 @@ export function VisualizationClient({
   localeBasePath = '',
   deliveryLocale,
   initialProducts,
+  initialLinks,
   localeCode,
   productSource,
 }: Props) {
@@ -239,10 +246,13 @@ export function VisualizationClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [skus, localeCode])
 
+  const links = useMemo(() => new Map(initialLinks ?? []), [initialLinks])
+
   const ctx: RenderContext = {
     loadPriority: loadPriority ?? 'lazy',
     localeBasePath,
     products,
+    links,
     ...(productSource !== undefined && { productSource }),
     ...(localeCode !== undefined && { locale: localeCode }),
   }

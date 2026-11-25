@@ -34,6 +34,7 @@ import { client, siteName } from '../../../lib/content-client'
 import { defaultLocale, localeForSlug } from '../../../lib/locales'
 import { siteBasePath } from '../../../lib/preview-request'
 import { registry } from '../../../lib/registry'
+import { resolveLinks } from '../../../lib/resolve-links'
 import { NotFoundContent } from '../../../src/components/NotFoundContent'
 import { renderContent } from '../../../src/renderer'
 
@@ -54,7 +55,7 @@ export default async function NotFound() {
       depth: 'all',
       locale: locale.delivery,
     })
-    return renderContent(slot, registry, ctx)
+    return renderContent(slot, registry, { ...ctx, links: await resolveLinks(slot, locale) })
   } catch {
     // Loud-in-console failure isn't warranted here: an editor simply may not
     // have seeded the slot yet, and the branded fallback is a complete 404.

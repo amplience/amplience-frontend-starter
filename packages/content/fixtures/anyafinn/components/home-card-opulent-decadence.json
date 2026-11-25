@@ -55,7 +55,16 @@
       }
     },
     "links": {
-      "href": "/blog/opulent-decadence",
+      "href": {
+        "type": "page",
+        "page": {
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+          },
+          "contentType": "https://quadratic.amplience.com/v2/content/blog-article",
+          "id": "c4f982c7-9efe-5464-9eb5-274f75ae4e19"
+        }
+      },
       "cta": {
         "label": {
           "values": [
@@ -76,7 +85,16 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/blog/opulent-decadence",
+        "href": {
+          "type": "page",
+          "page": {
+            "_meta": {
+              "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+            },
+            "contentType": "https://quadratic.amplience.com/v2/content/blog-article",
+            "id": "c4f982c7-9efe-5464-9eb5-274f75ae4e19"
+          }
+        },
         "variant": "text",
         "color": "black"
       }

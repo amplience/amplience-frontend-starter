@@ -8,6 +8,6 @@
       "deliveryId": "3f3ffa62-f355-56bc-8ede-37f0b1dfc406"
     },
     "label": "Returns & refunds",
-    "link": "/delivery/returns"
+    "link": { "type": "url", "url": "/delivery/returns" }
   }
 }

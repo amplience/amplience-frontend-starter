@@ -24,6 +24,11 @@ const schemaFile = (name: string) =>
   }
 
 const carousel = schemaFile('content_product-carousel.json')
+const link = JSON.parse(
+  readFileSync(path.join(here, '../../content-type-schemas/schemas/partials_link.json'), 'utf8'),
+) as { $id: string; oneOf: { properties: Record<string, Record<string, unknown>> }[] }
+const linkField = (schema: typeof link, field: string) =>
+  schema.oneOf.find((option) => field in option.properties)?.properties[field]
 const multi = schemaFile('content_multi-pim-product-carousel.json')
 const listsOf = (schema: typeof multi) =>
   (schema.properties.products as { properties: Record<string, Record<string, unknown>> }).properties
@@ -150,6 +155,24 @@ describe('withProductPickers', () => {
     expect(multi.properties.products?.['ui:component']).toBeDefined()
   })
 
+  it("gives the link's product and category fields the main PIM's single pickers", () => {
+    const picked = withProductPickers(link, { mainPim: 'commercetools', commercetools: true })
+    expect(linkField(picked, 'product')?.['ui:extension']).toMatchObject({
+      name: 'ecomm-toolkit-commercetools',
+      params: { data: 'product', type: 'string' },
+    })
+    expect(linkField(picked, 'category')?.['ui:extension']).toMatchObject({
+      name: 'ecomm-toolkit-commercetools',
+      params: { data: 'category', type: 'string' },
+    })
+    const cms = withProductPickers(link, { mainPim: 'cms', commercetools: false })
+    expect(linkField(cms, 'product')?.['ui:extension']).toMatchObject({
+      name: 'ecomm-toolkit-amplience',
+    })
+    expect(linkField(cms, 'url')?.['ui:extension']).toBeUndefined()
+    expect(linkField(link, 'product')?.['ui:extension']).toBeUndefined()
+  })
+
   it('returns every other schema unchanged', () => {
     const other = { $id: 'https://quadratic.amplience.com/v2/content/hero', properties: {} }
     expect(withProductPickers(other, { mainPim: 'commercetools', commercetools: true })).toBe(other)
@@ -195,7 +218,8 @@ describe('the commercetools eComm Toolkit extension definition', () => {
     ) as { parameters: string }
     expect(JSON.parse(resolved.parameters)).toEqual({
       vendor: 'commercetools',
-      identifier: 'sku',
+      productIdentifier: 'sku',
+      categoryIdentifier: 'slug',
       codec_params: {
         project: 'anyafinn',
         language: 'en',

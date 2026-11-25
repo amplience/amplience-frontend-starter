@@ -13,6 +13,6 @@
       }
     },
     "label": "Jackets",
-    "link": "/men-clothing-jackets"
+    "link": { "type": "category", "category": "men-clothing-jackets" }
   }
 }

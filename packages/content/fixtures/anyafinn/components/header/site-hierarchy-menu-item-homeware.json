@@ -13,6 +13,6 @@
       }
     },
     "label": "Homeware",
-    "link": "/home"
+    "link": { "type": "category", "category": "home" }
   }
 }

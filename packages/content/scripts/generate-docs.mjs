@@ -61,6 +61,7 @@ const SCHEMA = {
   hero: 'https://quadratic.amplience.com/v2/content/hero',
   markdown: 'https://quadratic.amplience.com/v2/content/markdown-block',
   contentLink: 'http://bigcontent.io/cms/schema/v1/core#/definitions/content-link',
+  contentReference: 'http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference',
   localizedValue: 'http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value',
 }
 
@@ -322,10 +323,25 @@ const parentCtaFor = (slug) => {
   for (let i = segs.length - 1; i > 0; i--) {
     const ancestor = segs.slice(0, i).join('/')
     if (slugSet.has(ancestor)) {
-      return { label: `← ${effectiveTitle(ancestor)}`, href: `/${ancestor}` }
+      return { label: `← ${effectiveTitle(ancestor)}`, slug: ancestor }
     }
   }
-  return { label: '← Home', href: '/' }
+  return { label: '← Home', slug: '' }
+}
+
+/** A partials/link to a docs page (or the homepage, for ''), by its fixture id. */
+const pageLinkTo = (slug) => {
+  const fixtureId = (rel) => JSON.parse(readFileSync(path.join(fixturesBase, rel), 'utf8')).id
+  const id =
+    slug === ''
+      ? fixtureId('pages/home.json')
+      : UPDATE_ONLY[slug]
+        ? fixtureId(UPDATE_ONLY[slug].page)
+        : fixtureIdFor(FIXTURE_SET, `pages/${slug}`)
+  return {
+    type: 'page',
+    page: { _meta: { schema: SCHEMA.contentReference }, contentType: SCHEMA.page, id },
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -407,7 +423,7 @@ for (const doc of docs) {
   if (parentCta) {
     ctas.push({
       label: localized(parentCta.label),
-      href: parentCta.href,
+      href: pageLinkTo(parentCta.slug),
       variant: 'outlined',
       color: 'white',
     })
@@ -415,7 +431,7 @@ for (const doc of docs) {
   for (const child of childrenOf(slug)) {
     ctas.push({
       label: localized(child.title),
-      href: `/${child.slug}`,
+      href: pageLinkTo(child.slug),
       variant: 'solid',
       color: 'primary',
     })

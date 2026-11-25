@@ -8,6 +8,15 @@
       "deliveryId": "b03bcab6-5c9d-5fed-93ec-0fb12fc39519"
     },
     "label": "Working with a hub",
-    "link": "/docs/working-with-a-hub"
+    "link": {
+      "type": "page",
+      "page": {
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+        },
+        "contentType": "https://quadratic.amplience.com/v2/content/page",
+        "id": "eeb24dea-c77c-5503-9c82-36d0f1745f86"
+      }
+    }
   }
 }

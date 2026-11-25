@@ -8,6 +8,15 @@
       "deliveryId": "90e68513-06fa-5b4d-87d3-a8397e17bb86"
     },
     "label": "Content types",
-    "link": "/docs/content-types"
+    "link": {
+      "type": "page",
+      "page": {
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+        },
+        "contentType": "https://quadratic.amplience.com/v2/content/page",
+        "id": "781706cc-d460-5e53-a3ee-a291bceeed0f"
+      }
+    }
   }
 }

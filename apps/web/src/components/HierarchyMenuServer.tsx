@@ -28,6 +28,8 @@ import {
 } from '@amplience/frontend-starter-components/registry'
 
 import { client } from '../../lib/content-client'
+import { defaultLocale, locales } from '../../lib/locales'
+import { resolveLinks } from '../../lib/resolve-links'
 import { renderContent } from '../renderer'
 
 /**
@@ -76,6 +78,8 @@ type HierarchyMenuStub = {
    * the context has to be handed across the boundary explicitly.
    */
   readonly localeBasePath?: string
+  /** Active locale code, for resolving the tree's page and product links. */
+  readonly locale?: string
   readonly [key: string]: unknown
 }
 
@@ -96,7 +100,9 @@ export async function HierarchyMenuServer(props: HierarchyMenuStub) {
     return null
   }
 
+  const locale = locales.find((l) => l.code === props.locale) ?? defaultLocale
   return renderContent(assembled, hierarchySubRegistry, {
     localeBasePath: props.localeBasePath ?? '',
+    links: await resolveLinks(assembled, locale),
   })
 }

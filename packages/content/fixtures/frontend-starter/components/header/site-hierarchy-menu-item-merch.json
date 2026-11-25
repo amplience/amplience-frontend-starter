@@ -13,6 +13,6 @@
       }
     },
     "label": "Merch",
-    "link": "/merchandise"
+    "link": { "type": "category", "category": "merchandise" }
   }
 }

@@ -13,7 +13,7 @@
       }
     },
     "label": "Find a store",
-    "link": "/stores",
+    "link": { "type": "url", "url": "/stores" },
     "icon": "map-pin",
     "visibility": "mobileOnly"
   }

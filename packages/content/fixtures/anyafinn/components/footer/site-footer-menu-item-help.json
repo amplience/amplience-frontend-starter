@@ -8,7 +8,7 @@
       "deliveryId": "99b2caa9-31be-5da5-a05c-03dab745eb43"
     },
     "label": "Help",
-    "link": "/help",
+    "link": { "type": "url", "url": "/help" },
     "children": [
       {
         "id": "7a0bdcf7-7844-5e4e-b1b2-c2fc23d60d30",

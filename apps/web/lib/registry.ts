@@ -65,6 +65,7 @@ const hierarchyMenuServerEntry: AnyComponentRegistryEntry = {
   propsFromSchema: (schema, ctx) => ({
     ...(schema as Record<string, unknown>),
     localeBasePath: ctx.localeBasePath ?? '',
+    ...(ctx.locale !== undefined && { locale: ctx.locale }),
   }),
 }
 

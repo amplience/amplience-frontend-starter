@@ -36,9 +36,10 @@
       ]
     },
     "href": {
-      "type": "string",
-      "title": "CTA Link",
-      "pattern": "^(?!https?\\/\\/)(?:(?:https?:\\/\\/)(?:localhost|(?:[A-Za-z0-9-]+\\.)+[A-Za-z]{2,})(?::\\d{2,5})?(?:\\/[^\\s?#]*)?(?:\\?[^\\s#]*)?(?:#[^\\s]*)?|\\/(?:[^\\s?#]+(?:\\/[^\\s?#]*)*)?(?:\\?[^\\s#]*)?(?:#[^\\s]*)?|(?:\\.\\.?\\/)?[^\\s/:?#]+(?:\\/[^\\s?#]*)*(?:\\?[^\\s#]*)?(?:#[^\\s]*)?)$"
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/link" },
+        { "title": "CTA Link", "description": "Where the button goes." }
+      ]
     },
     "variant": {
       "type": "string",

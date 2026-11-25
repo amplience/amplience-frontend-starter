@@ -8,6 +8,15 @@
       "deliveryId": "62ff1214-d16c-57fb-b3f4-6f7c594069e5"
     },
     "label": "Contributing",
-    "link": "/contributing"
+    "link": {
+      "type": "page",
+      "page": {
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+        },
+        "contentType": "https://quadratic.amplience.com/v2/content/page",
+        "id": "e747dfbb-f5f0-5e0e-aaab-34dda63ebede"
+      }
+    }
   }
 }

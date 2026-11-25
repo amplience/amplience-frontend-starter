@@ -8,7 +8,7 @@
       "deliveryId": "10327c6e-cd33-5bc6-98a9-708ee0ff90bb"
     },
     "label": "Shopping",
-    "link": "/shopping",
+    "link": { "type": "url", "url": "/shopping" },
     "children": [
       {
         "id": "1d1018e4-3356-54d4-bd6c-1717689db7e6",

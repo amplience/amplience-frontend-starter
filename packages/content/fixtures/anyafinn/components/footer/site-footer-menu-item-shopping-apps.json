@@ -8,6 +8,6 @@
       "deliveryId": "ba424de6-88c4-5fb8-9d7a-b54a8d6e84b3"
     },
     "label": "Our apps",
-    "link": "/shopping/apps"
+    "link": { "type": "url", "url": "/shopping/apps" }
   }
 }

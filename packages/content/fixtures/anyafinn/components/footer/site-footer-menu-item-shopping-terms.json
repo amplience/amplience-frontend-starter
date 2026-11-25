@@ -8,6 +8,6 @@
       "deliveryId": "9e5a7243-2e36-573f-b719-ffe8f8becdbc"
     },
     "label": "Terms & conditions",
-    "link": "/shopping/terms"
+    "link": { "type": "url", "url": "/shopping/terms" }
   }
 }

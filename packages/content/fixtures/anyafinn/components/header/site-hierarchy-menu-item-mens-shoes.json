@@ -13,6 +13,6 @@
       }
     },
     "label": "Shoes",
-    "link": "/men-shoes"
+    "link": { "type": "category", "category": "men-shoes" }
   }
 }

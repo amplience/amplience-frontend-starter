@@ -5,6 +5,7 @@ import { client, siteName } from '../../../lib/content-client'
 import { localeForSlug } from '../../../lib/locales'
 import { getPreviewHost, siteBasePath } from '../../../lib/preview-request'
 import { registry } from '../../../lib/registry'
+import { resolveLinks } from '../../../lib/resolve-links'
 import { PreviewBanner } from '../../../src/components/PreviewBanner'
 import { renderContent } from '../../../src/renderer'
 
@@ -34,11 +35,18 @@ export default async function SiteLayout({
   const locale = localeForSlug(localeSlug)
   if (locale === undefined) notFound()
   const previewHost = await getPreviewHost()
-  const ctx = { localeBasePath: await siteBasePath(locale) }
   const [headerResult, footerResult] = await Promise.allSettled([
     client.getByKey(`${siteName}/site/header`, { depth: 'all', locale: locale.delivery }),
     client.getByKey(`${siteName}/site/footer`, { depth: 'all', locale: locale.delivery }),
   ])
+  const fetched = [headerResult, footerResult].flatMap((r) =>
+    r.status === 'fulfilled' ? [r.value] : [],
+  )
+  const ctx = {
+    localeBasePath: await siteBasePath(locale),
+    locale: locale.code,
+    links: await resolveLinks(fetched, locale),
+  }
   const header =
     headerResult.status === 'fulfilled' ? renderContent(headerResult.value, registry, ctx) : null
   const footer =

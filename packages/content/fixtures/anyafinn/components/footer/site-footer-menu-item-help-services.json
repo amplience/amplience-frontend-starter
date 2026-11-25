@@ -8,6 +8,6 @@
       "deliveryId": "444bb5b9-c1d0-51be-8e86-abb8c1a0e741"
     },
     "label": "Our services",
-    "link": "/help/services"
+    "link": { "type": "url", "url": "/help/services" }
   }
 }

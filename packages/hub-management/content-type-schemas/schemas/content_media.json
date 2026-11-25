@@ -28,9 +28,13 @@
       ]
     },
     "href": {
-      "type": "string",
-      "title": "Link",
-      "description": "Optional URL — wraps the media in a link. External URLs open in a new tab. A video inside a link is always ambient, so the click goes to the link, and it plays only while the link is hovered or focused."
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/link" },
+        {
+          "title": "Link",
+          "description": "Optional — wraps the media in a link. External URLs open in a new tab. A video inside a link is always ambient, so the click goes to the link, and it plays only while the link is hovered or focused."
+        }
+      ]
     },
     "fullBleed": {
       "type": "boolean",

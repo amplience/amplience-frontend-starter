@@ -57,7 +57,16 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/about",
+        "href": {
+          "type": "page",
+          "page": {
+            "_meta": {
+              "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+            },
+            "contentType": "https://quadratic.amplience.com/v2/content/page",
+            "id": "b2107fdb-4c6e-5fcf-b3ad-2c4556955b0e"
+          }
+        },
         "variant": "solid",
         "color": "primary"
       },
@@ -93,7 +102,10 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "https://github.com/amplience/amplience-frontend-starter",
+        "href": {
+          "type": "url",
+          "url": "https://github.com/amplience/amplience-frontend-starter"
+        },
         "variant": "outlined",
         "color": "black"
       }

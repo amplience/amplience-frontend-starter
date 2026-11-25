@@ -79,7 +79,16 @@
       }
     },
     "links": {
-      "href": "/docs/getting-started",
+      "href": {
+        "type": "page",
+        "page": {
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+          },
+          "contentType": "https://quadratic.amplience.com/v2/content/page",
+          "id": "995d5c04-b13b-5d18-a7eb-bd11de1bbbe2"
+        }
+      },
       "cta": {
         "label": {
           "values": [
@@ -112,7 +121,7 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/features/accelerator",
+        "href": { "type": "url", "url": "/features/accelerator" },
         "variant": "text",
         "color": "black"
       }

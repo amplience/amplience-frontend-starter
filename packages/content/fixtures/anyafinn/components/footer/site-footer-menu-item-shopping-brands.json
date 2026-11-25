@@ -8,6 +8,6 @@
       "deliveryId": "82624205-09aa-53bd-b226-bc2b341debf2"
     },
     "label": "Shop by brand",
-    "link": "/shopping/brands"
+    "link": { "type": "url", "url": "/shopping/brands" }
   }
 }

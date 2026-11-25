@@ -8,6 +8,15 @@
       "deliveryId": "69127086-cd93-5d42-817d-2d4704fe1a1d"
     },
     "label": "About",
-    "link": "/about"
+    "link": {
+      "type": "page",
+      "page": {
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+        },
+        "contentType": "https://quadratic.amplience.com/v2/content/page",
+        "id": "b2107fdb-4c6e-5fcf-b3ad-2c4556955b0e"
+      }
+    }
   }
 }

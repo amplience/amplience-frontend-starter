@@ -32,6 +32,7 @@ import { localeForSlug, publicPath } from '../../../../../lib/locales'
 import { siteBasePath } from '../../../../../lib/preview-request'
 import { productSourceName } from '../../../../../lib/product-source'
 import { registry } from '../../../../../lib/registry'
+import { resolveLinks } from '../../../../../lib/resolve-links'
 import { resolveProducts } from '../../../../../lib/resolve-products'
 import {
   ContentUnavailableCard,
@@ -77,7 +78,10 @@ export default async function BlogArticleRoute({ params }: RouteProps) {
     emitContentFailure(error, key)
     return <ContentUnavailableCard error={error} resource={key} />
   }
-  const products = await resolveProducts(article, registry, locale)
+  const [products, links] = await Promise.all([
+    resolveProducts(article, registry, locale),
+    resolveLinks(article, locale),
+  ])
 
   return renderContent(article, registry, {
     loadPriority: 'lcp',
@@ -85,5 +89,6 @@ export default async function BlogArticleRoute({ params }: RouteProps) {
     productSource: productSourceName,
     locale: locale.code,
     products,
+    links,
   })
 }

@@ -47,7 +47,7 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/products/anyafinn-knee-high-pointed-toe-real-suede-heeled-boots-tan",
+        "href": { "type": "product", "product": "AFBT008-3" },
         "variant": "outlined",
         "color": "black"
       }

@@ -79,7 +79,16 @@
       }
     },
     "links": {
-      "href": "/docs/storybook",
+      "href": {
+        "type": "page",
+        "page": {
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+          },
+          "contentType": "https://quadratic.amplience.com/v2/content/page",
+          "id": "7ddc9cbb-0d71-598b-ad75-58c729c4491d"
+        }
+      },
       "cta": {
         "label": {
           "values": [
@@ -112,7 +121,16 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/docs/storybook",
+        "href": {
+          "type": "page",
+          "page": {
+            "_meta": {
+              "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+            },
+            "contentType": "https://quadratic.amplience.com/v2/content/page",
+            "id": "7ddc9cbb-0d71-598b-ad75-58c729c4491d"
+          }
+        },
         "variant": "text",
         "color": "black"
       }

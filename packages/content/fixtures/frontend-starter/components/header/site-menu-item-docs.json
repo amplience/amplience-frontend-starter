@@ -8,7 +8,16 @@
       "deliveryId": "2ec2c15c-d527-5fee-8a9b-2f7e17a0ece7"
     },
     "label": "Docs",
-    "link": "/docs",
+    "link": {
+      "type": "page",
+      "page": {
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+        },
+        "contentType": "https://quadratic.amplience.com/v2/content/page",
+        "id": "a4071dd6-cd9c-5de8-8fa2-eb9e6522c395"
+      }
+    },
     "children": [
       {
         "id": "7e7f72ea-f0c2-5f4b-b497-1eeb04b8d5e1",

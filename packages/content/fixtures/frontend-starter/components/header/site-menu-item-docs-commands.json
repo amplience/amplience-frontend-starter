@@ -8,6 +8,15 @@
       "deliveryId": "94d17de3-fe95-5dfc-be1d-047690460c8f"
     },
     "label": "Command reference",
-    "link": "/docs/commands"
+    "link": {
+      "type": "page",
+      "page": {
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+        },
+        "contentType": "https://quadratic.amplience.com/v2/content/page",
+        "id": "1c51cef8-ea1e-5b5d-90e5-25c2be943b71"
+      }
+    }
   }
 }

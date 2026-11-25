@@ -143,7 +143,16 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/",
+        "href": {
+          "type": "page",
+          "page": {
+            "_meta": {
+              "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+            },
+            "contentType": "https://quadratic.amplience.com/v2/content/page",
+            "id": "8df2c1a3-8b31-5e34-896a-424c65a478c0"
+          }
+        },
         "variant": "outlined",
         "color": "white"
       },
@@ -179,7 +188,16 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/docs",
+        "href": {
+          "type": "page",
+          "page": {
+            "_meta": {
+              "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+            },
+            "contentType": "https://quadratic.amplience.com/v2/content/page",
+            "id": "a4071dd6-cd9c-5de8-8fa2-eb9e6522c395"
+          }
+        },
         "variant": "solid",
         "color": "primary"
       }

@@ -13,6 +13,15 @@
       }
     },
     "label": "Deploying a site",
-    "link": "/docs/deploying"
+    "link": {
+      "type": "page",
+      "page": {
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+        },
+        "contentType": "https://quadratic.amplience.com/v2/content/page",
+        "id": "90adc9f7-0b38-5bb8-9411-43257bdd25cd"
+      }
+    }
   }
 }

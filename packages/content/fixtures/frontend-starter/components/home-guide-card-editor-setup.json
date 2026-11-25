@@ -79,7 +79,16 @@
       }
     },
     "links": {
-      "href": "/docs/editor-setup",
+      "href": {
+        "type": "page",
+        "page": {
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+          },
+          "contentType": "https://quadratic.amplience.com/v2/content/page",
+          "id": "38dbd296-5f86-5625-adb3-fcbadab9a973"
+        }
+      },
       "cta": {
         "label": {
           "values": [
@@ -112,7 +121,16 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/docs/editor-setup",
+        "href": {
+          "type": "page",
+          "page": {
+            "_meta": {
+              "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+            },
+            "contentType": "https://quadratic.amplience.com/v2/content/page",
+            "id": "38dbd296-5f86-5625-adb3-fcbadab9a973"
+          }
+        },
         "variant": "text",
         "color": "black"
       }

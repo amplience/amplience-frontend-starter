@@ -79,7 +79,7 @@
       }
     },
     "links": {
-      "href": "https://quadratic-lite-components.vercel.app/",
+      "href": { "type": "url", "url": "https://quadratic-lite-components.vercel.app/" },
       "cta": {
         "label": {
           "values": [
@@ -112,7 +112,7 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "https://quadratic-lite-components.vercel.app/",
+        "href": { "type": "url", "url": "https://quadratic-lite-components.vercel.app/" },
         "variant": "text",
         "color": "black"
       }

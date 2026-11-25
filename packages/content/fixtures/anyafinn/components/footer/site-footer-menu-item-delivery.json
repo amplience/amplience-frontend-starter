@@ -8,7 +8,7 @@
       "deliveryId": "553925eb-76a2-574a-b611-d27a9b2fd40c"
     },
     "label": "Delivery",
-    "link": "/delivery",
+    "link": { "type": "url", "url": "/delivery" },
     "children": [
       {
         "id": "5ada66f3-617e-52ac-be90-2815190c1028",

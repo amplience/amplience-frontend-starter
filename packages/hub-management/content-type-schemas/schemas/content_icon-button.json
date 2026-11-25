@@ -23,9 +23,10 @@
       "description": "Screen reader label for this button (required for accessibility)."
     },
     "link": {
-      "type": "string",
-      "title": "Link",
-      "description": "URL this button navigates to."
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/link" },
+        { "title": "Link", "description": "Where this button goes." }
+      ]
     },
     "visibility": {
       "type": "string",

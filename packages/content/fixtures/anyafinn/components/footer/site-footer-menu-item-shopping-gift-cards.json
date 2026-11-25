@@ -8,6 +8,6 @@
       "deliveryId": "1d1018e4-3356-54d4-bd6c-1717689db7e6"
     },
     "label": "Gift cards & vouchers",
-    "link": "/shopping/gift-cards"
+    "link": { "type": "url", "url": "/shopping/gift-cards" }
   }
 }

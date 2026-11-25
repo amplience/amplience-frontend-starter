@@ -56,6 +56,7 @@ import {
 import { isVseHost, VSE_SUFFIX } from '../../lib/preview'
 import { productSourceName } from '../../lib/product-source'
 import { registry } from '../../lib/registry'
+import { resolveLinks } from '../../lib/resolve-links'
 import { resolveProducts } from '../../lib/resolve-products'
 import { HOMEPAGE_DELIVERY_KEY } from '../../lib/routing'
 import { LocaleSelectorConfigured } from '../../src/components/LocaleSelectorConfigured'
@@ -186,6 +187,7 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
   // Resolved once here, on the server: the client boundary cannot await a
   // port read (ADR-0027 — see its open question on live editing).
   const previewProducts = uniqueProducts(await resolveProducts(item, visualizationRegistry, locale))
+  const previewLinks = [...(await resolveLinks(item, locale))]
 
   const itemSchema = (item as { _meta?: { schema?: string } })?._meta?.schema ?? ''
   if (itemSchema === CUSTOM_CSS_SCHEMA) {
@@ -200,12 +202,19 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
     ])
     // Render each fetched item, degrading to nothing rather than breaking the
     // preview — the point is to see the CSS applied, not to fail on chrome.
+    const settledLinks = await resolveLinks(
+      [homeResult, headerResult, footerResult].flatMap((r) =>
+        r.status === 'fulfilled' ? [r.value] : [],
+      ),
+      locale,
+    )
     const renderSettled = (result: PromiseSettledResult<unknown>, topOfPage = false): ReactNode => {
       if (result.status !== 'fulfilled') return null
       try {
         return renderContent(result.value, visualizationRegistry, {
           localeBasePath: basePath,
           locale: locale.code,
+          links: settledLinks,
           loadPriority: topOfPage ? 'lcp' : 'lazy',
         })
       } catch {
@@ -243,6 +252,7 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
             localeBasePath={basePath}
             deliveryLocale={locale.delivery}
             initialProducts={previewProducts}
+            initialLinks={previewLinks}
             productSource={productSourceName}
             localeCode={locale.code}
           />
@@ -259,6 +269,7 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
         localeBasePath={basePath}
         deliveryLocale={locale.delivery}
         initialProducts={previewProducts}
+        initialLinks={previewLinks}
         productSource={productSourceName}
         localeCode={locale.code}
       />
@@ -274,11 +285,16 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
     client.getByKey(`${config.siteName}/site/header`, { depth: 'all', locale: locale.delivery }),
     client.getByKey(`${config.siteName}/site/footer`, { depth: 'all', locale: locale.delivery }),
   ])
+  const chromeLinks = await resolveLinks(
+    [headerResult, footerResult].flatMap((r) => (r.status === 'fulfilled' ? [r.value] : [])),
+    locale,
+  )
   if (headerResult.status === 'fulfilled') {
     try {
       header = renderContent(headerResult.value, visualizationRegistry, {
         localeBasePath: basePath,
         locale: locale.code,
+        links: chromeLinks,
       })
     } catch {
       // Not fatal — render without header rather than breaking the visualization.
@@ -289,6 +305,7 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
       footer = renderContent(footerResult.value, visualizationRegistry, {
         localeBasePath: basePath,
         locale: locale.code,
+        links: chromeLinks,
       })
     } catch {
       // Not fatal — render without footer rather than breaking the visualization.
@@ -305,6 +322,7 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
           localeBasePath={basePath}
           deliveryLocale={locale.delivery}
           initialProducts={previewProducts}
+          initialLinks={previewLinks}
           productSource={productSourceName}
           localeCode={locale.code}
         />
