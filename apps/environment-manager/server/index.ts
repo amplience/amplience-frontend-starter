@@ -2260,6 +2260,65 @@ async function listRepoItems(token: string, repoId: string) {
 }
 
 /**
+ * Which fixture set each item on the hub came from, as counts — or why that
+ * can't be known (no dc-cli import map on this machine). Shared by the
+ * content-breakdown endpoint and the unscoped Sync all, so the panel and the
+ * operation agree on which sets a hub has.
+ */
+async function classifyHubContent(env: Environment) {
+  const mapFile = path.join(homedir(), '.amplience', 'imports', `quadratic-${env.hubName}.json`)
+  if (!existsSync(mapFile)) {
+    return {
+      available: false as const,
+      reason:
+        `No dc-cli import map for "${env.hubName}" on this machine, so no item can be traced ` +
+        'back to the set it came from. Seeding from here builds one.',
+      mapFile,
+    }
+  }
+
+  const [{ classifyHubItems, summarise }, { readAllSets }] = await Promise.all([
+    import(
+      pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'provenance.mjs')).href
+    ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/provenance.mjs')>,
+    import(
+      pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'fixture-sets.mjs')).href
+    ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/fixture-sets.mjs')>,
+  ])
+
+  const map = JSON.parse(readFileSync(mapFile, 'utf-8')) as {
+    contentItems?: [string, string][]
+  }
+  const token = await getAmplienceToken(env.clientId, env.clientSecret)
+  const repos = [env.repoContent, env.repoSlots, env.repoSiteComponents, env.repoProducts].filter(
+    (id): id is string => (id ?? '') !== '',
+  )
+  const items = (await Promise.all(repos.map((id) => listRepoItems(token, id)))).flat()
+
+  const sets = readAllSets().map((s) => ({ name: s.name, ids: s.ids }))
+  return {
+    available: true as const,
+    ...summarise(classifyHubItems(items, map.contentItems ?? [], sets)),
+  }
+}
+
+/**
+ * The repository's fixture sets that have content on this hub, in panel order.
+ * Empty when that can't be known (no import map, or the hub couldn't be read),
+ * so the caller falls back to syncing the localhost row's set alone.
+ */
+async function installedSets(env: Environment): Promise<string[]> {
+  try {
+    const breakdown = await classifyHubContent(env)
+    if (!breakdown.available) return []
+    return FIXTURE_SETS.map((s) => s.name).filter((n) => (breakdown.bySet[n] ?? 0) > 0)
+  } catch (err) {
+    console.error(`Could not list the fixture sets on "${env.name}":`, err)
+    return []
+  }
+}
+
+/**
  * GET /api/environments/:name/content-breakdown
  *
  * Which fixture set each item on the hub came from, as counts (ADR-0019 §6.7).
@@ -2284,39 +2343,8 @@ app.get('/api/environments/:name/content-breakdown', async (c) => {
     return c.json({ error: 'Environment is missing credentials or repository IDs.' }, 400)
   }
 
-  const mapFile = path.join(homedir(), '.amplience', 'imports', `quadratic-${env.hubName}.json`)
-  if (!existsSync(mapFile)) {
-    return c.json({
-      available: false,
-      reason:
-        `No dc-cli import map for "${env.hubName}" on this machine, so no item can be traced ` +
-        'back to the set it came from. Seeding from here builds one.',
-      mapFile,
-    })
-  }
-
   try {
-    const [{ classifyHubItems, summarise }, { readAllSets }] = await Promise.all([
-      import(
-        pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'provenance.mjs')).href
-      ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/provenance.mjs')>,
-      import(
-        pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'fixture-sets.mjs')).href
-      ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/fixture-sets.mjs')>,
-    ])
-
-    const map = JSON.parse(readFileSync(mapFile, 'utf-8')) as {
-      contentItems?: [string, string][]
-    }
-    const token = await getAmplienceToken(env.clientId, env.clientSecret)
-    const repos = [env.repoContent, env.repoSlots, env.repoSiteComponents, env.repoProducts].filter(
-      (id): id is string => (id ?? '') !== '',
-    )
-    const items = (await Promise.all(repos.map((id) => listRepoItems(token, id)))).flat()
-
-    const sets = readAllSets().map((s) => ({ name: s.name, ids: s.ids }))
-    const summary = summarise(classifyHubItems(items, map.contentItems ?? [], sets))
-    return c.json({ available: true, ...summary })
+    return c.json(await classifyHubContent(env))
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
     console.error(`Failed to classify content for "${env.name}":`, err)
@@ -2384,7 +2412,28 @@ app.post('/api/environments/:name/:op', async (c) => {
       provenance !== undefined ? ` · ${provenance}` : setName === undefined ? '' : ` · ${setName}`
     await stream.writeln(`▶ ${opCfg.label}${scope} — "${env.label || env.name}"…\n`)
     try {
-      await runScript(stream, opCfg.script, args, buildEnv(env, opCfg.republish, setName), name)
+      // An unscoped Sync all covers every set already on the hub, not just the
+      // one the localhost row points at: the model steps run once with the first
+      // set, then each further set gets its content step.
+      const installed =
+        op === 'sync-all' && setName === undefined && scopeFlag === undefined
+          ? await installedSets(env)
+          : []
+      if (installed.length > 0) {
+        await stream.writeln(`Fixture sets on this hub: ${installed.join(', ')}\n`)
+        for (const [i, set] of installed.entries()) {
+          if (i > 0) await stream.writeln(`\n▶ Sync content items · ${set}\n`)
+          await runScript(
+            stream,
+            opCfg.script,
+            [i === 0 ? 'all' : 'content', '--set', set],
+            buildEnv(env, opCfg.republish, set),
+            name,
+          )
+        }
+      } else {
+        await runScript(stream, opCfg.script, args, buildEnv(env, opCfg.republish, setName), name)
+      }
       // A provenance wipe without --apply only reported. Saying "Done" there
       // reads as the work having happened, which is how a dry run gets mistaken
       // for a wipe that refused.
