@@ -32,6 +32,7 @@ import { siteBasePath } from '../../../../../lib/preview-request'
 import { productMediaList } from '../../../../../lib/product-media'
 import { productSource, productSourceName } from '../../../../../lib/product-source'
 import { registry } from '../../../../../lib/registry'
+import { resolveLinks } from '../../../../../lib/resolve-links'
 import { resolveProducts } from '../../../../../lib/resolve-products'
 import {
   ContentUnavailableCard,
@@ -98,6 +99,7 @@ export default async function ProductRoute({ params }: RouteProps) {
           productSource: productSourceName,
           locale: locale.code,
           products: await resolveProducts(product.content, registry, locale),
+          links: await resolveLinks(product.content, locale),
         })
 
   return (

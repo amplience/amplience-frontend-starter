@@ -13,6 +13,6 @@
       }
     },
     "label": "Jeans",
-    "link": "/men-clothing-jeans"
+    "link": { "type": "category", "category": "men-clothing-jeans" }
   }
 }

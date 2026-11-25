@@ -16,6 +16,15 @@
         "height": 30
       }
     },
-    "link": "/"
+    "link": {
+      "type": "page",
+      "page": {
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+        },
+        "contentType": "https://quadratic.amplience.com/v2/content/page",
+        "id": "40d71d03-f25f-597a-a1d9-e41728b0880f"
+      }
+    }
   }
 }

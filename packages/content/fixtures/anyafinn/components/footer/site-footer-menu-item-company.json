@@ -8,7 +8,7 @@
       "deliveryId": "8b7e19d2-09d9-57e7-802f-1fe77ca49a94"
     },
     "label": "Company",
-    "link": "/company",
+    "link": { "type": "url", "url": "/company" },
     "children": [
       {
         "id": "4a936b91-824f-5469-905e-deb28be661d7",

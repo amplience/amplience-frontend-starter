@@ -47,7 +47,7 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/products/anyafinn-crew-neck-double-layer-cardigan-with-wool-grey",
+        "href": { "type": "product", "product": "WXTIN-S" },
         "variant": "outlined",
         "color": "black"
       }

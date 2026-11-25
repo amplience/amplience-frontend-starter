@@ -8,6 +8,6 @@
       "deliveryId": "a9510b9e-3603-5afd-b2fe-94d0d6358528"
     },
     "label": "International orders",
-    "link": "/delivery/international"
+    "link": { "type": "url", "url": "/delivery/international" }
   }
 }

@@ -94,7 +94,7 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/women",
+        "href": { "type": "category", "category": "women" },
         "variant": "solid",
         "color": "white"
       }

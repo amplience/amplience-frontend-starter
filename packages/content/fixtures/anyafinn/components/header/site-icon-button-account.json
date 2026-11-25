@@ -9,6 +9,6 @@
     },
     "icon": "user",
     "label": "My account",
-    "link": "/account"
+    "link": { "type": "url", "url": "/account" }
   }
 }

@@ -13,6 +13,6 @@
       }
     },
     "label": "Knitwear",
-    "link": "/men-clothing-tops"
+    "link": { "type": "category", "category": "men-clothing-tops" }
   }
 }

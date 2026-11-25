@@ -55,7 +55,16 @@
       }
     },
     "links": {
-      "href": "/blog/piratecore",
+      "href": {
+        "type": "page",
+        "page": {
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+          },
+          "contentType": "https://quadratic.amplience.com/v2/content/blog-article",
+          "id": "a31a4e51-c340-5d99-b16f-64271c970bfa"
+        }
+      },
       "cta": {
         "label": {
           "values": [
@@ -76,7 +85,16 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/blog/piratecore",
+        "href": {
+          "type": "page",
+          "page": {
+            "_meta": {
+              "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+            },
+            "contentType": "https://quadratic.amplience.com/v2/content/blog-article",
+            "id": "a31a4e51-c340-5d99-b16f-64271c970bfa"
+          }
+        },
         "variant": "text",
         "color": "black"
       }

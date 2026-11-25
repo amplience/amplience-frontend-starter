@@ -8,6 +8,6 @@
       "deliveryId": "04bf2b16-eef7-51d4-9fc2-047d2da13eb8"
     },
     "label": "Secure shopping",
-    "link": "/shopping/secure"
+    "link": { "type": "url", "url": "/shopping/secure" }
   }
 }

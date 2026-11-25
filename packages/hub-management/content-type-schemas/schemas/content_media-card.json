@@ -70,15 +70,19 @@
       "title": "Links",
       "properties": {
         "href": {
-          "type": "string",
-          "title": "Card Link",
-          "description": "Makes the entire card a single link. When set, the CTA is ignored."
+          "allOf": [
+            { "$ref": "https://quadratic.amplience.com/v2/partials/link" },
+            {
+              "title": "Card Link",
+              "description": "Makes the entire card a single link. When set, the CTA is ignored."
+            }
+          ]
         }
       },
       "if": {
         "properties": {
           "href": {
-            "const": ""
+            "properties": { "type": { "const": "" } }
           }
         }
       },

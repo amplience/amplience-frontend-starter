@@ -8,6 +8,6 @@
       "deliveryId": "ea295510-673c-50cd-885e-448970b973fa"
     },
     "label": "Black Friday",
-    "link": "/shopping/black-friday"
+    "link": { "type": "url", "url": "/shopping/black-friday" }
   }
 }

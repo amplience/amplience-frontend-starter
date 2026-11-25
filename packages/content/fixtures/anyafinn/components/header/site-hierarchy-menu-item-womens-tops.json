@@ -13,6 +13,6 @@
       }
     },
     "label": "Tops",
-    "link": "/women-clothing-tops"
+    "link": { "type": "category", "category": "women-clothing-tops" }
   }
 }

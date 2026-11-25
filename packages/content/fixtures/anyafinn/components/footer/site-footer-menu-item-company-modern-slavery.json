@@ -8,6 +8,6 @@
       "deliveryId": "4c2f2316-4f03-5e37-a10b-d84948bb77db"
     },
     "label": "Modern slavery",
-    "link": "/company/modern-slavery"
+    "link": { "type": "url", "url": "/company/modern-slavery" }
   }
 }

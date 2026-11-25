@@ -13,6 +13,6 @@
       }
     },
     "label": "Boots",
-    "link": "/women-shoes-boots"
+    "link": { "type": "category", "category": "women-shoes-boots" }
   }
 }

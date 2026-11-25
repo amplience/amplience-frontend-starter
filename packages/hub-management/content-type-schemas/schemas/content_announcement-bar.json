@@ -64,10 +64,13 @@
       }
     },
     "href": {
-      "type": "string",
-      "title": "Bar link",
-      "description": "Optional. Makes the whole bar a link. Inline links in the message still work on their own.",
-      "pattern": "^(?!https?\\/\\/)(?:(?:https?:\\/\\/)(?:localhost|(?:[A-Za-z0-9-]+\\.)+[A-Za-z]{2,})(?::\\d{2,5})?(?:\\/[^\\s?#]*)?(?:\\?[^\\s#]*)?(?:#[^\\s]*)?|\\/(?:[^\\s?#]+(?:\\/[^\\s?#]*)*)?(?:\\?[^\\s#]*)?(?:#[^\\s]*)?|(?:\\.\\.?\\/)?[^\\s/:?#]+(?:\\/[^\\s?#]*)*(?:\\?[^\\s#]*)?(?:#[^\\s]*)?)$"
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/link" },
+        {
+          "title": "Bar link",
+          "description": "Optional. Makes the whole bar a link. Inline links in the message still work on their own."
+        }
+      ]
     },
     "linkLabel": {
       "allOf": [

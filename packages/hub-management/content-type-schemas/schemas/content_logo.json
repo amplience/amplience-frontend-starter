@@ -21,9 +21,10 @@
       ]
     },
     "link": {
-      "type": "string",
-      "title": "Link",
-      "description": "URL the logo links to (e.g. \"/\")."
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/link" },
+        { "title": "Link", "description": "Where the logo goes — usually the homepage." }
+      ]
     }
   },
   "propertyOrder": ["image", "link"],

@@ -8,6 +8,6 @@
       "deliveryId": "a0f866be-3538-5cc4-b08c-0ba17784413d"
     },
     "label": "Blog",
-    "link": "/blog"
+    "link": { "type": "url", "url": "/blog" }
   }
 }

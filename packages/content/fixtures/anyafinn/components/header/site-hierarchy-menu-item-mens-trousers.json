@@ -13,6 +13,6 @@
       }
     },
     "label": "Trousers",
-    "link": "/men-clothing-trousers"
+    "link": { "type": "category", "category": "men-clothing-trousers" }
   }
 }

@@ -55,7 +55,7 @@
       }
     },
     "links": {
-      "href": "/sale"
+      "href": { "type": "category", "category": "sale" }
     },
     "layout": "overlay",
     "headingVariant": "h3",

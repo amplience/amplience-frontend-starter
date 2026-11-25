@@ -102,6 +102,12 @@ export type RenderContext = {
    */
   readonly products?: ReadonlyMap<string, ResolvedProduct>
   /**
+   * Page and product link targets resolved before render, keyed `page:<id>` or
+   * `product:<sku>`, as site paths. The dispatcher reads it to turn link fields
+   * into hrefs; like `products`, values rather than a fetcher.
+   */
+  readonly links?: ReadonlyMap<string, string>
+  /**
    * The deployment's product source (`PRODUCT_SOURCE`: `cms`, `commercetools`).
    * Content that holds a product list per source — the multi-PIM carousel —
    * reads the one for this site. Whole-tree, like `locale`.

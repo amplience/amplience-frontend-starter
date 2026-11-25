@@ -47,7 +47,16 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/shop-the-look",
+        "href": {
+          "type": "page",
+          "page": {
+            "_meta": {
+              "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+            },
+            "contentType": "https://quadratic.amplience.com/v2/content/page",
+            "id": "a57c021c-65d2-574d-8dba-71d5ab1a1300"
+          }
+        },
         "variant": "solid",
         "color": "primary"
       }

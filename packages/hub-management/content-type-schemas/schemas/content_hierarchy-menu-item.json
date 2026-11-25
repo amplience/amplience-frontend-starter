@@ -30,9 +30,13 @@
       "description": "Display text for this menu item."
     },
     "link": {
-      "type": "string",
-      "title": "Link",
-      "description": "URL this item navigates to. Omit for parent-only category labels."
+      "allOf": [
+        { "$ref": "https://quadratic.amplience.com/v2/partials/link" },
+        {
+          "title": "Link",
+          "description": "Where this item goes. Omit for parent-only category labels."
+        }
+      ]
     },
     "icon": {
       "allOf": [

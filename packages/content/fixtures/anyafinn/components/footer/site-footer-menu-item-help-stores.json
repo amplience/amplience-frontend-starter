@@ -8,6 +8,6 @@
       "deliveryId": "b5599a1b-3b62-5ac7-9110-43614be45c86"
     },
     "label": "Our stores",
-    "link": "/help/stores"
+    "link": { "type": "url", "url": "/help/stores" }
   }
 }

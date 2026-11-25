@@ -13,6 +13,6 @@
       }
     },
     "label": "Womens",
-    "link": "/women"
+    "link": { "type": "category", "category": "women" }
   }
 }

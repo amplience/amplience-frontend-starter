@@ -13,6 +13,6 @@
       }
     },
     "label": "Blog",
-    "link": "/blog"
+    "link": { "type": "url", "url": "/blog" }
   }
 }

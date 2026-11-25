@@ -72,7 +72,8 @@ function isSpanProps(props: ButtonVariantProps): props is ButtonAsSpan {
 }
 
 function isLinkProps(props: ButtonVariantProps): props is ButtonAsLink {
-  return 'href' in props
+  // A link field that didn't resolve leaves `href` undefined: render a button.
+  return typeof (props as { href?: unknown }).href === 'string'
 }
 
 // ---------------------------------------------------------------------------

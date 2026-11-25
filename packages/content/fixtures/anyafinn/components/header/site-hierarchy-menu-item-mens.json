@@ -13,6 +13,6 @@
       }
     },
     "label": "Mens",
-    "link": "/men"
+    "link": { "type": "category", "category": "men" }
   }
 }

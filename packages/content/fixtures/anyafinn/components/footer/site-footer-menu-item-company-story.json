@@ -8,6 +8,15 @@
       "deliveryId": "4a936b91-824f-5469-905e-deb28be661d7"
     },
     "label": "Our story",
-    "link": "/company/story"
+    "link": {
+      "type": "page",
+      "page": {
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+        },
+        "contentType": "https://quadratic.amplience.com/v2/content/page",
+        "id": "020583d4-f129-5971-baa4-ed6f7ee4f614"
+      }
+    }
   }
 }

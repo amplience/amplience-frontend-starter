@@ -72,6 +72,7 @@ import type { Locale } from '../../../../lib/locales'
 import { siteBasePath } from '../../../../lib/preview-request'
 import { productSource, productSourceName } from '../../../../lib/product-source'
 import { registry } from '../../../../lib/registry'
+import { resolveLinks } from '../../../../lib/resolve-links'
 import { resolveProducts, toResolvedProduct } from '../../../../lib/resolve-products'
 import { deliveryKeyForSlug, pathForDeliveryKey } from '../../../../lib/routing'
 import { ContentUnavailableCard, emitContentFailure, renderContent } from '../../../../src/renderer'
@@ -205,7 +206,10 @@ export default async function ContentRoute({ params }: RouteProps) {
   // locale (ADR-0015).
   // Products any block references are resolved in one call before dispatch, so
   // the synchronous adapters can read them straight off the context (ADR-0027).
-  const products = await resolveProducts(page, registry, locale)
+  const [products, links] = await Promise.all([
+    resolveProducts(page, registry, locale),
+    resolveLinks(page, locale),
+  ])
 
   return renderContent(page, registry, {
     loadPriority: 'lcp',
@@ -213,6 +217,7 @@ export default async function ContentRoute({ params }: RouteProps) {
     productSource: productSourceName,
     locale: locale.code,
     products,
+    links,
   })
 }
 

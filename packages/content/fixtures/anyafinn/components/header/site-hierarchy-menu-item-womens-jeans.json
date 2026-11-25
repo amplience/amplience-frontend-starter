@@ -13,6 +13,6 @@
       }
     },
     "label": "Jeans",
-    "link": "/women-clothing-jeans"
+    "link": { "type": "category", "category": "women-clothing-jeans" }
   }
 }

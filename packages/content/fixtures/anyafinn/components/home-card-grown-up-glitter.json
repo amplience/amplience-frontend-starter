@@ -55,7 +55,16 @@
       }
     },
     "links": {
-      "href": "/blog/grown-up-glitter",
+      "href": {
+        "type": "page",
+        "page": {
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+          },
+          "contentType": "https://quadratic.amplience.com/v2/content/blog-article",
+          "id": "55efd71f-a841-59da-aa36-d2f3f710751d"
+        }
+      },
       "cta": {
         "label": {
           "values": [
@@ -76,7 +85,16 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/blog/grown-up-glitter",
+        "href": {
+          "type": "page",
+          "page": {
+            "_meta": {
+              "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+            },
+            "contentType": "https://quadratic.amplience.com/v2/content/blog-article",
+            "id": "55efd71f-a841-59da-aa36-d2f3f710751d"
+          }
+        },
         "variant": "text",
         "color": "black"
       }

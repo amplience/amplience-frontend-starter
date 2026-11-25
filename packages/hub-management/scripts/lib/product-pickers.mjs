@@ -31,6 +31,7 @@
  */
 
 export const PRODUCT_CAROUSEL_SCHEMA = 'https://quadratic.amplience.com/v2/content/product-carousel'
+export const LINK_SCHEMA = 'https://quadratic.amplience.com/v2/partials/link'
 export const MULTI_PIM_PRODUCT_CAROUSEL_SCHEMA =
   'https://quadratic.amplience.com/v2/content/multi-pim-product-carousel'
 
@@ -44,15 +45,27 @@ const DEFAULT_REGION = 'europe-west1.gcp'
  * A toolkit product-picker editor, which stores product references as strings.
  * `name` is the extension's: one per product source, defined in extensions/.
  */
-const toolkitPicker = (name) => ({
+const toolkitPicker = (name, type = 'strings') => ({
   name,
   params: {
     label: 'Search by keyword or category',
     view: 'product',
     data: 'product',
-    type: 'strings',
+    type,
   },
 })
+
+/**
+ * A toolkit category picker, storing one category as a string. Category URLs use the slug, so the
+ * commercetools extension is installed with `categoryIdentifier: "slug"`; Amplience PIM ids already are.
+ */
+const toolkitCategoryPicker = (name) => ({
+  name,
+  params: { label: 'Category', view: 'single', data: 'category', type: 'string' },
+})
+
+const toolkitName = (mainPim) =>
+  mainPim === 'commercetools' ? 'ecomm-toolkit-commercetools' : 'ecomm-toolkit-amplience'
 
 /** Stores commercetools product ids. */
 const COMMERCETOOLS_PICKER = toolkitPicker('ecomm-toolkit-commercetools')
@@ -136,6 +149,20 @@ export const seedsContentType = (file, hubEntry) =>
  * Every other schema is returned unchanged.
  */
 export const withProductPickers = (schema, { mainPim, commercetools }) => {
+  if (schema?.$id === LINK_SCHEMA) {
+    const name = toolkitName(mainPim)
+    const extensions = {
+      product: toolkitPicker(name, 'string'),
+      category: toolkitCategoryPicker(name),
+    }
+    const oneOf = schema.oneOf.map((option) => {
+      const field = Object.keys(extensions).find((key) => key in option.properties)
+      if (field === undefined) return option
+      const picked = { ...option.properties[field], 'ui:extension': extensions[field] }
+      return { ...option, properties: { ...option.properties, [field]: picked } }
+    })
+    return { ...schema, oneOf }
+  }
   if (schema?.$id === PRODUCT_CAROUSEL_SCHEMA) {
     const picker = mainPim === 'commercetools' ? COMMERCETOOLS_PICKER : AMPLIENCE_PICKER
     const products = { ...schema.properties.products, 'ui:extension': picker }

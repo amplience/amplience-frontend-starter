@@ -15,13 +15,16 @@ import {
   HIERARCHY_MENU_SCHEMA,
 } from '@amplience/frontend-starter-components/registry'
 
-const { getHierarchyMock } = vi.hoisted(() => ({ getHierarchyMock: vi.fn() }))
+const { getHierarchyMock, getByIdMock } = vi.hoisted(() => ({
+  getHierarchyMock: vi.fn(),
+  getByIdMock: vi.fn(),
+}))
 
 vi.mock('../../lib/content-client', () => ({
   client: {
     getHierarchy: getHierarchyMock,
     getByKey: vi.fn(),
-    getById: vi.fn(),
+    getById: getByIdMock,
     listBySchema: vi.fn(),
   },
   siteName: 'test',
@@ -72,6 +75,25 @@ describe('HierarchyMenuServer', () => {
     expect(out).toContain('href="/about"')
     expect(out).toContain('href="/about/team"')
     expect(out).not.toContain('/fr-fr/')
+  })
+
+  it("resolves a page link to the page's URL, inside the locale", async () => {
+    getByIdMock.mockResolvedValue({
+      _meta: { deliveryKeys: { values: [{ value: 'test/about' }] } },
+    })
+    getHierarchyMock.mockResolvedValue({
+      _meta: { schema: HIERARCHY_MENU_SCHEMA },
+      items: [
+        {
+          _meta: { schema: HIERARCHY_MENU_ITEM_SCHEMA },
+          label: 'About',
+          link: { type: 'page', page: { id: 'page-1' } },
+        },
+      ],
+    })
+    const out = await renderServer(stub('/fr-fr'))
+    expect(getByIdMock).toHaveBeenCalledWith('page-1')
+    expect(out).toContain('href="/fr-fr/about"')
   })
 
   it('renders nothing when the stub carries no delivery key', async () => {

@@ -6,6 +6,7 @@
 
 export { renderContent } from './dispatch'
 export { collectSkus } from './collect-skus'
+export { collectLinkKeys, resolveLinkFields } from './links'
 export { productMap, uniqueProducts } from './product-map'
 export { emitContentFailure, emitRendererFailure } from './console'
 export { ComponentUnregisteredCard } from './failure/ComponentUnregisteredCard'

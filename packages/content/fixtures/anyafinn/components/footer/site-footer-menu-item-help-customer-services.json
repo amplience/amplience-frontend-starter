@@ -8,6 +8,6 @@
       "deliveryId": "7a0bdcf7-7844-5e4e-b1b2-c2fc23d60d30"
     },
     "label": "Customer services",
-    "link": "/help/customer-services"
+    "link": { "type": "url", "url": "/help/customer-services" }
   }
 }

@@ -8,6 +8,6 @@
       "deliveryId": "ab0e222e-5b35-5847-a086-c9c89bc0d6fe"
     },
     "label": "FAQs",
-    "link": "/company/faqs"
+    "link": { "type": "url", "url": "/company/faqs" }
   }
 }

@@ -8,6 +8,15 @@
       "deliveryId": "7e7f72ea-f0c2-5f4b-b497-1eeb04b8d5e1"
     },
     "label": "Getting started",
-    "link": "/docs/getting-started"
+    "link": {
+      "type": "page",
+      "page": {
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+        },
+        "contentType": "https://quadratic.amplience.com/v2/content/page",
+        "id": "995d5c04-b13b-5d18-a7eb-bd11de1bbbe2"
+      }
+    }
   }
 }

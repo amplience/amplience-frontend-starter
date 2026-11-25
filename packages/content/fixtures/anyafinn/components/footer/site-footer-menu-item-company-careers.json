@@ -8,6 +8,6 @@
       "deliveryId": "d4c0f845-feba-5747-a7d3-8a45fffde9a4"
     },
     "label": "Careers",
-    "link": "/company/careers"
+    "link": { "type": "url", "url": "/company/careers" }
   }
 }

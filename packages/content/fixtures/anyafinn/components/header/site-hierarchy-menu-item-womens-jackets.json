@@ -13,6 +13,6 @@
       }
     },
     "label": "Coats & Jackets",
-    "link": "/women-clothing-jackets"
+    "link": { "type": "category", "category": "women-clothing-jackets" }
   }
 }

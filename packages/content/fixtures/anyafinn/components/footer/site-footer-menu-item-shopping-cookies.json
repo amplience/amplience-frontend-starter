@@ -8,6 +8,6 @@
       "deliveryId": "c55564e8-e081-55c3-880d-4b42f602f29f"
     },
     "label": "Cookies",
-    "link": "/shopping/cookies"
+    "link": { "type": "url", "url": "/shopping/cookies" }
   }
 }

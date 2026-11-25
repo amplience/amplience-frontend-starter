@@ -47,7 +47,7 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/products/anyafinn-suede-trench-coat-khaki",
+        "href": { "type": "product", "product": "WIDP6-08" },
         "variant": "outlined",
         "color": "black"
       }

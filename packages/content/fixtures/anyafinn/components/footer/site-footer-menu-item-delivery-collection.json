@@ -8,6 +8,6 @@
       "deliveryId": "3f6b8463-fa1e-5745-a422-c274b64ab222"
     },
     "label": "Delivery & collection",
-    "link": "/delivery/collection"
+    "link": { "type": "url", "url": "/delivery/collection" }
   }
 }

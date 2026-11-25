@@ -8,6 +8,6 @@
       "deliveryId": "09edceb9-4452-5611-8b5f-5b4ae08e841e"
     },
     "label": "Privacy notice",
-    "link": "/shopping/privacy"
+    "link": { "type": "url", "url": "/shopping/privacy" }
   }
 }

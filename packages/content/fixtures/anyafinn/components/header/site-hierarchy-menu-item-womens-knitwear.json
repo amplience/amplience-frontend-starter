@@ -13,6 +13,6 @@
       }
     },
     "label": "Knitwear",
-    "link": "/women-clothing-knitwear"
+    "link": { "type": "category", "category": "women-clothing-knitwear" }
   }
 }

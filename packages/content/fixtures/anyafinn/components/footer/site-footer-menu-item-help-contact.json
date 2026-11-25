@@ -8,6 +8,6 @@
       "deliveryId": "8781780b-1a09-58e4-ac22-fecbbb6af568"
     },
     "label": "Contact us",
-    "link": "/help/contact"
+    "link": { "type": "url", "url": "/help/contact" }
   }
 }

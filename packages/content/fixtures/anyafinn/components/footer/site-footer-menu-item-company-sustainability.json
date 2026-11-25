@@ -8,6 +8,6 @@
       "deliveryId": "875b0558-333e-5827-b751-d69362c6424b"
     },
     "label": "Sustainability",
-    "link": "/company/sustainability"
+    "link": { "type": "url", "url": "/company/sustainability" }
   }
 }

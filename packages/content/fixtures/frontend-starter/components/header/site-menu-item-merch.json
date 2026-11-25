@@ -8,6 +8,6 @@
       "deliveryId": "246fa7e4-5e61-581e-9a6f-4d821fb5c466"
     },
     "label": "Merch",
-    "link": "/merchandise"
+    "link": { "type": "category", "category": "merchandise" }
   }
 }

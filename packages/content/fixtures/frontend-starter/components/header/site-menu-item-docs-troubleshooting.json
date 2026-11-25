@@ -8,6 +8,15 @@
       "deliveryId": "bae4cd54-e21b-5a37-bdb2-6557460d34f8"
     },
     "label": "Troubleshooting",
-    "link": "/docs/troubleshooting"
+    "link": {
+      "type": "page",
+      "page": {
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-reference"
+        },
+        "contentType": "https://quadratic.amplience.com/v2/content/page",
+        "id": "a5a7a879-37e5-5deb-96d7-b63352cefd8c"
+      }
+    }
   }
 }

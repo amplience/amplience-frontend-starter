@@ -47,7 +47,7 @@
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/home",
+        "href": { "type": "category", "category": "home" },
         "variant": "outlined",
         "color": "black"
       }

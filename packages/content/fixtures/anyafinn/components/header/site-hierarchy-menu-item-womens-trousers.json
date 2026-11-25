@@ -13,6 +13,6 @@
       }
     },
     "label": "Trousers",
-    "link": "/women-clothing-trouser"
+    "link": { "type": "category", "category": "women-clothing-trouser" }
   }
 }

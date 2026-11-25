@@ -41,6 +41,7 @@ import {
 import { ComponentUnregisteredCard } from './failure/ComponentUnregisteredCard'
 import { PropsValidationFailureCard } from './failure/PropsValidationFailureCard'
 import { SchemaUnknownCard } from './failure/SchemaUnknownCard'
+import { resolveLinkFields } from './links'
 import {
   isLocaleContent,
   LOCALE_CONTENT_SCHEMA,
@@ -277,7 +278,9 @@ export function renderContent(
     return fail({ failureClass: 'ComponentUnregistered', schemaUri }, content)
   }
 
-  const { node, blockCss } = extractBlockCss(content, schemaUri)
+  const extracted = extractBlockCss(content, schemaUri)
+  const node = resolveLinkFields(extracted.node, ctx.links)
+  const { blockCss } = extracted
 
   if (validate !== undefined && !validate(node)) {
     return fail(
@@ -318,6 +321,7 @@ export function renderContent(
       // Resolved products are whole-tree too (ADR-0027): the pre-pass collects
       // from the entire tree, so a rail at any depth reads the same map.
       ...(ctx.products !== undefined && { products: ctx.products }),
+      ...(ctx.links !== undefined && { links: ctx.links }),
       ...(ctx.productSource !== undefined && { productSource: ctx.productSource }),
     }
     const children = renderContent(getChildren(node), registry, childCtx)
