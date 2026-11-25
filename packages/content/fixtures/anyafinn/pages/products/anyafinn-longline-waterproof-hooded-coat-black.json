@@ -1,0 +1,527 @@
+{
+  "id": "3b467d70-63fe-5a63-a14c-dd33679cdfbf",
+  "label": "Product — Longline Waterproof Hooded Coat - Black",
+  "body": {
+    "_meta": {
+      "name": "Longline Waterproof Hooded Coat - Black",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "3b467d70-63fe-5a63-a14c-dd33679cdfbf",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-longline-waterproof-hooded-coat-black"
+          }
+        ]
+      }
+    },
+    "sku": "WWKE7-08",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Longline Waterproof Hooded Coat - Black"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Longline Waterproof Hooded Coat - Black"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Abrigo Largo Impermeable con Capucha - Negro"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Manteau long imperméable à capuche - Noir"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Langer Wasserdichter Mantel mit Kapuze - Schwarz"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Cappotto Lungo Impermeabile con Cappuccio - Nero"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 70,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 84,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 88.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Knee-length waterproof hooded coat"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Knee-length waterproof hooded coat"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Abrigo impermeable con capucha hasta la rodilla"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Manteau imperméable à capuche longueur genou"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Knielanger wasserdichter Kapuzenmantel"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Cappotto impermeabile con cappuccio al ginocchio"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WWKE7_SQ1_0000000004_BLACK_MDf",
+          "alt": "Longline Waterproof Hooded Coat - Black",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Shell and lining: 100% polyester"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Shell and lining: 100% polyester"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Exterior y forro: 100 % poliéster"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Dessus et doublure : 100 % polyester"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Obermaterial und Futter: 100 % Polyester"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Esterno e fodera: 100% poliestere"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte regular, talla normal"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe classique, taille normalement"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Normale Passform, fällt normal aus"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità regolare, veste in taglia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Length"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Length"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Largo"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Longueur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Länge"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lunghezza"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Knee length"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Knee length"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Hasta la rodilla"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Longueur genou"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Knielang"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Al ginocchio"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 8–20"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Season"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Season"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Temporada"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Saison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Saison"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Stagione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "All year"
+            },
+            {
+              "locale": "en-GB",
+              "value": "All year"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Todo el año"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Toute l'année"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Ganzjährig"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Tutto l'anno"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavable a máquina"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavable en machine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwaschbar"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavabile in lavatrice"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["women", "women-clothing", "women-clothing-jackets"],
+    "tags": ["coats", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Waterproof is a specification, not an adjective, and this coat holds it. The polyester shell sheds rain rather than soaking it up, the fixed hood covers what a hood should, and the knee-length cut keeps your legs dry when the wind puts the rain sideways. With no padding it packs down small and layers over whatever the season asks for - a t-shirt in August, two knits in February. Black, machine washable, and honest about what it's for."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Waterproof is a specification, not an adjective, and this coat holds it. The polyester shell sheds rain rather than soaking it up, the fixed hood covers what a hood should, and the knee-length cut keeps your legs dry when the wind puts the rain sideways. With no padding it packs down small and layers over whatever the season asks for - a t-shirt in August, two knits in February. Black, machine washable, and honest about what it's for."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Impermeable es una especificación, no un adjetivo, y este abrigo la cumple. El tejido exterior de poliéster repele la lluvia en lugar de absorberla, la capucha fija cubre lo que una capucha debe cubrir y el largo a la rodilla mantiene las piernas secas cuando el viento pone la lluvia de lado. Sin relleno, se pliega en muy poco espacio y se superpone a lo que pida la temporada: una camiseta en agosto, dos jerséis en febrero. Negro, lavable a máquina y sincero sobre para qué sirve."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Imperméable est une spécification, pas un adjectif, et ce manteau la tient. La toile polyester renvoie la pluie au lieu de la boire, la capuche fixe couvre ce qu'une capuche doit couvrir, et la longueur genou garde les jambes sèches quand le vent met la pluie à l'horizontale. Sans rembourrage, il se plie en tout petit et se superpose à ce que la saison réclame : un t-shirt en août, deux pulls en février. Noir, lavable en machine, et franc sur ce à quoi il sert."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Wasserdicht ist eine technische Angabe, kein Schmuckwort – und dieser Mantel hält sie ein. Das Polyester-Obermaterial perlt Regen ab, statt ihn aufzusaugen, die fest angesetzte Kapuze bedeckt, was eine Kapuze bedecken sollte, und der knielange Schnitt hält die Beine trocken, wenn der Wind den Regen quer treibt. Ohne Wattierung lässt er sich klein zusammenlegen und passt über alles, was die Saison verlangt – im August ein T-Shirt, im Februar zwei Strickteile. Schwarz, maschinenwaschbar und ehrlich in seinem Zweck."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Impermeabile è una specifica tecnica, non un aggettivo, e questo cappotto la rispetta. Il guscio in poliestere respinge la pioggia invece di assorbirla, il cappuccio fisso copre quanto un cappuccio dovrebbe coprire e il taglio al ginocchio tiene asciutte le gambe quando il vento mette la pioggia di traverso. Senza imbottitura si comprime in poco spazio e si sovrappone a quello che chiede la stagione: una t-shirt ad agosto, due maglioni a febbraio. Nero, lavabile in lavatrice e sincero su ciò che fa."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

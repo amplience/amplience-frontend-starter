@@ -1,0 +1,271 @@
+{
+  "id": "b10bc7c9-3078-5060-a124-eb41c6c7eecd",
+  "label": "Product — Lodge Check Super Soft Throw",
+  "body": {
+    "_meta": {
+      "name": "Lodge Check Super Soft Throw",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "b10bc7c9-3078-5060-a124-eb41c6c7eecd",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-lodge-check-super-soft-throw"
+          }
+        ]
+      }
+    },
+    "sku": "WZ96M",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Lodge Check Super Soft Throw"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Lodge Check Super Soft Throw"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Lodge Check Manta Extrasuave"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Lodge Check Plaid ultra doux"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Lodge Check Superweiche Decke"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Plaid Super Morbido Lodge Check"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 28,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 33.5,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 35.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Fringed sage colour-block throw"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Fringed sage colour-block throw"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Manta verde salvia en bloques con flecos"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Plaid vert sauge à blocs et franges"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Salbeigrüne Blockstreifen-Decke mit Fransen"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Plaid a blocchi verde salvia con frange"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WZ96M_SQ2_0000000047_GREEN_SLf",
+          "alt": "Lodge Check Super Soft Throw",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "100% polyester"
+            },
+            {
+              "locale": "en-GB",
+              "value": "100% polyester"
+            },
+            {
+              "locale": "es-ES",
+              "value": "100 % poliéster"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "100 % polyester"
+            },
+            {
+              "locale": "de-DE",
+              "value": "100 % Polyester"
+            },
+            {
+              "locale": "it-IT",
+              "value": "100% poliestere"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Dimensiones"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maße"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Dimensioni"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "130 x 150 cm"
+            },
+            {
+              "locale": "en-GB",
+              "value": "130 x 150 cm"
+            },
+            {
+              "locale": "es-ES",
+              "value": "130 x 150 cm"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "130 x 150 cm"
+            },
+            {
+              "locale": "de-DE",
+              "value": "130 x 150 cm"
+            },
+            {
+              "locale": "it-IT",
+              "value": "130 x 150 cm"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["home"],
+    "tags": ["soft-furnishings", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Sage laid against cream in broad blocks, with a long fringe at each end - the sort of throw that looks arranged when it has simply been dropped over a chair. The surface is brushed to a softness that belies the price, and the muted green keeps easy company with oak, linen and anything earth-toned. At 130 by 150cm it's sized for one person and one armchair rather than a whole sofa."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Sage laid against cream in broad blocks, with a long fringe at each end - the sort of throw that looks arranged when it has simply been dropped over a chair. The surface is brushed to a softness that belies the price, and the muted green keeps easy company with oak, linen and anything earth-toned. At 130 by 150cm it's sized for one person and one armchair rather than a whole sofa."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Verde salvia contra crema en bloques amplios, con un fleco largo en cada extremo: el tipo de manta que parece colocada con cuidado cuando solo se ha dejado caer sobre una silla. La superficie está cepillada hasta una suavidad que no se corresponde con el precio, y el verde apagado hace buenas migas con el roble, el lino y cualquier tono tierra. Con 130 por 150cm está dimensionada para una persona y un sillón, no para un sofá entero."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Du vert sauge posé sur de la crème en larges blocs, avec de longues franges à chaque extrémité : le genre de plaid qui a l'air arrangé alors qu'il a simplement été jeté sur une chaise. La surface est brossée jusqu'à une douceur que le prix ne laisse pas deviner, et le vert sourd fait bon ménage avec le chêne, le lin et tout ce qui tire vers les tons terre. Avec 130 sur 150cm, il est dimensionné pour une personne et un fauteuil, pas pour un canapé entier."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Salbeigrün auf Creme in breiten Blöcken, mit langen Fransen an beiden Enden – die Art Decke, die arrangiert aussieht, obwohl sie einfach über den Stuhl geworfen wurde. Die Oberfläche ist zu einer Weichheit gebürstet, die man dem Preis nicht ansieht, und das gedeckte Grün verträgt sich mühelos mit Eiche, Leinen und allem Erdfarbenen. Mit 130 mal 150cm ist sie für eine Person und einen Sessel gedacht, nicht für ein ganzes Sofa."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Verde salvia accostato al panna in blocchi ampi, con una frangia lunga a ogni estremità: il tipo di plaid che sembra sistemato con cura anche quando è stato semplicemente lasciato cadere su una poltrona. La superficie è spazzolata fino a una morbidezza che il prezzo non lascia immaginare, e il verde smorzato fa buona compagnia a rovere, lino e a qualunque tono terra. Con 130 per 150cm è dimensionato per una persona e una poltrona, non per un divano intero."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

@@ -1,0 +1,308 @@
+{
+  "id": "9dcbf41a-84c4-55d7-8817-445774f1ad60",
+  "label": "Product — Chinos - Petrol",
+  "body": {
+    "_meta": {
+      "name": "Chinos - Petrol",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "9dcbf41a-84c4-55d7-8817-445774f1ad60",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-chinos-petrol"
+          }
+        ]
+      }
+    },
+    "sku": "M0E20000000E5CW",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Chinos - Petrol"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Chinos - Petrol"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chinos - Azul petróleo"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Chino - Bleu pétrole"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Chinohose - Petrol"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Chino - Petrolio"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 158.53,
+        "compareAtAmount": 186.5,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 190.19,
+        "compareAtAmount": 223.75,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 190.19,
+        "compareAtAmount": 223.75,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Petrol blue-green chinos"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Petrol blue-green chinos"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chinos azul petróleo"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Chino bleu pétrole"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Chinohose in Petrol"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Chino blu petrolio"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080178_1",
+          "alt": "Chinos - Petrol — view 1",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080178_2",
+          "alt": "Chinos - Petrol — view 2",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080178_3",
+          "alt": "Chinos - Petrol — view 3",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080178_4",
+          "alt": "Chinos - Petrol — view 4",
+          "width": 858,
+          "height": 1144
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Color"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Colour"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Color"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Couleur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Farbe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Colore"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Petrol"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Petrol"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Azul petróleo"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Bleu pétrole"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Petrol"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Petrolio"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "24–42"
+            },
+            {
+              "locale": "en-GB",
+              "value": "24–42"
+            },
+            {
+              "locale": "es-ES",
+              "value": "24–42"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "24–42"
+            },
+            {
+              "locale": "de-DE",
+              "value": "24–42"
+            },
+            {
+              "locale": "it-IT",
+              "value": "24–42"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": [
+      "men",
+      "men-clothing",
+      "men-clothing-trousers",
+      "sale",
+      "sale-men",
+      "sale-men-clothing"
+    ],
+    "tags": ["trousers"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Chinos in a deep petrol blue-green that pair easily with neutrals."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Chinos in a deep petrol blue-green that pair easily with neutrals."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chinos en un intenso azul petróleo que combinan fácilmente con tonos neutros."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un chino bleu pétrole profond qui s'associe facilement aux tons neutres."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Chinohose in tiefem Petrol, die sich leicht mit neutralen Farben kombinieren lässt."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Chino in un intenso blu petrolio, facili da abbinare ai colori neutri."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

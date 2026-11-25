@@ -34,46 +34,49 @@ const fromFixture = (slug: string, locale = 'en-GB') => {
 
 export const Playground: Story = {
   parameters: { controls: { disable: false } },
-  args: fromFixture('aurora-lounge-chair'),
+  args: fromFixture('anyafinn-suede-trench-coat-khaki'),
 }
 
 export const Gallery: Story = {
-  name: 'Gallery — six images',
-  args: fromFixture('aurora-lounge-chair'),
+  name: 'Gallery — four images',
+  args: fromFixture('anyafinn-tailored-overcoat-brown'),
 }
 
 export const SingleImage: Story = {
   name: 'One image — renders an image, not a carousel',
-  args: fromFixture('aurora-side-table'),
+  args: fromFixture('anyafinn-embossed-floor-lamp'),
 }
 
 export const NoImages: Story = {
   name: 'No images — no gallery region at all',
-  args: fromFixture('aurora-shelving'),
+  args: { ...fromFixture('anyafinn-embossed-floor-lamp'), images: [] },
 }
 
 export const Discontinued: Story = {
   name: 'Discontinued',
-  args: fromFixture('verde-ceramic-planter'),
+  args: {
+    ...fromFixture('anyafinn-collared-argyle-cardigan-pink-burgundy'),
+    status: 'discontinued',
+  },
 }
 
 export const LongName: Story = {
   name: 'Long name',
-  args: fromFixture('mara-hand-woven-wool-throw'),
+  args: fromFixture('anyafinn-2ft-pre-lit-flocked-christmas-tree-with-burlap-base'),
 }
 
 export const WithEditorialContent: Story = {
   name: 'With editorial slots',
-  args: fromFixture('terra-dining-table'),
+  args: fromFixture('anyafinn-terra-stone-effect-coffee-table'),
   render: (args) => (
     <ProductDetailPage {...args}>
       {/* Stands in for the rendered slots — the real page passes the
           renderer's output for the product's `slots` array. */}
       <div style={{ maxWidth: '48rem', margin: '0 auto', padding: '2rem 1rem' }}>
-        <h2>Reclaimed, not reproduced</h2>
+        <h2>The detail</h2>
         <p>
-          Every Terra top is milled from elm salvaged from farm buildings in the Welsh borders. No
-          two are the same colour, and the nail-holes are left in.
+          Corners and edges are rounded off so the block softens rather than looms, and the
+          cross-shaped plinth lifts the top just enough to cast a shadow line beneath.
         </p>
       </div>
     </ProductDetailPage>
@@ -82,10 +85,10 @@ export const WithEditorialContent: Story = {
 
 export const Localized: Story = {
   name: 'German locale — name, description and price all shift',
-  args: fromFixture('aurora-lounge-chair', 'de-DE'),
+  args: fromFixture('anyafinn-suede-trench-coat-khaki', 'de-DE'),
 }
 
 export const AsLcp: Story = {
   name: 'Lead image as LCP candidate',
-  args: { ...fromFixture('aurora-lounge-chair'), loadPriority: 'lcp' },
+  args: { ...fromFixture('anyafinn-suede-trench-coat-khaki'), loadPriority: 'lcp' },
 }

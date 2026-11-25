@@ -342,13 +342,14 @@ A product page — presentation-grade commerce fields plus optional slots for ed
 
 Only read when `PRODUCT_SOURCE` is `cms` (the default) — with `commercetools` the same pages render from the commerce project instead, and these items are ignored. See [Deploying › Products](deploying.md#products).
 
-Shares the head-metadata shape with [Page](#page) (`title`, `description`, `keywords`, `social`, `canonicalUrl`, `robots`, `slots`, `_meta`), and adds:
+Shares the head-metadata shape with [Page](#page) (`title`, `keywords`, `social`, `canonicalUrl`, `robots`, `slots`, `_meta`) — except `description`, which here is the product's long copy rather than the meta description — and adds:
 
 | Field              | Label             | Type                                        | Req | Notes                                                                                                                                     |
 | ------------------ | ----------------- | ------------------------------------------- | --- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `sku`              | SKU               | string                                      | ✓   | The identifier in your commerce or PIM system — what [product carousels](#product-carousel-block) reference. Not displayed                |
 | `name`             | Product Name      | localized string                            | ✓   |                                                                                                                                           |
-| `shortDescription` | Short Description | localized string                            |     | A sentence or two for the product page and cards. Longer copy belongs in slots                                                            |
+| `shortDescription` | Short Description | localized string                            |     | A few words for cards and the top of the product page. Also the meta description                                                          |
+| `description`      | Description       | localized string                            |     | The full product description, shown on the product page below the short one. Never on cards                                               |
 | `prices`           | Prices            | object[]                                    |     | One per currency: `amount`, `currencyCode` (ISO 4217), and optional `compareAtAmount`. See below                                          |
 | `images`           | Images            | [Media](#media)[]                           |     | The first is the card and lead image; two or more make the product page a gallery                                                         |
 | `attributes`       | Attributes        | object[]                                    |     | Display-only spec rows: localized `label` and `value`                                                                                     |

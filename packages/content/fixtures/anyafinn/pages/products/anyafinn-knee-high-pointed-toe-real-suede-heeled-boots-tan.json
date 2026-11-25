@@ -1,0 +1,527 @@
+{
+  "id": "771625b4-5dba-5aa2-86f7-17612d689ee8",
+  "label": "Product — Knee-High Pointed Toe Real Suede Heeled Boots - Tan",
+  "body": {
+    "_meta": {
+      "name": "Knee-High Pointed Toe Real Suede Heeled Boots - Tan",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "771625b4-5dba-5aa2-86f7-17612d689ee8",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-knee-high-pointed-toe-real-suede-heeled-boots-tan"
+          }
+        ]
+      }
+    },
+    "sku": "AFBT008-3",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Knee-High Pointed Toe Real Suede Heeled Boots - Tan"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Knee-High Pointed Toe Real Suede Heeled Boots - Tan"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Botas altas de tacón en ante auténtico con punta afilada - Camel"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Bottes hautes à talon en vrai daim, bout pointu - Camel"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Kniehohe Absatzstiefel aus echtem Veloursleder mit spitzer Zehe - Hellbraun"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Stivali al ginocchio con tacco in vera pelle scamosciata, punta affilata - Cuoio"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 75,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 90,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 95.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Knee-high suede heeled boots"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Knee-high suede heeled boots"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Botas altas de tacón de ante"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Bottes hautes à talon en daim"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Kniehohe Absatzstiefel aus Veloursleder"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Stivali al ginocchio con tacco in scamosciato"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WZIXI_SQ1_0000000011_TAN_SLs",
+          "alt": "Knee-High Pointed Toe Real Suede Heeled Boots - Tan",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Real suede upper"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Real suede upper"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Exterior de ante auténtico"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tige en vrai daim"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Obermaterial aus echtem Veloursleder"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Tomaia in vera pelle scamosciata"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Heel"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Heel"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tacón"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Talon"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Absatz"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Tacco"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Slim heel"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Slim heel"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tacón fino"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Talon fin"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Schmaler Absatz"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Tacco sottile"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Shaft height"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Shaft height"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Altura de caña"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Hauteur de tige"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Schafthöhe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Altezza gambale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Knee-high"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Knee-high"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Hasta la rodilla"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Hauteur genou"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Kniehoch"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Al ginocchio"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fastening"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fastening"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cierre"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Fermeture"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Verschluss"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Chiusura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Side zip"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Side zip"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cremallera lateral"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Zip latéral"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Seitlicher Reißverschluss"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Zip laterale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 3–8"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 3–8"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 3–8"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 3–8"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 3–8"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 3–8"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Suede protector spray recommended"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Suede protector spray recommended"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Se recomienda spray protector para ante"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Spray protecteur pour daim recommandé"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Veloursleder-Imprägnierspray empfohlen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Consigliato spray protettivo per scamosciato"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["women", "women-shoes", "women-shoes-boots"],
+    "tags": ["boots", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Real suede, a slim heel, and a pointed toe that keeps the whole knee-high shape sleek rather than bulky. Side zip for ease, tan rather than the more expected black or brown. UK sizes 3 to 8, suede protector recommended."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Real suede, a slim heel, and a pointed toe that keeps the whole knee-high shape sleek rather than bulky. Side zip for ease, tan rather than the more expected black or brown. UK sizes 3 to 8, suede protector recommended."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Ante auténtico, un tacón fino y una punta afilada que mantienen estilizada, y no voluminosa, toda la silueta hasta la rodilla. Cremallera lateral para mayor comodidad, en camel en lugar del negro o marrón de siempre. Tallas UK de la 3 a la 8, se recomienda protector para ante."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Du vrai daim, un talon fin et un bout pointu qui gardent toute la silhouette haute élancée plutôt que massive. Zip latéral pour plus de facilité, en camel plutôt que dans le noir ou le marron attendus. Pointures UK 3 à 8, protecteur pour daim recommandé."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Echtes Veloursleder, ein schmaler Absatz und eine spitze Zehe, die die ganze kniehohe Form schlank statt klobig wirken lässt. Seitlicher Reißverschluss für leichtes An- und Ausziehen, in Hellbraun statt des üblichen Schwarz oder Braun. UK-Größen 3 bis 8, Veloursleder-Imprägnierung empfohlen."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Vera pelle scamosciata, un tacco sottile e una punta affilata che mantengono slanciata, e non ingombrante, tutta la linea al ginocchio. Zip laterale per comodità, color cuoio invece del più scontato nero o marrone. Taglie UK dalla 3 alla 8, consigliato un protettivo per scamosciato."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

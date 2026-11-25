@@ -1,0 +1,537 @@
+{
+  "id": "54128e80-57e4-545f-aaa2-712a4bceed9f",
+  "label": "Product — Casual Wide Leg Stripe Trousers - Multi",
+  "body": {
+    "_meta": {
+      "name": "Casual Wide Leg Stripe Trousers - Multi",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "54128e80-57e4-545f-aaa2-712a4bceed9f",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-casual-wide-leg-stripe-trousers-multi"
+          }
+        ]
+      }
+    },
+    "sku": "AFTR005-08",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Casual Wide Leg Stripe Trousers - Multi"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Casual Wide Leg Stripe Trousers - Multi"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Pantalón ancho informal de rayas - Multicolor"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pantalon large décontracté à rayures - Multicolore"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Weite Freizeithose mit Streifen - Mehrfarbig"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Pantaloni casual a gamba larga a righe - Multicolore"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 25.5,
+        "compareAtAmount": 30,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 30.6,
+        "compareAtAmount": 36,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 33.14,
+        "compareAtAmount": 38.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Pull-on wide-leg stripe trousers"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Pull-on wide-leg stripe trousers"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Pantalón ancho de rayas sin cierre"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pantalon large rayé à enfiler"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Weite Streifenhose zum Hineinschlüpfen"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Pantaloni a righe a gamba larga senza chiusure"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WWQ62_SQ1_0000000029_MULTI_MDf",
+          "alt": "Casual Wide Leg Stripe Trousers - Multi",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "93% viscose, 7% polyester"
+            },
+            {
+              "locale": "en-GB",
+              "value": "93% viscose, 7% polyester"
+            },
+            {
+              "locale": "es-ES",
+              "value": "93 % viscosa, 7 % poliéster"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "93 % viscose, 7 % polyester"
+            },
+            {
+              "locale": "de-DE",
+              "value": "93 % Viskose, 7 % Polyester"
+            },
+            {
+              "locale": "it-IT",
+              "value": "93% viscosa, 7% poliestere"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Wide leg"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Wide leg"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Pierna ancha"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Jambe large"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Weites Bein"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Gamba larga"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Rise"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Rise"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tiro"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Taille"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Leibhöhe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vita"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Mid rise"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Mid rise"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tiro medio"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Taille mi-haute"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Mittlere Leibhöhe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vita media"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 8–20"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Season"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Season"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Temporada"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Saison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Saison"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Stagione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Otoño/Invierno"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Automne/Hiver"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herbst/Winter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Autunno/Inverno"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavable a máquina"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavable en machine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwaschbar"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavabile in lavatrice"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": [
+      "women",
+      "women-clothing",
+      "women-clothing-trouser",
+      "sale",
+      "sale-women",
+      "sale-women-clothing"
+    ],
+    "tags": ["trousers", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Pull-on and elasticated at a mid rise, these trade tailoring for ease without losing the wide leg. A stripe print does the work a plain fabric can't, side slip pockets keep it practical. Sizes 8 to 20, machine washable."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Pull-on and elasticated at a mid rise, these trade tailoring for ease without losing the wide leg. A stripe print does the work a plain fabric can't, side slip pockets keep it practical. Sizes 8 to 20, machine washable."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Sin cierres y con cintura elástica de tiro medio, cambian el patrón sastre por comodidad sin perder la pierna ancha. El estampado de rayas hace lo que un tejido liso no puede, y los bolsillos laterales los mantienen prácticos. Tallas de la 8 a la 20, lavable a máquina."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "À enfiler, taille élastiquée mi-haute : ce pantalon troque la coupe tailleur contre l'aisance sans renoncer à la jambe large. L'imprimé rayé fait ce qu'un tissu uni ne peut pas faire, et les poches latérales le gardent pratique. Tailles 8 à 20, lavable en machine."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Zum Hineinschlüpfen, mit elastischem Bund auf mittlerer Höhe: Diese Hose tauscht Schneiderkunst gegen Bequemlichkeit, ohne das weite Bein aufzugeben. Der Streifenprint leistet, was ein unifarbener Stoff nicht kann, und seitliche Eingrifftaschen halten sie praktisch. Größen 8 bis 20, maschinenwaschbar."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Senza chiusure, con elastico in vita a media altezza: scambiano il taglio sartoriale con la comodità senza perdere la gamba larga. La stampa a righe fa ciò che un tessuto tinta unita non può, e le tasche laterali li rendono pratici. Taglie dalla 8 alla 20, lavabili in lavatrice."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

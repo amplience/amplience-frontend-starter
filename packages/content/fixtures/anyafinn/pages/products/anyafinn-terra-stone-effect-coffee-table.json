@@ -1,0 +1,344 @@
+{
+  "id": "c0210cb5-ccea-5f2f-ab4e-ef923a4a1cda",
+  "label": "Product — Terra Stone Effect Coffee Table",
+  "body": {
+    "_meta": {
+      "name": "Terra Stone Effect Coffee Table",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "c0210cb5-ccea-5f2f-ab4e-ef923a4a1cda",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-terra-stone-effect-coffee-table"
+          }
+        ]
+      }
+    },
+    "sku": "VZ5XR",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Terra Stone Effect Coffee Table"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Terra Stone Effect Coffee Table"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Terra Mesa de Centro Efecto Piedra"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Terra Table basse effet pierre"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Terra Couchtisch in Steinoptik"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Terra Tavolino da Salotto Effetto Pietra"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 109,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 130.75,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 137.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Travertine-look coffee table"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Travertine-look coffee table"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Mesa de centro efecto travertino"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Table basse effet travertin"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Couchtisch in Travertin-Optik"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Tavolino effetto travertino"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/VZ5XR_SQ2_0000000003_NATURAL_SLf",
+          "alt": "Terra Stone Effect Coffee Table",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "MDF"
+            },
+            {
+              "locale": "en-GB",
+              "value": "MDF"
+            },
+            {
+              "locale": "es-ES",
+              "value": "MDF"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "MDF"
+            },
+            {
+              "locale": "de-DE",
+              "value": "MDF"
+            },
+            {
+              "locale": "it-IT",
+              "value": "MDF"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Finish"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Finish"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Acabado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Finition"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Oberfläche"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Finitura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Travertine stone effect"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Travertine stone effect"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Efecto piedra travertino"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Effet pierre travertin"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Travertin-Steinoptik"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Effetto pietra travertino"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Dimensiones"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maße"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Dimensioni"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "H38 x W85 x D75 cm"
+            },
+            {
+              "locale": "en-GB",
+              "value": "H38 x W85 x D75 cm"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Al38 x An85 x F75 cm"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "H38 x L85 x P75 cm"
+            },
+            {
+              "locale": "de-DE",
+              "value": "H38 x B85 x T75 cm"
+            },
+            {
+              "locale": "it-IT",
+              "value": "A38 x L85 x P75 cm"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["home", "accessories", "furniture"],
+    "tags": ["furniture", "aw26"],
+    "slots": [
+      {
+        "id": "634a0807-8c92-5396-8b30-8f9901c75e74",
+        "contentType": "https://quadratic.amplience.com/v2/slots/slot",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Stone without the structural engineering. A banded, warm-toned travertine effect wraps an MDF build, so you get the visual mass of a quarried slab and none of the four-people-and-a-trolley problem. Corners and edges are rounded off so the block softens rather than looms, and the cross-shaped plinth lifts the top just enough to cast a shadow line beneath. 85cm across - room for a tray, a stack of books and a pair of feet."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Stone without the structural engineering. A banded, warm-toned travertine effect wraps an MDF build, so you get the visual mass of a quarried slab and none of the four-people-and-a-trolley problem. Corners and edges are rounded off so the block softens rather than looms, and the cross-shaped plinth lifts the top just enough to cast a shadow line beneath. 85cm across - room for a tray, a stack of books and a pair of feet."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Piedra sin la ingeniería estructural. Un efecto travertino cálido y vetado envuelve una estructura de MDF, así que consigues la masa visual de un bloque recién salido de la cantera y nada del problema de las cuatro personas y una carretilla. Las esquinas y los cantos van redondeados para que el bloque se suavice en lugar de imponerse, y la peana en forma de cruz eleva el tablero lo justo para dibujar una línea de sombra debajo. 85cm de ancho: sitio para una bandeja, una pila de libros y un par de pies."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "La pierre, sans l'étude de structure. Un effet travertin chaud et veiné habille une construction en MDF : vous récupérez la masse visuelle d'un bloc de carrière et rien du problème des quatre personnes et du diable. Les angles et les arêtes sont arrondis pour que le bloc s'adoucisse au lieu de surplomber, et le socle en croix soulève le plateau juste assez pour dessiner une ligne d'ombre en dessous. 85cm de large : de quoi poser un plateau, une pile de livres et une paire de pieds."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Stein, aber ohne Statikfrage. Eine warm getönte, geäderte Travertin-Optik umhüllt einen MDF-Korpus: Sie bekommen die optische Masse einer gebrochenen Steinplatte und nichts von dem Problem, dass vier Leute und eine Sackkarre nötig sind. Ecken und Kanten sind abgerundet, sodass der Block weich wirkt statt zu thronen, und der kreuzförmige Sockel hebt die Platte gerade so weit an, dass darunter eine Schattenlinie entsteht. 85cm im Durchmesser – Platz für ein Tablett, einen Stapel Bücher und ein Paar Füße."
+        },
+        {
+          "locale": "it-IT",
+          "value": "La pietra senza l'ingegneria strutturale. Un effetto travertino a fasce, dai toni caldi, avvolge una struttura in MDF: ottieni la massa visiva di una lastra di cava e nessuno dei problemi del trasporto in quattro persone con un carrello. Angoli e spigoli sono arrotondati, così il blocco si addolcisce invece di incombere, e il basamento a croce solleva il piano quanto basta a disegnare una linea d'ombra sotto. 85cm di larghezza: spazio per un vassoio, una pila di libri e un paio di piedi."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

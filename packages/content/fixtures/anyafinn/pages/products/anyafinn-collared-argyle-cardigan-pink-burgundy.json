@@ -1,0 +1,473 @@
+{
+  "id": "9eb22468-88fe-5965-91de-9610e993e39b",
+  "label": "Product — Collared Argyle Cardigan - Pink & Burgundy",
+  "body": {
+    "_meta": {
+      "name": "Collared Argyle Cardigan - Pink & Burgundy",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "9eb22468-88fe-5965-91de-9610e993e39b",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-collared-argyle-cardigan-pink-burgundy"
+          }
+        ]
+      }
+    },
+    "sku": "AFKN003-08",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Collared Argyle Cardigan - Pink & Burgundy"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Collared Argyle Cardigan - Pink & Burgundy"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Cárdigan de rombos con cuello - Rosa y burdeos"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Cardigan à col motif argyle - Rose et bordeaux"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Argyle-Cardigan mit Kragen - Rosa & Bordeaux"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Cardigan con colletto a rombi - Rosa e bordeaux"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 29.75,
+        "compareAtAmount": 35,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 35.7,
+        "compareAtAmount": 42,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 38.24,
+        "compareAtAmount": 44.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Collared argyle cardigan"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Collared argyle cardigan"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Cárdigan de rombos con cuello"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Cardigan argyle à col"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Argyle-Cardigan mit Kragen"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Cardigan a rombi con colletto"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/X2M3P_SQ1_0000000029_MULTI_MDf",
+          "alt": "Collared Argyle Cardigan - Pink & Burgundy",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "100% acrylic"
+            },
+            {
+              "locale": "en-GB",
+              "value": "100% acrylic"
+            },
+            {
+              "locale": "es-ES",
+              "value": "100 % acrílico"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "100 % acrylique"
+            },
+            {
+              "locale": "de-DE",
+              "value": "100 % Polyacryl"
+            },
+            {
+              "locale": "it-IT",
+              "value": "100% acrilico"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte regular, talla normal"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe classique, taille normalement"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Normale Passform, fällt normal aus"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità regolare, veste in taglia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 8–18"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 8–18"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 8–18"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 8–18"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 8–18"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 8–18"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Season"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Season"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Temporada"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Saison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Saison"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Stagione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Otoño/Invierno"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Automne/Hiver"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herbst/Winter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Autunno/Inverno"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavable a máquina"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavable en machine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwaschbar"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavabile in lavatrice"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": [
+      "women",
+      "women-clothing",
+      "women-clothing-knitwear",
+      "sale",
+      "sale-women",
+      "sale-women-clothing"
+    ],
+    "tags": ["knitwear", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A proper collar changes what a cardigan can do, and this one uses it to carry a bold argyle pattern without looking like fancy dress. Button-through front, ribbed cuffs and hem, and enough structure in the acrylic knit to hold its shape over a shirt. Sizes 8 to 18, machine washable."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A proper collar changes what a cardigan can do, and this one uses it to carry a bold argyle pattern without looking like fancy dress. Button-through front, ribbed cuffs and hem, and enough structure in the acrylic knit to hold its shape over a shirt. Sizes 8 to 18, machine washable."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Un cuello de verdad cambia lo que puede hacer un cárdigan, y este lo aprovecha para lucir un atrevido estampado de rombos sin parecer un disfraz. Botonadura completa, puños y bajo de canalé, y la estructura justa en el punto acrílico para mantener la forma sobre una camisa. Tallas de la 8 a la 18, lavable a máquina."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un vrai col change ce qu'un cardigan peut faire, et celui-ci s'en sert pour porter un motif argyle affirmé sans avoir l'air d'un déguisement. Boutonnage sur toute la hauteur, poignets et bas côtelés, et assez de tenue dans la maille acrylique pour garder sa forme sur une chemise. Tailles 8 à 18, lavable en machine."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein richtiger Kragen verändert, was ein Cardigan kann – dieser nutzt ihn, um ein kräftiges Argyle-Muster zu tragen, ohne nach Verkleidung auszusehen. Durchgehende Knopfleiste, Rippbündchen an Ärmeln und Saum und genug Stand im Acrylstrick, um über einem Hemd die Form zu halten. Größen 8 bis 18, maschinenwaschbar."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Un vero colletto cambia ciò che un cardigan può fare, e questo lo usa per sostenere un audace motivo a rombi senza sembrare un costume. Abbottonatura completa, polsini e fondo a costine e abbastanza struttura nella maglia acrilica da mantenere la forma sopra una camicia. Taglie dalla 8 alla 18, lavabile in lavatrice."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

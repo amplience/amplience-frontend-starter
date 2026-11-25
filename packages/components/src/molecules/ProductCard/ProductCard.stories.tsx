@@ -45,17 +45,23 @@ const fromFixture = (slug: string) => {
   }
 }
 
+/** A real product's name and link only — the sparse card the catalogue itself never produces. */
+const nameOnly = (slug: string) => {
+  const p = storyProduct(slug)
+  return { name: p.name, href: p.href, locale: 'en-GB' }
+}
+
 export const Playground: Story = {
   parameters: { controls: { disable: false } },
-  args: fromFixture('aurora-lounge-chair'),
+  args: fromFixture('anyafinn-suede-trench-coat-khaki'),
   render: (args) => <div style={{ maxWidth: '280px' }}>{grid(<ProductCard {...args} />)}</div>,
 }
 
 export const OnSale: Story = {
   name: 'On sale — was and now',
   args: {
-    ...fromFixture('aurora-lounge-chair'),
-    price: { amount: 599, compareAtAmount: 749, currencyCode: 'GBP' },
+    ...fromFixture('anyafinn-suede-trench-coat-khaki'),
+    price: { amount: 148.75, compareAtAmount: 175, currencyCode: 'GBP' },
   },
   render: (args) => <div style={{ maxWidth: '280px' }}>{grid(<ProductCard {...args} />)}</div>,
 }
@@ -77,9 +83,15 @@ export const States: Story = {
   render: () =>
     grid(
       <>
-        <ProductCard {...fromFixture('aurora-side-table')} />
-        <ProductCard {...fromFixture('aurora-shelving')} />
-        <ProductCard {...fromFixture('verde-ceramic-planter')} />
+        <ProductCard {...fromFixture('anyafinn-embossed-floor-lamp')} />
+        <ProductCard
+          {...fromFixture('anyafinn-terra-stone-effect-coffee-table')}
+          status="coming-soon"
+        />
+        <ProductCard
+          {...fromFixture('anyafinn-collared-argyle-cardigan-pink-burgundy')}
+          status="discontinued"
+        />
       </>,
     ),
 }
@@ -89,11 +101,14 @@ export const SparseData: Story = {
   render: () =>
     grid(
       <>
-        <ProductCard {...fromFixture('aurora-lounge-chair')} />
-        <ProductCard {...fromFixture('lumen-floor-lamp')} />
+        <ProductCard {...fromFixture('anyafinn-suede-trench-coat-khaki')} />
+        <ProductCard {...fromFixture('anyafinn-embossed-floor-lamp')} />
         {/* No image and no price — the box is still reserved, so the row
             keeps a straight baseline. */}
-        <ProductCard {...fromFixture('aurora-shelving')} />
+        <ProductCard
+          {...nameOnly('anyafinn-terra-stone-effect-coffee-table')}
+          status="coming-soon"
+        />
       </>,
     ),
 }
@@ -103,8 +118,10 @@ export const LongName: Story = {
   render: () =>
     grid(
       <>
-        <ProductCard {...fromFixture('mara-hand-woven-wool-throw')} />
-        <ProductCard {...fromFixture('verde-ceramic-planter')} />
+        <ProductCard
+          {...fromFixture('anyafinn-2ft-pre-lit-flocked-christmas-tree-with-burlap-base')}
+        />
+        <ProductCard {...fromFixture('anyafinn-water-resistant-funnel-neck-jacket-light-beige')} />
       </>,
     ),
 }

@@ -1,0 +1,527 @@
+{
+  "id": "6e0e00a0-8e83-5c97-ae41-1a3820cc6bdb",
+  "label": "Product — Textured Wide Leg Trouser Co-ord - Navy",
+  "body": {
+    "_meta": {
+      "name": "Textured Wide Leg Trouser Co-ord - Navy",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "6e0e00a0-8e83-5c97-ae41-1a3820cc6bdb",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-textured-wide-leg-trouser-co-ord-navy"
+          }
+        ]
+      }
+    },
+    "sku": "WXU7O-08",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Textured Wide Leg Trouser Co-ord - Navy"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Textured Wide Leg Trouser Co-ord - Navy"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Conjunto de Pantalón Ancho Texturizado - Azul Marino"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pantalon large texturé coordonné - Bleu marine"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Strukturierte Wide-Leg-Hose Co-ord - Navy"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Pantaloni Coordinati a Gamba Larga in Tessuto Testurizzato - Blu Navy"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 28,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 33.5,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 35.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Textured wide-leg co-ord trousers"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Textured wide-leg co-ord trousers"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Pantalón ancho texturizado para conjuntar"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pantalon large texturé coordonné"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Strukturierte weite Co-ord-Hose"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Pantaloni coordinati testurizzati a gamba larga"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WXU7O_SQ1_0000000048_NAVY_MDf",
+          "alt": "Textured Wide Leg Trouser Co-ord - Navy",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "100% polyester"
+            },
+            {
+              "locale": "en-GB",
+              "value": "100% polyester"
+            },
+            {
+              "locale": "es-ES",
+              "value": "100 % poliéster"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "100 % polyester"
+            },
+            {
+              "locale": "de-DE",
+              "value": "100 % Polyester"
+            },
+            {
+              "locale": "it-IT",
+              "value": "100% poliestere"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte regular, talla normal"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe classique, taille normalement"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Normale Passform, fällt normal aus"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità regolare, veste in taglia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Rise"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Rise"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tiro"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Taille"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Leibhöhe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vita"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "High rise"
+            },
+            {
+              "locale": "en-GB",
+              "value": "High rise"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tiro alto"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Taille haute"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Hoher Bund"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vita alta"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 8–22"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Season"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Season"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Temporada"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Saison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Saison"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Stagione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Spring to autumn"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Spring to autumn"
+            },
+            {
+              "locale": "es-ES",
+              "value": "De primavera a otoño"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Du printemps à l'automne"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Frühling bis Herbst"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Dalla primavera all'autunno"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavable a máquina"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavable en machine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwaschbar"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavabile in lavatrice"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["women", "women-clothing", "women-clothing-trouser"],
+    "tags": ["trousers", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "The texture is doing the heavy lifting here. A flat weave at this price reads cheap; this one has a slub running through it that holds the wide leg in shape and stops the navy going flat under office lighting. The rise sits high, which lengthens everything below it, and the elasticated drawstring waist builds the comfort in rather than trading it away. Side slip pockets, full leg to the floor, machine washable. The matching top turns it into a suit."
+        },
+        {
+          "locale": "en-GB",
+          "value": "The texture is doing the heavy lifting here. A flat weave at this price reads cheap; this one has a slub running through it that holds the wide leg in shape and stops the navy going flat under office lighting. The rise sits high, which lengthens everything below it, and the elasticated drawstring waist builds the comfort in rather than trading it away. Side slip pockets, full leg to the floor, machine washable. The matching top turns it into a suit."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Aquí la textura es la que carga con el trabajo. Un tejido plano a este precio se lee barato; este lleva un hilo flameado que recorre la tela, sostiene la pierna ancha en su sitio y evita que el azul marino se apague bajo la luz de la oficina. El talle sube alto, lo que alarga todo lo que queda por debajo, y la cintura elástica con cordón integra la comodidad en lugar de sacrificarla. Bolsillos de abertura laterales, pierna entera hasta el suelo, lavable a máquina. El top a juego lo convierte en traje."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "C'est la texture qui fait tout le travail ici. À ce prix, un tissage plat fait bon marché ; celui-ci a un fil flammé qui le traverse, tient la jambe large en forme et empêche le bleu marine de s'aplatir sous les néons du bureau. La taille est haute, ce qui allonge tout ce qui se trouve en dessous, et la taille élastiquée à cordon intègre le confort au lieu de le sacrifier. Poches italiennes, jambe entière jusqu'au sol, lavable en machine. Le haut assorti en fait un tailleur."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Die Struktur macht hier die eigentliche Arbeit. Eine glatte Webart wirkt in dieser Preisklasse billig; diese hier hat einen Flammgarn-Effekt, der das weite Bein in Form hält und verhindert, dass das Navy unter Bürobeleuchtung flach aussieht. Der Bund sitzt hoch, was alles darunter verlängert, und der elastische Tunnelzug baut den Komfort ein, statt ihn einzutauschen. Seitliche Eingrifftaschen, weites Bein bis zum Boden, maschinenwaschbar. Das passende Oberteil macht daraus einen Anzug."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Qui è la trama a fare il lavoro pesante. Un'armatura piatta, a questo prezzo, sembra economica; questa ha una fiammatura che la percorre, tiene in forma la gamba larga e impedisce al blu navy di spegnersi sotto le luci dell'ufficio. La vita è alta, il che allunga tutto quello che sta sotto, e la coulisse elasticizzata costruisce la comodità invece di sacrificarla. Tasche laterali a filo, gamba lunga fino a terra, lavabili in lavatrice. Il top coordinato li trasforma in un tailleur."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

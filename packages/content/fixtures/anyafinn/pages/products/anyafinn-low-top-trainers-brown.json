@@ -1,0 +1,298 @@
+{
+  "id": "ac76b791-54a5-53f4-bac9-0193006eec95",
+  "label": "Product — Low-Top Trainers - Brown",
+  "body": {
+    "_meta": {
+      "name": "Low-Top Trainers - Brown",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "ac76b791-54a5-53f4-bac9-0193006eec95",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-low-top-trainers-brown"
+          }
+        ]
+      }
+    },
+    "sku": "M0E20000000EMLC",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Low-Top Trainers - Brown"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Low-Top Trainers - Brown"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Zapatillas bajas - Marrón"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Baskets basses - Marron"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Low-Top-Sneaker - Braun"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Sneakers basse - Marrone"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 164.5,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 197.5,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 197.5,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Minimal brown low-top trainers"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Minimal brown low-top trainers"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Zapatillas bajas marrones minimalistas"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Baskets basses marron minimalistes"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Schlichte braune Low-Top-Sneaker"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Sneakers basse marroni minimaliste"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/082623_1",
+          "alt": "Low-Top Trainers - Brown — view 1",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/082623_2",
+          "alt": "Low-Top Trainers - Brown — view 2",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/082623_3",
+          "alt": "Low-Top Trainers - Brown — view 3",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/082623_4",
+          "alt": "Low-Top Trainers - Brown — view 4",
+          "width": 858,
+          "height": 1144
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Color"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Colour"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Color"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Couleur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Farbe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Colore"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Brown"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Brown"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Marrón"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Marron"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Braun"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Marrone"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "en-GB",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "es-ES",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "de-DE",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "it-IT",
+              "value": "EU 34–46"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["men", "men-shoes", "men-shoes-sneakers"],
+    "tags": ["trainers"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Minimal low-top trainers in a warm brown."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Minimal low-top trainers in a warm brown."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Zapatillas bajas minimalistas en un marrón cálido."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Des baskets basses minimalistes dans un marron chaud."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Schlichte Low-Top-Sneaker in warmem Braun."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Sneakers basse minimaliste in un marrone caldo."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

@@ -1,0 +1,308 @@
+{
+  "id": "0ec47773-51c5-5b79-b1b2-cce23266d1f8",
+  "label": "Product — Button Cardigan - Beige",
+  "body": {
+    "_meta": {
+      "name": "Button Cardigan - Beige",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "0ec47773-51c5-5b79-b1b2-cce23266d1f8",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-button-cardigan-beige"
+          }
+        ]
+      }
+    },
+    "sku": "M0E20000000E4N1",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Button Cardigan - Beige"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Button Cardigan - Beige"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Cárdigan con botones - Beige"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Cardigan boutonné - Beige"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Strickjacke mit Knöpfen - Beige"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Cardigan con bottoni - Beige"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 190.39,
+        "compareAtAmount": 223.99,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 228.44,
+        "compareAtAmount": 268.75,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 228.44,
+        "compareAtAmount": 268.75,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Soft beige button cardigan"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Soft beige button cardigan"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Cárdigan con botones beige suave"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Cardigan boutonné beige doux"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Strickjacke in sanftem Beige"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Cardigan con bottoni beige delicato"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080113_1",
+          "alt": "Button Cardigan - Beige — view 1",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080113_2",
+          "alt": "Button Cardigan - Beige — view 2",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080113_3",
+          "alt": "Button Cardigan - Beige — view 3",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080113_4",
+          "alt": "Button Cardigan - Beige — view 4",
+          "width": 858,
+          "height": 1144
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Color"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Colour"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Color"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Couleur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Farbe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Colore"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Beige"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Beige"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Beige"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Beige"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Beige"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Beige"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "34–58"
+            },
+            {
+              "locale": "en-GB",
+              "value": "34–58"
+            },
+            {
+              "locale": "es-ES",
+              "value": "34–58"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "34–58"
+            },
+            {
+              "locale": "de-DE",
+              "value": "34–58"
+            },
+            {
+              "locale": "it-IT",
+              "value": "34–58"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": [
+      "men",
+      "men-clothing",
+      "men-clothing-tops",
+      "sale",
+      "sale-men",
+      "sale-men-clothing"
+    ],
+    "tags": ["knitwear"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A buttoned cardigan in soft beige — a lighter alternative to a jacket."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A buttoned cardigan in soft beige — a lighter alternative to a jacket."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Un cárdigan con botones en beige suave, una alternativa más ligera a la chaqueta."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un cardigan boutonné beige doux, une alternative plus légère à la veste."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Eine Strickjacke mit Knöpfen in sanftem Beige – eine leichtere Alternative zur Jacke."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Un cardigan con bottoni in un beige delicato, un'alternativa più leggera alla giacca."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

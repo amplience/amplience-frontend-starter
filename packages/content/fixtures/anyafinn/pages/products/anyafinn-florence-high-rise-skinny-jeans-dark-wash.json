@@ -1,0 +1,530 @@
+{
+  "id": "dac7cc6a-0b7a-592c-b444-b11c05d22df2",
+  "label": "Product — Florence High Rise Skinny Jeans - Dark Wash",
+  "body": {
+    "_meta": {
+      "name": "Florence High Rise Skinny Jeans - Dark Wash",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "dac7cc6a-0b7a-592c-b444-b11c05d22df2",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-florence-high-rise-skinny-jeans-dark-wash"
+          }
+        ]
+      }
+    },
+    "sku": "AFDN001-08",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Florence High Rise Skinny Jeans - Dark Wash"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Florence High Rise Skinny Jeans - Dark Wash"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Vaqueros pitillo de tiro alto Florence - Lavado oscuro"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Jean skinny taille haute Florence - Délavage foncé"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Florence Skinny Jeans mit hohem Bund - Dunkle Waschung"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Jeans skinny a vita alta Florence - Lavaggio scuro"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 18.7,
+        "compareAtAmount": 22,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 22.52,
+        "compareAtAmount": 26.5,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 23.79,
+        "compareAtAmount": 27.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "High-rise skinny jeans"
+        },
+        {
+          "locale": "en-GB",
+          "value": "High-rise skinny jeans"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Vaqueros pitillo de tiro alto"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Jean skinny taille haute"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Skinny Jeans mit hohem Bund"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Jeans skinny a vita alta"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WHDXZ_SQ1_0000000073_DARK_WASH_MDf",
+          "alt": "Florence High Rise Skinny Jeans - Dark Wash",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "91% cotton, 7% polyester, 2% elastane"
+            },
+            {
+              "locale": "en-GB",
+              "value": "91% cotton, 7% polyester, 2% elastane"
+            },
+            {
+              "locale": "es-ES",
+              "value": "91 % algodón, 7 % poliéster, 2 % elastano"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "91 % coton, 7 % polyester, 2 % élasthanne"
+            },
+            {
+              "locale": "de-DE",
+              "value": "91 % Baumwolle, 7 % Polyester, 2 % Elasthan"
+            },
+            {
+              "locale": "it-IT",
+              "value": "91% cotone, 7% poliestere, 2% elastan"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Skinny, true to size"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Skinny, true to size"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Pitillo, talla normal"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Skinny, taille normalement"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Skinny, fällt normal aus"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Skinny, veste in taglia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Rise"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Rise"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tiro"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Taille"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Leibhöhe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vita"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "High rise"
+            },
+            {
+              "locale": "en-GB",
+              "value": "High rise"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tiro alto"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Taille haute"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Hoher Bund"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vita alta"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 8–24"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 8–24"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 8–24"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 8–24"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 8–24"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 8–24"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Season"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Season"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Temporada"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Saison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Saison"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Stagione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Otoño/Invierno"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Automne/Hiver"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herbst/Winter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Autunno/Inverno"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavable a máquina"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavable en machine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwaschbar"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavabile in lavatrice"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["women", "women-clothing-jeans", "sale", "sale-women", "sale-women-clothing"],
+    "tags": ["jeans", "denim", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A high rise keeps everything in place and a skinny leg keeps the line clean underneath boots or trainers alike. Dark wash denim with a touch of stretch so it moves rather than fighting you, five-pocket construction throughout. Sizes 8 to 24, machine washable."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A high rise keeps everything in place and a skinny leg keeps the line clean underneath boots or trainers alike. Dark wash denim with a touch of stretch so it moves rather than fighting you, five-pocket construction throughout. Sizes 8 to 24, machine washable."
+        },
+        {
+          "locale": "es-ES",
+          "value": "El tiro alto lo mantiene todo en su sitio y la pierna pitillo deja una línea limpia, tanto con botas como con zapatillas. Denim oscuro con un toque elástico para que se mueva contigo en lugar de pelearse, construcción de cinco bolsillos. Tallas de la 8 a la 24, lavable a máquina."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "La taille haute maintient tout en place et la jambe skinny garde une ligne nette, sous des bottes comme avec des baskets. Denim brut avec une touche de stretch pour qu'il bouge avec vous au lieu de vous contraindre, construction cinq poches. Tailles 8 à 24, lavable en machine."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Der hohe Bund hält alles an seinem Platz, und das schmale Bein sorgt für eine klare Linie – unter Stiefeln genauso wie zu Sneakern. Dunkler Denim mit etwas Stretch, damit er mitgeht statt gegen Sie zu arbeiten, durchgehend Five-Pocket-Verarbeitung. Größen 8 bis 24, maschinenwaschbar."
+        },
+        {
+          "locale": "it-IT",
+          "value": "La vita alta tiene tutto al suo posto e la gamba skinny mantiene la linea pulita, sotto gli stivali come con le sneakers. Denim scuro con un tocco di elasticità, così si muove con te invece di ostacolarti, costruzione a cinque tasche. Taglie dalla 8 alla 24, lavabili in lavatrice."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

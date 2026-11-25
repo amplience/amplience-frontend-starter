@@ -1,12 +1,12 @@
 /**
  * Story data for the product components, read from the real content fixtures.
  *
- * These are the same seven items `packages/content/fixtures/anyafinn/pages/
- * products/` seeds into a hub, so a story shows what the CMS actually holds —
- * including the awkward ones. `aurora-shelving` has no image and no price;
- * `mara-hand-woven-wool-throw` has a name long enough to break a card;
- * `verde-ceramic-planter` is discontinued. Hand-written story data drifts from
- * the fixtures and quietly stops covering those cases.
+ * A representative slice of the products `packages/content/fixtures/anyafinn/
+ * pages/products/` seeds into a hub — real commercetools data, so a story shows
+ * what the CMS actually holds: a four-shot gallery, single packshots, a sale
+ * price, a name long enough to stress a card, and a product with editorial
+ * slots. The catalogue has no sparse or discontinued products, so the stories
+ * for those states override a real product's fields rather than inventing one.
  *
  * The delivery bodies are localized (`{ values: [...] }`) because that is what
  * the Delivery API returns when no locale is requested — the content client
@@ -20,13 +20,13 @@
 
 import type { ContentMediaData, ResolvedProduct } from '@amplience/frontend-starter-types'
 
-import auroraLoungeChair from '../../../content/fixtures/anyafinn/pages/products/aurora-lounge-chair.json'
-import auroraShelving from '../../../content/fixtures/anyafinn/pages/products/aurora-shelving.json'
-import auroraSideTable from '../../../content/fixtures/anyafinn/pages/products/aurora-side-table.json'
-import lumenFloorLamp from '../../../content/fixtures/anyafinn/pages/products/lumen-floor-lamp.json'
-import maraWoolThrow from '../../../content/fixtures/anyafinn/pages/products/mara-hand-woven-wool-throw.json'
-import terraDiningTable from '../../../content/fixtures/anyafinn/pages/products/terra-dining-table.json'
-import verdePlanter from '../../../content/fixtures/anyafinn/pages/products/verde-ceramic-planter.json'
+import christmasTree from '../../../content/fixtures/anyafinn/pages/products/anyafinn-2ft-pre-lit-flocked-christmas-tree-with-burlap-base.json'
+import argyleCardigan from '../../../content/fixtures/anyafinn/pages/products/anyafinn-collared-argyle-cardigan-pink-burgundy.json'
+import embossedFloorLamp from '../../../content/fixtures/anyafinn/pages/products/anyafinn-embossed-floor-lamp.json'
+import suedeTrenchCoat from '../../../content/fixtures/anyafinn/pages/products/anyafinn-suede-trench-coat-khaki.json'
+import tailoredOvercoat from '../../../content/fixtures/anyafinn/pages/products/anyafinn-tailored-overcoat-brown.json'
+import terraCoffeeTable from '../../../content/fixtures/anyafinn/pages/products/anyafinn-terra-stone-effect-coffee-table.json'
+import funnelNeckJacket from '../../../content/fixtures/anyafinn/pages/products/anyafinn-water-resistant-funnel-neck-jacket-light-beige.json'
 
 /** The presentational shape the product components take. */
 export type StoryProduct = {
@@ -70,9 +70,8 @@ const isStatus = (v: unknown): v is NonNullable<StoryProduct['status']> =>
 
 /**
  * Normalise one fixture body. Typed through `unknown` rather than the JSON's
- * inferred shape because the seven files differ — `aurora-shelving` carries no
- * `images`, `price` or `attributes` at all, so a shared literal type would
- * have to be the union of all seven.
+ * inferred shape because the files differ — only some carry `slots` or a
+ * sale price — so a shared literal type would have to be their union.
  */
 const toStoryProduct = (
   fixture: unknown,
@@ -133,15 +132,15 @@ const toStoryProduct = (
   }
 }
 
-/** All seven fixture products, in catalogue (name) order. */
+/** The story products, in catalogue (name) order. */
 export const storyProducts: readonly StoryProduct[] = [
-  auroraLoungeChair,
-  auroraShelving,
-  auroraSideTable,
-  lumenFloorLamp,
-  maraWoolThrow,
-  terraDiningTable,
-  verdePlanter,
+  argyleCardigan,
+  christmasTree,
+  embossedFloorLamp,
+  funnelNeckJacket,
+  suedeTrenchCoat,
+  tailoredOvercoat,
+  terraCoffeeTable,
 ]
   .map((f) => toStoryProduct(f))
   .sort((a, b) => a.name.localeCompare(b.name))
@@ -156,13 +155,13 @@ export const storyProduct = (slug: string): StoryProduct => {
 /** The same product in a different locale, for the localization stories. */
 export const storyProductIn = (slug: string, locale: string, currency?: string): StoryProduct => {
   const source = [
-    auroraLoungeChair,
-    auroraShelving,
-    auroraSideTable,
-    lumenFloorLamp,
-    maraWoolThrow,
-    terraDiningTable,
-    verdePlanter,
+    argyleCardigan,
+    christmasTree,
+    embossedFloorLamp,
+    funnelNeckJacket,
+    suedeTrenchCoat,
+    tailoredOvercoat,
+    terraCoffeeTable,
   ].find((f) => toStoryProduct(f).slug === slug)
   if (source === undefined) throw new Error(`No product fixture with slug "${slug}"`)
   return toStoryProduct(source, locale, currency)

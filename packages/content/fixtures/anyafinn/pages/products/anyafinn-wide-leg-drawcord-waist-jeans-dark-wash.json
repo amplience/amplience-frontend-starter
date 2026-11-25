@@ -1,0 +1,527 @@
+{
+  "id": "87de4b3b-a6b5-5ae5-9d09-9ae0d654e70d",
+  "label": "Product — Wide Leg Drawcord Waist Jeans - Dark Wash",
+  "body": {
+    "_meta": {
+      "name": "Wide Leg Drawcord Waist Jeans - Dark Wash",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "87de4b3b-a6b5-5ae5-9d09-9ae0d654e70d",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-wide-leg-drawcord-waist-jeans-dark-wash"
+          }
+        ]
+      }
+    },
+    "sku": "WJPZY-08",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Wide Leg Drawcord Waist Jeans - Dark Wash"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Wide Leg Drawcord Waist Jeans - Dark Wash"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Vaqueros Anchos con Cintura de Cordón - Lavado Oscuro"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Jean large taille à cordon - Délavage foncé"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Wide-Leg-Jeans mit Tunnelzug - Dunkle Waschung"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Jeans a Gamba Larga con Vita a Coulisse - Lavaggio Scuro"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 25,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 30,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 31.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Wide-leg jeans with a drawcord waist"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Wide-leg jeans with a drawcord waist"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Vaqueros anchos con cintura de cordón"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Jean large à taille coulissée"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Weite Jeans mit Tunnelzugbund"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Jeans a gamba larga con vita a coulisse"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WJPZY_SQ1_0000000073_DARK_WASH_MDf",
+          "alt": "Wide Leg Drawcord Waist Jeans - Dark Wash",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "100% cotton"
+            },
+            {
+              "locale": "en-GB",
+              "value": "100% cotton"
+            },
+            {
+              "locale": "es-ES",
+              "value": "100 % algodón"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "100 % coton"
+            },
+            {
+              "locale": "de-DE",
+              "value": "100 % Baumwolle"
+            },
+            {
+              "locale": "it-IT",
+              "value": "100% cotone"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "True to size"
+            },
+            {
+              "locale": "en-GB",
+              "value": "True to size"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Talla normal"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Taille normalement"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Fällt normal aus"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Veste in taglia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Rise"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Rise"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tiro"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Taille"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Leibhöhe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vita"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Mid rise"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Mid rise"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tiro medio"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Taille mi-haute"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Mittlere Leibhöhe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vita media"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 8–20"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Season"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Season"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Temporada"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Saison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Saison"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Stagione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "All year"
+            },
+            {
+              "locale": "en-GB",
+              "value": "All year"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Todo el año"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Toute l'année"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Ganzjährig"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Tutto l'anno"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavable a máquina"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavable en machine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwaschbar"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavabile in lavatrice"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["women", "women-clothing-jeans"],
+    "tags": ["jeans", "denim", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A wide leg without the waistband battle. An elasticated waist and drawcord tie do the job a zip and button usually would, which means these sit comfortably through a long day and a large lunch alike. The mid rise lands at the natural waist and the leg falls straight and full from there, holding a long line in trainers or heels. Back patch pockets and side slips keep the detailing familiar. Pure cotton in a deep indigo wash."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A wide leg without the waistband battle. An elasticated waist and drawcord tie do the job a zip and button usually would, which means these sit comfortably through a long day and a large lunch alike. The mid rise lands at the natural waist and the leg falls straight and full from there, holding a long line in trainers or heels. Back patch pockets and side slips keep the detailing familiar. Pure cotton in a deep indigo wash."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Pierna ancha sin la batalla de la cintura. Una cintura elástica y un cordón de ajuste hacen el trabajo que suelen hacer una cremallera y un botón, lo que significa que se llevan cómodos en una jornada larga y en una comida copiosa por igual. El talle medio se asienta en la cintura natural y la pierna cae recta y holgada desde ahí, sosteniendo una línea larga con deportivas o con tacón. Bolsillos de plastrón detrás y de abertura en los lados para no perder los detalles de siempre. Algodón puro en un lavado índigo profundo."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Le jambe large, sans la bataille de la ceinture. Une taille élastiquée et un cordon de serrage font le travail qu'assurent d'habitude une fermeture éclair et un bouton, ce qui veut dire qu'il se porte confortablement une longue journée entière comme après un déjeuner copieux. La taille mi-haute se place à la taille naturelle et la jambe tombe droite et ample à partir de là, tenant une ligne longue en baskets comme en talons. Poches plaquées au dos et poches italiennes sur les côtés pour garder des détails familiers. Pur coton, délavage indigo profond."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Weites Bein, ohne den Kampf mit dem Bund. Gummizug und Tunnelzug übernehmen die Arbeit, die sonst Reißverschluss und Knopf machen – heißt: Diese Jeans sitzt bequem, durch einen langen Tag und ein großes Mittagessen gleichermaßen. Der mittelhohe Bund liegt in der natürlichen Taille, von dort fällt das Bein gerade und weit und hält eine lange Linie, in Sneakern wie in Heels. Aufgesetzte Gesäßtaschen und seitliche Eingriffe halten die Details vertraut. Reine Baumwolle in tiefer Indigo-Waschung."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Una gamba larga senza la battaglia con la cintura in vita. Vita elasticizzata e coulisse fanno il lavoro che di solito spetta a zip e bottone, il che vuol dire che restano comodi durante una giornata lunga e un pranzo abbondante. La vita media si assesta sul punto naturale e da lì la gamba scende diritta e piena, tenendo una linea allungata con sneaker o con i tacchi. Tasche applicate dietro e tasche laterali a filo per un dettaglio familiare. Puro cotone in un lavaggio indaco profondo."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

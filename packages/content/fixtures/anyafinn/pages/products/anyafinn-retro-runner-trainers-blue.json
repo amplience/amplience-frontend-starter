@@ -1,0 +1,365 @@
+{
+  "id": "c0683388-ea9a-59ce-a44c-72e0ae22c20e",
+  "label": "Product — Retro Runner Trainers - Blue",
+  "body": {
+    "_meta": {
+      "name": "Retro Runner Trainers - Blue",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "c0683388-ea9a-59ce-a44c-72e0ae22c20e",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-retro-runner-trainers-blue"
+          }
+        ]
+      }
+    },
+    "sku": "M0E20000000E582",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Retro Runner Trainers - Blue"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Retro Runner Trainers - Blue"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Zapatillas running retro - Azul"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Baskets running rétro - Bleu"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Retro-Runner-Sneaker - Blau"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Sneakers running rétro - Blu"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 176.16,
+        "compareAtAmount": 207.25,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 211.44,
+        "compareAtAmount": 248.75,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 211.44,
+        "compareAtAmount": 248.75,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Italian-made retro runners"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Italian-made retro runners"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Zapatillas running retro fabricadas en Italia"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Baskets running rétro fabriquées en Italie"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Retro-Runner aus Italien"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Sneakers running rétro prodotte in Italia"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080169_1",
+          "alt": "Retro Runner Trainers - Blue — view 1",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080169_2",
+          "alt": "Retro Runner Trainers - Blue — view 2",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080169_3",
+          "alt": "Retro Runner Trainers - Blue — view 3",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080169_4",
+          "alt": "Retro Runner Trainers - Blue — view 4",
+          "width": 858,
+          "height": 1144
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Color"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Colour"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Color"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Couleur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Farbe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Colore"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Blue"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Blue"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Azul"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Bleu"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Blau"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Blu"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "en-GB",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "es-ES",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "de-DE",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "it-IT",
+              "value": "EU 34–46"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Origin"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Origin"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Origen"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Origine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herkunft"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Origine"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Fabricado en Italia"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Fabriqué en Italie"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Hergestellt in Italien"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Prodotto in Italia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["men", "men-shoes", "men-shoes-sneakers", "sale", "sale-men", "sale-men-shoes"],
+    "tags": ["trainers"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Retro-shaped runners in blue, made in Italy."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Retro-shaped runners in blue, made in Italy."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Zapatillas running de línea retro en azul, fabricadas en Italia."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Des baskets running à la ligne rétro, en bleu, fabriquées en Italie."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Sneaker in Retro-Runner-Form in Blau – hergestellt in Italien."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Sneakers running dalla linea rétro in blu, prodotte in Italia."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

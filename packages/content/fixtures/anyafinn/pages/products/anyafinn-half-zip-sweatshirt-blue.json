@@ -1,0 +1,463 @@
+{
+  "id": "532450a0-8c21-5be9-82d7-9c665b7b6186",
+  "label": "Product — Half Zip Sweatshirt - Blue",
+  "body": {
+    "_meta": {
+      "name": "Half Zip Sweatshirt - Blue",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "532450a0-8c21-5be9-82d7-9c665b7b6186",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-half-zip-sweatshirt-blue"
+          }
+        ]
+      }
+    },
+    "sku": "AFHS006-08",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Half Zip Sweatshirt - Blue"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Half Zip Sweatshirt - Blue"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Sudadera con media cremallera - Azul"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Sweat demi-zip - Bleu"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Sweatshirt mit halbem Reißverschluss - Blau"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Felpa con mezza zip - Blu"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 25,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 30,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 31.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Relaxed half-zip sweatshirt"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Relaxed half-zip sweatshirt"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Sudadera holgada con media cremallera"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Sweat demi-zip à coupe ample"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Locker geschnittenes Half-Zip-Sweatshirt"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Felpa con mezza zip dal taglio comodo"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/X2C8F_SQ1_0000000020_BLUE_MDf",
+          "alt": "Half Zip Sweatshirt - Blue",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "60% cotton, 40% polyester"
+            },
+            {
+              "locale": "en-GB",
+              "value": "60% cotton, 40% polyester"
+            },
+            {
+              "locale": "es-ES",
+              "value": "60 % algodón, 40 % poliéster"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "60 % coton, 40 % polyester"
+            },
+            {
+              "locale": "de-DE",
+              "value": "60 % Baumwolle, 40 % Polyester"
+            },
+            {
+              "locale": "it-IT",
+              "value": "60% cotone, 40% poliestere"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Relaxed, true to size"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Relaxed, true to size"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte holgado, talla normal"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe décontractée, taille normalement"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Lockere Passform, fällt normal aus"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità comoda, veste in taglia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 8–22"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Season"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Season"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Temporada"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Saison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Saison"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Stagione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Otoño/Invierno"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Automne/Hiver"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herbst/Winter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Autunno/Inverno"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavable a máquina"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavable en machine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwaschbar"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavabile in lavatrice"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["women", "women-clothing", "women-clothing-tops"],
+    "tags": ["tops", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A jersey staple that does more than one job. The half zip and funnel collar let you decide how much neck you want covered, and the relaxed body leaves room for a long-sleeve tee underneath when the temperature drops. Ribbed cuffs and hem give it a finish rather than an edge that curls. Sizes 8 to 22, machine washable."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A jersey staple that does more than one job. The half zip and funnel collar let you decide how much neck you want covered, and the relaxed body leaves room for a long-sleeve tee underneath when the temperature drops. Ribbed cuffs and hem give it a finish rather than an edge that curls. Sizes 8 to 22, machine washable."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Un básico de punto que cumple más de una función. La media cremallera y el cuello chimenea te dejan decidir cuánto cuello cubrir, y el corte holgado deja sitio para una camiseta de manga larga debajo cuando bajan las temperaturas. Los puños y el bajo de canalé le dan un acabado en lugar de un borde que se enrolla. Tallas de la 8 a la 22, lavable a máquina."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un basique en jersey qui remplit plus d'une fonction. Le demi-zip et le col cheminée vous laissent choisir à quel point couvrir le cou, et la coupe ample laisse la place à un t-shirt à manches longues en dessous quand la température baisse. Les poignets et le bas côtelés lui donnent une vraie finition plutôt qu'un bord qui roulotte. Tailles 8 à 22, lavable en machine."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein Jersey-Klassiker, der mehr als eine Aufgabe erfüllt. Halber Reißverschluss und Stehkragen lassen Sie entscheiden, wie viel Hals bedeckt sein soll, und der lockere Schnitt lässt Platz für ein Langarmshirt darunter, wenn es kälter wird. Rippbündchen an Ärmeln und Saum geben ihm einen sauberen Abschluss statt einer Kante, die sich einrollt. Größen 8 bis 22, maschinenwaschbar."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Un classico in jersey che fa più di un lavoro. La mezza zip e il collo a imbuto ti lasciano decidere quanto coprire il collo, e il taglio comodo lascia spazio a una maglia a maniche lunghe sotto quando la temperatura scende. Polsini e fondo a costine gli danno una vera rifinitura invece di un bordo che si arrotola. Taglie dalla 8 alla 22, lavabile in lavatrice."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

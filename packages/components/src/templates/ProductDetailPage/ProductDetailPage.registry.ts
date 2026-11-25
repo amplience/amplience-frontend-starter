@@ -62,7 +62,7 @@ export const productMetadataFromSchema = (
 ) => {
   const social = schema.social
   const title = schema.title ?? schema.name
-  const description = schema.description ?? schema.shortDescription
+  const description = schema.shortDescription ?? schema.description
   const ogTitle = social?.title ?? title
   const ogDescription = social?.description ?? description
   // Social image wins; the lead product image is the natural fallback. Cap DI
@@ -135,6 +135,7 @@ export const productRegistryEntry: ComponentRegistryEntry<ProductSchema, Product
       ...(schema.shortDescription !== undefined && {
         shortDescription: schema.shortDescription,
       }),
+      ...(schema.description !== undefined && { description: schema.description }),
       ...(attributes !== undefined && attributes.length > 0 && { attributes }),
       ...(schema.brand !== undefined && { brand: schema.brand }),
       ...(schema.tags !== undefined && { tags: schema.tags }),

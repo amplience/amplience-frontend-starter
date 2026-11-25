@@ -1,0 +1,372 @@
+{
+  "id": "a2fca300-f978-556d-ad7c-530fca48bc1d",
+  "label": "Product — Leather Jacket - Beige",
+  "body": {
+    "_meta": {
+      "name": "Leather Jacket - Beige",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "a2fca300-f978-556d-ad7c-530fca48bc1d",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-leather-jacket-beige"
+          }
+        ]
+      }
+    },
+    "sku": "M0E20000000E4JR",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Leather Jacket - Beige"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Leather Jacket - Beige"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chaqueta de piel - Beige"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Veste en cuir - Beige"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Lederjacke - Beige"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Giacca in pelle - Beige"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 521.48,
+        "compareAtAmount": 613.5,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 625.81,
+        "compareAtAmount": 736.25,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 625.81,
+        "compareAtAmount": 736.25,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Italian-made collared leather jacket"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Italian-made collared leather jacket"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chaqueta de piel con cuello fabricada en Italia"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Veste en cuir à col fabriquée en Italie"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Lederjacke mit Kragen, hergestellt in Italien"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Giacca in pelle con colletto prodotta in Italia"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080105_1",
+          "alt": "Leather Jacket - Beige — view 1",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080105_2",
+          "alt": "Leather Jacket - Beige — view 2",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080105_3",
+          "alt": "Leather Jacket - Beige — view 3",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080105_4",
+          "alt": "Leather Jacket - Beige — view 4",
+          "width": 858,
+          "height": 1144
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Color"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Colour"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Color"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Couleur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Farbe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Colore"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Beige"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Beige"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Beige"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Beige"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Beige"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Beige"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "34–58"
+            },
+            {
+              "locale": "en-GB",
+              "value": "34–58"
+            },
+            {
+              "locale": "es-ES",
+              "value": "34–58"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "34–58"
+            },
+            {
+              "locale": "de-DE",
+              "value": "34–58"
+            },
+            {
+              "locale": "it-IT",
+              "value": "34–58"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Origin"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Origin"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Origen"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Origine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herkunft"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Origine"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Fabricado en Italia"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Fabriqué en Italie"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Hergestellt in Italien"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Prodotto in Italia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": [
+      "men",
+      "men-clothing",
+      "men-clothing-jackets",
+      "sale",
+      "sale-men",
+      "sale-men-clothing"
+    ],
+    "tags": ["jackets"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A beige leather jacket with a clean, collared shape, made in Italy."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A beige leather jacket with a clean, collared shape, made in Italy."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Una chaqueta de piel beige con cuello y líneas limpias, fabricada en Italia."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Une veste en cuir beige à col, aux lignes nettes, fabriquée en Italie."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Eine beige Lederjacke mit klarer Form und Kragen – hergestellt in Italien."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Una giacca in pelle beige con colletto e linee pulite, prodotta in Italia."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

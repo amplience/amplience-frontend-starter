@@ -1,0 +1,298 @@
+{
+  "id": "c1bf9a3a-d987-52c4-98d0-77671051b3db",
+  "label": "Product — Lace-Up Shoes - Grey",
+  "body": {
+    "_meta": {
+      "name": "Lace-Up Shoes - Grey",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "c1bf9a3a-d987-52c4-98d0-77671051b3db",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-lace-up-shoes-grey"
+          }
+        ]
+      }
+    },
+    "sku": "M0E20000000EMOT",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Lace-Up Shoes - Grey"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Lace-Up Shoes - Grey"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Zapatos con cordones - Gris"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Chaussures à lacets - Gris"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Schnürschuhe - Grau"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Scarpe stringate - Grigio"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 229.25,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 275,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 275,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Smart-casual grey lace-ups"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Smart-casual grey lace-ups"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Zapatos con cordones grises, smart casual"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Chaussures à lacets grises, chic décontracté"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Graue Schnürschuhe, elegant-lässig"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Scarpe stringate grigie, smart casual"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/082628_1",
+          "alt": "Lace-Up Shoes - Grey — view 1",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/082628_2",
+          "alt": "Lace-Up Shoes - Grey — view 2",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/082628_3",
+          "alt": "Lace-Up Shoes - Grey — view 3",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/082628_4",
+          "alt": "Lace-Up Shoes - Grey — view 4",
+          "width": 858,
+          "height": 1144
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Color"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Colour"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Color"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Couleur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Farbe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Colore"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Grey"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Grey"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Gris"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Gris"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Grau"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Grigio"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "en-GB",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "es-ES",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "de-DE",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "it-IT",
+              "value": "EU 34–46"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["men", "men-shoes", "men-shoes-lace-up-shoes"],
+    "tags": ["shoes"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Grey lace-up shoes that sit between smart and casual."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Grey lace-up shoes that sit between smart and casual."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Zapatos con cordones grises, a medio camino entre lo formal y lo informal."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Des chaussures à lacets grises, entre habillé et décontracté."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Graue Schnürschuhe zwischen elegant und lässig."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Scarpe stringate grigie, a metà tra eleganti e casual."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

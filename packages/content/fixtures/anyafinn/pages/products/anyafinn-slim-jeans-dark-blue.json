@@ -1,0 +1,298 @@
+{
+  "id": "1cb8ce35-6ce2-5092-84a4-fc6a8c21dfc1",
+  "label": "Product — Slim Jeans - Dark Blue",
+  "body": {
+    "_meta": {
+      "name": "Slim Jeans - Dark Blue",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "1cb8ce35-6ce2-5092-84a4-fc6a8c21dfc1",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-slim-jeans-dark-blue"
+          }
+        ]
+      }
+    },
+    "sku": "M0E20000000ELE4",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Slim Jeans - Dark Blue"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Slim Jeans - Dark Blue"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Vaqueros slim - Azul oscuro"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Jean slim - Bleu foncé"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Slim Jeans - Dunkelblau"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Jeans slim - Blu scuro"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 186.5,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 223.75,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 223.75,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Dark-wash slim jeans"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Dark-wash slim jeans"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Vaqueros slim lavado oscuro"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Jean slim brut"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Dunkle Slim Jeans"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Jeans slim lavaggio scuro"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/082380_1",
+          "alt": "Slim Jeans - Dark Blue — view 1",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/082380_2",
+          "alt": "Slim Jeans - Dark Blue — view 2",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/082380_3",
+          "alt": "Slim Jeans - Dark Blue — view 3",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/082380_4",
+          "alt": "Slim Jeans - Dark Blue — view 4",
+          "width": 858,
+          "height": 1144
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Color"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Colour"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Color"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Couleur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Farbe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Colore"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Dark blue"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Dark blue"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Azul oscuro"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Bleu foncé"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Dunkelblau"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Blu scuro"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "24–42"
+            },
+            {
+              "locale": "en-GB",
+              "value": "24–42"
+            },
+            {
+              "locale": "es-ES",
+              "value": "24–42"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "24–42"
+            },
+            {
+              "locale": "de-DE",
+              "value": "24–42"
+            },
+            {
+              "locale": "it-IT",
+              "value": "24–42"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["men", "men-clothing", "men-clothing-jeans"],
+    "tags": ["jeans"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Dark wash slim jeans that dress up as easily as they dress down."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Dark wash slim jeans that dress up as easily as they dress down."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Vaqueros slim oscuros que se arreglan con la misma facilidad con la que se llevan informales."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un jean slim brut qui s'habille aussi facilement qu'il se porte décontracté."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Dunkle Slim Jeans, die sich ebenso leicht schick wie lässig kombinieren lassen."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Jeans slim scuri che si vestono eleganti con la stessa facilità con cui si portano casual."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

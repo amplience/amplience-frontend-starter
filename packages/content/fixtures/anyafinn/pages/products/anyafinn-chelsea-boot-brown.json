@@ -1,0 +1,537 @@
+{
+  "id": "feafeed7-b84d-5434-813b-1d01d070e215",
+  "label": "Product — Chelsea Boot - Brown",
+  "body": {
+    "_meta": {
+      "name": "Chelsea Boot - Brown",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "feafeed7-b84d-5434-813b-1d01d070e215",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-chelsea-boot-brown"
+          }
+        ]
+      }
+    },
+    "sku": "AFBT001-3",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Chelsea Boot - Brown"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Chelsea Boot - Brown"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Botín Chelsea - Marrón"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Bottine Chelsea - Marron"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Chelsea-Boot - Braun"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Stivaletto Chelsea - Marrone"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 25.5,
+        "compareAtAmount": 30,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 30.6,
+        "compareAtAmount": 36,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 33.14,
+        "compareAtAmount": 38.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Classic Chelsea ankle boots"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Classic Chelsea ankle boots"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Botines Chelsea clásicos"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Bottines Chelsea classiques"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Klassische Chelsea-Stiefeletten"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Stivaletti Chelsea classici"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WHN0S_SQ1_0000000143_BROWN_MDf",
+          "alt": "Chelsea Boot - Brown",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Synthetic upper"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Synthetic upper"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Exterior sintético"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tige synthétique"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Obermaterial aus Synthetik"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Tomaia sintetica"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Heel"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Heel"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tacón"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Talon"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Absatz"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Tacco"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Flat"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Flat"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Plano"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Plat"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Flach"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Piatto"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Shaft height"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Shaft height"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Altura de caña"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Hauteur de tige"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Schafthöhe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Altezza gambale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Ankle"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Ankle"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Al tobillo"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Cheville"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Knöchelhoch"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Alla caviglia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fastening"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fastening"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cierre"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Fermeture"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Verschluss"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Chiusura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Pull-on, rear pull tab"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Pull-on, rear pull tab"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Sin cierre, lengüeta trasera"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "À enfiler, tirette arrière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zum Hineinschlüpfen, Zuglasche hinten"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Senza chiusura, linguetta posteriore"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 3–8"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 3–8"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 3–8"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 3–8"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 3–8"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 3–8"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Wipe clean"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Wipe clean"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Limpiar con un paño húmedo"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Nettoyer avec un chiffon humide"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Feucht abwischen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Pulire con un panno umido"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": [
+      "women",
+      "women-shoes",
+      "women-shoes-boots",
+      "sale",
+      "sale-women",
+      "sale-women-shoes"
+    ],
+    "tags": ["boots", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "The Chelsea boot stays useful precisely because it doesn't try to be more than it is: a clean round toe, elastic side panels, a pull tab at the back. Flat sole for actual walking, not just standing around in. UK sizes 3 to 8, wipe clean."
+        },
+        {
+          "locale": "en-GB",
+          "value": "The Chelsea boot stays useful precisely because it doesn't try to be more than it is: a clean round toe, elastic side panels, a pull tab at the back. Flat sole for actual walking, not just standing around in. UK sizes 3 to 8, wipe clean."
+        },
+        {
+          "locale": "es-ES",
+          "value": "El botín Chelsea sigue siendo útil precisamente porque no intenta ser más de lo que es: una puntera redonda y limpia, paneles laterales elásticos y una lengüeta trasera. Suela plana para caminar de verdad, no solo para estar de pie. Tallas UK de la 3 a la 8, se limpia con un paño."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "La bottine Chelsea reste utile justement parce qu'elle ne cherche pas à être plus que ce qu'elle est : un bout rond net, des empiècements élastiques sur les côtés, une tirette à l'arrière. Semelle plate pour vraiment marcher, pas seulement pour rester debout. Pointures UK 3 à 8, se nettoie d'un coup de chiffon."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Der Chelsea-Boot bleibt gerade deshalb so nützlich, weil er nicht mehr sein will, als er ist: eine klare runde Zehe, elastische Seiteneinsätze, eine Zuglasche hinten. Flache Sohle zum richtigen Gehen, nicht nur zum Herumstehen. UK-Größen 3 bis 8, feucht abwischbar."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Lo stivaletto Chelsea resta utile proprio perché non cerca di essere più di quello che è: punta tonda pulita, inserti elastici laterali, linguetta sul retro. Suola piatta per camminare davvero, non solo per stare in piedi. Taglie UK dalla 3 alla 8, si pulisce con un panno."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

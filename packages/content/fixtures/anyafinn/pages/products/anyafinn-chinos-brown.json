@@ -1,0 +1,362 @@
+{
+  "id": "f9ba10d4-63d3-5bf9-bbc3-4359adc000d7",
+  "label": "Product — Chinos - Brown",
+  "body": {
+    "_meta": {
+      "name": "Chinos - Brown",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "f9ba10d4-63d3-5bf9-bbc3-4359adc000d7",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-chinos-brown"
+          }
+        ]
+      }
+    },
+    "sku": "M0E20000000E03K",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Chinos - Brown"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Chinos - Brown"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chinos - Marrón"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Chino - Marron"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Chinohose - Braun"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Chino - Marrone"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 171.99,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 206.25,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 206.25,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Slim tapered chinos"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Slim tapered chinos"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chinos slim entallados"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Chino fuselé coupe slim"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Schmal zulaufende Chinohose"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Chino slim affusolati"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/079479_1",
+          "alt": "Chinos - Brown — view 1",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/079479_2",
+          "alt": "Chinos - Brown — view 2",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/079479_3",
+          "alt": "Chinos - Brown — view 3",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/079479_4",
+          "alt": "Chinos - Brown — view 4",
+          "width": 858,
+          "height": 1144
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Color"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Colour"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Color"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Couleur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Farbe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Colore"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Brown"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Brown"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Marrón"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Marron"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Braun"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Marrone"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "34–58"
+            },
+            {
+              "locale": "en-GB",
+              "value": "34–58"
+            },
+            {
+              "locale": "es-ES",
+              "value": "34–58"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "34–58"
+            },
+            {
+              "locale": "de-DE",
+              "value": "34–58"
+            },
+            {
+              "locale": "it-IT",
+              "value": "34–58"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Origin"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Origin"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Origen"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Origine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herkunft"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Origine"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Fabricado en Italia"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Fabriqué en Italie"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Hergestellt in Italien"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Prodotto in Italia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["men", "men-clothing", "men-clothing-trousers"],
+    "tags": ["trousers"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Brown chinos with a slim, tapered leg, made in Italy."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Brown chinos with a slim, tapered leg, made in Italy."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chinos marrones de pierna estrecha y entallada, fabricados en Italia."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un chino marron à jambe fine et fuselée, fabriqué en Italie."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Braune Chinohose mit schmalem, zulaufendem Bein – hergestellt in Italien."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Chino marroni con gamba slim e affusolata, prodotti in Italia."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

@@ -17,7 +17,15 @@
         "items": [
           {
             "label": "🛍️ Product",
-            "pointers": ["/sku", "/name", "/brand", "/prices", "/shortDescription", "/status"]
+            "pointers": [
+              "/sku",
+              "/name",
+              "/brand",
+              "/prices",
+              "/shortDescription",
+              "/description",
+              "/status"
+            ]
           },
           {
             "label": "🖼️ Media",
@@ -37,14 +45,7 @@
           },
           {
             "label": "⚙️ Metadata",
-            "pointers": [
-              "/title",
-              "/description",
-              "/keywords",
-              "/canonicalUrl",
-              "/robots",
-              "/social"
-            ]
+            "pointers": ["/title", "/keywords", "/canonicalUrl", "/robots", "/social"]
           }
         ]
       }
@@ -137,7 +138,7 @@
         },
         {
           "title": "Short Description",
-          "description": "A sentence or two shown on the product page and in cards. Longer copy belongs in the Content tab."
+          "description": "A short phrase shown on the product page and in cards. Longer copy belongs in the Content tab."
         }
       ],
       "properties": {
@@ -290,9 +291,27 @@
     "description": {
       "allOf": [
         {
-          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/description"
+          "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        },
+        {
+          "title": "Description",
+          "description": "The full product description, shown on the product page below the short description. Never shown on cards."
         }
-      ]
+      ],
+      "properties": {
+        "values": {
+          "items": {
+            "properties": {
+              "value": {
+                "type": "string",
+                "title": "Description",
+                "description": "The full product description, shown on the product page.",
+                "ui:component": "text-area"
+              }
+            }
+          }
+        }
+      }
     },
     "keywords": {
       "allOf": [
@@ -315,6 +334,7 @@
     "brand",
     "prices",
     "shortDescription",
+    "description",
     "status",
     "images",
     "attributes",
@@ -322,7 +342,6 @@
     "tags",
     "slots",
     "title",
-    "description",
     "keywords",
     "social",
     "canonicalUrl",

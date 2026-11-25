@@ -76,9 +76,8 @@ export type ProductCardProps = {
  * hard target on touch.
  *
  * Every visual element is optional except the name: a product with no image,
- * no price and no description still renders as a legible card. That is the
- * `coming-soon` case, and it is a fixture (`aurora-shelving`) rather than a
- * hypothetical.
+ * no price and no description still renders as a legible card — the
+ * `coming-soon` case.
  *
  *   <ProductCard name="Aurora Lounge Chair" href="/products/aurora-lounge-chair"
  *                price={{ amount: 749, currencyCode: 'GBP' }} media={…} />
@@ -116,8 +115,7 @@ export function ProductCard({
               {...media}
               {...mediaLoadingProps(loadPriority)}
               {...(sizes !== undefined && { sizes })}
-              {...(styles.image !== undefined && { className: styles.image })}
-              className="Image"
+              className={clsx(styles.image, 'Image')}
             />
           )}
           {status !== 'active' && (

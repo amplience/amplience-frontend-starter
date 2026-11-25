@@ -1,0 +1,463 @@
+{
+  "id": "195cbd45-4c1f-5437-83d4-89d62b041276",
+  "label": "Product — Crew Neck Stitch Interest Jumper - Green",
+  "body": {
+    "_meta": {
+      "name": "Crew Neck Stitch Interest Jumper - Green",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "195cbd45-4c1f-5437-83d4-89d62b041276",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-crew-neck-stitch-interest-jumper-green"
+          }
+        ]
+      }
+    },
+    "sku": "AFKN008-08",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Crew Neck Stitch Interest Jumper - Green"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Crew Neck Stitch Interest Jumper - Green"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Jersey de cuello redondo con punto texturizado - Verde"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pull col rond à mailles fantaisie - Vert"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Rundhalspullover mit Strukturstrick - Grün"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Maglione girocollo con punto fantasia - Verde"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 20,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 24,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 25.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Stitch-detail crew neck jumper"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Stitch-detail crew neck jumper"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Jersey de cuello redondo con detalles de punto"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pull col rond à détails de mailles"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Rundhalspullover mit Strickdetails"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Maglione girocollo con dettagli a maglia"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WW3XR_SQ1_0000000029_MULTI_MDf",
+          "alt": "Crew Neck Stitch Interest Jumper - Green",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "56% viscose, 23% polyamide, 21% polyester"
+            },
+            {
+              "locale": "en-GB",
+              "value": "56% viscose, 23% polyamide, 21% polyester"
+            },
+            {
+              "locale": "es-ES",
+              "value": "56 % viscosa, 23 % poliamida, 21 % poliéster"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "56 % viscose, 23 % polyamide, 21 % polyester"
+            },
+            {
+              "locale": "de-DE",
+              "value": "56 % Viskose, 23 % Polyamid, 21 % Polyester"
+            },
+            {
+              "locale": "it-IT",
+              "value": "56% viscosa, 23% poliammide, 21% poliestere"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte regular, talla normal"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe classique, taille normalement"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Normale Passform, fällt normal aus"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità regolare, veste in taglia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 8–22"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Season"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Season"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Temporada"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Saison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Saison"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Stagione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Otoño/Invierno"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Automne/Hiver"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herbst/Winter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Autunno/Inverno"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavable a máquina"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavable en machine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwaschbar"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavabile in lavatrice"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["women", "women-clothing", "women-clothing-knitwear"],
+    "tags": ["knitwear", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Vertical stitch detailing gives a plain crew neck something to look at without turning it into a statement piece. Fine gauge knit with a ribbed collar, cuffs and hem for a clean finish. Sizes 8 to 22, machine washable."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Vertical stitch detailing gives a plain crew neck something to look at without turning it into a statement piece. Fine gauge knit with a ribbed collar, cuffs and hem for a clean finish. Sizes 8 to 22, machine washable."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Los detalles de punto vertical dan a un sencillo jersey de cuello redondo algo que mirar, sin convertirlo en una prenda protagonista. Punto fino con cuello, puños y bajo de canalé para un acabado limpio. Tallas de la 8 a la 22, lavable a máquina."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Des détails de mailles verticales donnent du relief à un simple pull col rond, sans en faire une pièce forte. Maille fine avec col, poignets et bas côtelés pour une finition nette. Tailles 8 à 22, lavable en machine."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Vertikale Strickdetails geben einem schlichten Rundhalspullover etwas fürs Auge, ohne ihn zum Statement-Teil zu machen. Feiner Strick mit Rippbündchen an Kragen, Ärmeln und Saum für einen sauberen Abschluss. Größen 8 bis 22, maschinenwaschbar."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Le lavorazioni verticali danno a un semplice girocollo qualcosa da guardare, senza trasformarlo in un capo protagonista. Maglia fine con collo, polsini e fondo a costine per una finitura pulita. Taglie dalla 8 alla 22, lavabile in lavatrice."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

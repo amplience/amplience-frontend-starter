@@ -120,7 +120,7 @@ describe('ProductDetailPage — status', () => {
 
 describe('ProductDetailPage — sparse data', () => {
   it('renders with nothing but a name', () => {
-    // `aurora-shelving`: no price, no images, no attributes, no description.
+    // A coming-soon product: no price, no images, no attributes, no description.
     const { container } = render(<ProductDetailPage name="Aurora Shelving" />)
     expect(screen.getByRole('heading', { level: 1 })).toBeTruthy()
     expect(container.querySelector('data')).toBeNull()

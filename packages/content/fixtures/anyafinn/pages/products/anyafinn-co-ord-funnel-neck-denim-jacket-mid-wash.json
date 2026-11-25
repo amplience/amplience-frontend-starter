@@ -1,0 +1,463 @@
+{
+  "id": "44f7015f-29c5-5d66-8d2e-47ea11d318de",
+  "label": "Product — Co-Ord Funnel Neck Denim Jacket - Mid Wash",
+  "body": {
+    "_meta": {
+      "name": "Co-Ord Funnel Neck Denim Jacket - Mid Wash",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "44f7015f-29c5-5d66-8d2e-47ea11d318de",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-co-ord-funnel-neck-denim-jacket-mid-wash"
+          }
+        ]
+      }
+    },
+    "sku": "X5GYG-08",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Co-Ord Funnel Neck Denim Jacket - Mid Wash"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Co-Ord Funnel Neck Denim Jacket - Mid Wash"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chaqueta Vaquera Conjuntada con Cuello Chimenea - Lavado Medio"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Veste en jean coordonnée col cheminée - Délavage moyen"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Co-Ord Jeansjacke mit Stehkragen - Mittlere Waschung"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Giacca in Denim Coordinata con Collo a Imbuto - Lavaggio Medio"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 50,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 60,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 63.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Funnel-neck denim jacket, co-ord ready"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Funnel-neck denim jacket, co-ord ready"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chaqueta vaquera con cuello chimenea, para conjuntar"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Veste en jean col cheminée, à coordonner"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Jeansjacke mit Stehkragen, als Co-ord kombinierbar"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Giacca di jeans con collo a imbuto, da coordinare"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/X5GYG_SQ1_0000000265_MID_WASH_MDf",
+          "alt": "Co-Ord Funnel Neck Denim Jacket - Mid Wash",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "100% cotton denim"
+            },
+            {
+              "locale": "en-GB",
+              "value": "100% cotton denim"
+            },
+            {
+              "locale": "es-ES",
+              "value": "100 % denim de algodón"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "100 % denim de coton"
+            },
+            {
+              "locale": "de-DE",
+              "value": "100 % Baumwoll-Denim"
+            },
+            {
+              "locale": "it-IT",
+              "value": "100% denim di cotone"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte regular, talla normal"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe classique, taille normalement"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Normale Passform, fällt normal aus"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità regolare, veste in taglia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 8–20"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Season"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Season"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Temporada"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Saison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Saison"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Stagione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Spring to autumn"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Spring to autumn"
+            },
+            {
+              "locale": "es-ES",
+              "value": "De primavera a otoño"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Du printemps à l'automne"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Frühling bis Herbst"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Dalla primavera all'autunno"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavable a máquina"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavable en machine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwaschbar"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavabile in lavatrice"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["women", "women-clothing", "women-clothing-jackets"],
+    "tags": ["jackets", "denim", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Bought alone it's a good denim jacket; bought with its matching jeans it's an outfit you don't have to think about. The funnel neck is what places it now rather than 1985 - no collar, just a clean standing neckline above a press-stud placket. A tie at the waist lets you choose between structured and relaxed, and the oversized patch pockets are deep enough to justify themselves. Mid-wash cotton denim, machine washable. Coordinating jeans sold separately under item X5GYH."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Bought alone it's a good denim jacket; bought with its matching jeans it's an outfit you don't have to think about. The funnel neck is what places it now rather than 1985 - no collar, just a clean standing neckline above a press-stud placket. A tie at the waist lets you choose between structured and relaxed, and the oversized patch pockets are deep enough to justify themselves. Mid-wash cotton denim, machine washable. Coordinating jeans sold separately under item X5GYH."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Por separado es una buena chaqueta vaquera; con sus vaqueros a juego es un look que no hay ni que pensar. El cuello chimenea es lo que la sitúa ahora y no en 1985: sin solapas, solo un escote alto y limpio sobre una tapeta de botones a presión. Un lazo en la cintura te deja elegir entre estructurada y relajada, y los bolsillos de plastrón oversize son lo bastante profundos para justificarse. Denim de algodón en lavado medio, lavable a máquina. Vaqueros a juego a la venta por separado, item X5GYH."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Achetée seule, c'est une bonne veste en jean ; achetée avec son jean assorti, c'est une tenue sur laquelle on n'a plus à réfléchir. Le col cheminée est ce qui l'ancre aujourd'hui plutôt qu'en 1985 : pas de col chemise, juste une encolure montante nette au-dessus d'une patte à boutons-pression. Un lien à la taille laisse choisir entre structuré et décontracté, et les poches plaquées oversize sont assez profondes pour se justifier. Denim de coton délavage moyen, lavable en machine. Jean coordonné vendu séparément : item X5GYH."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Einzeln gekauft ist sie eine gute Jeansjacke; zusammen mit der passenden Jeans ist sie ein Outfit, über das Sie nicht mehr nachdenken müssen. Der Stehkragen verortet sie im Heute und nicht in 1985 – kein Kragen, nur eine klare, stehende Halslinie über einer Druckknopfleiste. Ein Bindeband in der Taille lässt Ihnen die Wahl zwischen strukturiert und lässig, und die übergroßen Aufsatztaschen sind tief genug, um sich zu rechtfertigen. Baumwoll-Denim in mittlerer Waschung, maschinenwaschbar. Passende Jeans separat erhältlich unter item X5GYH."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Comprata da sola è una buona giacca di jeans; comprata con i suoi jeans coordinati è un outfit su cui non devi pensare. Il collo a imbuto è ciò che la colloca oggi e non nel 1985: nessun bavero, solo una scollatura pulita che sale sopra un'abbottonatura a bottoni automatici. Un laccio in vita ti fa scegliere tra strutturata e morbida, e le tasche applicate oversize sono profonde abbastanza da giustificarsi. Denim di cotone in lavaggio medio, lavabile in lavatrice. Jeans coordinati venduti separatamente, item X5GYH."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}
