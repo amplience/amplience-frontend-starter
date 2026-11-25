@@ -1,0 +1,20 @@
+{
+  "id": "75e63a79-3138-542e-a1a4-5168be6a3ee9",
+  "label": "Product — Suede Trench Coat - Khaki — main slot",
+  "body": {
+    "_meta": {
+      "name": "Product — Suede Trench Coat - Khaki — main slot",
+      "schema": "https://quadratic.amplience.com/v2/slots/slot",
+      "deliveryId": "75e63a79-3138-542e-a1a4-5168be6a3ee9"
+    },
+    "components": [
+      {
+        "id": "fed696f1-2480-5e3d-be35-51bfeb3e807c",
+        "contentType": "https://quadratic.amplience.com/v2/content/markdown-block",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      }
+    ]
+  }
+}

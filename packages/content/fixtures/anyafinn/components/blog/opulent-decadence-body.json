@@ -32,22 +32,22 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Shop the Midi Wrap Dress"
+              "value": "Shop the Suede Trench Coat"
             },
             {
               "locale": "fr-FR",
-              "value": "Voir la robe portefeuille midi"
+              "value": "Voir le trench en daim"
             },
             {
               "locale": "de-DE",
-              "value": "Zum Midi-Wickelkleid"
+              "value": "Zum Trenchcoat aus Veloursleder"
             }
           ],
           "_meta": {
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/products/midi-wrap-dress",
+        "href": "/products/anyafinn-suede-trench-coat-khaki",
         "variant": "outlined",
         "color": "black"
       }

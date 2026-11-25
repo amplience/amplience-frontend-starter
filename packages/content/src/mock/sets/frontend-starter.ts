@@ -99,6 +99,7 @@ import homeMediaCard2 from '../../../fixtures/frontend-starter/components/home-m
 import homeMediaCard3 from '../../../fixtures/frontend-starter/components/home-media-card-3.json' with { type: 'json' }
 import homeMediaCard4 from '../../../fixtures/frontend-starter/components/home-media-card-4.json' with { type: 'json' }
 import homeMediaCard5 from '../../../fixtures/frontend-starter/components/home-media-card-5.json' with { type: 'json' }
+import homeMerchCarousel from '../../../fixtures/frontend-starter/components/home-merch-carousel.json' with { type: 'json' }
 import mediaVideoAmbient from '../../../fixtures/frontend-starter/components/media/video-ambient.json' with { type: 'json' }
 import mediaVideoPlayer from '../../../fixtures/frontend-starter/components/media/video-player.json' with { type: 'json' }
 import notFoundHero from '../../../fixtures/frontend-starter/components/not-found-hero.json' with { type: 'json' }
@@ -208,6 +209,7 @@ const fixtures: readonly EnrichedContentItem[] = [
   homeMediaCard3,
   homeMediaCard4,
   homeMediaCard5,
+  homeMerchCarousel,
   // Standalone video examples — not placed on a page; drop them into a slot
   // to see them rendered.
   mediaVideoPlayer,

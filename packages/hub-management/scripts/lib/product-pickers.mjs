@@ -5,16 +5,26 @@
  * Driven by the hub's entry in amplience.config.json:
  *
  *   "commercetools": { "projectKey", "clientId", "clientSecret", "region"? }
- *       Seeds the eComm Toolkit extension with these credentials and gives the
- *       product carousel's `products` field the toolkit picker. Without it the
- *       field stays a plain list of SKUs. The secret reaches editors'
- *       browsers (the toolkit calls commercetools from there), so use an API
- *       client that can only read published products and categories.
+ *       Seeds the commercetools eComm Toolkit extension with these credentials,
+ *       for whichever carousels use it (see `mainPim` and `multiPimDemo`).
+ *       The secret reaches editors' browsers (the toolkit calls commercetools
+ *       from there), so use an API client that can only read published
+ *       products and categories.
+ *
+ *   "mainPim": "cms" | "commercetools"
+ *       The hub's main product source — which picker the product carousel
+ *       gets. Same values as a site's PRODUCT_SOURCE. Without it, commercetools
+ *       when the hub has commercetools settings, and the CMS otherwise.
+ *
+ * Every hub is seeded with the Amplience PIM extension: it needs no
+ * credentials, because it reads the hub's own Product items as the signed-in
+ * editor. It stores SKUs, which is what the `cms` product source reads.
  *
  *   "multiPimDemo": true
  *       Registers the Multi-PIM Product Carousel content type — a demo tool
  *       for hubs whose sites use different product sources. Off by default,
- *       so a real client's hub only ever has the one carousel.
+ *       so a real client's hub only ever has the one carousel, and ignored on
+ *       a hub with only one PIM available, where it would hold a single list.
  *
  * The multi-PIM *schema* is always seeded (schemas are invisible to editors
  * and the content-blocks palette lists it); only its content type is gated.
@@ -30,16 +40,28 @@ export const MULTI_PIM_CONTENT_TYPE_FILE = 'content_multi-pim-product-carousel.j
 /** commercetools' own region default, which Quadratic 1.0's projects use. */
 const DEFAULT_REGION = 'europe-west1.gcp'
 
-/** The toolkit's product-picker editor: stores product ids as strings. */
-const ECOMM_TOOLKIT_PICKER = {
-  name: 'ecomm-toolkit',
+/**
+ * A toolkit product-picker editor, which stores product references as strings.
+ * `name` is the extension's: one per product source, defined in extensions/.
+ */
+const toolkitPicker = (name) => ({
+  name,
   params: {
     label: 'Search by keyword or category',
     view: 'product',
     data: 'product',
     type: 'strings',
   },
-}
+})
+
+/** Stores commercetools product ids. */
+const COMMERCETOOLS_PICKER = toolkitPicker('ecomm-toolkit-commercetools')
+
+/** Stores SKUs of Product items authored in Amplience. */
+const AMPLIENCE_PICKER = toolkitPicker('ecomm-toolkit-amplience')
+
+/** The product sources a hub can name as its main one — PRODUCT_SOURCE's values. */
+export const PRODUCT_SOURCES = ['cms', 'commercetools']
 
 /**
  * The hub's commercetools settings as `${commercetools:…}` token values, or
@@ -61,35 +83,72 @@ export const commercetoolsSettings = (hubEntry) => {
   }
 }
 
+/**
+ * The hub's main product source: its `mainPim`, or — when it doesn't name one —
+ * commercetools if it has commercetools settings and the CMS otherwise. Throws
+ * on a value that isn't a product source, or on commercetools without
+ * settings, rather than quietly seeding the other picker.
+ */
+export const mainPim = (hubEntry) => {
+  const hasCommercetools = commercetoolsSettings(hubEntry) !== undefined
+  const pim = hubEntry?.mainPim ?? (hasCommercetools ? 'commercetools' : 'cms')
+  if (!PRODUCT_SOURCES.includes(pim)) {
+    throw new Error(
+      `"mainPim": "${pim}" isn't a product source. Use ${PRODUCT_SOURCES.map((p) => `"${p}"`).join(' or ')}.`,
+    )
+  }
+  if (pim === 'commercetools' && !hasCommercetools) {
+    throw new Error(
+      `"mainPim": "commercetools" needs a complete "commercetools" block for this hub in amplience.config.json.`,
+    )
+  }
+  return pim
+}
+
 /** Whether an extension definition needs commercetools settings to resolve. */
 export const needsCommercetools = (definitionText) => definitionText.includes('${commercetools:')
 
-/** Whether this hub registers a content-type file. */
+/**
+ * The product sources this hub can pick from: the CMS always (the Amplience
+ * PIM needs no credentials), and commercetools when the hub has its settings.
+ */
+export const availablePims = (hubEntry) =>
+  PRODUCT_SOURCES.filter((pim) => pim === 'cms' || commercetoolsSettings(hubEntry) !== undefined)
+
+/**
+ * Whether this hub registers a content-type file. The multi-PIM carousel needs
+ * the hub to opt in *and* to have more than one PIM to show lists for.
+ */
 export const seedsContentType = (file, hubEntry) =>
-  file !== MULTI_PIM_CONTENT_TYPE_FILE || hubEntry?.multiPimDemo === true
+  file !== MULTI_PIM_CONTENT_TYPE_FILE ||
+  (hubEntry?.multiPimDemo === true && availablePims(hubEntry).length > 1)
 
 /**
  * A schema with this hub's product pickers applied. Only the two carousel
  * schemas change:
  *
- *   - product carousel: `products` gets the toolkit picker on a commercetools hub;
- *   - multi-PIM carousel: its commercetools list gets the picker, or is removed
- *     on a hub without commercetools — along with the per-source tabs, which
- *     would otherwise hold a single Amplience (SKU) list.
+ *   - product carousel: `products` gets the main PIM's picker;
+ *   - multi-PIM carousel: its Amplience list gets the Amplience PIM picker, and
+ *     its commercetools list the commercetools one — or is removed on a hub
+ *     without commercetools, along with the per-source tabs, which would
+ *     otherwise hold a single list.
  *
  * Every other schema is returned unchanged.
  */
-export const withProductPickers = (schema, { commercetools }) => {
+export const withProductPickers = (schema, { mainPim, commercetools }) => {
   if (schema?.$id === PRODUCT_CAROUSEL_SCHEMA) {
-    if (!commercetools) return schema
-    const products = { ...schema.properties.products, 'ui:extension': ECOMM_TOOLKIT_PICKER }
+    const picker = mainPim === 'commercetools' ? COMMERCETOOLS_PICKER : AMPLIENCE_PICKER
+    const products = { ...schema.properties.products, 'ui:extension': picker }
     return { ...schema, properties: { ...schema.properties, products } }
   }
   if (schema?.$id === MULTI_PIM_PRODUCT_CAROUSEL_SCHEMA) {
     const { 'ui:component': tabs, ...field } = schema.properties.products
-    const lists = { ...field.properties }
+    const lists = {
+      ...field.properties,
+      cms: { ...field.properties.cms, 'ui:extension': AMPLIENCE_PICKER },
+    }
     if (commercetools) {
-      lists.commercetools = { ...lists.commercetools, 'ui:extension': ECOMM_TOOLKIT_PICKER }
+      lists.commercetools = { ...lists.commercetools, 'ui:extension': COMMERCETOOLS_PICKER }
       const products = { ...field, 'ui:component': tabs, properties: lists }
       return { ...schema, properties: { ...schema.properties, products } }
     }

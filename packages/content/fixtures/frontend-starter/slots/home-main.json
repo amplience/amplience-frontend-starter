@@ -43,6 +43,13 @@
         }
       },
       {
+        "id": "5da30b88-a8cc-5641-a9db-74314a220e50",
+        "contentType": "https://quadratic.amplience.com/v2/content/product-carousel",
+        "_meta": {
+          "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/content-link"
+        }
+      },
+      {
         "id": "4cf77247-71d6-5137-9fbe-93c04e6d2d50",
         "contentType": "https://quadratic.amplience.com/v2/content/columns",
         "_meta": {

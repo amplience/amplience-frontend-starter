@@ -37,9 +37,7 @@ describe('missingRequired', () => {
   })
 
   it('lists every blank required field in form order', () => {
-    expect(missingRequired(EMPTY_ENV)).toEqual(
-      REQUIRED_FIELDS.filter((key) => key !== 'localhostUrl'),
-    )
+    expect(missingRequired(EMPTY_ENV)).toEqual(REQUIRED_FIELDS)
   })
 
   it('treats whitespace as blank', () => {

@@ -1,0 +1,527 @@
+{
+  "id": "cac4a830-c8a1-537e-9743-5fb878222950",
+  "label": "Product — Longline Quilted Padded Coat - Black",
+  "body": {
+    "_meta": {
+      "name": "Longline Quilted Padded Coat - Black",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "cac4a830-c8a1-537e-9743-5fb878222950",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-longline-quilted-padded-coat-black"
+          }
+        ]
+      }
+    },
+    "sku": "WWKE1-08",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Longline Quilted Padded Coat - Black"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Longline Quilted Padded Coat - Black"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Abrigo Largo Acolchado - Negro"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Manteau long matelassé rembourré - Noir"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Langer Wattierter Steppmantel - Schwarz"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Cappotto Lungo Trapuntato Imbottito - Nero"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 80,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 96,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 101.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Knee-length quilted winter coat"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Knee-length quilted winter coat"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Abrigo de invierno acolchado hasta la rodilla"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Manteau d'hiver matelassé longueur genou"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Knielanger gesteppter Wintermantel"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Cappotto invernale trapuntato al ginocchio"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WWKE1_SQ1_0000000004_BLACK_MDf",
+          "alt": "Longline Quilted Padded Coat - Black",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Shell, lining and padding: 100% polyester (plant-based fill)"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Shell, lining and padding: 100% polyester (plant-based fill)"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Exterior, forro y relleno: 100 % poliéster (relleno de origen vegetal)"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Dessus, doublure et rembourrage : 100 % polyester (garnissage d'origine végétale)"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Obermaterial, Futter und Wattierung: 100 % Polyester (pflanzenbasierte Füllung)"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Esterno, fodera e imbottitura: 100% poliestere (imbottitura di origine vegetale)"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte regular, talla normal"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe classique, taille normalement"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Normale Passform, fällt normal aus"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità regolare, veste in taglia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Length"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Length"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Largo"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Longueur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Länge"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lunghezza"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Knee length"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Knee length"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Hasta la rodilla"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Longueur genou"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Knielang"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Al ginocchio"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 8–24"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 8–24"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 8–24"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 8–24"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 8–24"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 8–24"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Season"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Season"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Temporada"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Saison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Saison"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Stagione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Otoño/Invierno"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Automne/Hiver"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herbst/Winter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Autunno/Inverno"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavable a máquina"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavable en machine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwaschbar"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavabile in lavatrice"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["women", "women-clothing", "women-clothing-jackets"],
+    "tags": ["coats", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Knee length is the difference between a coat you wear in November and one you wear in January. Quilted channels hold a plant-based fill that traps warmth without the padding stacking up around you, so the silhouette stays narrow while the coverage runs all the way down. The hood is attached rather than removable, which is one fewer thing to lose, and the zip runs clean to the chin. Two side pockets, deep enough for cold hands. Sized 8 through 24."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Knee length is the difference between a coat you wear in November and one you wear in January. Quilted channels hold a plant-based fill that traps warmth without the padding stacking up around you, so the silhouette stays narrow while the coverage runs all the way down. The hood is attached rather than removable, which is one fewer thing to lose, and the zip runs clean to the chin. Two side pockets, deep enough for cold hands. Sized 8 through 24."
+        },
+        {
+          "locale": "es-ES",
+          "value": "El largo a la rodilla es la diferencia entre un abrigo de noviembre y uno de enero. Los canales del acolchado sujetan un relleno de origen vegetal que retiene el calor sin que el guateado se acumule a tu alrededor, así que la silueta se mantiene estrecha mientras la cobertura llega hasta abajo. La capucha va fija en lugar de desmontable, que es una cosa menos que perder, y la cremallera sube limpia hasta la barbilla. Dos bolsillos laterales, profundos para manos frías. Tallas de la 8 a la 24."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "La longueur genou, c'est toute la différence entre un manteau de novembre et un manteau de janvier. Les canaux matelassés retiennent un garnissage d'origine végétale qui emprisonne la chaleur sans s'empiler autour de vous : la silhouette reste fine alors que la protection descend jusqu'en bas. La capuche est fixe plutôt qu'amovible, soit une chose de moins à perdre, et la fermeture éclair monte net jusqu'au menton. Deux poches latérales, assez profondes pour les mains froides. Du 8 au 24."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Knielang ist der Unterschied zwischen einem Mantel für November und einem für Januar. Die Steppkanäle halten eine pflanzenbasierte Füllung, die Wärme speichert, ohne dass sich die Wattierung um Sie herum auftürmt – die Silhouette bleibt schmal, während die Abdeckung bis nach unten durchläuft. Die Kapuze ist fest angesetzt statt abnehmbar, also eine Sache weniger, die verloren gehen kann, und der Reißverschluss läuft sauber bis zum Kinn. Zwei Seitentaschen, tief genug für kalte Hände. In den Größen 8 bis 24."
+        },
+        {
+          "locale": "it-IT",
+          "value": "La lunghezza al ginocchio è la differenza tra un cappotto che si porta a novembre e uno che si porta a gennaio. Le camere trapuntate trattengono un'imbottitura di origine vegetale che accumula calore senza gonfiarsi addosso, così la silhouette resta affusolata mentre la copertura arriva fin giù. Il cappuccio è fisso e non staccabile, una cosa in meno da perdere, e la zip sale pulita fino al mento. Due tasche laterali, profonde quanto serve alle mani fredde. Taglie dalla 8 alla 24."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

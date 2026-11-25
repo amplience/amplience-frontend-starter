@@ -1,0 +1,44 @@
+{
+  "id": "fed696f1-2480-5e3d-be35-51bfeb3e807c",
+  "label": "Product — Suede Trench Coat - Khaki — story",
+  "body": {
+    "_meta": {
+      "name": "Product — Suede Trench Coat - Khaki — story",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "fed696f1-2480-5e3d-be35-51bfeb3e807c"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "## Caring for suede\n\nDry clean only. Treat the coat with a suede protector spray before you first wear it and again each season, and lift the nap with a soft suede brush once it's dry. Hang it on a wide, shaped hanger, away from direct sunlight."
+        },
+        {
+          "locale": "en-GB",
+          "value": "## Caring for suede\n\nDry clean only. Treat the coat with a suede protector spray before you first wear it and again each season, and lift the nap with a soft suede brush once it's dry. Hang it on a wide, shaped hanger, away from direct sunlight."
+        },
+        {
+          "locale": "es-ES",
+          "value": "## Cuidado del ante\n\nSolo limpieza en seco. Trata el abrigo con un spray protector para ante antes de estrenarlo y de nuevo cada temporada, y levanta el pelo con un cepillo suave una vez seco. Cuélgalo en una percha ancha y con forma, lejos de la luz solar directa."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "## Entretenir le daim\n\nNettoyage à sec uniquement. Traitez le manteau avec un spray protecteur pour daim avant la première utilisation, puis à chaque saison, et relevez le velours avec une brosse douce une fois sec. Suspendez-le sur un cintre large et galbé, à l'abri du soleil direct."
+        },
+        {
+          "locale": "de-DE",
+          "value": "## Pflege von Veloursleder\n\nNur chemische Reinigung. Behandeln Sie den Mantel vor dem ersten Tragen und danach jede Saison mit einem Veloursleder-Imprägnierspray, und richten Sie den Flor mit einer weichen Velourslederbürste auf, sobald er trocken ist. Auf einem breiten, geformten Bügel und ohne direkte Sonne aufhängen."
+        },
+        {
+          "locale": "it-IT",
+          "value": "## La cura della pelle scamosciata\n\nSolo lavaggio a secco. Tratta il cappotto con uno spray protettivo per scamosciato prima di indossarlo la prima volta e poi a ogni stagione, e ravviva il pelo con una spazzola morbida quando è asciutto. Appendilo a una gruccia larga e sagomata, lontano dalla luce diretta del sole."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "gutter": true,
+    "maxWidth": "default"
+  }
+}

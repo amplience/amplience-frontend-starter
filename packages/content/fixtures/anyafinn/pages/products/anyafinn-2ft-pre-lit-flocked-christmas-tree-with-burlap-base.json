@@ -1,0 +1,335 @@
+{
+  "id": "8afcab48-cd4d-5aab-89cc-b23130c35f58",
+  "label": "Product — 2ft Pre-lit Flocked Christmas Tree with Burlap Base",
+  "body": {
+    "_meta": {
+      "name": "2ft Pre-lit Flocked Christmas Tree with Burlap Base",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "8afcab48-cd4d-5aab-89cc-b23130c35f58",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-2ft-pre-lit-flocked-christmas-tree-with-burlap-base"
+          }
+        ]
+      }
+    },
+    "sku": "X1N4X",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "2ft Pre-lit Flocked Christmas Tree with Burlap Base"
+        },
+        {
+          "locale": "en-GB",
+          "value": "2ft Pre-lit Flocked Christmas Tree with Burlap Base"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Árbol de Navidad Nevado Preiluminado de 2ft con Base de Yute"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Sapin de Noël floqué pré-illuminé 2ft avec base en toile de jute"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Beschneiter Weihnachtsbaum 2ft mit Beleuchtung und Jutesockel"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Albero di Natale Innevato Preilluminato da 2ft con Base in Iuta"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 25,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 30,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 31.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Pre-lit tabletop Christmas tree"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Pre-lit tabletop Christmas tree"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Árbol de Navidad de sobremesa preiluminado"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Sapin de Noël de table pré-illuminé"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Beleuchteter Tisch-Weihnachtsbaum"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Albero di Natale da tavolo preilluminato"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/X1N4X_SQ1_0000000029_MULTI_SLf",
+          "alt": "2ft Pre-lit Flocked Christmas Tree with Burlap Base",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Iron and plastic"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Iron and plastic"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Hierro y plástico"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Fer et plastique"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Eisen und Kunststoff"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Ferro e plastica"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Height"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Height"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Altura"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Hauteur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Höhe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Altezza"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Approx. 60 cm"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Approx. 60 cm"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Aprox. 60 cm"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Env. 60 cm"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Ca. 60 cm"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Circa 60 cm"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Power"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Power"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Alimentación"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Alimentation"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Stromversorgung"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Alimentazione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "3 x AA batteries (not included)"
+            },
+            {
+              "locale": "en-GB",
+              "value": "3 x AA batteries (not included)"
+            },
+            {
+              "locale": "es-ES",
+              "value": "3 pilas AA (no incluidas)"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "3 piles AA (non incluses)"
+            },
+            {
+              "locale": "de-DE",
+              "value": "3 x AA-Batterien (nicht enthalten)"
+            },
+            {
+              "locale": "it-IT",
+              "value": "3 pile AA (non incluse)"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["home"],
+    "tags": ["christmas", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A full-size tree experience at tabletop scale. 120 branch tips are flocked so it looks like it came in from the frost, and 30 warm white LEDs are already threaded through - no untangling, no stringing. It runs on three AA batteries rather than the mains, so it can sit on a hall table or a desk with no cable to hide, and a built-in timer brings it on for six hours and off for eighteen. Burlap wrap at the base instead of a plastic stand."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A full-size tree experience at tabletop scale. 120 branch tips are flocked so it looks like it came in from the frost, and 30 warm white LEDs are already threaded through - no untangling, no stringing. It runs on three AA batteries rather than the mains, so it can sit on a hall table or a desk with no cable to hide, and a built-in timer brings it on for six hours and off for eighteen. Burlap wrap at the base instead of a plastic stand."
+        },
+        {
+          "locale": "es-ES",
+          "value": "La experiencia de un árbol grande a escala de sobremesa. Sus 120 puntas de rama van nevadas para que parezca recién llegado de la escarcha, y 30 LED de luz blanca cálida vienen ya enhebrados: sin desenredar, sin colocar guirnaldas. Funciona con tres pilas AA en lugar de con la corriente, así que puede vivir en la mesa del recibidor o en un escritorio sin cable que esconder, y un temporizador integrado lo enciende seis horas y lo apaga dieciocho. Envoltura de yute en la base en lugar de un pie de plástico."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "L'effet d'un vrai sapin, à l'échelle d'une table. 120 pointes de branches sont floquées pour qu'il ait l'air de rentrer du gel, et 30 LED blanc chaud sont déjà installées dans le feuillage : rien à démêler, rien à guirlander. Il fonctionne sur trois piles AA plutôt que sur le secteur, il peut donc se poser sur une console d'entrée ou un bureau sans câble à cacher, et une minuterie intégrée l'allume six heures et l'éteint dix-huit. Une toile de jute à la base au lieu d'un pied en plastique."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein Weihnachtsbaum in voller Wirkung, nur im Tischformat. 120 Zweigspitzen sind beschneit, sodass er aussieht, als käme er gerade aus dem Frost herein, und 30 warmweiße LEDs sind schon eingezogen – kein Entwirren, kein Lichterkette-Auflegen. Er läuft mit drei AA-Batterien statt am Netz, kann also ohne ein Kabel, das irgendwo verschwinden muss, auf der Flurkommode oder dem Schreibtisch stehen, und ein integrierter Timer schaltet ihn sechs Stunden an und achtzehn Stunden aus. Am Fuß Jutestoff statt Plastikständer."
+        },
+        {
+          "locale": "it-IT",
+          "value": "L'esperienza di un albero a grandezza naturale in scala da tavolo. 120 punte di rami sono effetto neve, come se l'albero fosse appena rientrato dal gelo, e 30 LED bianco caldo sono già intrecciati tra i rami: niente nodi da sciogliere, niente fili da sistemare. Va con tre batterie AA invece che a corrente, così può stare su una consolle d'ingresso o su una scrivania senza cavi da nascondere, e un timer integrato lo accende per sei ore e lo spegne per diciotto. Alla base, iuta avvolta al posto del solito supporto di plastica."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@
 //
 // ProductCard molecule. The interesting cases are the absent ones — a
 // product with no image, no price or no description still has to render a
-// legible card, because `aurora-shelving` is exactly that.
+// legible card, because a `coming-soon` product can be exactly that.
 
 import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'

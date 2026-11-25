@@ -32,22 +32,22 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Shop the Silk Blouse"
+              "value": "Shop the Double Layer Cardigan"
             },
             {
               "locale": "fr-FR",
-              "value": "Voir la blouse en soie"
+              "value": "Voir le cardigan double épaisseur"
             },
             {
               "locale": "de-DE",
-              "value": "Zur Seidenbluse"
+              "value": "Zum Cardigan im Lagenlook"
             }
           ],
           "_meta": {
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/products/silk-blouse",
+        "href": "/products/anyafinn-crew-neck-double-layer-cardigan-with-wool-grey",
         "variant": "outlined",
         "color": "black"
       }

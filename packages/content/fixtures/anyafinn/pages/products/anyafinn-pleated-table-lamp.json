@@ -1,0 +1,335 @@
+{
+  "id": "1e3d8be4-fb32-5629-89bc-bd67b1b59af0",
+  "label": "Product — Pleated Table Lamp",
+  "body": {
+    "_meta": {
+      "name": "Pleated Table Lamp",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "1e3d8be4-fb32-5629-89bc-bd67b1b59af0",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-pleated-table-lamp"
+          }
+        ]
+      }
+    },
+    "sku": "X1QB5",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Pleated Table Lamp"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Pleated Table Lamp"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Lámpara de Mesa Plisada"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Lampe à poser plissée"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Tischleuchte mit Plisseefalten"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Lampada da Tavolo Plissettata"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 59,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 70.75,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 74.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Pleated ceramic table lamp"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Pleated ceramic table lamp"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Lámpara de mesa plisada de cerámica"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Lampe à poser plissée en céramique"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Plissierte Keramik-Tischleuchte"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Lampada da tavolo plissettata in ceramica"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/X1QB5_SQ1_0000000088_NO_COLOR_RSr",
+          "alt": "Pleated Table Lamp",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Ceramic"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Ceramic"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cerámica"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Céramique"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Keramik"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Ceramica"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Finish"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Finish"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Acabado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Finition"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Oberfläche"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Finitura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Pleated"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Pleated"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Plisado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Plissé"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Plissiert"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Plissettato"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Dimensiones"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maße"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Dimensioni"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "H55 x W32 x D32 cm"
+            },
+            {
+              "locale": "en-GB",
+              "value": "H55 x W32 x D32 cm"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Al55 x An32 x F32 cm"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "H55 x L32 x P32 cm"
+            },
+            {
+              "locale": "de-DE",
+              "value": "H55 x B32 x T32 cm"
+            },
+            {
+              "locale": "it-IT",
+              "value": "A55 x L32 x P32 cm"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["home", "electrical", "lighting"],
+    "tags": ["lighting", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Pleating from top to bottom. The ceramic base is ridged in a fan that widens as it drops, and the drum shade above picks up the same vertical rhythm, so the two halves read as one object rather than a lamp with a shade on it. Lit, the ridges cast fine shadow lines down the base and the whole thing glows rather than glares. At 55cm it has the presence to sit on a console without disappearing."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Pleating from top to bottom. The ceramic base is ridged in a fan that widens as it drops, and the drum shade above picks up the same vertical rhythm, so the two halves read as one object rather than a lamp with a shade on it. Lit, the ridges cast fine shadow lines down the base and the whole thing glows rather than glares. At 55cm it has the presence to sit on a console without disappearing."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Plisado de arriba abajo. La base de cerámica está estriada en un abanico que se ensancha a medida que cae, y la pantalla de tambor de encima recoge el mismo ritmo vertical, así que las dos mitades se leen como un solo objeto y no como una lámpara con una pantalla puesta. Encendida, las estrías dibujan líneas finas de sombra por la base y el conjunto brilla en lugar de deslumbrar. Con 55cm tiene presencia suficiente para ocupar una consola sin desaparecer."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Du plissé de haut en bas. Le pied en céramique est nervuré en éventail qui s'élargit en descendant, et l'abat-jour cylindrique au-dessus reprend le même rythme vertical : les deux moitiés se lisent comme un seul objet plutôt qu'une lampe coiffée d'un abat-jour. Allumée, elle dessine de fines lignes d'ombre le long du pied et rayonne au lieu d'éblouir. Avec 55cm, elle a la présence qu'il faut pour tenir une console sans s'y perdre."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Falten von oben bis unten. Der Keramikfuß ist in einem Fächer gerippt, der sich nach unten hin weitet, und der Trommelschirm darüber nimmt denselben vertikalen Rhythmus auf – die beiden Hälften wirken als ein Objekt und nicht als Leuchte mit aufgesetztem Schirm. Eingeschaltet werfen die Rippen feine Schattenlinien über den Fuß, und das Ganze leuchtet, statt zu blenden. Mit 55cm hat sie genug Präsenz, um auf einer Konsole nicht einfach zu verschwinden."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Plissé dall'alto in basso. La base in ceramica è scanalata a ventaglio e si allarga scendendo, e il paralume cilindrico sopra riprende lo stesso ritmo verticale, così le due metà si leggono come un unico oggetto e non come una lampada con un paralume appoggiato sopra. Accesa, le scanalature disegnano linee d'ombra sottili lungo la base e l'insieme diffonde luce invece di abbagliare. Con 55cm ha la presenza giusta per stare su una consolle senza sparire."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

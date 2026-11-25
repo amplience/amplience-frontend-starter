@@ -38,7 +38,6 @@
   "type": "object",
   "properties": {
     "media": {
-      "title": "Media",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/rich-media"
@@ -46,16 +45,24 @@
       ]
     },
     "title": {
-      "title": "Title",
-      "minLength": 1,
       "allOf": [
-        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+        {
+          "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+        },
+        {
+          "title": "Title",
+          "minLength": 1
+        }
       ]
     },
     "description": {
-      "title": "Description",
       "allOf": [
-        { "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string" }
+        {
+          "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+        },
+        {
+          "title": "Description"
+        }
       ]
     },
     "links": {
@@ -78,14 +85,16 @@
       "then": {
         "properties": {
           "cta": {
-            "title": "CTA",
             "type": "object",
             "allOf": [
               {
                 "$ref": "https://quadratic.amplience.com/v2/partials/cta"
+              },
+              {
+                "title": "CTA",
+                "description": "Rendered inside the card body. Only used when Link is not set."
               }
-            ],
-            "description": "Rendered inside the card body. Only used when Link is not set."
+            ]
           }
         }
       }
@@ -125,19 +134,21 @@
       "default": "raised"
     },
     "color": {
-      "title": "Card colour",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette" }
-      ],
-      "default": "white"
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/colour#/definitions/palette"
+        },
+        {
+          "title": "Card colour",
+          "default": "white"
+        }
+      ]
     },
     "customCss": {
-      "title": "Custom CSS (advanced)",
-      "description": "Optional. CSS for this block only — it also reaches any blocks nested inside it. Bare declarations style the block itself (background: …); nested rules style what's inside (h2 { … }, &:hover { … }, @media … { … }); custom properties (--color-primary: …) flow down to child blocks. Leave blank for none.",
-      "type": "string",
-      "ui:extension": { "name": "css-editor" },
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/block-css#/definitions/css" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/block-css#/definitions/css"
+        }
       ]
     }
   },

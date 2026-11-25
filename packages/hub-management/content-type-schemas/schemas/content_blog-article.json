@@ -80,35 +80,43 @@
       }
     },
     "title": {
-      "description": "Article headline — <title> and SEO.",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/title"
+        },
+        {
+          "description": "Article headline — <title> and SEO."
         }
       ]
     },
     "social": {
-      "description": "Open Graph overrides. Unset fields fall back to the article's own title and description.",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/social"
+        },
+        {
+          "description": "Open Graph overrides. Unset fields fall back to the article's own title and description."
         }
       ]
     },
     "canonicalUrl": {
-      "description": "Rarely set — when absent, the canonical defaults to the article's /blog/{slug} path.",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/canonicalUrl"
+        },
+        {
+          "description": "Rarely set — when absent, the canonical defaults to the article's /blog/{slug} path."
         }
       ]
     },
     "coverImage": {
-      "title": "Cover Image",
-      "description": "Hero image or video for the article — shown in the article header and article cards on the archive page. Video plays as an ambient background.",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/rich-media"
+        },
+        {
+          "title": "Cover Image",
+          "description": "Hero image or video for the article — shown in the article header and article cards on the archive page. Video plays as an ambient background."
         }
       ]
     },

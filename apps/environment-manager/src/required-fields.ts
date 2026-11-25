@@ -22,7 +22,6 @@ export const REQUIRED_FIELDS = [
   'hubId',
   'repoContent',
   'repoSlots',
-  'localhostUrl',
 ] as const satisfies readonly StringEnvKey[]
 
 export type RequiredField = (typeof REQUIRED_FIELDS)[number]

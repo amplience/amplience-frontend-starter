@@ -1,0 +1,362 @@
+{
+  "id": "9114141e-6f44-5c78-9abf-7450a854fed8",
+  "label": "Product — Crew Neck Jumper - Dark Red",
+  "body": {
+    "_meta": {
+      "name": "Crew Neck Jumper - Dark Red",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "9114141e-6f44-5c78-9abf-7450a854fed8",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-crew-neck-jumper-dark-red"
+          }
+        ]
+      }
+    },
+    "sku": "M0E20000000F2QT",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Crew Neck Jumper - Dark Red"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Crew Neck Jumper - Dark Red"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Jersey de cuello redondo - Rojo oscuro"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pull col rond - Rouge foncé"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Rundhalspullover - Dunkelrot"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Maglione girocollo - Rosso scuro"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 140.5,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 168.75,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 168.75,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Italian-made crew neck jumper"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Italian-made crew neck jumper"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Jersey de cuello redondo fabricado en Italia"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pull col rond fabriqué en Italie"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Rundhalspullover, hergestellt in Italien"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Maglione girocollo prodotto in Italia"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/084983_1",
+          "alt": "Crew Neck Jumper - Dark Red — view 1",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/084983_2",
+          "alt": "Crew Neck Jumper - Dark Red — view 2",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/084983_3",
+          "alt": "Crew Neck Jumper - Dark Red — view 3",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/084983_4",
+          "alt": "Crew Neck Jumper - Dark Red — view 4",
+          "width": 858,
+          "height": 1144
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Color"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Colour"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Color"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Couleur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Farbe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Colore"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Dark red"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Dark red"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Rojo oscuro"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Rouge foncé"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Dunkelrot"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Rosso scuro"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "34–58"
+            },
+            {
+              "locale": "en-GB",
+              "value": "34–58"
+            },
+            {
+              "locale": "es-ES",
+              "value": "34–58"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "34–58"
+            },
+            {
+              "locale": "de-DE",
+              "value": "34–58"
+            },
+            {
+              "locale": "it-IT",
+              "value": "34–58"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Origin"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Origin"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Origen"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Origine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herkunft"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Origine"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Fabricado en Italia"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Fabriqué en Italie"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Hergestellt in Italien"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Prodotto in Italia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["men", "men-clothing", "men-clothing-tops"],
+    "tags": ["knitwear"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A dark red crew neck jumper to layer over a shirt, made in Italy."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A dark red crew neck jumper to layer over a shirt, made in Italy."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Un jersey de cuello redondo rojo oscuro para llevar sobre una camisa, fabricado en Italia."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un pull col rond rouge foncé à porter sur une chemise, fabriqué en Italie."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein dunkelroter Rundhalspullover, der sich über ein Hemd tragen lässt – hergestellt in Italien."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Un maglione girocollo rosso scuro da portare sopra una camicia, prodotto in Italia."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

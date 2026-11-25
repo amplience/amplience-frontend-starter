@@ -1,0 +1,44 @@
+{
+  "id": "1d07f198-3e20-5048-89d4-2cd4b0b30342",
+  "label": "Product — Terra Stone Effect Coffee Table — story",
+  "body": {
+    "_meta": {
+      "name": "Product — Terra Stone Effect Coffee Table — story",
+      "schema": "https://quadratic.amplience.com/v2/content/markdown-block",
+      "deliveryId": "1d07f198-3e20-5048-89d4-2cd4b0b30342"
+    },
+    "content": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "## Assembly and care\n\nArrives flat-packed for self assembly. Wipe the stone-effect finish with a soft, dry cloth, use coasters under hot or wet glasses, and avoid harsh or abrasive cleaners. Height 38 cm, top 85 x 75 cm."
+        },
+        {
+          "locale": "en-GB",
+          "value": "## Assembly and care\n\nArrives flat-packed for self assembly. Wipe the stone-effect finish with a soft, dry cloth, use coasters under hot or wet glasses, and avoid harsh or abrasive cleaners. Height 38 cm, top 85 x 75 cm."
+        },
+        {
+          "locale": "es-ES",
+          "value": "## Montaje y cuidados\n\nSe entrega en caja plana para montar en casa. Limpia el acabado efecto piedra con un paño suave y seco, usa posavasos bajo vasos calientes o mojados y evita limpiadores agresivos o abrasivos. Altura 38 cm, tablero 85 x 75 cm."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "## Montage et entretien\n\nLivrée en kit, à monter soi-même. Essuyez la finition effet pierre avec un chiffon doux et sec, utilisez des sous-verres pour les verres chauds ou humides et évitez les nettoyants agressifs ou abrasifs. Hauteur 38 cm, plateau 85 x 75 cm."
+        },
+        {
+          "locale": "de-DE",
+          "value": "## Aufbau und Pflege\n\nWird flach verpackt zur Selbstmontage geliefert. Die Steinoptik mit einem weichen, trockenen Tuch abwischen, unter heiße oder nasse Gläser Untersetzer legen und auf scharfe oder scheuernde Reiniger verzichten. Höhe 38 cm, Platte 85 x 75 cm."
+        },
+        {
+          "locale": "it-IT",
+          "value": "## Montaggio e cura\n\nArriva in kit da montare. Pulisci la finitura effetto pietra con un panno morbido e asciutto, usa sottobicchieri per bicchieri caldi o bagnati ed evita detergenti aggressivi o abrasivi. Altezza 38 cm, piano 85 x 75 cm."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "gutter": true,
+    "maxWidth": "default"
+  }
+}

@@ -79,10 +79,36 @@ export type Environment = {
    * Optional: absent/false means never ignore validation.
    */
   ignoreSchemaValidation?: boolean
+  /**
+   * commercetools settings for the eComm Toolkit product picker, which
+   * `hub:import` seeds from them. The secret reaches editors' browsers, so this
+   * should be a read-only API client, not a site's own. `region` (default
+   * europe-west1.gcp) and `language` (default en) are optional and hand-set.
+   */
+  commercetools?: CommercetoolsSettings
+  /**
+   * The hub's main product source: which picker its Product Carousel gets.
+   * Same values as a site's PRODUCT_SOURCE. Absent, `hub:import` infers it —
+   * commercetools when the hub has commercetools settings, else the CMS.
+   */
+  mainPim?: ProductSourceName
+  /** Registers the Multi-PIM Product Carousel content type (demo hubs). */
+  multiPimDemo?: boolean
   /** Optional single group the hub is listed under; absent = ungrouped. */
   group?: string
   /** Optional emoji, or an http(s) image URL, shown beside the label. */
   icon?: string
+}
+
+/** A product source — a site's PRODUCT_SOURCE, and a hub's main PIM. */
+export type ProductSourceName = 'cms' | 'commercetools'
+
+export type CommercetoolsSettings = {
+  projectKey: string
+  clientId: string
+  clientSecret: string
+  region?: string
+  language?: string
 }
 
 export type Config = {

@@ -214,9 +214,9 @@ describe('ContentRoute — category listings (ADR-0024)', () => {
     expect(out).toContain('data-category="furniture"')
     // Assert the filtering, not a marker attribute: both tables are in, and
     // a product from a sibling category is out.
-    expect(out).toContain('/products/terra-dining-table')
-    expect(out).toContain('/products/aurora-side-table')
-    expect(out).not.toContain('/products/lumen-floor-lamp')
+    expect(out).toContain('/products/anyafinn-terra-stone-effect-coffee-table')
+    expect(out).toContain('/products/anyafinn-marlow-coffee-table-with-wavy-edge-detail')
+    expect(out).not.toContain('/products/anyafinn-embossed-floor-lamp')
   })
 
   it('matches an ancestor category, because ancestors are denormalised', async () => {
@@ -225,8 +225,8 @@ describe('ContentRoute — category listings (ADR-0024)', () => {
     expect(out).toContain('data-category="home"')
     // The leaf's products *and* its siblings' — with no tree walk anywhere,
     // because every product carries `home` alongside its leaf category.
-    expect(out).toContain('/products/terra-dining-table')
-    expect(out).toContain('/products/lumen-floor-lamp')
+    expect(out).toContain('/products/anyafinn-terra-stone-effect-coffee-table')
+    expect(out).toContain('/products/anyafinn-embossed-floor-lamp')
   })
 
   it('derives an unlocalised title from the identifier', async () => {
@@ -257,8 +257,8 @@ describe('ContentRoute — category listings (ADR-0024)', () => {
     vi.stubEnv('PRODUCT_LISTING_LIMIT', '0')
     const { default: ContentRoute } = await loadRoute()
     const out = renderToStaticMarkup((await ContentRoute(routeProps(['furniture']))) as ReactNode)
-    expect(out).toContain('/products/terra-dining-table')
-    expect(out).toContain('/products/aurora-side-table')
+    expect(out).toContain('/products/anyafinn-terra-stone-effect-coffee-table')
+    expect(out).toContain('/products/anyafinn-marlow-coffee-table-with-wavy-edge-detail')
   })
 
   it('falls back to layout metadata for a path that is neither a page nor a category', async () => {

@@ -1,0 +1,463 @@
+{
+  "id": "728bde44-61a4-5ac5-97ef-682b148ec752",
+  "label": "Product — Crew Neck Double Layer Cardigan with Wool - Grey",
+  "body": {
+    "_meta": {
+      "name": "Crew Neck Double Layer Cardigan with Wool - Grey",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "728bde44-61a4-5ac5-97ef-682b148ec752",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-crew-neck-double-layer-cardigan-with-wool-grey"
+          }
+        ]
+      }
+    },
+    "sku": "WXTIN-S",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Crew Neck Double Layer Cardigan with Wool - Grey"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Crew Neck Double Layer Cardigan with Wool - Grey"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Cárdigan de Doble Capa con Lana y Cuello Redondo - Gris"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Cardigan col rond double épaisseur avec laine - Gris"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Cardigan im Lagenlook mit Rundhalsausschnitt und Wolle - Grau"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Cardigan Girocollo Doppio Strato con Lana - Grigio"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 28,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 33.5,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 35.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Layered-look cardigan with wool"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Layered-look cardigan with wool"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Cárdigan efecto doble capa con lana"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Cardigan effet superposé avec laine"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Cardigan im Lagenlook mit Wolle"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Cardigan effetto doppio strato con lana"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WXTIN_SQ1_0000000005_GREY_MDf",
+          "alt": "Crew Neck Double Layer Cardigan with Wool - Grey",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "44% polyester, 33% polyamide, 17% acrylic, 6% wool"
+            },
+            {
+              "locale": "en-GB",
+              "value": "44% polyester, 33% polyamide, 17% acrylic, 6% wool"
+            },
+            {
+              "locale": "es-ES",
+              "value": "44 % poliéster, 33 % poliamida, 17 % acrílico, 6 % lana"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "44 % polyester, 33 % polyamide, 17 % acrylique, 6 % laine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "44 % Polyester, 33 % Polyamid, 17 % Polyacryl, 6 % Wolle"
+            },
+            {
+              "locale": "it-IT",
+              "value": "44% poliestere, 33% poliammide, 17% acrilico, 6% lana"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte regular, talla normal"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe classique, taille normalement"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Normale Passform, fällt normal aus"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità regolare, veste in taglia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "S–XL"
+            },
+            {
+              "locale": "en-GB",
+              "value": "S–XL"
+            },
+            {
+              "locale": "es-ES",
+              "value": "S–XL"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "S–XL"
+            },
+            {
+              "locale": "de-DE",
+              "value": "S–XL"
+            },
+            {
+              "locale": "it-IT",
+              "value": "S–XL"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Season"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Season"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Temporada"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Saison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Saison"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Stagione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Otoño/Invierno"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Automne/Hiver"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herbst/Winter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Autunno/Inverno"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavable a máquina"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavable en machine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwaschbar"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavabile in lavatrice"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["women", "women-clothing", "women-clothing-knitwear"],
+    "tags": ["knitwear", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "One garment doing a convincing impression of two. A soft grey knit is trimmed at the collar, placket and cuffs in contrast burgundy, so buttoned up it looks like there's a second layer underneath you never had to put on. Wool in the blend adds warmth and a little grip to the handle, and ribbing at the hem and cuffs keeps everything sitting where it should. Wear it closed as a top or open over a shirt. Machine washable."
+        },
+        {
+          "locale": "en-GB",
+          "value": "One garment doing a convincing impression of two. A soft grey knit is trimmed at the collar, placket and cuffs in contrast burgundy, so buttoned up it looks like there's a second layer underneath you never had to put on. Wool in the blend adds warmth and a little grip to the handle, and ribbing at the hem and cuffs keeps everything sitting where it should. Wear it closed as a top or open over a shirt. Machine washable."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Una sola prenda haciendo una imitación convincente de dos. Un punto gris suave se remata en cuello, tapeta y puños con burdeos en contraste, así que abotonado parece que hay una segunda capa debajo que nunca has tenido que ponerte. La lana de la mezcla aporta calor y algo de cuerpo al tacto, y el canalé del bajo y de los puños mantiene todo justo donde debe estar. Llévalo cerrado como top o abierto sobre una camisa. Lavable a máquina."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un seul vêtement qui imite deux de façon convaincante. Une maille gris doux est bordée au col, sur la patte de boutonnage et aux poignets d'un bordeaux contrastant : fermé, on croit à une seconde couche en dessous qu'on n'a jamais eu à enfiler. La laine du mélange apporte de la chaleur et un peu de tenue à la main, et les côtes au bas et aux poignets maintiennent tout exactement en place. À porter fermé comme un haut, ou ouvert sur une chemise. Lavable en machine."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein Kleidungsstück, das überzeugend zwei vortäuscht. Ein weicher grauer Strick ist an Kragen, Knopfleiste und Bündchen mit kontrastierendem Bordeaux abgesetzt – zugeknöpft sieht es aus, als läge darunter eine zweite Schicht, die Sie nie anziehen mussten. Der Wollanteil bringt Wärme und etwas Griffigkeit ins Material, und die Rippbündchen an Saum und Ärmeln halten alles dort, wo es sitzen soll. Geschlossen als Oberteil oder offen über einer Bluse zu tragen. Maschinenwaschbar."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Un capo che fa un'imitazione convincente di due. Una maglia grigia morbida è rifinita al collo, sull'abbottonatura e sui polsini in bordeaux a contrasto, così abbottonato sembra che sotto ci sia un secondo strato che non hai mai dovuto indossare. La lana nella composizione aggiunge calore e un po' di corpo alla mano, e le costine su fondo e polsini tengono tutto dove deve stare. Portalo chiuso come top o aperto sopra una camicia. Lavabile in lavatrice."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

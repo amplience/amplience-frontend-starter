@@ -1,0 +1,463 @@
+{
+  "id": "37fe6389-0b5a-5637-9b9c-664d1c8bcaae",
+  "label": "Product — Stretch Denim Western Jacket - White",
+  "body": {
+    "_meta": {
+      "name": "Stretch Denim Western Jacket - White",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "37fe6389-0b5a-5637-9b9c-664d1c8bcaae",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-stretch-denim-western-jacket-white"
+          }
+        ]
+      }
+    },
+    "sku": "WR3EN-08",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Stretch Denim Western Jacket - White"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Stretch Denim Western Jacket - White"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chaqueta Vaquera Western Elástica - Blanco"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Veste western en jean stretch - Blanc"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Western-Jeansjacke aus Stretch-Denim - Weiß"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Giacca Western in Denim Stretch - Bianco"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 35,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 42,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 43.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "White stretch-denim western jacket"
+        },
+        {
+          "locale": "en-GB",
+          "value": "White stretch-denim western jacket"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chaqueta vaquera western elástica blanca"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Veste western en jean stretch blanc"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Weiße Western-Jeansjacke aus Stretch-Denim"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Giacca western in denim stretch bianco"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WR3EN_SQ1_0000000013_WHITE_MDf",
+          "alt": "Stretch Denim Western Jacket - White",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "99% cotton, 1% elastane"
+            },
+            {
+              "locale": "en-GB",
+              "value": "99% cotton, 1% elastane"
+            },
+            {
+              "locale": "es-ES",
+              "value": "99 % algodón, 1 % elastano"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "99 % coton, 1 % élasthanne"
+            },
+            {
+              "locale": "de-DE",
+              "value": "99 % Baumwolle, 1 % Elasthan"
+            },
+            {
+              "locale": "it-IT",
+              "value": "99% cotone, 1% elastan"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte regular, talla normal"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe classique, taille normalement"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Normale Passform, fällt normal aus"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità regolare, veste in taglia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 8–22"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Season"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Season"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Temporada"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Saison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Saison"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Stagione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Spring/Summer"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Spring/Summer"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Primavera/Verano"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Printemps/Été"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Frühling/Sommer"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Primavera/Estate"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavable a máquina"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavable en machine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwaschbar"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavabile in lavatrice"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["women", "women-clothing", "women-clothing-jackets"],
+    "tags": ["jackets", "denim", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "White denim is a summer decision and this is the shape to make it in. Classic western lines throughout - pointed yokes, button placket, flap patch pockets - with one per cent elastane worked into the cotton so your shoulders move rather than getting pinned. Over a printed dress it does the crisp contrast thing no other layer manages, and it holds its own against blue denim below if double denim is where you're going. Machine washable, which white demands."
+        },
+        {
+          "locale": "en-GB",
+          "value": "White denim is a summer decision and this is the shape to make it in. Classic western lines throughout - pointed yokes, button placket, flap patch pockets - with one per cent elastane worked into the cotton so your shoulders move rather than getting pinned. Over a printed dress it does the crisp contrast thing no other layer manages, and it holds its own against blue denim below if double denim is where you're going. Machine washable, which white demands."
+        },
+        {
+          "locale": "es-ES",
+          "value": "El denim blanco es una decisión de verano y esta es la forma en la que tomarla. Líneas western clásicas de arriba abajo —canesús en pico, tapeta de botones, bolsillos de plastrón con cartera— con un uno por ciento de elastano trabajado en el algodón para que los hombros se muevan en vez de quedarse clavados. Sobre un vestido estampado consigue ese contraste nítido que ninguna otra capa logra, y aguanta el tipo sobre denim azul si lo tuyo es el total denim. Lavable a máquina, como el blanco exige."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Le jean blanc est une décision d'été, et voici la coupe dans laquelle la prendre. Toutes les lignes du western sont là - empiècements pointus, patte boutonnée, poches plaquées à rabat - avec un pour cent d'élasthanne glissé dans le coton pour que les épaules bougent au lieu d'être bloquées. Sur une robe imprimée, elle réussit ce contraste net qu'aucune autre pièce ne donne, et elle tient tête au denim bleu en bas si le total denim est la direction choisie. Lavable en machine, ce que le blanc exige."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Weißes Denim ist eine Sommerentscheidung, und das ist die Form, in der man sie trifft. Durchgehend klassische Western-Linien – spitze Passen, Knopfleiste, aufgesetzte Taschen mit Patte – mit einem Prozent Elastan in der Baumwolle, damit die Schultern in Bewegung bleiben statt festgesteckt zu werden. Über einem bedruckten Kleid liefert sie den knackigen Kontrast, den keine andere Lage hinbekommt, und sie behauptet sich über blauem Denim, wenn Double Denim das Ziel ist. Maschinenwaschbar, was bei Weiß Pflicht ist."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Il denim bianco è una decisione estiva e questa è la forma giusta per prenderla. Linee western classiche in tutto il capo - carré a punta, abbottonatura centrale, tasche applicate con pattina - con un uno per cento di elastan lavorato nel cotone perché le spalle si muovano invece di restare bloccate. Sopra un abito stampato crea quel contrasto nitido che nessun altro strato riesce a dare, e tiene testa al denim blu sotto, se il doppio denim è la strada. Lavabile in lavatrice, come il bianco esige."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

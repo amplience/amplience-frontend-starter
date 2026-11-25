@@ -248,11 +248,9 @@ A horizontally scrolling rail of curated products.
 - **Components** [`ProductCarouselBlock`](../packages/components/src/organisms/ProductCarouselBlock) (organism) → `SectionHeader`, `Container`, [`ProductCarousel`](../packages/components/src/organisms/ProductCarousel) → `ProductCard` per slide
 - **Storybook** [Organisms/ProductCarouselBlock](https://quadratic-lite-components.vercel.app/?path=/docs/organisms-productcarouselblock--docs)
 
-It holds product references, not links to [products](#product): the renderer resolves each one through the active product source (`PRODUCT_SOURCE` — see [Deploying](deploying.md#products)), so the same rail works whether products live in the CMS or in commercetools. A reference is a SKU, or — with commercetools — a product id, which is what the product picker stores. References the source doesn't know are skipped, and a rail that resolves to nothing isn't rendered.
+It holds product references, not links to [products](#product): the renderer resolves each one through the active product source (`PRODUCT_SOURCE` — see [Deploying](deploying.md#products)), so the same rail works whether products live in the CMS or in commercetools. A reference is a SKU, which is what the product pickers store; with commercetools, a product id also resolves, for carousels picked before the picker stored SKUs. References the source doesn't know are skipped, and a rail that resolves to nothing isn't rendered.
 
-How the field is edited depends on the hub. When the hub's entry in `amplience.config.json` has a [`commercetools` block](working-with-a-hub.md#commercetools-product-picker), `hub:import` seeds the field with the eComm Toolkit product picker (search by keyword or category); otherwise it is a plain list of SKUs. The schema in the repo is the same either way — the picker is added at import time.
-
-> **Known limitation.** The picker stores commercetools product ids and can only display ids. A carousel seeded with SKUs (as the fixture sets are) renders correctly on the site, but the picker shows it as empty until products are picked again — and saving from the picker replaces the SKUs with ids.
+How the field is edited depends on the hub. `hub:import` seeds it with the eComm Toolkit [product picker](working-with-a-hub.md#product-pickers) (search by keyword or category) for the hub's main PIM — `"mainPim"` on its entry in `amplience.config.json`: the Amplience PIM one, which finds [Product](#product) items in the hub, or the commercetools one. Both store SKUs. The schema in the repo is the same either way — the picker is added at import time.
 
 | Field                                             | Label             | Type                                  | Req | Notes                                                              |
 | ------------------------------------------------- | ----------------- | ------------------------------------- | --- | ------------------------------------------------------------------ |
@@ -270,17 +268,17 @@ How the field is edited depends on the hub. When the hub's entry in `amplience.c
 
 ![Multi-PIM Product Carousel icon](https://cdn.media.amplience.net/i/quadraticdemo/content_multi-pim-product-carousel?w=48)
 
-A [Product Carousel](#product-carousel-block) for demo hubs that serve sites backed by more than one product source. Opt-in: `hub:import` only seeds it on hubs whose entry in `amplience.config.json` sets `"multiPimDemo": true` (see [Working with a hub](working-with-a-hub.md#commercetools-product-picker)).
+A [Product Carousel](#product-carousel-block) for demo hubs that serve sites backed by more than one product source. Opt-in: `hub:import` only seeds it on hubs whose entry in `amplience.config.json` sets `"multiPimDemo": true` and that have more than one PIM (today: commercetools details as well as the built-in Amplience PIM) (see [Working with a hub](working-with-a-hub.md#product-pickers)).
 
 - **Schema** [`content/multi-pim-product-carousel`](../packages/hub-management/content-type-schemas/schemas/content_multi-pim-product-carousel.json) · **Repository** `content`
 - **Components** the same [`ProductCarouselBlock`](../packages/components/src/organisms/ProductCarouselBlock) as the Product Carousel
 
 Every field matches the Product Carousel except `products`, which holds one list per product source, each on its own tab:
 
-| Field                    | Label                    | Type     | Req | Notes                                                                                                                                                                  |
-| ------------------------ | ------------------------ | -------- | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `products.cms`           | Products (Amplience)     | string[] |     | SKUs, read by sites running `PRODUCT_SOURCE=cms`                                                                                                                       |
-| `products.commercetools` | Products (commercetools) | string[] |     | Product picker; read by sites running `PRODUCT_SOURCE=commercetools`. Omitted on hubs without a `commercetools` block, which then show the Amplience list without tabs |
+| Field                    | Label                    | Type     | Req | Notes                                                                                                                                                                                |
+| ------------------------ | ------------------------ | -------- | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `products.cms`           | Products (Amplience)     | string[] |     | Amplience PIM product picker (SKUs); read by sites running `PRODUCT_SOURCE=cms`                                                                                                      |
+| `products.commercetools` | Products (commercetools) | string[] |     | commercetools product picker; read by sites running `PRODUCT_SOURCE=commercetools`. Omitted on hubs without a `commercetools` block, which then show the Amplience list without tabs |
 
 Each site renders the list for its own `PRODUCT_SOURCE` and ignores the others, so one content item can drive a CMS-backed site and a commercetools-backed site side by side. Single-source hubs should use the Product Carousel, so editors see one field.
 
@@ -344,13 +342,14 @@ A product page — presentation-grade commerce fields plus optional slots for ed
 
 Only read when `PRODUCT_SOURCE` is `cms` (the default) — with `commercetools` the same pages render from the commerce project instead, and these items are ignored. See [Deploying › Products](deploying.md#products).
 
-Shares the head-metadata shape with [Page](#page) (`title`, `description`, `keywords`, `social`, `canonicalUrl`, `robots`, `slots`, `_meta`), and adds:
+Shares the head-metadata shape with [Page](#page) (`title`, `keywords`, `social`, `canonicalUrl`, `robots`, `slots`, `_meta`) — except `description`, which here is the product's long copy rather than the meta description — and adds:
 
 | Field              | Label             | Type                                        | Req | Notes                                                                                                                                     |
 | ------------------ | ----------------- | ------------------------------------------- | --- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `sku`              | SKU               | string                                      | ✓   | The identifier in your commerce or PIM system — what [product carousels](#product-carousel-block) reference. Not displayed                |
 | `name`             | Product Name      | localized string                            | ✓   |                                                                                                                                           |
-| `shortDescription` | Short Description | localized string                            |     | A sentence or two for the product page and cards. Longer copy belongs in slots                                                            |
+| `shortDescription` | Short Description | localized string                            |     | A few words for cards and the top of the product page. Also the meta description                                                          |
+| `description`      | Description       | localized string                            |     | The full product description, shown on the product page below the short one. Never on cards                                               |
 | `prices`           | Prices            | object[]                                    |     | One per currency: `amount`, `currencyCode` (ISO 4217), and optional `compareAtAmount`. See below                                          |
 | `images`           | Images            | [Media](#media)[]                           |     | The first is the card and lead image; two or more make the product page a gallery                                                         |
 | `attributes`       | Attributes        | object[]                                    |     | Display-only spec rows: localized `label` and `value`                                                                                     |
@@ -708,23 +707,24 @@ DAM videos play the account's transcode renditions (`/v/{endpoint}/{name}/{profi
 
 [`partials/colour`](../packages/hub-management/content-type-schemas/schemas/partials_colour.json) — the design-token colour choices offered to authors, so every schema surfacing a colour draws from the same palette as the [theme tokens](theming.md).
 
-| Definition       | Values                                                                |
-| ---------------- | --------------------------------------------------------------------- |
-| `palette`        | `primary`, `secondary`, `tertiary`, `light`, `dark`, `black`, `white` |
-| `button-palette` | `primary`, `secondary`, `tertiary`, `black`, `white`                  |
+| Definition           | Values                                                                           |
+| -------------------- | -------------------------------------------------------------------------------- |
+| `palette`            | `primary`, `secondary`, `tertiary`, `light`, `dark`, `black`, `white`            |
+| `background-palette` | The `palette` values, labelled **Background colour** (used by `backgroundColor`) |
+| `button-palette`     | `primary`, `secondary`, `tertiary`, `black`, `white`                             |
 
 ### Container
 
 [`partials/container`](../packages/hub-management/content-type-schemas/schemas/partials_container.json) — the `Container` atom's authoring contract, referenced property-by-property by the blocks that wrap their content in one.
 
-| Definition  | Values                              |
-| ----------- | ----------------------------------- |
-| `max-width` | `narrow`, `default`, `wide`, `none` |
-| `gutter`    | boolean                             |
+| Definition  | Values                                                                                   |
+| ----------- | ---------------------------------------------------------------------------------------- |
+| `max-width` | **Max width**: `narrow`, `default`, `wide`, `none`; defaults to `default`                |
+| `gutter`    | **Gutter**: boolean, with a generic help text that blocks override to name what is inset |
 
 ### Block CSS
 
-[`partials/block-css`](../packages/hub-management/content-type-schemas/schemas/partials_block-css.json) — the value contract for every block's optional `customCss`: a string capped at 4,000 characters, the same limit the renderer enforces. The field's label, help text and CSS-editor extension are repeated on each block rather than held here, because an extension behind a cross-schema `$ref` hasn't been shown to render in the Dynamic Content form (ADR-0025, ADR-0026).
+[`partials/block-css`](../packages/hub-management/content-type-schemas/schemas/partials_block-css.json) — the value contract for every block's optional `customCss`: a string capped at 4,000 characters, the same limit the renderer enforces. The field's label (**Custom CSS (advanced)**), help text and CSS-editor extension are all held here and shared by every block, so each block's `customCss` property is just a reference (ADR-0026; ADR-0025 originally repeated these per block).
 
 ### Icon
 
@@ -738,7 +738,7 @@ DAM videos play the account's transcode renditions (`/v/{endpoint}/{name}/{profi
 
 ### Carousel Options
 
-[`partials/carousel-options`](../packages/hub-management/content-type-schemas/schemas/partials_carousel-options.json) — the `Carousel` molecule's presentation contract: `slides-per-view`, `gap`, `scroll-step` (`slide` \| `page`), `show-arrows`, `show-dots`, `show-scrollbar`, `drag-to-scroll`. Held separately because more than one content type renders through the same molecule (ADR-0020), so a new option is one edit rather than several.
+[`partials/carousel-options`](../packages/hub-management/content-type-schemas/schemas/partials_carousel-options.json) — the `Carousel` molecule's presentation contract: `slides-per-view` (with `slides-per-view-mobile`, `-tablet` and `-desktop` variants that add the breakpoint's label, help text and default of 1.2, 3 and 4 slides), `gap`, `scroll-step` (`slide` \| `page`), `show-arrows`, `show-dots`, `show-scrollbar`, `drag-to-scroll`. Each definition carries its own label, help text and default, so a block only adds an override where it differs. Held separately because more than one content type renders through the same molecule (ADR-0020), so a new option is one edit rather than several.
 
 ### Content Block
 

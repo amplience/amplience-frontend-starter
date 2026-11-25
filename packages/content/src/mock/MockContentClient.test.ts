@@ -37,13 +37,14 @@ describe('MockContentClient', () => {
 
     // Components inside the slot are also inlined, in the order the homepage
     // composes them.
-    expect(slot?.components).toHaveLength(6)
+    expect(slot?.components).toHaveLength(7)
     expect(slot?.components.map((c) => c._meta.schema)).toEqual([
       'https://quadratic.amplience.com/v2/content/hero',
       'https://quadratic.amplience.com/v2/content/columns',
       'https://quadratic.amplience.com/v2/content/carousel',
       'https://quadratic.amplience.com/v2/content/grid',
       'https://quadratic.amplience.com/v2/content/markdown-block',
+      'https://quadratic.amplience.com/v2/content/product-carousel',
       'https://quadratic.amplience.com/v2/content/columns',
     ])
   })

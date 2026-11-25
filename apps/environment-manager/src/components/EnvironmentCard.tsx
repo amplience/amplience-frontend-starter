@@ -913,6 +913,14 @@ export function EnvironmentCard({
               everything below stay, since they still apply. */}
           {isEmptyHub && (
             <div className="env-card__empty">
+              <div className="env-card__empty-tools">
+                <CardTools
+                  onRefresh={refreshStats}
+                  onEdit={onEdit}
+                  refreshDisabled={isRunning}
+                  editDisabled={isRunning}
+                />
+              </div>
               <p className="env-card__empty-title">This hub is empty.</p>
               <p className="env-card__empty-detail">
                 {stats.locales.length > 0 ? (
@@ -958,13 +966,6 @@ export function EnvironmentCard({
                   ) : null}
                   Seed
                 </button>
-                <button
-                  className="btn btn--sm btn--ghost"
-                  onClick={refreshStats}
-                  disabled={isRunning}
-                >
-                  Refresh
-                </button>
               </div>
             </div>
           )}
@@ -977,24 +978,12 @@ export function EnvironmentCard({
                   <th className="col-resource">Resource</th>
                   <th className="col-count">Count</th>
                   <th className="col-actions">
-                    <button
-                      className="btn--icon-only"
-                      onClick={refreshStats}
-                      disabled={isRunning || stats === null}
-                      aria-label="Refresh stats"
-                      title="Refresh counts"
-                    >
-                      ↻
-                    </button>
-                    <button
-                      className="btn--icon-only"
-                      onClick={onEdit}
-                      disabled={isRunning}
-                      aria-label="Environment settings"
-                      title="Settings"
-                    >
-                      ⚙
-                    </button>
+                    <CardTools
+                      onRefresh={refreshStats}
+                      onEdit={onEdit}
+                      refreshDisabled={isRunning || stats === null}
+                      editDisabled={isRunning}
+                    />
                   </th>
                 </tr>
               </thead>
@@ -2018,6 +2007,43 @@ export function EnvironmentCard({
         </div>
       )}
     </div>
+  )
+}
+
+/** The refresh and settings icons. They sit in the stats table's header when
+ *  the hub has content, and in the corner of the empty state when it doesn't. */
+function CardTools({
+  onRefresh,
+  onEdit,
+  refreshDisabled,
+  editDisabled,
+}: {
+  onRefresh: () => void
+  onEdit: () => void
+  refreshDisabled: boolean
+  editDisabled: boolean
+}) {
+  return (
+    <>
+      <button
+        className="btn--icon-only"
+        onClick={onRefresh}
+        disabled={refreshDisabled}
+        aria-label="Refresh stats"
+        title="Refresh counts"
+      >
+        ↻
+      </button>
+      <button
+        className="btn--icon-only"
+        onClick={onEdit}
+        disabled={editDisabled}
+        aria-label="Environment settings"
+        title="Settings"
+      >
+        ⚙
+      </button>
+    </>
   )
 }
 

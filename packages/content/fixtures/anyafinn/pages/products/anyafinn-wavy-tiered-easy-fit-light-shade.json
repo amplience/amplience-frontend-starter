@@ -1,0 +1,335 @@
+{
+  "id": "65bb7a3c-6af0-530d-bd26-4a394102d1c7",
+  "label": "Product — Wavy Tiered Easy-Fit Light Shade",
+  "body": {
+    "_meta": {
+      "name": "Wavy Tiered Easy-Fit Light Shade",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "65bb7a3c-6af0-530d-bd26-4a394102d1c7",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-wavy-tiered-easy-fit-light-shade"
+          }
+        ]
+      }
+    },
+    "sku": "X1QAB",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Wavy Tiered Easy-Fit Light Shade"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Wavy Tiered Easy-Fit Light Shade"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Pantalla Easy-Fit Ondulada de Dos Niveles"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Abat-jour Easy-Fit à étages ondulés"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Easy-Fit Lampenschirm mit gewellten Stufen"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Paralume Easy-Fit a Balze Ondulate"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 45,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 54,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 56.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Two-tier wavy pendant shade"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Two-tier wavy pendant shade"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Pantalla colgante de dos niveles ondulados"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Abat-jour suspension à deux étages ondulés"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Zweistufiger Pendelschirm mit Wellenkante"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Paralume a sospensione a due balze ondulate"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/X1QAB_SQ1_0000000088_NO_COLOR_RSr",
+          "alt": "Wavy Tiered Easy-Fit Light Shade",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fabric"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fabric"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tela"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tissu"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Stoff"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Tessuto"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fitting"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fitting"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Montaje"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Fixation"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Montage"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Attacco"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Clips onto an existing pendant"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Clips onto an existing pendant"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Se acopla a una lámpara colgante existente"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Se clipse sur une suspension existante"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Zum Aufclipsen auf eine vorhandene Pendelleuchte"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Si aggancia a una sospensione esistente"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Dimensiones"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maße"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Dimensioni"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "H26 x Ø30 cm"
+            },
+            {
+              "locale": "en-GB",
+              "value": "H26 x Ø30 cm"
+            },
+            {
+              "locale": "es-ES",
+              "value": "H26 x Ø30 cm"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "H26 x Ø30 cm"
+            },
+            {
+              "locale": "de-DE",
+              "value": "H26 x Ø30 cm"
+            },
+            {
+              "locale": "it-IT",
+              "value": "H26 x Ø30 cm"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["home", "electrical", "lighting"],
+    "tags": ["lighting", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Two fabric tiers, each cut with a soft wave along the edge, stacked so they overlap rather than line up. The result is sculptural without being fussy: the curves take light differently on each layer, and the gap between them lets a warm glow escape sideways as well as down. For the one object hanging in the middle of a room, that's worth more than another plain drum. A minute to put up."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Two fabric tiers, each cut with a soft wave along the edge, stacked so they overlap rather than line up. The result is sculptural without being fussy: the curves take light differently on each layer, and the gap between them lets a warm glow escape sideways as well as down. For the one object hanging in the middle of a room, that's worth more than another plain drum. A minute to put up."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Dos niveles de tela, cada uno cortado con una onda suave en el borde, apilados para que se solapen en lugar de alinearse. El resultado es escultórico sin resultar recargado: las curvas reciben la luz de forma distinta en cada capa, y el hueco entre ambas deja escapar un resplandor cálido hacia los lados además de hacia abajo. Para el único objeto que cuelga en medio de una habitación, eso vale más que otro tambor liso. Un minuto para colocarla."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Deux étages de tissu, chacun découpé d'une vague douce sur le bord, empilés pour se chevaucher plutôt que s'aligner. Le résultat est sculptural sans être précieux : les courbes prennent la lumière différemment sur chaque couche, et l'écart entre les deux laisse une lueur chaude s'échapper sur les côtés autant que vers le bas. Pour le seul objet suspendu au milieu d'une pièce, cela vaut mieux qu'un cylindre uni de plus. Une minute à installer."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Zwei Stoffstufen, jede mit einer sanften Welle an der Kante geschnitten, so übereinander gesetzt, dass sie sich überlappen statt zu fluchten. Das Ergebnis ist skulptural, ohne verspielt zu sein: Die Kurven nehmen das Licht auf jeder Lage anders auf, und der Spalt dazwischen lässt warmes Licht auch seitlich entweichen, nicht nur nach unten. Für das eine Objekt, das mitten im Raum hängt, ist das mehr wert als eine weitere schlichte Trommel. In einer Minute angebracht."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Due balze di tessuto, ciascuna tagliata con un'onda morbida sul bordo, sovrapposte in modo da accavallarsi invece di allinearsi. Il risultato è scultoreo senza essere lezioso: le curve prendono la luce in modo diverso su ogni strato, e lo spazio tra le due lascia scappare un bagliore caldo di lato oltre che verso il basso. Per l'unico oggetto appeso in mezzo a una stanza, vale più di un altro cilindro liscio. Un minuto per montarlo."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

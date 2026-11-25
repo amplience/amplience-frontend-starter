@@ -1,0 +1,362 @@
+{
+  "id": "d8207d8f-421d-540c-bdeb-71490a57646e",
+  "label": "Product — Stripe Jumper - Blue",
+  "body": {
+    "_meta": {
+      "name": "Stripe Jumper - Blue",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "d8207d8f-421d-540c-bdeb-71490a57646e",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-stripe-jumper-blue"
+          }
+        ]
+      }
+    },
+    "sku": "M0E20000000EFHV",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Stripe Jumper - Blue"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Stripe Jumper - Blue"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Jersey de rayas - Azul"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pull rayé - Bleu"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Gestreifter Pullover - Blau"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Maglione a righe - Blu"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 102,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 122.5,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 122.5,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Classic Breton stripe jumper"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Classic Breton stripe jumper"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Jersey de rayas marinero clásico"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pull marinière classique"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Klassischer Ringelpullover"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Maglione a righe alla marinara"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/081500_1",
+          "alt": "Stripe Jumper - Blue — view 1",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/081500_2",
+          "alt": "Stripe Jumper - Blue — view 2",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/081500_3",
+          "alt": "Stripe Jumper - Blue — view 3",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/081500_4",
+          "alt": "Stripe Jumper - Blue — view 4",
+          "width": 858,
+          "height": 1144
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Color"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Colour"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Color"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Couleur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Farbe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Colore"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Blue"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Blue"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Azul"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Bleu"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Blau"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Blu"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "XXS–XXXL"
+            },
+            {
+              "locale": "en-GB",
+              "value": "XXS–XXXL"
+            },
+            {
+              "locale": "es-ES",
+              "value": "XXS–XXXL"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "XXS–XXXL"
+            },
+            {
+              "locale": "de-DE",
+              "value": "XXS–XXXL"
+            },
+            {
+              "locale": "it-IT",
+              "value": "XXS–XXXL"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Origin"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Origin"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Origen"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Origine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herkunft"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Origine"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Fabricado en Italia"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Fabriqué en Italie"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Hergestellt in Italien"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Prodotto in Italia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["men", "men-clothing", "men-clothing-tops"],
+    "tags": ["knitwear"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A classic blue and white stripe jumper, made in Italy."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A classic blue and white stripe jumper, made in Italy."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Un clásico jersey de rayas azules y blancas, fabricado en Italia."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un pull rayé bleu et blanc classique, fabriqué en Italie."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Ein klassischer blau-weiß gestreifter Pullover – hergestellt in Italien."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Un classico maglione a righe blu e bianche, prodotto in Italia."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

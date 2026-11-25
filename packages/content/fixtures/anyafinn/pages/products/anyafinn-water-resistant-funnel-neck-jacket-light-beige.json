@@ -1,0 +1,537 @@
+{
+  "id": "6d5bdf31-0170-587e-b998-bc46d3a593fc",
+  "label": "Product — Water-Resistant Funnel Neck Jacket - Light Beige",
+  "body": {
+    "_meta": {
+      "name": "Water-Resistant Funnel Neck Jacket - Light Beige",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "6d5bdf31-0170-587e-b998-bc46d3a593fc",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-water-resistant-funnel-neck-jacket-light-beige"
+          }
+        ]
+      }
+    },
+    "sku": "WWKE3-08",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Water-Resistant Funnel Neck Jacket - Light Beige"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Water-Resistant Funnel Neck Jacket - Light Beige"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chaqueta Repelente al Agua con Cuello Chimenea - Beige Claro"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Veste déperlante col cheminée - Beige clair"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Wasserabweisende Jacke mit Stehkragen - Hellbeige"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Giacca Idrorepellente con Collo a Imbuto - Beige Chiaro"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 38.25,
+        "compareAtAmount": 45,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 45.9,
+        "compareAtAmount": 54,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 48.44,
+        "compareAtAmount": 56.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Cropped, shower-proof funnel-neck jacket"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Cropped, shower-proof funnel-neck jacket"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Chaqueta corta repelente al agua con cuello chimenea"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Veste courte déperlante à col cheminée"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Kurze, regenabweisende Jacke mit Stehkragen"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Giacca corta idrorepellente con collo a imbuto"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WWKE3_SQ1_0000000143_BROWN_MDf",
+          "alt": "Water-Resistant Funnel Neck Jacket - Light Beige",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Shell: 100% nylon; lining: 100% polyester"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Shell: 100% nylon; lining: 100% polyester"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Exterior: 100 % nailon; forro: 100 % poliéster"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Dessus : 100 % nylon ; doublure : 100 % polyester"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Obermaterial: 100 % Nylon; Futter: 100 % Polyester"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Esterno: 100% nylon; fodera: 100% poliestere"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte regular, talla normal"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe classique, taille normalement"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Normale Passform, fällt normal aus"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità regolare, veste in taglia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Length"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Length"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Largo"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Longueur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Länge"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lunghezza"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Cropped"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Cropped"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corto"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Court"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Kurz"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Corto"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 8–20"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 8–20"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Season"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Season"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Temporada"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Saison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Saison"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Stagione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Spring/Autumn"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Spring/Autumn"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Primavera/Otoño"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Printemps/Automne"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Frühling/Herbst"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Primavera/Autunno"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavable a máquina"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavable en machine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwaschbar"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavabile in lavatrice"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": [
+      "women",
+      "women-clothing",
+      "women-clothing-jackets",
+      "sale",
+      "sale-women",
+      "sale-women-clothing"
+    ],
+    "tags": ["jackets", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Some days need a jacket, not a coat. This cropped shell keeps the nylon light enough to carry over an arm and still turns back a shower, with a funnel collar that zips high when the wind picks up and sits open when it doesn't. The boxy cut finishes above the hip, so it works over high-waisted denim without bunching and leaves room for a hoodie underneath. Light beige keeps it quiet next to everything else in the wardrobe. Lined throughout and machine washable."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Some days need a jacket, not a coat. This cropped shell keeps the nylon light enough to carry over an arm and still turns back a shower, with a funnel collar that zips high when the wind picks up and sits open when it doesn't. The boxy cut finishes above the hip, so it works over high-waisted denim without bunching and leaves room for a hoodie underneath. Light beige keeps it quiet next to everything else in the wardrobe. Lined throughout and machine washable."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Hay días que piden una chaqueta, no un abrigo. Este modelo corto mantiene el nailon lo bastante ligero para llevarlo colgado del brazo y aun así frena un chubasco, con un cuello chimenea que se sube con la cremallera cuando arrecia el viento y se queda abierto cuando no hace falta. El corte recto termina por encima de la cadera, así que funciona sobre vaqueros de talle alto sin abultar y deja sitio para una sudadera debajo. El beige claro no discute con nada más del armario. Forrada por completo y lavable a máquina."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Certains jours appellent une veste, pas un manteau. Ce blouson court garde un nylon assez léger pour se porter au bras et tient tête à l'averse, avec un col cheminée qui se ferme haut quand le vent se lève et reste ouvert le reste du temps. La coupe carrée s'arrête au-dessus de la hanche : elle passe sur un jean taille haute sans faire de plis et laisse la place à un sweat à capuche en dessous. Le beige clair s'entend avec tout le reste du dressing. Entièrement doublée et lavable en machine."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Manche Tage brauchen eine Jacke, keinen Mantel. Dieser kurz geschnittene Blouson bleibt leicht genug, um ihn über dem Arm zu tragen, hält aber einen Schauer zuverlässig ab – mit einem Stehkragen, der sich bei auffrischendem Wind hoch zuziehen lässt und ansonsten offen bleibt. Der kastige Schnitt endet oberhalb der Hüfte, sitzt also über High-Waist-Jeans ohne Faltenwurf und lässt Platz für einen Hoodie darunter. Hellbeige bleibt zurückhaltend neben allem anderen im Kleiderschrank. Komplett gefüttert und maschinenwaschbar."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Ci sono giorni che chiedono una giacca, non un cappotto. Questo guscio corto tiene il nylon abbastanza leggero da portarlo sul braccio e sa comunque respingere un acquazzone, con un collo a imbuto che si chiude fino in alto quando si alza il vento e resta aperto quando non serve. Il taglio boxy finisce sopra il fianco: sta bene sui jeans a vita alta senza fare volume e lascia spazio a una felpa sotto. Il beige chiaro sta in silenzio accanto a tutto il resto dell'armadio. Interamente foderata e lavabile in lavatrice."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

@@ -17,8 +17,8 @@ const source = () => new CmsProductSource({ client: makeMockContentClient(SET), 
 // The contract every source must satisfy, run against the real fixtures.
 describeProductSource('CmsProductSource', () => ({
   source: source(),
-  knownSlug: 'aurora-lounge-chair',
-  knownSku: 'AUR-CHAIR-01',
+  knownSlug: 'anyafinn-suede-trench-coat-khaki',
+  knownSku: 'WIDP6-08',
   // Same set, different site: proves the *site* scoping returns nothing, rather
   // than passing because the set happened to hold no products.
   emptySource: new CmsProductSource({
@@ -59,7 +59,7 @@ describe('CmsProductSource — delivery keys', () => {
   })
 
   it('requests depth:all so editorial slots arrive resolved', async () => {
-    const product = await source().getBySlug('aurora-lounge-chair')
+    const product = await source().getBySlug('anyafinn-suede-trench-coat-khaki')
     expect(product.content).toBeDefined()
     expect(product.content?.length).toBeGreaterThan(0)
   })
@@ -118,15 +118,15 @@ describe('CmsProductSource — duplicate slugs', () => {
 
 describe('CmsProductSource — mapping', () => {
   it('maps the full fixture faithfully', async () => {
-    const product = await source().getBySlug('aurora-lounge-chair')
-    expect(product.sku).toBe('AUR-CHAIR-01')
-    expect(product.price).toEqual({ amount: 749, currencyCode: 'GBP' })
+    const product = await source().getBySlug('anyafinn-tailored-overcoat-brown')
+    expect(product.sku).toBe('M0E20000000F11K')
+    expect(product.price).toEqual({ amount: 498.99, currencyCode: 'GBP' })
     expect(product.prices).toEqual([
-      { amount: 749, currencyCode: 'GBP' },
-      { amount: 869, currencyCode: 'EUR' },
-      { amount: 949, currencyCode: 'USD' },
+      { amount: 498.99, currencyCode: 'GBP' },
+      { amount: 598.75, currencyCode: 'EUR' },
+      { amount: 598.75, currencyCode: 'USD' },
     ])
-    expect(product.images).toHaveLength(6)
+    expect(product.images).toHaveLength(4)
     // The URL, not the host: which placeholder service the fixtures point at
     // is a property of the fixtures, not of the mapping under test.
     expect(product.images?.[0]?.url).toMatch(/^https:\/\//)
@@ -135,7 +135,14 @@ describe('CmsProductSource — mapping', () => {
   })
 
   it('serves the empty-state product — no price, no images, no attributes', async () => {
-    const product = await source().getBySlug('aurora-shelving')
+    // The fixtures are a real catalogue with no sparse products, so the
+    // empty state is a minimal body rather than a fixture.
+    const getByKey = vi.fn().mockResolvedValue({
+      ...productItem('acme/products/bare', 'BARE', 'Bare'),
+      status: 'coming-soon',
+    })
+    const client = { ...clientOf([]), getByKey } as unknown as ContentClient
+    const product = await new CmsProductSource({ client, siteName: 'acme' }).getBySlug('bare')
     expect(product.price).toBeUndefined()
     expect(product.images).toBeUndefined()
     expect(product.attributes).toBeUndefined()
@@ -143,7 +150,7 @@ describe('CmsProductSource — mapping', () => {
   })
 
   it('leaves `content` undefined for a product with no editorial slots', async () => {
-    const product = await source().getBySlug('lumen-floor-lamp')
+    const product = await source().getBySlug('anyafinn-embossed-floor-lamp')
     expect(product.content).toBeUndefined()
   })
 

@@ -58,8 +58,6 @@ import siteHierarchyMenuItemMensTrousers from '../../../fixtures/anyafinn/compon
 import siteHierarchyMenuItemMens from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens.json' with { type: 'json' }
 import siteHierarchyMenuItemSale from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-sale.json' with { type: 'json' }
 import siteHierarchyMenuItemShopTheLook from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-shop-the-look.json' with { type: 'json' }
-import siteHierarchyMenuItemWomensAccessories from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens-accessories.json' with { type: 'json' }
-import siteHierarchyMenuItemWomensDresses from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens-dresses.json' with { type: 'json' }
 import siteHierarchyMenuItemWomensTops from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens-tops.json' with { type: 'json' }
 import siteHierarchyMenuItemWomens from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens.json' with { type: 'json' }
 import siteHierarchyMenuMain from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-main.json' with { type: 'json' }
@@ -75,13 +73,6 @@ import homeCardDepartmentWomens from '../../../fixtures/anyafinn/components/home
 import homeCardGrownUpGlitter from '../../../fixtures/anyafinn/components/home-card-grown-up-glitter.json' with { type: 'json' }
 import homeCardOpulentDecadence from '../../../fixtures/anyafinn/components/home-card-opulent-decadence.json' with { type: 'json' }
 import homeCardPiratecore from '../../../fixtures/anyafinn/components/home-card-piratecore.json' with { type: 'json' }
-import homeCardProductCorduroyTrousers from '../../../fixtures/anyafinn/components/home-card-product-corduroy-trousers.json' with { type: 'json' }
-import homeCardProductLeatherTote from '../../../fixtures/anyafinn/components/home-card-product-leather-tote.json' with { type: 'json' }
-import homeCardProductMaraHandWovenWoolThrow from '../../../fixtures/anyafinn/components/home-card-product-mara-hand-woven-wool-throw.json' with { type: 'json' }
-import homeCardProductQuiltedBomber from '../../../fixtures/anyafinn/components/home-card-product-quilted-bomber.json' with { type: 'json' }
-import homeCardProductRibbedKnitTop from '../../../fixtures/anyafinn/components/home-card-product-ribbed-knit-top.json' with { type: 'json' }
-import homeCardProductSilkScarf from '../../../fixtures/anyafinn/components/home-card-product-silk-scarf.json' with { type: 'json' }
-import homeCardProductWaxedFieldJacket from '../../../fixtures/anyafinn/components/home-card-product-waxed-field-jacket.json' with { type: 'json' }
 import homeClosingHero from '../../../fixtures/anyafinn/components/home-closing-hero.json' with { type: 'json' }
 import homeDepartments from '../../../fixtures/anyafinn/components/home-departments.json' with { type: 'json' }
 import homeEditorialImage from '../../../fixtures/anyafinn/components/home-editorial-image.json' with { type: 'json' }
@@ -94,8 +85,8 @@ import homeServiceDelivery from '../../../fixtures/anyafinn/components/home-serv
 import homeServiceReturns from '../../../fixtures/anyafinn/components/home-service-returns.json' with { type: 'json' }
 import homeServices from '../../../fixtures/anyafinn/components/home-services.json' with { type: 'json' }
 import homeShopTheLook from '../../../fixtures/anyafinn/components/home-shop-the-look.json' with { type: 'json' }
-import productAuroraLoungeChairStory from '../../../fixtures/anyafinn/components/products/aurora-lounge-chair-story.json' with { type: 'json' }
-import productTerraDiningTableStory from '../../../fixtures/anyafinn/components/products/terra-dining-table-story.json' with { type: 'json' }
+import productSuedeTrenchCoatKhakiStory from '../../../fixtures/anyafinn/components/products/suede-trench-coat-khaki-story.json' with { type: 'json' }
+import productTerraStoneEffectCoffeeTableStory from '../../../fixtures/anyafinn/components/products/terra-stone-effect-coffee-table-story.json' with { type: 'json' }
 import shopTheLookGrid from '../../../fixtures/anyafinn/components/shop-the-look-grid.json' with { type: 'json' }
 import shopTheLookHero from '../../../fixtures/anyafinn/components/shop-the-look-hero.json' with { type: 'json' }
 import shopTheLookMarkdown from '../../../fixtures/anyafinn/components/shop-the-look-markdown.json' with { type: 'json' }
@@ -114,32 +105,62 @@ import pageBlogOpulentDecadence from '../../../fixtures/anyafinn/pages/blog/opul
 import pageBlogPiratecore from '../../../fixtures/anyafinn/pages/blog/piratecore.json' with { type: 'json' }
 import pageCompanyStory from '../../../fixtures/anyafinn/pages/company/story.json' with { type: 'json' }
 import home from '../../../fixtures/anyafinn/pages/home.json' with { type: 'json' }
-import productAuroraLoungeChair from '../../../fixtures/anyafinn/pages/products/aurora-lounge-chair.json' with { type: 'json' }
-import productAuroraShelving from '../../../fixtures/anyafinn/pages/products/aurora-shelving.json' with { type: 'json' }
-import productAuroraSideTable from '../../../fixtures/anyafinn/pages/products/aurora-side-table.json' with { type: 'json' }
-import productCorduroyTrousers from '../../../fixtures/anyafinn/pages/products/corduroy-trousers.json'
-import productLeatherTote from '../../../fixtures/anyafinn/pages/products/leather-tote.json'
-import productLinenCampShirt from '../../../fixtures/anyafinn/pages/products/linen-camp-shirt.json'
-import productLumenFloorLamp from '../../../fixtures/anyafinn/pages/products/lumen-floor-lamp.json' with { type: 'json' }
-import productMaraWoolThrow from '../../../fixtures/anyafinn/pages/products/mara-hand-woven-wool-throw.json' with { type: 'json' }
-import productMidiWrapDress from '../../../fixtures/anyafinn/pages/products/midi-wrap-dress.json'
-import productOxfordShirt from '../../../fixtures/anyafinn/pages/products/oxford-shirt.json'
-import productPleatedSundress from '../../../fixtures/anyafinn/pages/products/pleated-sundress.json'
-import productQuiltedBomber from '../../../fixtures/anyafinn/pages/products/quilted-bomber.json'
-import productRibbedKnitTop from '../../../fixtures/anyafinn/pages/products/ribbed-knit-top.json'
-import productSilkBlouse from '../../../fixtures/anyafinn/pages/products/silk-blouse.json'
-import productSilkScarf from '../../../fixtures/anyafinn/pages/products/silk-scarf.json'
-import productTaperedChinos from '../../../fixtures/anyafinn/pages/products/tapered-chinos.json'
-import productTerraDiningTable from '../../../fixtures/anyafinn/pages/products/terra-dining-table.json' with { type: 'json' }
-import productVerdeCeramicPlanter from '../../../fixtures/anyafinn/pages/products/verde-ceramic-planter.json' with { type: 'json' }
-import productWaxedFieldJacket from '../../../fixtures/anyafinn/pages/products/waxed-field-jacket.json'
+import product2ftPreLitFlockedChristmasTreeWithBurlapBase from '../../../fixtures/anyafinn/pages/products/anyafinn-2ft-pre-lit-flocked-christmas-tree-with-burlap-base.json' with { type: 'json' }
+import productButtonCardiganBeige from '../../../fixtures/anyafinn/pages/products/anyafinn-button-cardigan-beige.json' with { type: 'json' }
+import productCasualWideLegStripeTrousersMulti from '../../../fixtures/anyafinn/pages/products/anyafinn-casual-wide-leg-stripe-trousers-multi.json' with { type: 'json' }
+import productCheckShirtMulti from '../../../fixtures/anyafinn/pages/products/anyafinn-check-shirt-multi.json' with { type: 'json' }
+import productChelseaBootBrown from '../../../fixtures/anyafinn/pages/products/anyafinn-chelsea-boot-brown.json' with { type: 'json' }
+import productChinosBrown from '../../../fixtures/anyafinn/pages/products/anyafinn-chinos-brown.json' with { type: 'json' }
+import productChinosPetrol from '../../../fixtures/anyafinn/pages/products/anyafinn-chinos-petrol.json' with { type: 'json' }
+import productClassicShirtLightBlue from '../../../fixtures/anyafinn/pages/products/anyafinn-classic-shirt-light-blue.json' with { type: 'json' }
+import productCoOrdFunnelNeckDenimJacketMidWash from '../../../fixtures/anyafinn/pages/products/anyafinn-co-ord-funnel-neck-denim-jacket-mid-wash.json' with { type: 'json' }
+import productCollaredArgyleCardiganPinkBurgundy from '../../../fixtures/anyafinn/pages/products/anyafinn-collared-argyle-cardigan-pink-burgundy.json' with { type: 'json' }
+import productCrewNeckDoubleLayerCardiganWithWoolGrey from '../../../fixtures/anyafinn/pages/products/anyafinn-crew-neck-double-layer-cardigan-with-wool-grey.json' with { type: 'json' }
+import productCrewNeckJumperDarkRed from '../../../fixtures/anyafinn/pages/products/anyafinn-crew-neck-jumper-dark-red.json' with { type: 'json' }
+import productCrewNeckStitchInterestJumperGreen from '../../../fixtures/anyafinn/pages/products/anyafinn-crew-neck-stitch-interest-jumper-green.json' with { type: 'json' }
+import productEmbossedFloorLamp from '../../../fixtures/anyafinn/pages/products/anyafinn-embossed-floor-lamp.json' with { type: 'json' }
+import productFlorenceHighRiseSkinnyJeansDarkWash from '../../../fixtures/anyafinn/pages/products/anyafinn-florence-high-rise-skinny-jeans-dark-wash.json' with { type: 'json' }
+import productHalfZipSweatshirtBlue from '../../../fixtures/anyafinn/pages/products/anyafinn-half-zip-sweatshirt-blue.json' with { type: 'json' }
+import productHighWaistFlareJeansMidWash from '../../../fixtures/anyafinn/pages/products/anyafinn-high-waist-flare-jeans-mid-wash.json' with { type: 'json' }
+import productKneeHighPointedToeRealSuedeHeeledBootsTan from '../../../fixtures/anyafinn/pages/products/anyafinn-knee-high-pointed-toe-real-suede-heeled-boots-tan.json' with { type: 'json' }
+import productLaceUpBootsBrown from '../../../fixtures/anyafinn/pages/products/anyafinn-lace-up-boots-brown.json' with { type: 'json' }
+import productLaceUpHikerBootBlack from '../../../fixtures/anyafinn/pages/products/anyafinn-lace-up-hiker-boot-black.json' with { type: 'json' }
+import productLaceUpShoesGrey from '../../../fixtures/anyafinn/pages/products/anyafinn-lace-up-shoes-grey.json' with { type: 'json' }
+import productLeatherJacketBeige from '../../../fixtures/anyafinn/pages/products/anyafinn-leather-jacket-beige.json' with { type: 'json' }
+import productLindenCoffeeTableOak from '../../../fixtures/anyafinn/pages/products/anyafinn-linden-coffee-table-oak.json' with { type: 'json' }
+import productLoafersBrown from '../../../fixtures/anyafinn/pages/products/anyafinn-loafers-brown.json' with { type: 'json' }
+import productLodgeCheckSuperSoftThrow from '../../../fixtures/anyafinn/pages/products/anyafinn-lodge-check-super-soft-throw.json' with { type: 'json' }
+import productLonglineQuiltedPaddedCoatBlack from '../../../fixtures/anyafinn/pages/products/anyafinn-longline-quilted-padded-coat-black.json' with { type: 'json' }
+import productLonglineWaterproofHoodedCoatBlack from '../../../fixtures/anyafinn/pages/products/anyafinn-longline-waterproof-hooded-coat-black.json' with { type: 'json' }
+import productLonglineZipHoodieBrown from '../../../fixtures/anyafinn/pages/products/anyafinn-longline-zip-hoodie-brown.json' with { type: 'json' }
+import productLowTopTrainersBrown from '../../../fixtures/anyafinn/pages/products/anyafinn-low-top-trainers-brown.json' with { type: 'json' }
+import productLowTopTrainersOlive from '../../../fixtures/anyafinn/pages/products/anyafinn-low-top-trainers-olive.json' with { type: 'json' }
+import productMarlowCoffeeTableWithWavyEdgeDetail from '../../../fixtures/anyafinn/pages/products/anyafinn-marlow-coffee-table-with-wavy-edge-detail.json' with { type: 'json' }
+import productNaturalScallopEasyFitLightShade from '../../../fixtures/anyafinn/pages/products/anyafinn-natural-scallop-easy-fit-light-shade.json' with { type: 'json' }
+import productPleatedTableLamp from '../../../fixtures/anyafinn/pages/products/anyafinn-pleated-table-lamp.json' with { type: 'json' }
+import productQuiltedDownJacketGrey from '../../../fixtures/anyafinn/pages/products/anyafinn-quilted-down-jacket-grey.json' with { type: 'json' }
+import productRetroRunnerTrainersBlue from '../../../fixtures/anyafinn/pages/products/anyafinn-retro-runner-trainers-blue.json' with { type: 'json' }
+import productSlimJeansBlue from '../../../fixtures/anyafinn/pages/products/anyafinn-slim-jeans-blue.json' with { type: 'json' }
+import productSlimJeansDarkBlue from '../../../fixtures/anyafinn/pages/products/anyafinn-slim-jeans-dark-blue.json' with { type: 'json' }
+import productStretchDenimWesternJacketWhite from '../../../fixtures/anyafinn/pages/products/anyafinn-stretch-denim-western-jacket-white.json' with { type: 'json' }
+import productStretchTailoredWideLegTrousersBlack from '../../../fixtures/anyafinn/pages/products/anyafinn-stretch-tailored-wide-leg-trousers-black.json' with { type: 'json' }
+import productStripeJumperBlue from '../../../fixtures/anyafinn/pages/products/anyafinn-stripe-jumper-blue.json' with { type: 'json' }
+import productSuedeTrenchCoatKhaki from '../../../fixtures/anyafinn/pages/products/anyafinn-suede-trench-coat-khaki.json' with { type: 'json' }
+import productTailoredOvercoatBrown from '../../../fixtures/anyafinn/pages/products/anyafinn-tailored-overcoat-brown.json' with { type: 'json' }
+import productTerraStoneEffectCoffeeTable from '../../../fixtures/anyafinn/pages/products/anyafinn-terra-stone-effect-coffee-table.json' with { type: 'json' }
+import productTexturedBlazerBrown from '../../../fixtures/anyafinn/pages/products/anyafinn-textured-blazer-brown.json' with { type: 'json' }
+import productTexturedWideLegTrouserCoOrdNavy from '../../../fixtures/anyafinn/pages/products/anyafinn-textured-wide-leg-trouser-co-ord-navy.json' with { type: 'json' }
+import productWaterResistantFunnelNeckJacketLightBeige from '../../../fixtures/anyafinn/pages/products/anyafinn-water-resistant-funnel-neck-jacket-light-beige.json' with { type: 'json' }
+import productWavyTieredEasyFitLightShade from '../../../fixtures/anyafinn/pages/products/anyafinn-wavy-tiered-easy-fit-light-shade.json' with { type: 'json' }
+import productWideLegDrawcordWaistJeansDarkWash from '../../../fixtures/anyafinn/pages/products/anyafinn-wide-leg-drawcord-waist-jeans-dark-wash.json' with { type: 'json' }
+import productZipFunnelNeckSweatshirtPink from '../../../fixtures/anyafinn/pages/products/anyafinn-zip-funnel-neck-sweatshirt-pink.json' with { type: 'json' }
 import shopTheLook from '../../../fixtures/anyafinn/pages/shop-the-look.json' with { type: 'json' }
 import slotBlogGrownUpGlitterMain from '../../../fixtures/anyafinn/slots/blog-grown-up-glitter-main.json' with { type: 'json' }
 import slotBlogOpulentDecadenceMain from '../../../fixtures/anyafinn/slots/blog-opulent-decadence-main.json' with { type: 'json' }
 import slotBlogPiratecoreMain from '../../../fixtures/anyafinn/slots/blog-piratecore-main.json' with { type: 'json' }
 import homeMain from '../../../fixtures/anyafinn/slots/home-main.json' with { type: 'json' }
-import productAuroraLoungeChairMainSlot from '../../../fixtures/anyafinn/slots/product-aurora-lounge-chair-main.json' with { type: 'json' }
-import productTerraDiningTableMainSlot from '../../../fixtures/anyafinn/slots/product-terra-dining-table-main.json' with { type: 'json' }
+import productSuedeTrenchCoatKhakiMainSlot from '../../../fixtures/anyafinn/slots/product-suede-trench-coat-khaki-main.json' with { type: 'json' }
+import productTerraStoneEffectCoffeeTableMainSlot from '../../../fixtures/anyafinn/slots/product-terra-stone-effect-coffee-table-main.json' with { type: 'json' }
 import shopTheLookMain from '../../../fixtures/anyafinn/slots/shop-the-look-main.json' with { type: 'json' }
 import slotStoryMain from '../../../fixtures/anyafinn/slots/story-main.json' with { type: 'json' }
 import type { EnrichedContentItem } from '../../types'
@@ -186,9 +207,7 @@ const fixtures: readonly EnrichedContentItem[] = [
   siteHierarchyMenuItemMensTrousers,
   siteHierarchyMenuItemMensJackets,
   siteHierarchyMenuItemWomens,
-  siteHierarchyMenuItemWomensDresses,
   siteHierarchyMenuItemWomensTops,
-  siteHierarchyMenuItemWomensAccessories,
   siteHierarchyMenuItemHomeware,
   siteHierarchyMenuItemSale,
   siteHierarchyMenuItemShopTheLook,
@@ -209,29 +228,6 @@ const fixtures: readonly EnrichedContentItem[] = [
   shopTheLook,
   homeMain,
   shopTheLookMain,
-  productAuroraLoungeChairStory,
-  productTerraDiningTableStory,
-  productAuroraLoungeChair,
-  productAuroraShelving,
-  productAuroraSideTable,
-  productLumenFloorLamp,
-  productMaraWoolThrow,
-  productTerraDiningTable,
-  productVerdeCeramicPlanter,
-  productAuroraLoungeChairMainSlot,
-  productTerraDiningTableMainSlot,
-  productOxfordShirt,
-  productLinenCampShirt,
-  productTaperedChinos,
-  productCorduroyTrousers,
-  productWaxedFieldJacket,
-  productQuiltedBomber,
-  productSilkBlouse,
-  productRibbedKnitTop,
-  productMidiWrapDress,
-  productPleatedSundress,
-  productLeatherTote,
-  productSilkScarf,
   blogGrownUpGlitterBody,
   blogGrownUpGlitterMoreLooks,
   blogOpulentDecadenceBody,
@@ -242,13 +238,6 @@ const fixtures: readonly EnrichedContentItem[] = [
   homeCardDepartmentSale,
   homeCardDepartmentMens,
   homeCardDepartmentWomens,
-  homeCardProductCorduroyTrousers,
-  homeCardProductLeatherTote,
-  homeCardProductMaraHandWovenWoolThrow,
-  homeCardProductQuiltedBomber,
-  homeCardProductRibbedKnitTop,
-  homeCardProductSilkScarf,
-  homeCardProductWaxedFieldJacket,
   homeClosingHero,
   homeDepartments,
   homeEditorialImage,
@@ -278,6 +267,59 @@ const fixtures: readonly EnrichedContentItem[] = [
   slotBlogOpulentDecadenceMain,
   slotBlogPiratecoreMain,
   slotStoryMain,
+  productSuedeTrenchCoatKhakiStory,
+  productSuedeTrenchCoatKhakiMainSlot,
+  productSuedeTrenchCoatKhaki,
+  productLonglineQuiltedPaddedCoatBlack,
+  productLonglineWaterproofHoodedCoatBlack,
+  productWaterResistantFunnelNeckJacketLightBeige,
+  productCoOrdFunnelNeckDenimJacketMidWash,
+  productStretchDenimWesternJacketWhite,
+  productTexturedWideLegTrouserCoOrdNavy,
+  productWideLegDrawcordWaistJeansDarkWash,
+  productCrewNeckDoubleLayerCardiganWithWoolGrey,
+  productTerraStoneEffectCoffeeTableStory,
+  productTerraStoneEffectCoffeeTableMainSlot,
+  productTerraStoneEffectCoffeeTable,
+  productMarlowCoffeeTableWithWavyEdgeDetail,
+  productLindenCoffeeTableOak,
+  productEmbossedFloorLamp,
+  productPleatedTableLamp,
+  productWavyTieredEasyFitLightShade,
+  productNaturalScallopEasyFitLightShade,
+  productLodgeCheckSuperSoftThrow,
+  product2ftPreLitFlockedChristmasTreeWithBurlapBase,
+  productCrewNeckStitchInterestJumperGreen,
+  productCollaredArgyleCardiganPinkBurgundy,
+  productLonglineZipHoodieBrown,
+  productZipFunnelNeckSweatshirtPink,
+  productHalfZipSweatshirtBlue,
+  productStretchTailoredWideLegTrousersBlack,
+  productCasualWideLegStripeTrousersMulti,
+  productHighWaistFlareJeansMidWash,
+  productFlorenceHighRiseSkinnyJeansDarkWash,
+  productKneeHighPointedToeRealSuedeHeeledBootsTan,
+  productChelseaBootBrown,
+  productLaceUpHikerBootBlack,
+  productTailoredOvercoatBrown,
+  productQuiltedDownJacketGrey,
+  productLeatherJacketBeige,
+  productCrewNeckJumperDarkRed,
+  productButtonCardiganBeige,
+  productStripeJumperBlue,
+  productCheckShirtMulti,
+  productClassicShirtLightBlue,
+  productTexturedBlazerBrown,
+  productChinosBrown,
+  productChinosPetrol,
+  productSlimJeansBlue,
+  productSlimJeansDarkBlue,
+  productLowTopTrainersBrown,
+  productLowTopTrainersOlive,
+  productRetroRunnerTrainersBlue,
+  productLaceUpBootsBrown,
+  productLaceUpShoesGrey,
+  productLoafersBrown,
 ]
 
 export const anyafinnSet: FixtureSet = {

@@ -1,0 +1,362 @@
+{
+  "id": "d18234c0-bc85-5de3-bd57-7f64a55cc155",
+  "label": "Product — Low-Top Trainers - Olive",
+  "body": {
+    "_meta": {
+      "name": "Low-Top Trainers - Olive",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "d18234c0-bc85-5de3-bd57-7f64a55cc155",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-low-top-trainers-olive"
+          }
+        ]
+      }
+    },
+    "sku": "M0E20000000E465",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Low-Top Trainers - Olive"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Low-Top Trainers - Olive"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Zapatillas bajas - Oliva"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Baskets basses - Olive"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Low-Top-Sneaker - Oliv"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Sneakers basse - Oliva"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 155.25,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 186.25,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 186.25,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Italian-made olive low-tops"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Italian-made olive low-tops"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Zapatillas bajas oliva fabricadas en Italia"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Baskets basses olive fabriquées en Italie"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Oliv-Low-Tops aus Italien"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Sneakers basse oliva prodotte in Italia"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080028_1",
+          "alt": "Low-Top Trainers - Olive — view 1",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080028_2",
+          "alt": "Low-Top Trainers - Olive — view 2",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080028_3",
+          "alt": "Low-Top Trainers - Olive — view 3",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080028_4",
+          "alt": "Low-Top Trainers - Olive — view 4",
+          "width": 858,
+          "height": 1144
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Color"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Colour"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Color"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Couleur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Farbe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Colore"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Olive"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Olive"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Oliva"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Olive"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Oliv"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Oliva"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "en-GB",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "es-ES",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "de-DE",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "it-IT",
+              "value": "EU 34–46"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Origin"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Origin"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Origen"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Origine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herkunft"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Origine"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Fabricado en Italia"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Fabriqué en Italie"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Hergestellt in Italien"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Prodotto in Italia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["men", "men-shoes", "men-shoes-sneakers"],
+    "tags": ["trainers"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Low-top trainers in an autumn olive, made in Italy."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Low-top trainers in an autumn olive, made in Italy."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Zapatillas bajas en un verde oliva otoñal, fabricadas en Italia."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Des baskets basses vert olive automnal, fabriquées en Italie."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Low-Top-Sneaker in herbstlichem Oliv – hergestellt in Italien."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Sneakers basse in un verde oliva autunnale, prodotte in Italia."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

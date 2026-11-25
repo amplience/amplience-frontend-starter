@@ -1,0 +1,335 @@
+{
+  "id": "8e728500-6e7b-51e6-ad4b-16c75b51a653",
+  "label": "Product — Linden Coffee Table - Oak",
+  "body": {
+    "_meta": {
+      "name": "Linden Coffee Table - Oak",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "8e728500-6e7b-51e6-ad4b-16c75b51a653",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-linden-coffee-table-oak"
+          }
+        ]
+      }
+    },
+    "sku": "WSPBM",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Linden Coffee Table - Oak"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Linden Coffee Table - Oak"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Linden Mesa de Centro - Roble"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Linden Table basse - Chêne"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Linden Couchtisch - Eiche"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Linden Tavolino da Salotto - Rovere"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 139,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 166.75,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 176.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Fluted coffee table with hidden storage"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Fluted coffee table with hidden storage"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Mesa de centro estriada con almacenaje oculto"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Table basse cannelée avec rangement caché"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Kannelierter Couchtisch mit verstecktem Stauraum"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Tavolino scanalato con vano nascosto"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WSPBM_SQ3_0000000006_OAK_SLd",
+          "alt": "Linden Coffee Table - Oak",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Particle board / MDF"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Particle board / MDF"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Aglomerado / MDF"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Panneau de particules / MDF"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Spanplatte / MDF"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Truciolare / MDF"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Finish"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Finish"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Acabado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Finition"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Oberfläche"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Finitura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Oak effect"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Oak effect"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Efecto roble"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Effet chêne"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Eiche-Optik"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Effetto rovere"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Dimensiones"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maße"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Dimensioni"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "H40 x W110 x D60 cm"
+            },
+            {
+              "locale": "en-GB",
+              "value": "H40 x W110 x D60 cm"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Al40 x An110 x F60 cm"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "H40 x L110 x P60 cm"
+            },
+            {
+              "locale": "de-DE",
+              "value": "H40 x B110 x T60 cm"
+            },
+            {
+              "locale": "it-IT",
+              "value": "A40 x L110 x P60 cm"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["home", "accessories", "furniture"],
+    "tags": ["furniture", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Fluting is having a moment; this version earns it. The ribbed door slides sideways instead of swinging out, which matters when the table sits in the gap between a sofa and a wall and a door has nowhere to go. Inside there's a removable shelf and room for remotes, coasters and the clutter that otherwise lives on top. A lipped edge keeps things from travelling, and splayed legs lift it clear of the floor."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Fluting is having a moment; this version earns it. The ribbed door slides sideways instead of swinging out, which matters when the table sits in the gap between a sofa and a wall and a door has nowhere to go. Inside there's a removable shelf and room for remotes, coasters and the clutter that otherwise lives on top. A lipped edge keeps things from travelling, and splayed legs lift it clear of the floor."
+        },
+        {
+          "locale": "es-ES",
+          "value": "El estriado está de moda; esta versión se lo ha ganado. La puerta acanalada se desliza hacia el lado en lugar de abrirse hacia fuera, lo que importa cuando la mesa vive en el hueco entre un sofá y una pared y una puerta no tiene adónde ir. Dentro hay un estante extraíble y sitio para mandos, posavasos y todo el desorden que si no acaba viviendo encima. Un canto con reborde evita que las cosas se vayan de viaje, y las patas abiertas la levantan del suelo."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Les cannelures ont leur moment ; cette version le mérite. La porte nervurée coulisse sur le côté au lieu de s'ouvrir vers l'extérieur, ce qui compte quand la table se cale entre un canapé et un mur et qu'une porte battante n'a nulle part où aller. À l'intérieur, une étagère amovible et de la place pour les télécommandes, les dessous de verre et le fourbi qui vit sinon sur le dessus. Un rebord empêche les objets de voyager, et les pieds évasés la décollent du sol."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Kannelierung hat gerade ihren Moment; diese Version verdient ihn. Die gerippte Tür läuft seitlich auf, statt aufzuschwingen – was zählt, wenn der Tisch in der Lücke zwischen Sofa und Wand steht und eine Tür nirgendwohin kann. Innen gibt es einen herausnehmbaren Einlegeboden und Platz für Fernbedienungen, Untersetzer und den Kleinkram, der sonst obenauf wohnt. Eine umlaufende Kante verhindert, dass Dinge wandern, und die schräg gestellten Beine heben ihn vom Boden ab."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Le scanalature sono il dettaglio del momento; questa versione se le merita. L'anta a costine scorre di lato invece di aprirsi verso l'esterno, cosa che conta quando il tavolino sta nello spazio tra il divano e il muro e un'anta non ha dove andare. Dentro c'è un ripiano rimovibile e posto per telecomandi, sottobicchieri e tutto il disordine che altrimenti vive sul piano. Un bordo rialzato impedisce alle cose di viaggiare, e le gambe svasate lo sollevano dal pavimento."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

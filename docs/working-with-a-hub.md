@@ -63,9 +63,25 @@ Each layer can be seeded on its own (`pnpm hub:import:settings`, `:types`, `:ext
 
 For the full walkthrough — prerequisites, repository IDs, verification steps, and publishing behaviour — see the [seeding runbook](runbooks/hub-setup.md).
 
-## commercetools product picker
+## Product pickers
 
-A hub serving commercetools-backed sites can give editors the eComm Toolkit product picker on [Product Carousel](content-types.md#product-carousel-block) blocks, in place of typing SKUs. There's no Environment Manager field for this yet: add a `commercetools` block to the hub's entry under `environments` in `amplience.config.json` by hand (the Environment Manager keeps it when it saves), then run `pnpm hub:import` (or just `:schemas` and `:extensions`).
+Editors pick products on [Product Carousel](content-types.md#product-carousel-block) blocks with the eComm Toolkit product picker, in place of typing SKUs. Which picker depends on where the hub's products live, and `hub:import` sets it up (the schemas in the repo stay the same either way — the picker is added at import time):
+
+- **Amplience PIM** (`ecomm-toolkit-amplience`) — every hub. It searches the hub's own [Product](content-types.md#product) content items as the signed-in editor, so it needs no credentials, and stores SKUs.
+- **commercetools** (`ecomm-toolkit-commercetools`) — hubs with a `commercetools` block (below). It stores SKUs too, so a carousel's content reads the same whichever picker filled it.
+
+Both run from the same extension app. The Product Carousel gets the picker for the hub's **main PIM** — "Hub's main PIM" in the Environment Manager's PIM details, saved as `"mainPim"` on the hub's entry in `amplience.config.json`:
+
+- `"mainPim": "cms"` — the Amplience PIM picker.
+- `"mainPim": "commercetools"` — the commercetools picker. Needs the hub's `commercetools` block; `hub:import` stops with an error without it.
+
+The values are the same as a site's `PRODUCT_SOURCE` (see [Deploying](deploying.md#products)), and the main PIM should match the source of the sites the hub mainly serves: a carousel only renders products its site's source can find. Without `mainPim`, a hub with a `commercetools` block counts as commercetools and any other as the CMS — so set it explicitly on a hub that has commercetools settings only for its multi-PIM carousels.
+
+### commercetools
+
+A hub serving commercetools-backed sites can give editors the commercetools picker. Set it up in the Environment Manager under the hub's settings → **PIM details**: the commercetools project key, client ID and client secret, the hub's main PIM, and whether to enable multi-PIM carousels. Then run `pnpm hub:import` (or just `:schemas`, `:types` and `:extensions`).
+
+The form saves them to the hub's entry under `environments` in `amplience.config.json`:
 
 ```json
 {
@@ -77,19 +93,20 @@ A hub serving commercetools-backed sites can give editors the eComm Toolkit prod
     "region": "europe-west1.gcp",
     "language": "en"
   },
+  "mainPim": "commercetools",
   "multiPimDemo": true
 }
 ```
 
-`projectKey`, `clientId` and `clientSecret` are required. `region` defaults to `europe-west1.gcp`, and `language` (the locale the picker searches and labels in) defaults to `en`. `multiPimDemo` is optional — see below. The hub's other settings sit alongside as usual; the file is plain JSON, so no comments.
+`projectKey`, `clientId` and `clientSecret` are all or nothing. `region` (default `europe-west1.gcp`) and `language` (the locale the picker searches and labels in, default `en`) aren't in the form; add them to the file by hand if you need them, and the form keeps them. The form always saves `mainPim` (described above); `multiPimDemo` is described below. The file is plain JSON, so no comments.
 
-With the block present, `hub:import` seeds the `ecomm-toolkit` extension with these credentials and adds the picker to the carousel's `products` field. Without it (or with any of the three required keys missing) the extension is skipped and the field stays a plain SKU list, so a CMS-only hub is unaffected.
+With the block present, `hub:import` seeds the `ecomm-toolkit-commercetools` extension with these credentials, for the Product Carousel when commercetools is the main PIM and for the multi-PIM carousel's commercetools list. Without it (or with any of the three required keys missing) that extension is skipped, so a CMS-only hub is unaffected.
 
 - **Use a dedicated read-only API client.** The toolkit calls commercetools from the editor's browser, so its secret is visible to anyone who can edit content. Create an API client with only `view_published_products` and `view_categories` — not the site's own client.
 - **The picker needs Product Projection Search.** The toolkit's search runs on commercetools' older Product Projection Search, which is deprecated and has to be active on the project. That's separate from the newer Product Search the site uses for listings (see [Deploying](deploying.md#commercetools)).
-- **Seeded SKUs show as empty in the picker.** The picker stores and displays commercetools product ids. Carousels seeded with SKUs render correctly on the site, but appear empty in the picker until re-picked, and saving from the picker replaces them with ids.
+- **The commercetools picker finds products by SKU.** Each SKU it stores must exist in the project — the same rule the site applies when it renders the carousel.
 
-`"multiPimDemo": true` also registers the [Multi-PIM Product Carousel](content-types.md#multi-pim-product-carousel-demo) — one product list per source, for demo hubs whose sites run on different product sources. Leave it off for a client's hub, so editors see a single carousel.
+`"multiPimDemo": true` also registers the [Multi-PIM Product Carousel](content-types.md#multi-pim-product-carousel-demo) — one product list per source, for demo hubs whose sites run on different product sources. Each list gets its own source's picker: Amplience PIM for the CMS list, commercetools for the commercetools list. It needs more than one PIM, so it's only seeded once the hub has commercetools details, and the Environment Manager only shows it ("Enable multi-PIM carousels"), along with the main PIM choice, from then on. Leave it off for a client's hub, so editors see a single carousel.
 
 ## Schedule preview
 

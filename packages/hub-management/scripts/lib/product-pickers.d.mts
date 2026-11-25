@@ -15,8 +15,15 @@ export type HubEntry = {
     region?: string
     language?: string
   }
+  /** The hub's main product source — see `ProductSourceName`. */
+  mainPim?: string
   multiPimDemo?: boolean
 }
+
+/** A site's PRODUCT_SOURCE, and a hub's `mainPim`. */
+export type ProductSourceName = 'cms' | 'commercetools'
+
+export declare const PRODUCT_SOURCES: readonly ProductSourceName[]
 
 export type CommercetoolsSettings = {
   project: string
@@ -32,8 +39,15 @@ export declare const commercetoolsSettings: (
   hubEntry: HubEntry | undefined,
 ) => CommercetoolsSettings | undefined
 
+export declare const mainPim: (hubEntry: HubEntry | undefined) => ProductSourceName
+
 export declare const needsCommercetools: (definitionText: string) => boolean
+
+export declare const availablePims: (hubEntry: HubEntry | undefined) => ProductSourceName[]
 
 export declare const seedsContentType: (file: string, hubEntry: HubEntry | undefined) => boolean
 
-export declare const withProductPickers: <T>(schema: T, options: { commercetools: boolean }) => T
+export declare const withProductPickers: <T>(
+  schema: T,
+  options: { mainPim: ProductSourceName; commercetools: boolean },
+) => T

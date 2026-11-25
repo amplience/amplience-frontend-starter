@@ -11,9 +11,10 @@
   "type": "object",
   "properties": {
     "icon": {
-      "title": "Icon",
       "allOf": [
-        { "$ref": "https://quadratic.amplience.com/v2/partials/icon#/definitions/icon-name" }
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/icon#/definitions/icon-name"
+        }
       ]
     },
     "label": {

@@ -1,0 +1,335 @@
+{
+  "id": "6f16a0a7-9c89-5871-9ea1-42637bd774d3",
+  "label": "Product — Embossed Floor Lamp",
+  "body": {
+    "_meta": {
+      "name": "Embossed Floor Lamp",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "6f16a0a7-9c89-5871-9ea1-42637bd774d3",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-embossed-floor-lamp"
+          }
+        ]
+      }
+    },
+    "sku": "WZFCA",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Embossed Floor Lamp"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Embossed Floor Lamp"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Lámpara de Pie con Relieve"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Lampadaire embossé"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Stehleuchte mit Reliefstruktur"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Lampada da Terra con Decoro a Rilievo"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 95,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 114,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 120.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Embossed stoneware floor lamp"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Embossed stoneware floor lamp"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Lámpara de pie de gres con relieve"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Lampadaire en grès embossé"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Stehleuchte aus Steinzeug mit Relief"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Lampada da terra in gres a rilievo"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WZFCA_SQ3_0000000067_CREAM_SLd",
+          "alt": "Embossed Floor Lamp",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Stoneware base, fabric shade"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Stoneware base, fabric shade"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Base de gres, pantalla de tela"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Pied en grès, abat-jour en tissu"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Fuß aus Steinzeug, Schirm aus Stoff"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Base in gres, paralume in tessuto"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Finish"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Finish"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Acabado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Finition"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Oberfläche"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Finitura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Embossed and glazed"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Embossed and glazed"
+            },
+            {
+              "locale": "es-ES",
+              "value": "En relieve y esmaltado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Embossé et émaillé"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Reliefiert und glasiert"
+            },
+            {
+              "locale": "it-IT",
+              "value": "In rilievo e smaltato"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Height"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Height"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Altura"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Hauteur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Höhe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Altezza"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "129.5 cm"
+            },
+            {
+              "locale": "en-GB",
+              "value": "129.5 cm"
+            },
+            {
+              "locale": "es-ES",
+              "value": "129,5 cm"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "129,5 cm"
+            },
+            {
+              "locale": "de-DE",
+              "value": "129,5 cm"
+            },
+            {
+              "locale": "it-IT",
+              "value": "129,5 cm"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["home", "electrical", "lighting"],
+    "tags": ["lighting", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Closer to a piece of pottery than a light fitting. The stoneware base carries fine vertical embossing that catches light whether the lamp is on or off, and at nearly 130cm it stands like a floor lamp while keeping the proportions of an oversized vessel. A tall, narrow shade in a plain neutral stays deliberately quiet so the base holds the attention. A 28cm square footprint tucks it beside an armchair rather than commandeering the corner."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Closer to a piece of pottery than a light fitting. The stoneware base carries fine vertical embossing that catches light whether the lamp is on or off, and at nearly 130cm it stands like a floor lamp while keeping the proportions of an oversized vessel. A tall, narrow shade in a plain neutral stays deliberately quiet so the base holds the attention. A 28cm square footprint tucks it beside an armchair rather than commandeering the corner."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Más cerca de una pieza de alfarería que de una luminaria. La base de gres lleva un relieve vertical fino que atrapa la luz con la lámpara encendida y también apagada, y con casi 130cm se sostiene como lámpara de pie sin perder las proporciones de una vasija sobredimensionada. Una pantalla alta y estrecha en un neutro liso se queda deliberadamente callada para que la base concentre toda la atención. Una huella de 28cm en cuadrado la encaja junto a un sillón en lugar de apropiarse del rincón."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Plus proche d'une pièce de poterie que d'un luminaire. Le pied en grès porte un fin embossage vertical qui accroche la lumière, lampe allumée ou éteinte, et avec près de 130cm il se tient comme un lampadaire tout en gardant les proportions d'un vase surdimensionné. Un abat-jour haut et étroit, dans un neutre uni, reste volontairement discret pour que le pied garde l'attention. Une emprise de 28cm de côté le glisse à côté d'un fauteuil au lieu de réquisitionner le coin de la pièce."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Näher an einem Stück Keramik als an einer Leuchte. Der Fuß aus Steinzeug trägt eine feine vertikale Reliefstruktur, die Licht einfängt, ob die Leuchte an ist oder nicht, und mit knapp 130cm steht sie da wie eine Stehleuchte, behält aber die Proportionen eines übergroßen Gefäßes. Ein hoher, schmaler Schirm in schlichtem Naturton bleibt bewusst zurückhaltend, damit der Fuß die Aufmerksamkeit behält. Die Stellfläche von 28cm im Quadrat stellt sie neben den Sessel, statt die ganze Ecke zu besetzen."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Più vicina a un pezzo di ceramica che a un corpo illuminante. La base in gres porta un fine rilievo verticale che cattura la luce con la lampada accesa e anche spenta, e con quasi 130cm si impone come una lampada da terra pur conservando le proporzioni di un vaso fuori scala. Un paralume alto e stretto, in un neutro semplice, resta volutamente discreto perché l'attenzione la tenga la base. Un ingombro quadrato di 28cm la infila accanto a una poltrona invece di occupare tutto l'angolo."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

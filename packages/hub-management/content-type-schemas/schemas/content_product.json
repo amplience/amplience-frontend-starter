@@ -17,7 +17,15 @@
         "items": [
           {
             "label": "🛍️ Product",
-            "pointers": ["/sku", "/name", "/brand", "/prices", "/shortDescription", "/status"]
+            "pointers": [
+              "/sku",
+              "/name",
+              "/brand",
+              "/prices",
+              "/shortDescription",
+              "/description",
+              "/status"
+            ]
           },
           {
             "label": "🖼️ Media",
@@ -37,14 +45,7 @@
           },
           {
             "label": "⚙️ Metadata",
-            "pointers": [
-              "/title",
-              "/description",
-              "/keywords",
-              "/canonicalUrl",
-              "/robots",
-              "/social"
-            ]
+            "pointers": ["/title", "/keywords", "/canonicalUrl", "/robots", "/social"]
           }
         ]
       }
@@ -83,26 +84,32 @@
       }
     },
     "title": {
-      "description": "Product page title — <title> and SEO. Falls back to the product name when unset.",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/title"
+        },
+        {
+          "description": "Product page title — <title> and SEO. Falls back to the product name when unset."
         }
       ]
     },
     "social": {
-      "description": "Open Graph overrides. Unset fields fall back to the product's own name and description.",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/social"
+        },
+        {
+          "description": "Open Graph overrides. Unset fields fall back to the product's own name and description."
         }
       ]
     },
     "canonicalUrl": {
-      "description": "Rarely set — when absent, the canonical defaults to the product's /products/{slug} path.",
       "allOf": [
         {
           "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/canonicalUrl"
+        },
+        {
+          "description": "Rarely set — when absent, the canonical defaults to the product's /products/{slug} path."
         }
       ]
     },
@@ -113,21 +120,25 @@
       "minLength": 1
     },
     "name": {
-      "title": "Product Name",
-      "description": "The product's display name.",
-      "minLength": 1,
       "allOf": [
         {
           "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+        },
+        {
+          "title": "Product Name",
+          "description": "The product's display name.",
+          "minLength": 1
         }
       ]
     },
     "shortDescription": {
-      "title": "Short Description",
-      "description": "A sentence or two shown on the product page and in cards. Longer copy belongs in the Content tab.",
       "allOf": [
         {
           "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        },
+        {
+          "title": "Short Description",
+          "description": "A short phrase shown on the product page and in cards. Longer copy belongs in the Content tab."
         }
       ],
       "properties": {
@@ -157,10 +168,12 @@
       "title": "Images",
       "description": "Product imagery. The first image is the primary one — used on cards and as the lead image on the product page. Add more to turn the product page's image area into a gallery; one image renders as a single image, and none renders nothing at all.",
       "items": {
-        "title": "Image",
         "allOf": [
           {
             "$ref": "https://quadratic.amplience.com/v2/partials/media"
+          },
+          {
+            "title": "Image"
           }
         ]
       }
@@ -174,21 +187,25 @@
         "title": "Attribute",
         "properties": {
           "label": {
-            "title": "Label",
-            "description": "e.g. Material, Dimensions, Weight.",
-            "minLength": 1,
             "allOf": [
               {
                 "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+              },
+              {
+                "title": "Label",
+                "description": "e.g. Material, Dimensions, Weight.",
+                "minLength": 1
               }
             ]
           },
           "value": {
-            "title": "Value",
-            "minLength": 1,
             "allOf": [
               {
                 "$ref": "http://bigcontent.io/cms/schema/v1/localization#/definitions/localized-string"
+              },
+              {
+                "title": "Value",
+                "minLength": 1
               }
             ]
           }
@@ -274,9 +291,27 @@
     "description": {
       "allOf": [
         {
-          "$ref": "https://quadratic.amplience.com/v2/partials/seo#/definitions/description"
+          "$ref": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+        },
+        {
+          "title": "Description",
+          "description": "The full product description, shown on the product page below the short description. Never shown on cards."
         }
-      ]
+      ],
+      "properties": {
+        "values": {
+          "items": {
+            "properties": {
+              "value": {
+                "type": "string",
+                "title": "Description",
+                "description": "The full product description, shown on the product page.",
+                "ui:component": "text-area"
+              }
+            }
+          }
+        }
+      }
     },
     "keywords": {
       "allOf": [
@@ -299,6 +334,7 @@
     "brand",
     "prices",
     "shortDescription",
+    "description",
     "status",
     "images",
     "attributes",
@@ -306,7 +342,6 @@
     "tags",
     "slots",
     "title",
-    "description",
     "keywords",
     "social",
     "canonicalUrl",

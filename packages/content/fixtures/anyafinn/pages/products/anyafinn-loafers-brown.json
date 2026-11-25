@@ -1,0 +1,362 @@
+{
+  "id": "adff2213-dbbd-5ffc-9e0f-1fa79f48d6f0",
+  "label": "Product — Loafers - Brown",
+  "body": {
+    "_meta": {
+      "name": "Loafers - Brown",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "adff2213-dbbd-5ffc-9e0f-1fa79f48d6f0",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-loafers-brown"
+          }
+        ]
+      }
+    },
+    "sku": "M0E20000000EA64",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Loafers - Brown"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Loafers - Brown"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Mocasines - Marrón"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Mocassins - Marron"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Loafer - Braun"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Mocassini - Marrone"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 286.5,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 343.75,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 343.75,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Italian-made brown loafers"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Italian-made brown loafers"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Mocasines marrones fabricados en Italia"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Mocassins marron fabriqués en Italie"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Braune Loafer aus Italien"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Mocassini marroni prodotti in Italia"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080776_1",
+          "alt": "Loafers - Brown — view 1",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080776_2",
+          "alt": "Loafers - Brown — view 2",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080776_3",
+          "alt": "Loafers - Brown — view 3",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/080776_4",
+          "alt": "Loafers - Brown — view 4",
+          "width": 858,
+          "height": 1144
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Color"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Colour"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Color"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Couleur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Farbe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Colore"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Brown"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Brown"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Marrón"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Marron"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Braun"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Marrone"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "en-GB",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "es-ES",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "de-DE",
+              "value": "EU 34–46"
+            },
+            {
+              "locale": "it-IT",
+              "value": "EU 34–46"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Origin"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Origin"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Origen"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Origine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herkunft"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Origine"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Fabricado en Italia"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Fabriqué en Italie"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Hergestellt in Italien"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Prodotto in Italia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["men", "men-shoes", "men-shoes-loafers"],
+    "tags": ["shoes"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Brown loafers, made in Italy."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Brown loafers, made in Italy."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Mocasines marrones, fabricados en Italia."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Des mocassins marron, fabriqués en Italie."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Braune Loafer – hergestellt in Italien."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Mocassini marroni, prodotti in Italia."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

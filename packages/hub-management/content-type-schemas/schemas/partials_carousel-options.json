@@ -12,6 +12,42 @@
       "minimum": 1,
       "maximum": 6
     },
+    "slides-per-view-mobile": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/slides-per-view"
+        },
+        {
+          "title": "Slides visible (mobile)",
+          "description": "Below 769px. Try 1.2 to leave a sliver of the next slide showing.",
+          "default": 1.2
+        }
+      ]
+    },
+    "slides-per-view-tablet": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/slides-per-view"
+        },
+        {
+          "title": "Slides visible (tablet)",
+          "description": "From 769px.",
+          "default": 3
+        }
+      ]
+    },
+    "slides-per-view-desktop": {
+      "allOf": [
+        {
+          "$ref": "https://quadratic.amplience.com/v2/partials/carousel-options#/definitions/slides-per-view"
+        },
+        {
+          "title": "Slides visible (desktop)",
+          "description": "From 992px.",
+          "default": 4
+        }
+      ]
+    },
     "gap": {
       "title": "Gap (px)",
       "description": "Space between slides. Defaults to the theme's --gap token when left empty.",
@@ -21,27 +57,32 @@
     "show-arrows": {
       "title": "Show arrows",
       "description": "Previous/next buttons overlaid on the track. Hidden automatically when everything already fits.",
-      "type": "boolean"
+      "type": "boolean",
+      "default": true
     },
     "show-dots": {
       "title": "Show dots",
       "description": "Pagination dots beneath the track, one per scroll position. Hidden automatically when there is nowhere to scroll.",
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "show-scrollbar": {
       "title": "Show scrollbar",
       "description": "A styled scrollbar beneath the track. Worth turning on for a dense track with no arrows, where it becomes the visible sign that there is more to see.",
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "drag-to-scroll": {
       "title": "Drag to scroll",
       "description": "Let a mouse drag the slides. Links inside slides still work — a drag is told apart from a click by distance. Touch is unaffected either way, since it already scrolls natively. Turn off for slides whose content wants the drag for itself, such as a map.",
-      "type": "boolean"
+      "type": "boolean",
+      "default": true
     },
     "scroll-step": {
       "title": "Arrow step",
       "description": "How far one arrow press moves the track: one slide at a time, or a full page of slides.",
       "type": "string",
+      "default": "slide",
       "enum": ["slide", "page"]
     }
   }

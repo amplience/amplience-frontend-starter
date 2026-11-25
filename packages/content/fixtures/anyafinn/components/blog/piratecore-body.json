@@ -32,22 +32,22 @@
           "values": [
             {
               "locale": "en-US",
-              "value": "Shop the Silk Scarf"
+              "value": "Shop the Suede Knee Boots"
             },
             {
               "locale": "fr-FR",
-              "value": "Voir le foulard en soie"
+              "value": "Voir les bottes hautes en daim"
             },
             {
               "locale": "de-DE",
-              "value": "Zum Seidentuch"
+              "value": "Zu den Stiefeln aus Veloursleder"
             }
           ],
           "_meta": {
             "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
           }
         },
-        "href": "/products/silk-scarf",
+        "href": "/products/anyafinn-knee-high-pointed-toe-real-suede-heeled-boots-tan",
         "variant": "outlined",
         "color": "black"
       }

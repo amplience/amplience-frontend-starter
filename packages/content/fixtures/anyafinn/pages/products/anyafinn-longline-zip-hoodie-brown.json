@@ -1,0 +1,463 @@
+{
+  "id": "2568b600-21df-5e18-8af0-124498f32e19",
+  "label": "Product — Longline Zip Hoodie - Brown",
+  "body": {
+    "_meta": {
+      "name": "Longline Zip Hoodie - Brown",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "2568b600-21df-5e18-8af0-124498f32e19",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-longline-zip-hoodie-brown"
+          }
+        ]
+      }
+    },
+    "sku": "AFHS004-08",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Longline Zip Hoodie - Brown"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Longline Zip Hoodie - Brown"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Sudadera larga con capucha y cremallera - Marrón"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Sweat zippé à capuche long - Marron"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Lange Kapuzenjacke mit Reißverschluss - Braun"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Felpa lunga con cappuccio e zip - Marrone"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 25,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 30,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 31.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Hip-length zip-through hoodie"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Hip-length zip-through hoodie"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Sudadera con capucha y cremallera hasta la cadera"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Sweat à capuche zippé couvrant les hanches"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Hüftlanger Hoodie mit Reißverschluss"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Felpa con zip e cappuccio lunga sui fianchi"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/X2C7Z_SQ1_0000000143_BROWN_MDf",
+          "alt": "Longline Zip Hoodie - Brown",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "60% cotton, 40% polyester"
+            },
+            {
+              "locale": "en-GB",
+              "value": "60% cotton, 40% polyester"
+            },
+            {
+              "locale": "es-ES",
+              "value": "60 % algodón, 40 % poliéster"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "60 % coton, 40 % polyester"
+            },
+            {
+              "locale": "de-DE",
+              "value": "60 % Baumwolle, 40 % Polyester"
+            },
+            {
+              "locale": "it-IT",
+              "value": "60% cotone, 40% poliestere"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Regular, true to size"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte regular, talla normal"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe classique, taille normalement"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Normale Passform, fällt normal aus"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità regolare, veste in taglia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 8–22"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 8–22"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Season"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Season"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Temporada"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Saison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Saison"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Stagione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Otoño/Invierno"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Automne/Hiver"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herbst/Winter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Autunno/Inverno"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavable a máquina"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavable en machine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwaschbar"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavabile in lavatrice"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["women", "women-clothing", "women-clothing-tops"],
+    "tags": ["tops", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Cut longer than a standard hoodie, which is the whole point - it covers the hip, so it works over leggings without anyone having to think about it. Full-length zip means it goes on over a tee without ruining your hair. Drawstring hood, side pockets deep enough for a phone and keys, soft jersey throughout. Sizes 8 to 22, machine washable."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Cut longer than a standard hoodie, which is the whole point - it covers the hip, so it works over leggings without anyone having to think about it. Full-length zip means it goes on over a tee without ruining your hair. Drawstring hood, side pockets deep enough for a phone and keys, soft jersey throughout. Sizes 8 to 22, machine washable."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Más larga que una sudadera normal, y de eso se trata: cubre la cadera, así que funciona sobre unos leggings sin tener que pensarlo. La cremallera completa permite ponértela sobre una camiseta sin estropear el peinado. Capucha con cordón, bolsillos laterales lo bastante hondos para el móvil y las llaves, y punto suave de arriba abajo. Tallas de la 8 a la 22, lavable a máquina."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Coupé plus long qu'un sweat à capuche classique, et c'est tout l'intérêt : il couvre les hanches et se porte sur un legging sans y penser. Le zip sur toute la longueur permet de l'enfiler sur un t-shirt sans ruiner sa coiffure. Capuche à cordon, poches latérales assez profondes pour un téléphone et des clés, jersey doux sur l'ensemble. Tailles 8 à 22, lavable en machine."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Länger geschnitten als ein normaler Hoodie – und genau darum geht es: Er bedeckt die Hüfte und funktioniert so über Leggings, ohne dass man darüber nachdenken muss. Der durchgehende Reißverschluss bedeutet, dass er sich über ein T-Shirt ziehen lässt, ohne die Frisur zu ruinieren. Kapuze mit Tunnelzug, Seitentaschen, tief genug für Handy und Schlüssel, durchgehend weicher Jersey. Größen 8 bis 22, maschinenwaschbar."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Tagliata più lunga di una felpa classica, ed è proprio questo il punto: copre i fianchi, così sta bene sopra i leggings senza doverci pensare. La zip a tutta lunghezza permette di indossarla sopra una t-shirt senza rovinare i capelli. Cappuccio con coulisse, tasche laterali profonde abbastanza per telefono e chiavi, jersey morbido su tutto il capo. Taglie dalla 8 alla 22, lavabile in lavatrice."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

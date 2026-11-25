@@ -43,6 +43,14 @@ describe('mapProduct — required fields', () => {
   })
 })
 
+describe('mapProduct — copy', () => {
+  it('maps the short and long descriptions separately', () => {
+    const product = mapProduct({ ...base, shortDescription: 'Short.', description: 'Long.' }, 's')
+    expect(product?.shortDescription).toBe('Short.')
+    expect(product?.description).toBe('Long.')
+  })
+})
+
 describe('mapProduct — images', () => {
   it('maps a ManualImage to its src, keeping the body for the DI path', () => {
     const media = {

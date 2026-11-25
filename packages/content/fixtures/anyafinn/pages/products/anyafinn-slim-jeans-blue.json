@@ -1,0 +1,362 @@
+{
+  "id": "05925dec-96d4-5470-890f-be3d3ed1f991",
+  "label": "Product — Slim Jeans - Blue",
+  "body": {
+    "_meta": {
+      "name": "Slim Jeans - Blue",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "05925dec-96d4-5470-890f-be3d3ed1f991",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-slim-jeans-blue"
+          }
+        ]
+      }
+    },
+    "sku": "M0E20000000DUMN",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Slim Jeans - Blue"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Slim Jeans - Blue"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Vaqueros slim - Azul"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Jean slim - Bleu"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Slim Jeans - Blau"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Jeans slim - Blu"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 234.25,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 281.25,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 281.25,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Italian-made mid-blue slim jeans"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Italian-made mid-blue slim jeans"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Vaqueros slim azul medio fabricados en Italia"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Jean slim bleu moyen fabriqué en Italie"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Mittelblaue Slim Jeans aus Italien"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Jeans slim blu medio prodotti in Italia"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/078900_1",
+          "alt": "Slim Jeans - Blue — view 1",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/078900_2",
+          "alt": "Slim Jeans - Blue — view 2",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/078900_3",
+          "alt": "Slim Jeans - Blue — view 3",
+          "width": 858,
+          "height": 1144
+        }
+      },
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://i8.amplience.net/i/willow/078900_4",
+          "alt": "Slim Jeans - Blue — view 4",
+          "width": 858,
+          "height": 1144
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Color"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Colour"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Color"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Couleur"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Farbe"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Colore"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Blue"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Blue"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Azul"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Bleu"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Blau"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Blu"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "24–42"
+            },
+            {
+              "locale": "en-GB",
+              "value": "24–42"
+            },
+            {
+              "locale": "es-ES",
+              "value": "24–42"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "24–42"
+            },
+            {
+              "locale": "de-DE",
+              "value": "24–42"
+            },
+            {
+              "locale": "it-IT",
+              "value": "24–42"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Origin"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Origin"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Origen"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Origine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herkunft"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Origine"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Made in Italy"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Fabricado en Italia"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Fabriqué en Italie"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Hergestellt in Italien"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Prodotto in Italia"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["men", "men-clothing", "men-clothing-jeans"],
+    "tags": ["jeans"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Mid-blue slim jeans, made in Italy."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Mid-blue slim jeans, made in Italy."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Vaqueros slim azul medio, fabricados en Italia."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Un jean slim bleu moyen, fabriqué en Italie."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Mittelblaue Slim Jeans – hergestellt in Italien."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Jeans slim blu medio, prodotti in Italia."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

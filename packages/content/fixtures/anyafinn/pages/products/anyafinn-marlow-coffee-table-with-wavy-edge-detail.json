@@ -1,0 +1,335 @@
+{
+  "id": "69bfa193-86fc-5a3f-bf3b-80c482b1aa99",
+  "label": "Product — Marlow Coffee Table with Wavy Edge Detail",
+  "body": {
+    "_meta": {
+      "name": "Marlow Coffee Table with Wavy Edge Detail",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "69bfa193-86fc-5a3f-bf3b-80c482b1aa99",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-marlow-coffee-table-with-wavy-edge-detail"
+          }
+        ]
+      }
+    },
+    "sku": "WSPBQ",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Marlow Coffee Table with Wavy Edge Detail"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Marlow Coffee Table with Wavy Edge Detail"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Marlow Mesa de Centro con Canto Ondulado"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Marlow Table basse à bord ondulé"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Marlow Couchtisch mit gewellter Kante"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Marlow Tavolino da Salotto con Bordo Ondulato"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 95,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 114,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 120.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Wavy-edge oak-effect coffee table"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Wavy-edge oak-effect coffee table"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Mesa de centro efecto roble con canto ondulado"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Table basse effet chêne à bord ondulé"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Couchtisch in Eiche-Optik mit Wellenkante"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Tavolino effetto rovere con bordo ondulato"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WSPBQ_SQ3_0000004181_OAK_BLACK_SLd",
+          "alt": "Marlow Coffee Table with Wavy Edge Detail",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Wood and metal"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Wood and metal"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Madera y metal"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Bois et métal"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Holz und Metall"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Legno e metallo"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Finish"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Finish"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Acabado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Finition"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Oberfläche"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Finitura"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Oak effect with wavy edge"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Oak effect with wavy edge"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Efecto roble con canto ondulado"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Effet chêne à bord ondulé"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Eiche-Optik mit gewellter Kante"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Effetto rovere con bordo ondulato"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Dimensiones"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Dimensions"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maße"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Dimensioni"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "H45 x W120 x D55 cm"
+            },
+            {
+              "locale": "en-GB",
+              "value": "H45 x W120 x D55 cm"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Al45 x An120 x F55 cm"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "H45 x L120 x P55 cm"
+            },
+            {
+              "locale": "de-DE",
+              "value": "H45 x B120 x T55 cm"
+            },
+            {
+              "locale": "it-IT",
+              "value": "A45 x L120 x P55 cm"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["home", "accessories", "furniture"],
+    "tags": ["furniture", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "A live-edge silhouette at a flat-pack price. The oak-effect top is profiled with an irregular wave along its length so it reads as a plank taken from a tree rather than cut from a sheet, and that irregularity is what stops it looking mass-produced. Black metal cross legs supply the contrast - organic above, geometric below. At 120cm long there's room for a tray, a laptop and somewhere to put your heels."
+        },
+        {
+          "locale": "en-GB",
+          "value": "A live-edge silhouette at a flat-pack price. The oak-effect top is profiled with an irregular wave along its length so it reads as a plank taken from a tree rather than cut from a sheet, and that irregularity is what stops it looking mass-produced. Black metal cross legs supply the contrast - organic above, geometric below. At 120cm long there's room for a tray, a laptop and somewhere to put your heels."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Una silueta de canto natural a precio de mueble para montar en casa. El tablero con efecto roble está perfilado con una onda irregular a lo largo, así que se lee como un tablón sacado de un árbol y no cortado de una plancha, y es justo esa irregularidad la que evita que parezca fabricado en serie. Las patas cruzadas de metal negro ponen el contraste: orgánico arriba, geométrico abajo. Con 120cm de largo hay sitio para una bandeja, un portátil y dónde apoyar los tacones."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Une silhouette bord naturel à un prix de meuble en kit. Le plateau effet chêne est profilé d'une vague irrégulière sur toute sa longueur, si bien qu'il se lit comme une planche prise dans un arbre plutôt que découpée dans un panneau, et c'est cette irrégularité qui l'empêche d'avoir l'air produit en série. Des pieds croisés en métal noir apportent le contraste : organique au-dessus, géométrique en dessous. Avec 120cm de long, il reste la place pour un plateau, un ordinateur portable et vos talons."
+        },
+        {
+          "locale": "de-DE",
+          "value": "Eine Baumkanten-Silhouette zum Flatpack-Preis. Die Platte in Eiche-Optik ist an der Längsseite mit einer unregelmäßigen Welle profiliert, sodass sie wie eine Bohle aus einem Baum wirkt und nicht wie aus der Platte geschnitten – und genau diese Unregelmäßigkeit verhindert den Massenware-Look. Schwarze Kreuzbeine aus Metall liefern den Kontrast: organisch oben, geometrisch unten. Auf 120cm Länge ist Platz für ein Tablett, einen Laptop und die eigenen Füße."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Una silhouette dal bordo vivo a un prezzo da mobile in kit. Il piano effetto rovere è sagomato con un'onda irregolare per tutta la lunghezza, così si legge come una tavola ricavata da un albero e non tagliata da un pannello, ed è proprio quell'irregolarità che gli evita l'aria di prodotto in serie. Le gambe a croce in metallo nero portano il contrasto: organico sopra, geometrico sotto. Con 120cm di lunghezza c'è posto per un vassoio, un portatile e per appoggiarci i tacchi."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}

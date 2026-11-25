@@ -1,0 +1,463 @@
+{
+  "id": "63950d15-1ad2-5dcc-afb5-043875edc73b",
+  "label": "Product — Stretch Tailored Wide Leg Trousers - Black",
+  "body": {
+    "_meta": {
+      "name": "Stretch Tailored Wide Leg Trousers - Black",
+      "schema": "https://quadratic.amplience.com/v2/content/product",
+      "deliveryId": "63950d15-1ad2-5dcc-afb5-043875edc73b",
+      "deliveryKeys": {
+        "values": [
+          {
+            "value": "anyafinn/products/anyafinn-stretch-tailored-wide-leg-trousers-black"
+          }
+        ]
+      }
+    },
+    "sku": "AFTR001-06",
+    "name": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Stretch Tailored Wide Leg Trousers - Black"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Stretch Tailored Wide Leg Trousers - Black"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Pantalón sastre ancho elástico - Negro"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pantalon large tailleur stretch - Noir"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Weite Stretch-Anzughose - Schwarz"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Pantaloni sartoriali a gamba larga elasticizzati - Nero"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "brand": "Anya Finn",
+    "prices": [
+      {
+        "amount": 25,
+        "currencyCode": "GBP"
+      },
+      {
+        "amount": 30,
+        "currencyCode": "EUR"
+      },
+      {
+        "amount": 31.99,
+        "currencyCode": "USD"
+      }
+    ],
+    "shortDescription": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Tailored wide-leg stretch trousers"
+        },
+        {
+          "locale": "en-GB",
+          "value": "Tailored wide-leg stretch trousers"
+        },
+        {
+          "locale": "es-ES",
+          "value": "Pantalón sastre ancho elástico"
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Pantalon large tailleur stretch"
+        },
+        {
+          "locale": "de-DE",
+          "value": "Weite Stretch-Anzughose"
+        },
+        {
+          "locale": "it-IT",
+          "value": "Pantaloni sartoriali elasticizzati a gamba larga"
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    },
+    "status": "active",
+    "images": [
+      {
+        "mediaType": "ManualImage",
+        "image": {
+          "src": "https://cdn.media.amplience.net/i/very/WFMYA_SQ1_0000000004_BLACK_MDf",
+          "alt": "Stretch Tailored Wide Leg Trousers - Black",
+          "width": 1350,
+          "height": 1800
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Material"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Material"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Material"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Matière"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Material"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Materiale"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "78% polyester, 19% viscose, 3% elastane"
+            },
+            {
+              "locale": "en-GB",
+              "value": "78% polyester, 19% viscose, 3% elastane"
+            },
+            {
+              "locale": "es-ES",
+              "value": "78 % poliéster, 19 % viscosa, 3 % elastano"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "78 % polyester, 19 % viscose, 3 % élasthanne"
+            },
+            {
+              "locale": "de-DE",
+              "value": "78 % Polyester, 19 % Viskose, 3 % Elasthan"
+            },
+            {
+              "locale": "it-IT",
+              "value": "78% poliestere, 19% viscosa, 3% elastan"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Fit"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Fit"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Corte"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Coupe"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Passform"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Vestibilità"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Tailored, wide leg"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Tailored, wide leg"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Entallado, pierna ancha"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Ajusté, jambe large"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Figurbetont, weites Bein"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Sartoriale, gamba larga"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Sizes"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Sizes"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Tallas"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Tailles"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Größen"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Taglie"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "UK 6–24"
+            },
+            {
+              "locale": "en-GB",
+              "value": "UK 6–24"
+            },
+            {
+              "locale": "es-ES",
+              "value": "UK 6–24"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "UK 6–24"
+            },
+            {
+              "locale": "de-DE",
+              "value": "UK 6–24"
+            },
+            {
+              "locale": "it-IT",
+              "value": "UK 6–24"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Season"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Season"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Temporada"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Saison"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Saison"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Stagione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Autumn/Winter"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Otoño/Invierno"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Automne/Hiver"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Herbst/Winter"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Autunno/Inverno"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      },
+      {
+        "label": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Care"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Care"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Cuidados"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Entretien"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Pflege"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Manutenzione"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        },
+        "value": {
+          "values": [
+            {
+              "locale": "en-US",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "en-GB",
+              "value": "Machine washable"
+            },
+            {
+              "locale": "es-ES",
+              "value": "Lavable a máquina"
+            },
+            {
+              "locale": "fr-FR",
+              "value": "Lavable en machine"
+            },
+            {
+              "locale": "de-DE",
+              "value": "Maschinenwaschbar"
+            },
+            {
+              "locale": "it-IT",
+              "value": "Lavabile in lavatrice"
+            }
+          ],
+          "_meta": {
+            "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+          }
+        }
+      }
+    ],
+    "categories": ["women", "women-clothing", "women-clothing-trouser"],
+    "tags": ["trousers", "aw26"],
+    "description": {
+      "values": [
+        {
+          "locale": "en-US",
+          "value": "Tailored at the waist and hip, then wide enough through the leg to move properly - a trouser that works for a desk and doesn't fight you on the train home. A little stretch in the weave, side pockets that actually sit flat. Sizes 6 to 24, machine washable."
+        },
+        {
+          "locale": "en-GB",
+          "value": "Tailored at the waist and hip, then wide enough through the leg to move properly - a trouser that works for a desk and doesn't fight you on the train home. A little stretch in the weave, side pockets that actually sit flat. Sizes 6 to 24, machine washable."
+        },
+        {
+          "locale": "es-ES",
+          "value": "Entallado en cintura y cadera y luego lo bastante ancho de pierna para moverse bien: un pantalón que funciona en la oficina y no te lo pone difícil en el tren de vuelta. Un toque elástico en el tejido y bolsillos laterales que de verdad quedan planos. Tallas de la 6 a la 24, lavable a máquina."
+        },
+        {
+          "locale": "fr-FR",
+          "value": "Ajusté à la taille et aux hanches, puis assez large dans la jambe pour bouger librement : un pantalon qui fonctionne au bureau et ne vous gêne pas dans le train du retour. Un peu de stretch dans le tissage, des poches latérales qui restent vraiment à plat. Tailles 6 à 24, lavable en machine."
+        },
+        {
+          "locale": "de-DE",
+          "value": "An Taille und Hüfte auf Figur geschnitten, dann im Bein weit genug für echte Bewegungsfreiheit – eine Hose, die am Schreibtisch funktioniert und sich auf der Heimfahrt nicht gegen Sie wehrt. Etwas Stretch im Gewebe, Seitentaschen, die wirklich flach anliegen. Größen 6 bis 24, maschinenwaschbar."
+        },
+        {
+          "locale": "it-IT",
+          "value": "Sagomati in vita e sui fianchi, poi abbastanza larghi sulla gamba per muoversi davvero: un pantalone che funziona alla scrivania e non ti ostacola sul treno del ritorno. Un po' di elasticità nel tessuto, tasche laterali che restano davvero piatte. Taglie dalla 6 alla 24, lavabili in lavatrice."
+        }
+      ],
+      "_meta": {
+        "schema": "http://bigcontent.io/cms/schema/v1/core#/definitions/localized-value"
+      }
+    }
+  }
+}
