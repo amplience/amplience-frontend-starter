@@ -1,0 +1,18 @@
+{
+  "id": "d322e051-ed0f-5aff-b6a9-44f9f91f0779",
+  "label": "Hierarchy menu item: Mens — Knitwear",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Mens — Knitwear",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "d322e051-ed0f-5aff-b6a9-44f9f91f0779",
+      "hierarchy": {
+        "parentId": "5c76289c-d092-5c6b-810f-05a5da4ff054",
+        "root": false,
+        "position": "gO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Knitwear",
+    "link": "/men-clothing-tops"
+  }
+}

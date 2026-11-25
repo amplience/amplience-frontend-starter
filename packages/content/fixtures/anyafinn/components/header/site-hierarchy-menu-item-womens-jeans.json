@@ -1,0 +1,18 @@
+{
+  "id": "2743e88c-4cbd-5e58-98cc-93b0c47fe850",
+  "label": "Hierarchy menu item: Womens — Jeans",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Womens — Jeans",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "2743e88c-4cbd-5e58-98cc-93b0c47fe850",
+      "hierarchy": {
+        "parentId": "32722372-7a57-5d8e-b95b-0ae3124ca58c",
+        "root": false,
+        "position": "ggggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Jeans",
+    "link": "/women-clothing-jeans"
+  }
+}

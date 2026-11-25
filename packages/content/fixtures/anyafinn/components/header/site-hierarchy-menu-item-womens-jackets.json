@@ -1,0 +1,18 @@
+{
+  "id": "9c73f78e-0936-5054-a7dd-747609f7e249",
+  "label": "Hierarchy menu item: Womens — Coats & Jackets",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Womens — Coats & Jackets",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "9c73f78e-0936-5054-a7dd-747609f7e249",
+      "hierarchy": {
+        "parentId": "32722372-7a57-5d8e-b95b-0ae3124ca58c",
+        "root": false,
+        "position": "O~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Coats & Jackets",
+    "link": "/women-clothing-jackets"
+  }
+}

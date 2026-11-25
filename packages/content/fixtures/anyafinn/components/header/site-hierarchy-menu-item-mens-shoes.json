@@ -1,0 +1,18 @@
+{
+  "id": "f65aa165-a82e-5909-9952-43a13df926f3",
+  "label": "Hierarchy menu item: Mens — Shoes",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Mens — Shoes",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "f65aa165-a82e-5909-9952-43a13df926f3",
+      "hierarchy": {
+        "parentId": "5c76289c-d092-5c6b-810f-05a5da4ff054",
+        "root": false,
+        "position": "gggggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Shoes",
+    "link": "/men-shoes"
+  }
+}

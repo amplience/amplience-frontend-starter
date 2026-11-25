@@ -53,12 +53,20 @@ import siteHeaderRow2 from '../../../fixtures/anyafinn/components/header/site-he
 import siteHeader from '../../../fixtures/anyafinn/components/header/site-header.json' with { type: 'json' }
 import siteHierarchyMenuItemHomeware from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-homeware.json' with { type: 'json' }
 import siteHierarchyMenuItemMensJackets from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens-jackets.json' with { type: 'json' }
+import siteHierarchyMenuItemMensJeans from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens-jeans.json' with { type: 'json' }
+import siteHierarchyMenuItemMensKnitwear from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens-knitwear.json' with { type: 'json' }
 import siteHierarchyMenuItemMensShirts from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens-shirts.json' with { type: 'json' }
+import siteHierarchyMenuItemMensShoes from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens-shoes.json' with { type: 'json' }
 import siteHierarchyMenuItemMensTrousers from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens-trousers.json' with { type: 'json' }
 import siteHierarchyMenuItemMens from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-mens.json' with { type: 'json' }
 import siteHierarchyMenuItemSale from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-sale.json' with { type: 'json' }
 import siteHierarchyMenuItemShopTheLook from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-shop-the-look.json' with { type: 'json' }
+import siteHierarchyMenuItemWomensBoots from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens-boots.json' with { type: 'json' }
+import siteHierarchyMenuItemWomensJackets from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens-jackets.json' with { type: 'json' }
+import siteHierarchyMenuItemWomensJeans from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens-jeans.json' with { type: 'json' }
+import siteHierarchyMenuItemWomensKnitwear from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens-knitwear.json' with { type: 'json' }
 import siteHierarchyMenuItemWomensTops from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens-tops.json' with { type: 'json' }
+import siteHierarchyMenuItemWomensTrousers from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens-trousers.json' with { type: 'json' }
 import siteHierarchyMenuItemWomens from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-item-womens.json' with { type: 'json' }
 import siteHierarchyMenuMain from '../../../fixtures/anyafinn/components/header/site-hierarchy-menu-main.json' with { type: 'json' }
 import siteIconButtonAccount from '../../../fixtures/anyafinn/components/header/site-icon-button-account.json' with { type: 'json' }
@@ -148,7 +156,6 @@ import productStripeJumperBlue from '../../../fixtures/anyafinn/pages/products/a
 import productSuedeTrenchCoatKhaki from '../../../fixtures/anyafinn/pages/products/anyafinn-suede-trench-coat-khaki.json' with { type: 'json' }
 import productTailoredOvercoatBrown from '../../../fixtures/anyafinn/pages/products/anyafinn-tailored-overcoat-brown.json' with { type: 'json' }
 import productTerraStoneEffectCoffeeTable from '../../../fixtures/anyafinn/pages/products/anyafinn-terra-stone-effect-coffee-table.json' with { type: 'json' }
-import productTexturedBlazerBrown from '../../../fixtures/anyafinn/pages/products/anyafinn-textured-blazer-brown.json' with { type: 'json' }
 import productTexturedWideLegTrouserCoOrdNavy from '../../../fixtures/anyafinn/pages/products/anyafinn-textured-wide-leg-trouser-co-ord-navy.json' with { type: 'json' }
 import productWaterResistantFunnelNeckJacketLightBeige from '../../../fixtures/anyafinn/pages/products/anyafinn-water-resistant-funnel-neck-jacket-light-beige.json' with { type: 'json' }
 import productWavyTieredEasyFitLightShade from '../../../fixtures/anyafinn/pages/products/anyafinn-wavy-tiered-easy-fit-light-shade.json' with { type: 'json' }
@@ -203,11 +210,19 @@ const fixtures: readonly EnrichedContentItem[] = [
   siteHeaderRow2,
   siteHeader,
   siteHierarchyMenuItemMens,
+  siteHierarchyMenuItemMensJackets,
+  siteHierarchyMenuItemMensKnitwear,
   siteHierarchyMenuItemMensShirts,
   siteHierarchyMenuItemMensTrousers,
-  siteHierarchyMenuItemMensJackets,
+  siteHierarchyMenuItemMensJeans,
+  siteHierarchyMenuItemMensShoes,
   siteHierarchyMenuItemWomens,
+  siteHierarchyMenuItemWomensJackets,
+  siteHierarchyMenuItemWomensKnitwear,
   siteHierarchyMenuItemWomensTops,
+  siteHierarchyMenuItemWomensTrousers,
+  siteHierarchyMenuItemWomensJeans,
+  siteHierarchyMenuItemWomensBoots,
   siteHierarchyMenuItemHomeware,
   siteHierarchyMenuItemSale,
   siteHierarchyMenuItemShopTheLook,
@@ -309,7 +324,6 @@ const fixtures: readonly EnrichedContentItem[] = [
   productStripeJumperBlue,
   productCheckShirtMulti,
   productClassicShirtLightBlue,
-  productTexturedBlazerBrown,
   productChinosBrown,
   productChinosPetrol,
   productSlimJeansBlue,
