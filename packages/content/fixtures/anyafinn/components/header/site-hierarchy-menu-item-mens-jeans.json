@@ -1,0 +1,18 @@
+{
+  "id": "da4ad4bb-0809-596f-add4-cecad1eebbac",
+  "label": "Hierarchy menu item: Mens — Jeans",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Mens — Jeans",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "da4ad4bb-0809-596f-add4-cecad1eebbac",
+      "hierarchy": {
+        "parentId": "5c76289c-d092-5c6b-810f-05a5da4ff054",
+        "root": false,
+        "position": "ggggO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Jeans",
+    "link": "/men-clothing-jeans"
+  }
+}

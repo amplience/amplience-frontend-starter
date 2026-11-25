@@ -1,0 +1,18 @@
+{
+  "id": "f5a7d897-0787-5511-b6eb-aeee16808cb9",
+  "label": "Hierarchy menu item: Womens — Knitwear",
+  "body": {
+    "_meta": {
+      "name": "Hierarchy menu item: Womens — Knitwear",
+      "schema": "https://quadratic.amplience.com/v2/content/hierarchy-menu-item",
+      "deliveryId": "f5a7d897-0787-5511-b6eb-aeee16808cb9",
+      "hierarchy": {
+        "parentId": "32722372-7a57-5d8e-b95b-0ae3124ca58c",
+        "root": false,
+        "position": "gO~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      }
+    },
+    "label": "Knitwear",
+    "link": "/women-clothing-knitwear"
+  }
+}

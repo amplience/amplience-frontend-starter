@@ -201,7 +201,7 @@ describe('MockContentClient', () => {
     })
 
     it('assembles the anyafinn commerce tree (ADR-0024)', async () => {
-      // Mens, Womens, Kids, Homeware, Shop the Look — three subcategories under Mens.
+      // Mens, Womens, Homeware, Sale, Shop the Look — six subcategories under Mens.
       // The commerce tree lives in its own set (ADR-0019), not the default one.
       const client = makeMockContentClient('anyafinn')
       const menu = await client.getHierarchy<{
@@ -214,7 +214,7 @@ describe('MockContentClient', () => {
           i._meta.deliveryId ===
           fixtureIdFor('anyafinn', 'components/header/site-hierarchy-menu-item-mens'),
       )
-      expect(mens?.children).toHaveLength(3)
+      expect(mens?.children).toHaveLength(6)
     })
 
     it('returns leaf nodes with no children key at all', async () => {
