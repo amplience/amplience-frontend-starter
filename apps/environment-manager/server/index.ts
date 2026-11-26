@@ -2240,23 +2240,119 @@ app.get('/api/environments/:name/stats', async (c) => {
  * under `custom` and make the wipe look like it had failed.
  */
 async function listRepoItems(token: string, repoId: string) {
-  const items: { id: string; label: string; status: string }[] = []
+  const items: { id: string; label: string; status: string; schema?: string }[] = []
   for (const status of ['ACTIVE', 'ARCHIVED']) {
     for (let page = 0; ; page++) {
       const url = `${AMPLIENCE_API}/content-repositories/${repoId}/content-items?status=${status}&size=100&page=${page}`
       const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } })
       if (!res.ok) throw new Error(`HTTP ${res.status} listing ${status} items`)
       const body = (await res.json()) as {
-        _embedded?: { 'content-items'?: { id: string; label?: string; status?: string }[] }
+        _embedded?: {
+          'content-items'?: {
+            id: string
+            label?: string
+            status?: string
+            body?: { _meta?: { schema?: string } }
+          }[]
+        }
         page?: { totalPages?: number }
       }
       for (const item of body._embedded?.['content-items'] ?? []) {
-        items.push({ id: item.id, label: item.label ?? item.id, status: item.status ?? status })
+        // The listing already carries each item's body, so its content type
+        // comes free — the breakdown's item lists show it beside the title.
+        const schema = item.body?._meta?.schema
+        items.push({
+          id: item.id,
+          label: item.label ?? item.id,
+          status: item.status ?? status,
+          ...(schema === undefined ? {} : { schema }),
+        })
       }
       if (page + 1 >= (body.page?.totalPages ?? 1)) break
     }
   }
   return items
+}
+
+/**
+ * Which fixture set each item on the hub came from, as counts — or why that
+ * can't be known (no dc-cli import map on this machine). Shared by the
+ * content-breakdown endpoint and the unscoped Sync all, so the panel and the
+ * operation agree on which sets a hub has.
+ */
+async function classifyHubContent(env: Environment) {
+  const mapFile = path.join(homedir(), '.amplience', 'imports', `quadratic-${env.hubName}.json`)
+  if (!existsSync(mapFile)) {
+    return {
+      available: false as const,
+      reason:
+        `No dc-cli import map for "${env.hubName}" on this machine, so no item can be traced ` +
+        'back to the set it came from. Seeding from here builds one.',
+      mapFile,
+    }
+  }
+
+  const [{ classifyHubItems, summarise }, { readAllSets }] = await Promise.all([
+    import(
+      pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'provenance.mjs')).href
+    ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/provenance.mjs')>,
+    import(
+      pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'fixture-sets.mjs')).href
+    ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/fixture-sets.mjs')>,
+  ])
+
+  const map = JSON.parse(readFileSync(mapFile, 'utf-8')) as {
+    contentItems?: [string, string][]
+  }
+  const token = await getAmplienceToken(env.clientId, env.clientSecret)
+  const repos = [env.repoContent, env.repoSlots, env.repoSiteComponents, env.repoProducts].filter(
+    (id): id is string => (id ?? '') !== '',
+  )
+  const items = (await Promise.all(repos.map((id) => listRepoItems(token, id)))).flat()
+
+  const sets = readAllSets().map((s) => ({ name: s.name, ids: s.ids }))
+  const classified = classifyHubItems(items, map.contentItems ?? [], sets)
+  return {
+    available: true as const,
+    ...summarise(classified),
+    // The two buckets with no source on disk, itemised so the panel can say
+    // which items they are. Live only, to match the counts `summarise` gives.
+    orphanedItems: itemRefs(classified.orphaned),
+    customItems: itemRefs(classified.custom),
+  }
+}
+
+/**
+ * The live items of a bucket, as the panel lists them. The classifier buckets
+ * the very objects `listRepoItems` built, so `schema` survives it even though
+ * its declared `HubItem` type doesn't name it.
+ */
+function itemRefs(
+  items: readonly { id: string; label?: string; status?: string; schema?: string }[],
+) {
+  return items
+    .filter((i) => i.status !== 'ARCHIVED')
+    .map((i) => ({
+      id: i.id,
+      label: i.label ?? i.id,
+      ...(i.schema === undefined ? {} : { schema: i.schema }),
+    }))
+}
+
+/**
+ * The repository's fixture sets that have content on this hub, in panel order.
+ * Empty when that can't be known (no import map, or the hub couldn't be read),
+ * so the caller falls back to syncing the localhost row's set alone.
+ */
+async function installedSets(env: Environment): Promise<string[]> {
+  try {
+    const breakdown = await classifyHubContent(env)
+    if (!breakdown.available) return []
+    return FIXTURE_SETS.map((s) => s.name).filter((n) => (breakdown.bySet[n] ?? 0) > 0)
+  } catch (err) {
+    console.error(`Could not list the fixture sets on "${env.name}":`, err)
+    return []
+  }
 }
 
 /**
@@ -2284,39 +2380,8 @@ app.get('/api/environments/:name/content-breakdown', async (c) => {
     return c.json({ error: 'Environment is missing credentials or repository IDs.' }, 400)
   }
 
-  const mapFile = path.join(homedir(), '.amplience', 'imports', `quadratic-${env.hubName}.json`)
-  if (!existsSync(mapFile)) {
-    return c.json({
-      available: false,
-      reason:
-        `No dc-cli import map for "${env.hubName}" on this machine, so no item can be traced ` +
-        'back to the set it came from. Seeding from here builds one.',
-      mapFile,
-    })
-  }
-
   try {
-    const [{ classifyHubItems, summarise }, { readAllSets }] = await Promise.all([
-      import(
-        pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'provenance.mjs')).href
-      ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/provenance.mjs')>,
-      import(
-        pathToFileURL(path.join(HUB_MANAGEMENT_ROOT, 'scripts', 'lib', 'fixture-sets.mjs')).href
-      ) as Promise<typeof import('../../../packages/hub-management/scripts/lib/fixture-sets.mjs')>,
-    ])
-
-    const map = JSON.parse(readFileSync(mapFile, 'utf-8')) as {
-      contentItems?: [string, string][]
-    }
-    const token = await getAmplienceToken(env.clientId, env.clientSecret)
-    const repos = [env.repoContent, env.repoSlots, env.repoSiteComponents, env.repoProducts].filter(
-      (id): id is string => (id ?? '') !== '',
-    )
-    const items = (await Promise.all(repos.map((id) => listRepoItems(token, id)))).flat()
-
-    const sets = readAllSets().map((s) => ({ name: s.name, ids: s.ids }))
-    const summary = summarise(classifyHubItems(items, map.contentItems ?? [], sets))
-    return c.json({ available: true, ...summary })
+    return c.json(await classifyHubContent(env))
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
     console.error(`Failed to classify content for "${env.name}":`, err)
@@ -2384,7 +2449,28 @@ app.post('/api/environments/:name/:op', async (c) => {
       provenance !== undefined ? ` · ${provenance}` : setName === undefined ? '' : ` · ${setName}`
     await stream.writeln(`▶ ${opCfg.label}${scope} — "${env.label || env.name}"…\n`)
     try {
-      await runScript(stream, opCfg.script, args, buildEnv(env, opCfg.republish, setName), name)
+      // An unscoped Sync all covers every set already on the hub, not just the
+      // one the localhost row points at: the model steps run once with the first
+      // set, then each further set gets its content step.
+      const installed =
+        op === 'sync-all' && setName === undefined && scopeFlag === undefined
+          ? await installedSets(env)
+          : []
+      if (installed.length > 0) {
+        await stream.writeln(`Fixture sets on this hub: ${installed.join(', ')}\n`)
+        for (const [i, set] of installed.entries()) {
+          if (i > 0) await stream.writeln(`\n▶ Sync content items · ${set}\n`)
+          await runScript(
+            stream,
+            opCfg.script,
+            [i === 0 ? 'all' : 'content', '--set', set],
+            buildEnv(env, opCfg.republish, set),
+            name,
+          )
+        }
+      } else {
+        await runScript(stream, opCfg.script, args, buildEnv(env, opCfg.republish, setName), name)
+      }
       // A provenance wipe without --apply only reported. Saying "Done" there
       // reads as the work having happened, which is how a dry run gets mistaken
       // for a wipe that refused.

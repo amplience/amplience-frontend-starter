@@ -21,6 +21,7 @@ import type {
   VercelPreflight,
   WebApp,
 } from '../types.js'
+import { contentItemUrl, schemaShortName } from '../workforce-links.js'
 import { Chevron } from './Chevron.js'
 import { HubIcon } from './HubIcon.js'
 
@@ -1069,6 +1070,7 @@ export function EnvironmentCard({
                   <ContentChildRow
                     key={row.key}
                     row={row}
+                    hubName={env.hubName}
                     isRunning={isRunning}
                     activeScopeKey={op?.scopeKey ?? null}
                     onRun={(scope) => {
@@ -2073,11 +2075,14 @@ type ResourceRowProps = {
  */
 function ContentChildRow({
   row,
+  hubName,
   isRunning,
   activeScopeKey,
   onRun,
 }: {
   row: ContentRow
+  /** Routes each listed item's link into the DC editor. */
+  hubName: string
   isRunning: boolean
   /** Which row the running operation belongs to — see ActiveOp.scopeKey. */
   activeScopeKey: string | null
@@ -2086,42 +2091,85 @@ function ContentChildRow({
   const scope: OpScope = row.kind === 'set' ? { set: row.key } : { provenance: row.kind }
   // Every row here shares `wipe-items`, so the spinner follows the scope.
   const running = isRunning && activeScopeKey === row.key
+  // `orphaned` and `custom` carry their items, so the count opens a list of them.
+  const [showItems, setShowItems] = useState(false)
+  const items = row.items ?? []
 
   return (
-    <tr className={`content-row content-row--${row.kind}`}>
-      <td className="col-resource col-resource--child" title={rowExplanation(row)}>
-        <span className="content-row__label">{row.label}</span>
-        {row.localeNote !== undefined && (
-          <span className="dim content-row__note"> · {row.localeNote}</span>
-        )}
-      </td>
-      <td className="col-count">{row.count.toLocaleString()}</td>
-      <td className="col-actions">
-        <div className="btn-group">
-          {row.canSync && (
-            <button
-              className={`btn btn--sm btn--op btn--op-sync${running ? ' btn--op-running' : ''}`}
-              onClick={() => onRun({ ...scope, op: 'sync-items' })}
-              disabled={isRunning}
-            >
-              {running ? <span className="spinner" aria-hidden="true" /> : null}
-              Sync
-            </button>
+    <>
+      <tr className={`content-row content-row--${row.kind}`}>
+        <td className="col-resource col-resource--child" title={rowExplanation(row)}>
+          <span className="content-row__label">{row.label}</span>
+          {row.localeNote !== undefined && (
+            <span className="dim content-row__note"> · {row.localeNote}</span>
           )}
-          {row.canWipe && row.count > 0 && (
+        </td>
+        <td className="col-count">
+          {items.length > 0 ? (
             <button
-              className={`btn btn--sm btn--op btn--op-wipe${running ? ' btn--op-running' : ''}`}
-              onClick={() => onRun({ ...scope, op: 'wipe-items' })}
-              disabled={isRunning}
-              title={row.regenerable ? undefined : 'Reports what it would remove first'}
+              type="button"
+              className="content-row__count-toggle"
+              aria-expanded={showItems}
+              title={showItems ? 'Hide these items' : 'Show which items these are'}
+              onClick={() => setShowItems((v) => !v)}
             >
-              {running ? <span className="spinner" aria-hidden="true" /> : null}
-              Wipe
+              {row.count.toLocaleString()}
             </button>
+          ) : (
+            row.count.toLocaleString()
           )}
-        </div>
-      </td>
-    </tr>
+        </td>
+        <td className="col-actions">
+          <div className="btn-group">
+            {row.canSync && (
+              <button
+                className={`btn btn--sm btn--op btn--op-sync${running ? ' btn--op-running' : ''}`}
+                onClick={() => onRun({ ...scope, op: 'sync-items' })}
+                disabled={isRunning}
+              >
+                {running ? <span className="spinner" aria-hidden="true" /> : null}
+                Sync
+              </button>
+            )}
+            {row.canWipe && row.count > 0 && (
+              <button
+                className={`btn btn--sm btn--op btn--op-wipe${running ? ' btn--op-running' : ''}`}
+                onClick={() => onRun({ ...scope, op: 'wipe-items' })}
+                disabled={isRunning}
+                title={row.regenerable ? undefined : 'Reports what it would remove first'}
+              >
+                {running ? <span className="spinner" aria-hidden="true" /> : null}
+                Wipe
+              </button>
+            )}
+          </div>
+        </td>
+      </tr>
+      {showItems && items.length > 0 && (
+        <tr className="content-row content-row--items">
+          <td colSpan={3}>
+            <ul className="content-row__items">
+              {items.map((item) => {
+                const url = contentItemUrl(hubName, item.id)
+                const type = schemaShortName(item.schema)
+                return (
+                  <li key={item.id}>
+                    {url === undefined ? (
+                      item.label
+                    ) : (
+                      <a href={url} target="_blank" rel="noreferrer">
+                        {item.label}
+                      </a>
+                    )}
+                    {type !== undefined && <span className="dim"> · {type}</span>}
+                  </li>
+                )
+              })}
+            </ul>
+          </td>
+        </tr>
+      )}
+    </>
   )
 }
 

@@ -77,6 +77,18 @@ describe('contentRows', () => {
     expect(rows.find((r) => r.kind === 'custom')?.count).toBe(942)
   })
 
+  it('carries the orphaned and custom items, so the panel can list them', () => {
+    const orphanedItems = [{ id: 'o1', label: 'Old banner' }]
+    const customItems = [{ id: 'c1', label: 'Summer sale', schema: 'https://x/hero.json' }]
+    const rows = contentRows(
+      available({ orphaned: 1, custom: 1, orphanedItems, customItems }),
+      SETS,
+    )
+    expect(rows.find((r) => r.kind === 'orphaned')?.items).toEqual(orphanedItems)
+    expect(rows.find((r) => r.kind === 'custom')?.items).toEqual(customItems)
+    expect(rows.find((r) => r.kind === 'set')?.items).toBeUndefined()
+  })
+
   it('renders no rows at all when the breakdown is unavailable', () => {
     // Not zeroes, which would be a guess presented as a fact.
     expect(contentRows({ available: false, reason: 'No map.' }, SETS)).toEqual([])
