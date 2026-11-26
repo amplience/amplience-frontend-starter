@@ -136,6 +136,13 @@
    --------------------------------------------------------------------------- */
 
 .track {
+  /*
+   * Makes the track the containing block for anything absolutely positioned
+   * inside a slide (e.g. Price's visually hidden labels). Without it they
+   * resolve against .viewport, which sits outside the scroll container, so
+   * they escape its clipping and widen the whole page.
+   */
+  position: relative;
   display: flex;
   align-items: stretch;
   gap: var(--carousel-gap);

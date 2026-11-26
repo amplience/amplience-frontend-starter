@@ -15,6 +15,9 @@
  */
 
 .root {
+  /* Contains the absolutely positioned .label below, so it can't escape a
+     scroll or overflow container the price sits in. */
+  position: relative;
   display: inline-block;
   color: var(--price-color, inherit);
   font-size: var(--price-font-size, inherit);
