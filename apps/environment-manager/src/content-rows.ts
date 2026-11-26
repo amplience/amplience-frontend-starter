@@ -27,9 +27,20 @@
 
 import type { FixtureSetInfo } from './types.js'
 
+/** One item in a bucket the panel can list — `schema` is its content type's URI. */
+export type ContentItemRef = { id: string; label: string; schema?: string }
+
 /** What the server reports for `GET /environments/:name/content-breakdown`. */
 export type ContentBreakdown =
-  | { available: true; bySet: Record<string, number>; orphaned: number; custom: number }
+  | {
+      available: true
+      bySet: Record<string, number>
+      orphaned: number
+      custom: number
+      /** Which items the two counts are — absent from an older server. */
+      orphanedItems?: ContentItemRef[]
+      customItems?: ContentItemRef[]
+    }
   | { available: false; reason: string }
 
 export type ContentRow = {
@@ -50,6 +61,8 @@ export type ContentRow = {
   localeNote?: string | undefined
   /** For a set row, where the set lives — a local set is on this computer only. */
   origin?: FixtureSetInfo['origin'] | undefined
+  /** For `orphaned` and `custom`, which items the count is, so the panel can list them. */
+  items?: ContentItemRef[] | undefined
 }
 
 /**
@@ -110,6 +123,7 @@ export function contentRows(
       canSync: false,
       canWipe: true,
       regenerable: false,
+      items: breakdown.orphanedItems,
     })
   }
   if (breakdown.custom > 0) {
@@ -121,6 +135,7 @@ export function contentRows(
       canSync: false,
       canWipe: true,
       regenerable: false,
+      items: breakdown.customItems,
     })
   }
   return rows

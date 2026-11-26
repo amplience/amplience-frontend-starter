@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { personalAccessTokensUrl } from './workforce-links.js'
+import { contentItemUrl, personalAccessTokensUrl, schemaShortName } from './workforce-links.js'
 
 describe('personalAccessTokensUrl', () => {
   it('builds the hub-scoped token screen', () => {
@@ -20,5 +20,27 @@ describe('personalAccessTokensUrl', () => {
     expect(personalAccessTokensUrl(undefined)).toBeUndefined()
     expect(personalAccessTokensUrl('')).toBeUndefined()
     expect(personalAccessTokensUrl('   ')).toBeUndefined()
+  })
+})
+
+describe('contentItemUrl', () => {
+  it('links to the item in the DC editor, routed by hub name', () => {
+    expect(contentItemUrl('my-hub', 'abc-123')).toBe(
+      'https://app.amplience.net/content/#!/my-hub/authoring/content-item/edit/abc-123',
+    )
+  })
+
+  it('offers no link without a hub name', () => {
+    expect(contentItemUrl('', 'abc-123')).toBeUndefined()
+  })
+})
+
+describe('schemaShortName', () => {
+  it('takes the last path segment, without .json', () => {
+    expect(schemaShortName('https://amplience.com/quadratic/hero-banner.json')).toBe('hero-banner')
+  })
+
+  it('is undefined for a missing schema', () => {
+    expect(schemaShortName(undefined)).toBeUndefined()
   })
 })

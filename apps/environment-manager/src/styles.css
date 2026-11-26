@@ -656,6 +656,38 @@ body {
   font-style: italic;
 }
 
+/* Their count opens the list of items it stands for — a link-styled number,
+   so the row's layout doesn't shift for having it. */
+.content-row__count-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+}
+
+.content-row__count-toggle[aria-expanded='true'] {
+  text-decoration-style: solid;
+}
+
+/* Custom can run to hundreds, so the list scrolls rather than pushing the
+   rest of the card off screen. */
+.content-row__items {
+  margin: 0.15rem 0 0.3rem 1.1rem;
+  padding: 0 0 0 1rem;
+  max-height: 12rem;
+  overflow-y: auto;
+  font-size: 0.925em;
+  color: var(--color-text-muted);
+}
+
+.content-row__items li {
+  padding: 0.05rem 0;
+}
+
 /* The sets the repository has that this hub doesn't — one offer, not a row
    each, so the table describes the hub rather than the catalogue. The picker
    stays folded away until asked for, so the row reads as one action. */

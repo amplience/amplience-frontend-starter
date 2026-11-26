@@ -2240,18 +2240,33 @@ app.get('/api/environments/:name/stats', async (c) => {
  * under `custom` and make the wipe look like it had failed.
  */
 async function listRepoItems(token: string, repoId: string) {
-  const items: { id: string; label: string; status: string }[] = []
+  const items: { id: string; label: string; status: string; schema?: string }[] = []
   for (const status of ['ACTIVE', 'ARCHIVED']) {
     for (let page = 0; ; page++) {
       const url = `${AMPLIENCE_API}/content-repositories/${repoId}/content-items?status=${status}&size=100&page=${page}`
       const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } })
       if (!res.ok) throw new Error(`HTTP ${res.status} listing ${status} items`)
       const body = (await res.json()) as {
-        _embedded?: { 'content-items'?: { id: string; label?: string; status?: string }[] }
+        _embedded?: {
+          'content-items'?: {
+            id: string
+            label?: string
+            status?: string
+            body?: { _meta?: { schema?: string } }
+          }[]
+        }
         page?: { totalPages?: number }
       }
       for (const item of body._embedded?.['content-items'] ?? []) {
-        items.push({ id: item.id, label: item.label ?? item.id, status: item.status ?? status })
+        // The listing already carries each item's body, so its content type
+        // comes free — the breakdown's item lists show it beside the title.
+        const schema = item.body?._meta?.schema
+        items.push({
+          id: item.id,
+          label: item.label ?? item.id,
+          status: item.status ?? status,
+          ...(schema === undefined ? {} : { schema }),
+        })
       }
       if (page + 1 >= (body.page?.totalPages ?? 1)) break
     }
@@ -2296,10 +2311,32 @@ async function classifyHubContent(env: Environment) {
   const items = (await Promise.all(repos.map((id) => listRepoItems(token, id)))).flat()
 
   const sets = readAllSets().map((s) => ({ name: s.name, ids: s.ids }))
+  const classified = classifyHubItems(items, map.contentItems ?? [], sets)
   return {
     available: true as const,
-    ...summarise(classifyHubItems(items, map.contentItems ?? [], sets)),
+    ...summarise(classified),
+    // The two buckets with no source on disk, itemised so the panel can say
+    // which items they are. Live only, to match the counts `summarise` gives.
+    orphanedItems: itemRefs(classified.orphaned),
+    customItems: itemRefs(classified.custom),
   }
+}
+
+/**
+ * The live items of a bucket, as the panel lists them. The classifier buckets
+ * the very objects `listRepoItems` built, so `schema` survives it even though
+ * its declared `HubItem` type doesn't name it.
+ */
+function itemRefs(
+  items: readonly { id: string; label?: string; status?: string; schema?: string }[],
+) {
+  return items
+    .filter((i) => i.status !== 'ARCHIVED')
+    .map((i) => ({
+      id: i.id,
+      label: i.label ?? i.id,
+      ...(i.schema === undefined ? {} : { schema: i.schema }),
+    }))
 }
 
 /**
