@@ -46,6 +46,7 @@ import { isContentClientError, resolveContentConfig } from '@amplience/frontend-
 import { makeSdkContentClient } from '@amplience/frontend-starter-content/sdk'
 import type { AnyComponentRegistryEntry } from '@amplience/frontend-starter-types'
 
+import { addChildCategories, resolveChildCategories } from '../../lib/child-categories'
 import { CUSTOM_CSS_SCHEMA, sanitizeCustomCss } from '../../lib/custom-css-schema'
 import {
   canonicalLocaleSlug,
@@ -188,6 +189,10 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
   // port read (ADR-0027 — see its open question on live editing).
   const previewProducts = uniqueProducts(await resolveProducts(item, visualizationRegistry, locale))
   const previewLinks = [...(await resolveLinks(item, locale))]
+  // Unticked too, so ticking "Show child categories" in the form shows them live.
+  const previewChildCategories = [
+    ...(await resolveChildCategories(item, locale, { includeUnticked: true })),
+  ]
 
   const itemSchema = (item as { _meta?: { schema?: string } })?._meta?.schema ?? ''
   if (itemSchema === CUSTOM_CSS_SCHEMA) {
@@ -197,8 +202,12 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
         depth: 'all',
         locale: locale.delivery,
       }),
-      client.getByKey(`${config.siteName}/site/header`, { depth: 'all', locale: locale.delivery }),
-      client.getByKey(`${config.siteName}/site/footer`, { depth: 'all', locale: locale.delivery }),
+      client
+        .getByKey(`${config.siteName}/site/header`, { depth: 'all', locale: locale.delivery })
+        .then((chrome) => addChildCategories(chrome, locale)),
+      client
+        .getByKey(`${config.siteName}/site/footer`, { depth: 'all', locale: locale.delivery })
+        .then((chrome) => addChildCategories(chrome, locale)),
     ])
     // Render each fetched item, degrading to nothing rather than breaking the
     // preview — the point is to see the CSS applied, not to fail on chrome.
@@ -253,6 +262,7 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
             deliveryLocale={locale.delivery}
             initialProducts={previewProducts}
             initialLinks={previewLinks}
+            initialChildCategories={previewChildCategories}
             productSource={productSourceName}
             localeCode={locale.code}
           />
@@ -270,6 +280,7 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
         deliveryLocale={locale.delivery}
         initialProducts={previewProducts}
         initialLinks={previewLinks}
+        initialChildCategories={previewChildCategories}
         productSource={productSourceName}
         localeCode={locale.code}
       />
@@ -282,8 +293,12 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
   let header: ReactNode = null
   let footer: ReactNode = null
   const [headerResult, footerResult] = await Promise.allSettled([
-    client.getByKey(`${config.siteName}/site/header`, { depth: 'all', locale: locale.delivery }),
-    client.getByKey(`${config.siteName}/site/footer`, { depth: 'all', locale: locale.delivery }),
+    client
+      .getByKey(`${config.siteName}/site/header`, { depth: 'all', locale: locale.delivery })
+      .then((chrome) => addChildCategories(chrome, locale)),
+    client
+      .getByKey(`${config.siteName}/site/footer`, { depth: 'all', locale: locale.delivery })
+      .then((chrome) => addChildCategories(chrome, locale)),
   ])
   const chromeLinks = await resolveLinks(
     [headerResult, footerResult].flatMap((r) => (r.status === 'fulfilled' ? [r.value] : [])),
@@ -323,6 +338,7 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
           deliveryLocale={locale.delivery}
           initialProducts={previewProducts}
           initialLinks={previewLinks}
+          initialChildCategories={previewChildCategories}
           productSource={productSourceName}
           localeCode={locale.code}
         />

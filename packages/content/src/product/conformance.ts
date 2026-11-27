@@ -196,6 +196,20 @@ export const describeProductSource = (
       })
     })
 
+    describe('childCategories (optional)', () => {
+      it('returns only listed categories, when implemented', async () => {
+        const { source } = await fixture()
+        if (!source.childCategories) return
+        const categories = await source.listCategories()
+        const listed = new Set(categories)
+        for (const category of categories) {
+          for (const child of await source.childCategories(category)) {
+            expect(listed.has(child.identifier), `child "${child.identifier}"`).toBe(true)
+          }
+        }
+      })
+    })
+
     describe('empty catalogue', () => {
       it('lists nothing without throwing', async () => {
         const { emptySource } = await fixture()

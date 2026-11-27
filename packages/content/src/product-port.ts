@@ -19,6 +19,7 @@
  */
 
 import type {
+  ChildCategory,
   CurrencyCode,
   Product,
   ProductListOptions,
@@ -91,6 +92,19 @@ export type ProductSource = {
    * URL a 404 with nothing to indicate why.
    */
   listCategories(): Promise<readonly string[]>
+
+  /**
+   * Optional: a category's direct children that hold products, in the
+   * source's own order — for menus that list them (`showChildCategories`).
+   *
+   * Only a source that owns a taxonomy implements this. It reads that
+   * taxonomy rather than asserting one, so the CMS source never does
+   * (ADR-0024): its categories are a flat set with no edges to read.
+   */
+  childCategories?(
+    identifier: string,
+    opts?: { readonly locale?: string },
+  ): Promise<readonly ChildCategory[]>
 
   /** What this source can do. See `SourceCapabilities`. */
   readonly capabilities: SourceCapabilities

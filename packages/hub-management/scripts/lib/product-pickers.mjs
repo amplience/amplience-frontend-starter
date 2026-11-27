@@ -61,11 +61,20 @@ const toolkitPicker = (name, type = 'strings') => ({
  */
 const toolkitCategoryPicker = (name) => ({
   name,
-  params: { label: 'Category', view: 'single', data: 'category', type: 'string' },
+  params: { label: 'Product category', view: 'single', data: 'category', type: 'string' },
 })
 
 const toolkitName = (mainPim) =>
   mainPim === 'commercetools' ? 'ecomm-toolkit-commercetools' : 'ecomm-toolkit-amplience'
+
+/** How each product source is named in field titles, matching the multi-PIM carousel's lists. */
+const PIM_NAMES = { cms: 'Amplience', commercetools: 'commercetools' }
+
+/** A picker field's title with the source it picks from, e.g. "Products (commercetools)". */
+const withSource = (field, mainPim) => ({
+  ...field,
+  title: `${field.title} (${PIM_NAMES[mainPim]})`,
+})
 
 /** Stores commercetools product ids. */
 const COMMERCETOOLS_PICKER = toolkitPicker('ecomm-toolkit-commercetools')
@@ -137,9 +146,10 @@ export const seedsContentType = (file, hubEntry) =>
   (hubEntry?.multiPimDemo === true && availablePims(hubEntry).length > 1)
 
 /**
- * A schema with this hub's product pickers applied. Only the two carousel
- * schemas change:
+ * A schema with this hub's product pickers applied. Every picker field's title
+ * names the source it picks from. Only these schemas change:
  *
+ *   - link: its product and category fields get the main PIM's pickers;
  *   - product carousel: `products` gets the main PIM's picker;
  *   - multi-PIM carousel: its Amplience list gets the Amplience PIM picker, and
  *     its commercetools list the commercetools one — or is removed on a hub
@@ -158,14 +168,17 @@ export const withProductPickers = (schema, { mainPim, commercetools }) => {
     const oneOf = schema.oneOf.map((option) => {
       const field = Object.keys(extensions).find((key) => key in option.properties)
       if (field === undefined) return option
-      const picked = { ...option.properties[field], 'ui:extension': extensions[field] }
+      const picked = {
+        ...withSource(option.properties[field], mainPim),
+        'ui:extension': extensions[field],
+      }
       return { ...option, properties: { ...option.properties, [field]: picked } }
     })
     return { ...schema, oneOf }
   }
   if (schema?.$id === PRODUCT_CAROUSEL_SCHEMA) {
     const picker = mainPim === 'commercetools' ? COMMERCETOOLS_PICKER : AMPLIENCE_PICKER
-    const products = { ...schema.properties.products, 'ui:extension': picker }
+    const products = { ...withSource(schema.properties.products, mainPim), 'ui:extension': picker }
     return { ...schema, properties: { ...schema.properties, products } }
   }
   if (schema?.$id === MULTI_PIM_PRODUCT_CAROUSEL_SCHEMA) {

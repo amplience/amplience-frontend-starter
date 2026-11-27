@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { ReactNode } from 'react'
 
+import { addChildCategories } from '../../../lib/child-categories'
 import { client, siteName } from '../../../lib/content-client'
 import { localeForSlug } from '../../../lib/locales'
 import { getPreviewHost, siteBasePath } from '../../../lib/preview-request'
@@ -35,9 +36,14 @@ export default async function SiteLayout({
   const locale = localeForSlug(localeSlug)
   if (locale === undefined) notFound()
   const previewHost = await getPreviewHost()
+  const fetchChrome = async (key: string) =>
+    addChildCategories(
+      await client.getByKey(`${siteName}/site/${key}`, { depth: 'all', locale: locale.delivery }),
+      locale,
+    )
   const [headerResult, footerResult] = await Promise.allSettled([
-    client.getByKey(`${siteName}/site/header`, { depth: 'all', locale: locale.delivery }),
-    client.getByKey(`${siteName}/site/footer`, { depth: 'all', locale: locale.delivery }),
+    fetchChrome('header'),
+    fetchChrome('footer'),
   ])
   const fetched = [headerResult, footerResult].flatMap((r) =>
     r.status === 'fulfilled' ? [r.value] : [],

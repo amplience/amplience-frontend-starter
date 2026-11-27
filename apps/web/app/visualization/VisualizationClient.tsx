@@ -41,14 +41,14 @@ import { useEffect, useMemo, useState, useTransition } from 'react'
 
 import { defaultRegistry } from '@amplience/frontend-starter-components/registry'
 import { resolveLocalized } from '@amplience/frontend-starter-content'
-import type { ContentBody } from '@amplience/frontend-starter-content'
+import type { ChildCategory, ContentBody } from '@amplience/frontend-starter-content'
 import type {
   MediaLoadPriority,
   RenderContext,
   ResolvedProduct,
 } from '@amplience/frontend-starter-types'
 
-import { collectSkus, productMap, renderContent } from '../../src/renderer'
+import { collectSkus, productMap, renderContent, withChildCategories } from '../../src/renderer'
 import { fillLocaleGaps } from './fill-locale-gaps'
 
 // ---------------------------------------------------------------------------
@@ -81,6 +81,13 @@ type Props = {
    * on the next reload.
    */
   initialLinks?: readonly (readonly [string, string])[]
+  /**
+   * Child categories the server resolved for the category menu items in
+   * `initialModel`, as `[category, children]` pairs — ticked or not, so ticking
+   * "Show child categories" shows them live. A newly picked category resolves
+   * on the next reload.
+   */
+  initialChildCategories?: readonly (readonly [string, readonly ChildCategory[]])[]
   /**
    * BCP 47 code for the pane's locale (e.g. `de-DE`). Sent to `/api/products`
    * so live-resolved products carry the same prices and copy as the server's.
@@ -120,6 +127,7 @@ export function VisualizationClient({
   deliveryLocale,
   initialProducts,
   initialLinks,
+  initialChildCategories,
   localeCode,
   productSource,
 }: Props) {
@@ -247,6 +255,10 @@ export function VisualizationClient({
   }, [skus, localeCode])
 
   const links = useMemo(() => new Map(initialLinks ?? []), [initialLinks])
+  const withCategories = useMemo(
+    () => withChildCategories(resolvedModel, new Map(initialChildCategories ?? [])),
+    [resolvedModel, initialChildCategories],
+  )
 
   const ctx: RenderContext = {
     loadPriority: loadPriority ?? 'lazy',
@@ -256,5 +268,5 @@ export function VisualizationClient({
     ...(productSource !== undefined && { productSource }),
     ...(localeCode !== undefined && { locale: localeCode }),
   }
-  return <>{renderContent(resolvedModel, defaultRegistry, ctx)}</>
+  return <>{renderContent(withCategories, defaultRegistry, ctx)}</>
 }

@@ -173,6 +173,23 @@ describe('withProductPickers', () => {
     expect(linkField(link, 'product')?.['ui:extension']).toBeUndefined()
   })
 
+  it('names the source in every picker field title, even with only one PIM', () => {
+    const ct = { mainPim: 'commercetools', commercetools: true } as const
+    const cms = { mainPim: 'cms', commercetools: false } as const
+    expect(withProductPickers(carousel, ct).properties.products?.title).toBe(
+      'Products (commercetools)',
+    )
+    expect(withProductPickers(carousel, cms).properties.products?.title).toBe(
+      'Products (Amplience)',
+    )
+    expect(linkField(withProductPickers(link, ct), 'category')?.title).toBe(
+      'Product category (commercetools)',
+    )
+    expect(linkField(withProductPickers(link, cms), 'product')?.title).toBe('Product (Amplience)')
+    expect(linkField(withProductPickers(link, cms), 'url')?.title).toBe('URL')
+    expect(carousel.properties.products?.title).toBe('Products')
+  })
+
   it('returns every other schema unchanged', () => {
     const other = { $id: 'https://quadratic.amplience.com/v2/content/hero', properties: {} }
     expect(withProductPickers(other, { mainPim: 'commercetools', commercetools: true })).toBe(other)

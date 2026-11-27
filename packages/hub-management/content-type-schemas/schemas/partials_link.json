@@ -70,7 +70,7 @@
         "type": { "const": "category", "ui:component": "none" },
         "category": {
           "type": "string",
-          "title": "Category",
+          "title": "Product category",
           "minLength": 1
         }
       },

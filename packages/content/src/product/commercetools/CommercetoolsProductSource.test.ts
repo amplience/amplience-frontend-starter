@@ -218,6 +218,38 @@ describe('CommercetoolsProductSource specifics', () => {
     })
   })
 
+  describe('childCategories', () => {
+    it('lists direct children with products, by order hint, labelled by name', async () => {
+      const children = await setup().source.childCategories('women', { locale: 'de-DE,*' })
+      expect(children).toEqual([
+        { identifier: 'women-tops', label: 'women-tops' },
+        { identifier: 'women-skirts', label: 'Röcke' },
+      ])
+    })
+
+    it('keeps empty children without Product Search, rather than reading the catalogue', async () => {
+      const { source, server } = setup({ searchInactive: true })
+      const warn = quiet()
+      try {
+        const children = await source.childCategories('women')
+        expect(children.map((c) => c.identifier)).toEqual([
+          'women-dresses',
+          'women-tops',
+          'women-skirts',
+        ])
+        expect(server.calls.filter((c) => c.includes('/product-projections'))).toHaveLength(0)
+      } finally {
+        warn.mockRestore()
+      }
+    })
+
+    it('returns nothing for a leaf or an unknown category', async () => {
+      const { source } = setup()
+      expect(await source.childCategories('women-tops')).toEqual([])
+      expect(await source.childCategories('nope')).toEqual([])
+    })
+  })
+
   describe('reads', () => {
     it('lists by category, ancestors included', async () => {
       const { products, total } = await setup().source.list({ category: 'women' })
