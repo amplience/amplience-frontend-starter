@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { api } from '../api.js'
+import { thumbnailIndex, withoutThumbnail } from '../site-order.js'
 import type { Config, Environment, WebApp } from '../types.js'
 
 type Props = {
@@ -16,10 +17,10 @@ type Props = {
 
 // ── Micro icons (mirrors EnvironmentCard's set) ─────────────────────────────────
 
-const GlobeIcon = () => (
+const GlobeIcon = ({ thumbnail = false }: { thumbnail?: boolean }) => (
   <svg
     aria-hidden="true"
-    className="site-row__icon"
+    className={`site-row__icon${thumbnail ? ' site-row__icon--thumbnail' : ''}`}
     width="12"
     height="12"
     viewBox="0 0 16 16"
@@ -88,6 +89,8 @@ export function SiteCard({ env, site, index, environments, onUpdate }: Props) {
   const hubLabel = env.label || env.name
   const isVercel = site.vercelProjectName !== undefined && site.vercelProjectName !== ''
   const movePending = target !== env.name
+  // Only worth marking when there's a choice between sites.
+  const isThumbnail = env.webApps.length > 1 && thumbnailIndex(env.webApps) === index
   const targetEnvObj = environments.find((e) => e.name === target)
   const targetLabel = targetEnvObj === undefined ? target : targetEnvObj.label || targetEnvObj.name
   // Brand and site name become build-time env vars (NEXT_PUBLIC_BRAND, SITE_NAME),
@@ -146,7 +149,8 @@ export function SiteCard({ env, site, index, environments, onUpdate }: Props) {
         if (!targetEnv) throw new Error('Target hub no longer exists.')
         const afterAdd = await api.update(targetEnv.name, {
           ...targetEnv,
-          webApps: [...targetEnv.webApps, updatedSite],
+          // The thumbnail flag is per hub, so it doesn't travel with the site.
+          webApps: [...targetEnv.webApps, withoutThumbnail(updatedSite)],
         })
         const sourceEnv = afterAdd.environments.find((e) => e.name === env.name)
         if (!sourceEnv) throw new Error('Source hub disappeared during move.')
@@ -236,8 +240,13 @@ export function SiteCard({ env, site, index, environments, onUpdate }: Props) {
   return (
     <div className="site-card">
       <div className="site-card__header">
-        <div className="site-card__title">
-          <GlobeIcon />
+        <div
+          className="site-card__title"
+          title={
+            isThumbnail ? 'Used for card thumbnails and as the default visualization' : undefined
+          }
+        >
+          <GlobeIcon thumbnail={isThumbnail} />
           <span className="site-card__label">{siteDisplayLabel(site, hubLabel)}</span>
         </div>
         {!editing && (
