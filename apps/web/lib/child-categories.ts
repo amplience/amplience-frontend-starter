@@ -17,10 +17,11 @@ const EMPTY: ReadonlyMap<string, readonly ChildCategory[]> = new Map()
 export async function resolveChildCategories(
   content: unknown,
   locale: Locale,
+  { includeUnticked = false } = {},
 ): Promise<ReadonlyMap<string, readonly ChildCategory[]>> {
   const childCategories = productSource.childCategories?.bind(productSource)
   if (childCategories === undefined) return EMPTY
-  const identifiers = collectMenuCategories(content)
+  const identifiers = collectMenuCategories(content, { includeUnticked })
   if (identifiers.length === 0) return EMPTY
 
   const results = await Promise.allSettled(

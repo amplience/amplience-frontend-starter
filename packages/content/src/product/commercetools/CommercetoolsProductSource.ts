@@ -226,41 +226,49 @@ export class CommercetoolsProductSource implements ProductSource {
    * may have been cut short (200+ categories).
    */
   async listCategories(): Promise<readonly string[]> {
+    const fromFacet = await this.#categoriesFromFacet()
+    if (fromFacet !== undefined) return fromFacet
+    const all = await this.#catalogue()
+    return [...new Set(all.flatMap((p) => p.categories ?? []))].sort()
+  }
+
+  /** `listCategories` from the facet alone, or `undefined` when search can't answer. */
+  async #categoriesFromFacet(): Promise<readonly string[] | undefined> {
     const fromFacet = await this.#cache.get('category-facet', async () => {
       const response = await this.#search(categoryFacetRequest())
       return response === undefined ? undefined : facetCategoryIds(response)
     })
-    if (fromFacet !== undefined) {
-      const { categoriesById } = await this.#context(undefined)
-      const ids = new Set<string>()
-      for (const id of fromFacet) {
-        const category = categoriesById.get(id)
-        if (!category) continue
-        ids.add(id)
-        for (const ancestor of category.ancestors ?? []) ids.add(ancestor.id)
-      }
-      const identifiers = [...ids]
-        .map((id) => categoriesById.get(id))
-        .filter((c): c is CtCategory => c !== undefined)
-        .map((c) => categoryIdentifier(c, this.#slugLocale))
-      return [...new Set(identifiers)].sort()
+    if (fromFacet === undefined) return undefined
+    const { categoriesById } = await this.#context(undefined)
+    const ids = new Set<string>()
+    for (const id of fromFacet) {
+      const category = categoriesById.get(id)
+      if (!category) continue
+      ids.add(id)
+      for (const ancestor of category.ancestors ?? []) ids.add(ancestor.id)
     }
-    const all = await this.#catalogue()
-    return [...new Set(all.flatMap((p) => p.categories ?? []))].sort()
+    const identifiers = [...ids]
+      .map((id) => categoriesById.get(id))
+      .filter((c): c is CtCategory => c !== undefined)
+      .map((c) => categoryIdentifier(c, this.#slugLocale))
+    return [...new Set(identifiers)].sort()
   }
 
   /**
    * A category's direct children that hold products, by `orderHint`, labelled
    * with their localised name (the identifier when there is none).
+   *
+   * Empty children are found from the Product Search facet only. Without it
+   * they are kept: a menu shouldn't wait on a full catalogue read.
    */
   async childCategories(
     identifier: string,
     opts?: { readonly locale?: string },
   ): Promise<readonly ChildCategory[]> {
-    const [ctx, listed] = await Promise.all([this.#context(opts), this.listCategories()])
+    const [ctx, listed] = await Promise.all([this.#context(opts), this.#categoriesFromFacet()])
     const parentId = this.#categoryIdFor(identifier, ctx)
     if (parentId === undefined) return []
-    const withProducts = new Set(listed)
+    const withProducts = listed && new Set(listed)
     return [...ctx.categoriesById.values()]
       .filter((c) => c.parent?.id === parentId)
       .sort((a, b) => orderOf(a) - orderOf(b))
@@ -268,7 +276,7 @@ export class CommercetoolsProductSource implements ProductSource {
         const id = categoryIdentifier(c, this.#slugLocale)
         return { identifier: id, label: pickLocalized(c.name, ctx.prefs) ?? id }
       })
-      .filter((c) => withProducts.has(c.identifier))
+      .filter((c) => withProducts?.has(c.identifier) ?? true)
   }
 
   async #listFromCatalogue(opts: ProductListOptions): Promise<ProductListResult> {

@@ -227,6 +227,22 @@ describe('CommercetoolsProductSource specifics', () => {
       ])
     })
 
+    it('keeps empty children without Product Search, rather than reading the catalogue', async () => {
+      const { source, server } = setup({ searchInactive: true })
+      const warn = quiet()
+      try {
+        const children = await source.childCategories('women')
+        expect(children.map((c) => c.identifier)).toEqual([
+          'women-dresses',
+          'women-tops',
+          'women-skirts',
+        ])
+        expect(server.calls.filter((c) => c.includes('/product-projections'))).toHaveLength(0)
+      } finally {
+        warn.mockRestore()
+      }
+    })
+
     it('returns nothing for a leaf or an unknown category', async () => {
       const { source } = setup()
       expect(await source.childCategories('women-tops')).toEqual([])

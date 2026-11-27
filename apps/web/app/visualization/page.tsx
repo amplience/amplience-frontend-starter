@@ -189,7 +189,10 @@ export default async function VisualizationRoute({ searchParams }: RouteProps) {
   // port read (ADR-0027 — see its open question on live editing).
   const previewProducts = uniqueProducts(await resolveProducts(item, visualizationRegistry, locale))
   const previewLinks = [...(await resolveLinks(item, locale))]
-  const previewChildCategories = [...(await resolveChildCategories(item, locale))]
+  // Unticked too, so ticking "Show child categories" in the form shows them live.
+  const previewChildCategories = [
+    ...(await resolveChildCategories(item, locale, { includeUnticked: true })),
+  ]
 
   const itemSchema = (item as { _meta?: { schema?: string } })?._meta?.schema ?? ''
   if (itemSchema === CUSTOM_CSS_SCHEMA) {

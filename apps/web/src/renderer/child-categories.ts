@@ -35,10 +35,14 @@ const asCategoryMenuItem = (node: Record<string, unknown>): CategoryMenuItem | u
 }
 
 /**
- * Every category a menu item in `content` links to, de-duplicated — ticked or
- * not, so a preview can tick the box live without another fetch.
+ * The categories ticked menu items in `content` link to, de-duplicated. With
+ * `includeUnticked`, every category menu item's — so a preview can tick the
+ * box live without another fetch.
  */
-export const collectMenuCategories = (content: unknown): readonly string[] => {
+export const collectMenuCategories = (
+  content: unknown,
+  { includeUnticked = false } = {},
+): readonly string[] => {
   const found = new Set<string>()
   const seen = new WeakSet<object>()
   const walk = (node: unknown): void => {
@@ -46,7 +50,9 @@ export const collectMenuCategories = (content: unknown): readonly string[] => {
     seen.add(node)
     if (isRecord(node)) {
       const item = asCategoryMenuItem(node)
-      if (item) found.add(item.link.category)
+      if (item && (includeUnticked || item.showChildCategories === true)) {
+        found.add(item.link.category)
+      }
     }
     for (const child of Object.values(node)) walk(child)
   }

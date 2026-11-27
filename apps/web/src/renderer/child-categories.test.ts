@@ -23,7 +23,7 @@ const children = new Map([
 ])
 
 describe('collectMenuCategories', () => {
-  it('finds category-linked menu items, ticked or not, de-duplicated', () => {
+  it('finds ticked category menu items, or every one with includeUnticked', () => {
     const menu = {
       _meta: { schema: 'https://quadratic.amplience.com/v2/content/menu' },
       items: [
@@ -36,7 +36,8 @@ describe('collectMenuCategories', () => {
         },
       ],
     }
-    expect(collectMenuCategories(menu)).toEqual(['women', 'men'])
+    expect(collectMenuCategories(menu)).toEqual(['women'])
+    expect(collectMenuCategories(menu, { includeUnticked: true })).toEqual(['women', 'men'])
   })
 })
 
