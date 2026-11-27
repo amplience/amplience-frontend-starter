@@ -41,24 +41,31 @@ export function SortableSiteRow({
 
   const canDrop = enabled && dragIndex !== null && dragIndex !== index
 
+  // The row sits inside its hub's SortableHub, so a site drag must not bubble up and start or land a
+  // hub drag. Over/drop only stop while a site drag is under way, so a hub drag still crosses the rows.
+
   return (
     <li
       className={`site-row${dragIndex === index ? ' site-row--dragging' : ''}`}
       draggable={armed}
       onDragStart={(e) => {
+        e.stopPropagation()
         e.dataTransfer.effectAllowed = 'move'
         e.dataTransfer.setData('text/plain', String(index))
         onDragStart(index)
       }}
       onDragOver={(e) => {
+        if (dragIndex !== null) e.stopPropagation()
         if (canDrop) e.preventDefault()
       }}
       onDrop={(e) => {
+        if (dragIndex !== null) e.stopPropagation()
         if (!canDrop || dragIndex === null) return
         e.preventDefault()
         onMove(dragIndex, index)
       }}
-      onDragEnd={() => {
+      onDragEnd={(e) => {
+        e.stopPropagation()
         setArmed(false)
         onDragEnd()
       }}

@@ -83,6 +83,8 @@ To register a deployed site against a hub, open that hub's card in `env-manager`
 
 Either way, once a site is recorded it's added as a visualization option in the CMS whenever you next seed or sync that hub's content types, and as a [schedule preview](working-with-a-hub.md#schedule-preview) application whenever you next seed its settings.
 
+One of a hub's sites is its _thumbnail site_: content-type cards show their thumbnails from it, and it's the default visualization. That's the first site in the list unless you choose another — tick **Use for card thumbnails and as the default visualization** when editing a site. Drag a site's handle (it replaces the globe icon on hover), or press Alt+↑/↓ on it, to reorder a hub's sites, which also reorders their visualizations. Both take effect when you next seed or sync the hub's content types. A hub with no sites keeps `Web (localhost)` as its default visualization.
+
 A newly recorded site is also what webhooks need in order to exist — they're created one per registered site, so seed them (**Webhooks → Seed**, or `pnpm hub:import:webhooks`) after adding one. See [Webhooks](working-with-a-hub.md#webhooks).
 
 > [!TIP] Manual Vercel setup
