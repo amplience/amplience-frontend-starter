@@ -145,6 +145,12 @@ export type WebApp = {
   vercelProjectName?: string
   /** Vercel team (scope) the project lives under, if not the personal scope. */
   vercelScope?: string
+  /**
+   * Marks the hub's thumbnail site: content-type import points card thumbnails
+   * at it and makes it the default visualization. At most one per hub; with
+   * none set, the first site plays that role.
+   */
+  thumbnail?: true
 }
 
 export type DiscoveredRepo = {

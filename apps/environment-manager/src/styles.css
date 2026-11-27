@@ -1237,6 +1237,69 @@ body {
   flex-shrink: 0;
 }
 
+/* The thumbnail site — card thumbnails and the default visualization. */
+.site-row__icon--thumbnail {
+  color: var(--color-accent);
+}
+
+/* Icon slot shared with the drag handle, which overlays the globe so the row
+   never shifts. The handle stays in the tab order (opacity, not display). */
+.site-row__lead {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.site-row__drag {
+  position: absolute;
+  inset: -0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1;
+  opacity: 0;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-text);
+  }
+}
+
+.site-row:hover .site-row__drag,
+.site-row__drag:focus-visible {
+  opacity: 1;
+}
+
+.site-row:hover .site-row__lead:has(.site-row__drag) .site-row__icon,
+.site-row__lead:has(.site-row__drag:focus-visible) .site-row__icon {
+  visibility: hidden;
+}
+
+.site-row--dragging {
+  opacity: 0.5;
+}
+
+/* Thumbnail checkbox in the site edit row. */
+.site-row .site-row__thumbnail {
+  gap: 0.4rem;
+  min-height: var(--target-sm);
+  cursor: pointer;
+
+  input {
+    accent-color: var(--color-accent);
+  }
+}
+
 .site-row__label {
   font-weight: 500;
   white-space: nowrap;

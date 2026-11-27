@@ -11,6 +11,7 @@ import {
 } from '../content-rows.js'
 import { hubBrands } from '../hub-brands.js'
 import { defaultBrandName, defaultSiteName } from '../site-defaults.js'
+import { moveItem, replaceSite, thumbnailIndex, withoutThumbnail } from '../site-order.js'
 import type {
   Config,
   CreateVercelSiteInput,
@@ -24,6 +25,7 @@ import type {
 import { contentItemUrl, schemaShortName } from '../workforce-links.js'
 import { Chevron } from './Chevron.js'
 import { HubIcon } from './HubIcon.js'
+import { SortableSiteRow } from './SortableSiteRow.js'
 
 type Props = {
   env: Environment
@@ -59,10 +61,10 @@ const EMPTY_SITE: WebApp = { label: '', url: '', brand: '', name: '' }
 
 // ── Micro icons ───────────────────────────────────────────────────────────────
 
-const GlobeIcon = () => (
+const GlobeIcon = ({ thumbnail = false }: { thumbnail?: boolean }) => (
   <svg
     aria-hidden="true"
-    className="site-row__icon"
+    className={`site-row__icon${thumbnail ? ' site-row__icon--thumbnail' : ''}`}
     width="11"
     height="11"
     viewBox="0 0 16 16"
@@ -200,6 +202,7 @@ export function EnvironmentCard({
     defaultSite: env.defaultSite ?? '',
   })
   const [sitesBusy, setSitesBusy] = useState(false)
+  const [dragSite, setDragSite] = useState<number | null>(null)
   const addSiteLabelRef = useRef<HTMLInputElement>(null)
   const editLocalhostUrlRef = useRef<HTMLInputElement>(null)
   const editWebAppFirstRef = useRef<HTMLInputElement>(null)
@@ -417,14 +420,27 @@ export function EnvironmentCard({
     const brandChanged = (editWebAppForm.brand ?? '').trim() !== (original?.brand ?? '').trim()
     const nameChanged = (editWebAppForm.name ?? '').trim() !== (original?.name ?? '').trim()
     if (isVercelSite && (brandChanged || nameChanged)) {
+      // The redeploy carries the site's stored thumbnail flag, so save a change to it first.
+      if (
+        original !== undefined &&
+        (editWebAppForm.thumbnail ?? false) !== (original.thumbnail ?? false)
+      ) {
+        const flagged = editWebAppForm.thumbnail
+          ? { ...original, thumbnail: true as const }
+          : withoutThumbnail(original)
+        onUpdate(
+          await api.update(env.name, {
+            ...env,
+            webApps: replaceSite(env.webApps, editingWebAppIdx, flagged),
+          }),
+        )
+      }
       await handleRedeployWebApp(editingWebAppIdx, editWebAppForm)
       return
     }
     setSitesBusy(true)
     try {
-      const newWebApps = env.webApps.map((app, i) =>
-        i === editingWebAppIdx ? editWebAppForm : app,
-      )
+      const newWebApps = replaceSite(env.webApps, editingWebAppIdx, editWebAppForm)
       const updated = await api.update(env.name, { ...env, webApps: newWebApps })
       onUpdate(updated)
       setEditingWebAppIdx(null)
@@ -643,6 +659,25 @@ export function EnvironmentCard({
   }, [op?.log])
 
   const isRunning = op?.status === 'running'
+
+  // Edits and redeploys address a site by index, so the order holds still while either is under way.
+  const canReorderSites =
+    env.webApps.length > 1 &&
+    editingWebAppIdx === null &&
+    !editingLocalhost &&
+    !sitesBusy &&
+    !isRunning &&
+    vercelOp?.status !== 'running'
+
+  // The site backing card thumbnails and the default visualization — only marked when there's a choice.
+  const thumbIdx = env.webApps.length > 1 ? thumbnailIndex(env.webApps) : -1
+  // With nothing flagged the first site is the thumbnail site by default, so there's nothing to untick.
+  const implicitThumb = !env.webApps.some((s) => s.thumbnail)
+
+  function handleMoveSite(from: number, to: number) {
+    if (to < 0 || to >= env.webApps.length || from === to) return
+    void api.update(env.name, { ...env, webApps: moveItem(env.webApps, from, to) }).then(onUpdate)
+  }
 
   // Elapsed-time counter: ticks once a second while an op runs; settled ops
   // read their fixed duration from endedAt instead, so the tick can stop.
@@ -1472,7 +1507,7 @@ export function EnvironmentCard({
               {/* Additional deployed sites */}
               {env.webApps.map((site, i) =>
                 editingWebAppIdx === i ? (
-                  <li key={i} className="site-row site-row--editing">
+                  <li key={site.url} className="site-row site-row--editing">
                     <label title="Label (blank = 'Web')" className="add-site-form__label--label">
                       <LabelIcon />
                       <input
@@ -1531,6 +1566,28 @@ export function EnvironmentCard({
                         disabled={sitesBusy}
                       />
                     </label>
+                    {env.webApps.length > 1 && (
+                      <label
+                        className="site-row__thumbnail"
+                        title={
+                          i === 0 && implicitThumb
+                            ? 'The first site is used unless another is chosen. Applies on the next content-type sync.'
+                            : 'Applies on the next content-type sync.'
+                        }
+                      >
+                        <input
+                          type="checkbox"
+                          checked={editWebAppForm.thumbnail === true || (i === 0 && implicitThumb)}
+                          onChange={(e) =>
+                            setEditWebAppForm((p) =>
+                              e.target.checked ? { ...p, thumbnail: true } : withoutThumbnail(p),
+                            )
+                          }
+                          disabled={sitesBusy || (i === 0 && implicitThumb)}
+                        />
+                        Use for card thumbnails and as the default visualization
+                      </label>
+                    )}
                     {editRowWillRedeploy && (
                       <p className="site-row__redeploy-note">
                         Saving will re-deploy this site to apply the new{' '}
@@ -1591,9 +1648,27 @@ export function EnvironmentCard({
                     </div>
                   </li>
                 ) : (
-                  <li key={i} className="site-row">
-                    <GlobeIcon />
-                    <span className="site-row__label">{siteDisplayLabel(site)}</span>
+                  <SortableSiteRow
+                    key={site.url}
+                    index={i}
+                    label={siteDisplayLabel(site)}
+                    icon={<GlobeIcon thumbnail={i === thumbIdx} />}
+                    enabled={canReorderSites}
+                    dragIndex={dragSite}
+                    onDragStart={setDragSite}
+                    onDragEnd={() => setDragSite(null)}
+                    onMove={handleMoveSite}
+                  >
+                    <span
+                      className="site-row__label"
+                      title={
+                        i === thumbIdx
+                          ? 'Used for card thumbnails and as the default visualization'
+                          : undefined
+                      }
+                    >
+                      {siteDisplayLabel(site)}
+                    </span>
                     <a
                       className="site-row__url"
                       href={site.url}
@@ -1624,7 +1699,7 @@ export function EnvironmentCard({
                     >
                       <PencilIcon />
                     </button>
-                  </li>
+                  </SortableSiteRow>
                 ),
               )}
             </ul>

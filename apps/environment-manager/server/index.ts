@@ -98,6 +98,8 @@ type WebApp = {
   name: string
   vercelProjectName?: string
   vercelScope?: string
+  /** At most one per hub — see src/types.ts. */
+  thumbnail?: true
 }
 
 type Environment = {
@@ -2050,6 +2052,8 @@ app.post('/api/environments/:name/vercel/redeploy-site', async (c) => {
         name: siteInput.sitename.trim() || targetFallbackSite,
         vercelProjectName: projectName,
         ...(site.vercelScope ? { vercelScope: site.vercelScope } : {}),
+        // The thumbnail flag is per hub, so it stays only when the site does.
+        ...(name === targetName && site.thumbnail ? { thumbnail: true as const } : {}),
       }
       if (name === targetName) {
         if (freshSource.webApps[index] === undefined) {

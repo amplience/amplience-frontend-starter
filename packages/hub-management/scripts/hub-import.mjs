@@ -164,6 +164,7 @@ import {
   resolveTokens,
   stripFields,
 } from './lib/resolve-placeholders.mjs'
+import { thumbnailSite, withWebAppVisualizations } from './lib/visualizations.mjs'
 import {
   diffWebhooks,
   expandDefinition,
@@ -547,6 +548,8 @@ const importTypes = async () => {
     console.log(`\n→ Found ${webApps.length} additional web app(s) for hub "${hubName}":`)
     for (const site of webApps)
       console.log(`  • ${site.label !== '' ? `Web (${site.label})` : 'Web'} — ${site.url}`)
+    const thumb = thumbnailSite(webApps)
+    console.log(`  Card thumbnails and default visualization: ${thumb.url}`)
   }
 
   const source = path.join(packageRoot, 'content-types')
@@ -558,35 +561,16 @@ const importTypes = async () => {
   const hubEntry = loadHubEntry(hubName)
   for (const file of readdirSync(source)) {
     if (!seedsContentType(file, hubEntry)) continue
-    // Parse as JSON so we can mutate the visualizations array cleanly.
     const raw = readFileSync(path.join(source, file), 'utf8')
     const data = withProductsRepo(
       JSON.parse(raw.replaceAll('${hub}', hubName).replaceAll('${localhostUrl}', localhostUrl)),
       productsRepo,
     )
 
-    // If there's at least one webApp, inject a custom card thumbnail using the first one's URL.
-    if (webApps.length > 0) {
-      const firstWebAppUrl = webApps[0].url
-      const cards = ((data.settings ??= {}).cards ??= [])
-      cards[0] ??= {}
-      data.settings.cards[0].templatedUri = `${firstWebAppUrl}/visualization?vse={{vse.domain}}&content={{content.sys.id}}&isThumbnail=true`
-    }
+    // Point the card thumbnail at the thumbnail site and add a Web (…) visualization per site.
+    const withSites = withWebAppVisualizations(data, webApps)
 
-    // Inject one Web (label) entry per webApp, immediately after the localhost entry.
-    const visualisations = data.settings?.visualizations
-    if (Array.isArray(visualisations) && webApps.length > 0) {
-      const localhostIdx = visualisations.findIndex((v) => v.label === 'Web (localhost)')
-      const insertAt = localhostIdx >= 0 ? localhostIdx : visualisations.length - 1
-      const extra = webApps.map((site) => ({
-        label: site.label !== '' ? `Web (${site.label})` : 'Web',
-        templatedUri: `${site.url}/visualization?vse={{vse.domain}}&content={{content.sys.id}}`,
-        default: false,
-      }))
-      visualisations.splice(insertAt, 0, ...extra)
-    }
-
-    writeFileSync(path.join(staged, file), JSON.stringify(data, null, 2) + '\n')
+    writeFileSync(path.join(staged, file), JSON.stringify(withSites, null, 2) + '\n')
   }
 
   await dcCli('content-type', 'import', staged, '--sync')
