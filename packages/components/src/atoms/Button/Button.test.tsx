@@ -115,6 +115,17 @@ describe('Button', () => {
       expect(el.getAttribute('data-color')).toBe('primary')
     })
 
+    it('does not leak localeBasePath to the DOM when href is unresolved', () => {
+      render(
+        <Button href={undefined as unknown as string} localeBasePath="/fr-fr">
+          Shop now
+        </Button>,
+      )
+      const el = screen.getByText('Shop now')
+      expect(el.tagName).toBe('BUTTON')
+      expect(el.hasAttribute('localebasepath')).toBe(false)
+    })
+
     it('a Button without href or onClick is still a real <button>', () => {
       render(<Button>Save</Button>)
       expect(screen.getByText('Save').tagName).toBe('BUTTON')

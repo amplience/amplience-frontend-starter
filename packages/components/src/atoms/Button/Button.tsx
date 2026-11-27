@@ -123,7 +123,16 @@ export function Button(props: ButtonProps) {
     )
   }
 
-  const { children, className, variant = 'solid', color = 'black', ...buttonProps } = props
+  // A link field that didn't resolve still arrives with the caller's
+  // `localeBasePath` (e.g. a HeroBlock CTA), so strip it here too.
+  const {
+    children,
+    className,
+    variant = 'solid',
+    color = 'black',
+    localeBasePath: _localeBasePath,
+    ...buttonProps
+  } = props as ButtonAsButton & OwnProps & { localeBasePath?: string }
 
   return (
     <button
