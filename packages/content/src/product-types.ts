@@ -196,6 +196,12 @@ export type ProductListResult = {
   readonly total?: number
 }
 
+/** A category's child, for navigation: its identifier and a display label. */
+export type ChildCategory = {
+  readonly identifier: string
+  readonly label: string
+}
+
 /**
  * What a source can honestly do. Consumers branch on these rather than
  * assuming, so a search box or facet rail renders only where it can be

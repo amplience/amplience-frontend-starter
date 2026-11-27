@@ -537,13 +537,14 @@ A single item in a navigation menu — with an optional link and optional child 
 - **Components** [`MenuItem`](../packages/components/src/molecules/MenuItem) (molecule) → `Link`, `Icon`
 - **Storybook** — no story yet
 
-| Field        | Label       | Type                          | Req | Notes                          |
-| ------------ | ----------- | ----------------------------- | --- | ------------------------------ |
-| `label`      | Label       | string                        | ✅  | Display text                   |
-| `link`       | Link        | [Link](#link)                 |     | Omit for parent-only items     |
-| `icon`       | Icon        | [Icon name](#icon)            |     | Shown alongside the label      |
-| `visibility` | Visibility  | `mobileOnly` \| `desktopOnly` |     | Unset shows at all breakpoints |
-| `children`   | Child items | Content link → Menu Item[]    |     | Nested items                   |
+| Field                 | Label                                | Type                          | Req | Notes                                                                                                                                                                       |
+| --------------------- | ------------------------------------ | ----------------------------- | --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`               | Label                                | string                        | ✅  | Display text                                                                                                                                                                |
+| `link`                | Link                                 | [Link](#link)                 |     | Omit for parent-only items                                                                                                                                                  |
+| `showChildCategories` | Show child categories as child items | boolean                       |     | Only for category links. Lists the category's child categories (with products) ahead of `children`. Needs a source with a category tree — commercetools, not the CMS source |
+| `icon`                | Icon                                 | [Icon name](#icon)            |     | Shown alongside the label                                                                                                                                                   |
+| `visibility`          | Visibility                           | `mobileOnly` \| `desktopOnly` |     | Unset shows at all breakpoints                                                                                                                                              |
+| `children`            | Child items                          | Content link → Menu Item[]    |     | Nested items                                                                                                                                                                |
 
 ### Hierarchy Menu
 
@@ -573,12 +574,13 @@ A single node in a Hierarchy Menu. Child items are managed by DC's hierarchy tre
 - **Components** [`MenuItem`](../packages/components/src/molecules/MenuItem) (molecule, shared with [Menu Item](#menu-item)) → `Link`, `Icon`
 - **Storybook** — no story yet
 
-| Field        | Label      | Type                          | Req | Notes                                |
-| ------------ | ---------- | ----------------------------- | --- | ------------------------------------ |
-| `label`      | Label      | string                        | ✅  |                                      |
-| `link`       | Link       | [Link](#link)                 |     | Omit for parent-only category labels |
-| `icon`       | Icon       | [Icon name](#icon)            |     |                                      |
-| `visibility` | Visibility | `mobileOnly` \| `desktopOnly` |     |                                      |
+| Field                 | Label                                | Type                          | Req | Notes                                                                                                                                                                                |
+| --------------------- | ------------------------------------ | ----------------------------- | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `label`               | Label                                | string                        | ✅  |                                                                                                                                                                                      |
+| `link`                | Link                                 | [Link](#link)                 |     | Omit for parent-only category labels                                                                                                                                                 |
+| `showChildCategories` | Show child categories as child items | boolean                       |     | Only for category links. Lists the category's child categories (with products) ahead of the tree's children. Needs a source with a category tree — commercetools, not the CMS source |
+| `icon`                | Icon                                 | [Icon name](#icon)            |     |                                                                                                                                                                                      |
+| `visibility`          | Visibility                           | `mobileOnly` \| `desktopOnly` |     |                                                                                                                                                                                      |
 
 ### Logo
 

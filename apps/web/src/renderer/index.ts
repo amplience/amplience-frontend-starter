@@ -5,6 +5,7 @@
  */
 
 export { renderContent } from './dispatch'
+export { collectMenuCategories, withChildCategories } from './child-categories'
 export { collectSkus } from './collect-skus'
 export { collectLinkKeys, resolveLinkFields } from './links'
 export { productMap, uniqueProducts } from './product-map'

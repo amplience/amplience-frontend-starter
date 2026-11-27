@@ -55,6 +55,24 @@
       "enum": ["mobileOnly", "desktopOnly"]
     }
   },
-  "propertyOrder": ["label", "link", "icon", "visibility"],
+  "if": {
+    "properties": {
+      "link": {
+        "properties": { "type": { "const": "category" } },
+        "required": ["type"]
+      }
+    },
+    "required": ["link"]
+  },
+  "then": {
+    "properties": {
+      "showChildCategories": {
+        "type": "boolean",
+        "title": "Show child categories as child items",
+        "description": "List this category's child categories under it, ahead of any child items added here. Needs a product source with a category tree, such as commercetools."
+      }
+    }
+  },
+  "propertyOrder": ["label", "link", "showChildCategories", "icon", "visibility"],
   "required": ["label"]
 }

@@ -27,6 +27,7 @@ import {
   hierarchyMenuRegistryEntry,
 } from '@amplience/frontend-starter-components/registry'
 
+import { addChildCategories } from '../../lib/child-categories'
 import { client } from '../../lib/content-client'
 import { defaultLocale, locales } from '../../lib/locales'
 import { resolveLinks } from '../../lib/resolve-links'
@@ -91,16 +92,16 @@ export async function HierarchyMenuServer(props: HierarchyMenuStub) {
     return null
   }
 
+  const locale = locales.find((l) => l.code === props.locale) ?? defaultLocale
   let assembled: unknown
   try {
-    assembled = await client.getHierarchy(rootKey)
+    assembled = await addChildCategories(await client.getHierarchy(rootKey), locale)
   } catch {
     // `getHierarchy` rejects if the key doesn't exist or the fetch fails.
     // Degrade silently — a broken nav should not crash every page.
     return null
   }
 
-  const locale = locales.find((l) => l.code === props.locale) ?? defaultLocale
   return renderContent(assembled, hierarchySubRegistry, {
     localeBasePath: props.localeBasePath ?? '',
     links: await resolveLinks(assembled, locale),

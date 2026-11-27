@@ -75,6 +75,9 @@ export type CtCategory = {
   readonly slug: LocalizedString
   readonly name?: LocalizedString
   readonly ancestors?: readonly CtReference[]
+  readonly parent?: CtReference
+  /** Sort key among siblings: a decimal string between 0 and 1. */
+  readonly orderHint?: string
 }
 
 export type CtAttributeDefinition = {

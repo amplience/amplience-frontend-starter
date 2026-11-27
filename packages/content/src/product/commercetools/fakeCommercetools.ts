@@ -28,19 +28,35 @@ export const CATEGORIES: readonly CtCategory[] = [
     id: 'cat-women-skirts',
     key: 'women-skirts',
     slug: { en: 'women-skirts' },
+    name: { en: 'Skirts', de: 'Röcke' },
     ancestors: [{ typeId: 'category', id: 'cat-women' }],
+    parent: { typeId: 'category', id: 'cat-women' },
+    orderHint: '0.2',
   },
   {
     id: 'cat-women-tops',
     key: 'women-tops',
     slug: { en: 'women-tops' },
     ancestors: [{ typeId: 'category', id: 'cat-women' }],
+    parent: { typeId: 'category', id: 'cat-women' },
+    orderHint: '0.1',
+  },
+  // No products — hidden from child categories.
+  {
+    id: 'cat-women-dresses',
+    key: 'women-dresses',
+    slug: { en: 'women-dresses' },
+    name: { en: 'Dresses' },
+    ancestors: [{ typeId: 'category', id: 'cat-women' }],
+    parent: { typeId: 'category', id: 'cat-women' },
+    orderHint: '0.05',
   },
   { id: 'cat-home', slug: { en: 'home' }, ancestors: [] },
   {
     id: 'cat-home-lighting',
     slug: { en: 'home-lighting' },
     ancestors: [{ typeId: 'category', id: 'cat-home' }],
+    parent: { typeId: 'category', id: 'cat-home' },
   },
 ]
 

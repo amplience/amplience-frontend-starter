@@ -33,6 +33,7 @@
 
 import type { ProductSource } from '../../product-port'
 import type {
+  ChildCategory,
   CurrencyCode,
   Product,
   ProductListOptions,
@@ -45,7 +46,7 @@ import { warnOnMissingCurrency } from '../selectPrice'
 import { warnOnMissingSkus } from '../warnings'
 import type { CommercetoolsClient, PagedQueryResponse, QueryParams } from './client'
 import { MAX_PAGE_SIZE } from './client'
-import { localePreferences } from './localize'
+import { localePreferences, pickLocalized } from './localize'
 import type { MappingContext } from './mapProjection'
 import { categoryIdentifier, mapProjection, skusOf } from './mapProjection'
 import type { SearchRequest, SearchResponse } from './search'
@@ -248,6 +249,28 @@ export class CommercetoolsProductSource implements ProductSource {
     return [...new Set(all.flatMap((p) => p.categories ?? []))].sort()
   }
 
+  /**
+   * A category's direct children that hold products, by `orderHint`, labelled
+   * with their localised name (the identifier when there is none).
+   */
+  async childCategories(
+    identifier: string,
+    opts?: { readonly locale?: string },
+  ): Promise<readonly ChildCategory[]> {
+    const [ctx, listed] = await Promise.all([this.#context(opts), this.listCategories()])
+    const parentId = this.#categoryIdFor(identifier, ctx)
+    if (parentId === undefined) return []
+    const withProducts = new Set(listed)
+    return [...ctx.categoriesById.values()]
+      .filter((c) => c.parent?.id === parentId)
+      .sort((a, b) => orderOf(a) - orderOf(b))
+      .map((c) => {
+        const id = categoryIdentifier(c, this.#slugLocale)
+        return { identifier: id, label: pickLocalized(c.name, ctx.prefs) ?? id }
+      })
+      .filter((c) => withProducts.has(c.identifier))
+  }
+
   async #listFromCatalogue(opts: ProductListOptions): Promise<ProductListResult> {
     const all = await this.#catalogue(opts)
     const { category } = opts
@@ -440,6 +463,9 @@ export class CommercetoolsProductSource implements ProductSource {
     )
   }
 }
+
+/** A category's `orderHint` as a number; one without sorts last. */
+const orderOf = (category: CtCategory): number => Number(category.orderHint ?? 1)
 
 /**
  * Dev-loud note that listings fell back to the full catalogue. Product Search
